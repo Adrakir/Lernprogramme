@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meine Lernprogramme</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231a7569'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle'%3E%F0%9F%8E%92%3C/text%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light dark}
+body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,'Segoe UI',sans-serif;background:linear-gradient(160deg,#10203b,#1a4a44);color:#f1f5ff;padding:24px;box-sizing:border-box}
+main{max-width:1020px;width:100%}
+h1{text-align:center;font-size:clamp(26px,5vw,40px);margin:0 0 8px}
+.sub{text-align:center;color:#b8d4cd;margin:0 0 32px}
+.subject{margin-top:28px}
+.subject h2{margin:0 0 6px;color:#a9f2df;font-size:clamp(20px,3vw,25px)}
+.topic{margin:0 0 14px;color:#b8d4cd;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+a.card{display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 20px;border-radius:20px;text-decoration:none;color:inherit;background:#ffffff14;border:1.5px solid #ffffff2e;transition:transform .15s,background .15s;text-align:center}
+a.card:hover,a.card:focus-visible{transform:translateY(-4px);background:#ffffff22;outline:3px solid #67ecd1;outline-offset:3px}
+.icon{font-size:56px;line-height:1}
+.card strong{font-size:20px}
+.card span{color:#c4d6e6;font-size:14px}
+.start{margin-top:6px;padding:9px 22px;border-radius:999px;background:#67ecd1;color:#0c1426;font-weight:700;font-size:15px}
+.progress{min-height:18px;color:#ffe9a8;font-size:13px;font-weight:600}
+footer{text-align:center;margin-top:36px;color:#9fb6c9;font-size:13px}
+@media(prefers-reduced-motion:reduce){a.card{transition:none}a.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>🎒 Meine Lernprogramme</h1>
+<p class="sub">Nach Fach und Thema sortiert – wähle ein Lernprogramm zum Starten.</p>
+<section class="subject" aria-labelledby="fach-deutsch">
+<h2 id="fach-deutsch">Deutsch</h2>
+<p class="topic">Thema: Erzählungen schreiben und verstehen</p>
+<div class="grid">
+<a class="card" href="deutsch/Deutschapp_Minka_Fuji/index.html">
+<span class="icon">📖</span>
+<strong>Minka &amp; Fuji – Erzählwerkstatt</strong>
+<span>Deutsch · Klasse 5<br>Erzählaufbau, Spannung, Schreibwerkstatt und Leseverständnis</span>
+<span class="start">Starten</span>
+</a>
+</div>
+</section>
+<section class="subject" aria-labelledby="fach-englisch">
+<h2 id="fach-englisch">Englisch</h2>
+<p class="topic">Thema: Vokabeln lernen und im Alltag anwenden</p>
+<div class="grid">
+<a class="card" href="englisch/index.html">
+<span class="icon">🇬🇧</span>
+<strong>Access Wortwelt</strong>
+<span>Englisch · Klasse 5<br>Vokabeltrainer für Welcome und Unit 1, mit Quiz, Sätzen und Hörübungen</span>
+<span class="start">Starten</span>
+</a>
+</div>
+</section>
+<section class="subject" aria-labelledby="fach-mathematik">
+<h2 id="fach-mathematik">Mathematik</h2>
+<p class="topic">Themen: Zahlen, Rechnen, Größen, Geometrie und Daten</p>
+<div class="grid">
+<a class="card" href="mathematik/MatheKompass/MatheKompass.html">
+<span class="icon">🧭</span>
+<strong>MatheKompass</strong>
+<span>Mathematik · Klasse 5<br>Interaktive Lernreise mit Übungen, Tests und Klassenarbeiten; zusätzliche Vertiefungen für Klasse 5/6</span>
+<span class="start">Starten</span>
+</a>
+</div>
+</section>
+<section class="subject" aria-labelledby="fach-musik">
+<h2 id="fach-musik">Musik</h2>
+<p class="topic">Thema: Noten, Pausen, Takte und Rhythmus</p>
+<div class="grid">
+<a class="card" href="musik/Musik-Lernapp/index.html">
+<span class="icon">🎵</span>
+<strong>Rhythmuswerkstatt</strong>
+<span>Musik · Klasse 5<br>Noten, Pausen, Takte und Rhythmus mit Minka und Fuji</span>
+<span class="start">Starten</span>
+</a>
+</div>
+</section>
+<section class="subject" aria-labelledby="fach-biologie">
+<h2 id="fach-biologie">Biologie</h2>
+<p class="topic">Thema: Lebewesen und Körper entdecken</p>
+<div class="grid">
+<a class="card" href="biologie%20und%20chemie/BioLabor_5_Biologie_V9_2.html">
+<span class="icon">🌱</span>
+<strong>BioLabor 5</strong>
+<span>Biologie · Klasse 5<br>Biologische Themen entdecken, verstehen und üben – Version 9.2</span>
+<span class="progress" id="prog-bio"></span>
+<span class="start">Starten</span>
+</a>
+</div>
+</section>
+<section class="subject" aria-labelledby="fach-chemie">
+<h2 id="fach-chemie">Chemie</h2>
+<p class="topic">Thema: Stoffe, Laborgeräte und Experimente</p>
+<div class="grid">
+<a class="card" href="biologie%20und%20chemie/Chemie_Entdeckerlabor_V7_2.html">
+<span class="icon">⚗️</span>
+<strong>Chemie-Entdeckerlabor</strong>
+<span>Chemie · Klasse 5<br>Stoffe, Laborgeräte und Experimente – Version 7.5</span>
+<span class="progress" id="prog-chem"></span>
+<span class="start">Starten</span>
+</a>
+</div>
+</section>
+<section class="subject" aria-labelledby="fach-erdkunde">
+<h2 id="fach-erdkunde">Erdkunde</h2>
+<p class="topic">Themen: Kartenlesen, Orientierung, Relief und Landschaft</p>
+<div class="grid">
+<a class="card" href="erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html">
+<span class="icon">🗺️</span>
+<strong>Erdkunde-Entdecker</strong>
+<span>Erdkunde · Klasse 5<br>Karten lesen, sich orientieren und Landschaften mit interaktiven Modellen erkunden</span>
+<span class="start">Starten</span>
+</a>
+</div>
+</section>
+<footer>Tipp: Lernstände werden je nach App im verwendeten Browser gespeichert. In der Erzählwerkstatt bleiben Antworten nur während der geöffneten Sitzung erhalten.</footer>
+</main>
+<script>
+// Zeigt den gespeicherten Lernstand beider Apps an, sofern vorhanden.
+try{const b=JSON.parse(localStorage.getItem('biolabor-kl5-v1')||'null');if(b&&typeof b.stars==='number'&&b.stars>0)document.getElementById('prog-bio').textContent='⭐ '+b.stars+(b.stars===1?' Lernstern':' Lernsterne')+' gesammelt'}catch(e){}
+try{const c=JSON.parse(localStorage.getItem('chemie5-data')||'null');const n=c&&c.done?Object.values(c.done).filter(Boolean).length:0;if(n>0)document.getElementById('prog-chem').textContent='✅ '+n+(n===1?' Lernbereich':' Lernbereiche')+' abgeschlossen'}catch(e){}
+</script>
+</body>
+</html>
