@@ -1,0 +1,55 @@
+MUSIK-LERNAPP MIT MINKA UND FUJI – VERSION 24
+Stand: 19.10.2026
+
+ENTHALTEN
+Die vollständige Lernapp mit Bildern, Spielen, Erklärungen, Übungen,
+Lernheft (PDF) und Arbeitsheft mit Lösungen (PDF).
+Version 24 verbessert die innere Technik und ergänzt:
+- robustere Offline-Speicherung mit verständlichen Fehlermeldungen
+- Offline-Anzeige im Kopfbereich (zeigt, ob die App ohne Internet läuft)
+- einklappbare Klangsteuerung (mehr Platz zum Lernen auf dem Handy)
+- sichtbare Lernziele mit Haken für erreichte Schritte
+- Fuji bemerkt wiederholte Schwierigkeiten und bietet gezielte Hilfe an
+- druckbare Lernstands-Übersicht und CSV-Export für die Lehrkraft
+  (unter „Mein Fortschritt")
+- kleinere Bilddateien (WebP) für schnelleres Laden
+- einen automatischen Prüfstand (siehe unten)
+Inhalte und Bedienung sind ansonsten unverändert.
+
+SO STARTEN
+1. Die ZIP-Datei vollständig entpacken.
+2. Im Ordner Musik-Lernapp die Datei index.html im Browser öffnen.
+   Alle Dateien und Unterordner müssen zusammenbleiben.
+
+AUF HANDY UND TABLET
+Am einfachsten nutzt du die veröffentlichte App:
+https://rhythmuswerkstatt-musik.node-opcua.chatgpt.site
+Falls eine Dateivorschau die entpackte App nicht vollständig öffnet,
+benutze diesen Link direkt im Browser.
+
+OHNE INTERNET
+In der veröffentlichten App kannst du unter „Sicherung und Offline-Lernen“
+die App und optional die beiden PDF-Hefte offline speichern.
+Das benötigt zunächst eine Internetverbindung. Der Offline-Speicher
+funktioniert nicht beim direkten Öffnen einer lokalen index.html-Datei.
+Vorlesen hängt von den verfügbaren Gerätestimmen ab.
+
+LERNSTAND
+Persönliche Lernstände sind nicht im ZIP enthalten. Sichere deinen bisherigen
+Stand in der App als JSON-Datei. Du kannst ihn in einem anderen Browser über
+die Sicherungsfunktion wieder einlesen. Lokale Dateien und die veröffentlichte
+App teilen ihren Lernstand nicht automatisch.
+
+PDF-HEFTE
+Musik-Lernapp/documents/lernheft-musik.pdf
+Musik-Lernapp/documents/arbeitsheft-musik.pdf
+
+PRÜFSTAND
+Die App enthält einen automatischen Prüfstand: Öffne die App einmal mit
+dem Zusatz #pruefstand in der Adresszeile (zum Beispiel index.html#pruefstand).
+Alle Ansichten, die Speicherung und die Lerninhalte werden dann automatisch
+geprüft und das Ergebnis wird angezeigt. Dein Lernstand bleibt dabei erhalten.
+Die automatischen Funktionsprüfungen wurden für Version 24 bestanden
+(alle 26 Ansichten, Lernstand-Speicherung, Offline-Speicherung und
+Offline-Start wurden automatisiert im Browser getestet).
+Ein vollständiger Test auf einem echten Android-Handy mit Edge steht aus.
