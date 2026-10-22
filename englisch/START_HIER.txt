@@ -1,0 +1,50 @@
+ACCESS WORTWELT – WELCOME UND UNIT 1
+Überarbeiteter App-Stand vom 20.10.2026
+
+STARTEN
+1. Die ZIP-Datei vollständig entpacken.
+2. Alle Dateien und den Ordner assets zusammenlassen.
+3. index.html mit einem aktuellen Browser öffnen.
+
+AM HANDY
+Eine ZIP-Datei ist keine installierbare Handy-App. Auf iPhone/iPad ist die
+Online-Version meist der einfachste Weg:
+https://access-wortwelt-unit1.node-opcua.chatgpt.site
+Falls lokale HTML-Dateien am Handy nicht richtig geöffnet werden, die
+Online-Version verwenden oder die entpackten Dateien auf einem Webserver
+bereitstellen.
+
+ENTHALTEN
+269 Lernkarten: 190 Welcome-Einträge und 79 Einträge aus Unit 1, S. 231–233.
+Lernkarten, Schreiben, Zuordnen, Quiz, Satzübungen, Groß-/Kleinschreibung,
+Lernstandscheck, Dialoge, Lückensätze, vier Hörgeschichten und Lernbilder.
+Hintergrund- und Schriftfarbe sind frei wählbar.
+
+SCHREIBEN UND HILFEN
+Du hast bei Fehlern einen zweiten Versuch. Tipps, die angezeigte Lösung
+und die englische Hörhilfe bei Deutsch → Englisch zählen als Unterstützung,
+nicht als selbstständig gewusstes Wort. Beim nächsten Wort kannst du es
+erneut ohne Hilfe versuchen. Bei Englisch → Deutsch spricht Audio nur
+die englische Aufgabe vor.
+Lückensätze geben die gesuchte Bedeutung bei Bedarf in Klammern an.
+Die Sprachausgabe des vollständigen Satzes liest diese Hinweise nicht mit.
+
+AUDIO UND FORTSCHRITT
+Audio verwendet die englische Sprachausgabe des Geräts, bevorzugt britisch.
+Es sind keine separat aufgenommenen Audiodateien enthalten.
+Stimmen und ihre Verfügbarkeit hängen vom Gerät und Browser ab; einzelne
+Stimmen können eine Internetverbindung benötigen.
+Hörgeschichten lassen sich bei Audioproblemen auch als Leseübung bearbeiten.
+Fortschritt und Farben werden nur im jeweiligen Browser gespeichert.
+Bereits online gespeicherter Fortschritt wird nicht in diese ZIP übernommen.
+Der Browser kann die Speicherung bei lokal geöffneten Dateien einschränken.
+
+Die ZIP enthält die App-Dateien, keine persönlichen Lernstände oder Zugangsdaten.
+
+SELBSTTEST FÜR DIE WEITERENTWICKLUNG
+Im Ordner englisch mit installiertem Node.js ausführen:
+node --test selftest.cjs
+Es werden keine zusätzlichen Pakete benötigt. Die Tests prüfen Daten,
+Antwortvarianten, Rückmeldungen, Hilfenwertung und Textalternativen in
+einer isolierten Browser-Nachbildung; persönliche Lernstände bleiben unberührt.
+Für Layout, Tastaturbedienung und echte Gerätestimmen zusätzlich im Browser testen.

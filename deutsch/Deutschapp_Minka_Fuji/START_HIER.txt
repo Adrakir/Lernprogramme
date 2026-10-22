@@ -1,0 +1,21 @@
+MINKA & FUJI – DEUTSCHAPP FÜR KLASSE 5
+
+Start am PC oder Mac:
+1. ZIP-Datei vollständig entpacken.
+2. Im entpackten Ordner die Datei index.html im Browser öffnen.
+3. Alle Dateien und den Ordner assets zusammenlassen.
+
+Inhalt:
+• Aufbau von Erzählungen: Einleitung, Hauptteil, Schluss
+• Spannungskurve mit dem Spannungswal
+• Übungen und Schreibwerkstatt für Einleitungen
+• Leseverständnis: sechs Geschichten mit insgesamt 72 Aufgaben
+• Hilfen, Musterlösungen und eigene Antworten zur Selbstkontrolle
+
+Die App nutzt lokale Bilder und Dateien; zum Lernen ist keine Anmeldung nötig.
+Antworten bleiben nur in der geöffneten Sitzung erhalten. Beim Neuladen werden sie zurückgesetzt.
+Eigene Texte werden nicht automatisch benotet.
+
+Auf Smartphones kann das direkte Öffnen entpackter HTML-Dateien je nach System eingeschränkt sein.
+Alternativ im Browser die veröffentlichte App öffnen:
+https://erzaehlwerkstatt-deutsch-5.node-opcua.chatgpt.site
