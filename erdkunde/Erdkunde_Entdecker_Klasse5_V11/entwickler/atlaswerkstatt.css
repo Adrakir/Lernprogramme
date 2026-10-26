@@ -5,3 +5,5 @@ html[data-theme=dark] .aw{--aw-ink:#e1edf3;--aw-paper:#19364a;--aw-soft:#173d3a;
 @media print{.aw .aw-nav,.aw button{display:none}.aw .aw-card{break-inside:avoid}.aw .aw-grid{grid-template-columns:1fr 1fr}.aw .aw-hero{padding:12px}}
 
 .aw .aw-map-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;border-radius:12px}.aw .aw-map-hint{display:none}.aw .aw-map-scroll:focus-visible{outline:3px solid #b16c02;outline-offset:3px}@media(max-width:780px){.aw .aw-map-scroll svg{min-width:640px}.aw .aw-map-hint{display:block}}
+
+.aw .aw-gap-list{padding-left:25px}.aw .aw-gap-list li{margin:24px 0;line-height:2.2;font-size:1.1rem}.aw .aw-gap-field{display:inline-flex;flex-direction:column;vertical-align:middle;max-width:100%;margin:3px 4px}.aw .aw-gap-field input{width:170px;max-width:100%}.aw .aw-gap-state{font-size:.78rem;line-height:1.5;color:#8b5911}.aw .aw-gap-state[data-good=true]{color:#086f62}.aw input[aria-invalid=true]{border:2px solid #a76a13}.aw input[aria-invalid=false]{border:2px solid #086f62}

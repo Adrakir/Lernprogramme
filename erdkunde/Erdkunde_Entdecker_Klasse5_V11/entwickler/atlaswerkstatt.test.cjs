@@ -26,4 +26,11 @@ for(const m of html.matchAll(/(?:src|href)="([^"#]+\.(?:js|css|webp|webmanifest)
 const output=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 assert.ok(!/<script src=/.test(output));checks++;
 assert.ok(output.includes('atlaswerkstatt.js')&&output.includes('Ortsname + Länge → Breite'));checks++;
+const goodGaps={parallel:'parallel',reference:'Äquator',north:'Nordpol',south:'Südpol',largest:'Äquator'};
+for(const r of a.checkGaps(goodGaps))eq(r.ok,true);
+for(const r of a.checkGaps({}))eq(r.empty,true);
+for(const r of a.checkGaps({...goodGaps,reference:'Aequator',south:'Suedpol',largest:' ÄQUATOR. '}))eq(r.ok,true);
+eq(a.checkGaps({...goodGaps,parallel:'senkrecht'})[0].ok,false);
+eq(a.checkGaps({...goodGaps,reference:'Nordpol'})[1].ok,false);
+eq(a.checkGaps({...goodGaps,largest:'Meridian'})[4].ok,false);
 console.log(`${checks} Prüfungen bestanden: Erdviertel, Grenzfälle, Komma-Eingaben, Richtungen, Kugelprojektion, Registerfelder, vollständige Ein-Datei-Ausgabe.`);

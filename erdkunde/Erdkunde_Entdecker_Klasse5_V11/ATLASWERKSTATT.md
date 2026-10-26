@@ -2,12 +2,14 @@
 
 Start über `index.html` und den neuen Menüpunkt **Gradnetz & Atlas**. Auch auf der Startseite und in den Lernpfaden Gradnetz/Atlanten ist ein Zugang eingebaut. Der bisherige App-Inhalt bleibt erhalten.
 
-## Vier Bereiche
+## Fünf Bereiche
 
 - **Gradnetz entdecken:** orthografisch projizierte, drehbare Modellkugel mit Breitenkreisen, Meridianen, markiertem Schnittpunkt und Breitenwinkel. Blick vom Äquator und auf beide Pole; Linienarten einzeln anzeigen. Rückseiten sind gestrichelt. Drehung ist anhaltbar, stoppt beim Verlassen und beachtet reduzierte Bewegung.
 - **Erdviertel:** farbige Weltkarte, Vergleich der vier Halbkugeln und acht Zuordnungsaufgaben einschließlich Äquator, Nullmeridian, 180°-Meridian und Polen.
 - **Blickrichtungen:** vier Modelle wie die vier Felder der Unterrichtsskizze. Selbst Formen zuordnen und einzeln begründete Rückmeldung erhalten.
-- **Orte im Atlas:** drei Sucharten mit je vier Beispielen (Prag, Lissabon, San Francisco, Alice Springs). Fünf anwählbare Schritte, abspielbarer Suchweg, Komma-Eingabe, Prüfung der Himmelsrichtung, Hilfen, Modellregister und erläuterte Planquadrate. 12 Ortsaufgaben + 8 Erdviertelaufgaben + 4 Blickzuordnungen = 24 unterschiedliche bewertbare Teilaufgaben.
+- **Orte im Atlas:** drei Sucharten mit je vier Beispielen (Prag, Lissabon, San Francisco, Alice Springs). Fünf anwählbare Schritte, abspielbarer Suchweg, Komma-Eingabe, Prüfung der Himmelsrichtung, Hilfen, Modellregister und erläuterte Planquadrate. 12 Ortsaufgaben + 8 Erdviertelaufgaben + 4 Blickzuordnungen = 24 unterschiedliche bewertbare Teilaufgaben; mit den fünf neuen Lücken insgesamt 29.
+
+**Lückentext (Ergänzung aus dem vierten Foto):** drei Merksätze mit fünf Lücken, optionaler Wort-Hilfe, Einzelrückmeldungen und Musterlösung. Meridiane werden fachlich als Längenhalbkreise erklärt. Groß-/Kleinschreibung und die Schreibweisen Ae/ue werden toleriert. Nach dem Anzeigen der Lösung werden keine neuen Erfolge gutgeschrieben, bis ein neuer Versuch gestartet wird.
 
 Ein Ortsname plus ein Grad führt über das Ortsregister zur Karte; der fehlende Grad wird abgelesen. Ein einzelner Grad ohne weitere Ortsinformation legt normalerweise keinen eindeutigen Punkt fest. Das Modellregister enthält nur die vier Übungsorte. Es ersetzt kein weltweites Ortsverzeichnis. Echte Atlasseitenzahlen hängen von Ausgabe und Auflage ab und werden hier nicht vorgetäuscht.
 
