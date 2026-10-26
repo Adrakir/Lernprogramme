@@ -1,30 +1,39 @@
-# Gradnetz- und Atlaswerkstatt · 26.10.2026
+# Gradnetz- und Atlaswerkstatt · verbessert am 26.10.2026
 
-Start über `index.html` und den neuen Menüpunkt **Gradnetz & Atlas**. Auch auf der Startseite und in den Lernpfaden Gradnetz/Atlanten ist ein Zugang eingebaut. Der bisherige App-Inhalt bleibt erhalten.
+Start über `index.html` und **Gradnetz & Atlas**. Die Ein-Datei-App enthält die Lernmodelle, Küstenkonturen, Druck-PDFs und alle 20 Ortsdaten. Die neuen Funktionen benötigen keine externen Laufzeitdienste.
 
-## Fünf Bereiche
+## Die sieben umgesetzten Verbesserungen
 
-- **Gradnetz entdecken:** orthografisch projizierte, drehbare Modellkugel mit Breitenkreisen, Meridianen, markiertem Schnittpunkt und Breitenwinkel. Blick vom Äquator und auf beide Pole; Linienarten einzeln anzeigen. Rückseiten sind gestrichelt. Drehung ist anhaltbar, stoppt beim Verlassen und beachtet reduzierte Bewegung.
-- **Erdviertel:** farbige Weltkarte, Vergleich der vier Halbkugeln und acht Zuordnungsaufgaben einschließlich Äquator, Nullmeridian, 180°-Meridian und Polen.
-- **Blickrichtungen:** vier Modelle wie die vier Felder der Unterrichtsskizze. Selbst Formen zuordnen und einzeln begründete Rückmeldung erhalten.
-- **Orte im Atlas:** drei Sucharten mit je vier Beispielen (Prag, Lissabon, San Francisco, Alice Springs). Fünf anwählbare Schritte, abspielbarer Suchweg, Komma-Eingabe, Prüfung der Himmelsrichtung, Hilfen, Modellregister und erläuterte Planquadrate. 12 Ortsaufgaben + 8 Erdviertelaufgaben + 4 Blickzuordnungen = 24 unterschiedliche bewertbare Teilaufgaben; mit den fünf neuen Lücken insgesamt 29.
+1. **Selbst Punkte markieren.** Auf der Welt- oder Regionalkarte antippen, den gewählten Punkt mit Richtungstasten oder den Pfeiltasten im fokussierten Kartenbereich verschieben und prüfen. Ortsnamen und Lösungslinien bleiben zunächst verborgen. Ablesetoleranz: 1° auf Regionalkarten, 3° auf der Weltkarte; beim Testpunkt 1°. Ein Grad entspricht dabei keiner überall gleichen Entfernung in Kilometern.
+2. **20 echte Orte in allen vier Erdvierteln.** Drei Sucharten mit jeweils 20 Ortsaufgaben und 20 Aufgaben zum Markieren. Quellen sind bei jedem Ort verlinkt, Ortslagen auf 0,1° gerundet. Die Auswahl enthält Prag, Lissabon, San Francisco, Alice Springs, Berlin, Paris, London, Rom, Kairo, Tokio, New York, Mexiko-Stadt, Rio de Janeiro, Buenos Aires, Santiago, Sydney, Kapstadt, Wellington, Frankfurt am Main und Frankfurt (Oder).
+3. **Abrufbare Hilfen.** Im Selbstübungsmodus beginnen Ortsaufgaben ohne Lösungslinien. Tipps führen von Erdviertel und Karte über Breite und Länge zur ausdrücklich angeforderten Lösung. Geführter Suchweg und Animation bleiben gesondert verfügbar. Beim Lückentext sind die erklärenden Bilder anfangs geschlossen. Geöffnete Hilfen werden in der Übungsstatistik berücksichtigt; eine angezeigte Musterlösung gilt nicht als selbstständig gelöste Aufgabe.
+4. **Gezielte Fehlerrückmeldungen.** Die Punktprüfung unterscheidet vertauschte Koordinaten, falsche Nord-/Süd- bzw. Ost-/Westlage, passende Breite bei falscher Länge, passende Länge bei falscher Breite und unpassende Kartenauswahl. Bei einer fehlenden Koordinate wird auch erkannt, wenn die bereits gegebene Koordinate noch einmal eingetragen wurde. Dezimalkomma und gültige Richtungsangaben werden geprüft.
+5. **Realistischere Registerarbeit.** Alphabetisches, durchsuchbares Modellregister mit 20 Orten, Land, Region, Kartenverweis und Planquadrat. Sechs Aufgaben erfordern die Wahl von Eintrag, Karte und Suchfeld. Frankfurt am Main und Frankfurt (Oder) zeigen, warum die Region wichtig ist. Planquadrate werden auf der ausgewählten Karte eingeblendet. Modell-Kartenkennzeichen ersetzen keine echten Atlasseiten; Seitenzahlen hängen von der Ausgabe ab.
+6. **Vier klare Lernschritte und Zoom.** Verstehen → Selbst üben → Atlas benutzen → Abschlusstest. Die bisherige Hauptnavigation ist auf fünf häufige Bereiche begrenzt; die übrigen Bereiche bleiben unter „Weitere App-Bereiche“ erreichbar. Karten und Globus lassen sich mit + / − vergrößern und seitlich verschieben. Tastaturbedienung, große Bedienelemente, Farbkontrast und reduzierte Bewegung werden berücksichtigt.
+7. **Abschlusstest und Druckdateien.** Zehn gemischte Aufgaben, Lösungen erst nach Abgabe und passende Links zum Weiterüben. Aufgaben und Musterlösungen liegen als getrennte, je zweiseitige Farb-PDFs vor und sind in der Ein-Datei-App eingebettet. Die freie Begründung zur letzten Aufgabe wird bewusst nicht automatisch benotet. Die Auswertung dient als Lernhinweis und vergibt keine Schulnote.
 
-**Lückentext (Ergänzung aus dem vierten Foto):** drei Merksätze mit fünf Lücken, optionaler Wort-Hilfe, Einzelrückmeldungen und Musterlösung. Meridiane werden fachlich als Längenhalbkreise erklärt. Groß-/Kleinschreibung und die Schreibweisen Ae/ue werden toleriert. Nach dem Anzeigen der Lösung werden keine neuen Erfolge gutgeschrieben, bis ein neuer Versuch gestartet wird.
+Die bisherigen acht Erdviertelaufgaben, vier Blickzuordnungen und fünf Lücken bleiben enthalten. Bestehende Werkstatt-Erfolge bleiben erhalten. Versuche und Hilfen werden pro Bereich lokal gespeichert; Wiederholungen zählen als weitere Versuche. Der Werkstatt-Reset betrifft nur die Werkstattdaten.
 
-Ein Ortsname plus ein Grad führt über das Ortsregister zur Karte; der fehlende Grad wird abgelesen. Ein einzelner Grad ohne weitere Ortsinformation legt normalerweise keinen eindeutigen Punkt fest. Das Modellregister enthält nur die vier Übungsorte. Es ersetzt kein weltweites Ortsverzeichnis. Echte Atlasseitenzahlen hängen von Ausgabe und Auflage ab und werden hier nicht vorgetäuscht.
+## Fachliche Hinweise
 
-Die Ortslagen sind auf 0,1° gerundet. Die numerische Rückmeldung akzeptiert ±0,16° als Ablesetoleranz, prüft aber Nord/Süd bzw. Ost/West gesondert. Der Punkt 23,6° S / 133,8° O aus der Skizze wird nur als Nähe von Alice Springs bezeichnet. Die App verwendet den nachgewiesenen Referenzpunkt 23,7° S / 133,9° O. Prag liegt bei rund 50,1° N, nicht 50,9° N.
+Breitenkreise verlaufen parallel zum Äquator. Ein Meridian ist ein Halbkreis von Pol zu Pol; zwei gegenüberliegende Meridiane bilden einen ganzen Längenkreis. Äquator, Nullmeridian und 180°-Meridian sind Grenzen zwischen Erdvierteln. Am Pol gibt es keine eindeutige östliche oder westliche Länge. Die Datumsgrenze verläuft nur ungefähr am 180°-Meridian.
 
-## Quellen
+Ein Ortsname plus ein Grad führt über das Ortsregister zur Karte; der fehlende Grad wird abgelesen. Ein einzelner Grad ohne weitere Ortsinformation legt normalerweise keinen eindeutigen Punkt fest. Die Ortsdaten sind gerundete Referenzpunkte, keine exakten Adressen. Die kleinen Koordinatenabweichungen aus den Unterrichtsskizzen werden in den Ortsbeispielen nicht als exakte Städteposition ausgegeben.
+
+## Quellen und Lizenzen
 
 - NOAA: https://oceanservice.noaa.gov/education/tutorial_nautical_charts/nautical_charts02_information_2b.html
-- NOAA, Datumsgrenze/180°: https://oceanservice.noaa.gov/facts/longitude.html
-- GeoNames (CC BY 4.0): https://www.geonames.org/3067696/prague.html · https://www.geonames.org/2267057/lisbon.html · https://www.geonames.org/5391959/san-francisco.html
-- Northern Territory Government, Place Names Register: https://www.ntlis.nt.gov.au/placenames/print_extract.jsp?id=22272
-- Bereits enthaltene Küstenkonturen: Natural Earth, Public Domain. Neue Grafiken sind eigene SVG-Lernmodelle.
+- NOAA, Nullmeridian/180°/Datumsgrenze: https://oceanservice.noaa.gov/facts/longitude.html
+- GeoNames, CC BY 4.0: vollständige Einzelquellen stehen in `entwickler/atlasdaten.js` und im Quellenbereich der App. Die 16 neu ergänzten Orte wurden am 26.10.2026 anhand dieser Einträge überprüft.
+- Alice Springs: Place Names Register, Northern Territory Government: https://www.ntlis.nt.gov.au/placenames/print_extract.jsp?id=22272
+- Küstenkonturen: Natural Earth, Public Domain. Grafiken und Lernkarten sind eigene Modelle; keine Verlagskarten werden kopiert.
 
 ## Entwicklung und Prüfung
 
-`node entwickler/build-offline.js` erzeugt die startfähige Ein-Datei-App. `node entwickler/atlaswerkstatt.test.cjs` prüft die fachlichen Berechnungen, Eingaben und Ressourcen. Die Werkstatt verwendet keine externen Laufzeitbibliotheken. Ihr Fortschritt liegt separat unter `geo-atlaswerkstatt-v1` und kann nach Rückfrage innerhalb der Werkstatt zurückgesetzt werden. Die übrigen App-Lernstände bleiben dabei erhalten.
+- `python entwickler/build-atlas-pdf.py`: erzeugt die beiden PDFs und die eingebetteten Druckdateien. Benötigt ReportLab und die im Skript angegebenen DejaVu-Schriften.
+- `node entwickler/build-offline.js`: erzeugt `index.html` mit allen eingebetteten Abhängigkeiten.
+- `node entwickler/atlaswerkstatt.test.cjs`: prüft Koordinaten, Richtungen, Vertauschungen, Projektion, 20 Ortslagen, Registerfelder, Lücken, zehn Testaufgaben und lokale Ressourcen.
 
-Im GitHub-Stand fehlten die Hauptdatei und mehrere Entwickler-Abhängigkeiten. Diese wurden aus dem vorhandenen vollständigen V11-Paket ergänzt. Bereits im Repository vorhandene neuere Dateien (Ansichten, Kartenexpedition und OSM-Daten) wurden beibehalten und in die Ein-Datei-App eingebunden.
+Die Ergänzungen wurden im Browser durchgespielt; die Druck-PDFs wurden gerendert und visuell geprüft. Eine schmale Browseransicht ersetzt keinen Test auf jedem echten iOS-/Android-Gerät. Der Offline-Cache im Entwickler-Modus verwendet einen eigenen Cache-Namensraum und entfernt keine Caches anderer Lernapps.
+
+Die zuvor fehlenden V11-Startdateien wurden aus dem vorhandenen vollständigen Paket ergänzt. Bereits im Repository vorhandene neuere Ansichten-, Kartenexpeditions- und OSM-Dateien bleiben erhalten.
