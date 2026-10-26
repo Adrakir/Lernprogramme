@@ -1,0 +1,22 @@
+/* Version 8: Gustav Globus und reale Diepholz-Beispiele */
+.v8-gustav{display:flex;align-items:center;gap:14px;padding:12px 18px;border:2px solid #93c3cb;border-radius:18px;background:linear-gradient(120deg,#e7f5f5,#f5f9e6);margin:13px 0;color:#173949}
+.v8-character{width:112px;max-height:126px;object-fit:contain;flex:none;filter:drop-shadow(0 4px 5px #2046572f)}
+.v8-talk{min-width:0;flex:1}.v8-talk strong{font-size:1.1rem}.v8-talk p{margin:7px 0 0;line-height:1.55;color:#204a59}
+.v8-lesson,.v8-practice{padding:12px 0 18px}.v8-lesson h3,.v8-practice h3{margin:19px 0 8px}
+.v8-map{padding:8px 8px 10px;border:1px solid #86b1ba;border-radius:15px;background:#f7fcfd}
+.v8-map iframe{width:100%;height:375px;border:0;border-radius:10px;background:#e2ece8;display:block}
+.v8-map .mini{padding:7px 5px 0;line-height:1.4;color:#234f5a}
+.v8-sites{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:10px;margin:13px 0}
+.v8-site{background:var(--surface2);border-radius:12px;padding:13px;border:1px solid var(--border);min-width:0}
+.v8-site-tag{font-weight:780}.v8-site a{display:block;font-weight:650;line-height:1.5;margin-top:7px;overflow-wrap:anywhere}
+.v8-real-photo{max-width:700px;border-radius:15px;padding:10px;background:var(--surface2);border:1px solid var(--border);margin:12px 0}
+.v8-real-photo img{width:100%;height:auto;max-height:400px;object-fit:contain;border-radius:10px;display:block}
+.v8-photo-fallback{padding:15px;background:#f1f3f5;color:#223}
+.v8-real-photo p{margin:8px 2px}.v8-zoom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:12px 0}
+.v8-zoom button,.v8-buttons button{padding:12px 13px;border-radius:11px;border:2px solid #36798d;background:#e7f5f5;color:#17465a;font-weight:750;min-height:44px;cursor:pointer}
+.v8-zoom button:disabled{opacity:.5}.v8-buttons{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.v8-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:17px 0}
+.v8-comparison>div,.v8-note,.v8-question{border:1px solid var(--border);background:var(--surface2);padding:13px;border-radius:12px}
+.v8-comparison p,.v8-note p{margin:7px 0}.v8-question{margin:15px 0}.v8-question p{font-weight:700;margin:9px 0;min-height:20px}
+@media(max-width:580px){.v8-gustav{padding:9px;gap:8px}.v8-character{width:76px;max-height:98px}.v8-talk p{font-size:.88rem}.v8-map iframe{height:290px}.v8-comparison{grid-template-columns:1fr}.v8-zoom{justify-content:center}}
+@media print{.v8-zoom,.v8-map iframe,.v8-buttons{display:none}}

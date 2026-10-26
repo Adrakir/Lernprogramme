@@ -11,4 +11,7 @@ function bundle(file){
  fs.writeFileSync(path.join(root,file),html);
  console.log(file+': '+Buffer.byteLength(html)+' Bytes');
 }
-bundle('index.html');bundle('lernheft.html');
+bundle('index.html');
+// Das separat erstellte Lernheft ist nicht in jedem Quellpaket enthalten.
+if(fs.existsSync(path.join(__dirname,'lernheft.html')))bundle('lernheft.html');
+
