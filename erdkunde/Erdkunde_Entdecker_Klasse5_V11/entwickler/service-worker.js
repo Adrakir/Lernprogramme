@@ -1,5 +1,5 @@
 /* HTTPS/localhost PWA cache. Nicht im Datei-Modus verwendbar. */
-const CACHE='erdkunde-v11-atlas-20261026-verbessert';
+const CACHE='erdkunde-v11-atlas-20261026-test-v2';
 const ASSETS=['./','./index.html','./style.css','./v7.css','./lernstoff.js','./world.js','./app.js','./v7.js','./v8.js','./v8.css','./v9.css','./v9-data.js','./v9.js','./v10-data.js','./v10.js','./v10.css','./v11.js','./v11.css','./gustav-globus.webp','./live.js','./manifest.webmanifest','./app-icon.svg','./app-icon-192.png','./app-icon-512.png','./ansichten.js','./ansichten-app.js','./ansichten.css','./entdecker.css','./entdecker.js','./diepholz-data.js','./atlaswerkstatt.js','./atlaswerkstatt.css','./atlasdaten.js','./atlas-druckdateien.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('erdkunde-v11-')&&k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()]))});

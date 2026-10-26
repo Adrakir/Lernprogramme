@@ -27,19 +27,19 @@ def line(x,y,x2,y2,color='#9AB1BE',width=.7):
     c.setStrokeColor(HexColor(color));c.setLineWidth(width);c.line(x,H-y,x2,H-y2)
 def box(x,y,w,h,fill='#EFF7F5',stroke=None):
     c.setFillColor(HexColor(fill));c.setStrokeColor(HexColor(stroke or fill));c.roundRect(x,H-y-h,w,h,10,fill=1,stroke=bool(stroke))
-def header(title,page,solution=False):
+def header(title,page,solution=False,total=3):
     c.setFillColor(HexColor(TEAL));c.rect(0,H-8,W,8,fill=1,stroke=0)
     txt(34,36,'ERDKUNDE · KLASSE 5',9,'Bold',TEAL)
     txt(34,66,title,23,'Bold')
     txt(34,87,('Musterlösungen und Lernhinweise' if solution else 'Gradnetz · Erdviertel · Polansichten · Atlasarbeit'),10,color=GREY)
     line(34,804,W-34,804)
     txt(34,823,'Eigene Lernmodelle · Küsten: Natural Earth, Public Domain',8,color=GREY)
-    txt(W-98,823,f'Seite {page} / 2',8,color=GREY)
+    txt(W-98,823,f'Seite {page} / {total}',8,color=GREY)
 def question(index,y,width=520):
     q=DATA['exam'][index-1]
     h=para(34,y,width,f'<b>{index}. {q["question"]}</b>',11,16)
     return y+h
-def map_art(x,y,w,h,bounds,point=None,point_label=None,lat_step=5,lon_step=5):
+def map_art(x,y,w,h,bounds,point=None,point_label=None,lat_step=5,lon_step=5,fields=False,tolerance=False):
     west,east,south,north=bounds
     left=x+36;top=y+22;mw=w-48;mh=h-43
     X=lambda lo:left+(lo-west)/(east-west)*mw
@@ -62,55 +62,121 @@ def map_art(x,y,w,h,bounds,point=None,point_label=None,lat_step=5,lon_step=5):
         label=f'{abs(la):g}°'+(' S' if la<0 else ' N' if la>0 else '')
         c.setFont('Body',8);c.setFillColor(HexColor(BLUE));c.drawRightString(left-5,H-yy-3,label)
     c.setStrokeColor(HexColor('#50758C'));c.rect(left,H-top-mh,mw,mh,fill=0,stroke=1)
+    if fields:
+        for i in range(5):
+            xx=left+i*mw/4;yy=top+i*mh/4
+            line(xx,top,xx,top+mh,'#425A68',.9);line(left,yy,left+mw,yy,'#425A68',.9)
+            if i<4:
+                txt(xx+mw/8-3,top+mh+12,chr(65+i),8,'Bold')
+                txt(left+mw+5,yy+mh/8+3,str(i+1),8,'Bold')
     if point:
-        la,lo=point;c.setFillColor(HexColor('#E8B83C'));c.setStrokeColor(HexColor(INK));c.circle(X(lo),H-Y(la),3.5,fill=1,stroke=1)
+        la,lo=point;
+        if tolerance:
+            c.setFillColor(HexColor('#D6EDDE'));c.setStrokeColor(HexColor('#6A997D'));c.rect(X(lo-1),H-Y(la-1),X(lo+1)-X(lo-1),Y(la-1)-Y(la+1),fill=1,stroke=1)
+        c.setFillColor(HexColor('#E8B83C'));c.setStrokeColor(HexColor(INK));c.circle(X(lo),H-Y(la),3.5,fill=1,stroke=1)
         if point_label:txt(X(lo)+7,Y(la)-5,point_label,8,'Bold')
-    txt(left,y+h-4,'Vereinfachte Lernkarte, kein Ausschnitt eines Verlagsatlas',7.4,color=GREY)
+    if not fields:txt(left,y+h-4,'Vereinfachte Lernkarte · Natural Earth, Public Domain',7,color=GREY)
+def field(x,y,w,label):
+    para(x,y,w,label,9.4,13)
+    line(x,y+31,x+w,y+31)
+def qhead(number,x,y,width=527):
+    q=DATA['exam'][number-1]
+    para(x,y,width-42,f'<b>{number}. {q["title"]}</b>',11.3,15)
+    txt(x+width-35,y+11,'2 P.',9,'Bold',TEAL)
+    instruction=q['question'].split(' Du kannst')[0]+' Setze ein kleines Kreuz.' if q['kind']=='map' else q['question']
+    return y+21+para(x,y+21,width,instruction,10,14)
+def model(x,y,size,kind,label):
+    cx=x+size/2;cy=y+size/2;r=size*.39
+    c.setFillColor(HexColor('#F3F7FA'));c.setStrokeColor(HexColor('#445E70'));c.setLineWidth(.8);c.circle(cx,H-cy,r,fill=1,stroke=1)
+    if kind=='parallel-pole':
+        for scale in [.866,.5,.2]:c.circle(cx,H-cy,r*scale,fill=0,stroke=1)
+    elif kind=='meridian-pole':
+        for a in range(0,360,45):line(cx,cy,cx+r*math.cos(math.radians(a)),cy+r*math.sin(math.radians(a)),'#445E70',.8)
+    elif kind=='parallel-side':
+        for lat in [-60,-30,0,30,60]:
+            dy=r*math.sin(math.radians(lat));span=r*math.cos(math.radians(lat));line(cx-span,cy-dy,cx+span,cy-dy,'#445E70',.8)
+    else:
+        for lon in [-60,-30,0,30,60]:
+            p=c.beginPath()
+            for i in range(91):
+                a=math.radians(-90+2*i);xx=cx+r*math.cos(a)*math.sin(math.radians(lon));yy=cy-r*math.sin(a)
+                if i==0:p.moveTo(xx,H-yy)
+                else:p.lineTo(xx,H-yy)
+            c.setStrokeColor(HexColor('#445E70'));c.drawPath(p,fill=0,stroke=1)
+    txt(x+size/2-20,y-3,label,9,'Bold')
+def grid_field(p,key):
+    w,e,so,n=DATA['maps'][key]['bounds']
+    return chr(65+min(3,int((p['lon']-w)/(e-w)*4)))+str(min(3,int((n-p['lat'])/(n-so)*4))+1)
 def register_table(y):
-    widths=[218,128,181];xs=[34,252,380,561]
-    rows=[['Ortsname','Region / Land','Karte / Suchfeld'],['Frankfurt am Main','Hessen / Deutschland','Europa / C1'],['Frankfurt (Oder)','Brandenburg / Deutschland','Europa / C1']]
-    for r,row in enumerate(rows):
-        yy=y+r*27
-        if r==0:box(34,yy,527,27,'#E6F1F3')
-        for col,t in enumerate(row):txt(xs[col]+6,yy+18,t,8.5,'Bold' if r==0 else 'Body')
-        line(34,yy+27,561,yy+27)
+    xs=[34,188,344,508];row_h=28
+    rows=[['Ort','Land / Region','Karte','Feld']]
+    for id in ['frankfurt-main','frankfurt-oder','berlin','lissabon']:
+        p=next(p for p in DATA['cities'] if p['id']==id);key='germany' if p['country']=='Deutschland' else 'europe'
+        rows.append([p['name'],p['country']+' / '+p['region'],DATA['maps'][key]['code']+' · '+('Deutschland' if key=='germany' else 'Europa'),grid_field(p,key)])
+    for i,row in enumerate(rows):
+        if i==0:box(34,y+i*row_h,527,row_h,'#E5F1F3')
+        for col,t in enumerate(row):txt(xs[col]+5,y+i*row_h+18,t,8.2,'Bold' if i==0 else 'Body')
+        line(34,y+(i+1)*row_h,561,y+(i+1)*row_h)
 def make_test():
     global c
-    path=ROOT/'Atlas_Abschlusstest_Klasse5.pdf';c=canvas.Canvas(str(path),pagesize=A4);c.setTitle('Abschlusstest Gradnetz und Atlas - Klasse 5')
+    path=ROOT/'Atlas_Abschlusstest_Klasse5.pdf';c=canvas.Canvas(str(path),pagesize=A4);c.setTitle('Atlas-Abschlusstest Klasse 5 - verbesserte Fassung, 20 Punkte')
     header('Mein Atlas-Abschlusstest',1)
-    txt(34,111,'Name:',10);line(74,113,315,113);txt(356,111,'Datum:',10);line(397,113,561,113)
-    for i,y in [(1,142),(2,225),(3,314),(4,398),(5,482),(6,566)]:
-        end=question(i,y);line(34,end+31,561,end+31)
-    box(34,696,527,68)
-    para(48,708,497,'<b>So arbeitest du:</b> Lies die Richtungsangaben genau. Du kannst ausgeschriebene Begriffe oder eindeutige Abkürzungen verwenden. Arbeite in deinem Tempo; etwa 15–20 Minuten sind ein Richtwert.',10,15)
-    c.showPage();header('Karten- und Atlasaufgaben',2)
-    question(7,105);map_art(34,133,527,167,DATA['maps']['europe']['bounds'])
-    question(8,321);register_table(361);txt(34,464,'Vollständiger Ortsname:',10);line(184,467,561,467)
-    question(9,492);p=next(p for p in DATA['cities'] if p['id']=='lissabon')
-    map_art(34,541,332,137,[-15,0,35,45],(p['lat'],p['lon']),'Lissabon',lat_step=5,lon_step=5)
-    txt(382,577,'Länge:',10,'Bold');line(382,608,485,608);txt(495,608,'°',11)
-    txt(382,638,'O oder W:',10);line(449,640,557,640)
-    question(10,704);txt(34,756,'Antwort:',10);line(92,758,207,758)
-    txt(233,756,'Begründung (unbenotet):',9);line(233,781,561,781)
+    txt(34,108,'Name:',9);line(72,110,323,110);txt(357,108,'Datum:',9);line(401,110,561,110)
+    txt(34,130,'20 Punkte · fünf Bereiche mit je 4 Punkten · Richtwert 20–25 Minuten',9,'Bold',TEAL)
+    qhead(1,34,151);field(34,205,527,DATA['exam'][0]['fields'][0]['label']);field(34,249,527,DATA['exam'][0]['fields'][1]['label'])
+    qhead(2,34,309);field(34,360,245,DATA['exam'][1]['fields'][0]['label']);field(309,360,252,DATA['exam'][1]['fields'][1]['label'])
+    qhead(3,34,424);field(34,475,245,DATA['exam'][2]['fields'][0]['label']);field(309,475,252,DATA['exam'][2]['fields'][1]['label'])
+    qhead(4,34,539);field(34,590,245,DATA['exam'][3]['fields'][0]['label']);field(309,590,252,DATA['exam'][3]['fields'][1]['label'])
+    box(34,657,527,52)
+    para(46,668,502,'<b>Hinweis:</b> Bei den Erdvierteln darfst du NO, NW, SO oder SW schreiben. Pro passender Teilantwort gibt es einen Punkt. Arbeite in deinem Tempo.',9.3,14)
+    para(34,729,527,'<b>Zusatz ohne Punkte:</b> Warum bestimmt ein Breitengrad allein normalerweise noch keinen eindeutigen Ort?',9.7,14)
+    line(34,779,561,779)
+    c.showPage();header('Ansichten und Kartenarbeit',2)
+    qhead(5,34,105,247);qhead(6,314,105,247)
+    model(42,180,104,'parallel-pole','Modell A');model(163,180,104,'meridian-pole','Modell B')
+    model(322,180,104,'parallel-side','Modell A');model(443,180,104,'meridian-side','Modell B')
+    field(34,296,247,'A: Breitenkreise oder Meridiane?');field(34,339,247,'B: Breitenkreise oder Meridiane?')
+    field(314,296,247,'A: Breitenkreise oder Meridiane?');field(314,339,247,'B: Breitenkreise oder Meridiane?')
+    qhead(7,34,393)
+    map_art(34,449,527,143,DATA['maps']['germany']['bounds'],lat_step=2,lon_step=2)
+    txt(70,608,'Bewertung: Breite und Länge je 1 Punkt, Ablesetoleranz je 1°.',8.5,color=GREY)
+    qhead(8,34,636)
+    map_art(34,690,280,105,[-80,-40,-40,0],(-20,-60),'P',lat_step=10,lon_step=10)
+    field(337,696,105,'Breite: Gradzahl (0,5 P.)');field(456,696,105,'N oder S (0,5 P.)');field(337,753,105,'Länge: Gradzahl (0,5 P.)');field(456,753,105,'O oder W (0,5 P.)')
+    c.showPage();header('Im Atlas sicher suchen',3)
+    qhead(9,34,105);register_table(173)
+    txt(34,337,'Modellkarte D · Deutschland und Nachbarn',9,'Bold')
+    map_art(34,350,310,159,DATA['maps']['germany']['bounds'],lat_step=2,lon_step=2,fields=True)
+    field(369,351,192,'Vollständiger Ortsname (0,5 P.)');field(369,407,192,'Karte: Kennzeichen / Name (0,5 P.)');field(369,463,192,'Suchfeld (1 P.)')
+    qhead(10,34,549)
+    p=next(p for p in DATA['cities'] if p['id']=='lissabon')
+    map_art(34,625,310,155,DATA['maps']['iberia']['bounds'],(p['lat'],p['lon']),'Lissabon')
+    field(369,639,192,'Länge: Gradzahl (1 P.)');field(369,703,192,'Länge: O oder W (1 P.)')
     c.save();return path
+def solution_line(number,y):
+    q=DATA['exam'][number-1];txt(34,y,f'{number}. {q["title"]} · 2 Punkte',10.8,'Bold',TEAL);para(34,y+12,527,q['explanation'],10,15)
 def make_solutions():
     global c
-    path=ROOT/'Atlas_Abschlusstest_Loesungen.pdf';c=canvas.Canvas(str(path),pagesize=A4);c.setTitle('Musterlösungen - Abschlusstest Gradnetz und Atlas')
-    header('Lösungen zum Abschlusstest',1,True)
-    for i,y in [(1,126),(2,222),(3,318),(4,414),(5,510),(6,606)]:
-        q=DATA['exam'][i-1];txt(34,y,f'Aufgabe {i}',11,'Bold',TEAL);para(34,y+13,527,q['explanation'],11,17)
-    para(34,745,527,'Bewertungsvorschlag: pro Aufgabe ein Punkt. Sinngleiche richtige Begriffe gelten ebenfalls. Es handelt sich um einen Lerncheck, nicht um eine vorgegebene Schulnote.',9,14,color=GREY)
-    c.showPage();header('Kartenlösungen und nächste Schritte',2,True)
-    txt(34,114,'7. Schnittpunkt: 50° N / 10° O',11,'Bold',TEAL);map_art(34,126,527,163,DATA['maps']['europe']['bounds'],(50,10),'Gesuchter Punkt')
-    for i,y in [(8,315),(9,395),(10,475)]:
-        q=DATA['exam'][i-1];txt(34,y,f'Aufgabe {i}',11,'Bold',TEAL);para(34,y+12,527,q['explanation'],10.5,16)
-    txt(34,599,'Gezielt weiterüben',12,'Bold',TEAL)
-    steps=[('1, 2, 10','Grundlagen: Globus und Lückentext'),('3, 4','Erdviertel: N/S und O/W kombinieren'),('5, 6','Polansichten: Ringe und Speichen vergleichen'),('7','Kartenarbeit: selbst Punkte markieren'),('8, 9','Atlasarbeit: Register und Randangaben lesen')]
-    for n,(nums,advice) in enumerate(steps):txt(34,625+n*23,f'Aufgaben {nums}',9,'Bold');txt(146,625+n*23,advice,9)
-    para(34,756,527,'Quellen der verwendeten Ortslagen: GeoNames (CC BY 4.0), Frankfurt am Main 2925533, Frankfurt (Oder) 2925535, Lissabon 2267057. Eigene Grafiken mit Natural-Earth-Küsten. Stand: 26.10.2026.',8,12,color=GREY)
+    path=ROOT/'Atlas_Abschlusstest_Loesungen.pdf';c=canvas.Canvas(str(path),pagesize=A4);c.setTitle('Musterlösungen und Teilpunkte - Atlas-Abschlusstest Klasse 5')
+    header('Lösungen und Teilpunkte',1,True,total=2)
+    box(34,110,527,103)
+    para(47,121,500,'<b>Maximal 20 Punkte.</b> Jeder der fünf Bereiche zählt vier Punkte. Passende Teilantworten werden einzeln gewertet. Ein falsches Richtungszeichen nimmt keine bereits verdienten Punkte für eine passende Gradzahl weg. Die freie Zusatzbegründung wird nicht automatisch benotet.',10,16)
+    solution_line(1,246);solution_line(2,325);solution_line(3,404);solution_line(4,483);solution_line(5,562);solution_line(6,641)
+    para(34,739,527,'Für Aufgaben 1–6: pro richtiger Teilantwort 1 Punkt. In der Druckfassung gelten eindeutige Abkürzungen und sinngleiche Fachwörter ebenfalls.',9,14,color=GREY)
+    c.showPage();header('Kartenlösungen und Auswertung',2,True,total=2)
+    txt(34,112,'7. Markieren: 52° N / 8° O',10.5,'Bold',TEAL);txt(312,112,'8. Ablesen: 20° S / 60° W',10.5,'Bold',TEAL)
+    map_art(34,129,251,167,DATA['maps']['germany']['bounds'],(52,8),'Lösung',lat_step=2,lon_step=2,tolerance=True)
+    map_art(312,129,249,167,[-80,-40,-40,0],(-20,-60),'P',lat_step=10,lon_step=10)
+    para(34,307,251,'Je 1 Punkt für passende Breite / Länge; bis 1° Abweichung pro Achse. Grün zeigt den Bereich für beide vollen Punkte.',9,14)
+    para(312,307,249,'20, S, 60 und W zählen jeweils 0,5 Punkte. Bei den Gradzahlen gilt eine Ablesetoleranz bis 0,5°.',9,14)
+    solution_line(9,399);solution_line(10,501)
+    txt(34,603,'Gezielt weiterüben',12,'Bold',TEAL)
+    rows=[('Aufgaben 1–2','Grundlagen: Bezugslinien und Gradangaben'),('Aufgaben 3–4','Erdviertel: N/S und O/W zusammen lesen'),('Aufgaben 5–6','Ansichten: Ringe, Speichen, Linien und Bögen'),('Aufgaben 7–8','Kartenarbeit: markieren und ablesen'),('Aufgaben 9–10','Atlasarbeit: Register und Randangaben')]
+    for i,(a,b) in enumerate(rows):txt(34,628+i*24,a,9,'Bold');txt(151,628+i*24,b,9)
+    para(34,765,527,'Eigene Modelle. Ortslagen: GeoNames (CC BY 4.0), Frankfurt am Main 2925533, Frankfurt (Oder) 2925535, Lissabon 2267057. Testfassung 2 · 26.10.2026.',7.7,11,color=GREY)
     c.save();return path
 if __name__=='__main__':
     test=make_test();solutions=make_solutions()
     encoded={'test':'data:application/pdf;base64,'+base64.b64encode(test.read_bytes()).decode(),'solutions':'data:application/pdf;base64,'+base64.b64encode(solutions.read_bytes()).decode()}
-    (HERE/'atlas-druckdateien.js').write_text('/* Eingebettete Druckdateien für die Ein-Datei-App. */\nwindow.AW_PDFS = '+json.dumps(encoded)+';\n')
+    (HERE/'atlas-druckdateien.js').write_text('/* Eingebettete Druckdateien für Testfassung 2. */\nwindow.AW_PDFS = '+json.dumps(encoded)+';\n')
     print(test.name,solutions.name)
