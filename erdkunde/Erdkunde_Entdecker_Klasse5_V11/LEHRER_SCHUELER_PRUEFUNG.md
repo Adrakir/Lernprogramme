@@ -46,3 +46,13 @@ Die Linien werden jetzt wie der Perspektivwechsel über eine gemeinsame pausierb
 Das sanfte Seitenscrollen ist in der Atlaswerkstatt ausgeschaltet. Dadurch bleiben Aufgabenwechsel nach langer Auswertung unmittelbar bedienbar. Browserprüfung: fünf schnelle Wechsel zwischen den Aufgaben 18, 9, 15, 17 und 14, alle jeweils mit einem Klick erfolgreich; Register bis Feld B3, Erdviertel, Halbkuppel, kompletter Lückentext und Zeichenlösung geprüft. Abgegebene Antworten und automatische Teilpunkte bleiben erhalten, manuelle Bewertung wird getrennt gespeichert.
 
 590 automatische Prüfungen bestanden, einschließlich Pause/Fortsetzen für Linien und Kugelblick sowie Stop bei verborgenem Fenster und Verlassen des Bereichs. Prüfung in der Desktop-Browservorschau; kein neuer echter iOS-/Android-Gerätetest und kein Unterrichtsversuch.
+
+## Bilder, Tipps und gezielte Rückmeldung in der interaktiven Klassenarbeit
+
+Alle 18 Aufgaben wurden auf Arbeits- und Lösungsabbildungen geprüft. Zusätzliche Arbeitsmodelle zeigen Gradgrenzen ohne vorgegebene Endwerte, ein unbeschriftetes Erdviertelmodell sowie die Linienarten zum Lückentext. Das Register hat eine ergänzende Modellkarte. Nach Abgabe ist zu jeder Aufgabe eine vollständige bebilderte Lösung direkt geöffnet; die steuerbaren Animationen bleiben zusätzlich verfügbar. Zeichenlösungen zeigen jedes der vier beziehungsweise drei Felder einzeln.
+
+Je Aufgabe gibt es zwei bewusst abrufbare Denkanstöße. Geöffnete Tipps bleiben im Versuch gespeichert und werden in der Auswertung vermerkt, ohne Punktabzug. Die Abgabe zeigt jede Teilantwort einschließlich ausgewählter Antworttexte, Kennzeichnung richtig/falsch/offen, richtiger Lösung und Teilpunkten. Unbeantwortete Aufgaben gelten als offen; Zeichnungen und Begründungen werden nicht automatisch als Fehler eingestuft. Die gemeinsame Bewertung aktualisiert Übersicht und Übungsempfehlung sofort.
+
+Empfehlungen führen passend zur Aufgabe zu Globus, Erdvierteln, Ansichten, Kartenmarkierung, Register, Ortssuche, Lückentext oder Zeichnen. Ein Rückweg öffnet die unveränderte abgegebene Aufgabe. Mehrere Aufgaben desselben Übungsbereichs werden in der Gesamtübersicht zusammengefasst. Auf schmalen Ansichten werden Antwortvergleich und Übersicht als gestapelte Karten dargestellt.
+
+717 automatische Prüfungen einschließlich Arbeits-/Lösungsbildern für alle 18 Aufgaben, Lösungssperre vor Abgabe, Hilfenspeicherung, Antworttexten, HTML-Escaping, korrekter Trennung manueller/offener Antworten und unveränderten 54 automatischen Punkten bestanden. Browserprüfung: Tipps, richtige/falsche/offene Antworten, Bilder, manuelle Bewertung und Empfehlung mit Rückweg erfolgreich. Kein echter Gerätetest oder Unterrichtsversuch.

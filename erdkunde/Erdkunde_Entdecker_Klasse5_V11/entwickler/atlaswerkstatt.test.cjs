@@ -164,4 +164,34 @@ doc.hidden=false;walk.command('cwWalkPlay');motion.state.tab='start';advance(500
 const dome=a.cwSolutionPlan(a.cwTasks[13]).steps;
 assert.ok(a.cwWalkGraphic(a.cwTasks[13],dome[2]).includes('cy="75" r="4"'));checks++;
 assert.ok(a.cwWalkGraphic(a.cwTasks[13],dome[3]).includes('cy="355" r="4"'));checks++;
+// Jede Aufgabe bietet Arbeitsmaterial, gestufte Tipps und eine bebilderte Lösung.
+for(const q of a.cwTasks){
+ const before=a.cwQuestion(q),after=submitted.cwQuestion(q),solution=a.cwFullSolutionGraphic(q);
+ assert.ok(before.includes('<svg'),q.id+': fehlende Arbeitsgrafik');checks++;
+ eq(a.cwHintTexts[q.id].length,2);
+ assert.ok(!before.includes('cw-feedback-panel')&&!before.includes('cw-full-solution'),q.id+': Lösung vor Abgabe');checks++;
+ assert.ok(after.includes('cw-feedback-panel')&&after.includes('cw-full-solution'),q.id+': Rückmeldung nach Abgabe');checks++;
+ assert.ok(solution.includes('<svg')&&!/NaN|undefined/.test(solution),q.id+': fehlende Lösungsabbildung');checks++;
+ assert.ok(a.cwPracticeMap[q.id][0]&&a.cwPracticeMap[q.id][1]);checks++;
+}
+const hintDraft=a.cleanClasswork({version:1,hints:{reference:1,limits:99,unknown:2,point:-1,house:'2'}});
+eq(hintDraft.hints.reference,1);eq(hintDraft.hints.limits,2);eq(hintDraft.hints.unknown,undefined);eq(hintDraft.hints.point,undefined);eq(hintDraft.hints.house,undefined);
+const wrong=a.gradeClasswork({equator:'<img src=x onerror=alert(1)>',prime:'Äquator',poleA:'lon'},null);
+eq(wrong[0].parts[0].actual,'<img src=x onerror=alert(1)>');
+eq(wrong[4].parts[0].actual,'Meridiane (Längenhalbkreise)');
+const comparison=a.examQuestionResult(wrong[0]);
+assert.ok(comparison.includes('&lt;img')&&!comparison.includes('<img'));checks++;
+assert.ok(comparison.includes('Bitte korrigieren')&&comparison.includes('Nullmeridian'));checks++;
+assert.ok(a.examQuestionResult(a.gradeClasswork({},null)[0]).includes('Nicht beantwortet'));checks++;
+eq(full[0].parts[0].actual,'Äquator');
+eq(a.cwNeedsPractice(a.cwTasks[0],full[0]),false);
+eq(a.cwNeedsPractice(a.cwTasks[0],wrong[0]),true);
+eq(a.cwNeedsPractice(a.cwTasks[12],wrong[12]),false); // Offene Zeichnung ist kein automatisch festgestellter Fehler.
+const reviewed=boot(null,JSON.stringify({version:1,submitted:true,manual:{latSide:false}})).window.AtlasWerkstatt;
+eq(reviewed.cwNeedsPractice(a.cwTasks[12],wrong[12]),true);
+const assisted=boot(null,JSON.stringify({version:1,started:true,hints:{reference:2}})).window.AtlasWerkstatt;
+assert.ok(assisted.cwQuestion(a.cwTasks[0]).includes('Tipp 2:'));checks++;
+assert.ok(assisted.cwQuestion(a.cwTasks[0]).includes('disabled'));checks++;
+assert.ok(submitted.cwReviewSummary().includes('unbeantwortet'));checks++;
+assert.ok(!a.cwReviewSummary());checks++;
 console.log(`${checks} Prüfungen bestanden: Erdviertel, Grenzfälle, Komma-Eingaben, Richtungen, Kugelprojektion, Registerfelder, vollständige Ein-Datei-Ausgabe.`);
