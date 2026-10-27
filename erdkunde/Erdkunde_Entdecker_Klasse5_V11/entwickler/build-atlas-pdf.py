@@ -301,7 +301,7 @@ def make_test():
     path=ROOT/'Atlas_Abschlusstest_Klasse5.pdf';c=canvas.Canvas(str(path),pagesize=A4);c.setTitle('Atlas-Abschlusstest Klasse 5 - verbesserte Fassung, 20 Punkte')
     header('Mein Atlas-Abschlusstest',1)
     txt(34,108,'Name:',9);line(72,110,323,110);txt(357,108,'Datum:',9);line(401,110,561,110)
-    txt(34,130,'Teil A: 20 Punkte · Teil B ab Seite 4 · Zusatzblätter ab Seite 7',9,'Bold',TEAL)
+    txt(34,130,'Fassung 27.10.2026 · 9 Seiten · Teil A: 20 Punkte · Zusatzblätter ab Seite 7',9,'Bold',TEAL)
     qhead(1,34,151);field(34,205,527,DATA['exam'][0]['fields'][0]['label']);field(34,249,527,DATA['exam'][0]['fields'][1]['label'])
     qhead(2,34,309);field(34,360,245,DATA['exam'][1]['fields'][0]['label']);field(309,360,252,DATA['exam'][1]['fields'][1]['label'])
     qhead(3,34,424);field(34,475,245,DATA['exam'][2]['fields'][0]['label']);field(309,475,252,DATA['exam'][2]['fields'][1]['label'])
@@ -360,6 +360,10 @@ def make_solutions():
     c.save();return path
 if __name__=='__main__':
     test=make_test();solutions=make_solutions()
-    encoded={'test':'data:application/pdf;base64,'+base64.b64encode(test.read_bytes()).decode(),'solutions':'data:application/pdf;base64,'+base64.b64encode(solutions.read_bytes()).decode()}
+    test_name='Erdkunde_Test_NEU_2026-10-27_9_Seiten.pdf'
+    solutions_name='Erdkunde_Loesungen_NEU_2026-10-27_8_Seiten.pdf'
+    (ROOT/test_name).write_bytes(test.read_bytes())
+    (ROOT/solutions_name).write_bytes(solutions.read_bytes())
+    encoded={'version':'2026-10-27-v6','testPages':9,'solutionPages':8,'testName':test_name,'solutionsName':solutions_name,'test':'data:application/pdf;base64,'+base64.b64encode(test.read_bytes()).decode(),'solutions':'data:application/pdf;base64,'+base64.b64encode(solutions.read_bytes()).decode()}
     (HERE/'atlas-druckdateien.js').write_text('/* Eingebettete Druckdateien für Testfassung 5 mit Ansichten, Gradnetz und Viertelkugeln. */\nwindow.AW_PDFS = '+json.dumps(encoded)+';\n')
     print(test.name,solutions.name)

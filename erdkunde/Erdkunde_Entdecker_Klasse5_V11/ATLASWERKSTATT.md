@@ -51,3 +51,7 @@ Der Übungs- und Testlückentext verwendet wieder die drei Sätze der Vorlage, e
 ## PDF-Zusatzblätter: Draufsicht, Linien und Viertelkugeln
 
 Die Seiten 7–9 ergänzen Ansichten desselben Hauses und des Globus, drei große freie Kugeln zum Einzeichnen der Linien sowie eine farbige Kugelzeichnung zum Beschriften der vier Erdviertel. Die Lösungen stehen auf den Seiten 6–8 der Lösungsdatei. Die vorderen Seiten mit Originalskizzen und Lückentext bleiben enthalten. Zusatzaufgaben 16–18 werden anhand der Musterlösung geprüft und sind nicht Teil der automatisch bewerteten 20 Punkte. Die Vorderansicht erläutert ausdrücklich, dass sich die Erdviertel auf der Rückseite fortsetzen und der 180°-Meridian dort die zweite Ost-/Westgrenze bildet.
+
+## Eindeutige PDF-Dateinamen
+
+Die aktuelle Fassung hat die eindeutigen Namen `Erdkunde_Test_NEU_2026-10-27_9_Seiten.pdf` und `Erdkunde_Loesungen_NEU_2026-10-27_8_Seiten.pdf`. Die bisherigen Dateinamen bleiben als identische Kopien für vorhandene Verweise erhalten. Startseite, Testübersicht und Werkstatt zeigen Seitenzahl und Datum. Die App prüft vor dem Anbieten der Druckdatei deren Versionskennung. Der neue Entwickler-Cache lädt beim Installieren seine Ressourcen ohne Wiederverwendung des HTTP-Caches.
