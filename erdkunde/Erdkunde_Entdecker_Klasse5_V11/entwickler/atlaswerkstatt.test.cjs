@@ -69,4 +69,6 @@ eq(a.gradeExam(answers,{lat:NaN,lon:8}).find(r=>r.id==='point').points,0);
 for(const r of a.gradeExam({},null))eq(r.answered,false);
 eq(a.examRegisterRows().find(r=>r.name==='Frankfurt am Main').field,'B3');
 eq(a.examRegisterRows().find(r=>r.name==='Frankfurt (Oder)').field,'D2');
+const sketch=a.cleanSketch({paths:{globe:[{color:'#1766a1',points:[[0,0],[480,300]]},{color:'bad',points:[[1,1]]},{color:'#1766a1',points:[[1,301]]}]},texts:{globe:'x'.repeat(1600)},review:true,color:'#9c3475'});
+eq(sketch.paths.globe.length,1);eq(sketch.texts.globe.length,1500);eq(sketch.review,true);eq(sketch.color,'#9c3475');eq(a.cleanSketch(null).review,false);eq(a.cleanSketch({paths:{globe:'invalid'}}).paths.globe.length,0);
 console.log(`${checks} Prüfungen bestanden: Erdviertel, Grenzfälle, Komma-Eingaben, Richtungen, Kugelprojektion, Registerfelder, vollständige Ein-Datei-Ausgabe.`);
