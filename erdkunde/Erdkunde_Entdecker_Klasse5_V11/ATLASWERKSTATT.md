@@ -65,3 +65,13 @@ Der bestehende Einstieg bleibt **`index.html`**. Es werden keine datierten App-K
 ## Start und Verweise repariert
 
 Ein gespeicherter Wert `null` unter `geo-atlaswerkstatt-v1` führte reproduzierbar zu einem Startabbruch der Werkstatt. Ungültige Speicherwerte werden jetzt abgefangen, ohne gültige Lernstände zu löschen. Ein sichtbarer Starthinweis bleibt stehen, falls die interaktiven Inhalte nicht starten (beispielsweise in einer Dateivorschau ohne JavaScript). Der zuvor ins Leere führende Lernheft-Link verweist auf das vorhandene PDF; im eigenständigen `index.html` ist dieses PDF eingebettet. Die aktuelle Klassenarbeit bleibt mit allen 18 Aufgaben erhalten.
+
+## Animierte Lösungswege und didaktische Überarbeitung
+
+Alle 18 Aufgaben der aktuellen interaktiven Klassenarbeit bieten nach endgültiger Abgabe einen eigenen Lösungsweg mit drei bis fünf Schritten. Lernziele stehen bereits vor der Bearbeitung fest. Die abgegebenen Antworten bleiben gesperrt und unverändert; der Lösungsweg verändert keine Punkte. Vollständige Musterlösung und Teilpunkte können zusätzlich aufgeklappt werden.
+
+Bei der Kartenarbeit werden zuerst die Breite, dann die Länge und schließlich der Schnittpunkt aufgebaut. Beim Ablesen verlaufen die hervorgehobenen Wege vom Punkt zum Kartenrand. Bei Ansichten kippt die tatsächliche Kugelprojektion vom Äquator zum Nordpol. Die vier Felder, die Halbkuppel, Erdviertel und der genaue Lückentext beziehen sich weiterhin auf die eingereichten Skizzen. Rückseitige Linien bleiben gestrichelt, eine Kartenkennung wird nicht mit einer geografischen Koordinate verwechselt.
+
+Animationen starten nur auf Wunsch. Vorwärts, rückwärts, Pause und Wiederholung erlauben ein eigenes Lerntempo. Automatische Schritte wechseln nach zehn Sekunden; Aufgabenwechsel, Bereichswechsel und ein verborgenes Browserfenster halten die Wiedergabe an. Bei reduzierter Bewegung bleiben statische Einzelschritte verfügbar. Eine neue Frage nach jedem Lösungsweg fordert zum eigenen Erklären auf; die Vergleichsantwort wird gesondert geöffnet. Diese Übungsfrage ist kein zusätzlicher Kompetenznachweis und verändert keine Testpunkte.
+
+Die aktuelle Klassenarbeit ist eine Lern- und Übungsarbeit mit lokalem Speicher. Für eine formale benotete Prüfung sind eine schulisch festgelegte Durchführung und eine Prüfung der Aufgaben, Hilfsmittel und Bewertung durch die Lehrkraft erforderlich. Die elf manuellen Kriterien bleiben getrennt von den 54 automatisch prüfbaren Teilpunkten. Zeichenqualität wird nicht mit Fachwissen gleichgesetzt.

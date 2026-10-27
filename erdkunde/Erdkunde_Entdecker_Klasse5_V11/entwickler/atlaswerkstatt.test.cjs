@@ -1,8 +1,8 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
 const noop=()=>{},nav={insertBefore:noop,querySelector:()=>null};
-function boot(saved=null){
- const ctx={MAIN:{addEventListener:noop},document:{getElementById:()=>nav,createElement:()=>({dataset:{}}),querySelectorAll:()=>[],addEventListener:noop},localStorage:{getItem:key=>key==='geo-atlaswerkstatt-v1'?saved:null},window:{},render:noop,renderStart:()=>'',renderLesson:()=>'',state:{tab:'start'},cancelAnimationFrame:noop,clearTimeout:noop};
+function boot(saved=null,classwork=null,reducedMotion=false){
+ const ctx={MAIN:{addEventListener:noop},document:{getElementById:()=>nav,createElement:()=>({dataset:{}}),querySelectorAll:()=>[],addEventListener:noop},localStorage:{getItem:key=>key==='geo-atlaswerkstatt-v1'?saved:key==='geo-klassenarbeit-18-v1'?classwork:null},window:{},render:noop,renderStart:()=>'',renderLesson:()=>'',state:{tab:'start'},cancelAnimationFrame:noop,clearTimeout:noop,matchMedia:()=>({matches:reducedMotion})};
  vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlasdaten.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlaswerkstatt.js'),'utf8'),ctx);
  return ctx;
 }
@@ -109,4 +109,29 @@ const cwDraft=a.cleanClasswork({version:1,answers:{labelH:'Nullmeridian',reason:
 eq(cwDraft.answers.labelH,'Nullmeridian');eq(cwDraft.answers.injected,undefined);eq(cwDraft.drawings.latSide.length,1);eq(cwDraft.descriptions.gBoth,'Zwei Linien kreuzen sich.');eq(cwDraft.index,17);eq(cwDraft.submitted,true);eq(cwDraft.manual.latSide,true);eq(cwDraft.manual.unknown,undefined);
 eq(a.cleanClasswork({version:0,submitted:true}).submitted,false);
 eq(a.cleanClasswork({version:1,point:{lat:100,lon:20}}).point,null);
+// Jede aktuelle PDF-Aufgabe hat einen eigenen, renderbaren Denkweg.
+const submitted=boot(null,JSON.stringify({version:1,submitted:true})).window.AtlasWerkstatt;
+const quiet=boot(null,JSON.stringify({version:1,submitted:true}),true).window.AtlasWerkstatt;
+for(const q of a.cwTasks){
+ const plan=a.cwSolutionPlan(q);
+ assert.ok(plan.objective&&plan.transfer&&plan.answer);checks++;
+ assert.ok(plan.steps.length>=3&&plan.steps.length<=6);checks++;
+ eq(a.cwWalkView(q),''); // Im laufenden Versuch keine Lösung freigeben.
+ assert.ok(submitted.cwWalkView(q).includes('Den Lösungsweg verstehen'));checks++;
+ assert.ok(quiet.cwWalkView(q).includes('id="cwWalkPlay" disabled'));checks++;
+ for(const step of plan.steps){
+  assert.ok(step.title&&step.text);checks++;
+  const graphic=a.cwWalkGraphic(q,step);
+  assert.ok(graphic.includes('<svg')||graphic.includes('<table'),q.id+': '+step.title);checks++;
+  assert.ok(!/NaN|undefined/.test(graphic));checks++;
+ }
+}
+const pointTask=a.cwTasks[6],pointPlan=a.cwSolutionPlan(pointTask);
+assert.ok(!a.cwWalkGraphic(pointTask,pointPlan.steps[0]).includes('Breite: 52'));checks++;
+assert.ok(a.cwWalkGraphic(pointTask,pointPlan.steps[1]).includes('Breite: 52'));checks++;
+assert.ok(!a.cwWalkGraphic(pointTask,pointPlan.steps[1]).includes('Länge: 8'));checks++;
+assert.ok(a.cwWalkGraphic(pointTask,pointPlan.steps[2]).includes('Länge: 8'));checks++;
+const tilt=a.cwSolutionPlan(a.cwTasks[4]).steps.find(s=>s.scene==='tilt');
+assert.notEqual(a.cwWalkGraphic(a.cwTasks[4],tilt,0),a.cwWalkGraphic(a.cwTasks[4],tilt,1));checks++;
+eq(a.gradeClasswork(cwAnswers,{lat:52,lon:8}).reduce((n,q)=>n+q.points,0),54);
 console.log(`${checks} Prüfungen bestanden: Erdviertel, Grenzfälle, Komma-Eingaben, Richtungen, Kugelprojektion, Registerfelder, vollständige Ein-Datei-Ausgabe.`);
