@@ -38,3 +38,11 @@ Die identische App und alle vorhandenen PDFs wurden anschließend als private We
 **Aus Schülersicht:** Jede Animation lässt sich selbst starten, pausieren, wiederholen und schrittweise lesen. Blau und Violett werden immer auch als Breite/N–S und Länge/O–W bezeichnet. Beim Wechsel der Perspektive bewegt sich die Kugelgeometrie. Die eigene abgegebene Antwort bleibt sichtbar. Eine neue Erklärfrage mit getrennt abrufbarer Vergleichsantwort schließt jeden Lösungsweg ab.
 
 **Noch sinnvoll, hier nicht zusätzlich eingeführt:** eine zweite, fachlich gleichwertige Aufgabenvariante für einen späteren Abruf ohne vorherige Musterlösung; eine mit der Lehrkraft abgestimmte Auswahl nach Anforderungsbereichen; anschließend ein kleiner Praxistest mit Kindern zu Lesetempo, Touchbedienung und Missverständnissen. Ein funktionierender Bildschirmtest belegt noch keine Lernwirksamkeit im Unterricht.
+
+## Abschlussprüfung am 27.10.2026
+
+Die Linien werden jetzt wie der Perspektivwechsel über eine gemeinsame pausierbare Wiedergabe aufgebaut. Beim Öffnen einer Lösung steht das vollständige erste Bild still; Bewegung beginnt durch Abspielen oder einen gewählten Einzelschritt. Pause hält auch den Linienaufbau an, Fortsetzen übernimmt den erreichten Stand. Der Nordpol sitzt im Halbkuppelmodell auf der Oberfläche, der Südpol ist an der fortgesetzten Achse markiert.
+
+Das sanfte Seitenscrollen ist in der Atlaswerkstatt ausgeschaltet. Dadurch bleiben Aufgabenwechsel nach langer Auswertung unmittelbar bedienbar. Browserprüfung: fünf schnelle Wechsel zwischen den Aufgaben 18, 9, 15, 17 und 14, alle jeweils mit einem Klick erfolgreich; Register bis Feld B3, Erdviertel, Halbkuppel, kompletter Lückentext und Zeichenlösung geprüft. Abgegebene Antworten und automatische Teilpunkte bleiben erhalten, manuelle Bewertung wird getrennt gespeichert.
+
+590 automatische Prüfungen bestanden, einschließlich Pause/Fortsetzen für Linien und Kugelblick sowie Stop bei verborgenem Fenster und Verlassen des Bereichs. Prüfung in der Desktop-Browservorschau; kein neuer echter iOS-/Android-Gerätetest und kein Unterrichtsversuch.

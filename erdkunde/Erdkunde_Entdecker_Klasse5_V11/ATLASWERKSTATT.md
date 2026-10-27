@@ -75,3 +75,11 @@ Bei der Kartenarbeit werden zuerst die Breite, dann die Länge und schließlich 
 Animationen starten nur auf Wunsch. Vorwärts, rückwärts, Pause und Wiederholung erlauben ein eigenes Lerntempo. Automatische Schritte wechseln nach zehn Sekunden; Aufgabenwechsel, Bereichswechsel und ein verborgenes Browserfenster halten die Wiedergabe an. Bei reduzierter Bewegung bleiben statische Einzelschritte verfügbar. Eine neue Frage nach jedem Lösungsweg fordert zum eigenen Erklären auf; die Vergleichsantwort wird gesondert geöffnet. Diese Übungsfrage ist kein zusätzlicher Kompetenznachweis und verändert keine Testpunkte.
 
 Die aktuelle Klassenarbeit ist eine Lern- und Übungsarbeit mit lokalem Speicher. Für eine formale benotete Prüfung sind eine schulisch festgelegte Durchführung und eine Prüfung der Aufgaben, Hilfsmittel und Bewertung durch die Lehrkraft erforderlich. Die elf manuellen Kriterien bleiben getrennt von den 54 automatisch prüfbaren Teilpunkten. Zeichenqualität wird nicht mit Fachwissen gleichgesetzt.
+
+## Abschlussprüfung am 27.10.2026
+
+Die Linien werden jetzt wie der Perspektivwechsel über eine gemeinsame pausierbare Wiedergabe aufgebaut. Beim Öffnen einer Lösung steht das vollständige erste Bild still; Bewegung beginnt durch Abspielen oder einen gewählten Einzelschritt. Pause hält auch den Linienaufbau an, Fortsetzen übernimmt den erreichten Stand. Der Nordpol sitzt im Halbkuppelmodell auf der Oberfläche, der Südpol ist an der fortgesetzten Achse markiert.
+
+Das sanfte Seitenscrollen ist in der Atlaswerkstatt ausgeschaltet. Dadurch bleiben Aufgabenwechsel nach langer Auswertung unmittelbar bedienbar. Browserprüfung: fünf schnelle Wechsel zwischen den Aufgaben 18, 9, 15, 17 und 14, alle jeweils mit einem Klick erfolgreich; Register bis Feld B3, Erdviertel, Halbkuppel, kompletter Lückentext und Zeichenlösung geprüft. Abgegebene Antworten und automatische Teilpunkte bleiben erhalten, manuelle Bewertung wird getrennt gespeichert.
+
+590 automatische Prüfungen bestanden, einschließlich Pause/Fortsetzen für Linien und Kugelblick sowie Stop bei verborgenem Fenster und Verlassen des Bereichs. Prüfung in der Desktop-Browservorschau; kein neuer echter iOS-/Android-Gerätetest und kein Unterrichtsversuch.

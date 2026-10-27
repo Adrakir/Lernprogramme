@@ -1,9 +1,12 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
 const noop=()=>{},nav={insertBefore:noop,querySelector:()=>null};
-function boot(saved=null,classwork=null,reducedMotion=false){
- const ctx={MAIN:{addEventListener:noop},document:{getElementById:()=>nav,createElement:()=>({dataset:{}}),querySelectorAll:()=>[],addEventListener:noop},localStorage:{getItem:key=>key==='geo-atlaswerkstatt-v1'?saved:key==='geo-klassenarbeit-18-v1'?classwork:null},window:{},render:noop,renderStart:()=>'',renderLesson:()=>'',state:{tab:'start'},cancelAnimationFrame:noop,clearTimeout:noop,matchMedia:()=>({matches:reducedMotion})};
- vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlasdaten.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlaswerkstatt.js'),'utf8'),ctx);
+function boot(saved=null,classwork=null,reducedMotion=false,harness=null){
+ const ctx={MAIN:{addEventListener:noop},document:{documentElement:{dataset:{}},getElementById:()=>nav,createElement:()=>({dataset:{}}),querySelectorAll:()=>[],addEventListener:noop},localStorage:{getItem:key=>key==='geo-atlaswerkstatt-v1'?saved:key==='geo-klassenarbeit-18-v1'?classwork:null},window:{},render:noop,renderStart:()=>'',renderLesson:()=>'',state:{tab:'start'},cancelAnimationFrame:noop,clearTimeout:noop,matchMedia:()=>({matches:reducedMotion})};
+ if(harness)Object.assign(ctx,harness);
+ vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlasdaten.js'),'utf8'),ctx);let source=fs.readFileSync(path.join(__dirname,'atlaswerkstatt.js'),'utf8');
+ if(harness)source=source.replace('window.AtlasWerkstatt=Object.freeze({',`window.__walk={command:cwWalkCommand,stop:stopCwWalk,state:cwWalkState,open(index){stopCwWalk();s.view='classwork';state.tab='atlaswerkstatt';cw.index=index;cwWalkView(cwTasks[index]);}};window.AtlasWerkstatt=Object.freeze({`);
+ vm.runInContext(source,ctx);
  return ctx;
 }
 const ctx=boot();
@@ -134,4 +137,31 @@ assert.ok(a.cwWalkGraphic(pointTask,pointPlan.steps[2]).includes('Länge: 8'));c
 const tilt=a.cwSolutionPlan(a.cwTasks[4]).steps.find(s=>s.scene==='tilt');
 assert.notEqual(a.cwWalkGraphic(a.cwTasks[4],tilt,0),a.cwWalkGraphic(a.cwTasks[4],tilt,1));checks++;
 eq(a.gradeClasswork(cwAnswers,{lat:52,lon:8}).reduce((n,q)=>n+q.points,0),54);
+// Pause muss sowohl Linienaufbau als auch Perspektivwechsel wirklich anhalten.
+const nodes=new Map(),frames=new Map(),timeouts=new Map(),events={};let job=0;
+const domNode=()=>({textContent:'',innerHTML:'',disabled:false,style:{},focus:noop,querySelectorAll:()=>[{style:{}}]});
+const doc={documentElement:{dataset:{}},hidden:false,getElementById:id=>{if(!nodes.has(id))nodes.set(id,domNode());return ['main','tabs'].includes(id)?nav:nodes.get(id);},createElement:()=>({dataset:{}}),querySelectorAll:()=>[],addEventListener:(type,fn)=>{(events[type]??=[]).push(fn);}};
+const motion=boot(null,JSON.stringify({version:1,submitted:true}),false,{document:doc,requestAnimationFrame:fn=>{frames.set(++job,fn);return job;},cancelAnimationFrame:id=>frames.delete(id),setTimeout:fn=>{timeouts.set(++job,fn);return job;},clearTimeout:id=>timeouts.delete(id)});
+const walk=motion.window.__walk,advance=now=>{const batch=[...frames.values()];frames.clear();batch.forEach(fn=>fn(now));};
+walk.open(0);
+eq(frames.size,0); // Beim Öffnen bleibt das Lösungsbild statisch.
+walk.command('cwWalkFirst');advance(0);advance(600);
+assert.ok(walk.state.progress>0&&walk.state.progress<1);checks++;
+const lineProgress=walk.state.progress;
+walk.command('cwWalkPlay');eq(frames.size,0);eq(walk.state.progress,lineProgress);eq(timeouts.size,0);
+walk.command('cwWalkPlay');advance(2000);eq(walk.state.progress,lineProgress);advance(2400);
+assert.ok(walk.state.progress>lineProgress);checks++;
+walk.stop();eq(frames.size,0);eq(timeouts.size,0);
+walk.open(4);walk.command('cwWalkMove','1');walk.command('cwWalkMove','1');advance(0);advance(900);
+const tiltProgress=walk.state.progress;assert.ok(tiltProgress>0&&tiltProgress<1);checks++;
+walk.command('cwWalkPlay');eq(frames.size,0);eq(walk.state.progress,tiltProgress);
+walk.command('cwWalkPlay');advance(3000);eq(walk.state.progress,tiltProgress);advance(3400);
+assert.ok(walk.state.progress>tiltProgress);checks++;
+walk.command('cwWalkMove','1');eq(walk.state.index,3);eq(walk.state.playing,false);eq(timeouts.size,0);
+walk.command('cwWalkFirst');advance(4000);walk.command('cwWalkPlay');walk.command('cwWalkPlay');
+doc.hidden=true;events.visibilitychange.forEach(fn=>fn());eq(frames.size,0);eq(timeouts.size,0);eq(walk.state.playing,false);
+doc.hidden=false;walk.command('cwWalkPlay');motion.state.tab='start';advance(5000);eq(frames.size,0);eq(timeouts.size,0);eq(walk.state.playing,false);
+const dome=a.cwSolutionPlan(a.cwTasks[13]).steps;
+assert.ok(a.cwWalkGraphic(a.cwTasks[13],dome[2]).includes('cy="75" r="4"'));checks++;
+assert.ok(a.cwWalkGraphic(a.cwTasks[13],dome[3]).includes('cy="355" r="4"'));checks++;
 console.log(`${checks} Prüfungen bestanden: Erdviertel, Grenzfälle, Komma-Eingaben, Richtungen, Kugelprojektion, Registerfelder, vollständige Ein-Datei-Ausgabe.`);
