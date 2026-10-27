@@ -23,3 +23,5 @@ svg[data-cw-draw]{display:block;width:100%;height:auto;background:#fff;border:1p
 .cw-rubric{display:grid!important;grid-template-columns:minmax(0,1fr);gap:.4rem}.cw-rubric select{max-width:100%}
 
 .cw-sphere{max-width:640px;margin:1rem auto}.cw-sphere svg{display:block;width:100%;height:auto}
+
+.aw-entry .aw-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:12px 0}.aw-entry .aw-controls a{display:inline-block;padding:10px 0;min-height:44px;box-sizing:border-box}

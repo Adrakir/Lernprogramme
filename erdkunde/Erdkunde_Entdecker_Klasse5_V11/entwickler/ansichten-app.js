@@ -29,7 +29,7 @@ renderLesson=function(){
  return html+geoLearningVisual(state.topic)+geoDepth(state.topic);
 };
 const geoOriginalStart=renderStart;
-renderStart=function(){return geoOriginalStart()+`<section class="card"><h2>📖 Bebildertes Lernheft</h2><p>Alle Themen, ausführliche Erklärungen und zusammengehörige Ansichten. Die druckbare HTML-Fassung funktioniert auch ohne PDF-Anzeige.</p><a class="btn" href="lernheft.html">Lernheft öffnen · PDF und Druck</a></section>`};
+renderStart=function(){return geoOriginalStart()+`<section class="card"><h2>📖 Bebildertes Lernheft</h2><p>Das vorhandene Lernheft als PDF zum Lesen und Ausdrucken. Die aktuelle Klassenarbeit findest du oben unter „Gradnetz & Atlas“.</p><a class="btn" href="../Erdkunde_Lernheft_Klasse5.pdf" download="Erdkunde_Lernheft_Klasse5.pdf">Lernheft öffnen · PDF</a></section>`};
 function geoSelfTest(){
  const results=[];
  const check=(name,ok)=>results.push({name,ok:!!ok});
@@ -48,3 +48,4 @@ function geoSelfTest(){
  return {passed:results.filter(r=>r.ok).length,total:results.length,results};
 }
 render();
+

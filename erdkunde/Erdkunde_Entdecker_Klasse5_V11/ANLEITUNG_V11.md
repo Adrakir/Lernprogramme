@@ -2,7 +2,10 @@
 
 ## Start
 
+- **Im Browser:** https://erdkunde-entdecker.node-opcua.chatgpt.site – die bestehende App ist dort mit allen Lerninhalten und PDF-Materialien bereitgestellt. Die Website ist zunächst privat und verlangt beim ersten Aufruf die Anmeldung mit ChatGPT.
+
 - **Direkt starten:** `index.html` in diesem Ordner im Browser öffnen oder in `G:\sebastian\Lernprogramme.html` die Kachel „Erdkunde-Entdecker“ wählen. Diese eigenständige HTML-Datei enthält die Lernmodelle und die neue Diepholzer Offline-Karte; dafür ist kein lokaler Server und keine Internetverbindung erforderlich.
+- **Ein Einstieg:** `index.html` wird fortlaufend verbessert. Der datierte Zweitlink ist nur noch eine Weiterleitung; keine zusätzliche App herunterladen. In einer reinen Dateivorschau können Schaltflächen sichtbar sein, ohne dass JavaScript ausgeführt wird. Die Datei deshalb in einem Browser öffnen.
 - **Zur Bearbeitung:** `entwickler/index.html` und die weiteren Dateien im Ordner `entwickler` in VS Code öffnen. Für dauerhafte Speicherung und PWA-Installation empfiehlt sich eine lokale Entwicklungsumgebung bzw. HTTPS-Bereitstellung.
 - Den Menüpunkt **📐 Praxiswerkstatt** wählen. Dort sind sechs Übungsstationen und zehn zusätzliche Praxisprüfungen vorhanden.
 - Die bisherigen 17 Gustav-Abenteuer, 16 Lernpfade, Quiz-Arena, Lernlabore und älteren Klassenarbeiten sind weiterhin enthalten.
@@ -29,7 +32,8 @@ Die neuen Aufgabenkarten sind eigens entwickelte Übungskarten und enthalten **k
 - Dateiöffnungen auf iPhone/Android können je nach Browser anders behandelt werden; das Paket ersetzt keine vollständigen Tests auf realen Endgeräten.
 - Lernstand wird im Browser lokal gespeichert, soweit der Browser lokalen Speicher für die jeweilige URL erlaubt. Bei Nutzung per `file://` ist dies browserabhängig.
 - Der vorhandene Export der älteren Lernstandsdaten enthält neue V11-Praxiswerte möglicherweise nicht. Daher bei Gerätewechsel die V11-Diagnose nicht als dauerhaft gesichert voraussetzen.
-- Das neue, bebilderte Lernheft liegt als `lernheft.html` und als **`Erdkunde_Lernheft_Klasse5_final.pdf`** vor (22 Seiten). Der ursprüngliche PDF-Dateiname kann noch in einer Anzeige gesperrt sein und wurde deshalb nicht überschrieben. Frühere Korrektur-Zwischenstände können ebenfalls noch geöffnet sein. Alle neuen Lernheft-Links zeigen auf die finale Variante. Die **neuen** zehn Praxisprüfungen und Lösungen lassen sich weiterhin direkt aus der V11-App ausdrucken.
+- Das vorhandene Lernheft liegt als **`Erdkunde_Lernheft_Klasse5.pdf`** vor und ist im eigenständigen `index.html` eingebettet. Die aktuelle neunseitige Klassenarbeit und die achtseitigen Lösungen findest du unter **Gradnetz & Atlas**. Die Klassenarbeit umfasst auch interaktiv alle 18 PDF-Aufgaben.
+
 - Ein vollständiger Fachcheck aller alten Aufgaben und Browser-Praxistests auf jedem Gerät kann nicht garantiert werden.
 
 ## Ansichten, bewegte Modelle und Diepholzer Karte – Überarbeitung 21.10.2026
@@ -47,7 +51,8 @@ Die neuen Aufgabenkarten sind eigens entwickelte Übungskarten und enthalten **k
 ### Entwicklung und Neuerzeugung
 
 1. `node entwickler\build-map.js` erzeugt den ausgewählten OSM-Datensatz aus `entwickler\diepholz.osm`.
-2. `node entwickler\build-offline.js` erzeugt die eigenständigen Dateien `index.html` und `lernheft.html`.
+2. `node entwickler\build-offline.js` aktualisiert die bestehende eigenständige Datei `index.html`. Eine zusätzliche App-Kopie wird nicht erzeugt.
 3. `entwickler\build-pdf.ps1` erzeugt mit dem lokal installierten Microsoft Edge die aktuelle PDF-Variante. Vor erneutem Erzeugen diese Variante in PDF-Anzeigen schließen; das alte, möglicherweise gesperrte Original wird nicht verändert.
 
 In der Browserkonsole führt `geoSelfTest()` die 46 integrierten Struktur- und Inhaltsprüfungen aus. Reale Mobilgeräte und assistive Techniken sollten zusätzlich separat geprüft werden.
+

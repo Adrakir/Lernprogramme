@@ -1,10 +1,20 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
 const noop=()=>{},nav={insertBefore:noop,querySelector:()=>null};
-const ctx={MAIN:{addEventListener:noop},document:{getElementById:()=>nav,createElement:()=>({dataset:{}}),querySelectorAll:()=>[],addEventListener:noop},localStorage:{getItem:()=>null},window:{},render:noop,renderStart:()=>'',renderLesson:()=>'',state:{tab:'start'},cancelAnimationFrame:noop,clearTimeout:noop};
-vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlasdaten.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlaswerkstatt.js'),'utf8'),ctx);
+function boot(saved=null){
+ const ctx={MAIN:{addEventListener:noop},document:{getElementById:()=>nav,createElement:()=>({dataset:{}}),querySelectorAll:()=>[],addEventListener:noop},localStorage:{getItem:key=>key==='geo-atlaswerkstatt-v1'?saved:null},window:{},render:noop,renderStart:()=>'',renderLesson:()=>'',state:{tab:'start'},cancelAnimationFrame:noop,clearTimeout:noop};
+ vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlasdaten.js'),'utf8'),ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'atlaswerkstatt.js'),'utf8'),ctx);
+ return ctx;
+}
+const ctx=boot();
 const a=ctx.window.AtlasWerkstatt;let checks=0;
 const eq=(got,want)=>{assert.equal(got,want);checks++};
+for(const saved of ['null','[]','true','42','"alt"','{beschädigt',JSON.stringify({done:['Grundlagen'],stats:{Grundlagen:{attempts:3,correct:2}}})]){
+ const loaded=boot(saved);eq(loaded.window.AtlasWerkstatt.cwTasks.length,18);
+}
+const resumed=boot(JSON.stringify({done:['Grundlagen'],stats:{Grundlagen:{attempts:3,correct:2}}}));
+eq(resumed.localStorage.getItem('geo-atlaswerkstatt-v1'),JSON.stringify({done:['Grundlagen'],stats:{Grundlagen:{attempts:3,correct:2}}}));
+assert.ok(resumed.renderStart().includes('Klassenarbeit · 18 Aufgaben'));checks++;
 for(const [lat,lon,want] of [[50,14,'NO'],[50,-14,'NW'],[-50,14,'SO'],[-50,-14,'SW'],[0,45,'edge'],[35,0,'edge'],[-30,180,'edge'],[30,-180,'edge'],[90,80,'pole'],[-90,-70,'pole']])eq(a.quarter(lat,lon).code,want);
 for(const [raw,max,want] of [['',90,null],[' ',90,null],['abc',180,null],['-1',90,null],['1e2',180,null],['90,1',90,null],['181',180,null],['14,4',180,14.4],['14.4',180,14.4],['0',90,0],['90',90,90],['180',180,180]])eq(a.number(raw,max),want);
 eq(a.checkMissing('9,1','W',-9.1,false).ok,true);
@@ -26,6 +36,14 @@ for(const m of html.matchAll(/(?:src|href)="([^"#]+\.(?:js|css|webp|webmanifest)
 const output=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 assert.ok(!/<script src=/.test(output));checks++;
 assert.ok(output.includes('atlasdaten.js')&&output.includes('awExamForm'));checks++;
+for(const match of output.matchAll(/<script>\s*([\s\S]*?)<\/script>/g)){new vm.Script(match[1]);checks++;}
+assert.ok(output.includes('id="appStartup"'));checks++;
+const workbook=output.match(/href="(data:application\/pdf;base64,[^"]+)" download="Erdkunde_Lernheft_Klasse5.pdf"/);
+assert.ok(workbook,'Vorhandenes Lernheft muss in der Offline-App eingebettet sein');checks++;
+assert.deepEqual(Buffer.from(workbook[1].split(',')[1],'base64'),fs.readFileSync(path.join(__dirname,'../Erdkunde_Lernheft_Klasse5.pdf')));checks++;
+const oldEntry=fs.readFileSync(path.join(__dirname,'../Erdkunde_App_NEU_2026-10-27_Klassenarbeit_18_Aufgaben.html'),'utf8');
+assert.ok(oldEntry.includes('content="0;url=index.html"')&&!oldEntry.includes('<script'));checks++;
+assert.ok(!fs.readFileSync(path.join(__dirname,'build-offline.js'),'utf8').includes('copyFileSync'));checks++;
 const goodGaps={parallel:'parallel',reference:'Äquator',north:'Nordpol',south:'Südpol',largest:'Äquator'};
 for(const r of a.checkGaps(goodGaps))eq(r.ok,true);
 for(const r of a.checkGaps({}))eq(r.empty,true);

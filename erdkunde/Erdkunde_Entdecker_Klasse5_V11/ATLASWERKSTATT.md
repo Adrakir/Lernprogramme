@@ -60,4 +60,8 @@ Die aktuelle Fassung hat die eindeutigen Namen `Erdkunde_Test_NEU_2026-10-27_9_S
 
 Die neue Ansicht „4 · Klassenarbeit“ führt durch alle 18 Aufgaben der aktuellen neunseitigen PDF. Sie bietet einen eigenen Versuchsspeicher, sieben Freihandflächen, Tastaturalternativen, Abgabeprüfung mit offenen Aufgaben, Teilpunkte und nachträgliche Musterlösungen. Zeichnungen und die freie Begründung haben elf transparente Kriterien zur gemeinsamen Bewertung. Die Lehrersicht und Schülersicht sind in LEHRER_SCHUELER_PRUEFUNG.md dokumentiert.
 
-Die reproduzierbare Ein-Datei-App heißt zusätzlich `Erdkunde_App_NEU_2026-10-27_Klassenarbeit_18_Aufgaben.html`. Sie wird bei jedem Offline-Build aus demselben Stand wie index.html erzeugt. Die Arbeit ist damit als neue Datei eindeutig von älteren Downloads unterscheidbar. Eine öffentliche Erdkunde-Hostingadresse ist in diesem Repository nicht eingerichtet.
+Der bestehende Einstieg bleibt **`index.html`**. Es werden keine datierten App-Kopien mehr erzeugt. Der bereits geteilte Zweitlink enthält nur noch eine Weiterleitung auf `index.html`. Die bestehende App ist außerdem unter https://erdkunde-entdecker.node-opcua.chatgpt.site als private Website bereitgestellt; beim ersten Aufruf ist die Anmeldung mit ChatGPT erforderlich. Die Veröffentlichung enthält denselben `index.html` und alle vorhandenen PDF-Materialien.
+
+## Start und Verweise repariert
+
+Ein gespeicherter Wert `null` unter `geo-atlaswerkstatt-v1` führte reproduzierbar zu einem Startabbruch der Werkstatt. Ungültige Speicherwerte werden jetzt abgefangen, ohne gültige Lernstände zu löschen. Ein sichtbarer Starthinweis bleibt stehen, falls die interaktiven Inhalte nicht starten (beispielsweise in einer Dateivorschau ohne JavaScript). Der zuvor ins Leere führende Lernheft-Link verweist auf das vorhandene PDF; im eigenständigen `index.html` ist dieses PDF eingebettet. Die aktuelle Klassenarbeit bleibt mit allen 18 Aufgaben erhalten.

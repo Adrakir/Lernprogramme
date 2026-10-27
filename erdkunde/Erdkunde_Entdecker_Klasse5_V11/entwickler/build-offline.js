@@ -6,13 +6,13 @@ function bundle(file){
  let html=fs.readFileSync(path.join(__dirname,file),'utf8');
  html=html.replace(/<link rel="stylesheet" href="([^"]+)">/g,(_,f)=>'<style>\n'+fs.readFileSync(path.join(__dirname,f),'utf8')+'\n</style>');
  html=html.replace(/<script src="([^"]+)"><\/script>/g,(_,f)=>'<script>\n/* '+f+' */\n'+fs.readFileSync(path.join(__dirname,f),'utf8').replace(/<\/script/gi,'<\\/script')+'\n</script>');
- html=html.replaceAll('src="gustav-globus.webp"','src="'+image+'"').replaceAll('../Erdkunde_Lernheft_Klasse5_final.pdf','Erdkunde_Lernheft_Klasse5_final.pdf');
+ html=html.replaceAll('src="gustav-globus.webp"','src="'+image+'"').replaceAll('../Erdkunde_Lernheft_Klasse5.pdf','data:application/pdf;base64,'+fs.readFileSync(path.join(root,'Erdkunde_Lernheft_Klasse5.pdf')).toString('base64'));
  html=html.replace(/<link rel="(?:manifest|apple-touch-icon)"[^>]+>/g,'');
  fs.writeFileSync(path.join(root,file),html);
  console.log(file+': '+Buffer.byteLength(html)+' Bytes');
 }
 bundle('index.html');
-fs.copyFileSync(path.join(root,'index.html'),path.join(root,'Erdkunde_App_NEU_2026-10-27_Klassenarbeit_18_Aufgaben.html'));
+// index.html bleibt der einzige App-Einstieg. Keine datierten App-Kopien erzeugen.
 // Das separat erstellte Lernheft ist nicht in jedem Quellpaket enthalten.
 if(fs.existsSync(path.join(__dirname,'lernheft.html')))bundle('lernheft.html');
 

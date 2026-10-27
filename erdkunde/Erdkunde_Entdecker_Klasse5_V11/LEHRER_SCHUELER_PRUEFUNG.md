@@ -24,3 +24,9 @@ Freihandzeichnungen und freie Begründungen werden anhand der Musterlösungen ge
 ## Ausgeführte Kontrollen
 
 203 automatische Prüfungen, darunter vollständige und leere Klassenarbeit, Teilpunkte, falsche Richtungsangaben und gespeicherte Antworten/Zeichenpfade. Im Browser geprüft: Einstieg über die Startseite, Beschriftungen und Lückentext, Markieren mit Richtungstasten, Zeichenmarkierung und Rückgängig, Wiederaufnahme nach Neuladen, offene Aufgaben vor Abgabe, endgültige Abgabe, gesperrte Antworten und gemeinsame Bewertung mit drei Zuständen. In einer 375 Pixel breiten Ansicht hatte die Seite keinen seitlichen Überlauf; Zeichenfelder stehen untereinander. Ein echter Geräteversuch mit jedem iOS-/Android-Browser bleibt offen.
+
+## Reparatur des vorhandenen Einstiegs
+
+Der Einstieg bleibt `index.html`; der frühere datierte App-Link leitet nur noch dorthin. Ein reproduzierbarer Startabbruch bei gespeichertem Werkstattwert `null` ist abgefangen. Ein sichtbarer Starthinweis erläutert, wenn interaktive Inhalte nicht geladen wurden. Der defekte Lernheft-Link ist ersetzt und das vorhandene PDF in der Ein-Datei-App eingebettet. Die 18 Aufgaben und gültige Lernstände bleiben erhalten. Die genaue vom Nutzer geöffnete Datei bzw. Adresse ist weiterhin unbekannt; damit ist noch nicht nachgewiesen, dass sein konkreter Fehler dieselbe Ursache hatte.
+
+Die identische App und alle vorhandenen PDFs wurden anschließend als private Website bereitgestellt: https://erdkunde-entdecker.node-opcua.chatgpt.site. Veröffentlichung erfolgreich bestätigt; der direkte Cloud-Browser-Aufruf zeigt erwartungsgemäß die ChatGPT-Anmeldung. Die Inhaltsprüfung erfolgte an der bytegleichen lokalen App. 235 automatische Prüfungen bestehen einschließlich Start mit ungültigen Speicherwerten, eingebettetem Lernheft und alter Linkweiterleitung. Das Mehrgeräte-Livequiz benötigt weiterhin den gesonderten Node.js-Server; die statische Bereitstellung betreibt diesen Server nicht.
