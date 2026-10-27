@@ -83,3 +83,7 @@ Die Linien werden jetzt wie der Perspektivwechsel über eine gemeinsame pausierb
 Das sanfte Seitenscrollen ist in der Atlaswerkstatt ausgeschaltet. Dadurch bleiben Aufgabenwechsel nach langer Auswertung unmittelbar bedienbar. Browserprüfung: fünf schnelle Wechsel zwischen den Aufgaben 18, 9, 15, 17 und 14, alle jeweils mit einem Klick erfolgreich; Register bis Feld B3, Erdviertel, Halbkuppel, kompletter Lückentext und Zeichenlösung geprüft. Abgegebene Antworten und automatische Teilpunkte bleiben erhalten, manuelle Bewertung wird getrennt gespeichert.
 
 590 automatische Prüfungen bestanden, einschließlich Pause/Fortsetzen für Linien und Kugelblick sowie Stop bei verborgenem Fenster und Verlassen des Bereichs. Prüfung in der Desktop-Browservorschau; kein neuer echter iOS-/Android-Gerätetest und kein Unterrichtsversuch.
+
+## Bezugslinien als Bildaufgabe
+
+Aufgabe 1 zeigt jetzt zwei Erdkugeln mit jeweils einer dick hervorgehobenen Bezugslinie. Das graue Gradnetz, Nord- und Südpol geben Orientierung; rückseitige Linien sind gestrichelt. Jede Grafik steht direkt über ihrem Antwortfeld. Auf schmalen Ansichten erscheinen die beiden Karten untereinander. Die Darstellung ist in der vollständigen Klassenarbeit und im bisherigen Teil-A-Test identisch. Die gesuchten Fachwörter stehen vor Abgabe weder im Bild noch in den Alternativtexten. Die übrigen Aufgaben wurden auf fehlende Bildbezüge durchgesehen: Aufgaben mit Modellen, Karten oder Skizzen enthalten bereits ihre Arbeitsgrafik.

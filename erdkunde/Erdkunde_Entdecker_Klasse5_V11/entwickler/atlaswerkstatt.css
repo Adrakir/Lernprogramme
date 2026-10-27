@@ -31,3 +31,6 @@ svg[data-cw-draw]{display:block;width:100%;height:auto;background:#fff;border:1p
 
 /* Aufgabenwechsel bleibt auch nach langer Auswertung unmittelbar bedienbar. */
 html[data-aw-active=true]{scroll-behavior:auto}.cw-question,#cwResult{scroll-margin-top:85px}
+
+/* Grafik und Antwort bleiben auch auf kleinen Bildschirmen zusammen. */
+.aw .aw-reference-models{align-items:start;margin:16px 0}.aw-reference-item{min-width:0;padding:14px;border:1px solid #bdd0da;border-radius:12px}.aw-reference-figure{margin:0 0 12px!important}.aw-reference-figure figcaption{font-weight:800;margin-bottom:8px}.aw-reference-item input{width:100%;min-width:0}.aw .aw-reference-figure svg{max-height:340px}@media(max-width:780px){.aw .aw-reference-models{grid-template-columns:1fr}}

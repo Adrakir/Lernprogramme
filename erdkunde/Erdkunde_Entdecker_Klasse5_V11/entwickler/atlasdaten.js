@@ -403,7 +403,7 @@ window.AW_DATA = {
       "kind": "fields",
       "skill": "Grundlagen",
       "title": "Die beiden Bezugslinien",
-      "question": "Wie heißen diese beiden Linien? Trage die passenden Fachwörter ein.",
+      "question": "Betrachte die Erdkugeln a) und b). Wie heißen die dick hervorgehobenen Linien? Trage die passenden Fachwörter ein.",
       "fields": [
         {
           "id": "equator",
