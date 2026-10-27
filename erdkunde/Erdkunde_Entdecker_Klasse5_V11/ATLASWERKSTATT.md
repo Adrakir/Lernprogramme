@@ -55,3 +55,9 @@ Die Seiten 7–9 ergänzen Ansichten desselben Hauses und des Globus, drei groß
 ## Eindeutige PDF-Dateinamen
 
 Die aktuelle Fassung hat die eindeutigen Namen `Erdkunde_Test_NEU_2026-10-27_9_Seiten.pdf` und `Erdkunde_Loesungen_NEU_2026-10-27_8_Seiten.pdf`. Die bisherigen Dateinamen bleiben als identische Kopien für vorhandene Verweise erhalten. Startseite, Testübersicht und Werkstatt zeigen Seitenzahl und Datum. Die App prüft vor dem Anbieten der Druckdatei deren Versionskennung. Der neue Entwickler-Cache lädt beim Installieren seine Ressourcen ohne Wiederverwendung des HTTP-Caches.
+
+## Vollständige interaktive Klassenarbeit
+
+Die neue Ansicht „4 · Klassenarbeit“ führt durch alle 18 Aufgaben der aktuellen neunseitigen PDF. Sie bietet einen eigenen Versuchsspeicher, sieben Freihandflächen, Tastaturalternativen, Abgabeprüfung mit offenen Aufgaben, Teilpunkte und nachträgliche Musterlösungen. Zeichnungen und die freie Begründung haben elf transparente Kriterien zur gemeinsamen Bewertung. Die Lehrersicht und Schülersicht sind in LEHRER_SCHUELER_PRUEFUNG.md dokumentiert.
+
+Die reproduzierbare Ein-Datei-App heißt zusätzlich `Erdkunde_App_NEU_2026-10-27_Klassenarbeit_18_Aufgaben.html`. Sie wird bei jedem Offline-Build aus demselben Stand wie index.html erzeugt. Die Arbeit ist damit als neue Datei eindeutig von älteren Downloads unterscheidbar. Eine öffentliche Erdkunde-Hostingadresse ist in diesem Repository nicht eingerichtet.

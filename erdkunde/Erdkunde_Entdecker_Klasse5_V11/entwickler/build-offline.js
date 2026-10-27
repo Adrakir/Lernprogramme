@@ -12,6 +12,7 @@ function bundle(file){
  console.log(file+': '+Buffer.byteLength(html)+' Bytes');
 }
 bundle('index.html');
+fs.copyFileSync(path.join(root,'index.html'),path.join(root,'Erdkunde_App_NEU_2026-10-27_Klassenarbeit_18_Aufgaben.html'));
 // Das separat erstellte Lernheft ist nicht in jedem Quellpaket enthalten.
 if(fs.existsSync(path.join(__dirname,'lernheft.html')))bundle('lernheft.html');
 
