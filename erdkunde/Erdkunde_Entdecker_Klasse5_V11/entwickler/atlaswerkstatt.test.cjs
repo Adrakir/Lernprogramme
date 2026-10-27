@@ -71,4 +71,12 @@ eq(a.examRegisterRows().find(r=>r.name==='Frankfurt am Main').field,'B3');
 eq(a.examRegisterRows().find(r=>r.name==='Frankfurt (Oder)').field,'D2');
 const sketch=a.cleanSketch({paths:{globe:[{color:'#1766a1',points:[[0,0],[480,300]]},{color:'bad',points:[[1,1]]},{color:'#1766a1',points:[[1,301]]}]},texts:{globe:'x'.repeat(1600)},review:true,color:'#9c3475'});
 eq(sketch.paths.globe.length,1);eq(sketch.texts.globe.length,1500);eq(sketch.review,true);eq(sketch.color,'#9c3475');eq(a.cleanSketch(null).review,false);eq(a.cleanSketch({paths:{globe:'invalid'}}).paths.globe.length,0);
+const notes=ctx.window.AW_DATA.notes;
+eq(notes.labels.length,8);
+for(const word of ['Nordpol','Südpol','Nordhalbkugel','Südhalbkugel','Äquator','Westhalbkugel','Osthalbkugel','Nullmeridian']){assert.ok(notes.scenes.hemispheres.items.some(i=>i.tag==='text'&&i.text===word));checks++;}
+eq(notes.scenes.hemispheresTest.items.filter(i=>i.tag==='text'&&/^[A-H]$/.test(i.text)).length,8);
+eq(notes.sentences[1],'Die Längenkreise verlaufen vom Nordpol zum Südpol.');
+eq(notes.sentences.length,3);
+assert.ok(a.originalScene('hemispheres').includes('Nullmeridian'));checks++;
+assert.ok(!notes.scenes.angle.items.some(i=>i.tag==='text'&&i.text.includes('45')));checks++;
 console.log(`${checks} Prüfungen bestanden: Erdviertel, Grenzfälle, Komma-Eingaben, Richtungen, Kugelprojektion, Registerfelder, vollständige Ein-Datei-Ausgabe.`);
