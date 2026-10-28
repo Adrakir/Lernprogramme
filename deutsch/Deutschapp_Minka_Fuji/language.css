@@ -1,0 +1,25 @@
+/* Sprachwerkstatt: uses the existing comic design and works without external assets. */
+.language-topics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:24px 0}
+.language-topics button{text-align:left;min-height:58px;line-height:1.4}
+.language-topics button[aria-pressed=true]{background:var(--accent);color:#182616;border-color:var(--accent)}
+.language-topics button span{font-weight:800}
+.language-goal{font-size:1.1rem}
+.language-steps{padding-left:26px;margin:20px 0}
+.language-steps li{padding-left:6px;margin:12px 0}
+.language-theory h2{scroll-margin-top:24px}
+.language-bank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+.language-word{padding:18px;border:1px solid var(--line);border-radius:10px;background:var(--panel2)}
+.language-word h4{font-size:1.05rem;color:var(--accent);margin:0 0 10px}
+.language-word p{margin:8px 0}
+#language-lesson .model-text{white-space:pre-wrap;overflow-wrap:anywhere}
+#language-training .select-label{display:block;max-width:540px;margin:18px 0}
+#language-score{color:var(--muted);margin-bottom:20px}
+#language-gap{display:inline-block;width:auto;max-width:100%;margin:8px;vertical-align:middle;font-family:inherit;font-size:1rem}
+.language-writing>label{display:block;font-weight:700;margin:20px 0 10px}
+.language-punct-row{padding:20px 0;border-top:1px solid var(--line)}
+.language-punct-inputs{display:flex;flex-wrap:wrap;gap:14px}
+.language-punct-inputs label{display:block;flex:1 1 110px;max-width:220px}
+.language-punct-inputs select{display:block;margin-top:6px}
+#language-task-title{scroll-margin-top:24px}
+@media(max-width:850px){.language-topics{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.language-topics,.language-bank{grid-template-columns:repeat(2,minmax(0,1fr))}.language-topics button{font-size:.9rem;padding:12px 10px}.language-bank{grid-template-columns:1fr}.language-punct-inputs label{max-width:none}}

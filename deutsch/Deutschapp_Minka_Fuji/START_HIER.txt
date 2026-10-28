@@ -11,11 +11,17 @@ Inhalt:
 • Übungen und Schreibwerkstatt für Einleitungen
 • Leseverständnis: sechs Geschichten mit insgesamt 72 Aufgaben
 • Hilfen, Musterlösungen und eigene Antworten zur Selbstkontrolle
+• Neu in Bereich 06: Schlingen in der Einleitung legen und später auflösen
+• Treffende Verben für gehen, sehen und sagen mit Bedeutung und Präteritum
+• Abwechslungsreiche Satzanfänge, passende Adjektive und wörtliche Rede
+• 28 neue Aufgaben, drei Satzzeichenübungen und sieben eigene Schreibaufträge
+• Minka und Fuji begleiten alle neuen Erklärungen, Beispiele und Übungen
 
 Die App nutzt lokale Bilder und Dateien; zum Lernen ist keine Anmeldung nötig.
 Antworten bleiben nur in der geöffneten Sitzung erhalten. Beim Neuladen werden sie zurückgesetzt.
 Eigene Texte werden nicht automatisch benotet.
 
 Auf Smartphones kann das direkte Öffnen entpackter HTML-Dateien je nach System eingeschränkt sein.
-Alternativ im Browser die veröffentlichte App öffnen:
-https://erzaehlwerkstatt-deutsch-5.node-opcua.chatgpt.site
+Bei aktivierter GitHub-Pages-Veröffentlichung ist die aktuelle Version hier:
+https://adrakir.github.io/Lernprogramme/deutsch/Deutschapp_Minka_Fuji/
+Die ältere Veröffentlichung auf chatgpt.site wird nicht automatisch mitgeändert.
