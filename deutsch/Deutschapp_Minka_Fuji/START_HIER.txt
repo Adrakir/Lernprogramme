@@ -16,12 +16,22 @@ Inhalt:
 • Abwechslungsreiche Satzanfänge, passende Adjektive und wörtliche Rede
 • 28 neue Aufgaben, drei Satzzeichenübungen und sieben eigene Schreibaufträge
 • Minka und Fuji begleiten alle neuen Erklärungen, Beispiele und Übungen
+• Bereich 07: geführter Lehrgang mit neun Stationen bis zur eigenen Geschichte
+• 32 steuerbare Animationsschritte, 16 Übungen und acht kleine Schreibproben
+• Erzählplan, Überarbeitungscheckliste, TXT-Export und Druck der eigenen Geschichte
 
 Die App nutzt lokale Bilder und Dateien; zum Lernen ist keine Anmeldung nötig.
-Antworten bleiben nur in der geöffneten Sitzung erhalten. Beim Neuladen werden sie zurückgesetzt.
+Bereiche 01–06: Antworten bleiben nur in der geöffneten Sitzung erhalten.
+Lehrgang 07: Fortschritt und Entwürfe werden im Browser dieses Geräts gespeichert,
+sofern der Browser das erlaubt. Keine automatische Synchronisierung mit anderen Geräten.
+Im Lehrgang kannst du unterbrechen und später mit „Weiterlernen“ fortsetzen.
+Speichere deine fertige Geschichte zusätzlich über „Text als TXT sichern“.
+Die Animationen starten nur auf Wunsch und lassen sich pausieren oder einzeln durchgehen.
+Bei reduzierter Bewegung in den Geräteeinstellungen bleiben alle Schritte ohne Animation bedienbar.
 Eigene Texte werden nicht automatisch benotet.
 
 Auf Smartphones kann das direkte Öffnen entpackter HTML-Dateien je nach System eingeschränkt sein.
 Bei aktivierter GitHub-Pages-Veröffentlichung ist die aktuelle Version hier:
 https://adrakir.github.io/Lernprogramme/deutsch/Deutschapp_Minka_Fuji/
+Direkt zum Lehrgang: dieselbe Adresse mit #lehrgang am Ende.
 Die ältere Veröffentlichung auf chatgpt.site wird nicht automatisch mitgeändert.

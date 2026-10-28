@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Minka & Fuji · Erzählwerkstatt</title>
-  <meta name="description" content="Erzählwerkstatt Klasse 5 mit Minka und Fuji: Einleitung, Spannungsschlingen, treffende Verben, Satzanfänge, Adjektive, wörtliche Rede und Leseverständnis.">
+  <meta name="description" content="Erzählwerkstatt Klasse 5 mit Minka und Fuji: geführter Lehrgang mit Animationen, Erzählübungen, Spannungsschlingen, Wortschatz, wörtlicher Rede und Leseverständnis.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141d32'/%3E%3Cpath d='M8 24V8h16M8 16h12M8 24h16' stroke='%23baf36b' stroke-width='3' fill='none'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css"><script defer src="app.js"></script>
+  <link rel="stylesheet" href="style.css"><script defer src="app.js?v=lehrgang1"></script>
   <script defer src="reading.js"></script>
   <link rel="stylesheet" href="language.css"><script defer src="language.js"></script>
+  <link rel="stylesheet" href="course.css?v=1"><script defer src="course-data.js?v=1"></script><script defer src="course.js?v=1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Zum Lernbereich</a>
@@ -19,11 +20,12 @@
     <button type="button" data-page="schreiben"><span>04</span> Einleitung schreiben</button>
   <button type="button" data-page="lesen"><span>05</span> Leseverständnis</button>
   <button type="button" data-page="sprache"><span>06</span> Erzählsprache trainieren</button>
+  <button type="button" data-page="lehrgang"><span>07</span> Geführter Lehrgang</button>
   </nav>
   <main id="main" tabindex="-1">
     <section id="entdecken" class="page">
       <div class="page-head"><p class="eyebrow">01 · Aufbau entdecken</p><h1>Minka & Fuji: das Kratzen im Schuppen.</h1><p>Lies ihren Abenteuercomic und entdecke dabei Einleitung, Hauptteil und Schluss. Minka und Fuji erklären dir, worauf es ankommt.</p></div>
-      <div class="lesson-grid">
+      <div class="note compact"><strong>Neu: Dein geführter Lehrgang.</strong> Minka und Fuji zeigen dir in animierten Beispielen, wie eine Erzählung entsteht. <button type="button" class="primary" data-go="lehrgang">Mit Minka &amp; Fuji lernen</button></div><div class="lesson-grid">
         <div class="panel reading-panel">
           <div class="panel-title"><h2>Unser Abenteuercomic</h2><span class="tag">6 Bilder · eine Geschichte</span></div>
           <p class="instruction">Wähle einen Teil. Du siehst im Text, was zu ihm gehört.</p>
@@ -80,11 +82,17 @@
     </section>
     <section id="sprache" class="page" hidden>
       <div class="page-head"><p class="eyebrow">06 · Sprachwerkstatt · Klasse 5</p><h1>Mit Minka & Fuji lebendig erzählen.</h1><p>Lege eine Spannungsschlinge, finde treffende Wörter und lass deine Figuren sprechen. Lerne Schritt für Schritt und probiere alles in eigenen Texten aus.</p></div>
-      <div class="reading-intro panel"><img src="assets/guides.webp" alt="Minka, die getigerte Katze mit weißen Pfoten, und Fuji, die graue Tschechoslowakische Wolfshündin" width="220" height="220"><div><div class="speech"><strong>Minka:</strong> „Mit einer Schlinge fangen wir die Aufmerksamkeit unserer Leser ein!“<br><strong>Fuji:</strong> „Und mit treffenden Wörtern können sie unser Abenteuer miterleben.“</div><p>Unser Lernweg: <strong>Verstehen → Vergleichen → Üben → Selbst schreiben.</strong> Wähle ein Thema. Deine Antworten und Texte bleiben beim Wechseln in dieser Sitzung erhalten.</p><p id="language-total" role="status"></p></div></div>
+      <div class="reading-intro panel"><img src="assets/guides.webp" alt="Minka, die getigerte Katze mit weißen Pfoten, und Fuji, die graue Tschechoslowakische Wolfshündin" width="220" height="220"><div><div class="speech"><strong>Minka:</strong> „Mit einer Schlinge fangen wir die Aufmerksamkeit unserer Leser ein!“<br><strong>Fuji:</strong> „Und mit treffenden Wörtern können sie unser Abenteuer miterleben.“</div><p>Unser Lernweg: <strong>Verstehen → Vergleichen → Üben → Selbst schreiben.</strong> Wähle ein Thema. Deine Antworten und Texte bleiben beim Wechseln in dieser Sitzung erhalten.</p><p id="language-total" role="status"></p><button type="button" class="primary" data-go="lehrgang">Schritt für Schritt im Lehrgang lernen</button></div></div>
       <div id="language-topics" class="language-topics" role="group" aria-label="Thema der Sprachwerkstatt"></div>
       <div id="language-lesson"></div>
     </section>
+    <section id="lehrgang" class="page" hidden>
+      <div class="course-hero"><div><p class="eyebrow">07 · Dein geführter Lehrgang</p><h1>Aus deiner Idee wird ein Abenteuer.</h1><p>Mit Minka und Fuji lernst du Schritt für Schritt, lebendig zu erzählen. Schau zu, probiere aus und schreibe am Ende deine eigene Geschichte.</p><div class="course-badges"><span>9 Stationen</span><span>Animationen zum Steuern</span><span>Für Klasse 5</span></div></div><img src="assets/guides.webp" alt="Minka, die getigerte Katze mit weißen Pfoten, und Fuji, die graue Wolfshündin, begleiten deinen Lehrgang" width="250" height="250"></div>
+      <div class="course-dashboard panel"><div><p class="eyebrow">Dein Lernweg</p><p id="course-overall" role="status"></p><progress id="course-progress" max="9" value="0" aria-label="Abgeschlossene Lehrgangsstationen"></progress><p id="course-storage" class="muted"></p></div><div class="quiz-actions"><button type="button" class="primary" id="course-resume">Lehrgang beginnen</button><button type="button" class="secondary" id="course-reset">Neu beginnen</button></div><div id="course-reset-confirm" hidden><p>Den Lehrgang einschließlich deiner Entwürfe auf diesem Gerät zurücksetzen? Sichere deinen Text vorher als TXT.</p><button type="button" class="secondary" id="course-reset-cancel">Abbrechen</button> <button type="button" class="secondary" id="course-reset-yes">Lehrgang zurücksetzen</button></div></div>
+      <div class="course-layout"><nav id="course-map" class="course-map" aria-label="Stationen des Lehrgangs"></nav><div id="course-workspace"></div></div>
+      <div class="course-save-toast" id="course-save-note" role="status"></div>
+    </section>
   </main>
-  <footer>Erzählwerkstatt · Üben in deinem Tempo.<span>Deine Eingaben bleiben in dieser geöffneten Seite. Beim Neuladen werden sie zurückgesetzt.</span></footer>
+  <footer>Erzählwerkstatt · Üben in deinem Tempo.<span>Bereiche 01–06: Eingaben bleiben in dieser Sitzung. Lehrgang 07: Fortschritt und Entwürfe werden auf diesem Gerät gespeichert, sofern dein Browser dies erlaubt. Texte werden nicht automatisch benotet.</span></footer>
 </body>
 </html>

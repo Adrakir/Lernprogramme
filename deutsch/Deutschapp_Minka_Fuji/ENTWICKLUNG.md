@@ -12,7 +12,7 @@ Die Einleitung-Schreibwerkstatt verlinkt den Bereich und prüft in der
 Selbsteinschätzung auch Spannungsschlinge und Wortwahl. Comics, Spannungskurve,
 18 Wissensaufgaben und sechs Lesegeschichten mit 72 Aufgaben bleiben erhalten.
 
-Alle Daten liegen nur im Arbeitsspeicher der geöffneten Seite. Ein Themen- oder
+Die Daten der Bereiche 01–06 liegen nur im Arbeitsspeicher der geöffneten Seite. Ein Themen- oder
 Bereichswechsel erhält Eingaben; Neuladen setzt sie zurück. Eine geöffnete Hilfe,
 Lösung oder ein korrigierter Fehlversuch wird nicht als unabhängiger Erstversuch
 gezählt. Freie Texte werden nur mit einer transparenten Selbsteinschätzung
@@ -41,3 +41,41 @@ damit wird auch das Starten ohne Webserver geprüft.
 Die Tests prüfen alle Aufgaben, richtige und falsche Antworten, Hilfen und
 Lösungsnutzung, getrennte Schreibentwürfe, Satzzeichenübungen, bestehende
 Lernbereiche und horizontale Überläufe bei 390 und 768 Pixeln.
+
+## Geführter Lehrgang · Bereich 07
+
+`course-data.js` enthält die Lerninhalte, `course.js` die Bedienung und
+`course.css` die Darstellung. Acht Lernstationen führen über Orientierung,
+Spannungsschlingen, Bewegungs-, Wahrnehmungs- und Redeverben, Satzanfänge,
+Adjektive und wörtliche Rede zum Schreibprojekt in Station 9.
+
+Jede Lernstation bietet vier kommentierte Animationsschritte, eine gemeinsame
+und eine selbstständige Aufgabe, einen Merksatz und eine freiwillige Schreibprobe
+mit Mustertext. Die 16 Aufgaben verwenden Zuordnungen, kontextbezogene Auswahl
+und antippbare Satzbausteine mit Rücknahmefunktion. Hinweise sind gestuft.
+Mit Lösung bearbeitete Aufgaben öffnen den nächsten Schritt, werden aber nicht
+als selbstständig gelöst gezählt. Die Bilanz zählt nur die acht Selbstaufgaben
+im aktuellen Durchgang. Ein Stationsabschluss ist eine transparente
+Selbsteinschätzung, keine automatische Kompetenzbescheinigung.
+
+Die 32 Animationsschritte lassen sich einzeln wählen oder mit 6,5 Sekunden pro
+Schritt abspielen. Wiedergabe pausiert beim Verlassen des Bereichs und bei einem
+verborgenen Dokument. Betriebssystemeinstellung `prefers-reduced-motion` sowie
+eine eigene Abschaltmöglichkeit erhalten alle Inhalte ohne Bewegung. Die Bilder
+stammen aus der bestehenden App; es gibt keine zusätzlichen Medienabrufe.
+
+Nur der Lehrgang speichert Fortschritt und Texte im Browserspeicher unter
+`minka-fuji-lehrgang-v1`. Eingaben werden kurz verzögert gespeichert, beim
+Verlassen sofort. Gespeicherte Strukturen werden beim Einlesen normalisiert.
+Bei blockiertem oder defektem Speicher bleibt die Sitzung nutzbar und zeigt die
+Speichergrenze an. Texte werden nicht übertragen. Ein bewusst bestätigter
+Neustart setzt ausschließlich den Lehrgang zurück. Wiederholen einer Station
+erhält ihre Schreibprobe. In der letzten Station sind Plan, Text, Checkliste,
+Lesefassung, UTF-8-TXT-Export und eine Druckansicht verfügbar. Nach einer
+Textänderung müssen Überarbeitungshäkchen erneut gesetzt werden.
+
+Der Direktlink endet auf `index.html#lehrgang` oder `/#lehrgang`.
+`tests/course.test.cjs` prüft den gesamten Lernweg, Hilfen und Verbesserungen,
+Wiederaufnahme, Textschutz, Export, Druckansicht, Speicherfehler,
+Bewegungsreduktion und Breiten von 320, 390 und 768 Pixeln. `npm test` führt
+diese Prüfungen zusammen mit den Regressionstests der bisherigen App aus.
