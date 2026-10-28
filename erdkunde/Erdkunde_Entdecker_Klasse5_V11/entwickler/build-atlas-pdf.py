@@ -28,8 +28,11 @@ def line(x,y,x2,y2,color='#9AB1BE',width=.7):
 def box(x,y,w,h,fill='#EFF7F5',stroke=None):
     c.setFillColor(HexColor(fill));c.setStrokeColor(HexColor(stroke or fill));c.roundRect(x,H-y-h,w,h,10,fill=1,stroke=bool(stroke))
 def header(title,page,solution=False,total=9):
+    page=c.getPageNumber()
+    total=11 if solution else 10
     c.setFillColor(HexColor(TEAL));c.rect(0,H-8,W,8,fill=1,stroke=0)
     txt(34,36,'ERDKUNDE · KLASSE 5',9,'Bold',TEAL)
+    txt(399,36,'Bebildert · 28.10.2026',8,'Bold',TEAL)
     txt(34,66,title,23,'Bold')
     txt(34,87,('Musterlösungen und Lernhinweise' if solution else 'Gradnetz · Erdviertel · Polansichten · Atlasarbeit'),10,color=GREY)
     line(34,804,W-34,804)
@@ -39,7 +42,7 @@ def question(index,y,width=520):
     q=DATA['exam'][index-1]
     h=para(34,y,width,f'<b>{index}. {q["question"]}</b>',11,16)
     return y+h
-def map_art(x,y,w,h,bounds,point=None,point_label=None,lat_step=5,lon_step=5,fields=False,tolerance=False):
+def map_art(x,y,w,h,bounds,point=None,point_label=None,lat_step=5,lon_step=5,fields=False,tolerance=False,credit=True):
     west,east,south,north=bounds
     left=x+36;top=y+22;mw=w-48;mh=h-43
     X=lambda lo:left+(lo-west)/(east-west)*mw
@@ -75,7 +78,7 @@ def map_art(x,y,w,h,bounds,point=None,point_label=None,lat_step=5,lon_step=5,fie
             c.setFillColor(HexColor('#D6EDDE'));c.setStrokeColor(HexColor('#6A997D'));c.rect(X(lo-1),H-Y(la-1),X(lo+1)-X(lo-1),Y(la-1)-Y(la+1),fill=1,stroke=1)
         c.setFillColor(HexColor('#E8B83C'));c.setStrokeColor(HexColor(INK));c.circle(X(lo),H-Y(la),3.5,fill=1,stroke=1)
         if point_label:txt(X(lo)+7,Y(la)-5,point_label,8,'Bold')
-    if not fields:txt(left,y+h-4,'Vereinfachte Lernkarte · Natural Earth, Public Domain',7,color=GREY)
+    if not fields and credit:txt(left,y+h-4,'Vereinfachte Lernkarte · Natural Earth, Public Domain',7,color=GREY)
 def field(x,y,w,label):
     para(x,y,w,label,9.4,13)
     line(x,y+31,x+w,y+31)
@@ -119,6 +122,73 @@ def register_table(y):
         line(34,y+(i+1)*row_h,561,y+(i+1)*row_h)
 def empty_circle(cx,cy,r):
     c.setStrokeColor(HexColor(INK));c.setLineWidth(1);c.circle(cx,H-cy,r,fill=0,stroke=1)
+def reference_globe(cx,cy,r,kind,labels=True):
+    """Orthografische Modellkugel: sichtbare Linien voll, Rückseite gestrichelt."""
+    def project(lat,lon):
+        a,b,p=map(math.radians,(lat,lon+25,18))
+        return (cx+r*math.cos(a)*math.sin(b),cy-r*(math.cos(p)*math.sin(a)-math.sin(p)*math.cos(a)*math.cos(b)),math.sin(p)*math.sin(a)+math.cos(p)*math.cos(a)*math.cos(b))
+    def curve(points,color,width):
+        for front in (False,True):
+            c.setStrokeColor(HexColor(color if front else '#C2CDD4'))
+            c.setLineWidth(width if front else max(.5,width*.6))
+            c.setDash([] if front else [2,3]);path=None
+            for x,y,z in points:
+                if (z>=0)==front:
+                    if path is None:path=c.beginPath();path.moveTo(x,H-y)
+                    else:path.lineTo(x,H-y)
+                elif path is not None:c.drawPath(path);path=None
+            if path is not None:c.drawPath(path)
+        c.setDash([])
+    c.setFillColor(HexColor('#EAF3F8'));c.setStrokeColor(HexColor('#567F95'));c.setLineWidth(.8)
+    c.circle(cx,H-cy,r,fill=1,stroke=1)
+    for lat in [-60,-30,0,30,60]:curve([project(lat,lo) for lo in range(-180,181,2)],'#AABBC5',.5)
+    for lon in [-120,-60,0,60,120,180]:curve([project(la,lon) for la in range(-90,91,2)],'#AABBC5',.5)
+    if kind in ('lat','both'):curve([project(0,lo) for lo in range(-180,181,2)],BLUE,2.8)
+    if kind in ('lon','both'):curve([project(la,0) for la in range(-90,91,2)],PINK,2.8)
+    if labels:
+        for lat,name in [(90,'Nordpol'),(-90,'Südpol')]:
+            x,y,_=project(lat,0);c.setFillColor(HexColor(INK));c.circle(x,H-y,2,fill=1,stroke=0)
+            txt(x+7,y-4 if lat>0 else y+10,name,8,'Bold')
+
+def limit_model(cx,cy,r,latitude,solution=False):
+    c.setFillColor(HexColor('#EDF5FA'));c.setStrokeColor(HexColor('#567F95'));c.setLineWidth(.8)
+    c.circle(cx,H-cy,r,fill=1,stroke=1)
+    color=BLUE if latitude else PINK
+    line(cx,cy-r,cx,cy+r,'#8EA9B9',.7)
+    if latitude:
+        line(cx-r,cy,cx+r,cy,BLUE,1.1)
+        txt(cx+r+7,cy+3,'0°',8,'Bold',BLUE)
+        txt(cx-17,cy-r-10,'Nordpol',8);txt(cx-17,cy+r+17,'Südpol',8)
+        angles=range(0,91,2);rr=r*.52
+        pts=[(cx+rr*math.cos(math.radians(a)),cy-rr*math.sin(math.radians(a))) for a in angles]
+        label='90°' if solution else '?';lx,ly=cx+rr*.88,cy-rr*.85
+    else:
+        txt(cx-7,cy-r-10,'0°',8,'Bold',PINK)
+        txt(cx-24,cy+r+17,'Gegenseite',8)
+        angles=range(0,181,2);rr=r*.70
+        pts=[(cx+rr*math.sin(math.radians(a)),cy-rr*math.cos(math.radians(a))) for a in angles]
+        label='180°' if solution else '?';lx,ly=cx+rr+6,cy+4
+        txt(cx-14,cy+4,'Pol',8,'Bold')
+    p=c.beginPath();p.moveTo(pts[0][0],H-pts[0][1])
+    for x,y in pts[1:]:p.lineTo(x,H-y)
+    c.setStrokeColor(HexColor(color));c.setLineWidth(2.2);c.drawPath(p)
+    txt(lx,ly,label,11,'Bold',color)
+    c.setFillColor(HexColor(INK));c.circle(cx,H-cy,2,fill=1,stroke=0)
+
+def quarters_model(cx,cy,r,solution=False):
+    cols=['#E4EEF9','#E7F3E7','#F7EAD9','#F2E4F1']
+    for n,(start,end) in enumerate([(180,270),(270,360),(90,180),(0,90)]):
+        pts=[(cx,cy)]+[(cx+r*math.cos(math.radians(a)),cy+r*math.sin(math.radians(a))) for a in range(start,end+1,2)]
+        pdf_polygon(pts,cols[n],cols[n],.5)
+    empty_circle(cx,cy,r)
+    line(cx-r,cy,cx+r,cy,BLUE,1.8);line(cx,cy-r,cx,cy+r,PINK,1.8)
+    txt(cx-4,cy-r-11,'N',9,'Bold');txt(cx-4,cy+r+17,'S',9,'Bold')
+    txt(cx-r-20,cy+3,'W',9,'Bold');txt(cx+r+11,cy+3,'O',9,'Bold')
+    txt(cx+7,cy-r+14,'0° Länge',7.5,color=PINK)
+    txt(cx-r+7,cy+13,'0° Breite',7.5,color=BLUE)
+    if solution:
+        for (dx,dy),name in zip([(-.45,-.42),(.45,-.42),(-.45,.48),(.45,.48)],['NW','NO','SW','SO']):
+            txt(cx+r*dx-9,cy+r*dy+3,name,12,'Bold')
 def draw_original_scene(key,x,y,w):
     sc=DATA['notes']['scenes'][key];scale=w/sc['w']
     c.saveState();c.translate(x,H-y);c.scale(scale,scale)
@@ -188,6 +258,7 @@ def sketch_solution_pages():
     para(34,433,527,'0° Breite am Äquator, 90° N am Nordpol, 90° S am Südpol. Auch die linke Seite des Äquators hat 0° Breite. Die Achse geht durch den Erdmittelpunkt weiter zum Südpol.',10,15)
     txt(34,526,'15. Die drei vollständigen Sätze deiner Vorlage',12,'Bold',TEAL)
     for j,sentence in enumerate(DATA['notes']['sentences']):para(34,552+j*44,527,sentence,11,16)
+    for j,kind in enumerate(['lat','lon','lat']):reference_globe(520,562+j*44,19,kind,False)
     para(34,714,527,'Ein Meridian ist ein Längenhalbkreis von Pol zu Pol. Zwei gegenüberliegende Meridiane bilden den ganzen Längenkreis. Die Datumsgrenze liegt nur ungefähr am 180°-Meridian.',9,14,color=GREY)
 
 def pdf_polygon(points,fill,stroke=INK,width=1):
@@ -296,20 +367,58 @@ def supplementary_solution_pages():
     for j,t in enumerate(rows):txt(34,612+j*33,t,10.5)
     para(34,759,527,'Der Äquator trennt Nord und Süd. Nullmeridian und 180°-Meridian begrenzen Ost und West. Die farbigen Bereiche zeigen hier nur den sichtbaren Teil jedes Erdviertels.',8.7,13,color=GREY)
 
+def reference_questions(solution=False):
+    qhead(1,34,151)
+    para(34,205,527,'Benenne jeweils die dick hervorgehobene Linie. Das graue Gradnetz hilft beim Orientieren.',9,13,color=GREY)
+    for i,x in enumerate([34,309]):
+        txt(x,236,('a) 0° geografische Breite' if i==0 else 'b) 0° geografische Länge'),10,'Bold')
+        reference_globe(x+120,335,76,'lat' if i==0 else 'lon')
+        txt(x+37,436,'Rückseite gestrichelt',8,color=GREY)
+        if solution:txt(x,466,'a) Äquator' if i==0 else 'b) Nullmeridian',12,'Bold',BLUE if i==0 else PINK)
+        else:field(x,453,245,'Name der hervorgehobenen Linie:')
+    qhead(2,34,505)
+    txt(34,566,'a) Breite · Seitenansicht',10,'Bold')
+    txt(309,566,'b) Länge · Blick auf den Pol',10,'Bold')
+    limit_model(151,656,57,True,solution)
+    limit_model(421,656,57,False,solution)
+    if solution:
+        para(34,744,245,'<b>0° bis 90°.</b> Das gilt nach Norden und nach Süden. Je 1 Punkt pro passender Gradzahl.',9.5,14)
+        para(309,744,252,'<b>0° bis 180°.</b> Das gilt nach Osten und nach Westen.',9.5,14)
+    else:
+        field(34,749,245,'Größte Gradzahl der Breite:')
+        field(309,749,252,'Größte Gradzahl der Länge:')
+
+def quarters_questions(solution=False):
+    qhead(3,34,108)
+    quarters_model(431,278,86,solution)
+    qhead(4,34,421)
+    quarters_model(431,590,86,solution)
+    for n,top in [(3,190),(4,503)]:
+        for i,f in enumerate(DATA['exam'][n-1]['fields']):
+            y=top+i*84
+            if solution:
+                answer={3:['Nordostviertel (NO)','Südwestviertel (SW)'],4:['Nordwestviertel (NW)','Südostviertel (SO)']}[n][i]
+                txt(34,y+10,f['label'],10)
+                txt(34,y+34,answer,11,'Bold',TEAL)
+            else:field(34,y,267,f['label'])
+    para(337,383,220,'Vorderansicht: W links, O rechts.',8,12,color=GREY)
+    para(337,695,220,'Die zweite Ost-/Westgrenze liegt auf der Rückseite am 180°-Meridian.',8,12,color=GREY)
+    if solution:
+        box(34,740,527,47)
+        para(46,750,502,'Erst N oder S lesen, dann O oder W ergänzen. Beide Richtungen bilden den Namen. Pro richtiger Teilantwort gibt es 1 Punkt.',9.3,14)
+    else:
+        para(34,737,527,'<b>Zusatz ohne Punkte:</b> Warum bestimmt ein Breitengrad allein normalerweise noch keinen eindeutigen Ort?',9.4,14)
+        line(34,783,561,783)
+
 def make_test():
     global c
     path=ROOT/'Atlas_Abschlusstest_Klasse5.pdf';c=canvas.Canvas(str(path),pagesize=A4);c.setTitle('Atlas-Abschlusstest Klasse 5 - verbesserte Fassung, 20 Punkte')
     header('Mein Atlas-Abschlusstest',1)
     txt(34,108,'Name:',9);line(72,110,323,110);txt(357,108,'Datum:',9);line(401,110,561,110)
-    txt(34,130,'Fassung 27.10.2026 · 9 Seiten · Teil A: 20 Punkte · Zusatzblätter ab Seite 7',9,'Bold',TEAL)
-    qhead(1,34,151);field(34,205,527,DATA['exam'][0]['fields'][0]['label']);field(34,249,527,DATA['exam'][0]['fields'][1]['label'])
-    qhead(2,34,309);field(34,360,245,DATA['exam'][1]['fields'][0]['label']);field(309,360,252,DATA['exam'][1]['fields'][1]['label'])
-    qhead(3,34,424);field(34,475,245,DATA['exam'][2]['fields'][0]['label']);field(309,475,252,DATA['exam'][2]['fields'][1]['label'])
-    qhead(4,34,539);field(34,590,245,DATA['exam'][3]['fields'][0]['label']);field(309,590,252,DATA['exam'][3]['fields'][1]['label'])
-    box(34,657,527,52)
-    para(46,668,502,'<b>Hinweis:</b> Bei den Erdvierteln darfst du NO, NW, SO oder SW schreiben. Pro passender Teilantwort gibt es einen Punkt. Arbeite in deinem Tempo.',9.3,14)
-    para(34,729,527,'<b>Zusatz ohne Punkte:</b> Warum bestimmt ein Breitengrad allein normalerweise noch keinen eindeutigen Ort?',9.7,14)
-    line(34,779,561,779)
+    txt(34,130,'Fassung 28.10.2026 · 10 Seiten · Teil A: 20 Punkte · Zeichenteil ab Seite 5',9,'Bold',TEAL)
+    reference_questions()
+    c.showPage();header('Die vier Erdviertel',2)
+    quarters_questions()
     c.showPage();header('Ansichten und Kartenarbeit',2)
     qhead(5,34,105,247);qhead(6,314,105,247)
     model(42,180,104,'parallel-pole','Modell A');model(163,180,104,'meridian-pole','Modell B')
@@ -321,7 +430,7 @@ def make_test():
     txt(70,608,'Bewertung: Breite und Länge je 1 Punkt, Ablesetoleranz je 1°.',8.5,color=GREY)
     qhead(8,34,636)
     map_art(34,690,280,105,[-80,-40,-40,0],(-20,-60),'P',lat_step=10,lon_step=10)
-    field(337,696,105,'Breite: Gradzahl (0,5 P.)');field(456,696,105,'N oder S (0,5 P.)');field(337,753,105,'Länge: Gradzahl (0,5 P.)');field(456,753,105,'O oder W (0,5 P.)')
+    field(337,696,105,'Breite: Gradzahl<br/>(0,5 P.)');field(456,696,105,'N oder S (0,5 P.)');field(337,753,105,'Länge: Gradzahl<br/>(0,5 P.)');field(456,753,105,'O oder W (0,5 P.)')
     c.showPage();header('Im Atlas sicher suchen',3)
     qhead(9,34,105);register_table(173)
     txt(34,337,'Modellkarte D · Deutschland und Nachbarn',9,'Bold')
@@ -340,30 +449,58 @@ def make_solutions():
     global c
     path=ROOT/'Atlas_Abschlusstest_Loesungen.pdf';c=canvas.Canvas(str(path),pagesize=A4);c.setTitle('Musterlösungen und Teilpunkte - Atlas-Abschlusstest Klasse 5')
     header('Lösungen und Teilpunkte',1,True,total=8)
-    box(34,110,527,103)
-    para(47,121,500,'<b>Teil A: maximal 20 Punkte.</b> Jeder der fünf Bereiche zählt vier Punkte. Passende Teilantworten werden einzeln gewertet. Ein falsches Richtungszeichen nimmt keine bereits verdienten Punkte für eine passende Gradzahl weg. Die freie Zusatzbegründung wird nicht automatisch benotet.',10,16)
-    solution_line(1,246);solution_line(2,325);solution_line(3,404);solution_line(4,483);solution_line(5,562);solution_line(6,641)
-    para(34,739,527,'Für Aufgaben 1–6: pro richtiger Teilantwort 1 Punkt. In der Druckfassung gelten eindeutige Abkürzungen und sinngleiche Fachwörter ebenfalls.',9,14,color=GREY)
-    c.showPage();header('Kartenlösungen und Auswertung',2,True,total=8)
-    txt(34,112,'7. Markieren: 52° N / 8° O',10.5,'Bold',TEAL);txt(312,112,'8. Ablesen: 20° S / 60° W',10.5,'Bold',TEAL)
-    map_art(34,129,251,167,DATA['maps']['germany']['bounds'],(52,8),'Lösung',lat_step=2,lon_step=2,tolerance=True)
-    map_art(312,129,249,167,[-80,-40,-40,0],(-20,-60),'P',lat_step=10,lon_step=10)
-    para(34,307,251,'Je 1 Punkt für passende Breite / Länge; bis 1° Abweichung pro Achse. Grün zeigt den Bereich für beide vollen Punkte.',9,14)
-    para(312,307,249,'20, S, 60 und W zählen jeweils 0,5 Punkte. Bei den Gradzahlen gilt eine Ablesetoleranz bis 0,5°.',9,14)
-    solution_line(9,399);solution_line(10,501)
-    txt(34,603,'Gezielt weiterüben',12,'Bold',TEAL)
-    rows=[('Aufgaben 1–2','Grundlagen: Bezugslinien und Gradangaben'),('Aufgaben 3–4','Erdviertel: N/S und O/W zusammen lesen'),('Aufgaben 5–6','Ansichten: Ringe, Speichen, Linien und Bögen'),('Aufgaben 7–8','Kartenarbeit: markieren und ablesen'),('Aufgaben 9–10','Atlasarbeit: Register und Randangaben')]
-    for i,(a,b) in enumerate(rows):txt(34,628+i*24,a,9,'Bold');txt(151,628+i*24,b,9)
-    para(34,765,527,'Eigene Modelle. Ortslagen: GeoNames (CC BY 4.0), Frankfurt am Main 2925533, Frankfurt (Oder) 2925535, Lissabon 2267057. Testfassung 5 · Ansichten und Zeichenaufgaben · 27.10.2026.',7.7,11,color=GREY)
+    txt(34,111,'Teil A: 20 Punkte · Aufgaben 1-10 mit je 2 Punkten.',9,'Bold',TEAL)
+    txt(34,131,'Zeichnungen und freie Antworten gemeinsam mit der Musterlösung prüfen.',9,color=GREY)
+    reference_questions(True)
+    c.showPage();header('Lösungen: Erdviertel',2,True)
+    quarters_questions(True)
+    c.showPage();header('Lösungen: vier Ansichten',3,True)
+    txt(34,115,'5. Blick auf den Nordpol · 2 Punkte',12,'Bold',TEAL)
+    model(65,159,180,'parallel-pole','Modell A',BLUE)
+    model(342,159,180,'meridian-pole','Modell B',PINK)
+    txt(63,362,'A: Breitenkreise = Ringe',10.5,'Bold',BLUE)
+    txt(340,362,'B: Meridiane = Speichen',10.5,'Bold',PINK)
+    para(34,388,527,'Die Breitenkreise umgeben den Pol. Die Meridiane laufen am Pol zusammen. Für jede richtige Zuordnung gibt es 1 Punkt.',10,15)
+    txt(34,463,'6. Blick vom Äquator · 2 Punkte',12,'Bold',TEAL)
+    model(65,500,180,'parallel-side','Modell A',BLUE)
+    model(342,500,180,'meridian-side','Modell B',PINK)
+    txt(48,704,'A: Breitenkreise = waagerechte Linien',9.5,'Bold',BLUE)
+    txt(339,704,'B: Meridiane = Bögen',10.5,'Bold',PINK)
+    para(34,735,527,'Meridiane verbinden Nordpol und Südpol. Breitenkreise berühren die Pole nicht. Für jede richtige Zuordnung gibt es 1 Punkt.',10,15)
+    c.showPage();header('Lösungen: Karten ablesen',4,True)
+    txt(34,115,'7. Markieren: 52° N / 8° O · 2 Punkte',12,'Bold',TEAL)
+    map_art(34,143,527,215,DATA['maps']['germany']['bounds'],(52,8),'Lösung',lat_step=2,lon_step=2,tolerance=True)
+    para(34,379,527,'Breite 52° N und Länge 8° O: je 1 Punkt, mit bis zu 1° Abweichung pro Achse. Der grüne Bereich zeigt, wo beide Teilpunkte erreicht werden.',10,15)
+    txt(34,464,'8. Ablesen: 20° S / 60° W · 2 Punkte',12,'Bold',TEAL)
+    map_art(34,492,527,215,[-80,-40,-40,0],(-20,-60),'P',lat_step=10,lon_step=10)
+    para(34,729,527,'Zuerst die Breite am seitlichen Rand ablesen: <b>20° S</b>. Dann die Länge am oberen Rand: <b>60° W</b>. 20, S, 60 und W zählen je 0,5 Punkte. Gradzahlen: bis 0,5° Abweichung.',10,15)
+    c.showPage();header('Lösungen: Register und Ortssuche',5,True)
+    solution_line(9,114)
+    register_table(184)
+    c.setStrokeColor(HexColor(TEAL));c.setLineWidth(1.8);c.rect(34,H-240,527,28,fill=0,stroke=1)
+    txt(34,354,'Modellkarte D · Deutschland und Nachbarn',9,'Bold')
+    map_art(34,369,310,165,DATA['maps']['germany']['bounds'],lat_step=2,lon_step=2,fields=True)
+    c.setStrokeColor(HexColor(TEAL));c.setLineWidth(2)
+    c.rect(70+262/4,H-(391+3*122/4),262/4,122/4,fill=0,stroke=1)
+    para(369,393,192,'<b>Frankfurt am Main</b><br/>Deutschland / Hessen<br/><br/><b>Karte D</b><br/>Suchfeld <b>B3</b>',10,16)
+    solution_line(10,582)
+    place=next(p for p in DATA['cities'] if p['id']=='lissabon')
+    map_art(34,632,310,156,DATA['maps']['iberia']['bounds'],(place['lat'],place['lon']),'Lissabon',credit=False)
+    west,east,south,north=DATA['maps']['iberia']['bounds']
+    xx=70+(place['lon']-west)/(east-west)*262
+    yy=654+(north-place['lat'])/(north-south)*113
+    c.setDash([3,2]);line(xx,yy,xx,767,PINK,1.5);c.setDash([])
+    txt(xx-20,782,'ca. 9° W',8,'Bold',PINK)
+    para(369,665,192,'<b>Ungefähr 9° W.</b><br/>Die Gradzahl zählt 1 Punkt, W einen weiteren Punkt.<br/><br/>Ein Breitengrad allein bestimmt noch keinen eindeutigen Ort.',10,15)
     sketch_solution_pages()
     supplementary_solution_pages()
     c.save();return path
 if __name__=='__main__':
     test=make_test();solutions=make_solutions()
-    test_name='Erdkunde_Test_NEU_2026-10-27_9_Seiten.pdf'
-    solutions_name='Erdkunde_Loesungen_NEU_2026-10-27_8_Seiten.pdf'
+    test_name='Erdkunde_Klassenarbeit_Bebildert_2026-10-28.pdf'
+    solutions_name='Erdkunde_Loesungen_Bebildert_2026-10-28.pdf'
     (ROOT/test_name).write_bytes(test.read_bytes())
     (ROOT/solutions_name).write_bytes(solutions.read_bytes())
-    encoded={'version':'2026-10-27-v6','testPages':9,'solutionPages':8,'testName':test_name,'solutionsName':solutions_name,'test':'data:application/pdf;base64,'+base64.b64encode(test.read_bytes()).decode(),'solutions':'data:application/pdf;base64,'+base64.b64encode(solutions.read_bytes()).decode()}
-    (HERE/'atlas-druckdateien.js').write_text('/* Eingebettete Druckdateien für Testfassung 5 mit Ansichten, Gradnetz und Viertelkugeln. */\nwindow.AW_PDFS = '+json.dumps(encoded)+';\n')
+    encoded={'version':'2026-10-28-v7','testPages':10,'solutionPages':11,'testName':test_name,'solutionsName':solutions_name,'test':'data:application/pdf;base64,'+base64.b64encode(test.read_bytes()).decode(),'solutions':'data:application/pdf;base64,'+base64.b64encode(solutions.read_bytes()).decode()}
+    (HERE/'atlas-druckdateien.js').write_text('/* Bebilderte Druckdateien: Bezugslinien, Winkelmodelle, Erdviertel und Kartenlösungen. */\nwindow.AW_PDFS = '+json.dumps(encoded)+';\n')
     print(test.name,solutions.name)
