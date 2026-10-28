@@ -1361,10 +1361,13 @@ const MUSIC_PATH=[
      "Nein: Pausen haben keinen Zeitwert"
     ],
     "ids": [
-     "w"
+     "qr",
+     "qr",
+     "qr",
+     "qr"
     ],
     "m": 4,
-    "why": "Ja, viermal ein Schlag Stille ergibt vier Schläge. Die ganze Note hat einen langen Ton, die Pausen keinen Ton.",
+    "why": "Ja. Jede Viertelpause dauert einen Schlag. Vier Viertelpausen ergeben vier Schläge Stille und füllen den 4/4-Takt.",
     "meter": true
    }
   ]

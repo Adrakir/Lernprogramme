@@ -11,7 +11,8 @@ const guideTopics=[
  {id:'punkt',title:'Punktierte Noten und Pausen',question:'Was verändert der Punkt rechts am Zeichen?',keys:['punkt','punkt-im-takt','punktierte-achtel'],image:'lesson-punkt',practice:'dotCalc'}
 ];
 let guideTopic=null,guideTeacherTopic='puls',guideTeacherMode=false;
-let guideRole=appStorage.read('rhythmuswerkstatt.role.v1')||null,guideTeacherKey=null,guideTeacherTab='auftrag';
+const guideSavedRole=appStorage.read('rhythmuswerkstatt.role.v1');
+let guideRole=['student','teacher'].includes(guideSavedRole)?guideSavedRole:null,guideTeacherKey=null,guideTeacherTab='auftrag';
 function guideChooseRole(role){guideRole=role;appStorage.write('rhythmuswerkstatt.role.v1',role);setView('home');}
 function guideRoleChoice(){
  $('#main').innerHTML=`<div class="simpleWelcome"><div class="eyebrow">Musik · Klasse 5</div><h1>Willkommen in der Rhythmuswerkstatt</h1><p>Wähle deinen Einstieg.</p><div class="simpleRoles"><button id="simpleStudent" class="card"><span class="simpleRoleIcon" aria-hidden="true">♫</span><strong>Ich bin Schüler/in</strong><span>Musik verstehen und Schritt für Schritt üben.</span><b>Zum Lernen →</b></button><button id="simpleTeacher" class="card"><span class="simpleRoleIcon" aria-hidden="true">▤</span><strong>Ich bin Lehrkraft</strong><span>Ein Thema vorbereiten und einen klaren Auftrag geben.</span><b>Zum Unterricht →</b></button></div><p class="legend">Du kannst den Einstieg jederzeit oben wechseln.</p></div>`;
@@ -22,8 +23,8 @@ const guideIndex=key=>MUSIC_PATH.findIndex(d=>d.key===key);
 const guideTopicFor=key=>guideTopics.find(t=>t.keys.includes(key))||guideTopics[0];
 function guideBookItem(book,key){return MUSIC_DOCUMENT_CONTENTS[book].groups.flatMap(g=>g.items).find(item=>item.key===key);}
 function guidePdf(book,key,label=null){const item=guideBookItem(book,key),data=MUSIC_DOCUMENT_CONTENTS[book];if(!item)return '';return `<a class="documentLink" href="${data.file}#page=${book==='work'?item.end:item.page}" target="_blank" rel="noopener">${label||data.name+' · S. '+(book==='work'?item.end:item.page)}</a>`;}
-function guideResumeIndex(){let i=pathState.index;if(pathState.done[i]){const next=pathState.done.findIndex((done,j)=>j>i&&!done);if(next>=0)i=next;}return i;}
-function guideResume(){const index=guideResumeIndex();if(index!==pathState.index)pathSelect(index,0);else{lesson=MUSIC_PATH[index].topic;setView('learn');}}
+function guideResumeIndex(){let i=pathState.index;if(pathState.done[i]){let next=pathState.done.findIndex((done,j)=>j>i&&!done);if(next<0)next=pathState.done.findIndex(done=>!done);if(next>=0)i=next;}return i;}
+function guideResume(){if(pathState.done.every(Boolean)){startSmart('review');return;}const index=guideResumeIndex();if(index!==pathState.index)pathSelect(index,0);else{lesson=MUSIC_PATH[index].topic;setView('learn');}}
 function guideBindActions(){
  $$('[data-guide-view]').forEach(b=>b.onclick=()=>setView(b.dataset.guideView));
  $$('[data-guide-lesson]').forEach(b=>b.onclick=()=>pathSelect(guideIndex(b.dataset.guideLesson),0));
@@ -39,8 +40,8 @@ function guideBindActions(){
 function guideHome(){
  if(!guideRole){guideRoleChoice();return;}
  if(guideRole==='teacher'){guideTeacher();return;}
- const i=guideResumeIndex(),d=MUSIC_PATH[i],started=pathState.stages.some(x=>x>0)||pathState.done.some(Boolean);
- $('#main').innerHTML=`<div class="eyebrow">Für Schüler und Schülerinnen</div><h1>Dein nächster Schritt</h1><p class="guideLead">Starte hier. Die Erklärung und die Aufgaben kommen nacheinander.</p><section class="card simpleNext"><div><span class="guideTag">Lernschritt ${i+1} von ${MUSIC_PATH.length}</span><h2>${escapeText(d.title)}</h2><p>${escapeText(d.goal)}</p><button id="guideResume" class="primary">${started?'Hier weiterlernen':'Jetzt anfangen'} →</button></div><img src="images/fuji-musiklehrer.webp" width="112" height="112" alt="Fuji begleitet dich beim Lernen"></section><div class="simpleAlternative"><p>Deine Lehrkraft hat ein anderes Thema genannt?</p><button id="guideAllTopics">Unterrichtsthema auswählen</button></div><details class="simpleHelp"><summary>Wie funktioniert das Lernen?</summary><ol><li>Lies die Erklärung.</li><li>Höre das Beispiel an.</li><li>Löse eine Aufgabe mit Hilfe.</li><li>Übe anschließend selbst.</li></ol><p>Du musst keine Übungsart auswählen. „Weiter“ führt dich durch den Lernschritt.</p></details>`;
+ const i=guideResumeIndex(),d=MUSIC_PATH[i],started=pathState.stages.some(x=>x>0)||pathState.done.some(Boolean),finished=pathState.done.every(Boolean);
+ $('#main').innerHTML=`<div class="eyebrow">Für Schüler und Schülerinnen</div><h1>${finished?'Dein Lernweg ist geübt':'Dein nächster Schritt'}</h1><p class="guideLead">${finished?'Du hast alle Lernschritte bearbeitet. Wiederhole jetzt die Themen, bei denen du noch unsicher bist.':'Starte hier. Die Erklärung und die Aufgaben kommen nacheinander.'}</p><section class="card simpleNext"><div><span class="guideTag">${finished?'Alle '+MUSIC_PATH.length+' Lernschritte bearbeitet':'Lernschritt '+(i+1)+' von '+MUSIC_PATH.length}</span><h2>${finished?'Gelerntes festigen':escapeText(d.title)}</h2><p>${finished?'Die Wiederholung wählt Aufgaben passend zu deinem bisherigen Lernstand.':escapeText(d.goal)}</p><button id="guideResume" class="primary">${finished?'Passende Wiederholung starten':started?'Hier weiterlernen':'Jetzt anfangen'} →</button></div><img src="images/fuji-musiklehrer.webp" width="112" height="112" alt="Fuji begleitet dich beim Lernen"></section><div class="simpleAlternative"><p>Deine Lehrkraft hat ein anderes Thema genannt?</p><button id="guideAllTopics">Unterrichtsthema auswählen</button></div><details class="simpleHelp"><summary>Wie funktioniert das Lernen?</summary><ol><li>Lies die Erklärung.</li><li>Höre das Beispiel an.</li><li>Löse eine Aufgabe mit Hilfe.</li><li>Übe anschließend selbst.</li></ol><p>Du musst keine Übungsart auswählen. „Weiter“ führt dich durch den Lernschritt.</p></details>`;
  guideBindActions();
 }
 function guideAreaHelp(){return `<dl class="guideDefinitions"><div><dt>Lernen</dt><dd>Erklärungen und vorgemachte Beispiele. Beginne hier, wenn etwas neu oder unklar ist.</dd></div><div><dt>Üben</dt><dd>Aufgaben selbst lösen. Tipps und Begründungen helfen dir dabei.</dd></div><div><dt>Prüfen</dt><dd>Deinen Lernstand einschätzen oder einen Übungstest bearbeiten.</dd></div><div><dt>Hefte</dt><dd>Das Lernheft erklärt. Das Aufgabenheft bietet Übungen und Lösungen zum Ausdrucken.</dd></div></dl>`;}
@@ -85,7 +86,7 @@ function guideTeacher(){
  on('guideCopy',async()=>{const field=$('#guideAssignment');try{await navigator.clipboard.writeText(field.value);$('#guideCopyStatus').textContent='Auftrag und Link sind kopiert.';}catch{field.focus();field.select();$('#guideCopyStatus').textContent='Der Text ist markiert. Wählen Sie „Kopieren“.';}});
 }
 const guideMeta={home:['Start','home'],themen:['Themen','themen'],learn:['Lernweg','themen'],exerciseHub:['Üben','exerciseHub'],pruefen:['Prüfen','pruefen'],tests:['Übungstest','pruefen'],documents:['Hefte','documents'],contents:['Heftseiten finden','documents'],progress:['Mein Fortschritt','pruefen'],lehrkraft:['Für Lehrkräfte','home'],practice:['Noten und Hörübungen','exerciseHub'],builder:['Einen Takt bauen','exerciseHub'],detective:['Rhythmus-Detektiv','exerciseHub'],dotted:['Punktierte Werte üben','exerciseHub'],rhythm:['Rhythmuswörter','exerciseHub'],tap:['Rhythmus nachklopfen','exerciseHub'],pieces:['Rhythmusstücke','exerciseHub'],bilder:['Mit Bildern verstehen','exerciseHub'],entdecken:['Animationen und Bewegung','exerciseHub'],schultraining:['Schulaufgaben und Stationen','exerciseHub'],labs:['Musikwerkstatt','exerciseHub'],games:['Musikspiele','exerciseHub'],mini:['Kleine Lernrunde','exerciseHub'],cards:['Meine Merkkarten','exerciseHub'],personal:['Meine Einstellungen','home'],access:['Ansicht einstellen','home'],device:['Gerät und Ton prüfen','home'],backup:['Sicherung und Offline','home']};
-function guideLocation(){let m=guideMeta[view]||['Üben','exerciseHub'];if(view==='smart')m=smart?.mode==='check'?['Lerncheck','pruefen']:['Passende Wiederholung','exerciseHub'];return m;}
+function guideLocation(){if(view==='dotted'&&dotTab==='learn')return ['Lernweg: Punktierung','themen'];let m=guideMeta[view]||['Üben','exerciseHub'];if(view==='smart')m=smart?.mode==='check'?['Lerncheck','pruefen']:['Passende Wiederholung','exerciseHub'];return m;}
 const guideStageHelp=[
  'Lies die Erklärung und den Merksatz. Klicke danach auf „Weiter: Beispiel anhören“.',
  'Höre das Beispiel. Gehe danach Fujis drei Erklärschritte durch. Dann geht es zur gemeinsamen Aufgabe.',
@@ -100,7 +101,7 @@ function guideDecorate(){
   trail.innerHTML=`<button data-guide-view="home">Start</button><span aria-hidden="true">/</span>${group!=='home'&&view!==group?`<button data-guide-view="${group}">${({themen:'Themen',exerciseHub:'Üben',pruefen:'Prüfen',documents:'Hefte'})[group]}</button><span aria-hidden="true">/</span>`:''}<span aria-current="page">${name}</span>`;
   main.prepend(trail);trail.querySelectorAll('[data-guide-view]').forEach(b=>b.onclick=()=>setView(b.dataset.guideView));
  }
- if(view==='learn'&&!main.querySelector('.simpleStage')){
+ if(main.querySelector('.pathLesson')&&!main.querySelector('.simpleStage')){
   const stage=pathState.stages[pathState.index],label=['Erklärung lesen','Beispiel anhören','Gemeinsam üben','Selbst üben'][stage];
   const status=document.createElement('p');status.className='simpleStage';status.innerHTML=`<span>Schritt ${stage+1} von 4</span><strong>${label}</strong>`;
   const stages=main.querySelector('.pathStages'),details=document.createElement('details');details.className='simpleStageSwitch';details.innerHTML='<summary>Zu einem anderen Schritt springen</summary>';stages.before(status);stages.before(details);details.append(stages);
@@ -108,7 +109,8 @@ function guideDecorate(){
   const switcher=main.querySelector('.pathTopicSwitch'),bottom=main.querySelector('.pathBottom');extra.append(switcher,bottom);
   const d=MUSIC_PATH[pathState.index],paper=document.createElement('div');paper.className='row';paper.innerHTML=guidePdf('learn',d.key)+guidePdf('work',d.key);extra.append(paper,details);main.querySelectorAll(':scope > .speechPanel,:scope > .row.spaced,:scope > .coachFeedback').forEach(e=>extra.append(e));main.append(extra);
  }
- if(guideTaskHelp[view]&&!main.querySelector('.guideTaskHelp')){const hint=document.createElement('p');hint.className='guideTaskHelp';hint.textContent=guideTaskHelp[view];const heading=main.querySelector('h1');heading?.after(hint);}
+ const extra=main.querySelector('.simpleLessonMore');if(extra)main.querySelectorAll(':scope > .row.spaced,:scope > .speechPanel,:scope > .coachFeedback').forEach(e=>extra.append(e));
+ if(guideTaskHelp[view]&&!main.querySelector('.pathLesson')&&!main.querySelector('.guideTaskHelp')){const hint=document.createElement('p');hint.className='guideTaskHelp';hint.textContent=guideTaskHelp[view];const heading=main.querySelector('h1');heading?.after(hint);}
  const soundViews=new Set(['learn','practice','smart','builder','detective','dotted','rhythm','tap','pieces','bilder','entdecken','schultraining','labs','games','mini','cards']);
  $('.audioDock').hidden=!soundViews.has(view);
  document.body.dataset.musicView=view;document.body.classList.toggle('simpleLanding',view==='home'&&!guideRole);document.body.classList.toggle('simpleSound',soundViews.has(view));
@@ -126,12 +128,14 @@ onAfterRender(guideDecorate);onAfterViewChange(guideSync);
 // Lokale Render-Aufrufe der Lernschritte verwenden dieselbe Orientierung.
 const guidePathBefore=renderPath;
 renderPath=function(){guidePathBefore();guideDecorate();guideSync();};renderLearn=renderPath;
+const guideDottedBefore=renderDotted;renderDotted=function(){guideDottedBefore();guideDecorate();guideSync();};
 $$('nav.mainNav button').forEach(b=>b.onclick=()=>{if(b.dataset.view==='themen')guideTopic=null;setView(b.dataset.view);});
+$('.brand').onclick=e=>{e.preventDefault();setView('home');};
 on('guideTeacherOpen',()=>{guideRole=null;setView('home');});
 on('guideHelpOpen',()=>{setView('home');const help=$('.simpleHelp');if(help){help.open=true;help.scrollIntoView({block:'nearest'});}});
 on('guideSettings',()=>setView('personal'));on('guideBackup',()=>setView('backup'));
 const guideSound=$('#soundTestTop');if(guideSound){const test=guideSound.onclick;guideSound.onclick=()=>{$('.audioDock').hidden=false;test?.();};}
-const guideShowAudio=showAudioControls;showAudioControls=function(open){if(open)$('.audioDock').hidden=false;guideShowAudio(open);};
+const guideShowAudio=showAudioControls;showAudioControls=function(open){if(open){$('.audioDock').hidden=false;setDockMinimized(false);}guideShowAudio(open);};
 const guideInitialKey=new URLSearchParams(location.search).get('schritt'),guideInitialIndex=guideIndex(guideInitialKey);
 if(guideInitialIndex>=0)pathSelect(guideInitialIndex,0);
 else if(['#themen','#pruefen','#lehrkraft'].includes(initialAppHash))setView(initialAppHash.slice(1));

@@ -1,0 +1,8 @@
+{
+  "name": "rhythmuswerkstatt-pruefung",
+  "private": true,
+  "scripts": {
+    "test": "node tests/current-check.cjs && node tests/offline-check.cjs"
+  },
+  "devDependencies": {"jsdom": "30.1.3"}
+}

@@ -60,14 +60,15 @@ const extraContent={
  ]
 };
 // Note-duration questions use only values that the corresponding lesson has introduced.
+const transferBeats=n=>fmt(n)+' '+(n<=1?'Schlag':'Schläge');
 const valueKeys={viertel:'q',halbe:'h',ganze:'w',achtel:'e',sechzehntel:'s'};
 for(const [key,id] of Object.entries(valueKeys)){
- const n=get(id),plural=sentenceName(n.name).replace(/Note$/,'Noten').replace(/note$/,'noten'),u=val(id)/4,sub=u<1?4:1;
+ const n=get(id),plural=sentenceName(n.name).replace(/Note$/,'Noten').replace(/note$/,'noten'),u=val(id)/4,sub=u<1?4:1,name=sentenceName(n.name),dative=name.replace(/^(halbe|ganze) /,'$1n ');
  extraContent[key]=[
- [`Wie lange dauern zwei ${plural} zusammen?`,`${fmt(u*2)} Schläge`,[`${fmt(u)} Schlag`,`${fmt(u*4)} Schläge`],`Zweimal ${fmt(u)} ergibt ${fmt(u*2)} Schläge. Zwei Köpfe bedeuten zwei Tonanfänge.`,[id,id],4,sub],
- [`Wie viele Tonanfänge hat eine einzelne ${n.name}?`,'1',['2','4'],'Ein Kopf bedeutet einen Tonanfang. Die Dauer kann mehrere Schläge umfassen.',[id],4,sub],
- [`Wie viel Zeit dauert eine ${n.name} plus eine gleich lange Pause?`,`${fmt(u*2)} Schläge`,[`${fmt(u)} Schlag`,'Keine Zeit'],`Klang und Stille zählen beide mit: ${fmt(u)} + ${fmt(u)} = ${fmt(u*2)}.`,null],
- [`Minka zählt bei einer ${n.name} nur die Köpfe. Was muss sie außerdem beachten?`,'Die Dauer des Zeichens',['Die Größe des Druckbildes','Die Farbe des Hintergrunds'],'Tonanfänge und Zeitdauer sind verschiedene Fragen.',[id],4,sub],
+ [`Wie lange dauern zwei ${plural} zusammen?`,transferBeats(u*2),[transferBeats(u),transferBeats(u*4)],`Zweimal ${fmt(u)} ergibt ${transferBeats(u*2)}. Zwei Köpfe bedeuten zwei Tonanfänge.`,[id,id],4,sub],
+ [`Wie viele Tonanfänge hat eine einzelne ${name}?`,'1',['2','4'],'Ein Kopf bedeutet einen Tonanfang. Die Dauer kann mehrere Schläge umfassen.',[id],4,sub],
+ [`Wie viel Zeit dauert eine ${name} plus eine gleich lange Pause?`,transferBeats(u*2),[transferBeats(u),'Keine Zeit'],`Klang und Stille zählen beide mit: ${fmt(u)} + ${fmt(u)} = ${fmt(u*2)}.`,null],
+ [`Minka zählt bei einer ${dative} nur die Köpfe. Was muss sie außerdem beachten?`,'Die Dauer des Zeichens',['Die Größe des Druckbildes','Die Farbe des Hintergrunds'],'Tonanfänge und Zeitdauer sind verschiedene Fragen.',[id],4,sub],
  [`Fuji spielt zwei ${plural} nacheinander. Wie viele neue Töne beginnen?`,'2',['1','4'],'Jede der beiden Noten hat einen eigenen Anfang.',[id,id],4,sub]
  ];
 }
@@ -81,7 +82,7 @@ for(const key of ['familie','stille','viertelpause','lange-pausen','kurze-pausen
  ['Acht Achtel dauern insgesamt …','4 Schläge',['8 Schläge','2 Schläge'],'8 × ½ = 4 Schläge.']
  ];
  else if(pause){const id=key==='lange-pausen'?'hr':key==='kurze-pausen'?'er':'qr',u=val(id)/4;extraContent[key]=[
- [`Wie lange dauert eine ${get(id).name}?`,`${fmt(u)} ${u===1?'Schlag':'Schläge'} Stille`,['Keine Zeit',`${fmt(u)} Schläge Klang`],`Pausen haben eine feste Dauer. Hier ${fmt(u)} Schläge Stille.`,[id],4,key==='kurze-pausen'?4:1],
+ [`Wie lange dauert eine ${sentenceName(get(id).name)}?`,`${transferBeats(u)} Stille`,['Keine Zeit',`${transferBeats(u)} Klang`],`Pausen haben eine feste Dauer. Hier ${transferBeats(u)} Stille.`,[id],4,key==='kurze-pausen'?4:1],
  ['Halbe Note oder Viertel plus Viertelpause: Was geschieht auf 2?','Bei der Halben Klang, beim zweiten Muster Stille',['In beiden Fällen ein neuer Ton','In beiden Fällen Stille'],'Die halbe Note hält über 2. Die Viertelpause im anderen Muster schweigt auf 2.'],
  ['Auf eine Viertelpause folgt eine Viertelnote. Wann beginnt ihr Ton?','Nach einem Schlag Stille',['Sofort ohne Wartezeit','Nach zwei Schlägen Stille'],'Die Viertelpause belegt einen Schlag, erst danach folgt der Ton.',['qr','q']],
  ['Womit erkennst du eine Pause beim Hören?','Mit dem weiterlaufenden Puls zwischen Tönen',['An einem besonderen Pausenklang','Pausen lassen sich zeitlich nicht erkennen'],'Die Pause klingt nicht. Mit dem Puls erkennst du ihre Dauer.'],

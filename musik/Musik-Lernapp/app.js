@@ -21,7 +21,8 @@ const duration=(id,m=4)=>fmt(val(id,m)/4)+' '+(val(id,m)<=4?'Schlag':'Schläge')
 function symbol(id,{staff=true,label=true,beamed=false}={}){const n=get(id),base=id[0];let ink='';
  if(n.rest){if(base==='w'||id==='barrest')ink='<rect x="35" y="35" width="25" height="8"/>';else if(base==='h')ink='<rect x="35" y="42" width="25" height="8"/>';else if(base==='q')ink='<path d="M47 24 L57 38 L48 49 L57 62 Q38 54 42 68 L49 76 Q32 65 41 57 L48 56 L39 43 L49 33 Z"/>';else{ink='<path d="M57 31L43 77" fill="none" stroke="currentColor" stroke-width="3"/><path d="M56 34Q49 46 40 42Q31 35 38 31Q45 28 47 36Q51 38 56 34"/>';if(base==='s'&&!beamed)ink+='<path d="M51 50Q44 62 35 58Q26 51 33 47Q40 44 42 52Q46 54 51 50"/>';}}
  else{ink=`<ellipse cx="42" cy="65" rx="12" ry="8" transform="rotate(-18 42 65)" fill="${base==='w'||base==='h'?'var(--panel2)':'currentColor'}" stroke="currentColor" stroke-width="${base==='w'?3:2}"/>`;if(base!=='w')ink+='<path d="M53 64V20" stroke="currentColor" stroke-width="3"/>';if((base==='e'||base==='s')&&!beamed)ink+='<path d="M53 20Q78 29 65 48Q70 33 53 29Z"/>';if(base==='s'&&!beamed)ink+='<path d="M53 32Q78 41 65 60Q70 45 53 41Z"/>';}
- if(n.dot)ink+='<circle cx="75" cy="65" r="3.5"/>';
+ // Der Verlängerungspunkt steht im Zwischenraum, nicht auf einer Notenlinie.
+ if(n.dot)ink+=`<circle cx="75" cy="${n.rest?42.5:57.5}" r="3.5"/>`;
  return `<svg viewBox="0 0 100 100" ${label?`role="img" aria-label="${n.name}"`:'aria-hidden="true"'} style="color:inherit">${staff?[20,35,50,65,80].map(y=>`<path d="M5 ${y}H95" stroke="currentColor" stroke-width=".7" opacity=".4"/>`).join(''):''}<g fill="currentColor">${ink}</g></svg>`;
 }
 function seq(ids,m=4,cls=''){return `<div class="sequence ${cls}">${ids.map((id,i)=>`<div class="noteTile" data-index="${i}">${symbol(id)}<span>${get(id).name}</span><small>${duration(id,m)}</small></div>`).join('')}</div>`;}
