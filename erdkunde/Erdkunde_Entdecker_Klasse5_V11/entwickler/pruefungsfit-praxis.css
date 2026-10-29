@@ -26,6 +26,8 @@
 [data-theme=dark] .praxis-plan .praxis-cell{background:#294b5e;color:#fff}
 [data-theme=dark] .praxis-root button.praxis-active{background:#114c63;color:white}
 @media(max-width:680px){
+ .praxis-map svg text{font-size:26px}
+
  .praxis-root .praxis-arrows{grid-template-columns:repeat(2,minmax(0,1fr))}
  .praxis-register-list{grid-template-columns:1fr}
  .praxis-plan{grid-template-columns:30px repeat(4,minmax(0,1fr));gap:4px}
