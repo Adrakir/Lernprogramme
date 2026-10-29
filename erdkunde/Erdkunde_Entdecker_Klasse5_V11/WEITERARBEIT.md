@@ -29,3 +29,16 @@ Die bisher angebotenen PDFs vom 27.10.2026 enthielten bei Aufgabe 1 keine Kugelb
 - Prüfung: 717 bestehende Prüfungen bestanden; PDF-Seiten visuell geprüft, Seitenzählung 10/11 und Byte-Gleichheit der eingebetteten Downloads mit den PDFs bestätigt.
 
 Bestehende Website und Projekt-ID weiterverwenden. Den tatsächlichen Veröffentlichungsstand über Sites prüfen.
+
+
+## 29.10.2026: Gustav erklärt die Atlasarbeit als Animation
+
+Die Schulung ist in die vorhandene App integriert: Thema/Lernpfad `atlanten`, Lernbegleiter (Einstieg und Entdecken-Schritt), Atlaswerkstatt/Atlas-Lernlabor und das bestehende Comic-Abenteuer `atlasdetektiv` (Geheimcode im Atlas). Auf der Startseite führt „Gustav erklärt Atlasarbeit“ direkt zur Schulung. Keine zweite App.
+
+Zehn steuerbare Schritte: Suchauftrag, Register, Planquadrat, Koordinaten, Kartenwahl, Breite, Länge, Schnittpunkt, Ergebnis und eigene Übung. Gustav erklärt in einer Sprechblase, optional per Browser-Vorlesen. Beispiele: Prag, Lissabon, San Francisco und Alice Springs. Geografische Linien werden über requestAnimationFrame aufgebaut; Pause/Fortsetzen behält den erreichten Stand. Bei reduzierter Bewegung stehen vollständige Einzelbilder bereit. Kein automatischer Schrittwechsel. Seiten-/Bereichswechsel und verborgenes Browserfenster stoppen Animation und eigene Sprachausgabe.
+
+Die Praxis verlangt 52° N / 8° O (Klick/Tippen, Pfeiltasten oder Richtungsknöpfe) plus zwei Antworten. Rückmeldung und Musterpunkt erscheinen erst nach Prüfen. Gespeicherte Klassenarbeitsantworten bleiben unabhängig. Das Comic-Abenteuer hat zehn Kapitel und acht Übungsfragen; die vorhandene Forscherprobe bleibt erreichbar. Die separate 19-seitige Schulungs-PDF ist verlinkt.
+
+Prüfung: 720 bestehende Prüfungen und 96 gezielte neue Prüfungen bestanden. Browser: Einstieg aus Lernpfad und Startseite, Lernbegleiter und Comic, vier Beispielauswahlen, Breite/Süd und Länge/West, Pause/Fortsetzen, Praxisbewertung und Markierung per Klick/Richtungsknöpfen sowie Wiederaufnahme geprüft. Kein echter iOS-/Android-Gerätetest. Vorlesestimmen hängen vom Browser/Betriebssystem ab.
+
+Quellen: `entwickler/atlas-schulung.js`, `atlas-schulung.css`, `atlas-schulung.test.cjs`. Ausgabe mit `node entwickler/build-offline.js` bauen; beide Tests ausführen. GitHub Pages bleibt der öffentliche Einstieg.
