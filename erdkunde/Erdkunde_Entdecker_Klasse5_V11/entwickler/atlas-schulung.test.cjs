@@ -21,6 +21,9 @@ for(const p of a.examples){
 }
 ok(a.steps(a.examples[3])[5].say.includes('südlich'));
 ok(a.steps(a.examples[1])[6].say.includes('westlich'));
+for(const [p,expected] of [[null,'noch keinen Punkt'],[{lat:50,lon:10},'nach Norden'],[{lat:54,lon:6},'nach Süden'],[{lat:52,lon:6},'nach Osten'],[{lat:52,lon:10},'nach Westen'],[{lat:52,lon:8},'Richtig:']])ok(a.pointAdvice(p).includes(expected),'Richtungshinweis: '+expected);
+const help=a.render('lesson');ok(help.includes('Hilfe 1: Wie finde ich die Breite?')===false);
+const practice=boot({saved:JSON.stringify({lesson:{step:9,checked:true,point:{lat:50,lon:10},first:'longitude',field:'D2'}})}).a.render('lesson');ok(practice.includes('Hilfe 1: Wie finde ich die Breite?'));ok(practice.includes('Hilfe 2: Wie finde ich die Länge?'));ok(practice.includes('Die Breite ist zu weit südlich'));ok(practice.includes('Die Länge ist zu weit östlich'));
 const geom=a.geometry([4,16,48,56]),point=a.pointFromXY(geom.X(8),geom.Y(52));equal(point.lat,52);equal(point.lon,8);
 for(const p of [[89,65],[711,65],[90,64],[90,351],[NaN,100],[Infinity,100]])equal(a.pointFromXY(...p),null);
 for(const p of [{lat:52,lon:8},{lat:51.5,lon:8.5},{lat:52.49,lon:7.51}])ok(a.grade(p,'latitude',' b 3 ').point);
