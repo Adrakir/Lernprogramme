@@ -1,0 +1,32 @@
+name: Erdkunde-App prüfen
+
+on:
+  push:
+    paths:
+      - "erdkunde/Erdkunde_Entdecker_Klasse5_V11/**"
+      - ".github/workflows/erdkunde-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  testen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository abrufen
+        uses: actions/checkout@v4
+      - name: Node.js 22 bereitstellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Atlas-Schulung testen
+        run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlas-schulung.test.cjs
+      - name: Interaktive Klassenarbeit testen
+        run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlaswerkstatt.test.cjs
+      - name: Offline-App reproduzierbar bauen
+        run: |
+          cd erdkunde/Erdkunde_Entdecker_Klasse5_V11
+          node entwickler/build-offline.js
+      - name: Gebündelte HTML-Datei auf Gleichheit prüfen
+        run: git diff --exit-code -- erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html
