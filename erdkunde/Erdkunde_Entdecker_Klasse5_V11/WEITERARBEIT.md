@@ -42,3 +42,14 @@ Die Praxis verlangt 52° N / 8° O (Klick/Tippen, Pfeiltasten oder Richtungsknö
 Prüfung: 720 bestehende Prüfungen und 96 gezielte neue Prüfungen bestanden. Browser: Einstieg aus Lernpfad und Startseite, Lernbegleiter und Comic, vier Beispielauswahlen, Breite/Süd und Länge/West, Pause/Fortsetzen, Praxisbewertung und Markierung per Klick/Richtungsknöpfen sowie Wiederaufnahme geprüft. Kein echter iOS-/Android-Gerätetest. Vorlesestimmen hängen vom Browser/Betriebssystem ab.
 
 Quellen: `entwickler/atlas-schulung.js`, `atlas-schulung.css`, `atlas-schulung.test.cjs`. Ausgabe mit `node entwickler/build-offline.js` bauen; beide Tests ausführen. GitHub Pages bleibt der öffentliche Einstieg.
+
+
+## 29.10.2026: Drei zusätzliche praktische Prüfungsfit-Stationen
+
+In der **bestehenden** App ist im Bereich **Prüfungsfit** die Geowerkstatt erreichbar (kein neuer Einstieg):
+
+- **Gradnetz:** Sechs Aufgaben auf einer 30°-Modellkarte, Schnittpunkt durch Tippen oder barrierearme Richtungstasten setzen, Korrektur mit markierten Linien.
+- **Gedrehte Karten:** Sechs Orientierungsaufgaben mit wechselndem Nordpfeil; acht mögliche Himmelsrichtungen, jeweils mit Begründung.
+- **Atlasregister:** Sechs Aufgaben mit gleichnamigen Orten (Frankfurt/Neustadt/Oldenburg), Bundesland, Kartenbuchstabe und auswählbarem Planquadrat.
+
+Jede Station zeigt Hinweise, nach dem Prüfen sofortige Begründungen und am Ende ein unbenotetes Ergebnis. Die bestehenden acht Lernwege, 48 Fragen, die 24-Fragen-Probe und die 18-Aufgaben-Klassenarbeit bleiben erhalten. Neues Ergebnis-Storage `erdkunde-pruefungsfit-praxis-v1`; vorhandene Lernstände unberührt. Quellen `entwickler/pruefungsfit-praxis.js` und `.css`, Test `entwickler/pruefungsfit-praxis.test.cjs`. Die publizierte Offline-`index.html` wurde mit den aktualisierten Quellen gleichlaufend erweitert. Die Modellkarte ist ausdrücklich nicht flächentreu; Atlasregistereinträge sind Übungsdaten, keine Schulatlas-Seitenangaben. **Echte Gerätetests und Unterrichtsversuche sind noch ausstehend.**

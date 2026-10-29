@@ -1,0 +1,38 @@
+
+/* Eigenständige, kontrastreiche Praxisstationen – greifen die vorhandenen Klassen nicht an. */
+.praxis-root{max-width:1080px}
+.praxis-root h1{margin-top:12px}
+.praxis-instruction{font-size:clamp(1.05rem,2.3vw,1.27rem);line-height:1.55;background:var(--surface2,#eef4f6);border-left:6px solid #1766a1;padding:14px 18px;border-radius:12px}
+.praxis-map{margin:15px 0;border:2px solid #9ebbc9;border-radius:14px;overflow:hidden;background:#f2f7fa;min-width:0}
+.praxis-map svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.praxis-map [data-praxis-map]{cursor:crosshair}
+.praxis-map [data-praxis-map]:focus-visible{outline:5px solid #e7a42c;outline-offset:-5px}
+.praxis-map figcaption{padding:10px 14px;font-size:.91rem;background:#e6f0f6;color:#173549;line-height:1.55}
+.praxis-root .praxis-arrows{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.praxis-root .praxis-arrows button,.praxis-directions button{min-height:52px}
+.praxis-directions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0}
+.praxis-root button.praxis-active{background:#125c79;color:#fff;border:3px solid #f2b84d}
+.praxis-register{background:var(--surface2,#eff5f7);padding:14px;border-radius:14px}
+.praxis-register-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.praxis-register-list button{line-height:1.35;overflow-wrap:anywhere;text-align:left;width:100%;min-height:70px;margin:0}
+.praxis-plan{display:grid;grid-template-columns:42px repeat(4,minmax(0,1fr));gap:6px;max-width:550px;margin:18px auto}
+.praxis-plan .praxis-axis{display:grid;place-items:center;font-weight:850;color:var(--text,#173549);font-size:1.15rem}
+.praxis-plan button{margin:0;min-height:61px;padding:5px}
+.praxis-plan .praxis-cell{background:#ecf4f6;border-color:#94b4c1;color:#173549}
+.praxis-feedback{padding:14px 18px;border:2px solid #197857;border-left-width:6px;background:var(--surface2,#ecf4f6);border-radius:13px;margin-top:16px;line-height:1.55}
+.praxis-feedback p{margin:.4em 0}
+.praxis-root .pf-progress{margin:13px 0}
+[data-theme=dark] .praxis-map figcaption{background:#253d4b;color:#fff}
+[data-theme=dark] .praxis-plan .praxis-cell{background:#294b5e;color:#fff}
+[data-theme=dark] .praxis-root button.praxis-active{background:#114c63;color:white}
+@media(max-width:680px){
+ .praxis-root .praxis-arrows{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .praxis-register-list{grid-template-columns:1fr}
+ .praxis-plan{grid-template-columns:30px repeat(4,minmax(0,1fr));gap:4px}
+ .praxis-plan button{min-height:49px}
+ .praxis-map figcaption{font-size:.82rem}
+ .praxis-directions{gap:4px}
+ .praxis-directions button{padding:6px;min-height:51px}
+}
+@media(prefers-reduced-motion:reduce){.praxis-solution{animation:none!important}}
+@media print{.praxis-root button{display:none!important}.praxis-map{break-inside:avoid}}
