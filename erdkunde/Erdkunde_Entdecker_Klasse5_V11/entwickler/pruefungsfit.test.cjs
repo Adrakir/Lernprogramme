@@ -12,7 +12,7 @@ const api=context.window.Pruefungsfit;ok(api,'API vorhanden');equal(api.topics.l
 for(const t of api.topics){equal(t.qs.length,6,t.id);equal(t.steps.length,4,t.id);ok(t.goal.length>30,t.id+' hat ein Lernziel');ok(t.mistake.length>40,t.id+' hat typische Fehler');ok(t.rule.length>30,t.id+' hat eine Merkregel');
  for(const q of t.qs){equal(q[1].length,4,t.id);ok(Number.isInteger(q[2])&&q[2]>=0&&q[2]<4,'korrekte Antwort im Bereich');ok(q[3].length>35,'fachliche Begründung');}
  for(let i=1;i<=4;i++){const svg=api.art(t,i);ok(svg.includes('<svg')&&svg.includes('</svg>'),t.id+' Grafik '+i);ok(svg.includes('Bildschritt '+i+' von 4'),t.id+' Grafikschritt '+i);}}
-ok(!api.art(api.topics.find(t=>t.id==='koordinaten'),4).includes('0° O'),'0 Grad ohne Ost/West');
+ok(!api.art(api.topics.find(t=>t.id==='koordinaten'),4).includes('>0° O</text>'),'0 Grad ohne Ost/West');
 ok(tab.added.includes('data-tab="pruefung"'),'Navigation');
 ok(context.renderStart().includes('Prüfungsfit')&&context.renderStart().includes('Alter Start'),'Start nicht ersetzt');
 ok(context.renderTests().includes('Prüfungsfit')&&context.renderTests().includes('Alte Tests'),'Vorhandene Tests erhalten');
