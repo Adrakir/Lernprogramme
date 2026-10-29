@@ -9,7 +9,7 @@ const compassTasks=[
  {north:0,target:7,why:'Norden zeigt nach oben. Der See liegt oben links: Nordwest.'},
  {north:6,target:0,why:'Norden zeigt nach links. Rechts davon im Uhrzeigersinn liegt Osten oben.'},
  {north:4,target:2,why:'Norden zeigt nach unten. Der See rechts auf dem Blatt liegt deshalb im Westen.'},
- {north:2,target:3,why:'Norden zeigt nach rechts. Südlich davon geht es auf dem Blatt nach unten: Südost.'},
+ {north:2,target:3,why:'Norden zeigt nach rechts. Der See rechts unten liegt damit im Nordosten.'},
  {north:0,target:5,why:'Bei Norden oben liegt der See links unten: Südwest.'},
  {north:6,target:3,why:'Norden zeigt nach links. Die Richtung rechts unten ist Südwest.'}
 ];

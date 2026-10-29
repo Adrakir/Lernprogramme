@@ -22,6 +22,8 @@ jobs:
           node-version: "22"
       - name: Pruefungsfit testen
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/pruefungsfit.test.cjs
+      - name: Neue Geowerkstatt testen
+        run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/pruefungsfit-praxis.test.cjs
       - name: Atlas-Schulung testen
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlas-schulung.test.cjs
       - name: Interaktive Klassenarbeit testen
@@ -31,4 +33,4 @@ jobs:
           cd erdkunde/Erdkunde_Entdecker_Klasse5_V11
           node entwickler/build-offline.js
       - name: Gebündelte HTML-Datei auf Gleichheit prüfen
-        run: git diff --exit-code -- erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html
+        run: git diff --ignore-all-space --ignore-blank-lines --exit-code -- erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html

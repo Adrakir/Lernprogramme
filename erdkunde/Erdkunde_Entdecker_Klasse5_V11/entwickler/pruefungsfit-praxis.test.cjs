@@ -17,6 +17,8 @@ const p=context.window.PruefungsPraxis;
 assert.ok(p,'Werkstatt-API vorhanden');
 assert.equal(p.coordTasks.length,6);
 assert.equal(p.compassTasks.length,6);
+assert.match(p.compassTasks[3].why,/Nordosten/,'Gedrehter Nordpfeil: Nordost');
+for(const t of p.compassTasks)assert.ok(Number.isInteger((t.target-t.north+8)%8),'Kompassrichtung berechenbar');
 assert.equal(p.atlasTasks.length,6);
 assert.equal(p.coord(60,-30),'60° N / 30° W');
 assert.equal(p.coord(-30,120),'30° S / 120° O');

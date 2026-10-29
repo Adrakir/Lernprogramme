@@ -15,6 +15,9 @@ function boot(options={}){
 }
 const b=boot(),a=b.a;
 equal(a.examples.length,4);
+for(const [id,q,map] of [['prag','NO','Europa'],['lissabon','NW','Europa'],['sanfrancisco','NW','Nordamerika'],['alice','SO','Australien']]){const p=a.examples.find(v=>v.id===id);equal(a.quarterOf(p),q);equal(a.mapFor(p),map);}
+equal(a.quarterOf({lat:0,lon:10}),null);equal(a.quarterOf({lat:20,lon:0}),null);
+const regionLesson=boot({saved:JSON.stringify({lesson:{step:4}})});ok(regionLesson.a.render('lesson').includes('In welches Erdviertel?'));regionLesson.click('chooseq:NO');regionLesson.click('choosemap:Europa');regionLesson.click('check-region');ok(regionLesson.a.render('lesson').includes('2 von 2 Entscheidungen richtig'));
 for(const p of a.examples){
  equal(a.steps(p).length,10);ok(a.steps(p)[5].say.includes('Breitenkreis'));ok(a.steps(p)[6].say.includes('Meridian'));ok(a.steps(p)[8].say.includes(p.name));
  const g=a.geometry(p.bounds);ok(g.X(p.lon)>g.left&&g.X(p.lon)<g.left+g.width);ok(g.Y(p.lat)>g.top&&g.Y(p.lat)<g.top+g.height);
