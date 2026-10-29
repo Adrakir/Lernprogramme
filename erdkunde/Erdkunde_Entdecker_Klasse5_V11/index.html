@@ -14151,10 +14151,10 @@ const U=[
 'Ein Punkt auf einer Grenzlinie gehört nicht eindeutig zu genau einer der beiden angrenzenden Hälften.'
 ],rule:'Nord/Süd: Grenze Äquator. Ost/West: Grenzen 0° und 180° Länge.',mistake:'„Osthalbkugel heißt rechts auf jedem Bild.“ Das hängt von der Kartenansicht ab; entscheide mit der Längenangabe.',qs:[
 ['50° N liegt auf welcher Halbkugel?',['Südhalbkugel','Nordhalbkugel','Osthalbkugel allein','Westhalbkugel allein'],1,'N bedeutet nördlich des Äquators. Zusätzlich gibt es eine östliche oder westliche Lage.'],
-['20° S liegt wo?',['Nördlich des Äquators','Südlich des Äquators','Auf dem Nordpol','Auf dem Nullmeridian'],1,'S kennzeichnet südliche Breite.'],
+['20° S liegt wo?',['Nördlich des Äquators','Südlich des Äquators','Auf dem Nordpol','Auf dem Nullmeridian'],1,'S bedeutet südlich des Äquators. Die Angabe beschreibt eine geografische Breite, keine Länge.'],
 ['Welcher Wert ist eine Westlänge?',['12° N','12° S','12° W','12° Höhe'],2,'W ist westliche Länge, gemessen vom Nullmeridian.'],
 ['Was grenzt Ost und West voneinander ab?',['Nur der Äquator','Nullmeridian und 180°-Meridian','Nur der Nordpol','Alle Breitenkreise'],1,'Die beiden gegenüberliegenden Meridiane bilden die Trennung.'],
-['Was gilt für einen Ort genau auf dem Äquator?',['Er liegt eindeutig nur nördlich.','Er liegt eindeutig nur südlich.','Er liegt auf der Grenze von Nord und Süd.','Er liegt immer bei 180° Länge.'],2,'0° Breite bezeichnet die Grenze.'],
+['Was gilt für einen Ort genau auf dem Äquator?',['Er liegt eindeutig nur nördlich.','Er liegt eindeutig nur südlich.','Er liegt auf der Grenze von Nord und Süd.','Er liegt immer bei 180° Länge.'],2,'0° Breite liegt auf dem Äquator; dieser Kreis ist die gemeinsame Grenze beider Halbkugeln.'],
 ['Was bedeutet 65° O?',['Östlich des Nullmeridians','Oberhalb des Äquators','Östlich des Nordpols','65 km entfernt'],0,'Geografische Länge ist eine Winkelangabe, keine Entfernung in Kilometern.']
 ]},
 {id:'viertel',title:'Nordost-, Nordwest-, Südost- und Südwestviertel',goal:'Du bestimmst ein Erdviertel aus zwei Koordinaten.',intro:'Zwei Entscheidungen ergeben ein Erdviertel – nicht einfach eine zufällige Ecke.',steps:[
@@ -14164,9 +14164,9 @@ const U=[
 'Prüfe Sonderfälle: 0° Breite, 0°/180° Länge oder ein Pol gehören nicht eindeutig zu einem Viertel.'
 ],rule:'Erst N/S, dann O/W – zwei Buchstaben, ein Erdviertel.',mistake:'„Nordwestviertel liegt auf jeder Weltkarte oben links.“ Das stimmt nur bei einer passenden, nordorientierten Kartendarstellung.',qs:[
 ['40° N / 10° W liegt im …',['Nordwestviertel','Nordostviertel','Südwestviertel','Südostviertel'],0,'N = nördlich, W = westlich. Zusammen: Nordwestviertel.'],
-['23° S / 134° O liegt im …',['Nordostviertel','Südostviertel','Südwestviertel','Nordwestviertel'],1,'S + O ergibt Südostviertel.'],
-['48° N / 2° O liegt im …',['Südostviertel','Nordwestviertel','Nordostviertel','Südwestviertel'],2,'N + O ergibt Nordostviertel.'],
-['15° S / 60° W liegt im …',['Südwestviertel','Nordwestviertel','Nordostviertel','Südostviertel'],0,'S + W ergibt Südwestviertel.'],
+['23° S / 134° O liegt im …',['Nordostviertel','Südostviertel','Südwestviertel','Nordwestviertel'],1,'S bedeutet südlich des Äquators und O bedeutet östlich des Nullmeridians: Südostviertel.'],
+['48° N / 2° O liegt im …',['Südostviertel','Nordwestviertel','Nordostviertel','Südwestviertel'],2,'N bedeutet nördlich des Äquators und O bedeutet östlich des Nullmeridians: Nordostviertel.'],
+['15° S / 60° W liegt im …',['Südwestviertel','Nordwestviertel','Nordostviertel','Südostviertel'],0,'S bedeutet südlich des Äquators und W bedeutet westlich des Nullmeridians: Südwestviertel.'],
 ['0° / 30° O liegt …',['Im Nordostviertel','Auf der Grenze zwischen Nord und Süd','Im Südostviertel','Am Südpol'],1,'0° Breite liegt genau auf dem Äquator.'],
 ['90° N / 20° O bezeichnet …',['Einen Punkt im Nordostviertel','Den Nordpol; eine eindeutige Länge ist dort nicht sinnvoll','Den Äquator','Das Südwestviertel'],1,'Alle Meridiane treffen sich am Nordpol.']
 ]},
@@ -14177,7 +14177,7 @@ const U=[
 'Erst der Schnittpunkt beider Linien bestimmt den Ort. Kontrolliere N/S und O/W.'
 ],rule:'Koordinaten-Reihenfolge: Breite N/S, Länge O/W.',mistake:'„52° N allein zeigt einen genauen Ort.“ Nein. Viele Orte liegen auf demselben Breitenkreis.',qs:[
 ['Was liest du bei 52° N / 8° O zuerst?',['8° O','52° N','Die Kartenlegende','Die Höhe'],1,'Immer zuerst die Breite, danach die Länge.'],
-['Welcher Wert beschreibt die geografische Länge?',['38° S','60° N','9° W','0° Breite'],2,'O/W kennzeichnet Längengrade.'],
+['Welcher Wert beschreibt die geografische Länge?',['38° S','60° N','9° W','0° Breite'],2,'Ost und West sind Richtungen der geografischen Länge; Nord und Süd kennzeichnen die Breite.'],
 ['Wo liegt der gesuchte Punkt?',['Irgendwo auf 52° N','Am Schnittpunkt von 52° N und 8° O','Immer am Nordpol','Im Register'],1,'Ein Ort benötigt in der Regel beide Koordinaten.'],
 ['Was bedeutet 12° W?',['12 Grad südlich','12 Grad westlich des Nullmeridians','12 Kilometer westlich','12 Grad nördlich'],1,'Länge ist ein Winkel von 0° aus nach Ost oder West.'],
 ['Welches Koordinatenpaar gehört zu 40° südlicher Breite und 70° östlicher Länge?',['40° S / 70° O','70° O / 40° S','40° N / 70° W','70° S / 40° O'],0,'Die Breite steht zuerst, hier 40° S; dann folgt 70° O.'],
@@ -14216,7 +14216,7 @@ const U=[
 'Prüfe beim Kartenlesen auch Titel und Maßstab. Ein Kartensymbol zeigt nicht automatisch die echte Größe eines Objekts.'
 ],rule:'Erst Kartenorientierung, dann Legende, dann die eigentliche Frage.',mistake:'„Auf jeder Karte ist Norden oben.“ Nein. Prüfe den Nordpfeil, besonders bei gedrehten Plänen.',qs:[
 ['Wo liegt Osten auf einer Karte mit Nordpfeil nach oben?',['Links','Rechts','Unten','Immer oben'],1,'Bei nordorientierten Karten liegt Osten rechts.'],
-['Welche Nebenhimmelsrichtung liegt zwischen Nord und West?',['Südwest','Nordwest','Nordost','Südost'],1,'Nord und West ergeben Nordwest.'],
+['Welche Nebenhimmelsrichtung liegt zwischen Nord und West?',['Südwest','Nordwest','Nordost','Südost'],1,'Zwischen Norden und Westen liegt die Nebenhimmelsrichtung Nordwest; bei einer nordorientierten Karte ist das oben links.'],
 ['Was erklärt die Zeichen einer Karte?',['Legende','Nur der Titel','Seitenrand allein','Der Verlag allein'],0,'Die Legende entschlüsselt Farben und Symbole.'],
 ['Wenn der Nordpfeil nach links zeigt, wo liegt Norden?',['Oben','Unten','Links','Rechts'],2,'Der Nordpfeil zeigt die tatsächliche Nordrichtung der jeweiligen Karte.'],
 ['Was zeigt der Maßstab?',['Verhältnis zwischen Kartenstrecke und Wirklichkeit','Nur die Himmelsrichtung','Die höchste Temperatur','Anzahl der Orte'],0,'Der Maßstab verbindet Kartenentfernung und reale Strecke.'],
