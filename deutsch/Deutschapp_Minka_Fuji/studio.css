@@ -157,3 +157,16 @@
  body.studio-printing .studio-print-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}
  @page{size:A4;margin:16mm}
 }
+
+/* Grafische Spannungsspur: der aktive Szenenpunkt wächst beim Wechsel sichtbar. */
+#studio .studio-tension-graphic{display:grid;grid-template-columns:minmax(185px,.8fr) minmax(0,1.2fr);gap:12px;align-items:center;background:linear-gradient(145deg,#213d51,#203d34);border:1px solid #6a91a8;border-radius:13px;padding:15px 20px;margin:6px 0 22px}
+#studio .studio-tension-graphic svg{width:100%;max-height:160px;height:auto;overflow:visible}
+#studio .studio-tension-graphic strong{font-size:1.06rem}
+#studio .studio-tension-graphic p{color:#d3e2ed;margin:7px 0}
+#studio .studio-tension-graphic>.muted{grid-column:1 / -1;font-size:.83rem;margin:0}
+#studio .studio-story-panel-static{cursor:default}
+#studio .studio-story-panel-static:hover{border-color:#51718c}
+nav.navigation button[data-page=studio]{flex:1.65 1 200px;border:2px solid var(--accent)}
+nav.navigation button[data-page=studio]:not([aria-current=page]){background:#1e3b36}
+@media(max-width:600px){#studio .studio-tension-graphic{grid-template-columns:1fr}#studio .studio-tension-graphic svg{max-height:160px}}
+@media(prefers-reduced-motion:reduce){#studio *{transition:none!important;animation:none!important}}
