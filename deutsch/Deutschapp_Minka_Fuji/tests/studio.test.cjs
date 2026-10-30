@@ -110,7 +110,8 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
         for(const view of ['path','writer','exam','lab']){
           await page.click('.studio-tabs [data-studio-view="'+view+'"]');
           const dims=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
-          assert.ok(dims.scroll<=w+1,view+' @'+w+'px: '+dims.scroll);
+          const blockers=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(el=>{const b=el.getBoundingClientRect();return b.right>innerWidth+1&&b.width>0}).slice(0,10).map(el=>[el.tagName,el.id,String(el.className).slice(0,45),Math.round(el.getBoundingClientRect().right)]));
+          assert.ok(dims.scroll<=w+1,view+' @'+w+'px: '+dims.scroll+' Verursacher '+JSON.stringify(blockers));
         }
       }
     });
