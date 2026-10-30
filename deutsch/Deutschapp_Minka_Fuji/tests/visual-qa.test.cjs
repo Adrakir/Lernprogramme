@@ -10,11 +10,15 @@ const URL=process.env.DEUTSCH_APP_URL||pathToFileURL(path.resolve(__dirname,'../
 const artifactDir=path.resolve(__dirname,'artifacts');
 fs.mkdirSync(artifactDir,{recursive:true});
 async function artwork(image,label){
- const result=await image.evaluate(async img=>{
-  try{await img.decode()}catch{}
-  const r=img.getBoundingClientRect(),s=getComputedStyle(img);
-  return {width:r.width,height:r.height,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,display:s.display,visibility:s.visibility};
- });
+ let result;
+ for(let attempt=0;attempt<45;attempt++){
+  result=await image.evaluate(img=>{
+   const r=img.getBoundingClientRect(),s=getComputedStyle(img);
+   return {width:r.width,height:r.height,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,display:s.display,visibility:s.visibility,src:img.getAttribute('src')};
+  });
+  if(result.naturalWidth>0&&result.naturalHeight>0)break;
+  await new Promise(resolve=>setTimeout(resolve,80));
+ }
  assert.ok(result.naturalWidth>0&&result.naturalHeight>0,label+' wird nicht dekodiert: '+JSON.stringify(result));
  assert.ok(result.width>=48&&result.height>=40&&result.display!=='none'&&result.visibility!=='hidden',label+' ist unsichtbar: '+JSON.stringify(result));
 }
@@ -31,6 +35,8 @@ test('Deutschapp: echte Browser- und Bildkontrolle auf Safari/WebKit und Chromiu
      const page=await browser.newPage({viewport:{width,height:880},deviceScaleFactor:1,acceptDownloads:true});
      const errors=[];page.on('pageerror',e=>errors.push(e.message));
      try{
+      // Safari-/iMac-Kompatibilität: WebP absichtlich unzugänglich machen.
+      if(width===1366)await page.route('**/*.webp',route=>route.abort());
       await page.goto(URL,{waitUntil:'load'});
       assert.equal(await page.locator('nav.navigation [data-page]').count(),9,'Neun integrierte Deutsch-Bereiche');
       await page.locator('[data-page="studio"]').click();
@@ -50,10 +56,13 @@ test('Deutschapp: echte Browser- und Bildkontrolle auf Safari/WebKit und Chromiu
       await page.locator('[data-page="entdecken"]').click();
       await artwork(page.locator('#comic-image'),'Comicmotiv '+engine+' '+width);
       await artwork(page.locator('.guide-pair'),'Fuji/Minka-Figuren '+engine+' '+width);
+      if(width===1366)assert.match(await page.locator('#comic-image').getAttribute('src'),/\.jpg$/,'Comic bei blockiertem WebP als JPEG');
+
       await page.locator('#scene-next').click();
       await artwork(page.locator('#comic-image'),'Comicmotiv nach Weiterblättern '+engine+' '+width);
       await page.locator('[data-page="hauptteil"]').click();
       await artwork(page.locator('#body-art'),'Hauptteil-Szenenbild '+engine+' '+width);
+      if(width===1366)assert.match(await page.locator('#body-art').getAttribute('src'),/\.jpg$/,'Hauptteilbild bei blockiertem WebP als JPEG');
       await page.locator('[data-page="studio"]').click();
       await page.locator('[data-studio-view="builder"]').first().click();
       for(const id of ['leuchtturm','waldkarte','schleuse']){
