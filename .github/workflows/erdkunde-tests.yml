@@ -30,7 +30,7 @@ jobs:
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlaswerkstatt.test.cjs
       - name: Schülertypische Fehler und Verstehensfragen testen
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/praxis-schuelerfehler.test.cjs
-      - name: Themenübungen: drei Schwierigkeitsstufen und aufklappbare Lösungen testen
+      - name: "Themenübungen – drei Stufen und aufklappbare Lösungen testen"
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/themen-training.test.cjs
       - name: Browser-Smoke-Test (Desktop und Smartphone)
         run: |
