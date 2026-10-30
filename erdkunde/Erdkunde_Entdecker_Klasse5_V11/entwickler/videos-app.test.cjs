@@ -23,7 +23,7 @@ for(let n=1;n<=7;n++){
 }
 new vm.Script(app,{filename:'videos-app.js'});
 const handlers={}, added=[];
-const fakeEl=()=>({dataset:{tab:'videos'},classList:{toggle(){}},setAttribute(){},insertAdjacentHTML(position,html){added.push(html)},scrollIntoView(){}});
+const fakeEl=()=>({dataset:{tab:'videos'},classList:{toggle(){}},setAttribute(){},querySelector(){return fakeEl()},insertAdjacentHTML(position,html){added.push(html)},scrollIntoView(){}});
 const root={
   querySelector(){return null},
   appendChild(){},
