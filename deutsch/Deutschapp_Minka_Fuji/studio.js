@@ -197,6 +197,7 @@
       '<p class="studio-storage" id="studio-store" role="status"></p>';
     save();
     window.MF_ACADEMY?.afterRender(root,state.view);
+    window.MF_ACADEMY_TOOLS?.afterRender(root,state.view);
   }
   function setView(view){if(!['path','writer','exam','lab','coach','repair','teacher'].includes(view))return;state.view=view;state.scene=0;render();root.querySelector('#studio-workspace')?.scrollIntoView({block:'start',behavior:'instant'});}
   function safeFile(kind){
@@ -249,7 +250,7 @@
     if(d.studioPart){const x=draft();x.parts[d.studioPart]=el.value.slice(0,12000);x.checks=[];save();root.querySelectorAll('[data-studio-writer-check]').forEach(c=>c.checked=false);
       const n=document.getElementById('studio-writer-words'),preview=document.getElementById('studio-writer-preview'),msg=document.getElementById('studio-writer-checkinfo');
       if(n)n.textContent=words(fullDraft(x))+' Wörter · Der Hauptteil sollte genügend Raum bekommen.';
-      if(preview)preview.textContent=fullDraft(x)||'Deine Geschichte erscheint hier, sobald du zu schreiben beginnst.';window.MF_ACADEMY?.refreshWriterAnnotations?.();
+      if(preview)preview.textContent=fullDraft(x)||'Deine Geschichte erscheint hier, sobald du zu schreiben beginnst.';window.MF_ACADEMY_TOOLS?.refreshWriterAnnotations?.();
       if(msg)msg.textContent='Text geändert: Überprüfung noch offen.';return;}
     if(d.studioExamText!==undefined||d.studioExamTitle!==undefined){
       const x=examDraft();if(d.studioExamText!==undefined)x.text=el.value.slice(0,20000);else x.title=el.value.slice(0,160);
