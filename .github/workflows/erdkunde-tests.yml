@@ -5,6 +5,10 @@ on:
     paths:
       - "erdkunde/Erdkunde_Entdecker_Klasse5_V11/**"
       - ".github/workflows/erdkunde-tests.yml"
+  pull_request:
+    paths:
+      - "erdkunde/Erdkunde_Entdecker_Klasse5_V11/**"
+      - ".github/workflows/erdkunde-tests.yml"
   workflow_dispatch:
 
 permissions:
@@ -13,6 +17,7 @@ permissions:
 jobs:
   testen:
     runs-on: ubuntu-latest
+    timeout-minutes: 22
     steps:
       - name: Repository abrufen
         uses: actions/checkout@v4
@@ -20,6 +25,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Vollständige geographische Datenprüfung (272 Fragen)
+        run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/fachpruefung-gesamt.test.cjs
       - name: Pruefungsfit testen
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/pruefungsfit.test.cjs
       - name: Neue Geowerkstatt testen
@@ -36,8 +43,19 @@ jobs:
         run: |
           cd erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler
           npm install --no-save --ignore-scripts playwright
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
           node browser-smoke.test.cjs
+      - name: Alle 18 Klassenarbeitsaufgaben und 16 Themen in Chromium und WebKit
+        run: |
+          cd erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler
+          node browser-deep.test.cjs
+      - name: Screenshots als nachvollziehbare Sichtprüfung
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: erdkunde-browser-screenshots
+          path: erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/artifacts/
+          if-no-files-found: ignore
       - name: Offline-App reproduzierbar bauen
         run: |
           cd erdkunde/Erdkunde_Entdecker_Klasse5_V11
