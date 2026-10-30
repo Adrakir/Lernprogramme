@@ -9,7 +9,7 @@ const context={MODULES:[{id:'a',title:'Atlas',icon:'🌍',subtitle:'Atlasarbeit'
 render:()=>{},renderLearn:()=>'<div>Lernen</div>',renderLesson:()=>'<div>Kapitel</div>',
 esc:x=>String(x).replaceAll('<','&lt;'),head:()=>'<h1>Üben</h1>',
 pickQuestions:(arr,n)=>arr.slice(0,n),updateStars:()=>{},reasoningFor:()=>'<ol><li>Schritt 1</li><li>Schritt 2</li></ol>',
-grade:()=>{},msg:()=>{},MAIN:main,
+grade:()=>{},save:()=>{},progress:{attempts:0,correct:0,stars:0,mastery:{}},msg:()=>{},MAIN:main,
 localStorage:{getItem:()=>null,setItem:()=>{}},
 document:{getElementById:(id)=>id==='tabs'?nav:main,querySelectorAll:()=>[],addEventListener:(name,cb)=>{listeners[name]=cb}},
 window:{},console,Date};
