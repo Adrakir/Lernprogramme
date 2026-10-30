@@ -73,5 +73,6 @@ for(const file of sourceImages){
   ok(data.length>1500&&data[0]===255&&data[1]===216,'JPEG-Datei gueltig '+file);
  }
 }
-ok(read('index.html').includes('klarheit44'),'Mac-Update erneuert die Offline-Version');
+const activeVersion=(workerSource.match(/const VERSION='([^']+)'/)||[])[1];
+ok(!!activeVersion&&read('index.html').includes('v='+activeVersion),'HTML und Offlinecache verwenden dieselbe aktuelle Version');
 console.log('PASS: '+assertions+' Fachchecks; '+questions+' Fragen, '+notation+' Notenbilder, vier Rhythmuswörter, '+exceptions.length+' Lücken-/Fehlertakte.');

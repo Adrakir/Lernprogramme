@@ -96,6 +96,47 @@ async function main(){
    }
    const navigation=await expression('Array.from(document.querySelectorAll("nav.mainNav button")).map(b=>({label:b.textContent.trim(),width:Math.round(b.getBoundingClientRect().width)}))');
    check(navigation.length===5&&navigation.every(x=>x.width>=42),'Five touchable navigation choices at '+size.name);
+   if(size.name==='desktop'||size.name==='small-phone'){
+    // Nicht nur Bilddateien pruefen: alle 27 Szenen in beiden Lernphasen
+    // wirklich dekodieren und die sichtbaren Groessen im Browser messen.
+    const imageReport=await expression(`(async()=>{
+      const issues=[];
+      const visible=async(selector,label)=>{
+        const img=document.querySelector(selector);
+        if(!img){issues.push(label+": kein Bild");return;}
+        for(let tries=0;tries<40&&!img.naturalWidth;tries++)await new Promise(resolve=>setTimeout(resolve,80));
+        const rect=img.getBoundingClientRect();
+        const minWidth=label.startsWith('Übungskarte')?45:label.startsWith('Themenkarte')?55:65;
+        if(!img.naturalWidth||rect.width<minWidth||rect.height<50||
+           getComputedStyle(img).display==='none'||getComputedStyle(img).visibility==='hidden')
+          issues.push(label+": "+JSON.stringify({width:rect.width,height:rect.height,pixels:img.naturalWidth,src:img.getAttribute("src")}));
+        if(innerWidth>800 && !img.getAttribute("src").endsWith(".jpg"))issues.push(label+": JPEG-Ersatz fehlt");
+      };
+      for(let i=0;i<MUSIC_PATH.length;i++){
+        pathSelect(i,0);
+        await visible(".pathComicVisual img","Lernbild "+i);
+        pathStage(1);
+        await visible(".pathExampleScene img","Beispielbild "+i);
+      }
+      setView("themen");
+      const topics=[...document.querySelectorAll(".cleanTopic img")];
+      if(topics.length!==7)issues.push("Themenbilder: "+topics.length+" statt 7");
+      for(let i=0;i<topics.length;i++)await visible(".cleanTopic:nth-child("+(i+1)+") img","Themenkarte "+i);
+      setView("exerciseHub");
+      const exercises=[...document.querySelectorAll(".cleanPracticeChoice img")];
+      if(exercises.length!==6)issues.push("Übungskarten: "+exercises.length+" statt 6");
+      for(let i=0;i<exercises.length;i++)await visible(".cleanPracticeChoice:nth-child("+(i+1)+") img","Übungskarte "+i);
+      pathSelect(0,0);
+      document.querySelector(".pathComicVisual [data-path-zoom]").click();
+      const modal=document.querySelector("dialog.pathImageDialog");
+      if(!modal?.open||!modal.querySelector("img")?.src)issues.push("Bildvergrößerung öffnet nicht");
+      else modal.querySelector(".pathCloseImage").click();
+      if(document.querySelector("dialog.pathImageDialog"))issues.push("Bildvergrößerung schließt nicht");
+      setView("home");
+      return {issues,lessons:MUSIC_PATH.length,topics:topics.length,exercises:exercises.length};
+    })()`);
+    check(imageReport.issues.length===0,'All 27 illustrations in both learning phases, 7 topics, 6 exercise pictures and image zoom work at '+size.name+': '+JSON.stringify(imageReport));
+   }
    if(size.name==='iphone'){
     const lessonChecks=await expression(`(()=>{
       const problems=[],count=MUSIC_PATH.length;
