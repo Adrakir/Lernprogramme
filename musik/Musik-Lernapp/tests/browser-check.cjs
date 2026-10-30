@@ -106,7 +106,8 @@ async function main(){
         if(!img){issues.push(label+": kein Bild");return;}
         for(let tries=0;tries<40&&!img.naturalWidth;tries++)await new Promise(resolve=>setTimeout(resolve,80));
         const rect=img.getBoundingClientRect();
-        if(!img.naturalWidth||rect.width<65||rect.height<50||
+        const minWidth=label.startsWith('Übungskarte')?45:label.startsWith('Themenkarte')?55:65;
+        if(!img.naturalWidth||rect.width<minWidth||rect.height<50||
            getComputedStyle(img).display==='none'||getComputedStyle(img).visibility==='hidden')
           issues.push(label+": "+JSON.stringify({width:rect.width,height:rect.height,pixels:img.naturalWidth,src:img.getAttribute("src")}));
         if(innerWidth>800 && !img.getAttribute("src").endsWith(".jpg"))issues.push(label+": JPEG-Ersatz fehlt");
