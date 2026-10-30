@@ -27,7 +27,7 @@ function trainingPool(id,level){
  const tasks=[],n=Math.min(10,Math.max(6,base.length*2));
  for(let i=0;i<n;i++){
   const first=base[i%base.length],second=base[(i+1+Math.floor(i/base.length))%base.length];
-  const fWrong=(first.answer+1+i)%first.opts.length,sWrong=(second.answer+1+i)%second.opts.length;
+  const fWrong=(first.answer+1+(i%(first.opts.length-1)))%first.opts.length,sWrong=(second.answer+1+(i%(second.opts.length-1)))%second.opts.length;
   const fGood=first.opts[first.answer],sGood=second.opts[second.answer];
   const hints=[first.hints?.[0]||'Löse zuerst Teil A.',second.hints?.[0]||'Untersuche jetzt Teil B.','Vergleiche beide Teilantworten mit den Regeln und entscheide erst dann.'];
   if(level===2){
