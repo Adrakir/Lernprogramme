@@ -57,3 +57,37 @@
 @media(max-width:610px){.cleanHero{grid-template-columns:1fr;margin:.85rem 0}.cleanHero img{display:none}.cleanHero .primary{width:100%;min-width:0}.cleanActions{grid-template-columns:1fr;gap:.55rem}.cleanAction{flex-direction:row;min-height:0;align-items:center;padding:1rem}.cleanActionIcon{width:38px;height:38px;flex:0 0 auto}.cleanAction>span:last-child{align-self:center}.cleanAction small{margin-top:.2rem}.cleanTopicGrid,.cleanPracticeGrid{grid-template-columns:1fr;gap:.55rem}.cleanTopic{grid-template-columns:62px minmax(0,1fr) auto;min-height:82px;padding:.6rem}.cleanTopic img{width:62px;height:62px}.cleanTopicHead img{width:65px;height:65px}.cleanQuick{display:block;padding:1rem}.cleanQuick button{margin-top:.85rem;width:100%}.cleanPracticePanel .primary{width:100%}.cleanChoiceList{grid-template-columns:1fr}.cleanProgress>div{display:block}.cleanProgress span{display:block;margin-top:.2rem}}
 @media(max-width:360px){.cleanAction{gap:.5rem}.cleanPracticeChoice{padding:.55rem}.cleanPracticeChoice img{width:52px;height:52px}.cleanTopicHead{gap:.75rem}.cleanTopicHead img{width:52px;height:52px}.cleanHero{padding:1rem}}
 @media print{.cleanActions,.cleanHero button,.cleanQuick,.cleanLibrary,.cleanDetails,.cleanPracticeGrid{display:none!important}.cleanHero{border:0}.cleanProgress progress{appearance:none}}
+
+/* Notenbild und Anatomie: Korrektur des iPhone-Beispiels (Version klarheit38). */
+.partsLab{display:grid;grid-template-columns:minmax(0,1fr);gap:.8rem;width:100%;min-width:0}
+.partsLab>p{grid-column:1/-1;margin:.2rem 0}
+.partsLab>.pathAnatomy{width:100%;max-width:620px;height:auto;max-height:280px;justify-self:center}
+.partsLab .partButtons{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:flex-start;margin:.4rem 0}
+.partsLab .partButtons button{min-height:46px;min-width:0;padding:.65rem .9rem}
+.partsLab .partButtons button[aria-pressed="true"]{border-color:var(--mint);background:var(--panel2);box-shadow:inset 0 0 0 2px var(--mint)}
+.partsLab #anatomyText{line-height:1.5;min-height:0;padding:.9rem 1rem}
+.partExample{grid-column:1/-1;min-width:0;width:100%;border:1px solid var(--line);border-radius:15px;background:var(--panel2);padding:clamp(.8rem,3vw,1.3rem)}
+.partExample h3{margin:0 0 .7rem;font-size:1.2rem;line-height:1.4}
+.partExample p{font-size:1rem;line-height:1.6;max-width:48rem;margin:.65rem 0 .2rem}
+.partSingleSymbol{display:flex;align-items:center;justify-content:center;max-width:280px;min-height:158px;margin:0 auto}
+.partSingleSymbol svg{width:170px!important;height:170px!important;max-width:100%}
+.partCompareSymbols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;max-width:550px;margin:0 auto}
+.partCompareSymbols>div{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.35rem;padding:.75rem;border:1px solid var(--line);border-radius:12px;text-align:center}
+.partCompareSymbols svg{width:120px!important;height:120px!important;max-width:100%}
+.partCompareSymbols strong,.partCompareSymbols span{font-size:.95rem;line-height:1.35}
+.partCompareSymbols span{color:var(--mint);font-weight:750}
+.partBeamExample{max-width:100%;display:flex;justify-content:center;min-width:0}
+.partBeamExample .pathScore{width:max-content;max-width:100%;min-width:0;margin:.2rem 0 .4rem}
+.partBeamExample .modelSvg{max-width:none}
+.pathScore{scrollbar-gutter:stable}
+@media(max-width:550px){
+ .partsLab>.pathAnatomy{max-height:none}
+ .partsLab .partButtons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
+ .partsLab .partButtons button{font-size:.9rem;padding:.6rem .25rem;overflow-wrap:anywhere}
+ .partCompareSymbols{gap:.4rem}
+ .partCompareSymbols>div{padding:.55rem .25rem}
+ .partCompareSymbols svg{width:96px!important;height:96px!important}
+ .partSingleSymbol svg{width:148px!important;height:148px!important}
+ .partExample h3{font-size:1.08rem}
+ .pathScore{scrollbar-gutter:auto}
+}
