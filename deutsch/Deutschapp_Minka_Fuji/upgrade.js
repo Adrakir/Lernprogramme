@@ -78,7 +78,7 @@ window.MF_UPGRADE=(()=>{
  }
  function panelAnalysis(){
   const m=metrics(writing());
-  return '<section class="panel up-analysis"><h3>Schreibcoach: Textmerkmale entdecken</h3><p>Der regelbasierte Coach sucht einfache Muster. Er beurteilt <strong>keine</strong> Handlung, Gefühle oder Rechtschreibung und vergibt keine Note.</p>'+
+  return '<section id="up-feedback-analysis" class="panel up-analysis"><h3>Schreibcoach: Textmerkmale entdecken</h3><p>Der regelbasierte Coach sucht einfache Muster. Er beurteilt <strong>keine</strong> Handlung, Gefühle oder Rechtschreibung und vergibt keine Note.</p>'+
    '<div class="up-actions"><button type="button" class="secondary" data-up-load="writer">Meine Schreibwerkstatt übernehmen</button><button type="button" class="secondary" data-up-load="exam">Meine Klassenarbeit übernehmen</button><button type="button" class="secondary" data-up-load="sample">Beispieltext einsetzen</button></div>'+
    '<label for="up-analyse-text"><strong>Deinen Text hier untersuchen</strong></label><textarea id="up-analyse-text" rows="9" maxlength="20000" placeholder="Deine Geschichte …">'+esc(S.analysis||'')+'</textarea>'+
    '<p id="up-analyse-count" class="muted">'+m.count+' Wörter · '+m.sentences+' mögliche Sätze · '+m.paras+' Textabschnitte</p>'+
@@ -109,17 +109,18 @@ window.MF_UPGRADE=(()=>{
   const rows=skills().map(s=>{const written=D.writingTasks.filter(q=>q.focus===s.id&&S.diagnostic?.[q.id]?.checked);
     const self=written.length?Number(S.diagnostic[written[0].id].rating):-1;
     const theory=rated[s.id]||0;
-    return {...s,theory,writing:self,done:!!S.planDone[s.id]};});
-  const priority=rows.filter(x=>x.theory<2||x.writing>=0&&x.writing<2),rest=rows.filter(x=>!priority.includes(x));
+    const attempted=tests.some(q=>q.skill===s.id&&Number.isInteger(answer[q.id]));
+    return {...s,theory,attempted,writing:self,done:!!S.planDone[s.id]};});
+  const priority=rows.filter(x=>(x.attempted&&x.theory<2)||(x.writing>=0&&x.writing<2)),rest=rows.filter(x=>!priority.includes(x));
   return {priority,rest,rows};
  }
  function pathway(){
   const e=writingEvaluation();
-  return '<section class="panel up-path"><h3>Dein persönlicher Übungsweg</h3><p>Vorschläge aus den Auswahlaufgaben und deiner freiwilligen Einschätzung kurzer Schreibtexte. Kein automatischer Nachweis und keine Schulnote.</p>'+
-    '<div class="up-path-grid">'+[...e.priority,...e.rest].map(x=>'<article class="up-path-card '+(x.done?'up-done':'')+'"><span class="up-priority">'+(e.priority.includes(x)?'Jetzt vertiefen':'Danach wiederholen')+'</span><h4>'+esc(x.name)+'</h4><p>Wissen: '+x.theory+'/2 passende Antworten'+(x.writing>=0?' · Schreibprobe selbst eingeschätzt: '+x.writing+'/2':' · noch keine Schreibprobe')+'</p><p>'+esc(x.tip)+'</p><div class="up-actions"><button type="button" class="secondary" data-up-train="'+esc(x.id)+'">Passende Aufgabe</button><label class="up-done-label"><input type="checkbox" data-up-done="'+esc(x.id)+'" '+(x.done?'checked':'')+'> Geübt</label></div></article>').join('')+'</div></section>';
+  return '<section id="up-feedback-path" class="panel up-path"><h3>Dein persönlicher Übungsweg</h3><p>Vorschläge aus den Auswahlaufgaben und deiner freiwilligen Einschätzung kurzer Schreibtexte. Kein automatischer Nachweis und keine Schulnote.</p>'+
+    '<div class="up-path-grid">'+[...e.priority,...e.rest].map(x=>'<article class="up-path-card '+(x.done?'up-done':'')+'"><span class="up-priority">'+(e.priority.includes(x)?'Jetzt vertiefen':x.attempted||x.writing>=0?'Danach wiederholen':'Noch nicht geprüft')+'</span><h4>'+esc(x.name)+'</h4><p>Wissen: '+(x.attempted?x.theory+'/2 passende Antworten':'noch nicht geprüft')+(x.writing>=0?' · Schreibprobe selbst eingeschätzt: '+x.writing+'/2':' · noch keine Schreibprobe')+'</p><p>'+esc(x.tip)+'</p><div class="up-actions"><button type="button" class="secondary" data-up-train="'+esc(x.id)+'">Passende Aufgabe</button><label class="up-done-label"><input type="checkbox" data-up-done="'+esc(x.id)+'" '+(x.done?'checked':'')+'> Geübt</label></div></article>').join('')+'</div></section>';
  }
  function writingDiag(){
-  return '<section class="panel"><h3>Schreibproben statt nur Ankreuzen</h3><p>Schreibe drei kurze selbstständige Texte. Markiere anschließend eine echte Textstelle als Beleg für dein Kriterium. Die Selbsteinschätzung dient nur der Übungsplanung.</p>'+
+  return '<section id="up-feedback-writing" class="panel"><h3>Schreibproben statt nur Ankreuzen</h3><p>Schreibe drei kurze selbstständige Texte. Markiere anschließend eine echte Textstelle als Beleg für dein Kriterium. Die Selbsteinschätzung dient nur der Übungsplanung.</p>'+
     D.writingTasks.map(t=>{const r=S.diagnostic[t.id]||{};
       return '<div class="up-writing-prompt"><h4>'+esc(t.title)+'</h4><p>'+esc(t.intro)+'</p><p><strong>Auftrag:</strong> '+esc(t.goal)+'</p>'+
        '<textarea data-up-draft="'+t.id+'" rows="4" maxlength="4500" placeholder="Deine eigene Antwort …">'+esc(r.text||'')+'</textarea>'+
@@ -129,13 +130,13 @@ window.MF_UPGRADE=(()=>{
  }
  function conference(){
   const t=D.conference;
-  return '<section class="panel"><h3>Schreibkonferenz: Als Textdetektiv arbeiten</h3><p>Lies die Beispielgeschichte. Markiere durch Antippen eine Stelle. Erkläre, was gelungen ist oder überarbeitet werden sollte.</p>'+
+  return '<section id="up-feedback-conf" class="panel"><h3>Schreibkonferenz: Als Textdetektiv arbeiten</h3><p>Lies die Beispielgeschichte. Markiere durch Antippen eine Stelle. Erkläre, was gelungen ist oder überarbeitet werden sollte.</p>'+
    '<div class="up-conf-text">'+t.comments.map((x,i)=>'<button type="button" class="up-conf-line '+(S.conference.selected===i?'active':'')+'" data-up-conf="'+i+'">'+esc(x.quote)+'</button>').join(' ')+'</div>'+
    (Number.isInteger(S.conference.selected)?(()=>{const e=t.comments[S.conference.selected];return '<div class="up-conf-feedback"><strong>'+esc(e.label)+'</strong><p>'+esc(e.hint)+'</p><label>Mein Verbesserungsvorschlag<textarea data-up-conftext rows="3" maxlength="1200">'+esc(S.conference['text'+S.conference.selected]||'')+'</textarea></label></div>';})():'<p class="muted">Wähle eine Textstelle, um den passenden Hinweis zu entdecken.</p>')+
    '<p>Regel für die Konferenz: Zuerst etwas Gelungenes nennen, dann einen konkreten Verbesserungsvorschlag machen.</p></section>';
  }
  function feedback(){
-  return '<div class="studio-section-intro"><h2>Schreibcoach, Diagnose und Übungsplan</h2><p>Erkenne Sprachmuster in deinem Text, belege selbst die Wirkung und übe gezielt an deinen Schwierigkeiten. Es gibt keine vorgetäuschte KI-Korrektur.</p></div>'+
+  return '<div class="studio-section-intro"><h2>Schreibcoach, Diagnose und Übungsplan</h2><p>Erkenne Sprachmuster in deinem Text, belege selbst die Wirkung und übe gezielt an deinen Schwierigkeiten. Es gibt keine vorgetäuschte KI-Korrektur.</p><nav aria-label="Werkzeuge in diesem Bereich" class="up-jump-nav"><button data-up-jump="up-feedback-analysis">Text überprüfen</button><button data-up-jump="up-feedback-writing">Schreibproben</button><button data-up-jump="up-feedback-path">Mein Lernplan</button><button data-up-jump="up-feedback-conf">Schreibkonferenz</button></nav></div>'+
    panelAnalysis()+writingDiag()+pathway()+conference();
  }
  const sentences=text=>{
@@ -234,11 +235,18 @@ window.MF_UPGRADE=(()=>{
   return '<div class="up-plan-result"><strong>'+filled+' von 7 Planungspunkten ausgefüllt</strong><p>'+(goodStart?'Die Ausgangslage steht vor dem Höhepunkt.':'Prüfe, ob der Leser die Figuren bereits vor dem entscheidenden Moment kennenlernt.')+'</p><p>'+(goodEnd?'Der Höhepunkt steht vor dem Schluss.':'Die Lösung und der Schluss sollten normalerweise nach dem wichtigsten Moment kommen.')+'</p><p>Zusätzliche Kontrolle: Ist die Entscheidung aus den vorherigen Hinweisen verständlich? Nicht automatisch bewertbar.</p></div>';
  };
  function render(view){if(view==='builder')return builder();if(view==='feedback')return feedback();if(view==='portfolio')return portfolio();return '';}
- function post(root,view){if(view==='teacher'){root.querySelector('#studio-workspace')?.insertAdjacentHTML('beforeend',teacherAddon());}
- if(view==='portfolio')drawReader();}
+ function post(root,view){
+ if(view==='teacher')root.querySelector('#studio-workspace')?.insertAdjacentHTML('beforeend',teacherAddon());
+ if(view==='path'){
+  const area=root.querySelector('#studio-workspace');
+  area?.insertAdjacentHTML('afterbegin','<section class="panel up-quickstart"><h2>Neu: Deine nächsten Schreibabenteuer</h2><p>Wähle deinen Einstieg. Die bisherigen acht Lernbereiche bleiben erhalten.</p><div class="up-quick-grid"><button type="button" data-up-route="builder"><strong>🧩 Bildergeschichten bauen</strong><span>Sechs Bilder verstehen und den roten Faden planen</span></button><button type="button" data-up-route="feedback"><strong>🔍 Textcoach und Lernplan</strong><span>Eigene Texte verbessern, Schreibproben und Tipps</span></button><button type="button" data-up-route="portfolio"><strong>📚 Mein Portfolio</strong><span>Satzweise vorlesen, Lernstand sichern und übertragen</span></button></div></section>');
+ }
+ if(view==='portfolio')drawReader();
+}
  const click=e=>{
   const b=e.target.closest('button');if(!b||!R.contains(b))return;const d=b.dataset;
   if(d.upRoute){next(d.upRoute);return;}
+  if(d.upJump){R.querySelector('#'+d.upJump)?.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(d.upMove){const [i,v]=d.upMove.split(':').map(Number);move(i,v);return;}
   if(d.upZoom!==undefined){const st=scene(),i=Number(d.upZoom);let dialog=document.getElementById('up-zoom-dialog');if(!dialog){dialog=document.createElement('dialog');dialog.id='up-zoom-dialog';document.body.appendChild(dialog);}
    dialog.innerHTML='<button type="button" data-up-close>Schließen</button><h2>'+esc(st.scenes[i].title)+'</h2>'+art(st,i)+'<p>'+esc(st.scenes[i].action)+'</p>';
