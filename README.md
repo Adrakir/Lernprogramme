@@ -8,7 +8,7 @@ die Apps nach Fach und Thema.
 
 | Fach | Programm | Themen | Einstieg |
 |---|---|---|---|
-| Deutsch | Minka & Fuji – Erzählwerkstatt | Erzählungen schreiben und verstehen | [deutsch/Deutschapp_Minka_Fuji/index.html](./deutsch/Deutschapp_Minka_Fuji/index.html) |
+| Deutsch | Minka & Fuji – Erzählwerkstatt | Erzählungen, Gefühle und Gedanken, Hauptteil, Spannung, Schreiben und Verstehen | [deutsch/Deutschapp_Minka_Fuji/index.html](./deutsch/Deutschapp_Minka_Fuji/index.html) |
 | Englisch | Access Wortwelt | Vokabeln, Sätze und Hörübungen | [englisch/index.html](./englisch/index.html) |
 | Mathematik | MatheKompass | Zahlen, Rechnen, Größen, Geometrie und Daten | [mathematik/MatheKompass/MatheKompass.html](./mathematik/MatheKompass/MatheKompass.html) |
 | Musik | Rhythmuswerkstatt | Noten, Pausen, Takte und Rhythmus | [musik/Musik-Lernapp/index.html](./musik/Musik-Lernapp/index.html) |
