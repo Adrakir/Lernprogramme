@@ -35,17 +35,20 @@ jobs:
         run: npm test
       - name: Echter Browsertest mit Chromium (390px, 320px, Desktop)
         run: node tests/browser-check.cjs
-      - name: PDF-Hefte öffnen und Seitenzahlen vergleichen
+      - name: PDF-Hefte mit echtem PDF-Parser lesen
         run: |
-          if command -v pdfinfo >/dev/null 2>&1; then
-            LEARN=$(pdfinfo documents/lernheft-musik.pdf | awk '/^Pages:/ {print $2}')
-            WORK=$(pdfinfo documents/arbeitsheft-musik.pdf | awk '/^Pages:/ {print $2}')
-            echo "Tatsächliche PDF-Seitenzahlen: Lernheft=$LEARN, Aufgabenheft=$WORK"
-            test "$LEARN" -eq 42
-            test "$WORK" -eq 71
-          else
-            echo "::warning::pdfinfo nicht installiert, Seitenzahlprüfung nicht verfügbar"
-          fi
+          python3 -m pip install --quiet --disable-pip-version-check --target "$RUNNER_TEMP/music-pdfdeps" pypdf
+          PYTHONPATH="$RUNNER_TEMP/music-pdfdeps" python3 - <<'PY'
+          from pypdf import PdfReader
+          books=[("documents/lernheft-musik.pdf",42),("documents/arbeitsheft-musik.pdf",71)]
+          for path,expected in books:
+              book=PdfReader(path)
+              pages=len(book.pages)
+              text_by_page=[len(page.extract_text() or "") for page in book.pages]
+              print(f"{path}: {pages} Seiten; {sum(text_by_page)} extrahierbare Zeichen; {sum(n==0 for n in text_by_page)} textleere Seiten")
+              assert pages==expected, f"Falsche Seitenzahl: {path}, erwartet {expected}, gefunden {pages}"
+              assert sum(text_by_page)>2000, f"Zu wenig lesbarer Text in {path}"
+          PY
       - name: Screenshots für die Sichtprüfung bereitstellen
         if: always()
         uses: actions/upload-artifact@v4
