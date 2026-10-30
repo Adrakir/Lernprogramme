@@ -255,11 +255,7 @@ window.MF_UPGRADE=(()=>{
    r.checked=true;save();renderAgain();return;
   }
   if(d.upConf!==undefined){S.conference.selected=Number(d.upConf);save();renderAgain();return;}
-  if(d.upTrain){const skill=d.upTrain;if(['aufbau','spannung','faden','innen','sprache','schluss'].includes(skill)){
-   const repair=window.MF_ACADEMY_DATA?.repairs?.find(x=>x.skill===skill);
-   if(repair){try{const v=JSON.parse(localStorage.getItem('mf-deutsch-akademie-v1')||'{}');v.repairId=repair.id;localStorage.setItem('mf-deutsch-akademie-v1',JSON.stringify(v));}catch{}}
-   next('repair');
-  }return;}
+  if(d.upTrain){if(window.MF_ACADEMY?.openRepairSkill(d.upTrain))next('repair');return;}
   if(d.upBackup!==undefined){downloadBackup();return;}
   if(d.upPrint){teacherPrint(d.upPrint);return;}
   if(d.upLoadreading){S.readingText=d.upLoadreading==='writer'?loadStoryText():S.analysis;save();renderAgain();return;}
