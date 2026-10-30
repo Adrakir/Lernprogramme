@@ -6,7 +6,7 @@ const path=require('node:path');
 const {chromium}=require('playwright');
 const ROOT=path.resolve(__dirname,'..');
 test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte lokal',async()=>{
- const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.webp':'image/webp'};
+ const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.webp':'image/webp','.jpg':'image/jpeg'};
  const server=http.createServer(async(req,res)=>{
   let url;try{url=new URL(req.url,'http://localhost')}catch{res.writeHead(400).end();return;}
   const local=path.resolve(ROOT,'.'+decodeURIComponent(url.pathname));
@@ -25,7 +25,8 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   await page.evaluate(()=>navigator.serviceWorker.ready);
   const cache=await page.evaluate(async()=>{
     const names=await caches.keys();const c=await caches.open(names.find(n=>n.startsWith('minka-fuji-deutsch-')));
-    const keys=['./index.html','./studio.js?v=qa47','./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg','./image-compat.js?v=1'];
+    const script=(name)=>'./'+Array.from(document.querySelectorAll('script[src]')).map(el=>el.getAttribute('src')).find(src=>src.startsWith(name+'?'));
+    const keys=['./index.html',script('studio.js'),'./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg',script('image-compat.js')];
     return Promise.all(keys.map(async k=>({key:k,available:!!await c.match(k)})));
   });
   assert.ok(cache.every(x=>x.available),JSON.stringify(cache));
