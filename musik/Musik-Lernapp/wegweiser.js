@@ -115,7 +115,7 @@ function guideExerciseHub(){
  guideBindActions();
  $$('[data-guide-practice]').forEach(b=>b.onclick=()=>{
   guidePracticeTopic=+b.dataset.guidePractice;
-  guideExerciseHub();
+  render();
   $('#practicePanel')?.scrollIntoView?.({block:'nearest'});
  });
  on('guideLabs',()=>openLab('dictation'));
