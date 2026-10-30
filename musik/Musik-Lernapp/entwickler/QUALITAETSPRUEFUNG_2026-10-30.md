@@ -56,3 +56,25 @@ Ergebnis: **success**. Die vollständige npm-Testsuite wurde in der GitHub-Runne
 **Veröffentlichter und getester Quellstand:** Alle Codeänderungen und der verbesserte Browsercheck wurden über Pull Request #1 in `main` übernommen (Merge-Commit `d34cd2bb4cd01a50bc91712b9bf59e3a1c3a5d8a`). Startseite und Service Worker verwenden identisch Version `klarheit41`. Vorhandene Schüler-Lernstände und Speicherkennungen bleiben unverändert.
 
 **Nach wie vor nicht behauptet:** Ein Headless-Chromium-Lauf ersetzt kein haptisches Testen auf physischem iPhone mit Safari und auf Android, keine echte Beurteilung der Tonqualität über Lautsprecher, keinen umfangreichen Screenreader-/VoiceOver-Test und keine pixelgenaue Sichtprüfung aller PDF-Seiten. Dies sind verbleibende reale Abnahmen, nicht bestandene Tests.
+
+## Nachtrag: verifizierte Gesamtprüfung Version 42 (30.10.2026)
+
+**Freigegebener Stand:** Pull Request [#2](https://github.com/Adrakir/Lernprogramme/pull/2) nach erfolgreichem Testlauf in main übernommen (Merge-Commit 35120000450ad8eb866e61439011bbbbc809ee72). Die Cache-Version lautet klarheit42.
+
+**Bestandene Tests:** [GitHub Actions 41068714071](https://github.com/Adrakir/Lernprogramme/actions/runs/41068714071), Status success.
+- 1.147 musikfachliche Assertierungen: 27 Lernschritte, 216 Fragen, 151 Notenbilder und vier Rhythmuswörter.
+- 2.844 funktionale Assertierungen: alle Lernwege, Antwort-/Lösungsauswahl, Navigation, Lehreraufträge, Übungen, Sicherung und Wiederherstellung.
+- Offline-Tests bestanden: unterbrochene Updates, Cache-Konsistenz, optionale Offline-PDFs, Start ohne Netzwerk.
+- 65 Chromium-Browserprüfungen bei 320, 390 und 1366 Pixeln: alle 27 Lektionen in vier Lernphasen, mobile Scrollpfeile, WAV-Tonerzeugung, Notenbalken, Ananas-Worttakt, Navigation und kein unbeabsichtigtes Seitenüberlaufen.
+- Sechs Screenshots im Workflow-Artefakt gespeichert; die 320- und 390-Pixel-Ansichten wurden auch visuell angesehen.
+- Beide PDF-Hefte mit pypdf geöffnet. Lernheft: 42 Seiten, 60.760 auslesbare Zeichen, 0 textleere Seiten. Arbeitsheft: 71 Seiten, 88.229 auslesbare Zeichen, 0 textleere Seiten.
+
+**Inhaltliche Verbesserungen:** Brot = Viertel; Käse = zwei Achtel; Schokolade = vier Sechzehntel; Ananas = zwei Sechzehntel plus eine Achtel. Die vier Gruppen füllen einen 4/4-Takt und ergeben zehn Tonanfänge. Bei Ananas dauert die letzte Silbe doppelt so lang wie die ersten beiden. Der geführte Lernweg, Worttakt-Baukasten, hörbare Notenbeispiele, Übungsfragen und Unterrichtsstationen wurden angeglichen. Der neue Fachtest tests/content-check.cjs gehört jetzt zu npm test.
+
+**Grenzen der Prüfung:**
+1. Chromium-Emulation ist kein realer iPhone-Safari-Test. Touchgesten, VoiceOver und subjektive Klangqualität sind noch nicht vollständig abgenommen.
+2. Die PDFs sind lesbar und ihre Seitenzahlen stimmen, aber nicht alle 113 Seiten wurden einzeln visuell auf Layout- oder inhaltliche Fehler geprüft.
+3. Auf 320-Pixel-Screenshots liegt die schwebende Klangsteuerung bei einzelnen Scrollpositionen nahe an anderen Bedienelementen. Eine tatsächliche Touchkollision wurde nicht nachgewiesen.
+4. GitHub-Pages-Erreichbarkeit und sofortige Auslieferung der neuen Version sind nicht durch einen separaten Live-Netzwerktest bestätigt.
+
+Diese Abnahme belegt eine deutlich umfassendere Qualitätssicherung, aber keine absolute Fehlerfreiheit.
