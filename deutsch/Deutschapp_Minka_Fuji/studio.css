@@ -170,3 +170,10 @@ nav.navigation button[data-page=studio]{flex:1.65 1 200px;border:2px solid var(-
 nav.navigation button[data-page=studio]:not([aria-current=page]){background:#1e3b36}
 @media(max-width:600px){#studio .studio-tension-graphic{grid-template-columns:1fr}#studio .studio-tension-graphic svg{max-height:160px}}
 @media(prefers-reduced-motion:reduce){#studio *{transition:none!important;animation:none!important}}
+
+#studio .studio-scene-art{display:block;width:100%;min-width:0;align-self:stretch}
+#studio .studio-scene-art svg{display:block;width:100%;max-width:100%;height:auto;max-height:135px;overflow:hidden;border-radius:8px;box-shadow:0 4px 13px #0b17273d}
+@media(prefers-reduced-motion:no-preference){
+ #studio .studio-tension-graphic .studio-curve-active{animation:studio-curve-focus .35s ease-out}
+ @keyframes studio-curve-focus{from{opacity:.5;stroke-width:2}to{opacity:1;stroke-width:5}}
+}
