@@ -77,9 +77,9 @@ for(const key of ['familie','stille','viertelpause','lange-pausen','kurze-pausen
  if(key==='familie')extraContent[key]=[
  ['Wie viele Viertel dauern so lange wie eine ganze Note?','4',['2','8'],'Viermal ein Schlag ergibt vier Schläge.',['w']],
  ['Wie viele Achtel ersetzen zeitlich eine Viertel?','2',['4','1'],'½ + ½ = 1. Die Dauer bleibt gleich; es gibt zwei Tonanfänge.',['e','e'],4,2],
- ['Wie viele Sechzehntel ergeben eine Achtel?','2',['4','8'],'¼ + ¼ = ½ Schlag.',['s','s'],4,4],
+ ['Wie viele Sechzehntel ergeben eine Achtel?','2',['4','8'],'Eine Sechzehntelnote dauert ¼ Schlag. Zwei Sechzehntelnoten zusammen dauern ¼ + ¼ = ½ Schlag, also genauso lange wie eine Achtelnote.',['s','s'],4,4],
  ['Halbe oder zwei Viertel: Was ist gleich?','Die Gesamtdauer',['Die Zahl der Tonanfänge','Das Notenbild'],'Beide dauern zwei Schläge. Eine Halbe beginnt einmal, zwei Viertel zweimal.'],
- ['Acht Achtel dauern insgesamt …','4 Schläge',['8 Schläge','2 Schläge'],'8 × ½ = 4 Schläge.']
+ ['Acht Achtel dauern insgesamt …','4 Schläge',['8 Schläge','2 Schläge'],'Eine Achtelnote dauert einen halben Schlag. Acht Achtelnoten ergeben 8 × ½ = 4 Schläge und füllen damit einen vollständigen 4/4-Takt.']
  ];
  else if(pause){const id=key==='lange-pausen'?'hr':key==='kurze-pausen'?'er':'qr',u=val(id)/4;extraContent[key]=[
  [`Wie lange dauert eine ${sentenceName(get(id).name)}?`,`${transferBeats(u)} Stille`,['Keine Zeit',`${transferBeats(u)} Klang`],`Pausen haben eine feste Dauer. Hier ${transferBeats(u)} Stille.`,[id],4,key==='kurze-pausen'?4:1],
@@ -103,7 +103,7 @@ for(const key of ['familie','stille','viertelpause','lange-pausen','kurze-pausen
  ['Mehr Zählsilben bedeuten automatisch mehr Tonanfänge?','Nein',['Ja','Nur im 4/4-Takt'],'Die Zählsilben unterteilen die Zeit. Eine lange Note kann über mehrere Teilzeiten halten.']
  ];}
  else {const m=key==='dreiertakt'?3:4;extraContent[key]=[
- [`${m}/4: Halbe plus ${m===3?'Viertel':'zwei Viertel'}. Passt die Dauer?`,'Ja',[ 'Nein, zu kurz','Nein, zu lang'],`2 + ${m===3?'1':'1 + 1'} = ${m}.`,m===3?['h','q']:['h','q','q'],m,1,true],
+ [`${m}/4: Halbe plus ${m===3?'Viertel':'zwei Viertel'}. Passt die Dauer?`,'Ja',[ 'Nein, zu kurz','Nein, zu lang'],`Eine halbe Note dauert zwei Schläge. ${m===3?'Eine Viertelnote fügt einen Schlag hinzu: 2 + 1 = 3. Genau das passt in den 3/4-Takt.':'Zwei Viertelnoten dauern zusammen zwei Schläge: 2 + 1 + 1 = 4. Damit ist der 4/4-Takt vollständig.'}`,m===3?['h','q']:['h','q','q'],m,1,true],
  [`${m}/4: ${m-1} Viertelnoten. Wie viel fehlt?`,'1 Schlag',['2 Schläge','Nichts'],`${m} − ${m-1} = 1. Auch eine Viertelpause könnte die fehlende Zeit füllen.`,Array(m-1).fill('q'),m,1,true],
  [`${m}/4: ${m} Viertelpausen. Ist der Takt vollständig?`,'Ja, die Stille zählt mit',['Nein, Pausen zählen nicht','Nein, jeder Takt braucht einen Ton'],`${m} × 1 = ${m} Schläge Stille.`,Array(m).fill('qr'),m,1,true],
  [`${m}/4: Zwei Halbe${m===4?' und eine Viertel':''}. Was stimmt?`,'1 Schlag zu lang',['Genau passend','1 Schlag zu kurz'],`${m===4?'2 + 2 + 1 = 5':'2 + 2 = 4'}; gebraucht werden ${m} Schläge.`,m===4?['h','h','q']:['h','h'],m,1,true],
