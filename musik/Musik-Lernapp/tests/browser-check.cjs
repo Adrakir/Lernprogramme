@@ -8,7 +8,7 @@ const {setTimeout:delay}=require('node:timers/promises');
 const root=path.resolve(__dirname,'..');
 const artifacts=path.join(__dirname,'artifacts');
 fs.mkdirSync(artifacts,{recursive:true});
-const mime={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json','.webp':'image/webp','.svg':'image/svg+xml','.png':'image/png','.pdf':'application/pdf'};
+const mime={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json','.webp':'image/webp','.jpg':'image/jpeg','.svg':'image/svg+xml','.png':'image/png','.pdf':'application/pdf'};
 const server=http.createServer((req,res)=>{
  try{
   const pathname=decodeURIComponent(new URL(req.url,'http://localhost/').pathname);
@@ -64,15 +64,36 @@ async function main(){
    if(r.exceptionDetails)throw Error('Browser expression: '+(r.exceptionDetails.exception?.description||r.exceptionDetails.text||JSON.stringify(r.exceptionDetails)));
    return r.result.value;
   };
-  await cdp('Page.enable');await cdp('Runtime.enable');
+  await cdp('Page.enable');await cdp('Runtime.enable');await cdp('Network.enable');
   const sizes=[{width:390,height:844,name:'iphone'},{width:320,height:730,name:'small-phone'},{width:1366,height:850,name:'desktop'}];
   for(const size of sizes){
    await cdp('Emulation.setDeviceMetricsOverride',{width:size.width,height:size.height,screenWidth:size.width,screenHeight:size.height,deviceScaleFactor:1,mobile:size.width<800});
+   await cdp('Network.setBlockedURLs',{urls:size.name==='desktop'?['*.webp*']:[]});
    await cdp('Page.navigate',{url:url});
    await waitFor(()=>expression('Boolean(document.querySelector("#simpleStudent")||document.querySelector("#guideResume"))'));
+   if(size.name==='desktop'){
+    // Vorherige mobile Durchlaeufe haben die Rolle gespeichert: hier explizit Erstbesuch simulieren.
+    await expression('guideRole=null;guideRoleChoice()');
+    await waitFor(()=>expression('document.querySelector(".simpleWelcomeIntro img")?.naturalWidth>0'),15000);
+    check(await expression('document.querySelector(".simpleWelcomeIntro img").getAttribute("src").endsWith(".jpg")'),'Old Safari simulation: welcome illustration loads as JPEG');
+    check(await expression('document.querySelector(".simpleWelcomeIntro img").getBoundingClientRect().width>90'),'Welcome drawing is visible on an iMac-sized screen');
+    const image=await cdp('Page.captureScreenshot',{format:'png',fromSurface:true});
+    fs.writeFileSync(path.join(artifacts,'desktop-einstieg-mit-fuji.png'),Buffer.from(image.data,'base64'));
+   }
    await expression('document.querySelector("#simpleStudent")?.click()');
    await waitFor(()=>expression('Boolean(document.querySelector("#guideResume"))'));
    check(await expression('document.querySelectorAll(".cleanAction").length')===3,'Three student start choices at '+size.name);
+   if(size.name==='desktop'){
+    await waitFor(()=>expression('document.querySelector(".cleanHero img")?.naturalWidth>0'),15000);
+    check(await expression('document.querySelector(".cleanHero img").getAttribute("src").endsWith(".jpg")'),'Old Safari simulation: home image loads as JPEG');
+    await expression('pathSelect(0,0)');
+    await waitFor(()=>expression('document.querySelector(".pathComic img")?.naturalWidth>0'),15000);
+    check(await expression('document.querySelector(".pathComic img").getBoundingClientRect().width>90'),'Lesson comic visible at desktop width');
+    check(await expression('document.querySelector(".pathComic img").getAttribute("src").endsWith(".jpg")'),'Old Safari simulation: lesson comic loads JPEG');
+    const shot=await cdp('Page.captureScreenshot',{format:'png',fromSurface:true});
+    fs.writeFileSync(path.join(artifacts,'desktop-lernschritt-mit-bild.png'),Buffer.from(shot.data,'base64'));
+    await expression('setView("home")');
+   }
    const navigation=await expression('Array.from(document.querySelectorAll("nav.mainNav button")).map(b=>({label:b.textContent.trim(),width:Math.round(b.getBoundingClientRect().width)}))');
    check(navigation.length===5&&navigation.every(x=>x.width>=42),'Five touchable navigation choices at '+size.name);
    if(size.name==='iphone'){

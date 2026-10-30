@@ -1,4 +1,31 @@
 'use strict';
+
+/* Desktop-/Safari-Kompatibilitaet: Originalillustrationen als JPEG anzeigen,
+   falls der Browser WebP nicht dekodieren kann. Das gilt auch fuer spaeter
+   erzeugte Lernschritte, Themenkarten und Fuji/Minka-Bilder. */
+(function(){
+ const watched=new WeakSet();
+ const image=(el)=>{
+  if(watched.has(el))return;
+  watched.add(el);
+  el.addEventListener('error',()=>{
+   const url=el.getAttribute('src')||'';
+   if(el.dataset.fallbackImage==='jpeg'||!url.includes('.webp'))return;
+   el.dataset.fallbackImage='jpeg';
+   el.setAttribute('src',url.replace('.webp','.jpg'));
+  });
+ };
+ const scan=(root)=>{
+  if(!root||root.nodeType!==1)return;
+  if(root.tagName==='IMG')image(root);
+  root.querySelectorAll?.('img').forEach(image);
+ };
+ new MutationObserver(entries=>{
+  for(const entry of entries)for(const node of entry.addedNodes)scan(node);
+ }).observe(document.documentElement,{subtree:true,childList:true});
+ document.addEventListener('DOMContentLoaded',()=>scan(document.documentElement),{once:true});
+})();
+
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 // Ursprüngliche Adresse merken, bevor die Navigation den Hash ersetzt (für den Prüfstand).
 const initialAppHash=location.hash;

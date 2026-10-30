@@ -58,4 +58,20 @@ ok(words.pattern.length===10,'vier Wortgruppen ergeben zehn Tonanfänge');
 ok(words.questions.some(q=>q.q.includes('A-na-nas')),'Ananas wird abgefragt');
 ok(words.steps.some(p=>p.includes('nas')&&(p.includes('doppelt so lang')||p.includes('länger'))),'Ananas Silbendauer erklärt');
 ok(app.includes("wordCard('Ananas','A – na – nas',['s','s','e'])"),'Ananas-Wortkarte');
+// Alle WebP-Illustrationen muessen ein tatsaechliches Safari-kompatibles JPEG besitzen.
+const workerSource=read('sw.js');
+const sourceImages=[...workerSource.matchAll(/"\.\/images\/([^"]+\.webp)"/g)].map(m=>m[1]);
+ok(sourceImages.length>=35,'mindestens 35 Bildmotive sind offline registriert');
+ok(workerSource.includes("APP_ASSETS.push(...APP_ASSETS.filter"),'Serviceworker speichert JPEG-Fallbacks offline');
+for(const file of sourceImages){
+ const original=path.join(root,'images',file);
+ const fallback=original.replace(/\.webp$/i,'.jpg');
+ ok(fs.existsSync(original),'WebP-Illustration vorhanden '+file);
+ ok(fs.existsSync(fallback),'JPEG-Illustration fuer Safari vorhanden '+file);
+ if(fs.existsSync(fallback)){
+  const data=fs.readFileSync(fallback);
+  ok(data.length>1500&&data[0]===255&&data[1]===216,'JPEG-Datei gueltig '+file);
+ }
+}
+ok(read('index.html').includes('klarheit44'),'Mac-Update erneuert die Offline-Version');
 console.log('PASS: '+assertions+' Fachchecks; '+questions+' Fragen, '+notation+' Notenbilder, vier Rhythmuswörter, '+exceptions.length+' Lücken-/Fehlertakte.');
