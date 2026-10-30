@@ -47,7 +47,7 @@ window.MF_STUDIO_ART=(()=>{
           rect(106,78,84,7,'#9d765d',3)+rect(111,85,6,19,'#826348')+rect(179,85,6,19,'#826348')+floor;
       case 'bike':
         return circle(196,28,17,'#f9e7ae')+'<path d="M0 99 Q58 74 128 93 T240 88 L240 135 L0 135Z" fill="#8ebb9f"/>'+
-          circle(85,97,20,'none')+circle(155,97,20,'none')+'<path d="M85 97 L114 58 L128 97 L85 97 L155 97 L128 97 L142 61 L166 61" stroke="#36586a" stroke-width="4" fill="none" stroke-linejoin="round"/>'+
+          '<circle cx="85" cy="97" r="20" fill="none" stroke="#36586a" stroke-width="4"/>'+'<circle cx="155" cy="97" r="20" fill="none" stroke="#36586a" stroke-width="4"/>'+'<path d="M85 97 L114 58 L128 97 L85 97 L155 97 L128 97 L142 61 L166 61" stroke="#36586a" stroke-width="4" fill="none" stroke-linejoin="round"/>'+
           (index===1?Array.from({length:11},(_,i)=>line(i*23,10,(i*23)-7,25,'#71a9d0',2)).join(''):'');
       case 'concert':
         return rect(0,0,240,104,'#3f305b')+'<path d="M0 0 Q15 28 30 0 Q48 30 65 0 L65 105 L0 105Z" fill="#a24c76"/>'+
@@ -75,7 +75,7 @@ window.MF_STUDIO_ART=(()=>{
     return '<svg viewBox="0 0 240 135" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'+
       '<defs><linearGradient id="'+gradient+'" x2="0" y2="1"><stop stop-color="'+p[0]+'"/><stop offset="1" stop-color="'+p[1]+'"/></linearGradient></defs>'+
       rect(0,0,240,135,'url(#'+gradient+')',8)+background(type,index,p)+foreground(type,index,icon)+
-      '<path d="M2 2 H238 V133 H2 Z" fill="none" stroke="'+p[2]+'" stroke-width="3" rx="8"/></svg>';
+      '<rect x="1.5" y="1.5" width="237" height="132" rx="8" fill="none" stroke="'+p[2]+'" stroke-width="3"/></svg>';
   }
   return Object.freeze({render});
 })();
