@@ -17,7 +17,7 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
       assert.equal(await page.locator('#studio .studio-path-step').count(),7);
       await page.locator('[data-studio-path-check="0"]').check();
       assert.match(await page.locator('#studio .studio-progress-line').textContent(),/1 von 7/);
-      await page.locator('[data-studio-route="spannung"]').click();
+      await page.locator('#studio-path-items [data-studio-route="spannung"]').click();
       assert.equal(await page.locator('#spannung').isVisible(),true);
       await page.click('[data-page="studio"]');
       assert.equal(await page.locator('[data-studio-path-check="0"]').isChecked(),true);
