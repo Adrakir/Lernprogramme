@@ -54,7 +54,7 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
     });
     await t.test('Klassenarbeit: acht Aufgaben, Hilfen, Simulation, Rubrik, Sicherung und Textänderung',async()=>{
       await page.click('.studio-tabs [data-studio-view="exam"]');
-      assert.equal(await page.locator('#studio-picker option').count(),8);
+      assert.equal(await page.locator('#studio-picker option').count(),20);
       await page.selectOption('#studio-picker','reiz-dachboden');
       assert.equal(await page.locator('.studio-wordcards span').count(),4);
       await page.selectOption('#studio-picker','bild-fahrrad');
