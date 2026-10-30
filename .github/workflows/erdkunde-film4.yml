@@ -1,0 +1,65 @@
+name: Erdkunde – Gustav Globus Folge 4 rendern und sichern
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/erdkunde-film4.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: erdkunde-film4-upload
+  cancel-in-progress: false
+
+jobs:
+  rendern:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Projekt auschecken
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Python für den Original-Rendercode vorbereiten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Erforderliche Programme und Schriften
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y espeak ffmpeg fonts-lato
+          python -m pip install --upgrade pip
+          python -m pip install "numpy>=2.0,<3" "pillow>=11,<13" "scipy>=1.14,<2" "basemap>=2.0,<3"
+
+      - name: Originalfilm der Folge 4 reproduzierbar rendern
+        env:
+          GUSTAV_VIDEO_OUT: ${{ github.workspace }}/erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos
+          GUSTAV_VIDEO_TMP: ${{ runner.temp }}/gustav-folge4
+        run: |
+          mkdir -p "$GUSTAV_VIDEO_OUT" "$GUSTAV_VIDEO_TMP"
+          python -u erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/quelle/build_folge4.py
+
+      - name: MP4 und Laufzeit validieren
+        run: |
+          set -euo pipefail
+          MEDIA="erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos"
+          test "$(wc -c < "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4")" -gt 200000
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -of default=noprint_wrappers=1 "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4"
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4"
+          mv "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4" "$MEDIA/folge-4.mp4"
+
+      - name: Film, Untertitel und Vorschaubild veröffentlichen
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/folge-4.mp4
+          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/Gustav_Globus_Folge4_*
+          if git diff --cached --quiet; then echo "Folge 4 bereits unverändert gespeichert"; exit 0; fi
+          git commit -m "Erdkunde: Gustav-Globus-Folge 4 als MP4, Untertitel und Vorschau"
+          git pull --rebase origin main
+          git push origin HEAD:main
