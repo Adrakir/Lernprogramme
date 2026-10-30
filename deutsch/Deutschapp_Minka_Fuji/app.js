@@ -4,7 +4,7 @@ const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const escapeHTML = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let activePage = 'entdecken';
 function showPage(id, focus = true) {
-  if (!['entdecken','spannung','ueben','schreiben','lesen','sprache','lehrgang','hauptteil'].includes(id)) throw new Error('Unbekannter Lernbereich.');
+  if (!['studio','entdecken','spannung','ueben','schreiben','lesen','sprache','lehrgang','hauptteil'].includes(id)) throw new Error('Unbekannter Lernbereich.');
   activePage = id;
   $$('.page').forEach(el => el.hidden = el.id !== id);
   $$('[data-page]').forEach(button => button.dataset.page === id ? button.setAttribute('aria-current','page') : button.removeAttribute('aria-current'));
@@ -203,7 +203,7 @@ if(modelContext?.registerTool){
   const lifecycle=new AbortController();
   const tools=[
     {name:'read_learning_state',title:'Lernstand dieser Seite ansehen',description:'Liest den geöffneten Lernbereich, das Comicbild und die Übungsbilanz dieser Sitzung. Liest keinen Schülertext.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute(input){if(input===null||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length)throw new Error('Leeres Objekt erwartet.');return {page:activePage,comicScene:sceneIndex+1,curveStation:stationIndex+1,quiz:stats()};}},
-    {name:'navigate_learning_section',title:'Lernbereich öffnen',description:'Öffnet einen der acht sichtbaren Lernbereiche, ohne Antworten zu geben oder Texte zu verändern.',inputSchema:{type:'object',properties:{section:{type:'string',enum:['entdecken','spannung','ueben','schreiben','lesen','sprache','lehrgang','hauptteil']}},required:['section'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length!==1||typeof input.section!=='string')throw new Error('section erwartet.');showPage(input.section);return {page:activePage};}}
+    {name:'navigate_learning_section',title:'Lernbereich öffnen',description:'Öffnet einen der neun sichtbaren Lernbereiche, ohne Antworten zu geben oder Texte zu verändern.',inputSchema:{type:'object',properties:{section:{type:'string',enum:['studio','entdecken','spannung','ueben','schreiben','lesen','sprache','lehrgang','hauptteil']}},required:['section'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).length!==1||typeof input.section!=='string')throw new Error('section erwartet.');showPage(input.section);return {page:activePage};}}
   ];
   tools.forEach(tool=>{try{Promise.resolve(modelContext.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}});
   window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});
