@@ -5,6 +5,29 @@ Start am PC oder Mac:
 2. Im entpackten Ordner die Datei index.html im Browser öffnen.
 3. Alle Dateien und den Ordner assets zusammenlassen.
 
+
+NEU: STARTBEREICH „MEIN ERZÄHLSTUDIO“
+• Der Startbildschirm bietet drei Wege: lernen, eigene Geschichten schreiben, Klassenarbeit vorbereiten.
+• Ein siebenstufiger Lernweg verknüpft den Comic, den Spannungskurvenwal, Sprachtraining,
+  Hauptteil-Werkstatt, Schreibstudio, Textlabor und die Übungsklassenarbeiten.
+• Die Lernweg-Häkchen sind freiwillige Selbsteinschätzungen, keine Prüfungsnoten.
+• Sechs abwechslungsreiche Schreibanlässe: Schuppen, Schulfest, See, Bibliothek, Wald und Musikraum.
+  Minka und Fuji begleiten die Lernenden; die Geschichten haben auch andere Hauptfiguren.
+• Interaktive Szenengrafiken und Spannungskurve; Erzählplan, Einleitung, Hauptteil, Schluss,
+  Überarbeitungs-Checkliste, Vorschau, TXT-Sicherung und Druck.
+• Acht vollständige Schreibaufträge mit Bildgeschichte oder Reizwörtern, wahlweise mit
+  Hinweisen oder als Probeklassenarbeit ohne eingeblendete Hilfen.
+• Ein transparentes Raster mit sechs Kriterien zu je 0–2 Punkten zur SELBSTeinschätzung.
+  Das Programm benotet eigene Texte nicht automatisch.
+• Interaktives Textlabor mit sechs Geschichten und Markierungen für Handlung, Gedanke,
+  Gefühl und Höhepunkt; eigene Überarbeitung und Musterlösung zum Vergleichen.
+• Bilder, Skripte und Schriften der neuen Werkstatt sind offline nutzbar. Keine Anmeldung nötig.
+• Der Lernstand der neuen Werkstatt wird auf diesem Gerät gespeichert, soweit möglich.
+• Direktlink: https://adrakir.github.io/Lernprogramme/deutsch/Deutschapp_Minka_Fuji/#studio
+
+WICHTIG: Der Startbereich ist eine Ergänzung der vorhandenen App. Keine zweite App.
+Bereiche 01–08 bleiben erhalten und über die obere Navigation erreichbar.
+
 Inhalt:
 • Aufbau von Erzählungen: Einleitung, Hauptteil, Schluss
 • Spannungskurve mit dem Spannungswal
