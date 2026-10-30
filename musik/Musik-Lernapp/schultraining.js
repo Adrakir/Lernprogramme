@@ -20,7 +20,7 @@ function saveSchool(){schoolStorage=appStorage.write(schoolKey,schoolState);}
 function openSchool(tab='plan'){stop();schoolTab=Object.hasOwn(schoolTabs,tab)?tab:'plan';setView('schultraining');}
 const schoolStations=[
  ['A','Noten- und Pausenwerte','Erkenne Zeichen, benenne sie und vergleiche ihre Dauer.',()=>openSchool('pyramide'),()=>openVisual(1)],
- ['B','Rhythmuswörter und Karten','Verbinde Brot, Käse und Schokolade mit ihren Notengruppen.',()=>openVisual(4),()=>openExercise('words')],
+ ['B','Rhythmuswörter und Karten','Verbinde Brot, Käse, Schokolade und Ananas mit ihren Notengruppen.',()=>openVisual(4),()=>openExercise('words')],
  ['C','Takte und Taktarten','Prüfe die Schlagzahl und setze Taktstriche.',()=>openVisual(6),()=>openExercise('bars')],
  ['D','Zählzeiten und Betonung','Unterscheide Tonanfänge, Halten und Stille.',()=>openVisual(3),()=>openVisual(0)],
  ['E','Fehler finden und Pausen ergänzen','Verbessere Noten und Pausen und höre den fertigen Takt.',()=>openLab('repair'),()=>openLab('dictation')],
