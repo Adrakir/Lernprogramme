@@ -54,14 +54,14 @@ async function main(){
   ws.addEventListener('message',event=>{
    const data=JSON.parse(event.data.toString());
    if(data.id){const p=pending.get(data.id);if(p){pending.delete(data.id);data.error?p.reject(Error(data.error.message)):p.resolve(data.result);}}
-   if(data.method==='Runtime.exceptionThrown')errors.push(data.params.exceptionDetails.text);
+   if(data.method==='Runtime.exceptionThrown'){const d=data.params.exceptionDetails;errors.push((d.exception?.description||d.text)+' ['+(d.url||'unknown')+':'+d.lineNumber+']');}
   });
   const cdp=(method,params={})=>new Promise((resolve,reject)=>{
    const id=++seq;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}));
   });
   const expression=async src=>{
    const r=await cdp('Runtime.evaluate',{expression:src,returnByValue:true,awaitPromise:true,userGesture:true});
-   if(r.exceptionDetails)throw Error('Browser expression: '+(r.exceptionDetails.text||JSON.stringify(r.exceptionDetails)));
+   if(r.exceptionDetails)throw Error('Browser expression: '+(r.exceptionDetails.exception?.description||r.exceptionDetails.text||JSON.stringify(r.exceptionDetails)));
    return r.result.value;
   };
   await cdp('Page.enable');await cdp('Runtime.enable');
@@ -97,23 +97,33 @@ async function main(){
    }
    await expression('setView("exerciseHub")');
    check(await expression('document.querySelectorAll("[data-guide-practice]").length')===6,'Six practice topics at '+size.name);
-   await expression('document.querySelector("[data-guide-practice=\"2\"]").click()');
+   await expression('document.querySelectorAll("[data-guide-practice]")[2].click()');
    check(await expression('Boolean(document.querySelector("#practicePanel"))'),'Chosen practice opens at '+size.name);
    await expression('setView("pruefen")');
    check(await expression('Boolean(document.querySelector("#guideCheck"))'),'Check area reachable at '+size.name);
    await expression('setView("documents")');
-   check(await expression('document.querySelectorAll("a[href$=\"pdf?v=20261027-hefte32\"]").length>=2'),'Both printable music books linked at '+size.name);
+   check(await expression('Array.from(document.querySelectorAll("a")).filter(a=>a.href.includes(".pdf?v=")).length>=2'),'Both printable music books linked at '+size.name);
    await expression('setView("home")');
 
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="teile"),1)');
    await waitFor(()=>expression('Boolean(document.querySelector("#anatomyExample"))'));
    await expression('document.querySelector(\'[data-anatomy="4"]\').click()');
    check(await expression('document.querySelector("#anatomyExample").textContent.includes("1½ Schläge")'),'Dot duration demonstration at '+size.name);
+   await expression('document.querySelector("#pathListen").click()');
+   check(await expression('Boolean(document.querySelector("#rhythmAudio")?.src?.startsWith("blob:"))'),'Selected dot produces an audio waveform at '+size.name);
+   await expression('document.querySelector("#pathStop").click()');
    await expression('document.querySelector(\'[data-anatomy="3"]\').click()');
    check(await expression('document.querySelector("#anatomyExample").textContent.includes("zwei Achtelnoten")'),'Two eighth notes shown at '+size.name);
+   check(await expression('Boolean(document.querySelector("#pathSoundControls"))'),'Audio settings are reachable from the lesson at '+size.name);
+   if(size.width<=375){
+    const labels=await expression('Array.from(document.querySelectorAll(".partsLab .partButtons button")).map(b=>({name:b.textContent.trim(),width:b.clientWidth,content:b.scrollWidth}))');
+    check(labels.every(b=>b.content<=b.width+2),'Anatomy button labels fit without wrapping at '+size.name+': '+JSON.stringify(labels));
+   }
+   if(size.width<610)check(await expression('getComputedStyle(document.querySelector(".audioDock")).display==="none"'),'Collapsed audio toggle does not cover text at '+size.name);
    check(await expression('(document.querySelector(".partBeamExample .pathScore").scrollWidth-document.querySelector(".partBeamExample .pathScore").clientWidth)<3'),'Short bar fits without scrolling at '+size.name);
    const layout=await expression('({page:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth})');
    check(layout.page<=layout.viewport+3,'No accidental full-page horizontal overflow at '+size.name+': '+JSON.stringify(layout));
+   await expression('document.querySelector("#anatomyExample")?.scrollIntoView({block:"center",behavior:"instant"})');
    const screenshot=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false,fromSurface:true});
    fs.writeFileSync(path.join(artifacts,size.name+'-balken.png'),Buffer.from(screenshot.data,'base64'));
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="abschluss"),1)');
@@ -127,12 +137,18 @@ async function main(){
    }
    check(await expression('document.querySelectorAll("nav.mainNav button").length')===5,'Five main navigation choices at '+size.name);
   }
-  console.log('PASS: '+checks.length+' real Chromium checks ('+checks.join(', ')+')');
   check(errors.length===0,'No uncaught JavaScript exceptions: '+errors.slice(0,8).join('; '));
+  console.log('PASS: '+checks.length+' real Chromium checks ('+checks.join(', ')+')');
  }finally{
   try{ws?.close()}catch{}
-  chrome.kill('SIGTERM');server.close();
-  fs.rmSync(profile,{recursive:true,force:true});
+  server.close();
+  if(chrome.exitCode===null){
+   const exited=new Promise(resolve=>chrome.once('exit',resolve));
+   chrome.kill('SIGTERM');
+   await Promise.race([exited,delay(2200)]);
+  }
+  try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:3,retryDelay:200});}
+  catch(error){console.warn('Chromium temporary profile cleanup skipped: '+error.code);}
  }
 }
 main().catch(e=>{console.error('FAIL: '+e.stack);process.exitCode=1;server.close();});
