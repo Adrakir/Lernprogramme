@@ -14702,17 +14702,34 @@ function rank(q){
  return value;
 }
 function trainingPool(id,level){
- const all=Q.filter(q=>q.topic===id&&Array.isArray(q.opts)&&q.opts.length>=2&&Number.isInteger(q.answer)&&q.answer>=0&&q.answer<q.opts.length);
- const sorted=all.slice().sort((a,b)=>rank(a)-rank(b)||String(a.id).localeCompare(String(b.id)));
- if(!sorted.length)return [];
- const begin=Math.floor((level-1)*sorted.length/3),end=Math.floor(level*sorted.length/3);
- let selected=sorted.slice(begin,end);
- const center=(begin+end-1)/2;
- if(selected.length<6){
-  const others=sorted.filter(q=>!selected.includes(q)).sort((a,b)=>Math.abs(sorted.indexOf(a)-center)-Math.abs(sorted.indexOf(b)-center));
-  selected=selected.concat(others.slice(0,Math.max(0,6-selected.length)));
+ const base=Q.filter(q=>q.topic===id&&Array.isArray(q.opts)&&q.opts.length>=2&&Number.isInteger(q.answer)&&q.answer>=0&&q.answer<q.opts.length)
+   .slice().sort((a,b)=>rank(a)-rank(b)||String(a.id).localeCompare(String(b.id)));
+ if(!base.length)return [];
+ if(level===1)return base;
+ // Niveau 2 verbindet zwei getrennte Teilaufgaben. Niveau 3 prüft zwei Behauptungen.
+ // Die richtige Kombination wird aus den fachlich geprüften Ausgangslösungen abgeleitet.
+ const tasks=[],n=Math.min(10,Math.max(6,base.length*2));
+ for(let i=0;i<n;i++){
+  const first=base[i%base.length],second=base[(i+1+Math.floor(i/base.length))%base.length];
+  const fWrong=(first.answer+1+i)%first.opts.length,sWrong=(second.answer+1+i)%second.opts.length;
+  const fGood=first.opts[first.answer],sGood=second.opts[second.answer];
+  const hints=[first.hints?.[0]||'Löse zuerst Teil A.',second.hints?.[0]||'Untersuche jetzt Teil B.','Vergleiche beide Teilantworten mit den Regeln und entscheide erst dann.'];
+  if(level===2){
+   const label=(a,b)=>'A: '+a+' | B: '+b;
+   const options=[label(fGood,sGood),label(first.opts[fWrong],sGood),label(fGood,second.opts[sWrong]),label(first.opts[fWrong],second.opts[sWrong])];
+   const correct=i%4;[options[0],options[correct]]=[options[correct],options[0]];
+   tasks.push({id:'tt-apply-'+id+'-'+i,topic:id,text:'Zwei Schritte gehören zusammen. A) '+first.text+' B) '+second.text+' Welche Antwortkombination stimmt vollständig?',opts:options,answer:correct,
+    explain:'Teil A: '+first.explain+' Teil B: '+second.explain+' Nur wenn beide Teilantworten stimmen, ist die Kombination richtig.',hints});
+  }else{
+   const firstRight=i%4===0||i%4===1,secondRight=i%4===0||i%4===2;
+   const f=firstRight?fGood:first.opts[fWrong],g=secondRight?sGood:second.opts[sWrong];
+   const answer=firstRight?(secondRight?0:1):(secondRight?2:3);
+   tasks.push({id:'tt-check-'+id+'-'+i,topic:id,text:'Ein Kind überprüft zwei Antworten. Aussage A: Zur Frage „'+first.text+'“ sagt es „'+f+'“. Aussage B: Zur Frage „'+second.text+'“ sagt es „'+g+'“. Welche Einschätzung ist richtig?',
+    opts:['A und B sind richtig.','Nur A ist richtig.','Nur B ist richtig.','A und B sind falsch.'],answer,
+    explain:'A ist '+(firstRight?'richtig':'falsch')+': '+first.explain+' B ist '+(secondRight?'richtig':'falsch')+': '+second.explain+' So erkennst du den Denkfehler.',hints});
+  }
  }
- return selected;
+ return tasks;
 }
 function choose(id,level){
  const pool=trainingPool(id,level),key='training-'+id+'-'+level+'-'+Date.now();
@@ -14757,7 +14774,17 @@ function submit(){
  if(!session||session.submitted)return;
  session.submitted=true;
  const s=session,correct=s.items.filter((q,i)=>s.answers[i]===q.answer).length;
- s.items.forEach((q,i)=>grade(q,s.answers[i]===q.answer));
+ s.items.forEach((q,i)=>{
+  const ok=s.answers[i]===q.answer;
+  if(!q.id.startsWith('tt-')){grade(q,ok);return}
+  // Eigenständige Transferfragen zählen zum Lernstand, aber nicht als ungeprüfte
+  // IDs in der alten Fragenliste für die allgemeine Fehlerwiederholung.
+  progress.attempts++;
+  if(ok){progress.correct++;progress.stars+=3}
+  const m=progress.mastery[q.topic]||{c:0,a:0};
+  m.a++;if(ok)m.c++;progress.mastery[q.topic]=m;
+ });
+ save();
  completed[s.id]={level:s.level,correct,total:s.items.length,date:new Date().toISOString().slice(0,10)};
  try{localStorage.setItem(KEY,JSON.stringify(completed))}catch(e){}
  draw();
