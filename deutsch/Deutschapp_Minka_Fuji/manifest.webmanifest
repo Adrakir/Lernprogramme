@@ -1,0 +1,19 @@
+{
+  "name": "Minka & Fuji – Deutsch-Erzählwerkstatt",
+  "short_name": "Erzählwerkstatt",
+  "description": "Erzählungen für Klasse 5: Lernpfad, Schreibcoach, Klassenarbeit, Textreparatur",
+  "start_url": "./index.html#studio",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1424",
+  "theme_color": "#17273c",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
