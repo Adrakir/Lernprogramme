@@ -1,0 +1,34 @@
+name: Deutsch-App prüfen
+
+on:
+  push:
+    paths:
+      - "deutsch/Deutschapp_Minka_Fuji/**"
+      - ".github/workflows/deutsch-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Repository abrufen
+        uses: actions/checkout@v4
+      - name: Node.js bereitstellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: deutsch/Deutschapp_Minka_Fuji/package-lock.json
+      - name: Testabhängigkeiten installieren
+        run: npm ci
+        working-directory: deutsch/Deutschapp_Minka_Fuji
+      - name: Chromium für Browsertests installieren
+        run: npx playwright install --with-deps chromium
+        working-directory: deutsch/Deutschapp_Minka_Fuji
+      - name: Alle Deutsch-Browsertests ausführen
+        run: npm test
+        working-directory: deutsch/Deutschapp_Minka_Fuji
