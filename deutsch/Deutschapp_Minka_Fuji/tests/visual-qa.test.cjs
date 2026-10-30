@@ -39,6 +39,10 @@ test('Deutschapp: echte Browser- und Bildkontrolle auf Safari/WebKit und Chromiu
       if(width===1366)await page.route('**/*.webp',route=>route.abort());
       await page.goto(URL,{waitUntil:'load'});
       assert.equal(await page.locator('nav.navigation [data-page]').count(),9,'Neun integrierte Deutsch-Bereiche');
+      if(width===1366){
+       const labels=await page.locator('nav.navigation button').evaluateAll(nodes=>nodes.map(n=>({title:n.textContent.trim(),visible:n.clientWidth,content:n.scrollWidth})));
+       assert.ok(labels.every(n=>n.content<=n.visible+2),'iMac-Menütexte laufen über: '+JSON.stringify(labels));
+      }else assert.equal(await page.locator('.navigation-hint').isVisible(),true,'Hinweis zum seitlichen Wischen ist auf Handys sichtbar');
       await page.locator('[data-page="studio"]').click();
       await artwork(page.locator('#studio .studio-app-top img'),'Studio-Titelbild '+engine+' '+width);
       assert.equal(await page.locator('#studio .studio-choice').count(),3,'Drei Einstiege');
