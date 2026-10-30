@@ -117,7 +117,7 @@ function guideDecorate(){
  if(typeof enhanceMobile==='function')enhanceMobile();
 }
 function guideSync(){
- const [,locationGroup]=guideLocation(),group=['documents'].includes(locationGroup)?'documents':view==='home'||view==='lehrkraft'?'home':'themen';$$('nav.mainNav button').forEach(b=>{const active=b.dataset.view===group;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');if(b.dataset.view==='home')b.textContent=guideRole==='teacher'?'Unterricht':'Start';});
+ const [,locationGroup]=guideLocation(),group=locationGroup==='documents'?'documents':view==='home'||view==='lehrkraft'?'home':locationGroup==='exerciseHub'?'exerciseHub':locationGroup==='pruefen'?'pruefen':'themen';$$('nav.mainNav button').forEach(b=>{const active=b.dataset.view===group;b.classList.toggle('selected',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');if(b.dataset.view==='home')b.textContent=guideRole==='teacher'?'Unterricht':'Start';if(b.dataset.view==='themen')b.textContent='Lernen';});
  const role=$('#guideTeacherOpen');if(role){role.textContent=guideRole==='teacher'?'Lehrkraft · Wechseln':guideRole==='student'?'Schüler/in · Wechseln':'Einstieg wechseln';role.removeAttribute('aria-pressed');}
  const url=new URL(location.href);if(view==='learn')url.searchParams.set('schritt',MUSIC_PATH[pathState.index].key);else url.searchParams.delete('schritt');if(url.href!==location.href)history.replaceState({musicView:view},'',url.href);
 }
