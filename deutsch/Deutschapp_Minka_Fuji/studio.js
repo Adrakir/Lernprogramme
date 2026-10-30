@@ -11,7 +11,7 @@
   try{
     const p=JSON.parse(localStorage.getItem(STORE)||'null');
     if(p&&typeof p==='object'){
-      state.view=['path','writer','exam','lab'].includes(p.view)?p.view:'path';
+      state.view=['path','writer','exam','lab','coach','repair','teacher'].includes(p.view)?p.view:'path';
       state.pathDone=p.pathDone&&typeof p.pathDone==='object'?p.pathDone:{};
       state.storyId=data.stories.some(s=>s.id===p.storyId)?p.storyId:data.stories[0].id;
       state.stories=p.stories&&typeof p.stories==='object'?p.stories:{};
@@ -190,14 +190,15 @@
       '<div class="studio-actions"><button type="button" class="secondary" data-studio-view="writer">Eigene Erzählung schreiben</button>'+link('Gefühle und Gedanken üben','hauptteil')+'</div></section>';
   }
   function render(){
-    const titles={path:'Dein Lernweg',writer:'Schreiben',exam:'Klassenarbeiten',lab:'Textlabor'};
+    const titles={path:'Dein Lernweg',writer:'Schreiben',exam:'Klassenarbeiten',lab:'Textlabor',coach:'Schreibcoach',repair:'Reparaturwerkstatt',teacher:'Lehrkräfte'};
     root.innerHTML='<div class="studio-app-top"><div><p class="eyebrow">Minka &amp; Fuji · Erzählstudio</p><h1>Deine Erzählwerkstatt</h1><p>Erklärt, geübt und selbst geschrieben – mit verschiedenen Geschichten und Figuren.</p></div><img src="assets/guides.webp" alt="Minka und Fuji begleiten dich als Lernhelfer" width="150" height="150"></div>'+
-      '<nav class="studio-tabs" aria-label="Bereiche im Erzählstudio">'+tab('path','Start & Lernweg','🧭')+tab('writer','Schreiben','✏️')+tab('exam','Klassenarbeit','🎓')+tab('lab','Textlabor','🖍️')+'</nav>'+
-      '<div id="studio-workspace" aria-label="'+titles[state.view]+'">'+({path:renderPath,writer:renderWriter,exam:renderExam,lab:renderLab}[state.view])()+'</div>'+
+      '<nav class="studio-tabs" aria-label="Bereiche im Erzählstudio">'+tab('path','Start & Lernweg','🧭')+tab('writer','Schreiben','✏️')+tab('exam','Klassenarbeit','🎓')+tab('lab','Textlabor','🖍️')+tab('coach','Lerncoach','🧭')+tab('repair','Texte reparieren','🛠️')+tab('teacher','Lehrkräfte','📋')+'</nav>'+
+      '<div id="studio-workspace" aria-label="'+titles[state.view]+'">'+(['path','writer','exam','lab'].includes(state.view)?{path:renderPath,writer:renderWriter,exam:renderExam,lab:renderLab}[state.view]():window.MF_ACADEMY?.render(state.view)||'<p>Dieser Lernbereich ist nicht verfügbar.</p>')+'</div>'+
       '<p class="studio-storage" id="studio-store" role="status"></p>';
     save();
+    window.MF_ACADEMY?.afterRender(root,state.view);
   }
-  function setView(view){if(!['path','writer','exam','lab'].includes(view))return;state.view=view;state.scene=0;render();root.querySelector('#studio-workspace')?.scrollIntoView({block:'start',behavior:'instant'});}
+  function setView(view){if(!['path','writer','exam','lab','coach','repair','teacher'].includes(view))return;state.view=view;state.scene=0;render();root.querySelector('#studio-workspace')?.scrollIntoView({block:'start',behavior:'instant'});}
   function safeFile(kind){
     if(kind==='writer'){const s=story(),d=draft();return {name:'Meine_Erzaehlung_Minka_Fuji.txt',text:s.name+'\n\n'+fullDraft(d)+'\n\nMEIN ERZÄHLPLAN\n'+planFields.map(([k,l])=>l+'\n'+(d.plan?.[k]||'')).join('\n\n')+'\n\nEigener Entwurf, keine automatische Benotung.'};}
     const s=exam(),d=examDraft();return {name:'Meine_Deutsch_Uebungsklassenarbeit.txt',text:s.kind+': '+s.title+'\n'+(s.words.length?'Reizwörter: '+s.words.join(', '):s.panels.map((x,i)=>(i+1)+'. '+x[1]+': '+x[2]).join('\n'))+'\n'+s.task+'\n\n'+(d.title||'Meine Geschichte')+'\n\n'+(d.text||'')+'\n\nSELBSTKONTROLLE\n'+data.rubric.map((r,i)=>r.name+': '+(Number.isInteger(d.ratings?.[i])?d.ratings[i]+'/2':'nicht geprüft')).join('\n')+'\n\nKeine automatische Bewertung.'};
