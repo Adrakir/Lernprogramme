@@ -56,7 +56,10 @@ test('Schreibakademie: Lerncoach, Reparatur, Textlupe, Lehrerbereich und mobile 
     assert.match(await page.locator('#ac-repair-text').inputValue(),/Atem stockte/);
   });
   await t.test('Eigene Erzählung: zwei Fassungen und sechs manuelle Textfarben',async()=>{
-    await tab('writer');await page.selectOption('#studio-picker','bibliothek');
+    await tab('writer');
+    const toolState=await page.evaluate(()=>({tool:!!window.MF_ACADEMY_TOOLS,block:!!document.querySelector('.studio-story-writing'),lens:!!document.querySelector('.ac-textlens')}));
+    assert.equal(toolState.lens,true,'Textlupe nicht geladen: '+JSON.stringify(toolState));
+    await page.selectOption('#studio-picker','bibliothek');
     await page.fill('[data-studio-part="intro"]','Emma blätterte im Buch. Ihr Herz klopfte schnell.');
     await page.fill('[data-studio-part="body"]','Was bedeutete der Zettel? Sie ging zur Theke.');
     await page.click('[data-ac-save-writer]');
@@ -94,7 +97,8 @@ test('Schreibakademie: Lerncoach, Reparatur, Textlupe, Lehrerbereich und mobile 
       for(const view of ['coach','repair','teacher']){
         await tab(view);
         const size=await page.evaluate(()=>({w:document.documentElement.scrollWidth,inner:innerWidth}));
-        assert.ok(size.w<=width+1,view+' bei '+width+': '+size.w);
+        const blockers=await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(el=>{const b=el.getBoundingClientRect();return b.right>innerWidth+1&&b.width>0}).slice(0,10).map(el=>[el.tagName,el.id,String(el.className).slice(0,45),Math.round(el.getBoundingClientRect().right)]));
+        assert.ok(size.w<=width+1,view+' bei '+width+': '+size.w+' Verursacher '+JSON.stringify(blockers));
       }
     }
   });
