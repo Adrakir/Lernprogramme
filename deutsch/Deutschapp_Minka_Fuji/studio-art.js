@@ -4,12 +4,12 @@
 window.MF_STUDIO_ART=(()=>{
   const palettes={
     garden:['#d6effa','#b2dfaa','#5a947a'],school:['#f5e4c4','#d2b8a6','#a78571'],lake:['#deefff','#abd6f2','#588cbb'],
-    library:['#fff0d1','#d6ba93','#89684f'],forest:['#e2f5dc','#a4d3aa','#477a5f'],music:['#e9e8fc','#b0b6e5','#686ca3'],
+    library:['#fff0d1','#d6ba93','#89684f'],forest:['#e2f5dc','#a4d3aa','#477a5f'],shelter:['#eaf6f1','#bddacf','#6e9b91'],museum:['#f4e9dc','#dcc5ad','#907a68'],planetarium:['#192940','#30466a','#94baff'],kite:['#e6f5ff','#b8e7bb','#629b89'],music:['#e9e8fc','#b0b6e5','#686ca3'],
     park:['#dcf5fa','#bde8c1','#629e83'],bike:['#d9eafa','#a9c4df','#6a8daa'],concert:['#f4e5f4','#ddbadb','#7c5b85']
   };
   const theme={
     schuppen:'garden',pokal:'school',steg:'lake',bibliothek:'library',wald:'forest',musik:'music',
-    'bild-kiste':'park','bild-fahrrad':'bike','bild-konzerthaus':'concert','bild-bibliothek':'library'
+    'bild-kiste':'park','bild-fahrrad':'bike','bild-konzerthaus':'concert','bild-bibliothek':'library','bild-drachen':'kite','bild-konzert':'music','bild-tierheim':'shelter','bild-theater':'concert','bild-planetarium':'planetarium','bild-museum':'museum'
   };
   const circle=(x,y,r,fill)=>'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+fill+'"/>';
   const rect=(x,y,w,h,fill,rx=0)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+rx+'" fill="'+fill+'"/>';
@@ -54,6 +54,28 @@ window.MF_STUDIO_ART=(()=>{
           '<path d="M175 0 Q192 30 210 0 Q226 28 240 0 L240 105 L175 105Z" fill="#a24c76"/>'+
           rect(70,100,105,7,'#c18a72',2)+Array.from({length:5},(_,i)=>circle(88+i*16,17,3,'#f8e6a8')).join('')+
           (index===2?rect(65,0,111,101,'#293047',2):'');
+      case 'shelter':
+        return rect(0,12,240,92,'#dfede6',4)+rect(30,38,160,66,'#d0d7ce',3)+
+          Array.from({length:8},(_,i)=>line(39+i*19,42,39+i*19,101,'#80908b',2)).join('')+
+          rect(40,39,139,5,'#9fbaa9',1)+rect(36,98,147,7,'#628a78')+
+          (index===1?'<path d="M184 44 L199 58 L184 74" stroke="#9a8068" stroke-width="4" fill="none"/>':'')+
+          (index===2?'<path d="M70 97L90 87L100 97" fill="#b9895e"/>':'')+floor;
+      case 'museum':
+        return rect(0,0,240,101,'#eadfce')+Array.from({length:3},(_,i)=>rect(15+i*85,22,53,60,'#af9680',2)).join('')+
+          Array.from({length:3},(_,i)=>rect(19+i*85,27,45,50,'#f4eadd',2)).join('')+
+          (index===1?'<path d="M103 39 L143 44 L136 65 L112 64Z" fill="#c2a46c" stroke="#806843" stroke-width="2"/>':'')+
+          (index===3?rect(186,45,25,58,'#796c67',2):'')+floor;
+      case 'planetarium':
+        return rect(0,0,240,135,'#15223b',8)+
+          circle(172,28,24,'#354e8c')+circle(180,23,8,'#6476b7')+
+          Array.from({length:21},(_,i)=>circle((i*49+33)%235,(i*23+17)%92,1.8,i%3?'#dce9ff':'#f4d88b')).join('')+
+          '<path d="M0 120Q120 50 240 120V135H0Z" fill="#283656"/>'+
+          (index===1?circle(62,59,8,'#e85e70'):index===3?rect(66,94,106,18,'#697e9b',4):'');
+      case 'kite':
+        return tree(209,49,.6)+'<path d="M0 105Q90 93 240 105V135H0Z" fill="#8fc5a2"/>'+
+          '<path d="M76 47L97 18L118 47L98 78Z" fill="#efba73" stroke="#b87068" stroke-width="3"/>'+
+          '<path d="M97 78Q128 90 110 101" fill="none" stroke="#e4e4e9" stroke-width="2" stroke-dasharray="4 3"/>'+
+          (index===2?rect(163,48,52,49,'#d4b18b',2)+'<path d="M157 48L187 22L220 48Z" fill="#ad7565"/>':'')+floor;
       default:return floor;
     }
   }
