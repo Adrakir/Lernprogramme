@@ -128,3 +128,6 @@
 #studio .ac-mark-sinn{background:#c9b6ff;color:#2b164b}
 #studio .ac-mark-btn.ac-mark-gedanke,#studio .ac-mark-btn.ac-mark-gefuehl,#studio .ac-mark-btn.ac-mark-handlung,#studio .ac-mark-btn.ac-mark-hoehepunkt,#studio .ac-mark-btn.ac-mark-rede,#studio .ac-mark-btn.ac-mark-sinn{color:#102030}
 @media(max-width:600px){#studio .ac-markbar{grid-template-columns:repeat(2,minmax(0,1fr))}#ac-art-zoom{padding:12px}}
+
+#studio .ac-teacher-form,#studio .ac-teacher-form select,#studio .ac-teacher-buttons,#studio .ac-teacher-buttons button,#studio .ac-readbar{min-width:0;max-width:100%;overflow-wrap:anywhere}
+@media(max-width:380px){#studio .ac-teacher-buttons{grid-template-columns:minmax(0,1fr)}#studio .ac-teacher-buttons button{padding:11px 7px;font-size:.88rem}#studio .ac-read-controls{min-width:0}}
