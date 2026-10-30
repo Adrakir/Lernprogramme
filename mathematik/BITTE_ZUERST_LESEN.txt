@@ -16,11 +16,15 @@ Inhalte
 -------
 - Lernreise mit Themen wie Daten, große Zahlen, Runden, Zahlenstrahl,
   schriftliches Rechnen und Geometrie
+- Neu für Klasse 5 (Kerncurriculum Niedersachsen): Winkel (messen, Neben-,
+  Scheitel-, Stufen- und Wechselwinkel, Winkelsummen), Symmetrie & Vierecke
+  (Achsen-, Punkt- und Drehsymmetrie, Haus der Vierecke) und Körper & Netze
+  (Körperarten, Würfelnetze, Schrägbilder, Kantenmodelle, Würfelgebäude)
 - Lernstand und Tagestraining, Thementests, Klassenarbeiten, Wissenskarten
 
 Lernmodule
 ----------
-Jedes der zwölf Lernmodule hat fünf Reiter:
+Jedes der 15 Lernmodule hat fünf Reiter:
 1. Verstehen: geführter Lernweg (Entdecken, Verstehen, Gemeinsam lösen,
    Selbst versuchen, Begründen).
 2. Üben: zehn Aufgaben in drei Schwierigkeitsstufen mit gestuften Tipps.

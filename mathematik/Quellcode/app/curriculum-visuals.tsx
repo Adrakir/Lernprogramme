@@ -2,7 +2,9 @@
 import {useState} from 'react';
 import type {ShapeSpec} from '@/lib/curriculum';
 import type {Problem} from '@/lib/math';
+import {GeoShape} from './geo5-shapes';
 export function Shape({shape:s}:{shape:ShapeSpec}){
+ if(s.kind.startsWith('g-'))return <GeoShape s={s}/>;
  const angle=s.a*Math.PI/180,b=s.b??1,c=s.c??1;
  return <figure className="math-shape"><svg viewBox="0 0 420 320" role="img" aria-label={s.kind==='rectangle'?`Rechteck mit Seiten ${s.a} und ${b}; jedes Kästchen steht für einen Quadratzentimeter`:s.kind==='grid'||s.kind==='symmetry'?'Koordinatensystem mit Punkt P; zuerst die waagerechte x-Koordinate, dann die senkrechte y-Koordinate':s.kind==='fraction'?'Ein Ganzes in gleich große Teile zerlegt; blaue Teile sind eingefärbt':s.kind==='angle'?`Winkel von ${s.a} Grad`:s.kind==='cuboid'?`Quader mit Kantenlängen ${s.a}, ${b} und ${c}`:'Würfelnetz mit sechs gleich großen Quadraten'}>
  {s.kind==='rectangle'&&(()=>{const scale=Math.min(300/s.a,220/b),w=s.a*scale,h=b*scale,x=(420-w)/2,y=(320-h)/2;return <><rect x={x} y={y} width={w} height={h} fill={s.fillColor??'#dfe9ff'} stroke="#355fe4" strokeWidth="3"/>{Array.from({length:s.a-1},(_,i)=><line key={`v${i}`} x1={x+(i+1)*w/s.a} y1={y} x2={x+(i+1)*w/s.a} y2={y+h} stroke="#ffffff" strokeWidth="1.5"/>)}{Array.from({length:b-1},(_,i)=><line key={`h${i}`} x1={x} y1={y+(i+1)*h/b} x2={x+w} y2={y+(i+1)*h/b} stroke="#ffffff" strokeWidth="1.5"/>)}<text x="210" y={y+h+28} textAnchor="middle">{s.a} cm</text><text x={x-10} y="160" textAnchor="end">{b} cm</text><path d={`M ${x+16} ${y} v 16 h -16`} fill="none" stroke="#355fe4"/></>})()}

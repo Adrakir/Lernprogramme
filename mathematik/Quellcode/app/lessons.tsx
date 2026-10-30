@@ -7,8 +7,9 @@ import { Speak, Tally, Chart, PlaceTable, DataLab, ChartLab, BundleLab, NumberPu
 import {MarthaGuide} from './curriculum-visuals';
 import {GuidedLesson,TeachingTools} from './guided-learning';
 import {learningGoals} from '@/lib/guidance';
+import {geoLessons} from './geo5-lessons';
 import {additionalLessons,dataAdditions,numberAddition,roundingAddition,type Lesson} from './extra-lessons';
-const lessons:Record<Topic,Lesson[]>={...additionalLessons,...curriculumLessons,
+const lessons:Record<Topic,Lesson[]>={...additionalLessons,...curriculumLessons,...geoLessons,
  data:[
  {title:'Aus Antworten werden Daten',text:'Wie kommen die Kinder zur Schule? Jede Antwort ist ein Datenwert. Die unsortierte Sammlung heißt Urliste. Wir ordnen die Antworten in Kategorien: Rad, Bus und zu Fuß. Jede Antwort darf genau einmal gezählt werden.',rule:'Urliste → Strichliste → Häufigkeit. Die Häufigkeit sagt dir, wie oft eine Antwort vorkommt.',visual:<DataLab/>},
  {title:'Der fünfte Strich macht das Bündel',text:'Für jede Antwort zeichnest du einen Strich. Den fünften Strich legst du schräg durch die ersten vier. So erkennst du Mengen schnell, ohne jeden Strich einzeln zu zählen.',rule:'Ein vollständiges Fünferbündel steht für 5. Drei Bündel und zwei Striche sind 3 · 5 + 2 = 17.',visual:<div className="tally-demo"><Tally n={17}/><span>= 5 + 5 + 5 + 2 = <strong>17</strong></span></div>},

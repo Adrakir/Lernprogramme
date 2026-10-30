@@ -46,8 +46,8 @@ export function TeachingTools({topic,step}:{topic:Topic;step:number}){
  {solutions&&<section className="worksheet-solutions"><h2>Lösungen · separat aufbewahren</h2>{Array.from({length:4},(_,i)=>{const p=guidedProblem(topic,step,i+2);return <div key={p.id}><h3>{i+1}. {p.title}</h3><ol>{p.solution.map((s,j)=><li key={j}>{s}</li>)}</ol></div>;})}<h3>5. Musterbegründung</h3><p>{lessonInquiry(topic,step).explanation}</p></section>}</section>}</div>;
 }
 
-const ORDER:Topic[]=['data','numbers','round','line','units','stats','arithmetic','divisibility','geometry','measure','fractions','decimals'];
-const TITLES:Partial<Record<Topic,string>>={data:'Daten & Diagramme',numbers:'Große Zahlen',round:'Runden & Schätzen',line:'Zahlenstrahl',units:'Größen & Einheiten',stats:'Daten auswerten',arithmetic:'Schriftlich rechnen',divisibility:'Teilbarkeit',geometry:'Geometrie',measure:'Flächen & Körper',fractions:'Brüche',decimals:'Dezimalzahlen'};
+const ORDER:Topic[]=['data','numbers','round','line','units','stats','arithmetic','divisibility','geometry','angles','symmetry','measure','solids','fractions','decimals'];
+const TITLES:Partial<Record<Topic,string>>={data:'Daten & Diagramme',numbers:'Große Zahlen',round:'Runden & Schätzen',line:'Zahlenstrahl',units:'Größen & Einheiten',stats:'Daten auswerten',arithmetic:'Schriftlich rechnen',divisibility:'Teilbarkeit',geometry:'Geometrie',angles:'Winkel',symmetry:'Symmetrie & Vierecke',measure:'Flächen & Körper',solids:'Körper & Netze',fractions:'Brüche',decimals:'Dezimalzahlen'};
 type Vorschlag={kind:'start'|'repeat'|'next'|'done';topic:Topic};
 export function TodayGuide(){
  const [v,setV]=useState<Vorschlag>({kind:'start',topic:'data'});

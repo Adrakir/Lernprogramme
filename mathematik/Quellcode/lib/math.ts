@@ -1,6 +1,6 @@
 import {curriculumProblem,type ShapeSpec} from './curriculum.ts';
 import { expandedProblem,shuffled } from './tasks.ts';
-export type Topic = 'data'|'numbers'|'round'|'mental'|'line'|'units'|'stats'|'arithmetic'|'divisibility'|'geometry'|'measure'|'fractions'|'decimals';
+export type Topic = 'data'|'numbers'|'round'|'mental'|'line'|'units'|'stats'|'arithmetic'|'divisibility'|'geometry'|'measure'|'fractions'|'decimals'|'angles'|'symmetry'|'solids';
 export type Plot = {values:number[];labels:string[];scale:number;unit:string;horizontal?:boolean;title?:string;maxValue?:number};
 export type LineSpec = {start:number;step:number;steps:number;point?:number;hidden?:number[]};
 export type Problem = {id:string; topic:Topic; title:string; prompt:string; expression?:string; answer:number|string; hints:string[]; solution:string[]; type?:'choice'|'chart'|'tally'|'place'|'multi'|'build-chart'|'tally-build'|'line-place'; options?:string[]; values?:number[]; labels?:string[]; scale?:number; unit?:string; n?:number; place?:number; error?:string; horizontal?:boolean; chartTitle?:string; charts?:Plot[]; line?:LineSpec; fields?:string[]; raw?:string[]; table?:{headers:string[];rows:(string|number)[][]}; decimal?:boolean; pie?:{labels:string[];values:number[]}; skill?:string;shape?:ShapeSpec;work?:{a:number;b:number;op:string}};

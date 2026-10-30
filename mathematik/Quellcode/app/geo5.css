@@ -1,0 +1,15 @@
+.geo5-shape svg{max-height:340px}
+.geo5-grid{display:grid;gap:0;max-width:360px;margin:16px auto;border:2px solid #526382;background:#fff}
+.geo5-grid>.cell,.geo5-grid>button{display:block;width:100%;box-sizing:border-box;aspect-ratio:1;min-width:0;min-height:40px;border:1px solid #c3cee3;background:#fff;padding:0;border-radius:0}
+.geo5-grid>.on{background:#9fb7f4}
+.geo5-grid>.on.given{background:#5d82ea}
+.geo5-grid>.axis{border-left:4px solid #c4314b}
+.geo5-grid>button:hover{background:#e6edff}
+.geo5-grid>button.on:hover{background:#86a3ee}
+.geo5-grid.net{max-width:380px}
+.geo5-grid.net>.on{background:#9fb7f4;border-color:#355fe4}
+.geo5-grid.plan{max-width:220px}
+.geo5-grid.plan>button{font-size:1.4rem;font-weight:700;color:#24324d}
+.geo5-grid.plan>.on{background:#f4d67d}
+html[data-contrast=strong] .geo5-grid>.cell,html[data-contrast=strong] .geo5-grid>button{border-color:#333}
+.lesson-phases .btn.ghost[aria-current=step],.lesson-phases .btn.ghost[aria-current=step]:hover{background:#234cc9;color:#fff;border-color:#234cc9}

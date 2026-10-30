@@ -6,7 +6,7 @@ wichtigsten Mängel behoben.
 ## Sicht der Lehrkraft
 
 Stärken
-- Breite Abdeckung für Klasse 5: 12 Lernmodule, Kopftraining, Größen-Werkstatt,
+- Breite Abdeckung für Klasse 5: 15 Lernmodule, Kopftraining, Größen-Werkstatt,
   Diagnose, Thementests, Klassenarbeiten.
 - Geführte Lernwege mit den Phasen Entdecken, Verstehen, Gemeinsam lösen,
   Selbst versuchen, Begründen.
@@ -63,3 +63,13 @@ Offen
 - Ein Teil des Quellcodes besteht aus sehr langen Zeilen und ist schwer zu warten.
 - Das Bundle ist rund 1,2 MB groß. Es ist eine einzelne Offline-Datei; das ist
   so gewollt.
+
+## Ergänzung Klasse 5 (Kerncurriculum Niedersachsen)
+
+Abgleich mit dem KC 5/6: Es fehlten Winkel an Geradenkreuzungen und Parallelen,
+Winkelsummen, Punkt- und Drehsymmetrie, das Haus der Vierecke, Würfelnetze,
+Schrägbilder, Kantenmodelle und Würfelgebäude. Neu sind die Module 13 Winkel,
+14 Symmetrie & Vierecke und 15 Körper & Netze mit je vier Lernschritten,
+interaktiven Laboren, zehn Aufgabentypen auf drei Stufen, Vertiefung, Modultest,
+Hilfen, Thementest und Wissenskarten. `lib/geo5.test.ts` prüft unter anderem,
+dass der Faltalgorithmus genau die 11 Würfelnetze erkennt.
