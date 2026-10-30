@@ -15,6 +15,24 @@ async function run(browser,label,viewport,isMobile){
  assert.ok(await page.locator('#main h1').count(),label+': Einstieg sichtbar');
  assert.equal(await page.locator('#tabs [data-tab="atlaswerkstatt"]').count(),1,label+': vorhandene Atlaswerkstatt');
  assert.equal(await page.locator('#awMoreMain summary').count(),1,label+': zusätzliche Bereiche in einem Menü');
+ assert.equal(await page.locator('#tabs [data-tab="train"]').count(),1,label+': Themenübungen sind erreichbar');
+ await page.locator('#tabs [data-tab="train"]').click();
+ await page.locator('#tt-root').waitFor();
+ assert.equal(await page.locator('#tt-root .tt-topic').count(),16,label+': Übungsbereich für alle 16 Themen');
+ await page.locator('#tt-root [data-train="start:gradnetz:3"]').click();
+ assert.ok((await page.locator('#tt-root').innerText()).includes('Stufe 3'),label+': schwierigste Stufe startet');
+ await page.locator('#tt-root [data-train="hint"]').click();
+ assert.ok((await page.locator('#tt-root').innerText()).includes('Hinweis 1'),label+': freiwillige Hilfe sichtbar');
+ for(let n=0;n<6;n++){
+  await page.locator('#tt-root input[name="tt-answer"][value="0"]').check();
+  await page.locator('#tt-root [data-train="'+(n<5?'next':'submit')+'"]').click();
+ }
+ assert.equal(await page.locator('#tt-root .tt-result').count(),6,label+': Auswertung aller Aufgaben');
+ assert.equal(await page.locator('#tt-root .tt-steps[open]').count(),0,label+': ausführliche Lösungen zunächst geschlossen');
+ assert.ok((await page.locator('#tt-root .tt-result').first().innerText()).includes('Kurzlösung'),label+': normale Auswertung zeigt Kurzlösung');
+ await page.locator('#tt-root .tt-steps summary').first().click();
+ assert.equal(await page.locator('#tt-root .tt-steps[open]').count(),1,label+': individuelle Musterlösung aufklappbar');
+ assert.ok((await page.locator('#tt-root .tt-steps').first().innerText()).includes('Aufgabe verstehen'),label+': geführte Schritte vorhanden');
  await page.locator('#awMoreMain summary').click();
  await page.locator('#awMoreMain [data-tab="pruefung"]').click();
  await page.locator('#pf-root').waitFor();
