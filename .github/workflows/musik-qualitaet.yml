@@ -33,3 +33,12 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Vollständige Regressionstests
         run: npm test
+      - name: Echter Browsertest mit Chromium (390px, 320px, Desktop)
+        run: node tests/browser-check.cjs
+      - name: Browserbilder für die Sichtprüfung bereitstellen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: musik-browser-screenshots
+          path: musik/Musik-Lernapp/tests/artifacts/
+          if-no-files-found: ignore
