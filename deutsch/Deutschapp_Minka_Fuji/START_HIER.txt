@@ -1,3 +1,16 @@
+NEU: ERZÄHLWERKSTATT-AUSBAU (30.10.2026)
+• Start & Lernweg: Drei große Kacheln zu Bildergeschichten, Textcoach und Portfolio.
+• Geschichtenbaukasten: drei eigene Bildergeschichten mit je sechs SVG-Bildern, Bilderlupe und sieben verschiebbaren Handlungskarten; Karten sind auch mit Pfeiltasten bedienbar.
+• Textcoach: erklärt einfache Textmuster (gleiche Satzanfänge, viele „dann“, ungenaue Verben, Absätze und sehr lange Sätze). Das sind Hinweise, keine automatische Bewertung oder Rechtschreibkontrolle.
+• Schreibdiagnose: drei kurze Schreibproben, dazu belegbare eigene Texteinschätzung; unbeantwortete Auswahlfragen werden nicht als falsch gezählt.
+• Lernempfehlungen: an Erklärungen und vorhandene Reparaturübungen gekoppelt.
+• Schreibkonferenz: schwache Beispielgeschichte abschnittweise untersuchen, Verbesserungsvorschläge selbst formulieren.
+• Lesetandem: Sätze einzeln anklicken und per Gerätestimme hervorheben/vorlesen, Pause, Fortsetzen, Stopp; Vorlesequalität bleibt geräteabhängig.
+• Portfolio: lokal gespeicherte Texte und Lernstände als JSON sichern und auf einem anderen Gerät importieren. Der Import ersetzt nach Rückfrage bestehende Daten und sollte vorher gesichert werden. Die Sicherungsdatei kann personenbezogene Texte enthalten.
+• Lehrerbereich: aus den neuen Bildgeschichten eigene Aufgaben zusammenstellen; getrenntes Schülerblatt und Lehrer-Erwartungshorizont drucken.
+• Offline-Nutzung: zuerst online laden, danach auf unterstützten Browsern über die installierte Webseite; kein automatische Synchronisierung.
+• Qualitätssicherung: tests/upgrade.test.cjs und tests/offline.test.cjs prüfen neue Abläufe in Chromium; Run-Status auf GitHub Actions.
+
 MINKA & FUJI – DEUTSCHAPP FÜR KLASSE 5
 
 Start am PC oder Mac:
