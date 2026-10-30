@@ -1,0 +1,59 @@
+/* Rhythmuswerkstatt: ruhige Schüleroberfläche, 30.10.2026 */
+.cleanHero{display:grid;grid-template-columns:minmax(0,1fr) 124px;align-items:center;gap:1.4rem;padding:clamp(1.1rem,3vw,2rem);margin:1.25rem 0 1rem;border:2px solid var(--mint,#48ceb4);border-radius:22px;background:var(--panel,#1b2740)}
+.cleanHeroText{min-width:0}.cleanHero h2{font-size:clamp(1.25rem,2.8vw,1.75rem);line-height:1.25;margin:.45rem 0}.cleanHero p{margin:.4rem 0 1rem;max-width:44rem;line-height:1.55}
+.cleanHero img{width:124px;height:124px;border-radius:22px;object-fit:cover}
+.cleanHero .primary{font-size:1rem;min-height:50px;white-space:normal;text-align:center}
+.cleanProgress{display:grid;grid-template-columns:1fr;gap:.55rem;margin:1rem 0 2rem}
+.cleanProgress>div{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.cleanProgress span{color:var(--muted,#9daebc);font-size:.92rem}
+.cleanProgress progress{width:100%;height:14px;border:0;border-radius:99px;background:var(--panel2,#25334b);overflow:hidden}
+.cleanProgress progress::-webkit-progress-bar{background:var(--panel2,#25334b);border-radius:99px}
+.cleanProgress progress::-webkit-progress-value{background:var(--mint,#48ceb4);border-radius:99px}
+.cleanProgress progress::-moz-progress-bar{background:var(--mint,#48ceb4);border-radius:99px}
+.cleanSection{font-size:clamp(1.1rem,2.4vw,1.45rem);margin:1.8rem 0 .85rem;line-height:1.35}
+.cleanActions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.85rem;margin-bottom:1.4rem}
+.cleanAction{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:.7rem;min-width:0;min-height:174px;padding:1.05rem;border:2px solid var(--line,#475569);border-radius:16px;background:var(--panel,#1d2941);color:inherit;cursor:pointer}
+.cleanAction:hover,.cleanTopic:hover,.cleanPracticeChoice:hover{border-color:var(--mint,#48ceb4)}
+.cleanAction span:nth-child(2){flex:1}.cleanAction strong,.cleanTopic strong,.cleanPracticeChoice strong{display:block;line-height:1.3;font-size:1.04rem}
+.cleanAction small,.cleanTopic small,.cleanPracticeChoice small{display:block;color:var(--muted,#aab7c7);line-height:1.4;margin-top:.4rem;font-size:.87rem}
+.cleanAction>span:last-child{align-self:flex-end;font-size:1.25rem;color:var(--mint,#5dd5c1)}
+.cleanActionIcon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--panel2,#2b3953);font-weight:750;font-size:1.5rem;color:var(--mint,#5dd5c1)}
+.cleanDetails{margin:1.1rem 0;border:1px solid var(--line,#475569);border-radius:13px;background:var(--panel,#202d44);padding:.8rem 1.1rem}
+.cleanDetails summary,.cleanLibrary>summary{cursor:pointer;font-weight:750;min-height:40px;display:list-item;align-content:center;line-height:1.45}
+.cleanDetails ol{padding-left:1.5rem}.cleanDetails li{margin:.5rem 0}
+.cleanTopicGrid,.cleanPracticeGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin:1rem 0}
+.cleanTopic{display:grid;grid-template-columns:85px minmax(0,1fr) auto;align-items:center;text-align:left;gap:.9rem;min-height:105px;padding:.8rem;border:2px solid var(--line,#475569);border-radius:16px;background:var(--panel,#202d44);color:inherit;cursor:pointer}
+.cleanTopic img{width:85px;height:76px;object-fit:cover;border-radius:10px}
+.cleanTopic>span:last-child{font-size:1.25rem;color:var(--mint,#5dd5c1)}
+.cleanTopicHead{display:flex;align-items:center;gap:1.25rem;margin:1.1rem 0 1.4rem}
+.cleanTopicHead img{object-fit:cover;width:108px;height:90px;border-radius:18px}
+.cleanTopicHead h1{margin:.25rem 0}.cleanTopicHead p{margin:.3rem 0}
+.cleanFocus{margin:1.2rem 0;padding:1.25rem 1.5rem;border-left:5px solid var(--mint,#48ceb4)}
+.cleanFocus h2{margin:.45rem 0}.cleanFocus p{margin:.5rem 0 1rem}
+.cleanLessons{margin:1rem 0 1.3rem}
+.cleanQuick{display:flex;justify-content:space-between;align-items:center;gap:1.25rem;padding:1.25rem 1.5rem;margin:1rem 0}
+.cleanQuick h2{margin:.35rem 0}.cleanQuick p{margin:.4rem 0;max-width:40rem}
+.cleanQuick button{flex:0 0 auto}
+.cleanPracticeChoice{display:flex;align-items:center;gap:.85rem;text-align:left;border:2px solid var(--line,#475569);background:var(--panel,#1d2941);color:inherit;border-radius:14px;min-height:92px;padding:.75rem;cursor:pointer}
+.cleanPracticeChoice img{width:65px;height:62px;border-radius:10px;object-fit:cover;flex:0 0 auto}
+.cleanPracticeChoice.selected{border-color:var(--mint,#48ceb4);box-shadow:inset 0 0 0 1px var(--mint,#48ceb4)}
+.cleanPracticeChoice.selected::after{content:'✓';color:var(--mint,#48ceb4);font-weight:800;font-size:1.2rem;margin-left:auto}
+.cleanPracticePanel{margin:1rem 0;padding:1.35rem;border:2px solid var(--mint,#48ceb4)}
+.cleanPracticePanel h3{margin:.45rem 0}.cleanPracticePanel p{margin:.35rem 0 1rem}
+.cleanPracticeExtras{display:flex;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-top:1.2rem;border-top:1px solid var(--line,#475569);padding-top:1rem}
+.cleanPracticeExtras .cleanDetails{margin:0;flex:1 1 220px}
+.cleanPracticeExtras>button{flex:0 1 auto;white-space:normal}
+.cleanChoiceList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.8rem}
+.cleanChoiceList button{min-height:45px;white-space:normal;text-align:left}
+.cleanPrompt{margin:1rem 0 1.5rem;border:1px dashed var(--line,#475569);border-radius:12px;padding:.9rem 1rem;color:var(--muted,#aab7c7)}
+.cleanLibrary{padding:1rem 1.25rem;margin:1.4rem 0}
+.cleanExtraGroups{display:grid;gap:.75rem;margin-top:.85rem}
+.cleanExtraGroups>details{border-top:1px solid var(--line,#475569);padding:.8rem 0}
+.cleanExtraGroups>details summary{cursor:pointer;font-weight:650;min-height:44px}
+.cleanExtraGroups .guideExtraGrid{margin-top:.6rem}
+.cleanLibrary .guideExtraGrid button,.cleanLibrary .cleanChoiceList button{min-height:44px;margin:.15rem}
+.cleanHero button:focus-visible,.cleanAction:focus-visible,.cleanTopic:focus-visible,.cleanPracticeChoice:focus-visible,.cleanQuick button:focus-visible,.cleanPracticePanel button:focus-visible,.cleanLibrary button:focus-visible{outline:3px solid #e9bd4c;outline-offset:3px}
+@media(max-width:850px){.cleanActions{grid-template-columns:1fr 1fr}.cleanAction{min-height:150px}.cleanTopicGrid{grid-template-columns:1fr}.cleanPracticeGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:610px){.cleanHero{grid-template-columns:1fr;margin:.85rem 0}.cleanHero img{display:none}.cleanHero .primary{width:100%;min-width:0}.cleanActions{grid-template-columns:1fr;gap:.55rem}.cleanAction{flex-direction:row;min-height:0;align-items:center;padding:1rem}.cleanActionIcon{width:38px;height:38px;flex:0 0 auto}.cleanAction>span:last-child{align-self:center}.cleanAction small{margin-top:.2rem}.cleanTopicGrid,.cleanPracticeGrid{grid-template-columns:1fr;gap:.55rem}.cleanTopic{grid-template-columns:62px minmax(0,1fr) auto;min-height:82px;padding:.6rem}.cleanTopic img{width:62px;height:62px}.cleanTopicHead img{width:65px;height:65px}.cleanQuick{display:block;padding:1rem}.cleanQuick button{margin-top:.85rem;width:100%}.cleanPracticePanel .primary{width:100%}.cleanChoiceList{grid-template-columns:1fr}.cleanProgress>div{display:block}.cleanProgress span{display:block;margin-top:.2rem}}
+@media(max-width:360px){.cleanAction{gap:.5rem}.cleanPracticeChoice{padding:.55rem}.cleanPracticeChoice img{width:52px;height:52px}.cleanTopicHead{gap:.75rem}.cleanTopicHead img{width:52px;height:52px}.cleanHero{padding:1rem}}
+@media print{.cleanActions,.cleanHero button,.cleanQuick,.cleanLibrary,.cleanDetails,.cleanPracticeGrid{display:none!important}.cleanHero{border:0}.cleanProgress progress{appearance:none}}
