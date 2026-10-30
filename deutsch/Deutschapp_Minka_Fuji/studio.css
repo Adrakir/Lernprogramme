@@ -1,0 +1,159 @@
+/* Das Erzählstudio nutzt die bestehenden Farben, aber neue klare Lernkarten. */
+#studio{--studio-paper:#16263b;--studio-panel:#1e314a;--studio-line:#4b6689}
+#studio .studio-app-top{display:grid;grid-template-columns:minmax(0,1fr) 160px;align-items:center;gap:22px;border:1px solid #4a6b8f;background:linear-gradient(125deg,#21394f,#17352f);border-radius:18px;padding:24px;margin:0 0 18px}
+#studio .studio-app-top h1{margin-bottom:10px}
+#studio .studio-app-top p:last-child{color:#d1e3f7}
+#studio .studio-app-top img{width:100%;height:auto;max-height:150px;object-fit:contain}
+#studio .studio-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0 26px}
+#studio .studio-tab{min-width:0;background:#20324a;border:1px solid #527298;display:flex;justify-content:center;align-items:center;gap:8px;word-break:normal}
+#studio .studio-tab.active{background:var(--accent);color:#172517;border-color:var(--accent)}
+#studio .studio-tab span{font-size:1.2rem}
+#studio .studio-section-intro{max-width:860px;margin-bottom:22px}
+#studio .studio-section-intro p{color:#c6d6ec}
+#studio .studio-welcome{border:1px solid #4f7393;background:var(--studio-paper);border-radius:16px;padding:25px;margin-bottom:18px}
+#studio .studio-welcome>p{max-width:780px}
+#studio .studio-welcome progress{height:18px;accent-color:var(--accent);margin:12px 0 2px}
+#studio .studio-progress-line{margin:12px 0 0}
+#studio .studio-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:28px}
+#studio .studio-choice{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:20px;background:linear-gradient(160deg,#244260,#203a32);border:2px solid #597b9b;min-height:188px}
+#studio .studio-choice:hover,#studio .studio-choice:focus-visible{border-color:var(--accent)}
+#studio .studio-choice>span:first-child{font-size:2.15rem}
+#studio .studio-choice strong{font-size:1.12rem;line-height:1.35;margin:9px 0}
+#studio .studio-choice span:last-child{color:#d5e1ef;font-size:.92rem;font-weight:450}
+#studio .studio-path{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px}
+#studio .studio-path h3{margin-bottom:20px}
+#studio .studio-path-step{display:grid;grid-template-columns:46px minmax(0,1fr) minmax(150px,190px);gap:17px;border-bottom:1px solid #426080;padding:16px 0;align-items:center}
+#studio .studio-path-step:last-child{border-bottom:0}
+#studio .studio-path-num{width:45px;height:45px;border-radius:50%;border:2px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-weight:750;font-size:1.2rem}
+#studio .studio-path-info>strong{display:block;font-size:1.08rem}
+#studio .studio-path-info p{margin:4px 0 12px;color:var(--muted)}
+#studio .studio-path-actions{display:flex;gap:8px;flex-wrap:wrap}
+#studio .studio-path-actions button{font-size:.9rem;min-height:42px;padding:8px 13px}
+#studio .studio-check{display:flex;gap:9px;align-items:flex-start;line-height:1.4;min-height:46px;cursor:pointer}
+#studio .studio-check span{flex:1}
+#studio .studio-check input{flex:0 0 22px;width:22px;height:22px;min-height:22px;margin:2px 0 0;accent-color:var(--accent)}
+#studio .studio-shortcuts{margin:22px 0;border:1px dashed #5b7495;border-radius:15px;padding:20px}
+#studio .studio-shortcuts button{margin:5px 8px 5px 0}
+#studio .studio-select{max-width:650px;margin:0 0 20px}
+#studio .studio-select label{display:block}
+#studio #studio-picker{margin-top:8px}
+#studio .studio-story-title{display:flex;align-items:center;gap:14px;padding:18px;background:var(--studio-panel);border-radius:12px;margin:12px 0}
+#studio .studio-story-title h3{margin:0 0 4px}
+#studio .studio-story-title p{margin:0;color:var(--muted)}
+#studio .studio-story-icon{font-size:2.5rem}
+#studio .studio-storyboard{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:17px 0 9px}
+#studio .studio-story-panel{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:9px;min-width:0;padding:14px;background:#24374d;border:2px solid #51718c;text-align:left;min-height:218px;white-space:normal}
+#studio .studio-story-panel:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#96d7ff,#baf36b);border-radius:9px 9px 0 0}
+#studio .studio-story-panel.active,#studio .studio-story-panel:focus-visible{border-color:var(--accent);background:#28483c}
+#studio .studio-story-panel strong{line-height:1.3}
+#studio .studio-story-panel>span:last-child{font-size:.89rem;line-height:1.5;color:#d2e3f1;font-weight:450}
+#studio .studio-scene-num{font-size:.8rem;color:#b7d0f0}
+#studio .studio-scene-art{font-size:3rem;align-self:center;filter:drop-shadow(0 4px 8px #0c1620)}
+#studio .studio-scene-focus{background:#21364d;border-left:4px solid var(--accent);padding:16px 19px;margin:0 0 22px;border-radius:0 10px 10px 0}
+#studio .studio-scene-focus p{margin:6px 0 12px}
+#studio .studio-scene-controls{display:flex;flex-wrap:wrap;gap:9px}
+#studio .studio-help{border:1px solid #4f6685;border-radius:10px;padding:14px 20px;margin-bottom:22px}
+#studio .studio-help summary{color:var(--accent)}
+#studio .studio-help p{margin:11px 0}
+#studio .studio-write-grid{display:grid;grid-template-columns:minmax(270px,.9fr) minmax(0,1.1fr);gap:16px;align-items:start}
+#studio .studio-write-grid>.panel{min-width:0}
+#studio .studio-input-label{display:block;font-weight:650;margin:16px 0}
+#studio .studio-input-label input,#studio .studio-input-label textarea{display:block;margin-top:6px}
+#studio .studio-helptext{display:block;color:#c4d5e9;font-size:.9rem;font-weight:450;margin:5px 0}
+#studio textarea{min-height:130px;line-height:1.6}
+#studio [data-studio-part=body]{min-height:260px}
+#studio .studio-review,#studio .studio-preview{margin-top:18px}
+#studio .studio-checkgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:25px;row-gap:12px;margin:15px 0 22px}
+#studio .studio-checkgrid label{background:#1d3448;border-radius:10px;padding:13px}
+#studio .studio-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:17px}
+#studio .studio-story-reading{white-space:pre-wrap;line-height:1.85;color:#f3f6fd;background:#203047;border-radius:10px;padding:20px;min-height:80px;overflow-wrap:anywhere}
+#studio .studio-exam-settings{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,1fr);gap:18px;margin-bottom:20px}
+#studio .studio-exam-settings label{display:block}
+#studio .studio-exam-settings fieldset{border:1px solid #6480a1;border-radius:11px;padding:11px 15px;min-width:0}
+#studio .studio-exam-settings fieldset label{display:flex;align-items:center;gap:9px;margin:8px 0}
+#studio .studio-exam-settings input[type=radio]{width:19px;height:19px;min-height:auto;accent-color:var(--accent)}
+#studio .studio-exam-paper{border-color:#6e88a3}
+#studio .studio-exam-paper>h3{font-size:1.45rem}
+#studio .studio-exam-task{padding:16px 18px;background:#273f52;border-left:4px solid #9ad1ff;border-radius:0 9px 9px 0}
+#studio .studio-exam-bottom{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;margin-top:14px}
+#studio .studio-exam-bottom p{margin:0}
+#studio .studio-wordcards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+#studio .studio-wordcards span{display:grid;place-items:center;text-align:center;min-height:90px;border:2px dashed #86bcf2;border-radius:14px;background:#284460;font-size:1.2rem;font-weight:700;padding:12px}
+#studio .studio-hintlist{margin-bottom:12px}
+#studio .studio-hint{border:1px solid #6b8cae;background:#1e3850;border-radius:10px;padding:14px;margin:8px 0}
+#studio .studio-hint p{margin:3px 0}
+#studio .studio-exam-note{margin:20px 0;color:var(--muted)}
+#studio .studio-rubric-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,220px);gap:20px;align-items:center;border-top:1px solid #435d7e;padding:15px 0}
+#studio .studio-rubric-row p{margin:4px 0;color:var(--muted)}
+#studio .studio-rubric-row label{font-size:.9rem;color:var(--muted)}
+#studio .studio-rubric-row select{margin:4px 0 0}
+#studio .studio-score{padding:16px;background:#233e39;border:1px solid #6c9a7d;border-radius:12px}
+#studio .studio-score p{margin:5px 0}
+#studio .studio-lab-head{padding:12px 0}
+#studio .studio-lab-head h3{margin-bottom:5px}
+#studio .studio-tags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#studio .studio-tag{border-width:2px}
+#studio .studio-tag-gefuehl{background:#503e5e;border-color:#d1a6ff}
+#studio .studio-tag-gedanke{background:#394e6a;border-color:#9ad1ff}
+#studio .studio-tag-handlung{background:#294c41;border-color:#8de4bc}
+#studio .studio-tag-hoehepunkt{background:#594225;border-color:#ffca7d}
+#studio .studio-tag.active{outline:2px solid #fff;outline-offset:2px}
+#studio .studio-fragments{margin-top:14px}
+#studio .studio-fragments>p{color:var(--muted)}
+#studio .studio-fragment{width:100%;display:flex;gap:10px;align-items:center;text-align:left;margin:9px 0;border:2px solid #57708d;background:#263a53;font-weight:500}
+#studio .studio-fragment>span:nth-child(2){flex:1}
+#studio .studio-fragment small{font-size:.8rem;min-width:80px;text-align:right;color:#e3edf6}
+#studio .studio-fragment.marked{border-left-width:10px}
+#studio .studio-mark-handlung{border-left-color:#8de4bc}
+#studio .studio-mark-gedanke{border-left-color:#9ad1ff}
+#studio .studio-mark-gefuehl{border-left-color:#d1a6ff}
+#studio .studio-mark-hoehepunkt{border-left-color:#ffca7d}
+#studio .studio-fragment-number{width:29px;height:29px;background:#0d1728;display:grid;place-items:center;border-radius:50%;font-weight:750}
+#studio .studio-lab-feedback{background:#253c50;border-left:4px solid #a9d5fa;border-radius:0 10px 10px 0;padding:15px;margin-top:14px}
+#studio .studio-lab-feedback p{margin-top:6px}
+#studio .studio-before{background:#322d40;border:1px solid #735a8b;border-radius:11px;padding:15px}
+#studio .studio-before p{margin:6px 0}
+#studio .studio-lab-write{margin-top:17px}
+#studio .studio-lab-write>.studio-check{margin:12px 0}
+#studio .studio-storage{color:var(--muted);font-size:.88rem;margin:20px 0}
+#studio-print-sheet{display:none}
+@media(max-width:900px){
+ #studio .studio-write-grid{grid-template-columns:1fr}
+ #studio .studio-path-step{grid-template-columns:44px minmax(0,1fr)}
+ #studio .studio-path-step>.studio-check{grid-column:2}
+ #studio .studio-choices{gap:8px}
+ #studio .studio-choice{padding:15px}
+}
+@media(max-width:600px){
+ #studio .studio-app-top{grid-template-columns:1fr 90px;padding:17px}
+ #studio .studio-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #studio .studio-tab{font-size:.9rem;padding:12px 6px}
+ #studio .studio-choices{grid-template-columns:1fr}
+ #studio .studio-choice{min-height:110px}
+ #studio .studio-path{padding:14px}
+ #studio .studio-path-step{gap:10px}
+ #studio .studio-checkgrid{grid-template-columns:1fr}
+ #studio .studio-storyboard{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #studio .studio-story-panel{min-height:190px}
+ #studio .studio-scene-art{font-size:2.3rem}
+ #studio .studio-exam-settings{grid-template-columns:1fr}
+ #studio .studio-wordcards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #studio .studio-tags{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #studio .studio-rubric-row{grid-template-columns:1fr;gap:8px}
+ #studio .studio-fragment{flex-wrap:wrap}
+ #studio .studio-fragment small{text-align:left;min-width:0}
+ #studio .studio-hero h1{font-size:1.65rem}
+}
+@media(max-width:380px){#studio .studio-storyboard{grid-template-columns:1fr}#studio .studio-story-panel{min-height:125px}#studio .studio-app-top img{max-height:80px}}
+@media(prefers-reduced-motion:no-preference){
+ #studio .studio-story-panel,#studio .studio-choice{transition:transform .18s ease-out,border-color .18s ease-out,background .18s ease-out}
+ #studio .studio-story-panel.active{transform:translateY(-2px)}
+}
+@media print{
+ body.studio-printing{background:#fff!important;color:#111!important}
+ body.studio-printing>*:not(#studio-print-sheet){display:none!important}
+ body.studio-printing #studio-print-sheet{display:block!important;white-space:normal!important;padding:10mm;font-size:11pt;color:#111!important;background:#fff!important}
+ body.studio-printing #studio-print-sheet h1{font-size:18pt;margin-bottom:15mm;color:#111}
+ body.studio-printing .studio-print-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}
+ @page{size:A4;margin:16mm}
+}
