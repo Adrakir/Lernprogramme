@@ -86,6 +86,8 @@ test('Schreibakademie: Lerncoach, Reparatur, Textlupe, Lehrerbereich und mobile 
       await page.evaluate(()=>document.body.classList.remove('ac-printing'));
     }
     assert.ok(await page.locator('#ac-tts-speed').count()>0);
+    assert.ok(await page.locator('[data-ac-pause]').count()>0);
+    assert.ok(await page.locator('[data-ac-resume]').count()>0);
     assert.ok(await page.locator('#ac-size').count()>0);
     await page.selectOption('#ac-size','1.24');
     await page.locator('#ac-contrast').check();
