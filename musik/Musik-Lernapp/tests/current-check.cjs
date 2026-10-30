@@ -45,6 +45,7 @@ ok(doc.querySelector('#anatomyExample').querySelectorAll('svg').length===2,'Dott
 ok(doc.querySelector('[data-anatomy="4"]').getAttribute('aria-pressed')==='true','Chosen anatomy part accessible to screen readers');
 doc.querySelector('[data-anatomy="3"]').click();
 ok(doc.querySelector('#anatomyExample').textContent.includes('zwei Achtelnoten'),'Beam selection shows exactly two eighths');
+ok(e.errors.length===0,'Notenteile: keine ungefangenen DOM-Fehler nach dem Umschalten');
 ok(doc.querySelector('#anatomyExample').textContent.includes('musst nicht wischen'),'Beam example says why no swiping is necessary');
 run("setView('home')");
 
