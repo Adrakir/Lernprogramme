@@ -177,3 +177,10 @@ nav.navigation button[data-page=studio]:not([aria-current=page]){background:#1e3
  #studio .studio-tension-graphic .studio-curve-active{animation:studio-curve-focus .35s ease-out}
  @keyframes studio-curve-focus{from{opacity:.5;stroke-width:2}to{opacity:1;stroke-width:5}}
 }
+
+#studio .studio-next-step{background:#264539;border:1px solid #79a98b;border-radius:10px;padding:16px 18px;margin-top:16px}
+#studio .studio-next-step p{margin:5px 0 12px;color:#e1f1e5}
+#studio .studio-next-step button{min-height:43px}
+#studio .studio-guided-exam{padding:12px 18px;background:#203a50;border:1px solid #6785a2;border-radius:11px;margin:14px 0}
+#studio .studio-guided-exam li{padding:4px 0;margin-bottom:8px}
+#studio .studio-guided-exam p{color:#d2e0f2}
