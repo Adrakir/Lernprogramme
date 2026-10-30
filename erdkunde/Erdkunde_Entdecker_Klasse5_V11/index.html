@@ -266,9 +266,7 @@ html[data-aw-active=true]{scroll-behavior:auto}.cw-question,#cwResult{scroll-mar
   <style>
 .pf-panel{max-width:1120px;margin:10px auto 28px;padding:clamp(14px,2.5vw,30px);border:2px solid var(--border,#bccdd6);border-radius:22px;background:var(--surface,#fff);color:var(--text,#19384d);line-height:1.6}.pf-panel *{box-sizing:border-box}.pf-panel h1{font-size:clamp(1.55rem,3vw,2.35rem);line-height:1.24}.pf-panel h2{font-size:clamp(1.1rem,2.3vw,1.5rem)}.pf-panel button{font:inherit;font-weight:750;border-radius:12px;padding:10px 15px;min-height:46px;border:2px solid var(--border,#abc6d1);cursor:pointer;margin:3px;max-width:100%}.pf-panel button:focus-visible,.pf-panel input:focus-visible{outline:3px solid #e3a429;outline-offset:3px}.pf-main{background:var(--brand,#086f62);color:white;border-color:var(--brand,#086f62)!important}.pf-quiet{background:var(--surface2,#eaf2f5);color:var(--text,#173a4c)}.pf-kicker{letter-spacing:.08em;text-transform:uppercase;font-size:.79rem;font-weight:900;color:var(--brand,#086f62)}.pf-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.pf-goal,.pf-explain,.pf-rule,.pf-trap,.pf-hint,.pf-feedback{padding:14px 17px;border-radius:13px;background:var(--surface2,#edf5f7);margin:12px 0}.pf-goal{border-left:5px solid #1766a1}.pf-explain{border-left:5px solid #7e4b9a;font-size:1.05rem}.pf-trap{border-left:5px solid #bc7a2d}.pf-rule{border-left:5px solid #086f62}.pf-hint{border:2px dashed #c18d2c}.pf-feedback{border-left:5px solid #086f62}.pf-feedback p{margin:7px 0}.pf-figure{margin:16px 0;max-width:100%;overflow:hidden;border:1px solid #afc5ce;border-radius:14px;background:#f7fafc}.pf-figure svg{width:100%;height:auto;display:block;max-height:510px}.pf-figure figcaption{background:#eaf1f5;color:#274b5e;font-size:.85rem;padding:8px 12px}.pf-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}.pf-options{border:0;padding:0;margin:12px 0;display:grid;gap:9px;min-width:0}.pf-options legend{font-weight:700;margin-bottom:10px}.pf-options label{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border,#afc4cb);border-radius:12px;cursor:pointer;min-width:0}.pf-options label.pf-selected{border-color:#1766a1;background:var(--surface2,#e6f2f9)}.pf-options input{width:20px;height:20px;flex-shrink:0;accent-color:#1766a1}.pf-progress{height:10px;overflow:hidden;border-radius:15px;background:var(--border,#c1d3dd);margin:20px 0}.pf-progress span{display:block;height:100%;background:#086f62;transition:width .2s}.pf-small{font-size:.86rem;color:var(--muted,#496477)}.pf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.pf-tile{border:1px solid var(--border,#c8d7dd);border-radius:15px;padding:20px;min-width:0;background:var(--surface2,#f2f7f8)}.pf-tile h2{margin:5px 0}.pf-number{font-size:1.8rem;font-weight:900;color:var(--brand,#086f62)}.pf-end{margin-top:22px;padding:21px;border:2px solid var(--border,#b8cbd2);border-radius:15px}.pf-review{display:grid;gap:13px}.pf-review article{padding:14px;border:1px solid var(--border,#abc4cb);border-radius:12px}.pf-review h3{margin-top:0}.pf-panel button:disabled{opacity:.55}[data-theme=dark] .pf-figure figcaption{background:#203d4c;color:#fff}[data-theme=dark] .pf-figure{border-color:#7895a3}[data-theme=dark] .pf-main{color:#101e25}@media(max-width:680px){.pf-grid{grid-template-columns:1fr}.pf-controls button{flex:1 1 160px}.pf-panel{padding:13px}.pf-figure{margin:10px 0}}@media(prefers-reduced-motion:reduce){.pf-progress span{transition:none}}@media print{.pf-panel button,.pf-top{display:none!important}.pf-panel{border:none}.pf-figure{break-inside:avoid}}
 </style>
-  
-  
-<style>
+  <style>
 
 /* Eigenständige, kontrastreiche Praxisstationen – greifen die vorhandenen Klassen nicht an. */
 .praxis-root{max-width:1080px}
@@ -358,6 +356,56 @@ html[data-aw-active=true]{scroll-behavior:auto}.cw-question,#cwResult{scroll-mar
 @media print{.tt-overview,.tt-tips,.tt-actions{display:none}.tt-result{break-inside:avoid}.tt-steps{display:none}}
 
 </style>
+  <style>
+/* Erdkunde-Videothek: responsiv, kontrastreich und ohne seitliches Scrollen */
+.gv-library,.gv-suggestion,.gv-starter{max-width:100%;min-width:0}
+.gv-layout{display:grid;grid-template-columns:minmax(225px,.77fr) minmax(0,1.6fr);gap:18px;align-items:start}
+.gv-list{display:grid;align-content:start;gap:8px;min-width:0}
+.gv-film{display:flex;align-items:center;gap:12px;text-align:left;min-width:0;width:100%;border:2px solid #8ca4b0;border-radius:14px;background:var(--surface,#f5f9fa);color:var(--text,#18354a);padding:12px 13px;cursor:pointer;line-height:1.35;font:inherit}
+.gv-film:hover,.gv-film:focus-visible{outline:3px solid #2b8291;outline-offset:1px}
+.gv-current{background:#dbf4f1;color:#102b36;border-color:#0e776e}
+.gv-film-number{flex:0 0 34px;display:grid;place-items:center;width:34px;height:34px;background:#18677a;color:white;font-weight:800;border-radius:50%}
+.gv-film-copy{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.gv-film-copy strong{font-size:.95em;overflow-wrap:anywhere}
+.gv-film-copy small{font-size:.79em;opacity:.8}
+.gv-film-arrow{flex:none;color:#13776b;font-size:1.1em}
+.gv-stage{min-width:0;overflow:hidden}
+.gv-stage-heading,.gv-suggestion-top{display:flex;justify-content:space-between;align-items:start;gap:14px;flex-wrap:wrap}
+.gv-time{font-weight:700;opacity:.85}
+.gv-stage h2,.gv-suggestion h2{margin:.55em 0 .2em;overflow-wrap:anywhere}
+.gv-stage>p,.gv-suggestion p{line-height:1.55}
+.gv-player{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:16/9;object-fit:contain;border-radius:12px;background:#071725;margin:15px 0}
+.gv-observe{padding:13px 16px;margin:13px 0;border-radius:12px;background:#e8f4f7;color:#113b4d;border:1px solid #84b5bf}
+.gv-observe p{margin:4px 0}
+.gv-help{font-size:.91em;line-height:1.5}
+.gv-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:14px 0 0}
+.gv-actions>*{max-width:100%;white-space:normal;text-align:center;overflow-wrap:anywhere}
+.gv-notice{font-size:.9em;margin:16px 0;padding:12px;border:1px solid #749aa3;border-radius:12px}
+.gv-suggestion{margin:16px 0;padding:19px}
+.gv-suggestion-top>div{min-width:0;flex:1 1 260px}
+.gv-suggestion-top .pill{flex:0 1 auto}
+.gv-expand{margin-top:12px;border:1px solid #93bdc3;border-radius:12px;overflow:hidden}
+.gv-expand>summary{display:block;cursor:pointer;padding:12px 14px;background:#dcf4f2;color:#113c45;font-weight:800}
+.gv-expand>summary::marker{content:''}
+.gv-expand[open] > .gv-player{width:calc(100% - 24px);margin:12px auto}
+.gv-expand[open] > .gv-help{padding:0 14px 12px}
+.gv-starter{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:17px 0;padding:22px}
+.gv-starter-copy{min-width:0;flex:1}
+.gv-starter-emoji{font-size:clamp(42px,7vw,84px);line-height:1.2}
+.gv-starter h2{margin:.3em 0}
+.gv-starter p{max-width:60ch}
+[data-theme="dark"] .gv-film{background:#183146;color:#eefbff;border-color:#7395a7}
+[data-theme="dark"] .gv-current{background:#15565e;color:#fff;border-color:#7cebd6}
+[data-theme="dark"] .gv-observe{background:#183d4e;color:#f2fbff;border-color:#66b8bd}
+[data-theme="dark"] .gv-expand>summary{background:#184f56;color:#fff}
+[data-contrast="high"] .gv-film,[data-contrast="high"] .gv-expand{border-width:3px}
+@media(max-width:850px){.gv-layout{grid-template-columns:minmax(0,1fr)}.gv-list{grid-template-columns:repeat(2,minmax(0,1fr))}.gv-starter{padding:16px}}
+@media(max-width:490px){.gv-list{grid-template-columns:minmax(0,1fr)}.gv-film{padding:10px}.gv-stage{padding:13px}.gv-starter-emoji{display:none}.gv-suggestion{padding:13px}.gv-stage-heading{align-items:center}}
+@media print{.gv-list,.gv-player,.gv-actions,.gv-starter,.gv-suggestion,.gv-notice{display:none!important}}
+
+</style>
+  
+  
 </head>
 <body>
  <a class="skip" href="#main">Zum Lernbereich springen</a>
@@ -14816,6 +14864,155 @@ document.addEventListener('click',function(e){
  if(a.startsWith('start:')){const bits=a.split(':');start(bits[1],Number(bits[2]));return}
 });
 window.ErdkundeThemenTraining=Object.freeze({levels:LEVELS,topics:MODULES.length,questionCount:Q.length,trainingPool:trainingPool});
+})();
+
+</script>
+<script>
+/* videos-app.js */
+/* Paul und Gustav Globus: sieben echte MP4-Lernfilme in derselben Erdkunde-App. */
+(function () {
+  'use strict';
+  const films = Object.freeze([
+    {n:1,title:'Unsere Erde und ihr Aufbau',time:'0:43',info:'Erdkugel, Erdkruste, Erdmantel und Erdkern.',task:'Welche Erdschicht befindet sich direkt unter unseren Füßen?',topics:['geographie','erde'],lab:['world']},
+    {n:2,title:'Äquator, Nord- und Südhalbkugel',time:'1:01',info:'Der Äquator liegt auf 0° geografischer Breite.',task:'Liegt Deutschland nördlich oder südlich des Äquators?',topics:['gradnetz','erde'],lab:['coords','world']},
+    {n:3,title:'Nullmeridian, Ost- und Westhalbkugel',time:'0:59',info:'Nullmeridian und 180°-Meridian teilen die Erde in Ost und West.',task:'Durch welchen Ort bei London verläuft der Nullmeridian?',topics:['gradnetz','erde'],lab:['coords','world']},
+    {n:4,title:'Die vier Erdviertelkugeln',time:'1:20',info:'Nordost, Nordwest, Südost und Südwest – Norden/Süden zuerst.',task:'In welcher Erdviertelkugel liegt Deutschland?',poster:'Gustav_Globus_Folge4_Vorschau.jpg',topics:['gradnetz','erde','himmelsrichtungen'],lab:['coords','world']},
+    {n:5,title:'Seitenansicht und Draufsicht',time:'1:29',info:'Dieselbe Erdkugel aus verschiedenen Blickrichtungen, auch am Haus erklärt.',task:'Wo siehst du den Nordpol, wenn du von oben auf den Nordpol schaust?',poster:'Gustav_Globus_Folge5_Vorschau_compare.jpg',topics:['perspektive','luftbild','projektionen'],lab:['view','projection']},
+    {n:6,title:'Das Gradnetz und Koordinaten',time:'2:02',info:'Breitenkreise und gekrümmte Meridiane: erst Breite, dann Länge.',task:'Was liest du zuerst ab: 52° N oder 10° O?',poster:'Gustav_Globus_Folge6_Vorschau_Schnittpunkt.jpg',topics:['gradnetz','atlanten'],lab:['coords','atlas']},
+    {n:7,title:'Orte im Atlas finden',time:'2:16',info:'Mit ungefähr 52° N und 10° O die Lage von Hannover finden.',task:'Was machst du nach dem Ablesen von 52° nördlicher Breite?',poster:'Gustav_Globus_Folge7_Vorschau_Schnittpunkt.jpg',topics:['atlanten','gradnetz','kartenlesen'],lab:['atlas','coords']}
+  ]);
+  const root = document.getElementById('tabs');
+  const escapeText = x => String(x).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const onlineBase = 'https://adrakir.github.io/Lernprogramme/erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/';
+  const base = location.protocol === 'file:' ? onlineBase : 'filme/videos/';
+  const src = n => base + 'folge-' + n + '.mp4';
+  const poster = f => f.poster ? base + f.poster : '';
+  let active = 1;
+  function cardFilm(f) {
+    return '<button type="button" class="gv-film ' + (active === f.n ? 'gv-current' : '') +
+      '" data-gv-film="' + f.n + '" aria-pressed="' + (active === f.n) + '">' +
+      '<span class="gv-film-number">' + f.n + '</span><span class="gv-film-copy"><strong>' +
+      escapeText(f.title) + '</strong><small>Folge ' + f.n + ' · ' + f.time + '</small></span>' +
+      '<span class="gv-film-arrow" aria-hidden="true">▶</span></button>';
+  }
+  function player(f, suffix) {
+    return '<video class="gv-player" controls playsinline preload="none" ' +
+      (f.poster ? 'poster="' + escapeText(poster(f)) + '" ' : '') +
+      'aria-label="Film ' + f.n + ': ' + escapeText(f.title) + '" ' +
+      'data-gv-player="' + suffix + '"><source src="' + src(f.n) + '" type="video/mp4">' +
+      'Dein Browser unterstützt dieses Video nicht.</video>';
+  }
+  function fullLibrary() {
+    const f=films[active-1];
+    return '<section class="gv-library" aria-label="Paul und Gustav Globus – Erdkunde-Videothek">' +
+      '<div class="section-head"><div class="eyebrow">🎬 Anschauen, verstehen, selbst ausprobieren</div>' +
+      '<h1>Paul und Gustav Globus – Lernvideos</h1><p>Sieben kurze Erdkunde-Filme mit Paul, Lehrer Welt und Gustav Globus. ' +
+      'Wähle eine Folge, starte sie selbst und beantworte anschließend die Forscherfrage.</p></div>' +
+      '<div class="gv-layout"><nav class="gv-list" aria-label="Folge auswählen">' +
+      films.map(cardFilm).join('') + '</nav>' +
+      '<section class="gv-stage card" aria-live="polite">' +
+      '<div class="gv-stage-heading"><span class="pill">Folge ' + f.n + ' von 7</span><span class="gv-time">' + f.time + '</span></div>' +
+      '<h2>' + escapeText(f.title) + '</h2><p>' + escapeText(f.info) + '</p>' +
+      player(f, 'main') +
+      '<div class="gv-observe"><strong>🔎 Pauls Forscherfrage</strong><p>' + escapeText(f.task) + '</p>' +
+      '<p class="gv-help">Film bei Bedarf anhalten und die Antwort in eigenen Worten erklären.</p></div>' +
+      '<div class="gv-actions"><a class="btn ghost small" href="' + src(f.n) +
+      '" download>MP4 herunterladen</a>' +
+      (active > 1 ? '<button type="button" class="btn ghost small" data-gv-film="' + (active-1) + '">← Vorherige</button>' : '') +
+      (active < 7 ? '<button type="button" class="btn alt small" data-gv-film="' + (active+1) + '">Nächste Folge →</button>' : '') +
+      '</div></section></div>' +
+      '<div class="gv-notice">Die Videodateien werden bei Bedarf aus GitHub Pages geladen und benötigen Internet. ' +
+      'Die Übungen der App funktionieren weiterhin unabhängig davon. Deine bisherigen Lernstände bleiben unverändert.</div>' +
+      '</section>';
+  }
+  const firstForTopic = Object.freeze({
+    geographie:1, erde:2, gradnetz:6, atlanten:7, kartenlesen:7,
+    perspektive:5, luftbild:5, projektionen:5, himmelsrichtungen:4
+  });
+  const firstForLab = Object.freeze({coords:6, atlas:7, view:5, projection:5, world:2});
+  function inlinePanel(f) {
+    return '<section class="gv-suggestion card" aria-label="Passender Erklärfilm">' +
+      '<div class="gv-suggestion-top"><div><div class="eyebrow">🎬 Jetzt im passenden Thema</div>' +
+      '<h2>Gustav erklärt: ' + escapeText(f.title) + '</h2>' +
+      '<p>' + escapeText(f.info) + '</p></div><span class="pill">Film ' + f.n + ' · ' + f.time + '</span></div>' +
+      '<details class="gv-expand"><summary>▶ Film hier ansehen</summary>' +
+      player(f,'inline') +
+      '<p class="gv-help">🔎 Achte auf diese Frage: ' + escapeText(f.task) + '</p></details>' +
+      '<div class="gv-actions"><button type="button" class="btn ghost small" data-gv-open="' + f.n + '">' +
+      'Zu allen sieben Lernvideos</button></div></section>';
+  }
+  function starterPanel() {
+    return '<section class="gv-starter card"><div class="gv-starter-copy">' +
+      '<div class="eyebrow">🎬 Neu: Paul und Gustav Globus</div><h2>Erdkunde sehen und verstehen</h2>' +
+      '<p>Sieben kurze Filme zur Erde, zu Erdhalbkugeln, Erdviertelkugeln, Draufsicht, Gradnetz und Atlas. ' +
+      'Wähle einen Film und schau ihn direkt in der App an.</p>' +
+      '<button type="button" class="btn alt" data-gv-open="1">🎬 Lernvideos starten</button></div>' +
+      '<div class="gv-starter-emoji" aria-hidden="true">🌍</div></section>';
+  }
+  function renderIntoExistingPage() {
+    if (state.tab === 'start' && state.view === 'home') {
+      const hero=MAIN.querySelector('.flash > .hero');
+      if(hero)hero.insertAdjacentHTML('afterend',starterPanel());
+      return;
+    }
+    if(state.view === 'quiz' || state.printSet !== null) return;
+    let num = null;
+    if (state.view === 'lesson' || state.view === 'guide') num=firstForTopic[state.topic];
+    else if (state.tab === 'lab') num=firstForLab[state.lab];
+    if (!num) return;
+    const host=MAIN.querySelector('.flash');
+    if(!host) return;
+    const heading=host.querySelector('.section-head, .hero');
+    if(heading)heading.insertAdjacentHTML('afterend',inlinePanel(films[num-1]));
+    else host.insertAdjacentHTML('afterbegin',inlinePanel(films[num-1]));
+  }
+  if(root && !root.querySelector('[data-tab="videos"]')) {
+    const el=document.createElement('button');
+    el.type='button';el.dataset.tab='videos';el.textContent='🎬 Lernvideos';
+    const after=root.querySelector('[data-tab="learn"]');
+    if(after)after.insertAdjacentElement('afterend',el);else root.appendChild(el);
+  }
+  const previousRender=render;
+  render=function(){
+    if(state.tab==='videos' && state.view==='home') {
+      updateStars();
+      document.documentElement.dataset.theme=progress.theme;
+      document.documentElement.dataset.contrast=progress.contrast;
+      document.documentElement.style.setProperty('--fontScale',String(progress.font));
+      document.querySelectorAll('#tabs button').forEach(b=>{
+        const selected=b.dataset.tab==='videos';
+        b.classList.toggle('active',selected);
+        b.setAttribute('aria-current',selected?'page':'false');
+      });
+      MAIN.innerHTML='<div class="flash">' + fullLibrary() + '</div>';
+      return;
+    }
+    previousRender();
+    renderIntoExistingPage();
+  };
+  // Die App wertet nur data-action aus: eigene Filmaktionen kollidieren nicht mit Übungen.
+  document.addEventListener('click',event=>{
+    const button=event.target.closest('[data-gv-film], [data-gv-open]');
+    if(!button)return;
+    const n=Number(button.dataset.gvFilm||button.dataset.gvOpen);
+    if(!Number.isInteger(n)||n<1||n>films.length)return;
+    event.preventDefault();
+    active=n;
+    if(button.hasAttribute('data-gv-open')) {
+      switchTab('videos');
+    } else if(state.tab==='videos') {
+      render();
+      MAIN.querySelector('.gv-stage')?.scrollIntoView({behavior:'auto',block:'nearest'});
+    }
+  });
+  window.ErdkundeVideos=Object.freeze({
+    count:films.length,
+    films:films.map(f=>Object.freeze({number:f.n,title:f.title,src:src(f.n),topics:f.topics.slice()})),
+    open(n=1){if(!Number.isInteger(n)||n<1||n>7)return;active=n;switchTab('videos');}
+  });
+  // Für Atlas-Comic oder weitere Lernstationen öffentliches Modul verwenden:
+  // window.ErdkundeVideos.open(7)
+  render();
 })();
 
 </script>
