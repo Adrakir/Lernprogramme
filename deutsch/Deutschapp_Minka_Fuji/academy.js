@@ -130,11 +130,11 @@ window.MF_ACADEMY=(()=>{
   if(['path','writer','exam','lab','coach','repair','teacher'].includes(view)){
     const tts=document.createElement('section');tts.className='ac-readbar panel';tts.innerHTML=
       '<div><strong>Vorlesen und Ansicht</strong><p class="muted">Die Sprache wird auf deinem Gerät erzeugt. Klang und Stimmen hängen vom Browser ab.</p></div>'+
-      '<div class="ac-read-controls"><button type="button" class="secondary" data-ac-read="current">Vorlesen</button><button type="button" class="secondary" data-ac-stop>Stopp</button>'+
+      '<div class="ac-read-controls"><button type="button" class="secondary" data-ac-read="current">Vorlesen</button><button type="button" class="secondary" data-ac-pause>Pause</button><button type="button" class="secondary" data-ac-resume>Weiter</button><button type="button" class="secondary" data-ac-stop>Stopp</button>'+
       '<label>Tempo<select id="ac-tts-speed">'+[0.75,0.88,1,1.1].map(n=>'<option value="'+n+'" '+(state.settings.speed===n?'selected':'')+'>'+n+'×</option>').join('')+'</select></label>'+
       '<label>Stimme<select id="ac-tts-voice"><option value="">Gerätestimme</option></select></label>'+
       '<label>Textgröße<select id="ac-size"><option value="1" '+(state.settings.font===1?'selected':'')+'>Normal</option><option value="1.13" '+(state.settings.font===1.13?'selected':'')+'>Groß</option><option value="1.24" '+(state.settings.font===1.24?'selected':'')+'>Sehr groß</option></select></label>'+
-      '<label class="ac-inline-check"><input type="checkbox" id="ac-contrast" '+(state.settings.contrast?'checked':'')+'>Mehr Kontrast</label></div>';
+      '<label class="ac-inline-check"><input type="checkbox" id="ac-contrast" '+(state.settings.contrast?'checked':'')+'>Mehr Kontrast</label></div><p id="ac-tts-status" role="status" aria-live="polite" class="ac-tts-status">Vorlesen startet erst nach Antippen.</p>';
     workspace.appendChild(tts); updateVoices(); updateStyle();
     if(view==='path'){const starter=document.createElement('section');starter.innerHTML=daily();workspace.appendChild(starter);}
     if(view==='writer'){
@@ -165,15 +165,52 @@ window.MF_ACADEMY=(()=>{
   const select=document.getElementById('ac-tts-voice');if(!select)return;
   const list=voices();select.innerHTML='<option value="">Gerätestimme</option>'+list.map((v,i)=>'<option value="'+i+'" '+(state.settings.voice===v.name?'selected':'')+'>'+esc(v.name)+'</option>').join('');
  }
- function speak(mode){
-  if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window)){const x=document.querySelector('.ac-readbar .muted');if(x)x.textContent='Dieser Browser unterstützt kein Vorlesen. Du kannst die Vorlesefunktion des Geräts verwenden.';return;}
-  window.speechSynthesis.cancel();
-  const t=currentText(mode).trim();if(!t)return;
-  const u=new SpeechSynthesisUtterance(t.slice(0,12000));u.lang='de-DE';u.rate=Number(state.settings.speed)||0.88;
-  const opts=voices(),v=opts.find(x=>x.name===state.settings.voice);if(v)u.voice=v;
-  window.speechSynthesis.speak(u);
+ // Kurze Sprechabschnitte vermeiden Browser-Limits bei langen Schülergeschichten.
+ let speech={token:0,chunks:[],index:0,paused:false};
+ const speechStatus=message=>{const el=document.getElementById('ac-tts-status');if(el)el.textContent=message;};
+ function speechParts(text){
+   const tokens=String(text||'').replace(/\s+/g,' ').trim().split(/\s+/).filter(Boolean),parts=[];
+   let current='';
+   for(const word of tokens){
+     if(current.length+word.length+1>175&&current){parts.push(current);current='';}
+     if(word.length>175){if(current){parts.push(current);current='';}for(let i=0;i<word.length;i+=175)parts.push(word.slice(i,i+175));}
+     else current+=(current?' ':'')+word;
+   }
+   if(current)parts.push(current);
+   return parts;
  }
- const stop=()=>{try{window.speechSynthesis?.cancel()}catch{}};
+ function readNext(token){
+   if(token!==speech.token||speech.paused)return;
+   if(speech.index>=speech.chunks.length){speechStatus('Der ganze Text wurde vorgelesen.');return;}
+   const chunk=speech.chunks[speech.index];
+   const u=new SpeechSynthesisUtterance(chunk);u.lang='de-DE';u.rate=Number(state.settings.speed)||0.88;
+   const v=voices().find(x=>x.name===state.settings.voice);if(v)u.voice=v;
+   speechStatus('Vorlesen: Abschnitt '+(speech.index+1)+' von '+speech.chunks.length);
+   u.onend=()=>{if(token!==speech.token)return;speech.index++;readNext(token);};
+   u.onerror=e=>{if(token===speech.token)speechStatus('Die Sprachausgabe wurde unterbrochen. Du kannst den Text erneut vorlesen.');};
+   window.speechSynthesis.speak(u);
+ }
+ function speak(mode){
+   if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window)){speechStatus('Dieser Browser unterstützt keine Sprachausgabe. Bitte nutze die Vorlesefunktion des Geräts.');return;}
+   const t=currentText(mode).trim();if(!t){speechStatus('Es ist noch kein Text vorhanden.');return;}
+   speech.token++;window.speechSynthesis.cancel();
+   speech.chunks=speechParts(t);speech.index=0;speech.paused=false;
+   readNext(speech.token);
+ }
+ function pauseReading(){
+   if(!('speechSynthesis' in window)||!speech.chunks.length)return;
+   speech.paused=true;
+   try{window.speechSynthesis.pause()}catch{}
+   speechStatus('Vorlesen pausiert nach Abschnitt '+(speech.index+1)+'.');
+ }
+ function resumeReading(){
+   if(!('speechSynthesis' in window)||!speech.chunks.length)return;
+   speech.paused=false;
+   if(window.speechSynthesis.paused){try{window.speechSynthesis.resume()}catch{}}
+   else if(!window.speechSynthesis.speaking)readNext(speech.token);
+   speechStatus('Vorlesen fortgesetzt.');
+ }
+ const stop=()=>{speech.token++;speech.chunks=[];speech.index=0;speech.paused=false;try{window.speechSynthesis?.cancel()}catch{}speechStatus('Vorlesen beendet.');};
  function ensurePrint(){
    let node=document.getElementById('ac-print-sheet');
    if(!node){node=document.createElement('article');node.id='ac-print-sheet';document.body.appendChild(node);}
@@ -212,6 +249,8 @@ window.MF_ACADEMY=(()=>{
   if(d.acNewChallenge!==undefined){state.challenge++;save();rerender();return;}
   if(d.acPrint){printDoc(d.acPrint);return;}
   if(d.acRead){speak(d.acRead);return;}
+  if(d.acPause!==undefined){pauseReading();return;}
+  if(d.acResume!==undefined){resumeReading();return;}
   if(d.acStop!==undefined){stop();return;}
   if(d.acDownloadRepair!==undefined){
    const r=rstate();const file=new Blob(['\ufeff'+rdata().title+'\n\n'+(r.text||'')],{type:'text/plain;charset=utf-8'});
