@@ -1,0 +1,47 @@
+1
+00:00:00,450 --> 00:00:05,733
+Paul: Herr Welt, warum sieht dieselbe Erde auf manchen Bildern ganz anders aus?
+
+2
+00:00:06,383 --> 00:00:12,466
+Herr Welt: Gute Frage, Paul! Gustav, zeig uns die Seitenansicht und die Draufsicht.
+
+3
+00:00:13,116 --> 00:00:20,800
+Gustav: Bei der Seitenansicht schauen wir von der Seite auf die Erdkugel. Oben ist der Nordpol, unten der Südpol.
+
+4
+00:00:21,449 --> 00:00:29,800
+Gustav: Der rote Äquator verläuft mittig. Die Meridiane gehen vom Nordpol bis zum Südpol und wirken manchmal gebogen.
+
+5
+00:00:30,449 --> 00:00:34,866
+Paul: Und wenn ich direkt über dem Nordpol schwebe, was sehe ich dann?
+
+6
+00:00:35,516 --> 00:00:44,666
+Gustav: Jetzt ist es die Draufsicht vom Nordpol. Der Nordpol liegt in der Mitte, der Äquator am Rand. Wir sehen die Nordhalbkugel.
+
+7
+00:00:45,316 --> 00:00:52,599
+Gustav: Die Meridiane verlaufen wie Speichen von der Mitte nach außen. Die Breitenkreise sehen wie Ringe aus.
+
+8
+00:00:53,250 --> 00:00:57,399
+Paul: Sind das jetzt zwei verschiedene Erden?
+
+9
+00:00:58,049 --> 00:01:04,533
+Gustav: Nein, Paul. Die Erde bleibt eine Kugel. Nur unsere Blickrichtung verändert sich!
+
+10
+00:01:05,183 --> 00:01:12,466
+Herr Welt: Das kennst du von einem Haus: Von der Seite sieht man Türen und Fenster. Von oben sieht man das Dach.
+
+11
+00:01:13,116 --> 00:01:20,666
+Paul: Und bei welcher Ansicht liegt der Nordpol mitten im Bild? Überleg kurz!
+
+12
+00:01:21,316 --> 00:01:28,400
+Gustav: Bei der Draufsicht vom Nordpol! Prima! Im nächsten Film lesen wir gemeinsam das Gradnetz.
