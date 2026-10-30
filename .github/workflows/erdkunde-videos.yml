@@ -1,0 +1,47 @@
+name: Erdkunde – Gustav-Globus-Filme ins Repository sichern
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/erdkunde-videos.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: erdkunde-videos-upload
+  cancel-in-progress: false
+
+jobs:
+  videos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Video-Verzeichnis vorbereiten
+        run: mkdir -p erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos
+      - name: Drei HeyGen-Folgen lokal sichern
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 300 -o folge-1.mp4 "https://resource2.heygen.ai/aws_pacific/avatar_tmp/a20b79272c8a4da294abb69c77b08529/v014636fd536f4a06b7a0f6d8fc835a54/caption_54b6ce07cfe84b2b83ea96143fba3d79.mp4"
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 300 -o folge-2.mp4 "https://resource2.heygen.ai/aws_pacific/avatar_tmp/a20b79272c8a4da294abb69c77b08529/v73ffcf0eb9f84e4cacc78eec4bc4582c/caption_bca639cc16344dbaa0c150b255c50e6d.mp4"
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 300 -o folge-3.mp4 "https://resource2.heygen.ai/aws_pacific/avatar_tmp/a20b79272c8a4da294abb69c77b08529/v252d87505df7415f996447436688a43a/caption_0cc5c4e5b0eb48abb48e39a76d2a5101.mp4"
+          for v in folge-{1,2,3}.mp4; do
+            test "$(wc -c < "$v")" -gt 150000 || { echo "Nicht vollständig: $v"; exit 1; }
+          done
+      - name: Medien im bestehenden Repository speichern
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/folge-{1,2,3}.mp4
+          if git diff --cached --quiet; then echo "Videos bereits unverändert gespeichert"; exit 0; fi
+          git commit -m "Erdkunde: Gustav-Globus-Folgen 1 bis 3 als MP4 sichern"
+          git pull --rebase origin main
+          git push origin HEAD:main
