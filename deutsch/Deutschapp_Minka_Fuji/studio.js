@@ -68,12 +68,13 @@
   }
   const checkBox=(label,id,checked)=>'<label class="studio-check"><input type="checkbox" '+id+' '+(checked?'checked':'')+'><span>'+esc(label)+'</span></label>';
   function renderPath(){
-    const n=countDone();
+    const n=countDone(),next=data.pathway.findIndex((_,i)=>!state.pathDone[i]);
+    const nextStep=next<0?'<p class="studio-next-step">Alle sieben Lernschritte sind von dir abgehakt. Starte eine neue Erzählung oder eine Übungsklassenarbeit.</p>':'<div class="studio-next-step"><strong>Dein nächster Schritt: '+esc(data.pathway[next].title)+'</strong><p>'+esc(data.pathway[next].desc)+'</p>'+( ['writer','exam','lab'].includes(data.pathway[next].target)?'<button type="button" class="primary" data-studio-view="'+data.pathway[next].target+'">'+esc(data.pathway[next].action)+'</button>':link(data.pathway[next].action,data.pathway[next].target))+'</div>';
     return '<div class="studio-landing"><div class="studio-welcome">'+
       '<p class="eyebrow">Dein persönlicher Lernweg · Klasse 5</p><h2>Von der Idee zur spannenden Erzählung</h2>'+
       '<p>Du musst nicht alles auf einmal können. Minka und Fuji begleiten dich Schritt für Schritt. Deine Geschichten können aber auch von Lina, Sami, Mia oder anderen Figuren handeln.</p>'+
       '<p class="studio-progress-line"><strong>'+n+' von '+data.pathway.length+' Lernschritten selbst abgehakt</strong></p><progress value="'+n+'" max="'+data.pathway.length+'" aria-label="Selbst abgehakte Lernschritte"></progress>'+
-      '<p class="muted">Die Häkchen sind deine eigene Lernweg-Planung, kein Kompetenznachweis.</p></div>'+
+      '<p class="muted">Die Häkchen sind deine eigene Lernweg-Planung, kein Kompetenznachweis.</p>'+nextStep+'</div>'+
       '<div class="studio-choices">'+
       '<button type="button" class="studio-choice" data-studio-view="path" data-studio-focus="path"><span aria-hidden="true">🧭</span><strong>Ich möchte es lernen</strong><span>Geführt durch Erklärungen, Comics und Übungen</span></button>'+
       '<button type="button" class="studio-choice" data-studio-view="writer"><span aria-hidden="true">✏️</span><strong>Ich möchte schreiben</strong><span>Verschiedene Figuren und eigene Geschichten</span></button>'+
@@ -144,14 +145,14 @@
      (s.panels.length?storyboard(s.panels,false,s.id):'<div class="studio-wordcards" aria-label="Reizwörter">'+s.words.map(w=>'<span>'+esc(w)+'</span>').join('')+'</div>')+
      '<p class="studio-exam-task"><strong>Dein Arbeitsauftrag:</strong> '+esc(s.task)+'</p>'+
      '<p><strong>Denke daran:</strong> Schreibe eine passende Überschrift und eine zusammenhängende Erzählung mit Einleitung, Hauptteil und Schluss.</p>'+
-     (!sim&&!d.submitted?'<div class="studio-actions"><button type="button" class="secondary" data-studio-exam-hint>Hinweis '+(Math.min(d.hints||0,2)+1)+' von 3</button></div>'+
-       (d.hints?'<div class="studio-hintlist">'+s.help.slice(0,d.hints).map((v,i)=>hintBox('Hinweis '+(i+1),v)).join('')+'</div>':''):'')+
+     (!sim&&!d.submitted?'<div class="studio-actions"><button type="button" class="secondary" data-studio-exam-hint '+(d.hints>=3?'disabled':'')+'>Hinweis '+(Math.min(d.hints||0,2)+1)+' von 3</button></div>'+
+       (d.hints?'<div class="studio-hintlist">'+s.help.slice(0,d.hints).map((v,i)=>hintBox('Hinweis '+(i+1),v)).join('')+'</div>':''):(sim&&d.hints>0?'<p class="muted">Hier wurden vor dem Wechsel zur Probe bereits Hilfen geöffnet. Für eine unabhängige Probe beginne diese Aufgabe neu.</p>':'')) +
      '<label class="studio-input-label"><strong>Überschrift</strong><input type="text" maxlength="160" data-studio-exam-title value="'+esc(d.title||'')+'" placeholder="Eine passende Überschrift"></label>'+
      '<label class="studio-input-label"><strong>Deine Erzählung</strong><textarea rows="17" maxlength="20000" data-studio-exam-text placeholder="Hier beginnt deine Erzählung …">'+esc(d.text||'')+'</textarea></label>'+
      '<div class="studio-exam-bottom"><p id="studio-exam-words" role="status">'+words(d.text)+' Wörter · '+(sim?'Probe ohne Hilfen':'Übung mit freiwilligen Hinweisen')+'</p>'+
      '<button type="button" class="primary" data-studio-exam-submit '+(!String(d.text||'').trim()?'disabled':'')+'>'+(d.submitted?'Erneut zur Selbstprüfung abgeben':'Abgeben und selbst prüfen')+'</button></div></div>'+
      (d.submitted?'<section class="panel studio-review" id="studio-exam-review"><h3>Dein Kriterienraster</h3><p>Vergleiche jede Aussage sorgfältig mit deinem Text. Wähle 0 = noch nicht, 1 = teilweise, 2 = gut gelungen. Das ist eine <strong>Selbsteinschätzung</strong>, keine Schulnote.</p>'+
-       data.rubric.map((r,i)=>'<div class="studio-rubric-row"><div><strong>'+esc(r.name)+'</strong><p>'+esc(r.detail)+'</p></div><label>Eigene Einschätzung<select data-studio-rating="'+i+'"><option value="">Bitte wählen</option>'+[0,1,2].map(v=>'<option value="'+v+'" '+(check[i]===v?'selected':'')+'>'+v+' – '+['noch nicht','teilweise','gut gelungen'][v]+'</option>').join('')+'</select></label></div>').join('')+
+       '<details class="studio-guided-exam"><summary>Geführte Musterstruktur zur Auswertung aufklappen</summary><ol>'+s.guide.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ol><p>Das ist eine mögliche Handlungsfolge. Andere gut begründete Geschichten können ebenso passen. Achte auf den Aufbau, nicht auf identische Wörter.</p></details>'+data.rubric.map((r,i)=>'<div class="studio-rubric-row"><div><strong>'+esc(r.name)+'</strong><p>'+esc(r.detail)+'</p></div><label>Eigene Einschätzung<select data-studio-rating="'+i+'"><option value="">Bitte wählen</option>'+[0,1,2].map(v=>'<option value="'+v+'" '+(check[i]===v?'selected':'')+'>'+v+' – '+['noch nicht','teilweise','gut gelungen'][v]+'</option>').join('')+'</select></label></div>').join('')+
        '<div class="studio-score" role="status" id="studio-score"><strong>'+check.filter(v=>Number.isInteger(v)).length+' von '+data.rubric.length+' Kriterien betrachtet</strong><p>'+sum+' von 12 möglichen Selbsteinschätzungspunkten. Keine automatische Bewertung oder Note.</p>'+
        (check.some(v=>v===0||v===1)?'<p><strong>Weiterüben:</strong> '+data.rubric.filter((r,i)=>check[i]===0||check[i]===1).map(r=>esc(r.name)).join(' · ')+'</p>':'')+'</div>'+
        '<div class="studio-actions"><button type="button" class="secondary" data-studio-view="lab">Textüberarbeitung üben</button>'+link('Hauptteil gezielt üben','hauptteil')+
@@ -238,7 +239,7 @@
     if(el.name==='studio-exam-mode'){state.examMode=el.value==='simulation'?'simulation':'practice';render();return;}
     if(d.studioPathCheck!==undefined){state.pathDone[d.studioPathCheck]=el.checked;render();return;}
     if(d.studioWriterCheck!==undefined){draft().checks[Number(d.studioWriterCheck)]=el.checked;save();const x=root.querySelector('#studio-writer-checkinfo');if(x)x.textContent=draft().checks.filter(Boolean).length+' von '+writerChecks.length+' selbst geprüft · keine automatische Benotung.';return;}
-    if(d.studioRating!==undefined){const n=Number(d.studioRating),x=examDraft();x.ratings[n]=el.value===''?null:Number(el.value);render();return;}
+    if(d.studioRating!==undefined){const n=Number(d.studioRating),x=examDraft();x.ratings[n]=el.value===''?null:Number(el.value);render();root.querySelector('[data-studio-rating="'+Math.min(n+1,data.rubric.length-1)+'"]')?.focus?.({preventScroll:true});return;}
     if(d.studioLabSelf!==undefined){const v=labDraft();v.checks[Number(d.studioLabSelf)]=el.checked;save();const info=document.getElementById('studio-lab-self-status');info.textContent=v.checks.filter(Boolean).length+' von 3 Kriterien selbst geprüft – keine automatische Benotung.';return;}
   });
   root.addEventListener('input',ev=>{
@@ -253,7 +254,7 @@
       const x=examDraft();if(d.studioExamText!==undefined)x.text=el.value.slice(0,20000);else x.title=el.value.slice(0,160);
       x.submitted=false;x.ratings=[];save();
       const count=document.getElementById('studio-exam-words');if(count)count.textContent=words(x.text)+' Wörter';
-      const submit=root.querySelector('[data-studio-exam-submit]');if(submit)submit.disabled=!String(x.text||'').trim();
+      const submit=root.querySelector('[data-studio-exam-submit]');if(submit){submit.disabled=!String(x.text||'').trim();submit.textContent='Abgeben und selbst prüfen';}
       const review=root.querySelector('#studio-exam-review');if(review)review.remove();return;
     }
     if(d.studioLabRevision!==undefined){const x=labDraft();x.revision=el.value.slice(0,12000);x.checks=[];save();root.querySelectorAll('[data-studio-lab-self]').forEach(c=>c.checked=false);
