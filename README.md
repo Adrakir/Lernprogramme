@@ -39,8 +39,7 @@ Starten der vorhandenen eigenständigen HTML-Apps nicht benötigt.
 
 Einige Apps speichern Lernstände lokal im Browser des verwendeten Geräts. Diese
 Daten werden nicht automatisch zwischen Geräten oder Browsern synchronisiert.
-Beim Löschen der Browserdaten können sie verloren gehen. Die Erzählwerkstatt
-behält Antworten laut Startseite nur während der geöffneten Sitzung.
+Beim Löschen der Browserdaten können sie verloren gehen. Die älteren Deutsch-Übungen behalten einige Antworten nur innerhalb einer Sitzung; das neue Erzählstudio speichert Entwürfe lokal im Browser.
 
 ## Ergänzende Materialien
 
