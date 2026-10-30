@@ -184,3 +184,11 @@ nav.navigation button[data-page=studio]:not([aria-current=page]){background:#1e3
 #studio .studio-guided-exam{padding:12px 18px;background:#203a50;border:1px solid #6785a2;border-radius:11px;margin:14px 0}
 #studio .studio-guided-exam li{padding:4px 0;margin-bottom:8px}
 #studio .studio-guided-exam p{color:#d2e0f2}
+
+/* Auf Smartphones bleibt die obere Navigation auf einer einzigen wischbaren Zeile.
+   Der eigentliche Start zeigt die drei wichtigsten Lernentscheidungen. */
+@media(max-width:760px){
+ nav.navigation{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;max-width:100%;gap:8px;padding:9px 16px 16px}
+ nav.navigation button{flex:0 0 auto;min-width:165px;scroll-snap-align:start;padding:12px}
+ nav.navigation button[data-page=studio]{min-width:210px}
+}
