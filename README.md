@@ -8,7 +8,7 @@ die Apps nach Fach und Thema.
 
 | Fach | Programm | Themen | Einstieg |
 |---|---|---|---|
-| Deutsch | Minka & Fuji – Erzählwerkstatt | Erzählungen, Gefühle und Gedanken, Hauptteil, Spannung, Schreiben und Verstehen | [deutsch/Deutschapp_Minka_Fuji/index.html](./deutsch/Deutschapp_Minka_Fuji/index.html) |
+| Deutsch | Minka & Fuji – Erzählwerkstatt | Erzählstudio mit sieben Lernschritten, sechs Geschichten, acht Klassenarbeitsaufgaben und Textlabor | [deutsch/Deutschapp_Minka_Fuji/index.html](./deutsch/Deutschapp_Minka_Fuji/index.html) |
 | Englisch | Access Wortwelt | Vokabeln, Sätze und Hörübungen | [englisch/index.html](./englisch/index.html) |
 | Mathematik | MatheKompass | Zahlen, Rechnen, Größen, Geometrie und Daten | [mathematik/MatheKompass/MatheKompass.html](./mathematik/MatheKompass/MatheKompass.html) |
 | Musik | Rhythmuswerkstatt | Noten, Pausen, Takte und Rhythmus | [musik/Musik-Lernapp/index.html](./musik/Musik-Lernapp/index.html) |
@@ -51,6 +51,8 @@ Bereichen. Alte Sicherungen und begonnene 14-Aufgaben-Diagnosen bleiben lesbar.
 Ein bearbeitetes Beispiel ist kein Kompetenznachweis; Inhalte mit Kennzeichnung
 5/6 werden nach dem Unterrichtsstand ausgewählt. Details stehen in
 [BITTE_ZUERST_LESEN.txt](./mathematik/MatheKompass/BITTE_ZUERST_LESEN.txt).
+
+Die **Deutsch-Erzählwerkstatt** öffnet mit einem neuen Erzählstudio: Ein geführter Lernweg verbindet die vorhandenen acht Bereiche mit einer vollständigen Schreibwerkstatt, Bild- und Reizwortgeschichten als Übungsklassenarbeiten, einem Kriterienraster zur Selbstprüfung und einem Textlabor. Die Grafiken sind lokal eingebunden, und eigene Schreibtexte erhalten ausdrücklich keine automatische Note. Direktstart: [Mein Erzählstudio](./deutsch/Deutschapp_Minka_Fuji/index.html#studio). Hinweise stehen in [START_HIER.txt](./deutsch/Deutschapp_Minka_Fuji/START_HIER.txt).
 
 Im Erdkunde-Ordner liegen neben der App unter anderem Lernhefte,
 Übungsklassenarbeiten und Anleitungen. Für die Erdkunde-App und ihre Materialien
