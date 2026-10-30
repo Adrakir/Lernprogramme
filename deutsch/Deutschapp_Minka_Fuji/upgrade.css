@@ -65,3 +65,14 @@
 @media(max-width:650px){#studio .up-scenes,#studio .up-notes,#studio .up-results,#studio .up-path-grid,#studio .up-focus-list{grid-template-columns:minmax(0,1fr)}#studio .up-actions>button{flex:1 1 190px}#studio .up-card-list>li{grid-template-columns:14px minmax(0,1fr) 80px;padding:9px;gap:6px}#studio .up-move{grid-template-columns:repeat(2,36px)}#studio .up-move button{font-size:1rem;min-height:44px}}
 @media print{body.ac-printing #ac-print-sheet .ac-print-pictures{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}body.ac-printing #ac-print-sheet .ac-print-pictures svg{max-height:118px;height:auto;width:100%;display:block}}
 @media(prefers-reduced-motion:reduce){#studio .up-scene,#studio .up-read-line{animation:none!important;transition:none!important}}
+
+/* Eindeutiger Start für Kinder trotz zahlreicher Lernbereiche */
+#studio .up-quickstart{margin:0 0 22px;border-color:#94afc5;background:linear-gradient(140deg,#173f51,#244534)}
+#studio .up-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#studio .up-quick-grid button{min-width:0;min-height:112px;white-space:normal;padding:15px;text-align:left;border:1px solid #99c2bb;background:#234f54;display:flex;flex-direction:column;gap:9px}
+#studio .up-quick-grid button strong{font-size:1.06rem}
+#studio .up-quick-grid button span{font-size:.9rem;color:#e4f2eb}
+#studio .up-jump-nav{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 21px}
+#studio .up-jump-nav button{flex:1 1 150px;min-width:0;font-size:.88rem;white-space:normal;border-color:#718eaa}
+#studio .studio-tabs{scrollbar-width:thin;scrollbar-color:#9bb4c3 #172f46}
+@media(max-width:800px){#studio .up-quick-grid{grid-template-columns:1fr}#studio .up-quick-grid button{min-height:70px}}
