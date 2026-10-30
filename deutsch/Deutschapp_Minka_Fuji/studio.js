@@ -52,18 +52,18 @@
   const link=(label,route)=>'<button type="button" class="secondary" data-studio-route="'+route+'">'+esc(label)+'</button>';
   const hintBox=(kind,text)=>'<div class="studio-hint"><strong>'+kind+'</strong><p>'+esc(text)+'</p></div>';
   function countDone(){return data.pathway.filter((_,i)=>state.pathDone[i]).length;}
-  function sceneArt(s,idx,active,interactive){
+  function sceneArt(s,idx,active,interactive,themeId){
     const start=interactive?'<button type="button" class="studio-story-panel '+(active?'active':'')+'" data-studio-scene="'+idx+'" aria-pressed="'+active+'">':'<div class="studio-story-panel studio-story-panel-static">';
-    return start+'<span class="studio-scene-num">'+(idx+1)+'</span><span class="studio-scene-art" aria-hidden="true">'+esc(s[0])+'</span><strong>'+esc(s[1])+'</strong><span>'+esc(s[2])+'</span>'+(interactive?'</button>':'</div>');
+    return start+'<span class="studio-scene-num">'+(idx+1)+'</span><span class="studio-scene-art" aria-hidden="true">'+(window.MF_STUDIO_ART?window.MF_STUDIO_ART.render(themeId,idx,s[0]):esc(s[0]))+'</span><strong>'+esc(s[1])+'</strong><span>'+esc(s[2])+'</span>'+(interactive?'</button>':'</div>');
   }
   function tensionLine(){
     const current=Math.max(0,Math.min(state.scene,3));
     const dots=[[70,135],[250,110],[430,70],[610,30]];
     return '<div class="studio-tension-graphic"><div><strong>So wächst die Spannung</strong><p>Tippe oben auf eine Szene: Der Punkt wandert auf der Spannungskurve. Im Höhepunkt ist die Entscheidung am wichtigsten.</p></div><svg viewBox="0 0 690 175" role="img" aria-label="Ansteigende Spannung von Szene eins bis zum entscheidenden Moment in Szene vier" xmlns="http://www.w3.org/2000/svg"><path d="M35 155 H670" stroke="#90a8c7" stroke-width="2"/><path d="M70 135 Q170 150 250 110 Q345 105 430 70 Q520 55 610 30" fill="none" stroke="#baf36b" stroke-width="6" stroke-linecap="round"/>'+dots.map((p,i)=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(i===current?15:10)+'" fill="'+(i===current?'#ffffff':'#203850')+'" stroke="#baf36b" stroke-width="5"/><text x="'+p[0]+'" y="'+(p[1]+33)+'" text-anchor="middle" fill="#ffffff" font-size="19" font-weight="700">'+(i+1)+'</text>').join('')+'</svg><p class="muted">Die Kurve ist ein Modell. Nicht jede Geschichte hat genau diesen Verlauf.</p></div>';
   }
-  function storyboard(panels,interactive=false){
+  function storyboard(panels,interactive=false,themeId=''){
     const n=Math.max(0,Math.min(state.scene,panels.length-1));
-    return '<div class="studio-storyboard" role="group" aria-label="Bilderfolge in der richtigen Reihenfolge">'+panels.map((s,i)=>sceneArt(s,i,interactive&&n===i,interactive)).join('')+'</div>'+
+    return '<div class="studio-storyboard" role="group" aria-label="Bilderfolge in der richtigen Reihenfolge">'+panels.map((s,i)=>sceneArt(s,i,interactive&&n===i,interactive,themeId)).join('')+'</div>'+
      (interactive?'<div class="studio-scene-focus" role="status"><strong>Bild '+(n+1)+': '+esc(panels[n][1])+'</strong><p>'+esc(panels[n][2])+'</p><div class="studio-scene-controls"><button type="button" class="secondary" data-studio-scene="'+Math.max(n-1,0)+'" '+(n===0?'disabled':'')+'>Vorheriges Bild</button><button type="button" class="secondary" data-studio-scene="'+Math.min(n+1,panels.length-1)+'" '+(n===panels.length-1?'disabled':'')+'>Nächstes Bild</button></div></div>':'');
   }
   const checkBox=(label,id,checked)=>'<label class="studio-check"><input type="checkbox" '+id+' '+(checked?'checked':'')+'><span>'+esc(label)+'</span></label>';
@@ -117,7 +117,7 @@
     return '<div class="studio-section-intro"><h2>Die große Schreibwerkstatt</h2><p>Wähle deine Geschichte. Minka und Fuji helfen beim Schreiben, aber die Hauptfiguren wechseln. Du schreibst selbst und erhältst einen klaren Bauplan – keine automatisch erzeugte Note.</p></div>'+
      '<div class="studio-select"><label for="studio-picker"><strong>Wähle deinen Schreibanlass</strong></label>'+picker(data.stories,state.storyId)+'</div>'+
      '<div class="studio-story-title"><span class="studio-story-icon" aria-hidden="true">'+esc(s.icon)+'</span><div><h3>'+esc(s.name)+'</h3><p>'+esc(s.type)+' · '+esc(s.setting)+' · '+esc(s.people)+'</p></div></div>'+
-     storyboard(s.panels,true)+tensionLine()+
+     storyboard(s.panels,true,s.id)+tensionLine()+
      '<details class="studio-help"><summary>Ideen von Fuji: Worauf könntest du achten?</summary><p><strong>Ziel:</strong> '+esc(s.purpose)+'</p><p><strong>Hinweis:</strong> '+esc(s.hint)+'</p><p><strong>Hindernis:</strong> '+esc(s.obstacle)+'</p><ol>'+s.ideas.map(q=>'<li>'+esc(q)+'</li>').join('')+'</ol><p>Du darfst die Geschichte ganz anders lösen – wichtig ist der rote Faden.</p></details>'+
      '<div class="studio-write-grid"><section class="panel"><p class="eyebrow">Schritt 1</p><h3>Dein Erzählplan</h3><p>Stichwörter reichen aus. Du kannst deinen Plan jederzeit ändern.</p>'+
      planFields.map(([key,label,placeholder])=>'<label class="studio-input-label">'+esc(label)+'<input type="text" maxlength="450" data-studio-plan="'+key+'" value="'+esc(d.plan[key]||'')+'" placeholder="'+esc(placeholder)+'"></label>').join('')+
@@ -141,7 +141,7 @@
      '<label><input type="radio" name="studio-exam-mode" value="practice" '+(!sim?'checked':'')+'> Mit Hilfen üben</label>'+
      '<label><input type="radio" name="studio-exam-mode" value="simulation" '+(sim?'checked':'')+'> Probeklassenarbeit ohne Hilfen</label></fieldset></div>'+
      '<div class="panel studio-exam-paper"><p class="eyebrow">'+esc(s.kind)+' · '+esc(s.level)+' · Orientierungszeit: '+s.minutes+' Minuten</p><h3>'+esc(s.title)+'</h3>'+
-     (s.panels.length?storyboard(s.panels,false):'<div class="studio-wordcards" aria-label="Reizwörter">'+s.words.map(w=>'<span>'+esc(w)+'</span>').join('')+'</div>')+
+     (s.panels.length?storyboard(s.panels,false,s.id):'<div class="studio-wordcards" aria-label="Reizwörter">'+s.words.map(w=>'<span>'+esc(w)+'</span>').join('')+'</div>')+
      '<p class="studio-exam-task"><strong>Dein Arbeitsauftrag:</strong> '+esc(s.task)+'</p>'+
      '<p><strong>Denke daran:</strong> Schreibe eine passende Überschrift und eine zusammenhängende Erzählung mit Einleitung, Hauptteil und Schluss.</p>'+
      (!sim&&!d.submitted?'<div class="studio-actions"><button type="button" class="secondary" data-studio-exam-hint>Hinweis '+(Math.min(d.hints||0,2)+1)+' von 3</button></div>'+
