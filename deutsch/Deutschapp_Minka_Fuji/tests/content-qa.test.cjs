@@ -25,7 +25,7 @@ test('Deutsch: Fachinhalte, Lösungsbegründungen, Lernziele und Aufgabenbanken 
  for(const d of studio.stories){
   ok(nonempty(d.name)&&nonempty(d.setting)&&nonempty(d.people)&&nonempty(d.purpose),'Geschichte mit Figuren, Ort und Anlass '+d.id);
   ok(nonempty(d.hint)&&nonempty(d.obstacle)&&nonempty(d.peak)&&nonempty(d.ending),'Geschichte mit rotem Faden '+d.id);
-  ok(d.panels.length===4&&d.panels.every(p=>p.length===3&&p.every(nonempty)),'vier verständliche Handlungsbilder '+d.id);
+  ok(d.panels.length===4&&d.panels.every(p=>p.length===3&&!!p[0]&&nonempty(p[1])&&nonempty(p[2])),'vier verständliche Handlungsbilder '+d.id);
   ok(d.ideas.length>=2,'Anregungen zur eigenen Geschichte '+d.id);
  }
  for(const d of studio.exams){
