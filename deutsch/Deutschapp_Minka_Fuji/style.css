@@ -25,4 +25,5 @@
 /* Navigation: lange Wörter überlappen auf iMac und Tablet keine Nachbarkarte. */
 .navigation button{overflow-wrap:anywhere;hyphens:auto;line-height:1.35}
 .navigation-hint{display:none}
-@media(max-width:760px){.navigation-hint{display:block;max-width:var(--max);margin:-11px auto 10px;padding:0 16px;color:var(--muted);font-size:.82rem;line-height:1.45}}
+@media(min-width:761px){.navigation button{min-width:190px;font-size:.95rem;overflow-wrap:normal;hyphens:auto}}
+@media(max-width:760px){.navigation-hint{display:block;max-width:var(--max);margin:6px auto 14px;padding:0 16px;color:var(--muted);font-size:.82rem;line-height:1.45}}
