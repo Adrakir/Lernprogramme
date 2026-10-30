@@ -20,6 +20,28 @@ ok(!!doc.querySelector('script[src^="taktlabor.js"]'),'Taktlabor loaded');
 ok(!!doc.querySelector('link[href^="taktlabor.css"]'),'Taktlabor stylesheet loaded');
 
 ok(doc.querySelector('#simpleStudent'),'First visit chooses a role');click('simpleStudent');ok(doc.querySelector('#guideResume'),'Student has next step');
+
+run("setView('exerciseHub')");
+click('tlOpen');
+ok(run('view')==='taktlabor','Taktlabor reached from exercise area');
+ok(!!doc.querySelector('#taktlaborTimeline'),'Time grid visible');
+ok(doc.querySelectorAll('nav.mainNav button').length===5,'All five main choices remain visible');
+for(let level=1;level<=3;level++){
+ const button=doc.querySelector('[data-tl-level="'+level+'"]');
+ ok(button,'Level selector '+level);button.click();
+ for(let task=0;task<6;task++){
+  ok(doc.querySelectorAll('.tlChoices button').length===4,'Four answer choices');
+  ok(doc.querySelectorAll('#taktlaborTimeline [data-tl-index]').length>=2,'Timeline elements');
+  if(task===0){click('tlHint');ok(!!doc.querySelector('.tlHint'),'Progressive hint available');}
+  click('tlSolution');
+  ok(!!doc.querySelector('#tlFeedback'),'Worked solution available');
+  ok(doc.querySelector('#tlFeedback').textContent.includes('Richtige Antwort'),'Solution explains answer');
+  click('tlNext');
+ }
+}
+run("setView('home')");
+ok(!!doc.querySelector('#guideResume'),'Return to existing learning path');
+
 const keys=run('MUSIC_PATH.map(d=>d.key)');ok(keys.length===27&&new Set(keys).size===27,'27 unique lessons');
 ok(run('guideTopics.flatMap(t=>t.keys).length===MUSIC_PATH.length'),'Topics cover all lessons');ok(run('guideTopics.flatMap(t=>t.keys).every(k=>MUSIC_PATH.some(d=>d.key===k))'),'Topic links valid');
 ok(run("notes.map(n=>n.units).join(',')==='16,8,4,2,1'"),'Note durations');ok(run('dotted.every(n=>n.units===val(n.id[0])*1.5)'),'Dotted durations');ok(run('val("barrest",3)===12&&val("barrest",4)===16'),'Whole-measure rest adapts to meter');
