@@ -8,7 +8,7 @@ window.MF_COURSE_DATA = (() => {
   const row=(label,options,answer)=>({label,options,answer});
   const lessons=[
     {
-      id:'orientierung',title:'Ein Anfang, der Orientierung gibt',short:'Den Anfang planen',coach:'Minka',image:'scene-1.webp',effect:'orientation',minutes:'5–7 Minuten',
+      id:'orientierung',title:'Ein Anfang, der Orientierung gibt',short:'Den Anfang planen',coach:'Minka',image:'scene-1.jpg',effect:'orientation',minutes:'5–7 Minuten',
       goal:'Du verbindest Figuren, Zeit, Ort und Ausgangssituation zu einer verständlichen Einleitung.',
       intro:'Stell dir vor, du öffnest ein Buch. Bevor das Abenteuer richtig beginnt, möchtest du wissen: Wer ist hier? Wo bin ich? Was tun die Figuren? Genau diese Orientierung gibst du deinen Lesern.',
       rule:'Wer? Wann? Wo? Was tun die Figuren am Anfang? Diese Informationen gehören in zusammenhängende Sätze. Die Lösung des Abenteuers bleibt offen.',
@@ -33,7 +33,7 @@ window.MF_COURSE_DATA = (() => {
       takeaway:'Ich gebe Orientierung und verbinde meine Notizen zu Sätzen.'
     },
     {
-      id:'schlinge',title:'Eine Schlinge für die Neugier',short:'Neugier wecken',coach:'Fuji',image:'scene-2.webp',effect:'clue',minutes:'5–7 Minuten',
+      id:'schlinge',title:'Eine Schlinge für die Neugier',short:'Neugier wecken',coach:'Fuji',image:'scene-2.jpg',effect:'clue',minutes:'5–7 Minuten',
       goal:'Du setzt einen konkreten Hinweis, lässt eine Frage offen und planst die spätere Auflösung.',
       intro:'Mit „Schlinge“ meinen wir einen erzählerischen Köder: Du fängst die Aufmerksamkeit deiner Leser ein. Sie sollen wissen wollen, was hinter einem merkwürdigen Hinweis steckt.',
       rule:'Orientierung + auffälliger Hinweis + offene Frage. Die Frage muss nicht ausdrücklich als Fragesatz dastehen. Greife den Hinweis später wieder auf.',
@@ -60,7 +60,7 @@ window.MF_COURSE_DATA = (() => {
       takeaway:'Ich wecke eine Frage und greife meinen Hinweis später wieder auf.'
     },
     {
-      id:'bewegung',title:'Wörter setzen Pfoten in Bewegung',short:'Genau bewegen',coach:'Minka',image:'scene-1.webp',effect:'movement',minutes:'5–6 Minuten',
+      id:'bewegung',title:'Wörter setzen Pfoten in Bewegung',short:'Genau bewegen',coach:'Minka',image:'scene-1.jpg',effect:'movement',minutes:'5–6 Minuten',
       goal:'Du ersetzt allgemeine Bewegungsverben durch Wörter, die zur Art und zum Tempo der Bewegung passen.',
       intro:'„Minka ging zur Tür“ lässt vieles offen. Schleicht sie, hastet sie oder stolpert sie? Mit einem passenden Verb entsteht im Kopf der Leser eine sichtbare Bewegung.',
       rule:'Wähle nach der Szene, nicht nach der Länge des Wortes. Erzähle im Präteritum: schleichen → schlich, rennen → rannte, trotten → trottete.',
@@ -85,7 +85,7 @@ window.MF_COURSE_DATA = (() => {
       takeaway:'Mein Verb zeigt, wie sich eine Figur bewegt.'
     },
     {
-      id:'blicke',title:'Nicht jeder Blick ist gleich',short:'Genau hinsehen',coach:'Fuji',image:'scene-3.webp',effect:'look',minutes:'4–6 Minuten',
+      id:'blicke',title:'Nicht jeder Blick ist gleich',short:'Genau hinsehen',coach:'Fuji',image:'scene-3.jpg',effect:'look',minutes:'4–6 Minuten',
       goal:'Du unterscheidest suchendes Schauen, genaues Prüfen und längeres Beobachten.',
       intro:'Leser sollen nicht nur erfahren, dass Minka etwas sieht. Sie können miterleben, wie sie etwas zu erkennen versucht. Dafür brauchen wir genaue Wahrnehmungsverben.',
       rule:'Spähen = suchend und aufmerksam schauen. Mustern = genau und prüfend ansehen. Beobachten = einen Vorgang eine Weile aufmerksam verfolgen.',
@@ -111,7 +111,7 @@ window.MF_COURSE_DATA = (() => {
       takeaway:'Ich wähle mein Wahrnehmungsverb nach der Absicht und Dauer des Blicks.'
     },
     {
-      id:'stimmen',title:'So klingt die Stimme deiner Figuren',short:'Passend sprechen',coach:'Minka',image:'scene-2.webp',effect:'voice',minutes:'5–6 Minuten',
+      id:'stimmen',title:'So klingt die Stimme deiner Figuren',short:'Passend sprechen',coach:'Minka',image:'scene-2.jpg',effect:'voice',minutes:'5–6 Minuten',
       goal:'Du wählst Redeverben, die Lautstärke oder Absicht einer Äußerung deutlich machen.',
       intro:'Ein Dialog verrät mehr als Informationen. Minka kann flüstern, Fuji kann erklären oder warnen. Das Redeverb muss aber zu dem passen, was die Figur wirklich sagen will.',
       rule:'Fragen will etwas wissen. Warnen macht auf eine Gefahr aufmerksam. Flüstern beschreibt eine sehr leise Stimme. „Sagen“ darf als neutrales Verb bleiben.',
@@ -138,7 +138,7 @@ window.MF_COURSE_DATA = (() => {
       takeaway:'Mein Redeverb passt zur Absicht und zur Stimme meiner Figur.'
     },
     {
-      id:'anfaenge',title:'Sätze bekommen einen eigenen Rhythmus',short:'Satzanfänge variieren',coach:'Fuji',image:'scene-4.webp',effect:'order',minutes:'6–8 Minuten',
+      id:'anfaenge',title:'Sätze bekommen einen eigenen Rhythmus',short:'Satzanfänge variieren',coach:'Fuji',image:'scene-4.jpg',effect:'order',minutes:'6–8 Minuten',
       goal:'Du beginnst Sätze unterschiedlich und achtest dabei auf Wortstellung und Kommas.',
       intro:'„Dann … Dann … Dann …“ kann einen Text eintönig machen. Du kannst mit einer Zeit, einem Ort, einem Gefühl oder einem Nebensatz beginnen. Der Ablauf deiner Handlung soll dabei klar bleiben.',
       rule:'Im Aussagesatz steht das gebeugte Verb an zweiter Satzgliedstelle: „Vorsichtig öffnete Fuji die Tür.“ Nach einem vorangestellten Nebensatz steht ein Komma; dann folgt das Verb des Hauptsatzes.',
@@ -157,7 +157,7 @@ window.MF_COURSE_DATA = (() => {
       takeaway:'Ich variiere den Anfang und prüfe danach Verbposition und Kommas.'
     },
     {
-      id:'sinne',title:'Wörter, die man fast spüren kann',short:'Mit Adjektiven zeigen',coach:'Minka',image:'scene-4.webp',effect:'senses',minutes:'5–7 Minuten',
+      id:'sinne',title:'Wörter, die man fast spüren kann',short:'Mit Adjektiven zeigen',coach:'Minka',image:'scene-4.jpg',effect:'senses',minutes:'5–7 Minuten',
       goal:'Du wählst wenige treffende Adjektive und machst damit Sinneseindrücke anschaulich.',
       intro:'„Eine komische Tür und ein komisches Geräusch“ ist noch schwer vorstellbar. Wie fühlt sich das Holz an? Wie klingt das Geräusch? Genau diese Einzelheiten lassen eine Szene lebendig werden.',
       rule:'Wähle Eigenschaften, die für deine Szene wichtig sind. Passe die Endungen an: das raue Holz, auf dem rauen Holz. Viele allgemeine Adjektive ersetzen keine genaue Beobachtung.',
@@ -184,7 +184,7 @@ window.MF_COURSE_DATA = (() => {
       takeaway:'Wenige konkrete Adjektive machen eine Szene anschaulich.'
     },
     {
-      id:'dialog',title:'Wörtliche Rede bekommt ihre Zeichen',short:'Dialoge schreiben',coach:'Fuji',image:'scene-5.webp',effect:'talk',minutes:'7–9 Minuten',
+      id:'dialog',title:'Wörtliche Rede bekommt ihre Zeichen',short:'Dialoge schreiben',coach:'Fuji',image:'scene-5.jpg',effect:'talk',minutes:'7–9 Minuten',
       goal:'Du setzt Redezeichen, Doppelpunkt und Komma bei vorangestellten und nachgestellten Begleitsätzen richtig.',
       intro:'In unseren erfundenen Tiergeschichten können Minka und Fuji sprechen. Redezeichen zeigen, welche Wörter genau gesprochen werden. Der Begleitsatz sagt, wer spricht und wie.',
       rule:'Davor: Minka fragte: „Hörst du das?“ Danach: „Hörst du das?“, fragte Minka. Das Fragezeichen bleibt in der Rede; das Komma steht danach. Bei einer Aussage entfällt der Punkt vor dem nachgestellten Begleitsatz.',
