@@ -1,0 +1,33 @@
+Paul und Gustav Globus – Folge 7: Orte im Atlas finden
+
+
+
+Paul: Herr Welt, ich kenne die Koordinaten. Aber wie finde ich den Ort jetzt in einem Atlas?
+
+Herr Welt: Zuerst wählen wir im Inhaltsverzeichnis eine passende Karte. Für unser Beispiel ist das eine Deutschlandkarte.
+
+Gustav: Schau am Kartenrand! Dort stehen Breiten- und Längengrade. Die Linien im Kartenbild bilden das Gradnetz.
+
+Paul: Ich suche die Gegend um Hannover. Als grobe Koordinaten nehmen wir zweiundfünfzig Grad Nord und zehn Grad Ost.
+
+Gustav: Merke dir unbedingt: Wir suchen zuerst den Breitengrad und erst danach den Längengrad.
+
+Gustav: Schritt eins: Suche am linken oder rechten Kartenrand zweiundfünfzig Grad nördlicher Breite. Folge der roten Linie.
+
+Paul: Jetzt habe ich den Breitenkreis gefunden. Was mache ich als Nächstes?
+
+Gustav: Schritt zwei: Suche oben oder unten zehn Grad östlicher Länge. Folge dem grünen Meridian.
+
+Gustav: Dort, wo sich der rote Breitenkreis und der grüne Meridian treffen, liegt unser gesuchter Punkt.
+
+Herr Welt: Die Stadt Hannover liegt ganz in der Nähe. Gerundete Gradangaben zeigen die ungefähre Lage, nicht jede Straße.
+
+Paul: Aber in manchen Atlanten sind die Meridiane krumm. Muss ich eine gerade Linie ziehen?
+
+Gustav: Nein, Paul! Die Darstellung hängt von der Kartenprojektion ab. Verfolge immer dieselbe gebogene Meridianlinie bis zum Breitenkreis.
+
+Herr Welt: Nicht jeder Grad ist eingezeichnet. Liegt dein Wert zwischen zwei Linien, musst du den Abstand sorgfältig abschätzen.
+
+Paul: Und jetzt probiere ich es selbst: Punkt B liegt bei fünfzig Grad Nord und zwölf Grad Ost. Was suche ich zuerst?
+
+Gustav: Zuerst fünfzig Grad Nord, dann zwölf Grad Ost. Und schließlich den Schnittpunkt! Sehr gut!
