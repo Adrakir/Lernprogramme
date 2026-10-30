@@ -117,6 +117,7 @@ async function main(){
    check(await expression('(document.querySelector(".partBeamExample .pathScore").scrollWidth-document.querySelector(".partBeamExample .pathScore").clientWidth)<3'),'Short bar fits without scrolling at '+size.name);
    const layout=await expression('({page:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth})');
    check(layout.page<=layout.viewport+3,'No accidental full-page horizontal overflow at '+size.name+': '+JSON.stringify(layout));
+   await expression('document.querySelector("#anatomyExample")?.scrollIntoView({block:"center",behavior:"instant"})');
    const screenshot=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false,fromSurface:true});
    fs.writeFileSync(path.join(artifacts,size.name+'-balken.png'),Buffer.from(screenshot.data,'base64'));
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="abschluss"),1)');
@@ -134,8 +135,14 @@ async function main(){
   check(errors.length===0,'No uncaught JavaScript exceptions: '+errors.slice(0,8).join('; '));
  }finally{
   try{ws?.close()}catch{}
-  chrome.kill('SIGTERM');server.close();
-  fs.rmSync(profile,{recursive:true,force:true});
+  server.close();
+  if(chrome.exitCode===null){
+   const exited=new Promise(resolve=>chrome.once('exit',resolve));
+   chrome.kill('SIGTERM');
+   await Promise.race([exited,delay(2200)]);
+  }
+  try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:3,retryDelay:200});}
+  catch(error){console.warn('Chromium temporary profile cleanup skipped: '+error.code);}
  }
 }
 main().catch(e=>{console.error('FAIL: '+e.stack);process.exitCode=1;server.close();});
