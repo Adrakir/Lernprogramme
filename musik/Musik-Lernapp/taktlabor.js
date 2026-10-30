@@ -71,7 +71,7 @@ function tlTimeline(task){
   const html='<span class="tlBlock '+(rest?'tlRest ':'tlSound ')+(focus?'tlFocus':'')+'" style="grid-column:span '+n+'" data-tl-index="'+i+'" title="'+(rest?'Pause':'Ton')+'">'+(focus?'<b>?</b>':rest?'Pause':'Ton')+'</span>';
   start+=n;return html;
  }).join('');
- return '<div class="tlTime"><div class="tlNumbers">'+Array.from({length:task.m},(_,i)=>'<span>Schlag '+(i+1)+'</span>').join('')+'</div><div id="taktlaborTimeline" class="tlTimeline" style="--tl-cells:'+(task.m*4)+'">'+cells+'</div><div class="tlSubdiv">'+Array.from({length:task.m*4},(_,i)=>'<span'+(i%4===0?' class="tlStrong"':'')+'>'+(['1','e','&','a'][i%4])+'</span>').join('')+'</div></div>';
+ return '<div class="tlTime" style="--tl-cells:'+(task.m*4)+'"><div class="tlNumbers">'+Array.from({length:task.m},(_,i)=>'<span>Schlag '+(i+1)+'</span>').join('')+'</div><div id="taktlaborTimeline" class="tlTimeline" style="--tl-cells:'+(task.m*4)+'">'+cells+'</div><div class="tlSubdiv">'+Array.from({length:task.m*4},(_,i)=>'<span'+(i%4===0?' class="tlStrong"':'')+'>'+(['1','e','&','a'][i%4])+'</span>').join('')+'</div></div>';
 }
 function tlSave(){
  appStorage.write(TL_KEY,{version:1,results:tlResults});
