@@ -266,7 +266,7 @@
   window.addEventListener('afterprint',()=>document.body.classList.remove('studio-printing'));
   window.addEventListener('pagehide',save);
   render();
-  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
+  if(typeof navigator!=='undefined'&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
     window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}),{once:true});
   }
   if(!location.hash||location.hash==='#studio')showPage('studio',false);
