@@ -102,7 +102,7 @@ function renderTaktlabor(){
  const score=staffScore(task.ids,task.m,{focusSlot:task.kind==='silence'?undefined:task.target});
  const steps=tlHints(task);
  document.querySelector('#main').innerHTML='<div class="eyebrow">Üben · Hör- und Taktlabor</div><h1>Rhythmus sehen, hören und verstehen</h1>'
-  +'<p class="guideLead">Fuji zeigt dir zuerst den Rhythmus im Notenbild. Darunter wird die Zeit in gleich große Stücke zerlegt. Die grünen Felder klingen, die schraffierten Felder sind still.</p>'
+  +'<div class="tlCoach"><img src="images/fuji-musiklehrer.webp" width="90" height="90" alt="Fuji, der Musiklehrer"><p class="guideLead">Fuji zeigt dir den Rhythmus im Notenbild. Darunter wird die Zeit in gleich große Stücke zerlegt. Die grünen Felder klingen, die schraffierten Felder sind still.</p></div>'
   +'<div class="tlLevels" role="group" aria-label="Schwierigkeitsgrad">'+[1,2,3].map(n=>'<button class="'+(tlLevel===n?'selected':'')+'" data-tl-level="'+n+'" aria-pressed="'+(tlLevel===n)+'">'+['','1 · Grundlagen','2 · Mit Pausen','3 · Knifflig'][n]+'</button>').join('')+'</div>'
   +'<section class="card tlExercise"><div class="tlStep"><span>Aufgabe '+(tlIndexes[tlLevel-1]+1)+' von '+TL_COUNT+'</span><span>'+yes+' selbstständig richtig · '+done.length+' bearbeitet</span></div>'
   +'<h2>'+task.caption+'</h2><p>'+task.m+'/4-Takt · Die Viertelnote zählt als 1 Schlag.</p>'
@@ -129,5 +129,5 @@ renderExerciseHub=function(){tlOldHub();const p=document.createElement('section'
 registerView('taktlabor',renderTaktlabor);interfaceRoutes.add('taktlabor');
 guideMeta.taktlabor=['Hör- und Taktlabor','exerciseHub'];
 guideTaskHelp.taktlabor='Höre den Takt, beobachte die farbige Zeitspur und wähle dann die richtige Zählzeit oder Dauer.';
-onAfterRender(()=>{if(view==='taktlabor'){const dock=document.querySelector('.audioDock');if(dock)dock.hidden=false;if(typeof enhanceMobile==='function')enhanceMobile();}});
+onAfterRender(()=>{if(view==='taktlabor'){const dock=document.querySelector('.audioDock');if(dock)dock.hidden=false;document.body.classList.add('simpleSound');if(typeof enhanceMobile==='function')enhanceMobile();}});
 })();
