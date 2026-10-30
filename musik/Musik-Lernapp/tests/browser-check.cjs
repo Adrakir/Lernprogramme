@@ -84,6 +84,7 @@ async function main(){
           if(!document.querySelector("#pathExample"))problems.push("start:"+i);
           pathStage(1);
           if(!document.querySelector("#pathListen"))problems.push("audio:"+i);
+          if(!document.querySelector("#film")||!document.querySelector("#filmPlay"))problems.push("animation:"+i);
           pathStage(2);
           if(!document.querySelectorAll("[data-path-answer]").length)problems.push("guided:"+i);
           pathStage(3);
@@ -95,6 +96,21 @@ async function main(){
     })()`);
     check(lessonChecks.count===27&&lessonChecks.problems.length===0,'All 27 lessons render in all four stages: '+JSON.stringify(lessonChecks.problems));
    }
+   await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="woerter"),1)');
+   check(await expression('Boolean(document.querySelector("#film")&&document.querySelectorAll(".filmBeat").length===4)'),'Rhythm word teaching film has four beats at '+size.name);
+   const initialCaption=await expression('document.querySelector("#filmInfo").textContent');
+   await expression('document.querySelector("#filmNext").click()');
+   check(await expression('document.querySelector("#filmInfo").textContent')!==initialCaption,'Next-beat button changes explanatory text at '+size.name);
+   await expression('document.querySelector("#filmPlay").click()');
+   check(await expression('document.querySelector("#rhythmAudio").src.startsWith("blob:")'),'Film audio follows notation at '+size.name);
+   await expression('document.querySelector("#filmStop").click()');
+   check(await expression('document.querySelector("#filmInfo").textContent.includes("Angehalten")'),'Film has understandable stop feedback at '+size.name);
+   const filmSize=await expression('({page:document.documentElement.scrollWidth,visible:document.documentElement.clientWidth})');
+   check(filmSize.page<=filmSize.visible+3,'Teaching film fits device at '+size.name);
+   await expression('document.querySelector("#film")?.scrollIntoView({block:"center",behavior:"instant"})');
+   const filmShot=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false,fromSurface:true});
+   fs.writeFileSync(path.join(artifacts,size.name+'-lernfilm.png'),Buffer.from(filmShot.data,'base64'));
+   await expression('setView("home")');
    await expression('setView("exerciseHub")');
    check(await expression('document.querySelectorAll("[data-guide-practice]").length')===6,'Six practice topics at '+size.name);
    await expression('document.querySelectorAll("[data-guide-practice]")[2].click()');
