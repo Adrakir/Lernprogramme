@@ -1,12 +1,12 @@
 /* Offline-Start der bestehenden, eigenständigen Erdkunde-App auf GitHub Pages. */
-const CACHE='erdkunde-v11-thementraining-20261030-v18';
+const CACHE='erdkunde-v11-thementraining-20261030-v19';
 const APP='./index.html';
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.add(new Request(APP,{cache:'reload'}))).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',event=>{
  event.waitUntil(Promise.all([
-  caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('erdkunde-entdecker-pages-')&&key!==CACHE).map(key=>caches.delete(key)))),
+  caches.keys().then(keys=>Promise.all(keys.filter(key=>(key.startsWith('erdkunde-entdecker-pages-')||key.startsWith('erdkunde-v11-'))&&key!==CACHE).map(key=>caches.delete(key)))),
   self.clients.claim()
  ]));
 });
