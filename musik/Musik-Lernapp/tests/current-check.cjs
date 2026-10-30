@@ -1,7 +1,7 @@
 // Current application integration tests in a DOM fixture; no browser automation.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const {JSDOM,VirtualConsole}=require('jsdom');
-const root=path.resolve(__dirname,'../dist');let assertions=0;
+const root=path.resolve(__dirname,'..');let assertions=0;
 function ok(value,message){assert.ok(value,message);assertions++;}
 function boot(url='https://music.example/',saved=[],blocked=false){
  const errors=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e));
@@ -14,6 +14,11 @@ function boot(url='https://music.example/',saved=[],blocked=false){
  return {dom,w,doc,run,click,errors,close:()=>w.close()};
 }
 const e=boot(),{doc,run,click}=e;
+// Die fünf sichtbaren Hauptbereiche müssen mit ihren Lernansichten verknüpft sein.
+ok(doc.querySelectorAll('nav.mainNav button').length===5,'Five primary navigation choices');
+ok(!!doc.querySelector('script[src^="taktlabor.js"]'),'Taktlabor loaded');
+ok(!!doc.querySelector('link[href^="taktlabor.css"]'),'Taktlabor stylesheet loaded');
+
 ok(doc.querySelector('#simpleStudent'),'First visit chooses a role');click('simpleStudent');ok(doc.querySelector('#guideResume'),'Student has next step');
 const keys=run('MUSIC_PATH.map(d=>d.key)');ok(keys.length===27&&new Set(keys).size===27,'27 unique lessons');
 ok(run('guideTopics.flatMap(t=>t.keys).length===MUSIC_PATH.length'),'Topics cover all lessons');ok(run('guideTopics.flatMap(t=>t.keys).every(k=>MUSIC_PATH.some(d=>d.key===k))'),'Topic links valid');
