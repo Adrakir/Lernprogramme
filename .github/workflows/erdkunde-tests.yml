@@ -28,6 +28,12 @@ jobs:
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlas-schulung.test.cjs
       - name: Interaktive Klassenarbeit testen
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlaswerkstatt.test.cjs
+      - name: Browser-Smoke-Test (Desktop und Smartphone)
+        run: |
+          cd erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler
+          npm install --no-save --ignore-scripts playwright
+          npx playwright install --with-deps chromium
+          node browser-smoke.test.cjs
       - name: Offline-App reproduzierbar bauen
         run: |
           cd erdkunde/Erdkunde_Entdecker_Klasse5_V11
