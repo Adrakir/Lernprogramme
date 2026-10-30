@@ -19,10 +19,15 @@ Inhalt:
 • Bereich 07: geführter Lehrgang mit neun Stationen bis zur eigenen Geschichte
 • 32 steuerbare Animationsschritte, 16 Übungen und acht kleine Schreibproben
 • Erzählplan, Überarbeitungscheckliste, TXT-Export und Druck der eigenen Geschichte
+• Bereich 08: Hauptteil-Werkstatt zum Fuji-Lernheft mit 13 Themen und 39 Aufgaben
+• Gefühle und Gedanken, Sinneseindrücke, Hindernisse, Steigerung, Höhepunkt, Erzähltempo und roter Faden
+• Zeitform, Erzählperspektive, Dialog, Schluss, Überarbeiten und Klassenarbeit
+• Pro Thema drei Schwierigkeitsstufen, zwei Hinweise, ausklappbare geführte Lösung und Schreibauftrag
+• Vorher-Nachher-Beispiele, Schrittfolgen, Mustertexte und eigene Überarbeitungschecklisten
 
 Die App nutzt lokale Bilder und Dateien; zum Lernen ist keine Anmeldung nötig.
 Bereiche 01–06: Antworten bleiben nur in der geöffneten Sitzung erhalten.
-Lehrgang 07: Fortschritt und Entwürfe werden im Browser dieses Geräts gespeichert,
+Lehrgang 07 und Hauptteil-Werkstatt 08: Fortschritt und Entwürfe werden im Browser dieses Geräts gespeichert,
 sofern der Browser das erlaubt. Keine automatische Synchronisierung mit anderen Geräten.
 Im Lehrgang kannst du unterbrechen und später mit „Weiterlernen“ fortsetzen.
 Speichere deine fertige Geschichte zusätzlich über „Text als TXT sichern“.
@@ -34,4 +39,5 @@ Auf Smartphones kann das direkte Öffnen entpackter HTML-Dateien je nach System 
 Bei aktivierter GitHub-Pages-Veröffentlichung ist die aktuelle Version hier:
 https://adrakir.github.io/Lernprogramme/deutsch/Deutschapp_Minka_Fuji/
 Direkt zum Lehrgang: dieselbe Adresse mit #lehrgang am Ende.
+Direkt zur Hauptteil-Werkstatt: dieselbe Adresse mit #hauptteil am Ende.
 Die ältere Veröffentlichung auf chatgpt.site wird nicht automatisch mitgeändert.
