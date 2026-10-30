@@ -89,7 +89,7 @@ erreichbar. Die bisherigen Lernbereiche 01–08 sind erhalten.
   Erzählsituationen, 20 Bild-/Reizwort-Klassenarbeiten, sechs Textlabor-Texte,
   transparentes Kriterienraster und je eine mögliche Musterstruktur.
 - `studio-art.js`: vier kontextbezogene Vektorszenen pro Geschichte/Bildarbeit,
-  insgesamt 40 dynamisch erzeugte, lokale SVG-Illustrationen (offline).
+  inzwischen insgesamt 64 dynamisch erzeugte, lokale SVG-Szenen (offline).
 - `studio.js`: sieben Ansichten innerhalb einer App: Lernweg, vollständige
   Schreibwerkstatt, Klassenarbeits-Trainer und Textlabor.
 - `studio.css`: kontrastreiche responsive Oberfläche mit SVG-Spannungskurve,
@@ -122,7 +122,7 @@ Musterstruktur-Vorschlag erscheint erst nach der Abgabe zur Selbstprüfung.
 - `academy-data.js`: 12 Diagnoseaufgaben über sechs Kompetenzbereiche,
   12 Schreibreparaturen in drei Stufen, handlungsbezogene Begründungen.
 - `academy.js`: Lerncoach, Reparaturwerkstatt, sieben gespeicherte
-  Textversionen, Wortdiff, gerätebasierte Sprachausgabe, Schriftgröße,
+  Textversionen, Wortdiff, gerätebasierte, abschnittsweise Sprachausgabe mit Pause/Weiter, Schriftgröße,
   kontrastreichere Ansicht, Lehrerblätter und vier tägliche Mini-Aufgaben.
 - `academy-tools.js`: vergrößerbare Bildszenen und manuelle, sechsfarbige
   Markierung eigener Textausschnitte. Diese Markierung ist keine
