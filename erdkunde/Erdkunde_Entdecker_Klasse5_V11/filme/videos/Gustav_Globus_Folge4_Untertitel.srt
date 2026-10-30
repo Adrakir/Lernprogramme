@@ -1,0 +1,43 @@
+1
+00:00:00,280 --> 00:00:06,683
+Paul: Herr Welt, der Äquator teilt in Nord und Süd. Gibt es auch vier Erdviertel?
+
+2
+00:00:07,213 --> 00:00:12,750
+Herr Welt: Ja, Paul! Gustav Globus zeigt uns, wie das funktioniert.
+
+3
+00:00:13,279 --> 00:00:18,816
+Gustav: Der Äquator teilt die Erde in die Nordhalbkugel und die Südhalbkugel.
+
+4
+00:00:19,346 --> 00:00:27,083
+Gustav: Der Nullmeridian und der gegenüberliegende hundertachtzig Grad Meridian teilen die Erde in Osten und Westen.
+
+5
+00:00:27,613 --> 00:00:32,750
+Gustav: Wenn beide Teilungen zusammenkommen, entstehen vier Erdviertelkugeln.
+
+6
+00:00:33,280 --> 00:00:41,216
+Gustav: Nordost liegt nördlich des Äquators und östlich des Nullmeridians. Nordwest liegt nördlich und westlich.
+
+7
+00:00:41,746 --> 00:00:47,616
+Gustav: Südost liegt südlich und östlich. Südwest liegt südlich und westlich.
+
+8
+00:00:48,146 --> 00:00:52,083
+Paul: Warum sagen wir Nordost und nicht Ostnord?
+
+9
+00:00:52,613 --> 00:01:01,216
+Gustav: Bei den Erdvierteln nennen wir zuerst Nord oder Süd, danach Ost oder West. Das ist die übliche Namensreihenfolge.
+
+10
+00:01:01,746 --> 00:01:11,549
+Herr Welt: Deutschland liegt nördlich des Äquators und östlich des Nullmeridians. In welchem Viertel liegt es?
+
+11
+00:01:12,079 --> 00:01:19,683
+Gustav: Genau! Im Nordostviertel. Im nächsten Film sehen wir die Erde von der Seite und von oben.
