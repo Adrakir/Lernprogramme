@@ -27,11 +27,27 @@ async function check(browser,engine,width){
   assert.equal(await page.locator('#appStartup').count(),0,label+': App zeigt keinen endlosen Starthinweis');
   assert.equal(await page.locator('#tt-root .tt-topic').count(),0,'Thementraining erscheint nur im entsprechenden Tab');
   await fit('Start');
+  await page.waitForTimeout(350);
   if(width===1366||width===320)await page.screenshot({path:path.join(OUTPUT,label+'-start.png'),fullPage:false});
 
   await page.locator('#tabs [data-tab="train"]').click();
   await page.locator('#tt-root .tt-topic').first().waitFor();
   assert.equal(await page.locator('#tt-root .tt-topic').count(),16,label+': Alle 16 Themen');
+  // Screenshot und Lesbarkeitspruefung erst NACH 260ms-Einblendanimation.
+  await page.waitForTimeout(360);
+  const appearance=await page.locator('#tt-root h1').first().evaluate(el=>{
+   const parse=(s)=>s.match(/[\d.]+/g).slice(0,3).map(Number);
+   const luminance=(rgb)=>{
+    const channels=rgb.map(v=>{const c=v/255;return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4);});
+    return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];
+   };
+   const fg=luminance(parse(getComputedStyle(el).color));
+   const bg=luminance(parse(getComputedStyle(document.body).backgroundColor));
+   const ancestors=[];for(let x=el;x&&x!==document.body;x=x.parentElement)ancestors.push({className:String(x.className||''),opacity:Number(getComputedStyle(x).opacity)});
+   return {ratio:(Math.max(fg,bg)+.05)/(Math.min(fg,bg)+.05),ancestors};
+  });
+  assert.ok(appearance.ratio>=4.5,label+': Themenueberschrift zu kontrastarm '+JSON.stringify(appearance));
+  assert.ok(appearance.ancestors.every(x=>x.opacity>=.99),label+': Lernbereich nach Einblendung transparent '+JSON.stringify(appearance));
   await fit('16 Themen');
   if(width===1366||width===320)await page.screenshot({path:path.join(OUTPUT,label+'-themen.png'),fullPage:false});
   // Lernen: Alle 16 Themen in Grundlagen; zu den Schwerpunkten auch Level 2/3.
@@ -79,8 +95,10 @@ async function check(browser,engine,width){
     graphics++;
    }
    await fit('Klassenarbeit '+(i+1));
-   if((i===0||i===10||i===17)&&(width===1366||width===320))
+   if((i===0||i===10||i===17)&&(width===1366||width===320)){
+     await page.waitForTimeout(350);
      await page.screenshot({path:path.join(OUTPUT,label+'-klassenarbeit-'+(i+1)+'.png'),fullPage:false});
+   }
   }
   assert.ok(graphics>=9,label+': Bild- und Kartenaufgaben wirklich grafisch dargestellt ('+graphics+')');
   await page.locator('[data-aw="cwFinish"]').click();
