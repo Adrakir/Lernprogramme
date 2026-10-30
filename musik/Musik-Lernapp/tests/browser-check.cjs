@@ -54,7 +54,7 @@ async function main(){
   ws.addEventListener('message',event=>{
    const data=JSON.parse(event.data.toString());
    if(data.id){const p=pending.get(data.id);if(p){pending.delete(data.id);data.error?p.reject(Error(data.error.message)):p.resolve(data.result);}}
-   if(data.method==='Runtime.exceptionThrown')errors.push(data.params.exceptionDetails.text);
+   if(data.method==='Runtime.exceptionThrown'){const d=data.params.exceptionDetails;errors.push((d.exception?.description||d.text)+' ['+(d.url||'unknown')+':'+d.lineNumber+']');}
   });
   const cdp=(method,params={})=>new Promise((resolve,reject)=>{
    const id=++seq;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}));
@@ -137,8 +137,8 @@ async function main(){
    }
    check(await expression('document.querySelectorAll("nav.mainNav button").length')===5,'Five main navigation choices at '+size.name);
   }
-  console.log('PASS: '+checks.length+' real Chromium checks ('+checks.join(', ')+')');
   check(errors.length===0,'No uncaught JavaScript exceptions: '+errors.slice(0,8).join('; '));
+  console.log('PASS: '+checks.length+' real Chromium checks ('+checks.join(', ')+')');
  }finally{
   try{ws?.close()}catch{}
   server.close();
