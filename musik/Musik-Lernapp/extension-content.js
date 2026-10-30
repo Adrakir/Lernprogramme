@@ -46,7 +46,7 @@ const extraContent={
  ],
  woerter:[
  ['Wie viele Tonanfänge enthält Kä-se?','2',['1','4'],'Zwei Silben stützen zwei gleich lange Achtelnoten.',['e','e'],4,2],
- ['Wie lange dauert Scho-ko-la-de in unserer Vereinbarung?','1 Schlag',['4 Schläge','2 Schläge'],'Vier Sechzehntel teilen einen Viertelschlag.',['s','s','s','s'],4,4],
+ ['A-na-nas: Welche Notenwerte passen in einen Schlag?','Zwei Sechzehntel und eine Achtel',['Drei Achtel','Drei Viertel'],'A und na dauern je einen Viertelschlag als Teilzeit (je ¼ Schlag), nas dauert ½ Schlag: ¼ + ¼ + ½ = 1.',['s','s','e'],4,4],
  ['Brot, Käse, Brot: Wie viele Schläge sind das?','3',['4','5'],'Jede ganze Wortgruppe dauert einen Schlag.'],
  ['Brot, Käse, Brot: Wie viele Tonanfänge sind das?','4',['3','6'],'1 + 2 + 1 = 4 Tonanfänge, aber nur drei Schläge.'],
  ['Käse wird durch Schokolade ersetzt. Was bleibt gleich?','Die Gesamtdauer von einem Schlag',['Die Zahl der Tonanfänge','Die Anzahl der Silben'],'Aus zwei Achteln werden vier Sechzehntel. Der Schlag bleibt gleich lang.']
