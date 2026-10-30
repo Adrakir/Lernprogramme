@@ -76,9 +76,9 @@ function filmMarkup(d){
   }).join('')+'</div></div>';
  }).join('');
  const note=d.key==='luecken'||d.key==='fehler'?'<p class="filmCaution">Graue Felder zeigen <strong>fehlende Notenwerte</strong>, keine Pausen. Erst rechnen, dann ergänzen.</p>':'';
- const musicTip=d.key==='generalpause'?'<p class="filmCaution">Die beiden Reihen gehören zu <strong>zwei gleichzeitig spielenden Stimmen</strong>. Achte darauf, wer gerade schweigt.</p>':'';
+ const musicTip=d.key==='stille'?'<p class="filmCaution">Die zwei Reihen werden <strong>nacheinander</strong> abgespielt: einmal Klang halten, einmal Klang mit echter Pause.</p>':d.key==='generalpause'?'<p class="filmCaution">Die beiden Reihen gehören zu <strong>zwei gleichzeitig spielenden Stimmen</strong>. Achte darauf, wer gerade schweigt.</p>':'';
  return '<section id="film" class="filmCard" aria-label="Interaktive Schlag-für-Schlag-Erklärung" data-film-key="'+d.key+'">'+
- '<div class="filmTitle"><span class="filmMark" aria-hidden="true">♫</span><div><span class="eyebrow">Fuji zeigt es dir</span><h3>Schlag für Schlag verstehen</h3></div></div>'+
+ '<div class="filmTitle"><img class="filmPortrait" src="images/fuji-musiklehrer.webp" width="48" height="48" alt="Fuji erklärt die Zeitspur"><div><span class="eyebrow">Fuji zeigt es dir</span><h3>Schlag für Schlag verstehen</h3></div></div>'+
  '<p class="filmLead">'+copy[0]+'</p><p class="filmHint">'+copy[1]+'</p>'+
  '<div class="filmLegend"><span><b class="filmDot">●</b> neuer Ton</span><span><b class="filmLine">━</b> halten</span><span><b class="filmRest">–</b> Stille</span><span><b class="filmGap">?</b> fehlt noch</span></div>'+
  '<div class="filmRows">'+rows+'</div>'+note+musicTip+
@@ -91,15 +91,15 @@ function filmBind(d){
  const bars=filmBars(d),beats=d.m;
  let chosen=0;
  function show(pos,announcement){
-  const total=beats*bars.length;chosen=Math.min(total-1,Math.max(0,pos));
+  const total=d.key==='generalpause'?beats:beats*bars.length;chosen=Math.min(total-1,Math.max(0,pos));
   const row=Math.floor(chosen/beats),beat=chosen%beats,states=filmRow(d,bars[row],row);
   panel.querySelectorAll('[data-film-beat]').forEach(button=>{
-   const current=(+button.dataset.filmBar===row&&+button.dataset.filmBeat===beat);
+   const current=(d.key==='generalpause'||+button.dataset.filmBar===row)&&+button.dataset.filmBeat===beat;
    button.classList.toggle('filmSelected',current);button.setAttribute('aria-pressed',String(current));
   });
-  const descriptor=bars.length>1?(d.key==='generalpause'?(row===0?'Fuji':'Minka'):d.key==='stille'?(row===0?'Ton halten':'Ton mit Pause'):'Takt '+(row+1))+' · ':'';
+  const descriptor=bars.length>1?(d.key==='generalpause'?'Beide Stimmen':d.key==='stille'?(row===0?'Ton halten':'Ton mit Pause'):'Takt '+(row+1))+' · ':'';
   const info=panel.querySelector('#filmInfo');
-  if(info)info.textContent=descriptor+'Schlag '+(beat+1)+': '+filmBeatLabel(states,beat)+(announcement?' '+announcement:'');
+  if(info)info.textContent=descriptor+'Schlag '+(beat+1)+': '+(d.key==='generalpause'?'Fuji: '+filmBeatLabel(filmRow(d,bars[0],0),beat)+' Minka: '+filmBeatLabel(filmRow(d,bars[1],1),beat):filmBeatLabel(states,beat))+(announcement?' '+announcement:'');
  }
  panel.querySelectorAll('[data-film-beat]').forEach(button=>button.onclick=()=>{stop();show(+button.dataset.filmBar*beats+(+button.dataset.filmBeat));});
  panel.querySelector('#filmPrevious').onclick=()=>{stop();show(chosen-1);};
@@ -107,14 +107,15 @@ function filmBind(d){
  panel.querySelector('#filmStop').onclick=()=>{stop();show(chosen,'Angehalten.');};
  panel.querySelector('#filmPlay').onclick=()=>{
   const lengths=bars.map(ids=>ids.map(id=>id==='?'?{u:Math.max(0,beats*4-ids.filter(x=>x!=='?').reduce((a,x)=>a+val(x,beats),0)),rest:true}:id));
-  const seq=lengths.flat();show(0,'Erst wird eingezählt.');
+  const seq=d.key==='generalpause'?[{u:4,freq:330,extra:440},{u:4,freq:440},{u:8,rest:true}]:lengths.flat();show(0,'Erst wird eingezählt.');
   play(seq,beats,{leadIn:true,fullDuration:true,silentClick:true,hideEvents:true,
    onProgress({units}){
     if(!document.querySelector('#film')||view!=='learn')return;
     if(units<0){panel.querySelector('#filmInfo').textContent='Fuji zählt ein. Warte bis nach der letzten Zahl.';return;}
     const bar=Math.min(bars.length-1,Math.floor(units/(beats*4)));
     const time=units%(beats*4);
-    show(bar*beats+Math.min(beats-1,Math.floor(time/4)));
+    const step=(d.key==='generalpause'?0:bar)*beats+Math.min(beats-1,Math.floor(time/4));
+    if(step!==chosen)show(step);
    },
    onComplete(){if(document.querySelector('#film')===panel)show(chosen,'Fertig. Jetzt kannst du es selbst Schritt für Schritt versuchen.');}
   });
