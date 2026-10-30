@@ -11,6 +11,7 @@ const guideTopics=[
  {id:'punkt',title:'Punktierte Noten und Pausen',question:'Was verändert der Punkt rechts am Zeichen?',keys:['punkt','punkt-im-takt','punktierte-achtel'],image:'lesson-punkt',practice:'dotCalc'}
 ];
 let guideTopic=null,guideTeacherTopic='puls',guideTeacherMode=false;
+let guidePracticeTopic=null; // Nur Ansichtszustand, kein Lernstand; bewusst ohne Speicherung.
 const guideSavedRole=appStorage.read('rhythmuswerkstatt.role.v1');
 let guideRole=['student','teacher'].includes(guideSavedRole)?guideSavedRole:null,guideTeacherKey=null,guideTeacherTab='auftrag';
 function guideChooseRole(role){guideRole=role;appStorage.write('rhythmuswerkstatt.role.v1',role);setView('home');}
@@ -40,31 +41,84 @@ function guideBindActions(){
 function guideHome(){
  if(!guideRole){guideRoleChoice();return;}
  if(guideRole==='teacher'){guideTeacher();return;}
- const i=guideResumeIndex(),d=MUSIC_PATH[i],started=pathState.stages.some(x=>x>0)||pathState.done.some(Boolean),finished=pathState.done.every(Boolean);
- $('#main').innerHTML=`<div class="eyebrow">Für Schüler und Schülerinnen</div><h1>${finished?'Dein Lernweg ist geübt':'Dein nächster Schritt'}</h1><p class="guideLead">${finished?'Du hast alle Lernschritte bearbeitet. Wiederhole jetzt die Themen, bei denen du noch unsicher bist.':'Starte hier. Die Erklärung und die Aufgaben kommen nacheinander.'}</p><section class="card simpleNext"><div><span class="guideTag">${finished?'Alle '+MUSIC_PATH.length+' Lernschritte bearbeitet':'Lernschritt '+(i+1)+' von '+MUSIC_PATH.length}</span><h2>${finished?'Gelerntes festigen':escapeText(d.title)}</h2><p>${finished?'Die Wiederholung wählt Aufgaben passend zu deinem bisherigen Lernstand.':escapeText(d.goal)}</p><button id="guideResume" class="primary">${finished?'Passende Wiederholung starten':started?'Hier weiterlernen':'Jetzt anfangen'} →</button></div><img src="images/fuji-musiklehrer.webp" width="112" height="112" alt="Fuji begleitet dich beim Lernen"></section><div class="simpleAlternative"><p>Deine Lehrkraft hat ein anderes Thema genannt?</p><button id="guideAllTopics">Unterrichtsthema auswählen</button></div><details class="simpleHelp"><summary>Wie funktioniert das Lernen?</summary><ol><li>Lies die Erklärung.</li><li>Höre das Beispiel an.</li><li>Löse eine Aufgabe mit Hilfe.</li><li>Übe anschließend selbst.</li></ol><p>Du musst keine Übungsart auswählen. „Weiter“ führt dich durch den Lernschritt.</p></details>`;
+ const i=guideResumeIndex(),d=MUSIC_PATH[i],total=MUSIC_PATH.length;
+ const done=pathState.done.filter(Boolean).length;
+ const started=pathState.stages.some(x=>x>0)||done>0,finished=done===total;
+ $('#main').innerHTML=`
+ <div class="eyebrow">Musik · Klasse 5 · mit Fuji &amp; Minka</div>
+ <h1>${finished?'Alle Lernschritte geübt':'Was möchtest du heute machen?'}</h1>
+ <p class="guideLead">Du brauchst nur eine Sache auszuwählen. Alle Erklärungen, Aufgaben und Lösungen führen dich Schritt für Schritt.</p>
+ <section class="card cleanHero" aria-label="Dein nächster Lernschritt">
+  <div class="cleanHeroText">
+   <span class="guideTag">${finished?'Zeit zum Wiederholen':'Weiterlernen · Schritt '+(i+1)+' von '+total}</span>
+   <h2>${finished?'Prima! Wiederhole jetzt in Ruhe.':escapeText(d.title)}</h2>
+   <p>${finished?'Du hast alle Lernschritte bearbeitet. Jetzt kannst du dein Wissen festigen.':escapeText(d.goal)}</p>
+   <button id="guideResume" class="primary">${finished?'Wiederholung starten':started?'Diesen Lernschritt fortsetzen':'Mit diesem Lernschritt beginnen'} →</button>
+  </div><img src="images/fuji-musiklehrer.webp" width="120" height="120" alt="Fuji begleitet dich durch die Musikaufgaben">
+ </section>
+ <div class="cleanProgress"><div><strong>Dein Lernweg</strong><span>${done} von ${total} Lernschritten bearbeitet</span></div><progress max="${total}" value="${done}" aria-label="Bearbeitete Lernschritte"></progress></div>
+ <h2 class="cleanSection">Oder wähle deinen Weg</h2>
+ <div class="cleanActions">
+  <button class="cleanAction" id="guideAllTopics"><span aria-hidden="true" class="cleanActionIcon">♫</span><span><strong>Ein Thema lernen</strong><small>Noten, Pausen, Taktarten und mehr</small></span><span aria-hidden="true">→</span></button>
+  <button class="cleanAction" id="guideMini"><span aria-hidden="true" class="cleanActionIcon">✎</span><span><strong>3 Aufgaben üben</strong><small>Eine kurze Runde mit Tipps und Lösungen</small></span><span aria-hidden="true">→</span></button>
+  <button class="cleanAction" data-guide-view="pruefen"><span aria-hidden="true" class="cleanActionIcon">✓</span><span><strong>Wissen prüfen</strong><small>Lerncheck und Übungstests</small></span><span aria-hidden="true">→</span></button>
+ </div>
+ <details class="cleanDetails simpleHelp"><summary>Wie lerne ich hier am besten?</summary><ol><li>Öffne eine Erklärung und sieh dir das Notenbild an.</li><li>Höre den Rhythmus und zähle laut mit.</li><li>Übe zuerst gemeinsam mit Fuji und danach selbst.</li><li>Sieh dir nach jeder Antwort den Lösungsweg an.</li></ol><p>Im Bereich <strong>Üben</strong> findest du auch Takte zum Bauen und Hörübungen. Unter <strong>Hefte</strong> kannst du die Lernmaterialien öffnen.</p></details>`;
  guideBindActions();
 }
 function guideAreaHelp(){return `<dl class="guideDefinitions"><div><dt>Lernen</dt><dd>Erklärungen und vorgemachte Beispiele. Beginne hier, wenn etwas neu oder unklar ist.</dd></div><div><dt>Üben</dt><dd>Aufgaben selbst lösen. Tipps und Begründungen helfen dir dabei.</dd></div><div><dt>Prüfen</dt><dd>Deinen Lernstand einschätzen oder einen Übungstest bearbeiten.</dd></div><div><dt>Hefte</dt><dd>Das Lernheft erklärt. Das Aufgabenheft bietet Übungen und Lösungen zum Ausdrucken.</dd></div></dl>`;}
 function guideTopicsView(){
  const topic=guideTopics.find(t=>t.id===guideTopic);
  if(!topic){
- $('#main').innerHTML=`<div class="eyebrow">Unterrichtsthemen</div><h1>Welches Thema ist dran?</h1><p>Wähle das Thema aus deinem Unterricht.</p><div class="simpleTopicList">${guideTopics.map((t,i)=>`<button class="simpleTopicButton" data-guide-topic="${t.id}"><span class="simpleNumber">${i+1}</span><span><strong>${t.title}</strong><small>${t.keys.length} Lernschritte</small></span><span aria-hidden="true">→</span></button>`).join('')}</div>`;
+  $('#main').innerHTML=`<div class="eyebrow">Lernen · Schritt für Schritt</div><h1>Welches Thema lernst du?</h1>
+  <p class="guideLead">Wähle ein Thema aus deinem Musikunterricht. Du bekommst eine verständliche Erklärung, ein Hörbeispiel und passende Aufgaben.</p>
+  <div class="cleanTopicGrid">${guideTopics.map((t,i)=>{
+   const done=t.keys.filter(k=>pathState.done[guideIndex(k)]).length;
+   return `<button class="cleanTopic" data-guide-topic="${t.id}"><img src="images/${t.image}.webp" alt="" width="88" height="70" loading="lazy"><span><strong>${i+1}. ${escapeText(t.title)}</strong><small>${done} von ${t.keys.length} Schritten bearbeitet</small></span><span aria-hidden="true">→</span></button>`;
+  }).join('')}</div>`;
  }else{
- $('#main').innerHTML=`<button id="guideAllTopics" class="subtle">← Alle Themen</button><h1 class="spaced">${topic.title}</h1><p>Beginne mit dem ersten Lernschritt oder wähle deinen Arbeitsauftrag.</p><ol class="simpleLessonList">${topic.keys.map((key,j)=>{const i=guideIndex(key),d=MUSIC_PATH[i];return `<li><button data-guide-lesson="${key}"><span class="simpleNumber">${j+1}</span><span><strong>${escapeText(d.title)}</strong><small>${pathState.done[i]?'✓ Geübt':'Erklärung und Aufgaben'}</small></span><span aria-hidden="true">→</span></button></li>`;}).join('')}</ol><details class="card simpleOptional"><summary>Schon verstanden? Zusätzliche Übungen</summary><p>Diese Übung ist eine Ergänzung zum Lernschritt.</p><button data-guide-exercise="${topic.practice}">Übung zu diesem Thema starten</button></details>`;
+  const next=topic.keys.find(k=>!pathState.done[guideIndex(k)])||topic.keys[0];
+  const d=MUSIC_PATH[guideIndex(next)],done=topic.keys.filter(k=>pathState.done[guideIndex(k)]).length;
+  $('#main').innerHTML=`<button id="guideAllTopics" class="subtle">← Alle Themen</button><div class="cleanTopicHead"><img src="images/${topic.image}.webp" alt="" width="100" height="86"><div><div class="eyebrow">Thema · ${done} von ${topic.keys.length} Schritten bearbeitet</div><h1>${escapeText(topic.title)}</h1><p>${escapeText(topic.question)}</p></div></div>
+  <section class="card cleanFocus"><span class="guideTag">Dein nächster Lernschritt</span><h2>${escapeText(d.title)}</h2><p>${escapeText(d.goal)}</p><button class="primary" data-guide-lesson="${next}">${pathState.done[guideIndex(next)]?'Noch einmal üben':'Erklärung starten'} →</button></section>
+  <h2 class="cleanSection">Alle Schritte dieses Themas</h2>
+  <ol class="simpleLessonList cleanLessons">${topic.keys.map((key,j)=>{
+   const n=guideIndex(key),s=MUSIC_PATH[n];
+   return `<li><button data-guide-lesson="${key}"><span class="simpleNumber">${j+1}</span><span><strong>${escapeText(s.title)}</strong><small>${pathState.done[n]?'✓ Bereits bearbeitet':'Erklärung · Hören · Mitmachen · Üben'}</small></span><span aria-hidden="true">→</span></button></li>`;
+  }).join('')}</ol><details class="cleanDetails"><summary>Zu diesem Thema zusätzlich üben</summary><p>Wenn du die Erklärung verstanden hast, kannst du dein Wissen selbst ausprobieren.</p><button data-guide-exercise="${topic.practice}">Passende Übung öffnen</button></details>`;
  }
  guideBindActions();
 }
 function guideExerciseHub(){
- const groups=exerciseGroups.slice(0,6),keys=['viertel','stille','dreiertakt','woerter','punkt','teile'];
+ const groups=exerciseGroups.slice(0,6);
+ const names=['Notenwerte','Pausen','Takte','Rhythmus','Punktierte Noten','Noten beschriften'];
+ const pictures=['familie','stille','dreiertakt','woerter','punkt','teile'];
+ const keys=['viertel','stille','dreiertakt','woerter','punkt','teile'];
  const round=recentRoundView==='practice'&&quiz&&quiz.mode!=='label'&&quiz.index<quiz.questions.length?'practice':smart?.round?'smart':null;
- $('#main').innerHTML=`<div class="eyebrow">Üben · selbst ausprobieren</div><h1>Was möchtest du üben?</h1><p>Wähle zuerst ein Thema und dann eine Übung. Wenn die Erklärung noch fehlt, nutze „Lernen“.</p>
- ${round?`<section class="card guideContinue"><p>Deine begonnene Übungsrunde ist noch offen.</p><button data-guide-view="${round}" class="primary">Übungsrunde fortsetzen</button></section>`:''}
- <div class="guideExerciseGrid">${groups.map(([title,desc,actions],i)=>`<details class="card guideExerciseGroup"><summary><strong>${title}</strong><span>${desc}</span></summary><div class="guideExerciseLinks">${actions.map(([id,label])=>`<button data-guide-exercise="${id}">${label}</button>`).join('')}<button class="subtle" data-guide-lesson="${keys[i]}">Noch unsicher? Erklärung ansehen</button></div></details>`).join('')}</div>
- <h2 class="guideSectionTitle">Andere Arten zu üben</h2><p class="legend">Diese Angebote sind Ergänzungen. Für den normalen Lernweg brauchst du sie nicht vorher auszuwählen.</p>
- <details class="card guideExtra"><summary>Mit Bildern, Animationen und Bewegung</summary><p>Nutze diese anschaulichen Übungen, wenn du etwas sehen oder nachmachen möchtest.</p><div class="guideExtraGrid"><div><h3>Animationen und Ausprobieren</h3>${Object.entries(discoverTabs).map(([id,label])=>`<button data-guide-discover="${id}">${label.replace(/^\d+ · /,'')}</button>`).join('')}</div><div><h3>Bild-Erklärungen mit Übungen</h3>${visualStations.map((s,i)=>`<button data-guide-visual="${i}">${s.title}</button>`).join('')}</div></div></details>
- <details class="card guideExtra"><summary>Schulaufgaben und eigene Musikstücke</summary><p>Für einen Arbeitsauftrag aus dem Unterricht oder zum Vertiefen.</p><div class="guideExtraLinks"><button data-guide-school="pyramide">Notenwerte mit der Pyramide vergleichen</button><button data-guide-school="split">Punktierte Werte zerlegen</button><button data-guide-school="hear">Gleichmäßige und punktierte Rhythmen hören</button><button data-guide-school="compose">Ein eigenes Rhythmusstück bauen</button><button data-guide-school="plan">Stationenplan und Selbsteinschätzung</button><button id="guideLabs">Weitere Aufgaben in der Musikwerkstatt</button></div></details>
- <details class="card guideExtra"><summary>Musikspiele, kurze Runden und Merkkarten</summary><p>Spiele wiederholen Bekanntes. In einer kleinen Lernrunde gibt es ein Beispiel und drei Aufgaben.</p><div class="row"><button id="guideGames">Sechs Musikspiele auswählen</button><button id="guideMini">Kleine Lernrunde starten</button><button data-guide-view="cards">Meine Merkkarten (${coachState.cards.length})</button></div></details>`;
- guideBindActions();on('guideLabs',()=>openLab('dictation'));
+ const selected=Number.isInteger(guidePracticeTopic)&&guidePracticeTopic>=0&&guidePracticeTopic<groups.length?guidePracticeTopic:null;
+ const group=selected===null?null:groups[selected];
+ $('#main').innerHTML=`<div class="eyebrow">Üben · ohne Zeitdruck</div><h1>Hier kannst du Musik üben</h1><p class="guideLead">Beginne mit einer kurzen Übungsrunde oder wähle ein bestimmtes Thema. Du bekommst Tipps und siehst die richtige Lösung.</p>
+ ${round?`<section class="card guideContinue"><p>Du hast noch eine begonnene Runde.</p><button class="primary" data-guide-view="${round}">Begonnene Übung fortsetzen →</button></section>`:''}
+ <section class="card cleanQuick"><div><span class="guideTag">Schnell starten</span><h2>3 Fragen mit Fuji</h2><p>Eine kleine Übungsrunde zum Aufwärmen. Du brauchst nichts vorzubereiten.</p></div><button id="guideMini" class="primary">3 Fragen üben →</button></section>
+ <div class="guideWorkoutAnchor"></div>
+ <h2 class="cleanSection">Ein Thema gezielt üben</h2><p>Tippe auf das Thema, das du im Unterricht gerade behandelst.</p>
+ <div class="guideExerciseGrid cleanPracticeGrid" role="group" aria-label="Übungsthema wählen">
+ ${groups.map((g,i)=>`<button type="button" class="cleanPracticeChoice ${i===selected?'selected':''}" data-guide-practice="${i}" aria-pressed="${i===selected}"><img src="images/lesson-${pictures[i]}.webp" width="66" height="60" alt="" loading="lazy"><span><strong>${names[i]}</strong><small>${g[2].length} Übungsarten</small></span></button>`).join('')}</div>
+ ${group?`<section class="card cleanPracticePanel" id="practicePanel"><span class="guideTag">Du übst: ${names[selected]}</span><h3>Starte mit dieser Übung</h3><p>${group[1]}</p><button class="primary" data-guide-exercise="${group[2][0][0]}">${group[2][0][1]} →</button>
+ <div class="cleanPracticeExtras">${group[2].length>1?`<details class="cleanDetails"><summary>Andere Übungen zu diesem Thema</summary><div class="cleanChoiceList">${group[2].slice(1).map(([id,label])=>`<button data-guide-exercise="${id}">${label}</button>`).join('')}</div></details>`:''}<button class="subtle" data-guide-lesson="${keys[selected]}">Erklärung noch einmal ansehen</button></div></section>`:'<p class="cleanPrompt" role="status">Wähle oben eines der sechs Themen aus. Anschließend erscheint die passende Übung.</p>'}
+ <details class="card cleanLibrary"><summary>Weitere Spiele, Bilder und besondere Übungen</summary><p>Du musst diese Extras nicht benutzen. Sie helfen, wenn du etwas anders ausprobieren möchtest.</p>
+ <div class="cleanExtraGroups">
+ <details><summary>Mit Bildern und Animationen verstehen</summary><div class="guideExtraGrid"><div>${Object.entries(discoverTabs).map(([id,label])=>`<button data-guide-discover="${id}">${label.replace(/^\d+ · /,'')}</button>`).join('')}</div><div>${visualStations.map((s,i)=>`<button data-guide-visual="${i}">${escapeText(s.title)}</button>`).join('')}</div></div></details>
+ <details><summary>Musikstücke und besondere Schulaufgaben</summary><div class="cleanChoiceList"><button data-guide-school="pyramide">Notenwerte vergleichen</button><button data-guide-school="split">Punktierte Werte zerlegen</button><button data-guide-school="hear">Rhythmen vergleichen</button><button data-guide-school="compose">Eigenes Musikstück bauen</button><button data-guide-school="plan">Stationenplan</button><button id="guideLabs">Weitere Aufgaben in der Musikwerkstatt</button></div></details>
+ <details><summary>Spiele und Merkkarten</summary><div class="cleanChoiceList"><button id="guideGames">Sechs Musikspiele auswählen</button><button data-guide-view="cards">Meine Merkkarten (${coachState.cards.length})</button></div></details>
+ </div></details>`;
+ guideBindActions();
+ $$('[data-guide-practice]').forEach(b=>b.onclick=()=>{
+  guidePracticeTopic=+b.dataset.guidePractice;
+  guideExerciseHub();
+  $('#practicePanel')?.scrollIntoView?.({block:'nearest'});
+ });
+ on('guideLabs',()=>openLab('dictation'));
 }
 function guideChecks(){
  $('#main').innerHTML=`<div class="eyebrow">Prüfen · danach gezielt weiterlernen</div><h1>Was klappt schon?</h1><p>Die Ergebnisse helfen dir beim Üben. Sie sind keine Schulnote.</p><div class="guideChoices guideCheckChoices"><article class="card"><span class="guideTag">12 Aufgaben · alle Themen</span><h2>Lerncheck mit Rückmeldung</h2><p>Beantworte die Fragen. Danach siehst du deine Ergebnisse und passende Empfehlungen.</p><button id="guideCheck" class="primary">Lerncheck starten</button></article><article class="card"><span class="guideTag">8 Aufgaben · 6 Versionen</span><h2>Übungstest wie im Unterricht</h2><p>Bearbeite einen ganzen Test am Bildschirm oder drucke Aufgaben und Lösungen aus.</p><button data-guide-view="tests">Übungstest auswählen</button></article></div><section class="card guideFollowup"><h2>Danach: unsichere Themen üben</h2><p>In der Wiederholung bekommst du Aufgaben passend zu deinem bisherigen Lernstand auf diesem Gerät.</p><div class="row"><button id="guideReview">Passende Wiederholung starten</button><button data-guide-view="progress" class="subtle">Lernfortschritt ansehen</button></div></section>`;
