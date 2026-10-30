@@ -60,3 +60,9 @@ Jede Station zeigt Hinweise, nach dem Prüfen sofortige Begründungen und am End
 ## 30.10.2026: Vier Erdviertel und Kartenwahl
 
 Im bestehenden Gustav-Atlas-Lernpfad erklaert die Weltgrafik die vier Erdviertel (Nordwest, Nordost, Suedwest, Suedost) und die Bezugslinien Aequator und Nullmeridian. Die lernende Person waehlt das Erdviertel und die anschliessende Kontinentkarte; nach Pruefung folgen begruendete Rueckmeldungen. Es wird die Abfolge Weltkarte -> Kontinentkarte -> genauere Regionalkarte geuebt. Der zuvor fachlich falsche Nordost/Suedost-Hinweis der Kompasspraxis ist korrigiert. GitHub Actions testet nun auch die Praxisstationen. Versionsgleiche HTML-Pruefung ignoriert reine Unterschiede in Einrueckung oder Leerzeilen. Weiterhin ein Projekt, keine neue App.
+
+## 30.10.2026: Browserprüfung und gezielte Übungsdiagnostik
+
+Die bestehende App enthält jetzt in der Geowerkstatt dreistufige bis vierstufige Fehlererklärungen, eine Liste falsch gelöster Praxisaufgaben und eine direkte Empfehlung zum passenden Prüfungsfit-Lernweg. Die zusammengefasste Navigation wurde repariert, sodass „Prüfungsfit“ über „Weitere App-Bereiche“ wieder erreichbar ist. Der öffentliche Ein-Datei-Einstieg nutzt einen eigenen Service Worker für den Offline-Start nach Erstbesuch; der separate Entwickler-Service-Worker berücksichtigt die neuen Praxisdateien.
+
+Nach einem zunächst fehlgeschlagenen Browser-Test wurde die Ursache an der Tab-Einfügung behoben. Der nachfolgende GitHub-Actions-Lauf `40994263067` (Commit `34b02ad43212eebf387c1e206f82aee6f42f9429`) ist erfolgreich: Node-Tests, automatisierter Chromium-Test für 1280/390 px, reproduzierbarer HTML-Build und bytegleiche Bündelprüfung. GitHub Pages meldet ebenfalls erfolgreiche Bereitstellung. Reale iOS-/Android-Geräte, Voice-Qualität und die Lernwirksamkeit mit Kindern wurden dabei nicht praktisch überprüft.
