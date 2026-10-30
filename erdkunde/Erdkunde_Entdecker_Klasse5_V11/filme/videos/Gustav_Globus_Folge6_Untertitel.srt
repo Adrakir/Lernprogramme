@@ -1,0 +1,55 @@
+1
+00:00:00,450 --> 00:00:05,883
+Paul: Herr Welt, wie findet man eigentlich einen Ort ganz genau auf der Erde?
+
+2
+00:00:06,533 --> 00:00:11,216
+Herr Welt: Gustav, erklär uns das Gradnetz bitte Schritt für Schritt!
+
+3
+00:00:11,866 --> 00:00:20,050
+Gustav: Das Gradnetz besteht aus Breitenkreisen und Meridianen. Wo sie sich schneiden, können wir einen Ort bestimmen.
+
+4
+00:00:20,699 --> 00:00:30,966
+Gustav: Der Äquator hat null Grad Breite. Breitenkreise verlaufen parallel zum Äquator: bis neunzig Grad Nord und bis neunzig Grad Süd.
+
+5
+00:00:31,616 --> 00:00:35,966
+Paul: Und was sind dann die Längengrade?
+
+6
+00:00:36,616 --> 00:00:46,966
+Gustav: Meridiane verlaufen vom Nordpol zum Südpol. Der Nullmeridian hat null Grad Länge. Wir zählen von dort nach Osten oder Westen.
+
+7
+00:00:47,616 --> 00:00:56,549
+Herr Welt: Wir suchen jetzt zweiundfünfzig Grad Nord und zehn Grad Ost. Merk dir: Zuerst die Breite, danach die Länge.
+
+8
+00:00:57,200 --> 00:01:05,466
+Gustav: Schritt eins: Suche zweiundfünfzig Grad nördlicher Breite. Du folgst dem Breitenkreis um die Erdkugel.
+
+9
+00:01:06,116 --> 00:01:14,299
+Gustav: Schritt zwei: Suche zehn Grad östlicher Länge. Verfolge diesen Meridian vom Nordpol nach Süden.
+
+10
+00:01:14,950 --> 00:01:22,216
+Paul: Ah! Dort treffen sich der Breitenkreis und der Meridian. Das ist unser gesuchter Punkt!
+
+11
+00:01:22,866 --> 00:01:29,883
+Paul: Aber Gustav: Die Meridianlinie ist doch gebogen. Kann ich trotzdem zehn Grad Ost ablesen?
+
+12
+00:01:30,533 --> 00:01:40,883
+Gustav: Ja! Der Meridian liegt auf einer Kugel. Aus unserem Blickwinkel erscheint er gebogen. Verfolge dieselbe Linie bis zum Breitenkreis.
+
+13
+00:01:41,533 --> 00:01:52,216
+Herr Welt: Jetzt bist du dran: Welche Angabe suchst du zuerst – zweiundfünfzig Grad Nord oder zehn Grad Ost?
+
+14
+00:01:52,866 --> 00:02:01,549
+Gustav: Zuerst zweiundfünfzig Grad Nord! Dann zehn Grad Ost. Merke: Breite vor Länge. Gut gemacht!
