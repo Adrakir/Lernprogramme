@@ -105,6 +105,20 @@ async function main(){
    check(await expression('Array.from(document.querySelectorAll("a")).filter(a=>a.href.includes(".pdf?v=")).length>=2'),'Both printable music books linked at '+size.name);
    await expression('setView("home")');
 
+   await expression('setView("rhythm")');
+   check(await expression('document.querySelectorAll(".wordCard").length')===4,'Four rhythm-word cards visible at '+size.name);
+   check(await expression('Boolean(Array.from(document.querySelectorAll(".wordCard")).find(x=>x.textContent.includes("Ananas")))'),'Ananas has a diagram at '+size.name);
+   await expression('(()=>{const c=document.querySelectorAll("[data-wordbeat]")[0];c.value="Ananas";c.dispatchEvent(new Event("change",{bubbles:true}));})()');
+   check(await expression('document.querySelector(".wordSentence").textContent.includes("Ananas")'),'Ananas selectable in word rhythm builder at '+size.name);
+   check(await expression('document.querySelectorAll("#wordScore [data-beam=secondary]").length>=1'),'Two sixteenths have the second beam at '+size.name);
+   await expression('document.querySelector("#wordTakt").click()');
+   check(await expression('document.querySelector("#rhythmAudio").src.startsWith("blob:")'),'Ananas audio produced at '+size.name);
+   await expression('stop()');
+   await expression('document.querySelector(".wordCard:last-child")?.scrollIntoView({block:"center",behavior:"instant"})');
+   const rhythmScreenshot=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false,fromSurface:true});
+   fs.writeFileSync(path.join(artifacts,size.name+'-ananas.png'),Buffer.from(rhythmScreenshot.data,'base64'));
+   await expression('setView("home")');
+   
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="teile"),1)');
    await waitFor(()=>expression('Boolean(document.querySelector("#anatomyExample"))'));
    await expression('document.querySelector(\'[data-anatomy="4"]\').click()');
