@@ -10,7 +10,7 @@ die Apps nach Fach und Thema.
 |---|---|---|---|
 | Deutsch | Minka & Fuji – Erzählwerkstatt | Erzählstudio mit sieben Lernschritten, sechs Geschichten, acht Klassenarbeitsaufgaben und Textlabor | [deutsch/Deutschapp_Minka_Fuji/index.html](./deutsch/Deutschapp_Minka_Fuji/index.html) |
 | Englisch | Access Wortwelt | Vokabeln, Sätze und Hörübungen | [englisch/index.html](./englisch/index.html) |
-| Mathematik | MatheKompass | Zahlen, Rechnen, Größen, Geometrie und Daten | [mathematik/MatheKompass/MatheKompass.html](./mathematik/MatheKompass/MatheKompass.html) |
+| Mathematik | MatheKompass | Zahlen, Rechnen, Größen, Geometrie und Daten | [mathematik/MatheKompass.html](./mathematik/MatheKompass.html) |
 | Musik | Rhythmuswerkstatt | Noten, Pausen, Takte und Rhythmus | [musik/Musik-Lernapp/index.html](./musik/Musik-Lernapp/index.html) |
 | Biologie | BioLabor 5 | Lebewesen, Skelett, Knochen, Gelenke, Muskeln und Wirbelsäule | [biologie und chemie/BioLabor_5_Biologie_V9_2.html](./biologie%20und%20chemie/BioLabor_5_Biologie_V9_2.html) |
 | Chemie | Chemie-Entdeckerlabor | Stoffe, Laborgeräte und Experimente | [biologie und chemie/Chemie_Entdeckerlabor_V7_2.html](./biologie%20und%20chemie/Chemie_Entdeckerlabor_V7_2.html) |
@@ -46,10 +46,12 @@ Beim Löschen der Browserdaten können sie verloren gehen. Die älteren Deutsch-
 MatheKompass bietet geführte Lernwege mit Martha Mathe, zusätzliche interaktive
 Modelle, eine Unterrichtsansicht und druckbare Arbeitsblätter mit optionalem
 separatem Lösungsblatt. Die Lernstandserhebung umfasst 30 Aufgaben aus 15
-Bereichen. Alte Sicherungen und begonnene 14-Aufgaben-Diagnosen bleiben lesbar.
+Bereichen. Neu ist die Größen-Werkstatt für Längen, Gewichte, Geld, Flächen
+und Volumen: je fünf Stationen mit geführtem Lernpfad, Übungen in drei Niveaus,
+Vertiefung, Test mit Auswertung, gestuften Hilfen und Merkwissen. Alte Sicherungen und begonnene 14-Aufgaben-Diagnosen bleiben lesbar.
 Ein bearbeitetes Beispiel ist kein Kompetenznachweis; Inhalte mit Kennzeichnung
 5/6 werden nach dem Unterrichtsstand ausgewählt. Details stehen in
-[BITTE_ZUERST_LESEN.txt](./mathematik/MatheKompass/BITTE_ZUERST_LESEN.txt).
+[BITTE_ZUERST_LESEN.txt](./mathematik/BITTE_ZUERST_LESEN.txt).
 
 Die **Deutsch-Erzählwerkstatt** öffnet mit einem neuen Erzählstudio: Ein geführter Lernweg verbindet die vorhandenen acht Bereiche mit einer vollständigen Schreibwerkstatt, Bild- und Reizwortgeschichten als Übungsklassenarbeiten, 20 Übungsklassenarbeiten, einem Kriterienraster, zwölf Reparaturgeschichten, einem Lerncoach, einem Versionsvergleich, Textlupe und Vorlesefunktion. Ein Lehrerbereich druckt getrennte Arbeitsblätter und Erwartungshorizonte als PDF. Zusätzlich gibt es nun einen interaktiven Geschichtenbaukasten mit drei sechsseitigen Bildfolgen, regelbasierte Texthinweise, Schreibproben mit Belegen, individuelle Übungsempfehlungen, Satzvorlesen mit Hervorhebung und eine datenschutzbewusste JSON-Sicherung zum Übertragen zwischen Geräten. Die Grafiken sind lokal eingebunden, und eigene Schreibtexte erhalten ausdrücklich keine automatische Note. Direktstart: [Mein Erzählstudio](./deutsch/Deutschapp_Minka_Fuji/index.html#studio). Hinweise stehen in [START_HIER.txt](./deutsch/Deutschapp_Minka_Fuji/START_HIER.txt).
 
