@@ -1,0 +1,35 @@
+name: Musikapp – automatisierte Qualitätsprüfung
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'musik/Musik-Lernapp/**'
+      - '.github/workflows/musik-qualitaet.yml'
+  pull_request:
+    paths:
+      - 'musik/Musik-Lernapp/**'
+      - '.github/workflows/musik-qualitaet.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: Lernwege, Notation, Audio und Offline-Modus
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: musik/Musik-Lernapp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: musik/Musik-Lernapp/package-lock.json
+      - name: Abhängigkeiten installieren
+        run: npm ci --no-audit --no-fund
+      - name: Vollständige Regressionstests
+        run: npm test
