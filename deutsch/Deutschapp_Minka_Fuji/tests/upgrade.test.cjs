@@ -67,6 +67,7 @@ test('Ausbau: Bilderkino, Geschichtenbaukasten, Textcoach, Schreibprobe, Portfol
    const dl=await downloadPromise;
    assert.match(dl.suggestedFilename(),/Deutsch_Erzaehlwerkstatt_Lernstand/);
    await page.locator('#up-import').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"bad":true}')});
+   await page.waitForFunction(()=>document.getElementById('up-backup-status')?.textContent.includes('Kein gültiges'));
    assert.match(await page.locator('#up-backup-status').textContent(),/Kein gültiges/);
   });
   await t.test('Lehrkräfte erstellen 6-Bilder-Arbeiten mit zwei getrennten Druckfassungen',async()=>{
