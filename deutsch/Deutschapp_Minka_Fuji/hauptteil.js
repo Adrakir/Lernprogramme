@@ -3,7 +3,7 @@
   const q=(text,options,right,why,hint,steps)=>({text,options,right,why,hint,steps});
   const lessons=[
     {
-      id:'gefuehle',title:'Gefühle spürbar machen',who:'Minka',image:'scene-3.webp',
+      id:'gefuehle',title:'Gefühle spürbar machen',who:'Minka',image:'scene-3.jpg',
       goal:'Gefühle nicht nur benennen, sondern durch Körper, Verhalten und passende Einzelheiten zeigen.',
       weak:'Minka hatte Angst.',strong:'Minkas Herz hämmerte. Sie hielt die Luft an und wich einen Schritt zurück.',
       why:'Herzklopfen und Zurückweichen lassen uns die Angst miterleben, statt sie nur zu behaupten.',
@@ -18,7 +18,7 @@
       check:['Ich zeige eine körperliche oder sichtbare Reaktion.','Das Gefühl verändert das Verhalten.','Die Reaktionen passen zum Ereignis.']
     },
     {
-      id:'gedanken',title:'Gedanken und innere Fragen',who:'Fuji',image:'scene-2.webp',
+      id:'gedanken',title:'Gedanken und innere Fragen',who:'Fuji',image:'scene-2.jpg',
       goal:'Leser an Überlegungen, Sorgen und Entscheidungen einer Figur teilhaben lassen.',
       weak:'Minka dachte über alles nach.',strong:'Was, wenn dort jemand Hilfe brauchte? Minka musste nachsehen.',
       why:'Die innere Frage erklärt, warum Minka trotz ihrer Angst handelt.',
@@ -33,7 +33,7 @@
       check:['Die Gedanken passen zum Wissen der Figur.','Eine Überlegung erklärt ihre Entscheidung.','Ich verwechsle Gedanken nicht mit gesprochenen Worten.']
     },
     {
-      id:'sinne',title:'Mit den Sinnen erzählen',who:'Minka',image:'scene-4.webp',
+      id:'sinne',title:'Mit den Sinnen erzählen',who:'Minka',image:'scene-4.jpg',
       goal:'Passende Geräusche, Gerüche, Licht, Berührung und andere Eindrücke gezielt einsetzen.',
       weak:'Im Schuppen war es unheimlich.',strong:'Holz knarrte unter Fujis Pfoten. Es roch nach nasser Erde, und im Türspalt zitterte ein Lichtstreifen.',
       why:'Die konkreten Sinneseindrücke helfen, die Szene vorzustellen.',
@@ -48,7 +48,7 @@
       check:['Ich nutze mindestens zwei passende Sinne.','Die Figur kann diese Eindrücke tatsächlich wahrnehmen.','Mindestens ein Eindruck führt die Handlung weiter.']
     },
     {
-      id:'hindernisse',title:'Hindernisse und Entscheidungen',who:'Fuji',image:'scene-3.webp',
+      id:'hindernisse',title:'Hindernisse und Entscheidungen',who:'Fuji',image:'scene-3.jpg',
       goal:'Aus einem Problem eine Handlung mit Versuchen, Rückschlägen und Entscheidungen entwickeln.',
       weak:'Es gab ein Problem, aber dann war es weg.',strong:'Die Tür klemmte. Fuji stemmte sich dagegen, doch sie rührte sich nicht. Minka suchte nach einer anderen Öffnung.',
       why:'Ein Hindernis verlangt eine Entscheidung; dadurch entsteht Handlung.',
@@ -63,7 +63,7 @@
       check:['Meine Figuren haben ein verständliches Ziel.','Das Hindernis macht dieses Ziel schwerer.','Die Lösung entsteht durch eine passende Handlung.']
     },
     {
-      id:'spannung',title:'Spannung sinnvoll steigern',who:'Minka',image:'scene-3.webp',
+      id:'spannung',title:'Spannung sinnvoll steigern',who:'Minka',image:'scene-3.jpg',
       goal:'Neugier, Unsicherheit und neue Schwierigkeiten auf einen entscheidenden Moment hinführen.',
       weak:'Es war spannend. Dann war es noch spannender.',strong:'Hinter der Tür scharrte es. Plötzlich fiel sie ins Schloss. Dann sah Minka einen Schatten, der sich bewegte.',
       why:'Der Hinweis, das Hindernis und die neue Unsicherheit steigern die Spannung.',
@@ -78,7 +78,7 @@
       check:['Jede Stufe ergibt sich aus der vorherigen.','Das Problem wird schrittweise schwieriger.','Ich verrate den Ausgang nicht zu früh.']
     },
     {
-      id:'tempo',title:'Den wichtigen Moment verlangsamen',who:'Fuji',image:'scene-5.webp',
+      id:'tempo',title:'Den wichtigen Moment verlangsamen',who:'Fuji',image:'scene-5.jpg',
       goal:'Am Höhepunkt in kleinen Handlungsschritten erzählen und Unwichtiges zusammenfassen.',
       weak:'Dann retteten sie den Igel.',strong:'Fuji schob die Pfote unter den Topfrand. Das Gefäß kippte. Minka griff nach einem Holzklotz. Würde sie ihn rechtzeitig unterlegen?',
       why:'Die kleinen Schritte lassen Leser die Gefahr und den Entscheidungsaugenblick miterleben.',
@@ -93,7 +93,7 @@
       check:['Ich beschreibe den wichtigsten Moment genauer.','Die Schritte sind logisch und anschaulich.','Unwichtige Nebensachen lenken nicht ab.']
     },
     {
-      id:'hoehepunkt',title:'Höhepunkt und Erzählteile',who:'Minka',image:'scene-5.webp',
+      id:'hoehepunkt',title:'Höhepunkt und Erzählteile',who:'Minka',image:'scene-5.jpg',
       goal:'Den entscheidenden Moment erkennen und vom ausklingenden Schluss unterscheiden.',
       weak:'Am Ende der Geschichte war alles spannend.',strong:'Als der Topf abrutschte, stützte Minka ihn ab. Jetzt gelang die Rettung. Danach atmeten beide auf.',
       why:'Das Abstützen löst die entscheidende Frage. Die Erleichterung gehört zum Ausklang.',
@@ -108,7 +108,7 @@
       check:['Der Höhepunkt löst das wichtigste Problem.','Der Höhepunkt steht noch im Hauptteil.','Der Schluss zeigt die Zeit danach.']
     },
     {
-      id:'roterfaden',title:'Roter Faden: Ursache und Wirkung',who:'Fuji',image:'scene-4.webp',
+      id:'roterfaden',title:'Roter Faden: Ursache und Wirkung',who:'Fuji',image:'scene-4.jpg',
       goal:'Handlungen so verbinden, dass Hinweise, Ursachen und Folgen verständlich bleiben.',
       weak:'Minka suchte den Ball. Dann war ein Igel da.',strong:'Weil der Ball hinter den Schuppen gerollt war, suchten Minka und Fuji dort. Dabei hörten sie ein Kratzen.',
       why:'Der Weg zum Schuppen und die Entdeckung hängen miteinander zusammen.',
@@ -123,7 +123,7 @@
       check:['Jede wichtige Handlung hat einen nachvollziehbaren Grund.','Ein Hinweis vom Anfang wird später aufgegriffen.','Die Lösung fällt nicht ohne Vorbereitung vom Himmel.']
     },
     {
-      id:'perspektive',title:'Ich- und Er-/Sie-Perspektive',who:'Minka',image:'scene-2.webp',
+      id:'perspektive',title:'Ich- und Er-/Sie-Perspektive',who:'Minka',image:'scene-2.jpg',
       goal:'Die Erzählperspektive erkennen, durchhalten und fremdes Wissen nicht unbemerkt hineinmischen.',
       weak:'Ich ging zur Tür. Minka wusste nicht weiter. Dann sah ich meinen Schwanz.',strong:'Ich schlich zum Schuppen. Mein Herz klopfte, als ich ein Geräusch hörte.',
       why:'Die Ich-Perspektive bleibt konsequent bei der erlebenden Figur.',
@@ -138,7 +138,7 @@
       check:['Ich bleibe innerhalb eines Abschnitts bei einer Perspektive.','Die Pronomen und Verbformen stimmen.','Gedanken passen zum Wissen der Perspektivfigur.']
     },
     {
-      id:'zeitform',title:'Präteritum und Rückblick',who:'Fuji',image:'scene-1.webp',
+      id:'zeitform',title:'Präteritum und Rückblick',who:'Fuji',image:'scene-1.jpg',
       goal:'Schulische Erzählungen in der geforderten Zeitform schreiben und Vorzeitigkeit ausdrücken.',
       weak:'Minka ging zur Tür. Dann hört sie etwas und rannte los.',strong:'Minka ging zur Tür. Dann hörte sie etwas und rannte los.',
       why:'Alle Erzählverben stehen im Präteritum. Ein früheres Ereignis kann im Plusquamperfekt stehen.',
@@ -153,7 +153,7 @@
       check:['Ich halte die geforderte Zeitform ein.','Für früher Geschehenes nutze ich bei Bedarf das Plusquamperfekt.','Die wörtliche Rede darf natürlich klingen.']
     },
     {
-      id:'rede',title:'Wörtliche Rede im Hauptteil',who:'Minka',image:'scene-5.webp',
+      id:'rede',title:'Wörtliche Rede im Hauptteil',who:'Minka',image:'scene-5.jpg',
       goal:'Gespräche gezielt für Entscheidung, Spannung und Gefühle einsetzen und korrekt kennzeichnen.',
       weak:'Minka sagte etwas. Fuji sagte auch etwas. Sie redeten.',strong:'„Vorsicht, der Topf rutscht!“, rief Minka. „Schieb den Klotz darunter!“, antwortete Fuji.',
       why:'Die Figuren handeln durch ihre Worte. Der Dialog treibt die Rettung voran.',
@@ -168,7 +168,7 @@
       check:['Der Dialog passt zur Szene und hilft der Handlung.','Die Begleitsätze sind abwechslungsreich.','Anführungszeichen und Satzzeichen stimmen.']
     },
     {
-      id:'schluss',title:'Ausklang und Rückbezug',who:'Fuji',image:'scene-6.webp',
+      id:'schluss',title:'Ausklang und Rückbezug',who:'Fuji',image:'scene-6.jpg',
       goal:'Nach dem Höhepunkt Folgen, Gefühle und den Bezug zum Anfang zeigen.',
       weak:'Der Igel war frei. Plötzlich erschien ein Drache. Es ging weiter.',strong:'Der Igel huschte ins Laub. Fuji atmete auf. Neben dem Schuppen lag auch Minkas Ball.',
       why:'Der Schluss klingt aus und greift die Ballsuche aus der Einleitung wieder auf.',
@@ -183,7 +183,7 @@
       check:['Der Höhepunkt ist vorbei.','Ergebnis oder Folgen werden deutlich.','Der Schluss passt zur Einleitung und öffnet kein unpassendes neues Abenteuer.']
     },
     {
-      id:'ueberarbeiten',title:'Überarbeiten und Klassenarbeit',who:'Minka',image:'scene-6.webp',
+      id:'ueberarbeiten',title:'Überarbeiten und Klassenarbeit',who:'Minka',image:'scene-6.jpg',
       goal:'Eine ganze Erzählung gezielt auf Inhalt, Aufbau, Sprache und Aufgabenbezug prüfen.',
       weak:'Minka war da. Dann passierte etwas. Es war toll.',strong:'Minka stand vor dem Gartenschuppen. Hinter der Tür kratzte etwas. Sie rief Fuji zu Hilfe.',
       why:'Figur, Ort und Ereignisse werden klar; die Handlung bleibt nachvollziehbar.',
