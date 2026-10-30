@@ -4,8 +4,8 @@
  var observed=new WeakSet();
  function fallback(img){
   var original=img.getAttribute('src')||'';
-  if(img.getAttribute('data-jpeg-attempt')||!/\.webp(?:$|[?#])/i.test(original))return;
-  img.setAttribute('data-jpeg-attempt','1');
+  if(!/\.webp(?:$|[?#])/i.test(original))return;
+  // Bei einem neuen Bild darf der Fallback erneut versuchen: Comicseiten wechseln dieselbe IMG-Instanz.
   img.setAttribute('src',original.replace(/\.webp(?=$|[?#])/i,'.jpg'));
  }
  function bind(img){

@@ -40,6 +40,26 @@ test('Deutschapp: echte Browser- und Bildkontrolle auf Safari/WebKit und Chromiu
       await page.goto(URL,{waitUntil:'load'});
       assert.equal(await page.locator('nav.navigation [data-page]').count(),9,'Neun integrierte Deutsch-Bereiche');
       if(width===1366){
+       // Regression: Dasselbe IMG-Element wird mehrfach auf ein neues WebP umgeschaltet.
+       // Alte Safari-Versionen müssen bei JEDEM Wechsel auf JPEG zurückfallen.
+       await page.evaluate(()=>{
+        const img=document.createElement('img');
+        img.id='qa-repeat-fallback';img.alt='Safari-Bildwechsel';
+        img.style.cssText='width:90px;height:90px;object-fit:contain;position:absolute;top:-9000px';
+        document.body.appendChild(img);
+        img.src='assets/scene-1.webp';
+       });
+       await page.waitForFunction(()=>{
+        const el=document.querySelector('#qa-repeat-fallback');
+        return el?.naturalWidth>0&&el.getAttribute('src')==='assets/scene-1.jpg';
+       });
+       await page.locator('#qa-repeat-fallback').evaluate(img=>{img.src='assets/scene-2.webp';});
+       await page.waitForFunction(()=>{
+        const el=document.querySelector('#qa-repeat-fallback');
+        return el?.naturalWidth>0&&el.getAttribute('src')==='assets/scene-2.jpg';
+       });
+       await page.locator('#qa-repeat-fallback').evaluate(img=>img.remove());
+       assert.equal(await page.locator('nav.navigation').evaluate(el=>getComputedStyle(el).display),'grid','Lesbare Desktop-Navigation statt Silbenbruch');
        const labels=await page.locator('nav.navigation button').evaluateAll(nodes=>nodes.map(n=>({title:n.textContent.trim(),visible:n.clientWidth,content:n.scrollWidth})));
        assert.ok(labels.every(n=>n.content<=n.visible+2),'iMac-Menütexte laufen über: '+JSON.stringify(labels));
       }else assert.equal(await page.locator('.navigation-hint').isVisible(),true,'Hinweis zum seitlichen Wischen ist auf Handys sichtbar');

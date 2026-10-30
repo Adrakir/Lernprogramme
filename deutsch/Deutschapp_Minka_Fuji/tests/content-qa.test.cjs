@@ -71,7 +71,7 @@ test('Deutsch: Alle Offline-Bestandteile existieren und Installationen dürfen n
  }
  const webps=files.filter(f=>f.endsWith('.webp'));
  assert.ok(webps.length>=9,'Originalbilder vorhanden');
- assert.ok(files.includes('./image-compat.js?v=1'),'Safari-Bildkompatibilität offline verfügbar');
+ assert.ok(files.some(file=>/^\.\/image-compat\.js\?v=\d+$/.test(file)),'Safari-Bildkompatibilität offline verfügbar');
  for(const source of webps){
   const fallback=source.replace('.webp','.jpg');
   assert.ok(files.includes(fallback),'JPEG-Bild nicht im Offlinecache registriert: '+fallback);

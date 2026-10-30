@@ -26,3 +26,15 @@
 .navigation button{overflow-wrap:anywhere;hyphens:auto;line-height:1.35}
 .navigation-hint{display:none}
 @media(max-width:760px){.navigation-hint{display:block;max-width:var(--max);margin:-11px auto 10px;padding:0 16px;color:var(--muted);font-size:.82rem;line-height:1.45}}
+
+/* Desktop-Navigation: ganze Wörter, klare Kacheln statt umbrochener Silben.
+   Mobile Scroll-Navigation bleibt ab 760 Pixeln erhalten. */
+@media(min-width:1000px){
+ nav.navigation{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+ nav.navigation button{display:flex;align-items:center;min-width:0;width:100%;padding:13px 14px;gap:9px;line-height:1.35;word-break:normal;overflow-wrap:normal;hyphens:none}
+ nav.navigation button span{display:inline-block;flex:0 0 auto;margin-right:0}
+}
+@media(min-width:761px) and (max-width:999px){
+ nav.navigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+ nav.navigation button{min-width:0;width:100%;word-break:normal;overflow-wrap:normal;hyphens:none}
+}
