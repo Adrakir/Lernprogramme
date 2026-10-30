@@ -32,3 +32,27 @@ GitHub-Workflow: https://github.com/Adrakir/Lernprogramme/actions/workflows/musi
 Öffentliche App: https://adrakir.github.io/Lernprogramme/musik/Musik-Lernapp/
 
 Den letzten Prüfstand der App und die GitHub-Action-Läufe nur dann als „bestanden“ bezeichnen, wenn Logs und Ergebnisstatus tatsächlich erfolgreich sind.
+
+## Abschließende, **tatsächlich ausgeführte** Prüfung (30.10.2026)
+
+**GitHub-Actions-Lauf:** https://github.com/Adrakir/Lernprogramme/actions/runs/41064419722
+
+Ergebnis: **success**. Die vollständige npm-Testsuite wurde in der GitHub-Runner-Umgebung mit Node.js 22 ausgeführt:
+
+- **2.832 Assertions bestanden:** 27 vollständig durchgespielte Lernwege mit vier Phasen, 216 gültige Aufgaben, Auswertung und Hilfe, 27 Lehrkraft-Aufträge, sechs Spiele, erstellte Rhythmusstücke, Prüfungen, Speicherung, PDF-Zuordnungen und WAV-Erzeugung.
+- **Offline-Tests bestanden:** intaktes Cache-Update, Rollback bei fehlerhafter Aktualisierung, Start ohne Verbindung, JavaScript, CSS, Bilder, optionale PDF-Dateien und PDF-Byte-Ranges.
+- **50 echte Headless-Chromium-Browserchecks bestanden:** 320 px, 390 px und 1.366 px; 27 Lernschritte × vier Ansichten, Navigation, Übungswahl, Prüfungen, PDFs, ausgewählte Notenbestandteile, tatsächliche WAV-Erzeugung, keine ungewollte horizontale Seitenausdehnung, funktionsfähige Seitwärts-Pfeile bei langen Notenzeilen, kein Scrollbedarf bei kurzen Beispielen, passende Schaltflächen und **null unbehandelte JavaScript-Ausnahmen**.
+- **Drei echte Browser-Screenshots** aus dem grünen Lauf gesichert: GitHub-Actions-Artefakt „musik-browser-screenshots“ im oben verlinkten Lauf.
+
+**Tatsächlich aufgedeckte Fehler und Korrekturen:**
+1. Laufzeitfehler `$(...).forEach is not a function`: Verwechslung zwischen Einzel- und Mehrfachauswahl der Notenbestandteile (`$` und `$$`) an drei Stellen. In `path.js` korrigiert; Wiederholungstests nun ohne Fehler.
+2. Falsch zugeordnete Hörbeispiele beim Wechsel zwischen Notenkopf, Fähnchen, Balken und Punkt: nun werden die ausgewählten Notenwerte auch akustisch demonstriert.
+3. Der Knoten der neu eingesetzten Beispielgrafik wurde nach `replaceWith` ein zweites Mal über den geleerten Zwischencontainer abgerufen; dieses Problem verursachte **sechs abgefangene Browserskript-Ausnahmen**. Der einzusetzende DOM-Knoten wird jetzt vor der Verschiebung zwischengespeichert, und die Ausnahmeprüfung ist Pflicht im CI.
+4. Auf 320-Pixel-Displays umgebrochene Beschriftungen der Notenbestandteile: jetzt zwei Spalten mit lesbaren Namen.
+5. Schwebender Audioknopf über Lerntext: im minimierten Zustand auf schmalen Geräten während des Lernwegs ausgeblendet; die Klangsteuerung hat dafür einen eigenen erreichbaren Knopf in der Erklärung.
+6. Die anfänglich zu knappen sechs Aufgabenerklärungen sind erweitert.
+7. Die Testautomatik selbst enthielt zeitweise fehlerhafte CSS-Selektoren und einen nicht robusten Aufräumvorgang des Chromium-Profils; korrigiert. Ein harmloser Hinweis, wenn temporäre Browserdateien beim Aufräumen gesperrt bleiben, wird weiterhin protokolliert, beeinflusst das Prüfergebnis nicht.
+
+**Veröffentlichter und getester Quellstand:** Alle Codeänderungen und der verbesserte Browsercheck wurden über Pull Request #1 in `main` übernommen (Merge-Commit `d34cd2bb4cd01a50bc91712b9bf59e3a1c3a5d8a`). Startseite und Service Worker verwenden identisch Version `klarheit41`. Vorhandene Schüler-Lernstände und Speicherkennungen bleiben unverändert.
+
+**Nach wie vor nicht behauptet:** Ein Headless-Chromium-Lauf ersetzt kein haptisches Testen auf physischem iPhone mit Safari und auf Android, keine echte Beurteilung der Tonqualität über Lautsprecher, keinen umfangreichen Screenreader-/VoiceOver-Test und keine pixelgenaue Sichtprüfung aller PDF-Seiten. Dies sind verbleibende reale Abnahmen, nicht bestandene Tests.
