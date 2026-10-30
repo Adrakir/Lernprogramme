@@ -13,7 +13,10 @@ export const learningGoals:Record<Topic,{goal:string;discover:string;explain:str
  geometry:{goal:'Ich beschreibe Figuren, Winkel, Koordinaten und Spiegelungen.',discover:'Ist jedes Quadrat ein Rechteck? Und gilt auch die Umkehrung?',explain:'Jedes Quadrat hat vier rechte Winkel und ist ein Rechteck. Ein Rechteck braucht aber nicht vier gleich lange Seiten.',types:[0,1,4,6]},
  measure:{goal:'Ich unterscheide Rand, Fläche und Rauminhalt mit Einheiten.',discover:'Kann ein Rechteck bei gleichem Umfang mehr Fläche als ein anderes haben?',explain:'Ja: 6 × 4 und 8 × 2 haben beide 20 cm Umfang, aber 24 cm² beziehungsweise 16 cm² Fläche.',types:[0,3,7,4]},
  fractions:{goal:'Ich deute Brüche als gleich große Teile und begründe Umformungen.',discover:'Darfst du bei verschieden großen Stücken einfach die Stückzahl als Bruch nehmen?',explain:'Nein. Ein Nenner beschreibt gleich große Teile eines Ganzen. Zum Vergleichen müssen auch die Ganzen gleich groß sein.',types:[0,4,3,8]},
- decimals:{goal:'Ich erkläre Zehntel und Hundertstel und rechne stellengetreu.',discover:'Ist 0,7 kleiner als 0,65, weil 7 kleiner als 65 ist?',explain:'Nein: 0,7 = 0,70. 70 Hundertstel sind mehr als 65 Hundertstel.',types:[0,4,6,2]}
+ decimals:{goal:'Ich erkläre Zehntel und Hundertstel und rechne stellengetreu.',discover:'Ist 0,7 kleiner als 0,65, weil 7 kleiner als 65 ist?',explain:'Nein: 0,7 = 0,70. 70 Hundertstel sind mehr als 65 Hundertstel.',types:[0,4,6,2]},
+ angles:{goal:'Ich messe Winkel, benenne Winkelarten und berechne Winkel an Geradenkreuzungen, Parallelen und in Dreiecken.',discover:'Zwei Geraden schneiden sich. Musst du alle vier Winkel messen, um sie zu kennen?',explain:'Nein. Ein Winkel genügt: Sein Nebenwinkel ergänzt ihn zu 180°, sein Scheitelwinkel ist gleich groß.',types:[0,3,5,6]},
+ symmetry:{goal:'Ich erkenne und erzeuge Achsen-, Punkt- und Drehsymmetrie und ordne Vierecke nach ihren Eigenschaften.',discover:'Ist ein Parallelogramm achsensymmetrisch? Falte in Gedanken entlang einer Diagonalen.',explain:'Nein. Die Hälften passen beim Falten nicht aufeinander. Ein Parallelogramm ist aber punktsymmetrisch: Nach einer halben Drehung passt es wieder.',types:[3,2,6,7]},
+ solids:{goal:'Ich beschreibe Körper, prüfe Würfelnetze, zeichne Schrägbilder und lese Baupläne.',discover:'Lassen sich sechs Quadrate in einer beliebigen Anordnung immer zu einem Würfel falten?',explain:'Nein. Liegen zum Beispiel fünf Quadrate in einer Reihe, überlappen sich zwei Flächen. Es gibt genau 11 verschiedene Würfelnetze.',types:[0,2,5,7]}
 };
 
 const inquiries:Record<Topic,[string,string][]>={
@@ -101,6 +104,24 @@ const inquiries:Record<Topic,[string,string][]>={
   ['Was bedeutet Komma unter Komma?','Gleiche Stellenwerte stehen untereinander: Einer unter Einer, Zehntel unter Zehntel. Ergänzte Nullen rechts ändern den Wert nicht.'],
   ['Warum ist 2,35 · 4 = 9,40?','235 Hundertstel mal vier sind 940 Hundertstel. 940/100 = 9,40.'],
   ['Wie kannst du drei Hefte zu 1,25 € ohne Kommarechnung berechnen?','Rechne in Cent: 125 · 3 = 375 Cent, also 3,75 €.']
+ ],
+ angles:[
+  ['Woran erkennst du, welche Skala des Geodreiecks du ablesen musst?','Du nimmst die Skala, die an dem Schenkel mit 0° beginnt, auf dem die Nullkante liegt. Eine Schätzung (kleiner oder größer als 90°) bestätigt dein Ergebnis.'],
+  ['Warum ergeben Nebenwinkel zusammen 180°?','Sie liegen nebeneinander an derselben Geraden und bilden zusammen einen gestreckten Winkel.'],
+  ['Warum sind Stufenwinkel an Parallelen gleich groß?','Verschiebt man den einen Schnittpunkt entlang der schneidenden Geraden, passt er genau auf den anderen. Alle Winkel stimmen dann überein.'],
+  ['Kann ein Dreieck zwei rechte Winkel haben?','Nein. Zwei rechte Winkel ergeben schon 180°. Für den dritten Winkel bliebe 0° übrig.']
+ ],
+ symmetry:[
+  ['Wie viele Symmetrieachsen hat ein Rechteck, das kein Quadrat ist?','Zwei: die beiden Mittellinien. Die Diagonalen sind keine Achsen, weil die Hälften beim Falten nicht aufeinanderpassen.'],
+  ['Was bleibt beim Spiegeln an einer senkrechten Achse gleich?','Der y-Wert bleibt gleich. Nur der Abstand zur Achse wird auf die andere Seite übertragen.'],
+  ['Warum ist jedes punktsymmetrische Viereck auch drehsymmetrisch?','Punktsymmetrisch bedeutet: Die Figur passt nach einer Drehung um 180°. Das ist eine Drehsymmetrie.'],
+  ['Ist jedes Quadrat eine Raute?','Ja. Eine Raute braucht vier gleich lange Seiten, und die hat jedes Quadrat. Umgekehrt muss eine Raute keine rechten Winkel haben.']
+ ],
+ solids:[
+  ['Wie unterscheidest du ein Prisma von einer Pyramide?','Ein Prisma hat zwei gleiche, parallele Grundflächen, die durch Rechtecke verbunden sind. Eine Pyramide hat eine Grundfläche und eine Spitze.'],
+  ['Welche Flächen liegen bei einem Würfelnetz gegenüber?','Flächen, zwischen denen in einer Reihe genau eine andere Fläche liegt. Gegenüberliegende Flächen berühren sich nie an einer Kante.'],
+  ['Warum zeichnet man die Tiefe im Schrägbild verkürzt?','So wirkt der Körper auf dem flachen Papier räumlich. Die wahre Länge der Tiefe kann man im Schrägbild deshalb nicht direkt messen.'],
+  ['Woran erkennst du im Bauplan die Höhe eines Gebäudes?','An der größten Zahl im Bauplan. Die Summe aller Zahlen ist die Anzahl der Würfel.']
  ]
 };
 

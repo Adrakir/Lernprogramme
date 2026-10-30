@@ -1,5 +1,6 @@
 'use client';
 import {useState} from 'react';
+import {GeoLab} from './geo5-lessons';
 import type {Topic} from '@/lib/math';
 
 const operations={
@@ -78,5 +79,6 @@ export function TopicLab({topic,step}:{topic:Topic;step:number}){
  if(topic==='divisibility')return <PrimeAndGroups/>;
  if(topic==='decimals')return <DecimalModel/>;
  if(topic==='geometry')return step===1?<ProtractorLab/>:<CoordinateLab/>;
+ if(topic==='angles'||topic==='symmetry'||topic==='solids')return <GeoLab topic={topic} step={step}/>;
  return <p className="hint">Nutze gleich im Schritt „Verstehen“ das Bild oder Modell der Lektion. Beschreibe zuerst, was du siehst, bevor du die Erklärung vergleichst.</p>;
 }

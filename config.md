@@ -63,6 +63,10 @@ unter `mathe-kompass-modultests-v1`. Unter "Mein Lernstand" sichert
 in einer JSON-Datei; "Sicherung laden" prüft die Datei und überschreibt nach
 Rückfrage nur die enthaltenen Schlüssel.
 
+Die Klasse-5-Geometriemodule (Winkel, Symmetrie & Vierecke, Körper & Netze) stehen in
+`lib/geo5.ts` (Aufgaben), `app/geo5-shapes.tsx` (Zeichnungen) und `app/geo5-lessons.tsx`
+(Lernwege und Labore). Sie nutzen die vorhandenen Speicherschlüssel.
+
 Inhalte der Reiter Vertiefung und Hilfen stehen in
 `mathematik/Quellcode/lib/module-content.ts`, die Zusammenstellung der
 Modultests in `lib/module-test.ts`. Der Test `lib/module-content.test.ts`

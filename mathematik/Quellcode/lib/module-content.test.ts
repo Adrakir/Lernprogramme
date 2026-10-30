@@ -5,7 +5,7 @@ import {buildModuleTest} from './module-test.ts';
 import {makeProblem, correct, isComplete, type Topic} from './math.ts';
 import {areas, taskIds} from './tasks.ts';
 
-const topics: Topic[] = ['data', 'numbers', 'round', 'mental', 'line', 'units', 'stats', 'arithmetic', 'divisibility', 'geometry', 'measure', 'fractions', 'decimals'];
+const topics: Topic[] = ['data', 'numbers', 'round', 'mental', 'line', 'units', 'stats', 'arithmetic', 'divisibility', 'geometry', 'measure', 'fractions', 'decimals', 'angles', 'symmetry', 'solids'];
 
 test('jedes Modul hat Hilfen und drei geprüfte Vertiefungsaufgaben', () => {
   for (const t of topics) {

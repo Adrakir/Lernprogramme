@@ -339,4 +339,98 @@ export const modulInhalte: Record<Topic, ModulInhalt> = {
       {typ: 'Sachproblem', titel: 'Einkauf im Schreibwarenladen', aufgabe: 'Mia kauft 3 Hefte zu je 1,25 € und einen Stift für 2,40 €. Sie bezahlt mit 10 €. Wie viel Wechselgeld bekommt sie?', pruefung: zahl({label: 'Wechselgeld', wert: 3.85, einheit: '€'}), tipp: 'Rechne zuerst den Preis der Hefte aus.', loesung: ['Hefte: 3 · 1,25 € = 3,75 €', 'Zusammen: 3,75 € + 2,40 € = 6,15 €', 'Wechselgeld: 10,00 € − 6,15 € = 3,85 €']},
     ],
   },
+  angles: {
+    hilfe: {
+      merksaetze: [
+        'Ein Winkel besteht aus einem Scheitel und zwei Schenkeln. Er wird in Grad (°) gemessen.',
+        'Spitz: unter 90°. Recht: 90°. Stumpf: zwischen 90° und 180°. Gestreckt: 180°. Überstumpf: zwischen 180° und 360°.',
+        'Nebenwinkel ergeben zusammen 180°. Scheitelwinkel sind gleich groß.',
+        'An Parallelen sind Stufenwinkel und Wechselwinkel gleich groß.',
+        'Winkelsumme im Dreieck: 180°. Winkelsumme im Viereck: 360°.',
+      ],
+      beispiel: {
+        aufgabe: 'In einem Dreieck ist α = 48° und β = 67°. Wie groß ist γ? Welche Dreiecksart liegt vor?',
+        schritte: [
+          'Die Winkelsumme im Dreieck ist 180°.',
+          'Bekannte Winkel addieren: 48° + 67° = 115°.',
+          'Rest berechnen: γ = 180° − 115° = 65°.',
+          'Alle drei Winkel sind kleiner als 90°: Das Dreieck ist spitzwinklig.',
+          'Probe: 48° + 67° + 65° = 180°.',
+        ],
+      },
+      fehler: [
+        {fehler: 'Am Geodreieck wird die falsche Skala abgelesen, zum Beispiel 50° statt 130°.', richtig: 'Lies an der Skala, die am Schenkel unter der Nullkante mit 0° beginnt, und vergleiche mit deiner Schätzung.'},
+        {fehler: 'Nebenwinkel werden für gleich groß gehalten.', richtig: 'Gleich groß sind Scheitelwinkel. Nebenwinkel ergänzen sich zu 180°.'},
+        {fehler: 'Im Viereck wird mit 180° gerechnet.', richtig: 'Ein Viereck besteht aus zwei Dreiecken. Seine Winkelsumme ist 360°.'},
+      ],
+      strategie: ['Schätzen: spitz, recht oder stumpf?', 'Beziehung suchen: Nebenwinkel, Scheitelwinkel, Stufen- oder Wechselwinkel, Winkelsumme?', 'Rechnen mit 180° oder 360°.', 'Prüfen: Passt das Ergebnis zur Zeichnung und zur Schätzung?'],
+    },
+    vertiefung: [
+      {typ: 'Knobeln', titel: 'Drei gleiche Winkel', aufgabe: 'In einem Dreieck sind alle drei Winkel gleich groß. Wie groß ist jeder Winkel?', pruefung: zahl({label: 'Jeder Winkel', wert: 60, einheit: '°'}), tipp: 'Die drei gleichen Winkel teilen sich die Winkelsumme.', loesung: ['Die Winkelsumme ist 180°.', '180° : 3 = 60°.', 'Ein solches Dreieck ist gleichseitig.']},
+      {typ: 'Begründen', titel: 'Zwei stumpfe Winkel?', aufgabe: 'Tim behauptet: „Ein Dreieck kann zwei stumpfe Winkel haben.“ Stimmt das?', pruefung: wahl(1, 'Ja, zum Beispiel 100° und 100°.', 'Nein, zwei stumpfe Winkel sind zusammen schon mehr als 180°.', 'Nur bei großen Dreiecken.'), tipp: 'Ein stumpfer Winkel ist größer als 90°.', loesung: ['Zwei stumpfe Winkel sind jeweils größer als 90°.', 'Zusammen wären sie größer als 180°.', 'Für den dritten Winkel bliebe nichts übrig. Die Aussage ist falsch.']},
+      {typ: 'Sachproblem', titel: 'Die Uhr um 4 Uhr', aufgabe: 'Wie groß ist der kleinere Winkel zwischen Stunden- und Minutenzeiger um genau 4 Uhr?', pruefung: zahl({label: 'Winkel', wert: 120, einheit: '°'}), tipp: 'Zwischen zwei benachbarten Zahlen auf dem Zifferblatt liegen 360° : 12 = 30°.', loesung: ['Der Minutenzeiger zeigt auf 12, der Stundenzeiger auf 4.', 'Dazwischen liegen 4 Abschnitte zu je 30°.', '4 · 30° = 120°.']},
+    ],
+  },
+  symmetry: {
+    hilfe: {
+      merksaetze: [
+        'Achsensymmetrisch: Beim Falten an der Symmetrieachse liegen beide Hälften genau aufeinander.',
+        'Punkt und Bildpunkt sind gleich weit von der Achse entfernt. Ihre Verbindungslinie steht senkrecht auf der Achse.',
+        'Punktsymmetrisch: Nach einer halben Drehung (180°) um das Zentrum passt die Figur wieder auf sich.',
+        'Drehsymmetrisch: Die Figur passt nach einer Drehung um weniger als 360° wieder auf sich.',
+        'Jedes Quadrat ist ein Rechteck und eine Raute. Jedes Rechteck und jede Raute ist ein Parallelogramm.',
+      ],
+      beispiel: {
+        aufgabe: 'Spiegle P(2|7) an der senkrechten Achse x = 5.',
+        schritte: [
+          'Abstand zur Achse: 5 − 2 = 3 nach links.',
+          'Auf der anderen Seite 3 nach rechts: 5 + 3 = 8.',
+          'Bei einer senkrechten Achse bleibt der y-Wert gleich: 7.',
+          'Ergebnis: P′(8|7).',
+        ],
+      },
+      fehler: [
+        {fehler: 'Die Diagonalen eines Rechtecks werden als Symmetrieachsen angesehen.', richtig: 'Beim Falten an einer Diagonalen passen die Hälften nicht aufeinander. Ein Rechteck hat nur die zwei Mittellinien als Achsen.'},
+        {fehler: 'Beim Spiegeln wird der Punkt nur bis zur Achse verschoben.', richtig: 'Der Bildpunkt liegt auf der anderen Seite genauso weit von der Achse entfernt.'},
+        {fehler: '„Jedes Rechteck ist ein Quadrat.“', richtig: 'Umgekehrt: Jedes Quadrat ist ein Rechteck. Ein Rechteck braucht keine vier gleich langen Seiten.'},
+      ],
+      strategie: ['Falten in Gedanken oder mit Papier: Wo passt es?', 'Im Gitter: Kästchen bis zur Achse zählen und gleich weit weitergehen.', 'Drehen: Wie oft passt die Figur bei einer ganzen Umdrehung?', 'Vierecke: Eigenschaften prüfen (parallele Seiten, gleich lange Seiten, rechte Winkel).'],
+    },
+    vertiefung: [
+      {typ: 'Knobeln', titel: 'Achsen des Achtecks', aufgabe: 'Wie viele Symmetrieachsen hat ein regelmäßiges Achteck?', pruefung: zahl({label: 'Symmetrieachsen', wert: 8}), tipp: 'Ein regelmäßiges Vieleck hat so viele Achsen wie Ecken.', loesung: ['Vier Achsen verlaufen durch gegenüberliegende Ecken.', 'Vier Achsen verlaufen durch die Mitten gegenüberliegender Seiten.', 'Zusammen sind es 8 Achsen.']},
+      {typ: 'Begründen', titel: 'Raute oder Quadrat?', aufgabe: 'Welche Aussage ist richtig?', pruefung: wahl(2, 'Jede Raute ist ein Quadrat.', 'Kein Quadrat ist eine Raute.', 'Jedes Quadrat ist eine Raute, aber nicht jede Raute ist ein Quadrat.'), tipp: 'Vergleiche die Eigenschaften: Was braucht eine Raute, was zusätzlich ein Quadrat?', loesung: ['Eine Raute braucht vier gleich lange Seiten.', 'Ein Quadrat hat vier gleich lange Seiten und zusätzlich vier rechte Winkel.', 'Also ist jedes Quadrat eine Raute. Eine Raute mit schiefen Winkeln ist aber kein Quadrat.']},
+      {typ: 'Sachproblem', titel: 'Das Windrad', aufgabe: 'Ein Windrad hat 3 gleiche Flügel. Um welchen kleinsten Winkel muss es sich drehen, bis es wieder genau gleich aussieht?', pruefung: zahl({label: 'Drehwinkel', wert: 120, einheit: '°'}), tipp: 'Bei einer vollen Umdrehung passt das Windrad dreimal.', loesung: ['Eine volle Drehung hat 360°.', 'Das Windrad passt in 3 Lagen.', '360° : 3 = 120°.']},
+    ],
+  },
+  solids: {
+    hilfe: {
+      merksaetze: [
+        'Körper werden durch Flächen, Kanten und Ecken beschrieben.',
+        'Würfel und Quader haben 8 Ecken, 12 Kanten und 6 Flächen.',
+        'Ein Prisma hat zwei gleiche, parallele Grundflächen. Eine Pyramide hat eine Grundfläche und eine Spitze.',
+        'Es gibt genau 11 verschiedene Würfelnetze. Beim Spielwürfel ergeben gegenüberliegende Augenzahlen 7.',
+        'Schrägbild: Vorderfläche in wahrer Größe, Tiefe im 45°-Winkel und halb so lang, verdeckte Kanten gestrichelt.',
+      ],
+      beispiel: {
+        aufgabe: 'Für ein Kantenmodell eines Quaders mit 6 cm Länge, 4 cm Breite und 3 cm Höhe wird Draht gebraucht. Wie viel?',
+        schritte: [
+          'Ein Quader hat 12 Kanten: je 4 gleich lange in jeder Richtung.',
+          '4 · 6 cm = 24 cm, 4 · 4 cm = 16 cm, 4 · 3 cm = 12 cm.',
+          'Zusammen: 24 cm + 16 cm + 12 cm = 52 cm.',
+          'Antwort: Man braucht 52 cm Draht.',
+        ],
+      },
+      fehler: [
+        {fehler: 'Bei einem Würfel werden nur die sichtbaren Kanten gezählt (9).', richtig: 'Auch verdeckte Kanten zählen. Ein Würfel hat 12 Kanten.'},
+        {fehler: 'Jede Anordnung aus sechs Quadraten wird für ein Würfelnetz gehalten.', richtig: 'Probiere das Falten in Gedanken. Fünf Quadrate in einer Reihe oder ein 2-mal-3-Block ergeben keinen Würfel.'},
+        {fehler: 'Im Schrägbild wird die Tiefe in voller Länge gezeichnet.', richtig: 'Die Tiefe wird im Heft halb so lang und schräg im Winkel von 45° gezeichnet.'},
+      ],
+      strategie: ['Körper benennen: Gibt es eine Spitze, zwei gleiche Grundflächen oder gekrümmte Flächen?', 'Systematisch zählen: zuerst vorne, dann hinten, dann die Verbindungen.', 'Netze in Gedanken falten: Eine Fläche als Boden festlegen und die anderen hochklappen.', 'Bauplan: Zahlen addieren für die Anzahl, größte Zahl für die Höhe.'],
+    },
+    vertiefung: [
+      {typ: 'Knobeln', titel: 'Fehlende Augenzahl', aufgabe: 'Bei einem Spielwürfel liegt oben die 2. Welche Zahl liegt unten?', pruefung: zahl({label: 'Unten', wert: 5}), tipp: 'Gegenüberliegende Augenzahlen ergeben zusammen 7.', loesung: ['Oben und unten liegen sich gegenüber.', '7 − 2 = 5.', 'Unten liegt die 5.']},
+      {typ: 'Begründen', titel: 'Kanten der Pyramide', aufgabe: 'Wie viele Kanten hat eine Pyramide mit einem Sechseck als Grundfläche?', pruefung: zahl({label: 'Kanten', wert: 12}), tipp: 'Zähle die Kanten der Grundfläche und die Kanten zur Spitze getrennt.', loesung: ['Die Grundfläche hat 6 Kanten.', 'Von jeder der 6 Ecken führt eine Kante zur Spitze.', '6 + 6 = 12 Kanten.']},
+      {typ: 'Sachproblem', titel: 'Den Würfel vervollständigen', aufgabe: 'Ein Würfelgebäude besteht aus 2 · 2 · 2 Würfeln. Wie viele kleine Würfel braucht man noch, um daraus einen Würfel mit 3 Würfeln Kantenlänge zu bauen?', pruefung: zahl({label: 'Zusätzliche Würfel', wert: 19}), tipp: 'Berechne, wie viele Würfel der große Würfel insgesamt hat.', loesung: ['Der große Würfel hat 3 · 3 · 3 = 27 Würfel.', 'Vorhanden sind 2 · 2 · 2 = 8 Würfel.', '27 − 8 = 19 Würfel fehlen.']},
+    ],
+  },
 };
