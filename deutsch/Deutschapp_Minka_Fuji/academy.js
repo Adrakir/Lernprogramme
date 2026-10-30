@@ -281,5 +281,5 @@ window.MF_ACADEMY=(()=>{
   if('speechSynthesis' in window)window.speechSynthesis.onvoiceschanged=updateVoices;
  }
  init();
- return Object.freeze({render(view){if(view==='coach')return coach();if(view==='repair')return repair();if(view==='teacher')return teacher();return '';},afterRender,init,stop,diff});
+ return Object.freeze({render(view){if(view==='coach')return coach();if(view==='repair')return repair();if(view==='teacher')return teacher();return '';},afterRender,init,stop,diff,openRepairSkill(skillId){const found=D.repairs.find(x=>x.skill===skillId);if(!found)return false;state.repairId=found.id;save();return true;}});
 })();
