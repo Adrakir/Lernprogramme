@@ -60,3 +60,8 @@
  .filmBeat{transition:none!important;animation:none!important}
 }
 @media print{.filmActions{display:none}.filmBeat{break-inside:avoid}.filmCell{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
+.filmMoreSound{margin:.9rem 0 1.3rem;padding:.8rem 1rem;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
+.filmMoreSound summary{font-weight:700;min-height:44px;line-height:1.4;cursor:pointer;align-content:center}
+.filmMoreSound .pathAudioRow{margin:.75rem 0;display:flex;flex-wrap:wrap;gap:.5rem}
+.filmMoreSound button{min-height:44px;white-space:normal}
