@@ -56,6 +56,6 @@ const words=MUSIC_PATH.find(d=>d.key==='woerter');
 ok(words.pattern.reduce((sum,id)=>sum+val(id),0)===16,'Wortfolge füllt 4/4');
 ok(words.pattern.length===10,'vier Wortgruppen ergeben zehn Tonanfänge');
 ok(words.questions.some(q=>q.q.includes('A-na-nas')),'Ananas wird abgefragt');
-ok(words.steps.some(p=>p.includes('nas')&&p.includes('länger')),'Ananas Silbendauer erklärt');
+ok(words.steps.some(p=>p.includes('nas')&&(p.includes('doppelt so lang')||p.includes('länger'))),'Ananas Silbendauer erklärt');
 ok(app.includes("wordCard('Ananas','A – na – nas',['s','s','e'])"),'Ananas-Wortkarte');
 console.log('PASS: '+assertions+' Fachchecks; '+questions+' Fragen, '+notation+' Notenbilder, vier Rhythmuswörter, '+exceptions.length+' Lücken-/Fehlertakte.');
