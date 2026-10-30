@@ -78,7 +78,12 @@ test('Deutsch: Alle Offline-Bestandteile existieren und Installationen dürfen n
   const binary=fs.readFileSync(path.join(root,fallback.slice(2)));
   assert.ok(binary.length>1500&&binary[0]===255&&binary[1]===216,'JPEG-Datei nicht lesbar: '+fallback);
  }
- assert.ok(read('index.html').includes('studio.css?v=3'),'Neue Mobilbilder werden über aktualisiertes CSS geladen');
+ const html=read('index.html');
+ const linked=[...html.matchAll(/<(?:script|link)\b[^>]*?(?:src|href)="([^"]+)"[^>]*>/g)]
+  .map(m=>m[1]).filter(x=>!x.startsWith('data:')&&!x.startsWith('http')&&!x.startsWith('#')&&!x.startsWith('assets/'));
+ for(const src of linked)assert.ok(files.includes('./'+src),'HTML-Ressource fehlt im Offlinecache: '+src);
+ assert.ok(html.includes('studio.css?v=3'),'Neue Mobilbilder werden über aktualisiertes CSS geladen');
+
  assert.ok(worker.includes('await Promise.all(CORE.map'),'Offline-Installationsdateien werden vollständig geprüft');
  assert.ok(!worker.includes('Promise.allSettled(CORE.map'),'Keine versteckten Offline-Ladefehler');
  console.log('PASS: '+files.length+' Offline-Ressourcen vorhanden und vollständige Installation erzwungen.');
