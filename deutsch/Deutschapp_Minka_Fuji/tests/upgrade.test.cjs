@@ -53,7 +53,6 @@ test('Ausbau: Bilderkino, Geschichtenbaukasten, Textcoach, Schreibprobe, Portfol
    assert.match(await page.locator('.up-conf-feedback').textContent(),/Körperreaktion/);
    await page.locator('[data-up-conftext]').fill('Beschreibe zum Beispiel, dass ihre Hände zittern.');
    await tab('builder');await tab('feedback');
-   assert.match(await page.locator('[data-up-conftext]').inputValue().catch(()=>''),'').toString();
    await page.locator('[data-up-conf="2"]').click();
    assert.match(await page.locator('[data-up-conftext]').inputValue(),/Hände zittern/);
    await page.locator('[data-up-train="aufbau"]').click();
