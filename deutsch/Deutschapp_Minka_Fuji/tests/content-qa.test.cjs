@@ -69,6 +69,16 @@ test('Deutsch: Alle Offline-Bestandteile existieren und Installationen dürfen n
   if(local==='')continue;
   assert.ok(fs.existsSync(path.join(root,local)),'Offline-Datei fehlt: '+f);
  }
+ const webps=files.filter(f=>f.endsWith('.webp'));
+ assert.ok(webps.length>=9,'Originalbilder vorhanden');
+ assert.ok(files.includes('./image-compat.js?v=1'),'Safari-Bildkompatibilität offline verfügbar');
+ for(const source of webps){
+  const fallback=source.replace('.webp','.jpg');
+  assert.ok(files.includes(fallback),'JPEG-Bild nicht im Offlinecache registriert: '+fallback);
+  const binary=fs.readFileSync(path.join(root,fallback.slice(2)));
+  assert.ok(binary.length>1500&&binary[0]===255&&binary[1]===216,'JPEG-Datei nicht lesbar: '+fallback);
+ }
+ assert.ok(read('index.html').includes('studio.css?v=3'),'Neue Mobilbilder werden über aktualisiertes CSS geladen');
  assert.ok(worker.includes('await Promise.all(CORE.map'),'Offline-Installationsdateien werden vollständig geprüft');
  assert.ok(!worker.includes('Promise.allSettled(CORE.map'),'Keine versteckten Offline-Ladefehler');
  console.log('PASS: '+files.length+' Offline-Ressourcen vorhanden und vollständige Installation erzwungen.');
