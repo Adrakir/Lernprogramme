@@ -74,5 +74,7 @@ window.MF_ACADEMY_TOOLS=(()=>{
   root.addEventListener('input',e=>{
     if(e.target.matches('[data-studio-part]'))queueMicrotask(refreshWriterAnnotations);
   });
+  const observer=new MutationObserver(()=>{const block=root.querySelector('.studio-story-writing');if(block&&!root.querySelector('.ac-textlens'))addPanel('writer');});
+  observer.observe(root,{childList:true,subtree:false});
   return Object.freeze({afterRender:addPanel,refreshWriterAnnotations});
 })();
