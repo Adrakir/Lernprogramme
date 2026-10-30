@@ -319,6 +319,16 @@ html[data-aw-active=true]{scroll-behavior:auto}.cw-question,#cwResult{scroll-mar
 [data-contrast=high] .praxis-steps,[data-contrast=high] .praxis-review{background:#fff;color:#000;border-color:#000}
 @media(max-width:420px){.praxis-steps,.praxis-review{padding:13px}.praxis-steps ol,.praxis-review ol{padding-left:1.35rem}}
 
+/* Verstehensfragen mit 48px-Zielen, unabhängig von der Punktwertung. */
+.praxis-diagnosis{padding:12px 16px;border-left:5px solid #156b8a;background:var(--surface2,#edf5f7);border-radius:8px;line-height:1.55}
+.praxis-understand{margin:18px 0;padding:clamp(14px,3vw,20px);border:2px solid #6f9eaf;border-radius:16px;background:var(--surface2,#ecf4f7);color:var(--text,#18394b)}
+.praxis-understand h3{font-size:1.12rem}.praxis-reflect-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.praxis-reflect-options button{min-height:52px;white-space:normal;overflow-wrap:anywhere;text-align:left}
+.praxis-understand>.pf-main{min-height:50px}.praxis-reflect-result{line-height:1.55;padding:10px 12px;border:1px solid currentColor;border-radius:8px}
+.praxis-learning-status{display:block;font-size:.92rem;margin-top:4px}
+[data-contrast=high] .praxis-understand,[data-contrast=high] .praxis-diagnosis{border-color:#000;background:#fff;color:#000}
+@media(max-width:520px){.praxis-reflect-options{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -14405,7 +14415,7 @@ const atlasTasks=[1,0,3,2,4,5];
 const totals={grid:coordTasks.length,compass:compassTasks.length,atlas:atlasTasks.length};
 const titles={grid:'Koordinaten am Schnittpunkt setzen',compass:'Nordpfeil und Himmelsrichtungen',atlas:'Atlasregister und Planquadrat'};
 let results={};try{results=JSON.parse(localStorage.getItem(STORE)||'{}')||{}}catch(e){}
-let s={view:'home',station:'grid',index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null,mistakes:[]};
+let s={view:'home',station:'grid',index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null,mistakes:[],diagnosis:null,currentCorrect:false,reflectChoice:null,reflectDone:false,reflectMessage:''};
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','"':'&quot;',"'":'&#39;'}[c]));}
 function btn(label,action,cls){return '<button type="button" class="'+(cls||'pf-quiet')+'" data-praxis="'+esc(action)+'">'+esc(label)+'</button>';}
 function coord(lat,lon){
@@ -14476,6 +14486,7 @@ function task(){
   h+='<div class="pf-hint" role="note"><b>Gustavs Tipp:</b> '+esc(hints[s.station])+'</div>';
  }
  if(s.feedback)h+='<div class="praxis-feedback" role="status">'+s.feedback+'</div>';
+ if(s.checked&&!s.currentCorrect)h+=understandingCheck();
  if(!s.checked)h+='<div class="pf-controls">'+btn('Gustavs Tipp','hint')+btn('Meine Lösung prüfen','check','pf-main')+'</div>';
  else h+='<div class="pf-controls">'+btn(s.index===totals[s.station]-1?'Ergebnis ansehen':'Nächste Aufgabe →','next','pf-main')+'</div>';
  return h;
@@ -14495,7 +14506,8 @@ function summary(){
  let h='<div class="pf-top">'+btn('← Praxisübersicht','home')+'<span>Auswertung</span></div><h1>'+esc(titles[s.station])+' geschafft!</h1>';
  h+='<p class="pf-goal"><b>'+s.score+' von '+totals[s.station]+' Aufgaben</b> richtig. Das ist eine Lernrückmeldung, keine Note.</p>';
  h+='<p>'+(s.score===totals[s.station]?'Sehr gut: Du kannst die Aufgabe jetzt auch im Schulatlas probieren.':'Übe die Station erneut. Lies bei einer falschen Antwort erst die Begründung und probiere es danach ohne Tipp.')+'</p>';
- if(s.mistakes.length){h+='<section class="praxis-review" aria-label="Übungen zum Wiederholen"><h2>Diese Aufgaben übe ich noch einmal</h2><ol>'+s.mistakes.map(m=>'<li>Aufgabe '+(m.index+1)+': <strong>'+esc(m.expected)+'</strong> – das war die gesuchte Lösung.</li>').join('')+'</ol><p>Wiederhole zuerst den passenden Lernweg mit Gustav. Versuche danach die Station erneut, ohne die Lösung anzusehen.</p>'+btn('Passenden Lernweg mit Gustav öffnen','train','pf-main')+'</section>';}
+ if(s.mistakes.length){const understood=s.mistakes.filter(m=>m.understood).length;
+ h+='<section class="praxis-review" aria-label="Übungen zum Wiederholen"><h2>Diese Aufgaben übe ich noch einmal</h2><p><strong>'+understood+' von '+s.mistakes.length+' Verstehensfragen</strong> richtig beantwortet. Die Prüfungswertung bleibt unverändert.</p><ol>'+s.mistakes.map(m=>'<li>Aufgabe '+(m.index+1)+': <strong>'+esc(m.expected)+'</strong> – '+esc(m.reason)+' <span class="praxis-learning-status">'+(m.understood?'✓ Denkfehler erklärt':'○ Erklärung noch offen')+'</span></li>').join('')+'</ol><p>Übe den passenden Lernweg mit Gustav und versuche anschließend die Station noch einmal ohne Hilfe.</p>'+btn('Passenden Lernweg mit Gustav öffnen','train','pf-main')+'</section>';}
  h+='<div class="pf-controls">'+btn('Noch einmal üben','start:'+s.station,'pf-main')+btn('Andere Station','home')+'<button type="button" class="pf-quiet" data-pf="classwork">Zur Klassenarbeit</button></div>';
  return h;
 }
@@ -14506,8 +14518,40 @@ function render(){
 }
 function start(station){
  if(!Object.prototype.hasOwnProperty.call(totals,station))return;
- s={view:'task',station,index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null,mistakes:[]};
+ s={view:'task',station,index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null,mistakes:[],diagnosis:null,currentCorrect:false,reflectChoice:null,reflectDone:false,reflectMessage:''};
  s.focusHeading=true;render();
+}
+
+function diagnoseMistake(){
+ const q=(question,choices,correct,explain)=>({question,choices,correct,explain});
+ if(s.station==='grid'){
+  const t=coordTasks[s.index],latOK=s.lat===t.lat,lonOK=s.lon===t.lon;
+  if(s.lat===t.lon&&s.lon===t.lat&&!latOK&&!lonOK)
+   return {reason:'Du hast Breite und Länge vertauscht. Lies zuerst den Wert mit N/S und danach den mit O/W.',...q('Welche Angabe liest du zuerst?',['Breite (N/S)','Länge (O/W)'],0,'Erst geografische Breite, dann geografische Länge.')};
+  if(latOK&&!lonOK)
+   return {reason:'Die Breite stimmt schon! Prüfe die Länge: W bedeutet links vom Nullmeridian und O rechts.',...q('Welche Angabe führt nach Osten oder Westen?',['Breite (N/S)','Länge (O/W)'],1,'Ost und West gehören zur geografischen Länge.')};
+  if(!latOK&&lonOK)
+   return {reason:'Die Länge stimmt schon! Prüfe die Breite: N führt vom Äquator nach Norden, S nach Süden.',...q('Welche Angabe führt nach Norden oder Süden?',['Breite (N/S)','Länge (O/W)'],0,'Nord und Süd gehören zur geografischen Breite.')};
+  return {reason:'Beide Koordinaten müssen stimmen. Suche erst die Breitenlinie und dann die Längenlinie.',...q('Wie findest du einen Schnittpunkt?',['Erst Breite, dann Länge','Erst Farbe, dann Himmelsrichtung'],0,'Breite und Länge ergeben zusammen einen Schnittpunkt.')};
+ }
+ if(s.station==='compass'){
+  const t=compassTasks[s.index],byScreen=s.direction===t.target&&t.north!==0;
+  return {reason:byScreen?'Du hast vermutlich den Bildschirmrand als Norden verwendet. Die Karte ist aber gedreht.':'Beziehe die Richtung vom Haus zum See auf den roten Nordpfeil. Drehe die Karte gedanklich, bis Norden oben liegt.',...q('Was zeigt auf einer gedrehten Karte nach Norden?',['Der rote Nordpfeil','Immer der obere Bildschirmrand'],0,'Nur der Nordpfeil gibt auf dieser Karte Norden an.')};
+ }
+ const i=atlasTasks[s.index];
+ if(s.entry===i)
+  return {reason:'Den Ort hast du richtig gefunden! Kontrolliere beim Planquadrat zuerst den Spaltenbuchstaben und dann die Zeilenzahl.',...q('Was bedeutet das Planquadrat C2?',['Spalte C, Zeile 2','Zeile C, Spalte 2'],0,'Die Buchstaben stehen für die Spalten; die Zahlen für die Zeilen.')};
+ return {reason:'Prüfe den ganzen Ortsnamen und das Bundesland. Gleichnamige Orte können in verschiedenen Regionen liegen.',...q('Wie unterscheidest du gleichnamige Orte im Atlasregister?',['Ortsname und Bundesland vergleichen','Nur den ersten Namen wählen'],0,'Suche erst den eindeutigen Ort, danach Karte und Planquadrat.')};
+}
+function understandingCheck(){
+ const d=s.diagnosis;if(!d)return '';
+ let h='<section class="praxis-understand" aria-label="Verstehenscheck"><h3>🧠 Kannst du den Denkfehler jetzt erklären?</h3><p>'+esc(d.question)+'</p>';
+ if(!s.reflectDone){
+  h+='<div class="praxis-reflect-options" role="group" aria-label="Verstehensfrage">'+d.choices.map((v,i)=>'<button type="button" class="'+(s.reflectChoice===i?'praxis-active':'pf-quiet')+'" aria-pressed="'+(s.reflectChoice===i)+'" data-praxis="reflect:'+i+'">'+esc(v)+'</button>').join('')+'</div>';
+  h+=btn('Meine Erklärung prüfen','reflect-check','pf-main');
+ }else h+='<p role="status" class="praxis-reflect-result"><strong>✓ Verstanden!</strong> '+esc(d.explain)+'</p>';
+ if(s.reflectMessage)h+='<p role="status" class="praxis-reflect-result">'+esc(s.reflectMessage)+'</p>';
+ return h+'<p class="pf-small">Zusätzliche Lernfrage – keine weitere Note und kein Punktabzug.</p></section>';
 }
 function learningSteps(){
  const t=s.station==='grid'?coordTasks[s.index]:s.station==='compass'?compassTasks[s.index]:entries[atlasTasks[s.index]];
@@ -14541,14 +14585,14 @@ function check(){
   const correct=atlasTasks[s.index],e=entries[correct];good=s.entry===correct&&s.cell===e.cell;
   details='Gesucht ist <b>'+esc(e.place)+' ('+esc(e.region)+')</b>, Karte <b>'+esc(e.map)+'</b>, Feld <b>'+esc(e.cell)+'</b>. Überprüfe Namen, Region und Registerverweis.';
  }
- s.checked=true;if(good)s.score++;
- else s.mistakes.push({index:s.index,expected:s.station==='grid'?coord(coordTasks[s.index].lat,coordTasks[s.index].lon):s.station==='compass'?names[(compassTasks[s.index].target-compassTasks[s.index].north+8)%8]:entries[atlasTasks[s.index]].place+' – '+entries[atlasTasks[s.index]].cell});
- s.feedback='<strong>'+(good?'✓ Richtig – gut angewendet!':'Noch nicht richtig – so findest du die Lösung:')+'</strong><p>'+details+'</p>'+(good?'':learningSteps());
+ s.checked=true;s.currentCorrect=good;if(good)s.score++;
+ else{ s.diagnosis=diagnoseMistake();s.mistakes.push({index:s.index,expected:s.station==='grid'?coord(coordTasks[s.index].lat,coordTasks[s.index].lon):s.station==='compass'?names[(compassTasks[s.index].target-compassTasks[s.index].north+8)%8]:entries[atlasTasks[s.index]].place+' – '+entries[atlasTasks[s.index]].cell,reason:s.diagnosis.reason,understood:false}); }
+ s.feedback='<strong>'+(good?'✓ Richtig – gut angewendet!':'Noch nicht richtig – so findest du die Lösung:')+'</strong><p>'+details+'</p>'+(good?'':'<p class="praxis-diagnosis"><b>Gustavs Hinweis:</b> '+esc(s.diagnosis.reason)+'</p>'+learningSteps());
  render();
 }
 function next(){
  if(!s.checked)return;
- s.index++;s.checked=false;s.hint=false;s.feedback='';s.selected=false;s.lat=0;s.lon=0;s.direction=null;s.entry=null;s.cell=null;
+ s.index++;s.checked=false;s.hint=false;s.feedback='';s.selected=false;s.lat=0;s.lon=0;s.direction=null;s.entry=null;s.cell=null;s.diagnosis=null;s.currentCorrect=false;s.reflectChoice=null;s.reflectDone=false;s.reflectMessage='';
  if(s.index>=totals[s.station]){
   s.view='summary';results[s.station]={score:s.score,total:totals[s.station],errors:s.mistakes.length};
   try{localStorage.setItem(STORE,JSON.stringify(results))}catch(e){}
@@ -14571,6 +14615,16 @@ document.addEventListener('click',function(e){
   if(cmd==='hint'){s.hint=!s.hint;render();return;}
   if(cmd==='check'){check();return;}
   if(cmd==='next'){next();return;}
+  if(cmd.startsWith('reflect:')&&s.checked&&s.diagnosis&&!s.reflectDone){
+   const choice=Number(cmd.slice(8));if(choice===0||choice===1){s.reflectChoice=choice;s.reflectMessage='';render();}
+   return;
+  }
+  if(cmd==='reflect-check'&&s.checked&&s.diagnosis&&!s.reflectDone){
+   if(s.reflectChoice===null)s.reflectMessage='Wähle zuerst eine Antwort aus.';
+   else if(s.reflectChoice===s.diagnosis.correct){s.reflectDone=true;s.mistakes[s.mistakes.length-1].understood=true;s.reflectMessage='';}
+   else{s.reflectChoice=null;s.reflectMessage='Noch nicht ganz. Lies Gustavs Schritte erneut und versuche es noch einmal.';}
+   render();return;
+  }
   if(s.checked)return;
   if(cmd.startsWith('entry:')){s.entry=Number(cmd.slice(6));render();return;}
   if(cmd.startsWith('cell:')){s.cell=cmd.slice(5);render();return;}
