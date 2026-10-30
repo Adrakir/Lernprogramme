@@ -61,7 +61,7 @@ async function main(){
   });
   const expression=async src=>{
    const r=await cdp('Runtime.evaluate',{expression:src,returnByValue:true,awaitPromise:true,userGesture:true});
-   if(r.exceptionDetails)throw Error('Browser expression: '+(r.exceptionDetails.text||JSON.stringify(r.exceptionDetails)));
+   if(r.exceptionDetails)throw Error('Browser expression: '+(r.exceptionDetails.exception?.description||r.exceptionDetails.text||JSON.stringify(r.exceptionDetails)));
    return r.result.value;
   };
   await cdp('Page.enable');await cdp('Runtime.enable');
@@ -97,12 +97,12 @@ async function main(){
    }
    await expression('setView("exerciseHub")');
    check(await expression('document.querySelectorAll("[data-guide-practice]").length')===6,'Six practice topics at '+size.name);
-   await expression('document.querySelector("[data-guide-practice=\"2\"]").click()');
+   await expression('document.querySelectorAll("[data-guide-practice]")[2].click()');
    check(await expression('Boolean(document.querySelector("#practicePanel"))'),'Chosen practice opens at '+size.name);
    await expression('setView("pruefen")');
    check(await expression('Boolean(document.querySelector("#guideCheck"))'),'Check area reachable at '+size.name);
    await expression('setView("documents")');
-   check(await expression('document.querySelectorAll("a[href$=\"pdf?v=20261027-hefte32\"]").length>=2'),'Both printable music books linked at '+size.name);
+   check(await expression('Array.from(document.querySelectorAll("a")).filter(a=>a.href.includes(".pdf?v=")).length>=2'),'Both printable music books linked at '+size.name);
    await expression('setView("home")');
 
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="teile"),1)');
