@@ -202,3 +202,9 @@ nav.navigation button[data-page=studio]:not([aria-current=page]){background:#1e3
  #studio .studio-welcome{padding:14px}
  #studio .studio-choice{min-width:0;overflow-wrap:anywhere}
 }
+
+/* Große Reizwörter dürfen auf 320px-Geräten nicht die Seite verbreitern. */
+#studio .studio-wordcards{min-width:0}
+#studio .studio-wordcards span{min-width:0;overflow-wrap:anywhere;word-break:break-word;line-height:1.3;font-size:clamp(.88rem,3.7vw,1.2rem)}
+#studio .studio-exam-settings,#studio .studio-exam-settings label,#studio .studio-exam-paper,#studio .studio-rubric-row{min-width:0;max-width:100%}
+#studio .studio-exam-settings select,#studio .studio-select select{max-width:100%;min-width:0}
