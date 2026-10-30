@@ -118,7 +118,7 @@ window.MF_ACADEMY=(()=>{
  }
  function daily(){
   // Eine tägliche Kombination aus vier Aufgaben, ausgehend vom Kalendertag.
-  const day=new Date().toISOString().slice(0,10),salt=[...day].reduce((n,c)=>n*31+c.charCodeAt(0),0)>>>0;
+  const day=new Date().toLocaleDateString('sv-SE'),salt=[...day].reduce((n,c)=>n*31+c.charCodeAt(0),0)>>>0;
   const start=(salt+state.challenge)%D.repairs.length;
   const picks=Array.from({length:4},(_,i)=>D.repairs[(start+i*3)%D.repairs.length]);
   return '<div class="ac-daily panel"><h3>Vier Mini-Aufgaben des Tages</h3><p>Eine kurze Challenge mit vier verschiedenen Schreibproblemen. Du musst nicht auf Zeit spielen.</p>'+
