@@ -14349,7 +14349,7 @@ const baseRender=render;
 render=function(){baseRender();if(state.tab==='pruefung'){state.view='home';redraw(false);}};
 const oldTests=renderTests;renderTests=function(){return '<div class="card"><h2>🎯 Neu: Prüfungsfit mit Gustav</h2><p>Acht bebilderte Lernwege und eine Probe-Klassenarbeit mit 24 Fragen.</p>'+button('Prüfungsfit öffnen','open','pf-main')+'</div>'+oldTests();};
 const oldStart=renderStart;renderStart=function(){return '<section class="card"><h2>🎯 Prüfungsfit für die nächste Klassenarbeit</h2><p>Mit anschaulichen Modellen, Schritt-für-Schritt-Erklärungen und zahlreichen Fragen die Grundlagen sicher beherrschen.</p>'+button('Jetzt gezielt lernen','open','pf-main')+'</section>'+oldStart();};
-const testsTab=nav.querySelector('[data-tab="tests"]');if(testsTab)testsTab.insertAdjacentHTML('beforebegin','<button type="button" data-tab="pruefung">🎯 Prüfungsfit</button>');
+const testsTab=nav.querySelector('[data-tab="tests"]')||document.querySelector?.('#awMoreMain [data-tab="tests"]');if(testsTab)testsTab.insertAdjacentHTML('beforebegin','<button type="button" data-tab="pruefung">🎯 Prüfungsfit</button>');
 document.addEventListener('change',function(e){if(!e.target.closest('#pf-root'))return;if(e.target.name==='pf-choice')s.choice=Number(e.target.value);if(e.target.name==='pf-test-choice'&&s.test&&!s.test.finished)s.test.answers[s.test.index]=Number(e.target.value);});
 document.addEventListener('click',function(e){const b=e.target.closest('[data-pf]');if(!b)return; e.preventDefault();e.stopPropagation();const a=b.dataset.pf;
 if(a==='open'){switchTab('pruefung');s.mode='overview';redraw();return;}
