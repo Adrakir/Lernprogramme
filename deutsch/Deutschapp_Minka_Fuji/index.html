@@ -3,19 +3,21 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Minka & Fuji · Erzählwerkstatt</title>
-  <meta name="description" content="Erzählwerkstatt Klasse 5 mit Minka und Fuji: geführter Lehrgang mit Animationen, Erzählübungen, Spannungsschlingen, Wortschatz, Gefühlen, Gedanken, Hauptteil, wörtlicher Rede und Leseverständnis.">
+  <meta name="description" content="Erzählwerkstatt Klasse 5: geführter Lernweg, eigene Geschichten mit verschiedenen Figuren, Klassenarbeitstraining, Textlabor, Minka und Fuji, Einleitung, Hauptteil und Schluss.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141d32'/%3E%3Cpath d='M8 24V8h16M8 16h12M8 24h16' stroke='%23baf36b' stroke-width='3' fill='none'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css"><script defer src="app.js?v=lehrgang1"></script>
   <script defer src="reading.js"></script>
   <link rel="stylesheet" href="language.css"><script defer src="language.js"></script>
   <link rel="stylesheet" href="course.css?v=1"><script defer src="course-data.js?v=1"></script><script defer src="course.js?v=1"></script>
 <link rel="stylesheet" href="hauptteil.css?v=20261030"><script defer src="hauptteil.js?v=20261030"></script>
+  <link rel="stylesheet" href="studio.css?v=2"><script defer src="studio-data.js?v=2"></script><script defer src="studio.js?v=2"></script>
 </head>
 <body>
   <a class="skip" href="#main">Zum Lernbereich</a>
   <header class="top"><div class="brand"><span class="mark" aria-hidden="true">E.</span><span>Minka & Fuji<small>DEUTSCH · KLASSE 5</small></span></div><span class="header-note">Mit Minka & Fuji</span></header>
   <nav class="navigation" aria-label="Lernbereiche">
-    <button type="button" data-page="entdecken" aria-current="page"><span>01</span> Aufbau entdecken</button>
+    <button type="button" class="studio-main-nav" data-page="studio" aria-current="page"><span>Start</span> Mein Erzählstudio</button>
+    <button type="button" data-page="entdecken"><span>01</span> Aufbau entdecken</button>
     <button type="button" data-page="spannung"><span>02</span> Spannung verstehen</button>
     <button type="button" data-page="ueben"><span>03</span> Wissen üben</button>
     <button type="button" data-page="schreiben"><span>04</span> Einleitung schreiben</button>
@@ -25,6 +27,7 @@
   <button type="button" data-page="hauptteil"><span>08</span> Hauptteil-Werkstatt</button>
   </nav>
   <main id="main" tabindex="-1">
+    <section id="studio" class="page" hidden><div id="studio-app"></div></section>
     <section id="entdecken" class="page">
       <div class="page-head"><p class="eyebrow">01 · Aufbau entdecken</p><h1>Minka & Fuji: das Kratzen im Schuppen.</h1><p>Lies ihren Abenteuercomic und entdecke dabei Einleitung, Hauptteil und Schluss. Minka und Fuji erklären dir, worauf es ankommt.</p></div>
       <div class="note compact"><strong>Neu: Dein geführter Lehrgang.</strong> Minka und Fuji zeigen dir in animierten Beispielen, wie eine Erzählung entsteht. <button type="button" class="primary" data-go="lehrgang">Mit Minka &amp; Fuji lernen</button></div><div class="lesson-grid">
@@ -175,6 +178,7 @@
       </div>
     </section>
   </main>
-  <footer>Erzählwerkstatt · Üben in deinem Tempo.<span>Bereiche 01–06: Eingaben bleiben in dieser Sitzung. Lehrgang 07 und Hauptteil-Werkstatt 08: Fortschritt und Entwürfe werden auf diesem Gerät gespeichert, sofern dein Browser dies erlaubt. Texte werden nicht automatisch benotet.</span></footer>
+  <div id="studio-print-sheet" aria-label="Druckfassung deiner Erzählung"></div>
+  <footer>Erzählwerkstatt · Üben in deinem Tempo.<span>Bereiche 01–06: Eingaben bleiben in dieser Sitzung. Lehrgang 07, Hauptteil 08 und das neue Erzählstudio speichern Fortschritt und Entwürfe auf diesem Gerät, sofern dein Browser es erlaubt. Texte werden nicht automatisch benotet.</span></footer>
 </body>
 </html>
