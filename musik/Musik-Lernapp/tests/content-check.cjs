@@ -37,7 +37,7 @@ for(const [i,d] of MUSIC_PATH.entries()){
   const known=q.ids.filter(id=>id!=='?').reduce((sum,id)=>sum+val(id,q.m),0);
   const diff=known-q.m*4;
   if(diff!==0)exceptions.push({step:d.key,question:q.q,diff});
-  ok(Math.abs(diff)<=4,'Taktabweichung maximal ein Schlag '+i+'/'+j);
+  if(q.ids.includes('?'))ok(known<q.m*4,'Lücke hat tatsächlich fehlende Dauer '+i+'/'+j);else ok(Math.abs(diff)<=4,'bewusst unvollständiger oder überfüllter Takt höchstens ein Schlag '+i+'/'+j);
  }
 }
 ok(questions===216,'216 Fragen');
