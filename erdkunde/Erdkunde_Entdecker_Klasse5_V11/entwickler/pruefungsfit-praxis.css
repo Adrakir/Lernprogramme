@@ -38,3 +38,12 @@
 }
 @media(prefers-reduced-motion:reduce){.praxis-solution{animation:none!important}}
 @media print{.praxis-root button{display:none!important}.praxis-map{break-inside:avoid}}
+
+/* Didaktische Schrittfolge nach einer falschen Antwort; barrierearme Wiederholung. */
+.praxis-steps,.praxis-review{margin:16px 0;padding:clamp(14px,3vw,22px);background:var(--surface2,#eef6f8);color:var(--text,#19384d);border:2px solid var(--border,#b9d6df);border-radius:16px;max-width:100%;overflow-wrap:anywhere}
+.praxis-steps h3,.praxis-review h2{font-size:1.14rem;line-height:1.4}
+.praxis-steps ol,.praxis-review ol{padding-left:1.5rem;margin:12px 0;display:grid;gap:10px}
+.praxis-steps li,.praxis-review li{line-height:1.6;padding-left:4px}
+.praxis-review .pf-main{min-height:48px;white-space:normal}
+[data-contrast=high] .praxis-steps,[data-contrast=high] .praxis-review{background:#fff;color:#000;border-color:#000}
+@media(max-width:420px){.praxis-steps,.praxis-review{padding:13px}.praxis-steps ol,.praxis-review ol{padding-left:1.35rem}}

@@ -29,7 +29,7 @@ const atlasTasks=[1,0,3,2,4,5];
 const totals={grid:coordTasks.length,compass:compassTasks.length,atlas:atlasTasks.length};
 const titles={grid:'Koordinaten am Schnittpunkt setzen',compass:'Nordpfeil und Himmelsrichtungen',atlas:'Atlasregister und Planquadrat'};
 let results={};try{results=JSON.parse(localStorage.getItem(STORE)||'{}')||{}}catch(e){}
-let s={view:'home',station:'grid',index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null};
+let s={view:'home',station:'grid',index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null,mistakes:[]};
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','"':'&quot;',"'":'&#39;'}[c]));}
 function btn(label,action,cls){return '<button type="button" class="'+(cls||'pf-quiet')+'" data-praxis="'+esc(action)+'">'+esc(label)+'</button>';}
 function coord(lat,lon){
@@ -110,7 +110,7 @@ function home(){
  h+='<div class="pf-grid">';
  for(const key of ['grid','compass','atlas']){
   const intro={grid:'Koordinaten auf einem Gradnetz selbst markieren – mit Fingertipp oder Richtungstasten.',compass:'Den Nordpfeil lesen, selbst wenn die Karte auf dem Kopf steht.',atlas:'Gleichnamige Orte auseinanderhalten und das richtige Suchfeld finden.'}[key];
-  const score=results[key];h+='<article class="pf-tile"><h2>'+esc(titles[key])+'</h2><p>'+esc(intro)+'</p><p class="pf-small">'+(score?'Letzter Durchgang: '+score.score+'/'+score.total+' korrekt':'Noch nicht ausprobiert')+'</p>'+btn('Station üben','start:'+key,'pf-main')+'</article>';
+  const score=results[key];h+='<article class="pf-tile"><h2>'+esc(titles[key])+'</h2><p>'+esc(intro)+'</p><p class="pf-small">'+(score?'Letzter Durchgang: '+score.score+'/'+score.total+' korrekt'+(score.errors?' · '+score.errors+' Aufgabe(n) wiederholen':''):'Noch nicht ausprobiert')+'</p>'+btn('Station üben','start:'+key,'pf-main')+'</article>';
  }
  h+='</div><div class="pf-end"><h2>Danach die komplette Klassenarbeit</h2><p>Die vorhandene interaktive Klassenarbeit mit 18 Aufgaben, Zeichnungen und bebilderten Lösungswegen bleibt erhalten.</p><button type="button" data-pf="classwork" class="pf-main">Zur interaktiven Klassenarbeit</button></div>';
  return h;
@@ -119,6 +119,7 @@ function summary(){
  let h='<div class="pf-top">'+btn('← Praxisübersicht','home')+'<span>Auswertung</span></div><h1>'+esc(titles[s.station])+' geschafft!</h1>';
  h+='<p class="pf-goal"><b>'+s.score+' von '+totals[s.station]+' Aufgaben</b> richtig. Das ist eine Lernrückmeldung, keine Note.</p>';
  h+='<p>'+(s.score===totals[s.station]?'Sehr gut: Du kannst die Aufgabe jetzt auch im Schulatlas probieren.':'Übe die Station erneut. Lies bei einer falschen Antwort erst die Begründung und probiere es danach ohne Tipp.')+'</p>';
+ if(s.mistakes.length){h+='<section class="praxis-review" aria-label="Übungen zum Wiederholen"><h2>Diese Aufgaben übe ich noch einmal</h2><ol>'+s.mistakes.map(m=>'<li>Aufgabe '+(m.index+1)+': <strong>'+esc(m.expected)+'</strong> – das war die gesuchte Lösung.</li>').join('')+'</ol><p>Wiederhole zuerst den passenden Lernweg mit Gustav. Versuche danach die Station erneut, ohne die Lösung anzusehen.</p>'+btn('Passenden Lernweg mit Gustav öffnen','train','pf-main')+'</section>';}
  h+='<div class="pf-controls">'+btn('Noch einmal üben','start:'+s.station,'pf-main')+btn('Andere Station','home')+'<button type="button" class="pf-quiet" data-pf="classwork">Zur Klassenarbeit</button></div>';
  return h;
 }
@@ -129,8 +130,24 @@ function render(){
 }
 function start(station){
  if(!Object.prototype.hasOwnProperty.call(totals,station))return;
- s={view:'task',station,index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null};
+ s={view:'task',station,index:0,score:0,checked:false,hint:false,feedback:'',selected:false,lat:0,lon:0,direction:null,entry:null,cell:null,mistakes:[]};
  s.focusHeading=true;render();
+}
+function learningSteps(){
+ const t=s.station==='grid'?coordTasks[s.index]:s.station==='compass'?compassTasks[s.index]:entries[atlasTasks[s.index]];
+ const steps=s.station==='grid'?
+ ['Suche zuerst den Äquator: Dort ist die geografische Breite 0°.',
+  'Gehe vom Äquator zur Breite '+coord(t.lat,0).split(' / ')[0]+'. Norden liegt oben, Süden unten.',
+  'Suche den Nullmeridian bei 0° Länge und gehe bis '+coord(0,t.lon).split(' / ')[1]+'. Westen liegt links, Osten rechts.',
+  'Der gesuchte Ort liegt genau dort, wo sich beide Linien schneiden.']:
+ s.station==='compass'?
+ ['Zeige mit dem Finger entlang des roten Nordpfeils: In diese Richtung ist Norden.',
+  'Stelle dir vor, du drehst die gesamte Karte, bis der Nordpfeil nach oben zeigt.',
+  'Gehe gedanklich vom Haus zum See und benenne die Richtung: '+names[(t.target-t.north+8)%8]+'.']:
+ ['Lies Ortsnamen und Bundesland vollständig. Gleichnamige Orte darfst du nicht verwechseln.',
+  'Nimm den Registereintrag zu '+t.place+' in '+t.region+' und finde Karte '+t.map+'.',
+  'Suche im Planquadrat zuerst die Spalte '+t.cell[0]+' und danach die Zeile '+t.cell[1]+'. Ihr Schnitt ist '+t.cell+'.'];
+ return '<section class="praxis-steps" aria-label="Gustavs Lösungsweg"><h3>🌍 Gustavs Lösungsweg – Schritt für Schritt</h3><ol>'+steps.map(v=>'<li>'+esc(v)+'</li>').join('')+'</ol></section>';
 }
 function check(){
  if(s.checked)return;
@@ -149,14 +166,15 @@ function check(){
   details='Gesucht ist <b>'+esc(e.place)+' ('+esc(e.region)+')</b>, Karte <b>'+esc(e.map)+'</b>, Feld <b>'+esc(e.cell)+'</b>. Überprüfe Namen, Region und Registerverweis.';
  }
  s.checked=true;if(good)s.score++;
- s.feedback='<strong>'+(good?'✓ Richtig – gut angewendet!':'Noch nicht richtig – so findest du die Lösung:')+'</strong><p>'+details+'</p>';
+ else s.mistakes.push({index:s.index,expected:s.station==='grid'?coord(coordTasks[s.index].lat,coordTasks[s.index].lon):s.station==='compass'?names[(compassTasks[s.index].target-compassTasks[s.index].north+8)%8]:entries[atlasTasks[s.index]].place+' – '+entries[atlasTasks[s.index]].cell});
+ s.feedback='<strong>'+(good?'✓ Richtig – gut angewendet!':'Noch nicht richtig – so findest du die Lösung:')+'</strong><p>'+details+'</p>'+(good?'':learningSteps());
  render();
 }
 function next(){
  if(!s.checked)return;
  s.index++;s.checked=false;s.hint=false;s.feedback='';s.selected=false;s.lat=0;s.lon=0;s.direction=null;s.entry=null;s.cell=null;
  if(s.index>=totals[s.station]){
-  s.view='summary';results[s.station]={score:s.score,total:totals[s.station]};
+  s.view='summary';results[s.station]={score:s.score,total:totals[s.station],errors:s.mistakes.length};
   try{localStorage.setItem(STORE,JSON.stringify(results))}catch(e){}
  }
  s.restoreAction=null;s.focusHeading=true;render();
@@ -167,6 +185,12 @@ document.addEventListener('click',function(e){
   e.preventDefault();e.stopPropagation();const cmd=a.dataset.praxis;s.restoreAction=cmd;
   if(cmd==='open'||cmd==='home'){s.view='home';s.restoreAction=null;s.focusHeading=true;render();return;}
   if(cmd.startsWith('start:')){start(cmd.slice(6));return;}
+  if(cmd==='train'){
+   const topic={grid:'koordinaten',compass:'karte',atlas:'atlas'}[s.station];
+   const ix=window.Pruefungsfit?.topics.findIndex(t=>t.id===topic)??-1;
+   if(ix>=0&&typeof switchTab==='function'){switchTab('pruefung');window.Pruefungsfit.startUnit(ix);}
+   return;
+  }
   if(s.view!=='task')return;
   if(cmd==='hint'){s.hint=!s.hint;render();return;}
   if(cmd==='check'){check();return;}

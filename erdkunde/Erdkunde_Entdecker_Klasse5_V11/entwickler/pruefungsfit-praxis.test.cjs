@@ -44,4 +44,14 @@ assert.match(main.innerHTML,/Karte <b>F<\/b>/);
 p.start('atlas');click('entry:0');click('cell:B3');p.check();
 assert.match(main.innerHTML,/Noch nicht richtig/);
 assert.match(main.innerHTML,/Frankfurt \(Oder\)/);
+assert.match(main.innerHTML,/Gustavs Lösungsweg/);
+assert.match(main.innerHTML,/Schritt für Schritt/);
+for(let i=1;i<6;i++){
+ click('next');click('entry:0');click('cell:B3');p.check();
+}
+click('next');
+assert.match(main.innerHTML,/Diese Aufgaben übe ich noch einmal/);
+assert.match(main.innerHTML,/Passenden Lernweg mit Gustav öffnen/);
+assert.ok(JSON.parse(storage.get('erdkunde-pruefungsfit-praxis-v1')).atlas.errors>0);
+
 console.log('Praxisstationen geprüft: sechs Aufgaben pro Station, Gradnetz, gedrehter Nordpfeil, Register, Rückmeldung und Bedienung.');
