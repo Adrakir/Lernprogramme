@@ -105,3 +105,26 @@
  body.ac-printing #ac-print-sheet th{background:#eee}
  @page{size:A4;margin:16mm}
 }
+/* Aufklappbare Bildlupe und Textfarb-Lupe ohne automatische Sprachbenotung */
+#studio .studio-zoom{margin-top:auto;width:100%;padding:9px;border:1px solid #98bada;border-radius:9px;background:#213c52;color:#eef7ff;min-height:42px}
+#ac-art-zoom{width:min(92vw,840px);max-height:92vh;padding:24px;border:2px solid #668cad;border-radius:15px;background:#152a40;color:white}
+#ac-art-zoom::backdrop{background:rgba(5,12,25,.83)}
+#ac-art-zoom .ac-art-zoom-inner>svg{width:100%;height:auto;max-height:58vh}
+#ac-art-zoom h2{margin:12px 0}
+#ac-art-zoom p{line-height:1.6}
+#studio .ac-textlens{margin:18px 0;border-color:#7899b8}
+#studio .ac-markbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:16px 0}
+#studio .ac-mark-btn{min-height:45px;border:2px solid transparent;padding:11px 8px;white-space:normal}
+#studio .ac-mark-preview{background:#1b3147;border:1px solid #6283a3;border-radius:10px;padding:16px}
+#studio .ac-mark-preview article{padding:8px 0;border-bottom:1px solid #3d5c77}
+#studio .ac-mark-preview article:last-child{border-bottom:0}
+#studio .ac-mark-preview p{white-space:normal;line-height:1.85;overflow-wrap:anywhere}
+#studio mark{color:#151927;border-radius:3px;padding:2px 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#studio .ac-mark-gedanke{background:#a3d3ff;color:#152030}
+#studio .ac-mark-gefuehl{background:#f9bbee;color:#241629}
+#studio .ac-mark-handlung{background:#a5f0c9;color:#113321}
+#studio .ac-mark-hoehepunkt{background:#ffce83;color:#3b2511}
+#studio .ac-mark-rede{background:#f5e88d;color:#312e0c}
+#studio .ac-mark-sinn{background:#c9b6ff;color:#2b164b}
+#studio .ac-mark-btn.ac-mark-gedanke,#studio .ac-mark-btn.ac-mark-gefuehl,#studio .ac-mark-btn.ac-mark-handlung,#studio .ac-mark-btn.ac-mark-hoehepunkt,#studio .ac-mark-btn.ac-mark-rede,#studio .ac-mark-btn.ac-mark-sinn{color:#102030}
+@media(max-width:600px){#studio .ac-markbar{grid-template-columns:repeat(2,minmax(0,1fr))}#ac-art-zoom{padding:12px}}
