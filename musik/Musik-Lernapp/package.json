@@ -2,7 +2,9 @@
   "name": "rhythmuswerkstatt-pruefung",
   "private": true,
   "scripts": {
-    "test": "node tests/current-check.cjs && node tests/offline-check.cjs"
+    "test": "node tests/content-check.cjs && node tests/current-check.cjs && node tests/offline-check.cjs"
   },
-  "devDependencies": {"jsdom": "30.1.3"}
+  "devDependencies": {
+    "jsdom": "30.1.3"
+  }
 }
