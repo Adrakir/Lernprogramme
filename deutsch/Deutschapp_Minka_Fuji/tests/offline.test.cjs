@@ -25,7 +25,7 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   await page.evaluate(()=>navigator.serviceWorker.ready);
   const cache=await page.evaluate(async()=>{
     const names=await caches.keys();const c=await caches.open(names.find(n=>n.startsWith('minka-fuji-deutsch-')));
-    const keys=['./index.html','./studio.js?v=6','./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg','./image-compat.js?v=1'];
+    const keys=['./index.html','./studio.js?v=qa47','./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg','./image-compat.js?v=1'];
     return Promise.all(keys.map(async k=>({key:k,available:!!await c.match(k)})));
   });
   assert.ok(cache.every(x=>x.available),JSON.stringify(cache));
