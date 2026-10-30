@@ -67,7 +67,7 @@ const inquiries:Record<Topic,[string,string][]>={
   ['Kann derselbe Mittelwert zu verschiedenen Verteilungen gehören?','Ja. 4, 4, 4, 4 und 1, 2, 5, 8 haben beide Mittelwert 4, aber sehr unterschiedliche Streuungen.']
  ],
  arithmetic:[
-  ['Warum bleibt 704 beim Entbündeln dieselbe Zahl?','7 Hunderter und 4 Einer werden zu 6 Hundertern, 9 Zehnern und 14 Einern. Beide Darstellungen ergeben 704.'],
+  ['Bei 587 + 268 ergibt 7 + 8 = 15. Warum schreibst du nur die 5 in die Einerspalte?','15 Einer sind 1 Zehner und 5 Einer. Die 5 bleibt bei den Einern, der Zehner wandert als Übertrag in die Zehnerspalte. Beim Minus gilt es umgekehrt: Bei 704 − 286 wird ein Hunderter in 10 Zehner entbündelt, und 704 bleibt dieselbe Zahl.'],
   ['Warum steht das Zehner-Teilprodukt eine Stelle weiter links?','Bei 347 · 26 steht die 2 für 20. Deshalb ist dieses Teilprodukt 6.940 und nicht 694.'],
   ['Darfst du die Null im Ergebnis 1.248 : 6 = 208 auslassen?','Nein. 4 Zehner lassen sich nicht auf sechs volle Zehnergruppen verteilen. Die Null hält den Zehnerplatz im Quotienten frei.'],
   ['Warum braucht man für 25 Kinder und Busse mit acht Kinderplätzen vier Busse?','Drei Busse haben nur 24 Kinderplätze. Der Rest bedeutet ein weiteres Fahrzeug, nicht einen Bruchteil eines nutzbaren Busses.']

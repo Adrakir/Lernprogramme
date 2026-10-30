@@ -23,7 +23,7 @@ gehören deshalb in den jeweiligen App-Ordner. Die Fächerübersicht liegt in
 | Lernprogramm-Übersicht | [Lernprogramme.html](./Lernprogramme.html) |
 | Deutsch | [deutsch/Deutschapp_Minka_Fuji/index.html](./deutsch/Deutschapp_Minka_Fuji/index.html) |
 | Englisch | [englisch/index.html](./englisch/index.html) |
-| Mathematik | [mathematik/MatheKompass/MatheKompass.html](./mathematik/MatheKompass/MatheKompass.html) |
+| Mathematik | [mathematik/MatheKompass.html](./mathematik/MatheKompass.html) |
 | Musik | [musik/Musik-Lernapp/index.html](./musik/Musik-Lernapp/index.html) |
 | Biologie | [biologie und chemie/BioLabor_5_Biologie_V9_2.html](./biologie%20und%20chemie/BioLabor_5_Biologie_V9_2.html) |
 | Chemie | [biologie und chemie/Chemie_Entdeckerlabor_V7_2.html](./biologie%20und%20chemie/Chemie_Entdeckerlabor_V7_2.html) |
@@ -46,8 +46,9 @@ gehören deshalb in den jeweiligen App-Ordner. Die Fächerübersicht liegt in
 
 ### MatheKompass
 
-Die Offline-App wird aus `mathematik/MatheKompass/Quellcode` mit
-`npm run build:offline` gebaut. Prüfung: `npm run typecheck` und
+Die Offline-App wird aus `mathematik/Quellcode` gebaut: dort zuerst
+`npm install`, dann `npm run build:offline`. Der Build schreibt die fertige
+Datei direkt nach `mathematik/MatheKompass.html`. Prüfung: `npm run typecheck` und
 `npm run test:learning`. Dafür werden die Projektabhängigkeiten benötigt,
 nicht aber zum Starten der fertigen HTML-Datei.
 
@@ -55,6 +56,7 @@ Bestehende Lernstandsschlüssel bleiben erhalten. Lernwegpositionen liegen
 zusätzlich unter `mathe-kompass-path-<Thema>`. Diese Positionen werden nicht
 mit der Sicherung des Tagestrainings exportiert. Die Sicherung dieses
 Trainingsbereichs unterstützt alte 14- und neue 30-Aufgaben-Diagnosen.
+Die Größen-Werkstatt speichert ihren Stand unter `mathe-kompass-groessen-v1`.
 
 1. Bestehende fachspezifische Anleitungen und Prüfberichte im App-Ordner vor
    Änderungen lesen.

@@ -1,0 +1,46 @@
+MatheKompass – Klasse 5
+=======================
+
+Starten
+-------
+Die Datei MatheKompass.html im Ordner "mathematik" im Browser öffnen
+(Doppelklick genügt). Es wird keine Internetverbindung benötigt.
+Online: https://adrakir.github.io/Lernprogramme/mathematik/MatheKompass.html
+
+Lernstand
+---------
+Der Fortschritt wird nur im Browser dieses Geräts gespeichert. Beim Löschen
+der Browserdaten geht er verloren. Er wird nicht an andere Geräte übertragen.
+
+Inhalte
+-------
+- Lernreise mit Themen wie Daten, große Zahlen, Runden, Zahlenstrahl,
+  schriftliches Rechnen und Geometrie
+- Lernstand und Tagestraining, Thementests, Klassenarbeiten, Wissenskarten
+
+Größen-Werkstatt (neu)
+----------------------
+In der Seitenleiste unter "GRÖSSEN-WERKSTATT" gibt es fünf Größenbereiche:
+Längen, Gewichte, Rechnen mit Geld, Flächen und Volumen.
+
+Jeder Bereich hat fünf Reiter:
+1. Lernpfad: fünf Stationen. Jede Station führt in fünf Schritten durch das
+   Thema: Entdecken, Verstehen (mit Merksatz und Modell zum Ausprobieren),
+   Gemeinsam lösen (Beispiel Schritt für Schritt), Selbst versuchen und
+   Begründen.
+2. Üben: Runden mit sechs Aufgaben in den Niveaus Grundlagen, Standard und
+   Knobeln. Pro Aufgabe gibt es drei gestufte Tipps und danach einen
+   Lösungsweg. Typische Fehler erhalten eine eigene Rückmeldung.
+3. Vertiefung: anspruchsvollere Sach- und Begründungsaufgaben.
+4. Test: Aufgaben aus allen Stationen mit Punkten, einer Notenorientierung,
+   Empfehlungen pro Thema und Musterlösungen. Die Note dient nur der
+   Orientierung und ersetzt keine Bewertung durch die Lehrkraft.
+5. Hilfen: Stützpunkte, Merksätze, typische Fehler, Umrechnungstabellen und
+   Lösungsstrategien. Die Seite lässt sich drucken.
+
+Zusätzlich gibt es einen Gesamttest über alle fünf Größenbereiche.
+
+Für Lehrkräfte
+--------------
+Der Quellcode liegt in "mathematik/Quellcode". Hinweise zum Bauen stehen in
+config.md im Hauptordner des Repositorys.
