@@ -1,0 +1,77 @@
+name: Erdkunde – Lernvideos in bestehende App integrieren
+
+on:
+  push:
+    paths:
+      - '.github/workflows/erdkunde-video-integration.yml'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.js'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.css'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.test.cjs'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/index.html'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/service-worker.js'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: erdkunde-video-integration
+  cancel-in-progress: false
+
+jobs:
+  pruefen-und-bauen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Videointegration und vorhandene Filme prüfen
+        run: |
+          node --check erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.js
+          node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.test.cjs
+
+      - name: Bestehende Erdkunde-Lernschritte prüfen
+        run: |
+          node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlas-schulung.test.cjs
+          node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlaswerkstatt.test.cjs
+          node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/themen-training.test.cjs
+
+      - name: Quellcode und bestehende Offline-App synchronisieren
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git pull --rebase origin main
+          cd erdkunde/Erdkunde_Entdecker_Klasse5_V11
+          node entwickler/build-offline.js
+
+      - name: Video-Inhalte im veröffentlichten HTML belegen
+        shell: bash
+        run: |
+          set -euo pipefail
+          F="erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html"
+          grep -q "Paul und Gustav Globus" "$F"
+          grep -q "data-gv-open" "$F"
+          grep -q "filme/videos/" "$F"
+          grep -q "Die vier Erdviertelkugeln" "$F"
+          grep -q "Orte im Atlas finden" "$F"
+
+      - name: Gebündelte App aktualisieren, ohne bestehende Nutzerdateien zu verändern
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html
+          if git diff --cached --quiet; then
+            echo "Die veröffentlichte App enthält die Videos bereits."
+            exit 0
+          fi
+          git commit -m "Erdkunde: sieben Lernvideos in vorhandene Offline-App einbauen"
+          git push origin HEAD:main
