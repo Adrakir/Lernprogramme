@@ -28,6 +28,35 @@ NEU: STARTBEREICH „MEIN ERZÄHLSTUDIO“
 WICHTIG: Der Startbereich ist eine Ergänzung der vorhandenen App. Keine zweite App.
 Bereiche 01–08 bleiben erhalten und über die obere Navigation erreichbar.
 
+
+
+ZUSATZ: SCHREIBAKADEMIE / LERNCOACH (integriert im Erzählstudio)
+• In der Studio-Leiste: Lerncoach, Texte reparieren, Lehrkräfte.
+• Lerncoach: 12 Orientierungsfragen zu sechs Kompetenzen mit begründeter
+  Auswertung und Übungenempfehlungen. Der Test benotet keine eigenen Texte.
+• Geschichten-Reparatur: 12 Textfälle auf drei Niveaus, drei stufenweise Hilfen,
+  eigene Überarbeitung, kommentierte Musterlösung und Versionsvergleich.
+• In der großen Schreibwerkstatt: Fassungen per Klick sichern und Änderungen
+  farbig vergleichen. Textlupe: im Schreibfeld Satz auswählen, eine der sechs
+  Kategorien anklicken; Markierung erscheint in der Lesefassung.
+• Klassenarbeit: nun 20 verschiedene Bild- und Reizwortgeschichten.
+• Lehrkräfte: 20 Schülervorlagen, getrennte Erwartungshorizonte,
+  Kriterienraster, Schreibkonferenzbogen. Im Drucken-Dialog „Als PDF speichern“
+  wählen, wenn eine PDF-Datei benötigt wird. Keine automatische Schulnote.
+• Vorlesen: geräteabhängige deutsche Stimmen und einstellbares Tempo.
+  Textgröße und Kontrast lassen sich in den Werkstätten anpassen.
+• Bildlupe: Jede Bildfolge lässt sich vergrößert ansehen.
+• Vier wechselnde Mini-Schreibaufgaben pro Tag.
+• Auf GitHub Pages kann die App als installierbare Offline-Web-App verwendet
+  werden, soweit der Browser Service Worker/PWA unterstützt. Der erste
+  vollständige Aufruf benötigt Internet. Dateiöffnen via file:// hat
+  möglicherweise kein PWA-Caching.
+• Neue Funktionen speichern lokal: minka-fuji-studio-v1,
+  mf-deutsch-akademie-v1 und mf-deutsch-textlupe-v1.
+• Beim Löschen von Browserdaten können Entwürfe verloren gehen. Texte und
+  Pläne daher regelmäßig als TXT exportieren bzw. als PDF drucken.
+• Keine automatische Verteilung von Schülertexten an Lehrkräfte oder Server.
+
 Inhalt:
 • Aufbau von Erzählungen: Einleitung, Hauptteil, Schluss
 • Spannungskurve mit dem Spannungswal
