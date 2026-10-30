@@ -86,11 +86,11 @@ Das Erzählstudio ist in der **bestehenden** App integriert und über `#studio` 
 erreichbar. Die bisherigen Lernbereiche 01–08 sind erhalten.
 
 - `studio-data.js`: sieben verbundene Lernschritte, sechs unterschiedliche
-  Erzählsituationen, acht Bild-/Reizwort-Klassenarbeiten, sechs Textlabor-Texte,
+  Erzählsituationen, 20 Bild-/Reizwort-Klassenarbeiten, sechs Textlabor-Texte,
   transparentes Kriterienraster und je eine mögliche Musterstruktur.
 - `studio-art.js`: vier kontextbezogene Vektorszenen pro Geschichte/Bildarbeit,
   insgesamt 40 dynamisch erzeugte, lokale SVG-Illustrationen (offline).
-- `studio.js`: vier Ansichten innerhalb einer App: Lernweg, vollständige
+- `studio.js`: sieben Ansichten innerhalb einer App: Lernweg, vollständige
   Schreibwerkstatt, Klassenarbeits-Trainer und Textlabor.
 - `studio.css`: kontrastreiche responsive Oberfläche mit SVG-Spannungskurve,
   Markierlegende, reduzierter Animation und Druckansicht.
@@ -113,3 +113,29 @@ werden nicht gelöscht oder migriert.
 Bildunterschriften sind Orientierungsangebote. Bei offenen Schreibaufträgen
 sind abweichende, aber logisch aufgebaute Geschichten zulässig. Ein
 Musterstruktur-Vorschlag erscheint erst nach der Abgabe zur Selbstprüfung.
+
+## Schreibakademie · Vertiefungen und QA
+
+- `academy-extra.js`: 12 zusätzliche differenzierte Klassenarbeitsvarianten,
+  insgesamt 20 Bild- und Reizwortaufgaben mit gestuften Hilfen und
+  vierteiligen Musterstrukturen.
+- `academy-data.js`: 12 Diagnoseaufgaben über sechs Kompetenzbereiche,
+  12 Schreibreparaturen in drei Stufen, handlungsbezogene Begründungen.
+- `academy.js`: Lerncoach, Reparaturwerkstatt, sieben gespeicherte
+  Textversionen, Wortdiff, gerätebasierte Sprachausgabe, Schriftgröße,
+  kontrastreichere Ansicht, Lehrerblätter und vier tägliche Mini-Aufgaben.
+- `academy-tools.js`: vergrößerbare Bildszenen und manuelle, sechsfarbige
+  Markierung eigener Textausschnitte. Diese Markierung ist keine
+  automatische semantische Bewertung.
+- `manifest.webmanifest`, `icon.svg`, `sw.js`: installierbare Offline-
+  Progressive-Web-App auf unterstützten HTTPS-Browsern.
+- `tests/academy.test.cjs`: Browserregression für die neuen Funktionen,
+  unter anderem Mobilbreiten von 320, 390 und 768 Pixeln.
+- `academy.css`: responsive Werkstätten, Bildlupe, Markierungsfarben,
+  Vorlesebedienung und getrennte A4-Druckseiten für Schüler und Lehrer.
+
+Das Lehrerblatt bietet eine **mögliche Musterstruktur** statt einer
+einzig richtigen Geschichte. Eigene Schülertexte werden bewusst nicht
+automatisch benotet, interpretiert oder an Dritte übertragen.
+Druckvorlagen können im Browser als PDF gespeichert werden; die
+GitHub-Web-App selbst benötigt dazu keinen PDF-Server.
