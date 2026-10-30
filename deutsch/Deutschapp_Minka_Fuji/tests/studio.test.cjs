@@ -32,6 +32,7 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
       await page.selectOption('#studio-picker','pokal');
       assert.match(await page.locator('.studio-story-title').textContent(),/Lina und Ben/);
       assert.equal(await page.locator('.studio-story-panel').count(),4);
+      assert.equal(await page.locator('.studio-story-panel svg').count(),4);
       await page.click('[data-studio-scene="3"]');
       assert.match(await page.locator('.studio-scene-focus').textContent(),/Der Vorhang/);
       assert.equal(await page.locator('.studio-tension-graphic svg circle').count(),4);
@@ -52,10 +53,13 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
       assert.match(await page.locator('[data-studio-part="body"]').inputValue(),/Linas Hände zitterten/);
     });
     await t.test('Klassenarbeit: acht Aufgaben, Hilfen, Simulation, Rubrik, Sicherung und Textänderung',async()=>{
-      await page.click('[data-studio-view="exam"]');
+      await page.click('.studio-tabs [data-studio-view="exam"]');
       assert.equal(await page.locator('#studio-picker option').count(),8);
       await page.selectOption('#studio-picker','reiz-dachboden');
       assert.equal(await page.locator('.studio-wordcards span').count(),4);
+      await page.selectOption('#studio-picker','bild-fahrrad');
+      assert.equal(await page.locator('.studio-story-panel svg').count(),4);
+      await page.selectOption('#studio-picker','reiz-dachboden');
       await page.click('[data-studio-exam-hint]');
       assert.match(await page.locator('.studio-hintlist').textContent(),/Hinweis 1/);
       await page.check('input[name="studio-exam-mode"][value="simulation"]');
@@ -77,7 +81,7 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
       assert.equal(await page.locator('[data-studio-rating="0"]').inputValue(),'');
     });
     await t.test('Textlabor: sechs Texte, vier Markierungen, Rückmeldung und eigene Überarbeitung',async()=>{
-      await page.click('[data-studio-view="lab"]');
+      await page.click('.studio-tabs [data-studio-view="lab"]');
       assert.equal(await page.locator('#studio-picker option').count(),6);
       for(const name of ['gefuehle','schule','see','buch','wald','musik']){
         await page.selectOption('#studio-picker',name);
@@ -96,7 +100,7 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
         assert.match(await page.locator('#studio-lab-self-status').textContent(),/1 von 3/);
       }
       await page.reload();
-      await page.click('[data-studio-view="lab"]');
+      await page.click('.studio-tabs [data-studio-view="lab"]');
       await page.selectOption('#studio-picker','schule');
       assert.equal(await page.locator('[data-studio-fragment="0"]').getAttribute('class').then(s=>s.includes('marked')),true);
     });
@@ -104,7 +108,7 @@ test('Erzählstudio: geführter Lernweg, mehrere Geschichten, Klassenarbeit und 
       for(const w of [320,390,768]){
         await page.setViewportSize({width:w,height:850});
         for(const view of ['path','writer','exam','lab']){
-          await page.click('[data-studio-view="'+view+'"]');
+          await page.click('.studio-tabs [data-studio-view="'+view+'"]');
           const dims=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));
           assert.ok(dims.scroll<=w+1,view+' @'+w+'px: '+dims.scroll);
         }
