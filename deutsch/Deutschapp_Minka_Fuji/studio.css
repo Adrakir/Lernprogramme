@@ -196,7 +196,7 @@ nav.navigation button[data-page=studio]:not([aria-current=page]){background:#1e3
 /* Korrektur aus echtem 320-px-Browsertest: kein Min-Content-Überlauf */
 @media(max-width:380px){
  #studio .studio-app-top{grid-template-columns:minmax(0,1fr);gap:8px}
- #studio .studio-app-top img{display:none}
+ #studio .studio-app-top img{display:block;justify-self:center;width:min(126px,100%);height:auto;max-height:126px}
  #studio .studio-app-top h1{font-size:1.48rem;overflow-wrap:anywhere}
  #studio .studio-app-top p{overflow-wrap:anywhere}
  #studio .studio-welcome{padding:14px}

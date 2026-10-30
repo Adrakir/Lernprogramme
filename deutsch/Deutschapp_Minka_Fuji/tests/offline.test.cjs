@@ -25,7 +25,7 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   await page.evaluate(()=>navigator.serviceWorker.ready);
   const cache=await page.evaluate(async()=>{
     const names=await caches.keys();const c=await caches.open(names.find(n=>n.startsWith('minka-fuji-deutsch-')));
-    const keys=['./index.html','./studio.js?v=6','./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/whale.webp'];
+    const keys=['./index.html','./studio.js?v=qa47','./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg','./image-compat.js?v=1'];
     return Promise.all(keys.map(async k=>({key:k,available:!!await c.match(k)})));
   });
   assert.ok(cache.every(x=>x.available),JSON.stringify(cache));
@@ -34,6 +34,10 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   assert.equal(await page.locator('.up-scene svg').count(),6);
   await context.setOffline(true);
   await page.reload();
+  await page.locator('[data-page="entdecken"]').click();
+  await page.waitForFunction(()=>document.querySelector('#comic-image')?.naturalWidth>0);
+  assert.ok(await page.locator('#comic-image').evaluate(img=>img.naturalWidth>0),'Comic-Bild ist offline sichtbar');
+  await page.locator('[data-page="studio"]').click();
   await page.click('[data-page="studio"]');await page.click('[data-studio-view="builder"]');
   assert.equal(await page.locator('#up-scene').inputValue(),'waldkarte');
   assert.equal(await page.locator('.up-scene svg').count(),6);

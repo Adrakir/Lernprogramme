@@ -32,7 +32,7 @@ function renderScene(index) {
   if (!Number.isInteger(index) || index < 0 || index >= scenes.length) throw new Error('Unbekanntes Comicbild.');
   sceneIndex = index;
   const scene = scenes[index];
-  $('#comic-image').src = `assets/scene-${index+1}.webp`; $('#comic-image').alt = scene.alt;
+  $('#comic-image').src = `assets/scene-${index+1}.jpg`; $('#comic-image').alt = scene.alt;
   $('#comic-number').textContent = `Bild ${index+1}`;
   $('#comic-narrative').textContent = scene.text;
   $('#comic-dialogue').innerHTML = `<strong>${scene.speaker} erklärt:</strong> ${escapeHTML(scene.dialogue)}`;
