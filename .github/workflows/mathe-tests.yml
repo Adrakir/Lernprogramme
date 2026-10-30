@@ -1,0 +1,42 @@
+name: MatheKompass prüfen
+
+on:
+  push:
+    paths:
+      - "mathematik/**"
+      - ".github/workflows/mathe-tests.yml"
+  pull_request:
+    paths:
+      - "mathematik/**"
+      - ".github/workflows/mathe-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  testen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: mathematik/Quellcode
+    steps:
+      - name: Repository abrufen
+        uses: actions/checkout@v4
+      - name: Node.js 22 bereitstellen
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: mathematik/Quellcode/package-lock.json
+      - name: Abhängigkeiten installieren
+        run: npm ci
+      - name: Typen prüfen
+        run: npm run typecheck
+      - name: Aufgabengeneratoren, Inhalte und Lernlogik testen
+        run: npm run test:learning
+      - name: Offline-App reproduzierbar bauen
+        run: npm run build:offline
+      - name: Gebündelte HTML-Datei auf Gleichheit prüfen
+        run: git diff --exit-code -- ../MatheKompass.html

@@ -46,8 +46,21 @@ export function TeachingTools({topic,step}:{topic:Topic;step:number}){
  {solutions&&<section className="worksheet-solutions"><h2>Lösungen · separat aufbewahren</h2>{Array.from({length:4},(_,i)=>{const p=guidedProblem(topic,step,i+2);return <div key={p.id}><h3>{i+1}. {p.title}</h3><ol>{p.solution.map((s,j)=><li key={j}>{s}</li>)}</ol></div>;})}<h3>5. Musterbegründung</h3><p>{lessonInquiry(topic,step).explanation}</p></section>}</section>}</div>;
 }
 
+const ORDER:Topic[]=['data','numbers','round','line','units','stats','arithmetic','divisibility','geometry','measure','fractions','decimals'];
+const TITLES:Partial<Record<Topic,string>>={data:'Daten & Diagramme',numbers:'Große Zahlen',round:'Runden & Schätzen',line:'Zahlenstrahl',units:'Größen & Einheiten',stats:'Daten auswerten',arithmetic:'Schriftlich rechnen',divisibility:'Teilbarkeit',geometry:'Geometrie',measure:'Flächen & Körper',fractions:'Brüche',decimals:'Dezimalzahlen'};
+type Vorschlag={kind:'start'|'repeat'|'next'|'done';topic:Topic};
 export function TodayGuide(){
- const [topic,setTopic]=useState<Topic>('arithmetic');
- useEffect(()=>{try{const saved=JSON.parse(localStorage.getItem('mathe-kompass-v1')||'null');if(Array.isArray(saved?.records)){const recent=saved.records.slice(-20).findLast((r:{topic?:string;first?:boolean})=>r.first===false&&r.topic&&r.topic in learningGoals);if(recent)setTopic(recent.topic);}}catch(error){console.error('MatheKompass: Tagesempfehlung konnte nicht geladen werden.',error);}},[]);
- return <section className="panel today-guide"><h2>Dein nächster Lernschritt mit Martha</h2><p><strong>Dein Ziel:</strong> {learningGoals[topic].goal}</p><p>Entdecken → verstehen → gemeinsam lösen → selbst versuchen → begründen. Du bestimmst das Tempo, ohne Zeitdruck.</p><div className="guided-actions"><a className="btn" href={'#'+topic}>Geführten Lernweg öffnen</a><a className="btn ghost" href="#learning">Lernstand prüfen und passend üben</a></div><small>Der Vorschlag greift unsichere Aufgaben auf. Alle anderen Themen bleiben frei wählbar.</small></section>;
+ const [v,setV]=useState<Vorschlag>({kind:'start',topic:'data'});
+ useEffect(()=>{try{const saved=JSON.parse(localStorage.getItem('mathe-kompass-v1')||'null');const records=Array.isArray(saved?.records)?saved.records:[];const lessons:string[]=Array.isArray(saved?.lessons)?saved.lessons:[];
+  const recent=records.slice(-20).findLast((r:{topic?:string;first?:boolean})=>r.first===false&&r.topic&&r.topic in learningGoals);
+  if(recent){setV({kind:'repeat',topic:recent.topic});return;}
+  const open=ORDER.find(t=>!lessons.includes(t));
+  if(!open){setV({kind:'done',topic:'data'});return;}
+  setV({kind:records.length||lessons.length?'next':'start',topic:open});
+ }catch(error){console.error('MatheKompass: Tagesempfehlung konnte nicht geladen werden.',error);}},[]);
+ const name=TITLES[v.topic]??v.topic;
+ if(v.kind==='done')return <section className="panel today-guide"><h2>Alle Lernmodule durchgearbeitet</h2><p>Du hast alle Verstehen-Lernwege abgeschlossen. Jetzt festigst du dein Wissen: Schreibe in jedem Modul den Modultest oder nutze die Klassenarbeiten.</p><div className="guided-actions"><a className="btn" href="#learning">Lernstand prüfen und passend üben</a><a className="btn ghost" href="#exams">Klassenarbeiten öffnen</a></div></section>;
+ const head=v.kind==='start'?'Willkommen. So startest du':v.kind==='repeat'?'Dein nächster Lernschritt: wiederholen':'Dein nächster Lernschritt';
+ const text=v.kind==='start'?<>Beginne mit Modul 01 <strong>{name}</strong>. Dort lernst du Schritt für Schritt, wie man Daten sammelt, zählt und in Diagrammen darstellt. Jedes Modul hat fünf Bereiche: Verstehen, Üben, Vertiefung, Test und Hilfen.</>:v.kind==='repeat'?<>Bei <strong>{name}</strong> warst du zuletzt noch unsicher. Wiederhole den Lernweg oder schau in die Hilfen. Danach geht es leichter.</>:<>Als Nächstes ist <strong>{name}</strong> dran. {learningGoals[v.topic].goal}</>;
+ return <section className="panel today-guide"><h2>{head}</h2><p>{text}</p><p>Entdecken → verstehen → gemeinsam lösen → selbst versuchen → begründen. Du bestimmst das Tempo, ohne Zeitdruck.</p><div className="guided-actions"><a className="btn" href={'#'+v.topic}>{v.kind==='start'?'Mit Modul 01 beginnen':'Lernweg öffnen'}</a><a className="btn ghost" href="#learning">Lernstand prüfen und passend üben</a></div><small>{v.kind==='repeat'?'Der Vorschlag greift unsichere Aufgaben auf. ':''}Alle Themen bleiben frei wählbar.</small></section>;
 }
