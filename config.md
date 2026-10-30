@@ -57,6 +57,18 @@ zusätzlich unter `mathe-kompass-path-<Thema>`. Diese Positionen werden nicht
 mit der Sicherung des Tagestrainings exportiert. Die Sicherung dieses
 Trainingsbereichs unterstützt alte 14- und neue 30-Aufgaben-Diagnosen.
 Die Größen-Werkstatt speichert ihren Stand unter `mathe-kompass-groessen-v1`.
+Die Modultests der Lernmodule speichern die letzten zehn Ergebnisse je Thema
+unter `mathe-kompass-modultests-v1`. Unter "Mein Lernstand" sichert
+"Gesamten Lernstand sichern" alle Schlüssel mit dem Präfix `mathe-kompass`
+in einer JSON-Datei; "Sicherung laden" prüft die Datei und überschreibt nach
+Rückfrage nur die enthaltenen Schlüssel.
+
+Inhalte der Reiter Vertiefung und Hilfen stehen in
+`mathematik/Quellcode/lib/module-content.ts`, die Zusammenstellung der
+Modultests in `lib/module-test.ts`. Der Test `lib/module-content.test.ts`
+prüft alle Inhalte und alle Aufgabengeneratoren. Der Workflow
+`.github/workflows/mathe-tests.yml` führt Typprüfung, Tests und Build aus und
+bricht ab, wenn `MatheKompass.html` nicht zum Quellcode passt.
 
 1. Bestehende fachspezifische Anleitungen und Prüfberichte im App-Ordner vor
    Änderungen lesen.

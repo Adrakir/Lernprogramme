@@ -18,8 +18,28 @@ Inhalte
   schriftliches Rechnen und Geometrie
 - Lernstand und Tagestraining, Thementests, Klassenarbeiten, Wissenskarten
 
-Größen-Werkstatt (neu)
-----------------------
+Lernmodule
+----------
+Jedes der zwölf Lernmodule hat fünf Reiter:
+1. Verstehen: geführter Lernweg (Entdecken, Verstehen, Gemeinsam lösen,
+   Selbst versuchen, Begründen).
+2. Üben: zehn Aufgaben in drei Schwierigkeitsstufen mit gestuften Tipps.
+3. Vertiefung: drei Knobel-, Begründungs- und Sachaufgaben mit Prüfung,
+   Tipp und Musterlösung.
+4. Test: zehn Aufgaben aus allen Teilthemen (7 Aufgaben zu 1 Punkt,
+   3 Knobelaufgaben zu 2 Punkten), Auswertung nach Teilthemen mit
+   Übungsempfehlung, Orientierungsnote und allen Lösungswegen.
+5. Hilfen: Merksätze, ein Beispiel Schritt für Schritt, typische Fehler und
+   Strategien. Die Seite lässt sich drucken.
+Das Kopftraining hat keinen Modultest.
+
+Lernstand sichern
+-----------------
+Unter "Mein Lernstand" lässt sich der gesamte Lernstand als Datei sichern und
+auf einem anderen Gerät wieder laden.
+
+Größen-Werkstatt
+----------------
 In der Seitenleiste unter "GRÖSSEN-WERKSTATT" gibt es fünf Größenbereiche:
 Längen, Gewichte, Rechnen mit Geld, Flächen und Volumen.
 
