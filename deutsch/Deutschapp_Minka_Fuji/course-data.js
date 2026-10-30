@@ -209,13 +209,13 @@ window.MF_COURSE_DATA = (() => {
     finalChecks:[
       'Meine Einleitung stellt Figuren, Ort, Zeit und Ausgangssituation verständlich vor.',
       'Ein konkreter Hinweis macht neugierig. Seine Ursache wird erst später erklärt.',
-      'Mein Hauptteil entwickelt die Handlung; der Schluss rundet sie ab.',
+      'Mein Hauptteil entwickelt die Handlung: Hindernisse, Ursache und Wirkung, Gedanken, Gefühle und ein Höhepunkt. Der Schluss rundet sie ab.',
       'Bewegungs-, Wahrnehmungs- und Redeverben passen zur Szene.',
       'Meine Satzanfänge sind abwechslungsreich; die Wortstellung stimmt.',
-      'Wenige treffende Adjektive zeigen passende Einzelheiten.',
+      'Wenige treffende Adjektive und ausgewählte Sinneseindrücke machen wichtige Einzelheiten anschaulich.',
       'Meine wörtliche Rede hat passende Begleitsätze und Satzzeichen.',
       'Zeitform und Erzählperspektive passen; ich habe meinen Text laut gelesen.'
     ],
-    finalModel:'Das Kratzen im Schuppen\n\nAn einem windigen Herbstnachmittag suchte Minka mit Fuji ihren roten Ball im Garten. Neben dem alten Schuppen blieb die getigerte Katze stehen. Hinter der verwitterten Tür kratzte etwas.\n\nVorsichtig schlich Minka näher. „Hast du das gehört?“, flüsterte sie. Fuji lauschte und schob die Tür mit der Nase auf. Durch den schmalen Spalt spähte Minka ins Dunkel. Unter einem umgedrehten Blumentopf scharrten winzige Krallen über den Boden.\n\n„Da steckt ein Igel fest!“, rief Minka. Als Fuji den Topfrand anhob, schob Minka einen Holzklotz darunter. Einen Moment lang hielten beide den Atem an. Dann kroch der Igel durch die Lücke.\n\nErleichtert sahen sie ihm nach. Wenig später fand Minka auch ihren Ball. Fuji legte sich zufrieden unter den Apfelbaum.'
+    finalModel:'Das Kratzen im Schuppen\n\nAn einem windigen Herbstnachmittag suchte Minka mit Fuji ihren roten Ball im Garten. Neben dem alten Schuppen blieb die getigerte Katze stehen. Hinter der verwitterten Tür kratzte etwas.\n\nVorsichtig schlich Minka näher. „Hast du das gehört?“, flüsterte sie. Fuji lauschte und schob die Tür mit der Nase auf. Durch den schmalen Spalt spähte Minka ins Dunkel. Unter einem umgedrehten Blumentopf scharrten winzige Krallen über den Boden.\n\n„Da steckt ein Igel fest!“, rief Minka. Als Fuji den Topfrand anhob, schob Minka einen Holzklotz darunter. Minka hielt den Atem an. Was, wenn der Topf erneut abrutschte? Fuji stemmte ihre Pfote fester dagegen. Dann kroch der Igel durch die Lücke.\n\nErleichtert sahen sie ihm nach. Wenig später fand Minka auch ihren Ball. Fuji legte sich zufrieden unter den Apfelbaum.'
   });
 })();
