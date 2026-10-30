@@ -28,5 +28,23 @@ aside{border-radius:14px;border:1px solid #b2bcd588;background:#122e42;padding:1
 </section><aside><strong>Merke:</strong> Der Äquator ist 0° Breite. Der Nullmeridian ist 0° Länge. Erst Nord/Süd, dann Ost/West – so werden die Erdviertelkugeln benannt.</aside>
 <p class="sm">Keine Anmeldung erforderlich. Der Fortschritt wird hier nicht gespeichert. Die Filme können auf iPhone, iPad, Android und PC im Browser abgespielt werden, sobald die MP4-Dateien bereitstehen.</p>
 </main>
-<script>const v=document.querySelector('article:last-of-type video');const s=document.getElementById('status4');v.addEventListener('loadedmetadata',()=>{s.textContent='Folge 4 ist jetzt auf GitHub verfügbar.'});v.addEventListener('error',()=>{s.textContent='Folge 4 ist noch nicht als MP4 auf GitHub gespeichert.'},true);</script>
+<script>
+document.querySelectorAll('article').forEach(async function(card) {
+  const video=card.querySelector('video'), src=video.querySelector('source').getAttribute('src');
+  const link=card.querySelector('a[download]');
+  try {
+    const check=await fetch(src,{method:'HEAD',cache:'no-store'});
+    if(!check.ok)throw Error('Noch nicht hochgeladen');
+    if(card===document.querySelector('article:last-of-type')) {
+      document.getElementById('status4').textContent='Folge 4 ist als MP4 auf GitHub verfügbar.';
+    }
+  }catch(e){
+    video.hidden=true;
+    if(link)link.hidden=true;
+    const msg=document.createElement('p');msg.className='status';
+    msg.textContent='Diese MP4-Datei ist auf GitHub noch nicht verfügbar. Bitte den alternativen Videolink verwenden, falls vorhanden.';
+    video.after(msg);
+  }
+});
+</script>
 </body></html>
