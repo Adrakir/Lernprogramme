@@ -1,6 +1,6 @@
 /* Offline-Unterstützung der vorhandenen GitHub-Pages-App. Keine Datenübertragung. */
 const CACHE='minka-fuji-deutsch-2026-10-30-academy-v1';
-const CORE=['./','./index.html','./style.css','./app.js?v=lehrgang1','./reading.js','./language.css','./language.js','./course.css?v=1','./course-data.js?v=1','./course.js?v=1','./hauptteil.css?v=20261030','./hauptteil.js?v=20261030','./studio.css?v=2','./studio-data.js?v=2','./studio-art.js?v=2','./academy.css?v=1','./academy-data.js?v=1','./academy.js?v=1','./studio.js?v=3','./assets/guides.webp','./icon.svg','./manifest.webmanifest'];
+const CORE=['./','./index.html','./style.css','./app.js?v=lehrgang1','./reading.js','./language.css','./language.js','./course.css?v=1','./course-data.js?v=1','./course.js?v=1','./hauptteil.css?v=20261030','./hauptteil.js?v=20261030','./studio.css?v=2','./studio-data.js?v=2','./studio-art.js?v=2','./academy.css?v=1','./academy-data.js?v=1','./academy.js?v=1','./studio.js?v=4','./academy-extra.js?v=1','./academy-tools.js?v=1','./assets/guides.webp','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>Promise.allSettled(CORE.map(url=>cache.add(url)))).then(()=>self.skipWaiting()));
 });
