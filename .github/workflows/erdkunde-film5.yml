@@ -1,0 +1,68 @@
+name: Erdkunde – Gustav Globus Folge 5 rendern und sichern
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/erdkunde-film5.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: erdkunde-film5-upload
+  cancel-in-progress: false
+
+jobs:
+  rendern:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Python vorbereiten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Renderprogramme und Schriften installieren
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y espeak ffmpeg fonts-lato
+          python -m pip install "numpy>=2.0,<3" "pillow>=11,<13" "scipy>=1.14,<2" "basemap>=2.0,<3"
+
+      - name: Animationsfilm Folge 5 erstellen
+        env:
+          GUSTAV_VIDEO_OUT: ${{ github.workspace }}/erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos
+          GUSTAV_VIDEO_TMP: ${{ runner.temp }}/gustav-folge5
+        run: |
+          mkdir -p "$GUSTAV_VIDEO_OUT" "$GUSTAV_VIDEO_TMP"
+          python -u erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/quelle/build_folge5.py
+
+      - name: Film und Ton technisch prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          MEDIA="erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos"
+          FILM="$MEDIA/Paul_und_Gustav_Globus_Folge_5_Seitenansicht_Draufsicht.mp4"
+          test "$(wc -c < "$FILM")" -gt 200000
+          ffprobe -v error -show_entries stream=codec_name,width,height -of default=noprint_wrappers=1 "$FILM"
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 "$FILM"
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 "$FILM"
+          mv "$FILM" "$MEDIA/folge-5.mp4"
+
+      - name: Video und Materialien ins bestehende Repository veröffentlichen
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/folge-5.mp4
+          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/Gustav_Globus_Folge5_*
+          if git diff --cached --quiet; then echo "Folge 5 ist bereits verfügbar"; exit 0; fi
+          git commit -m "Erdkunde: Folge 5 als MP4, SRT, Sprechtext und Vorschaubilder"
+          git pull --rebase origin main
+          git push origin HEAD:main
