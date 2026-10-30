@@ -79,3 +79,37 @@ Der Direktlink endet auf `index.html#lehrgang` oder `/#lehrgang`.
 Wiederaufnahme, Textschutz, Export, Druckansicht, Speicherfehler,
 Bewegungsreduktion und Breiten von 320, 390 und 768 Pixeln. `npm test` führt
 diese Prüfungen zusammen mit den Regressionstests der bisherigen App aus.
+
+## Erzählstudio · Neuer Startbereich (Oktober 2026)
+
+Das Erzählstudio ist in der **bestehenden** App integriert und über `#studio` direkt
+erreichbar. Die bisherigen Lernbereiche 01–08 sind erhalten.
+
+- `studio-data.js`: sieben verbundene Lernschritte, sechs unterschiedliche
+  Erzählsituationen, acht Bild-/Reizwort-Klassenarbeiten, sechs Textlabor-Texte,
+  transparentes Kriterienraster und je eine mögliche Musterstruktur.
+- `studio-art.js`: vier kontextbezogene Vektorszenen pro Geschichte/Bildarbeit,
+  insgesamt 40 dynamisch erzeugte, lokale SVG-Illustrationen (offline).
+- `studio.js`: vier Ansichten innerhalb einer App: Lernweg, vollständige
+  Schreibwerkstatt, Klassenarbeits-Trainer und Textlabor.
+- `studio.css`: kontrastreiche responsive Oberfläche mit SVG-Spannungskurve,
+  Markierlegende, reduzierter Animation und Druckansicht.
+- `tests/studio.test.cjs`: Browsertests für Lernführung, verschiedene Figuren,
+  Texteingabe, lokale Wiederaufnahme, Prüfung, Raster, Markierungen und
+  320-/390-/768-px-Ansichten. `npm test` umfasst auch die bestehenden Tests.
+
+**Bewertung:** Das Kriterienraster mit sechs Kriterien und 0–2 Punkten je
+Kriterium ist eine reine Selbsteinschätzung, keine automatische Sprachkorrektur
+und keine Schulnote. Das Textlabor prüft nur eindeutige vorgegebene
+Textmarkierungen, keine frei geschriebenen Formulierungen.
+
+**Datenschutz:** Lernweg, Entwürfe, Markierungen und Prüfungstexte bleiben unter
+`minka-fuji-studio-v1` im lokalen Browser. Keine Übertragung und keine
+Gerätesynchronisation. Export als UTF-8-TXT und eine A4-Druckansicht sind
+vorhanden. Alte Speicherstände des geführten Lehrgangs und der Hauptteil-Werkstatt
+werden nicht gelöscht oder migriert.
+
+**Bilderdidaktik:** Die grafischen Bilder zeigen eine mögliche Ausgangslage;
+Bildunterschriften sind Orientierungsangebote. Bei offenen Schreibaufträgen
+sind abweichende, aber logisch aufgebaute Geschichten zulässig. Ein
+Musterstruktur-Vorschlag erscheint erst nach der Abgabe zur Selbstprüfung.
