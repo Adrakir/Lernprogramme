@@ -109,6 +109,9 @@ async function main(){
    await waitFor(()=>expression('Boolean(document.querySelector("#anatomyExample"))'));
    await expression('document.querySelector(\'[data-anatomy="4"]\').click()');
    check(await expression('document.querySelector("#anatomyExample").textContent.includes("1½ Schläge")'),'Dot duration demonstration at '+size.name);
+   await expression('document.querySelector("#pathListen").click()');
+   check(await expression('Boolean(document.querySelector("#rhythmAudio")?.src?.startsWith("blob:"))'),'Selected dot produces an audio waveform at '+size.name);
+   await expression('document.querySelector("#pathStop").click()');
    await expression('document.querySelector(\'[data-anatomy="3"]\').click()');
    check(await expression('document.querySelector("#anatomyExample").textContent.includes("zwei Achtelnoten")'),'Two eighth notes shown at '+size.name);
    check(await expression('(document.querySelector(".partBeamExample .pathScore").scrollWidth-document.querySelector(".partBeamExample .pathScore").clientWidth)<3'),'Short bar fits without scrolling at '+size.name);
