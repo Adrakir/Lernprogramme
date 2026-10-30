@@ -33,6 +33,21 @@ ok(doc.querySelectorAll('[data-guide-topic]').length===7,'Topic back navigation'
 run("setView('home')");
 
 
+// Regression: eine kurze Notenzeile darf auf dem iPhone keine falsche Wischanweisung ausgeben.
+ok(!run('pathTimeline(["e","e"],4,{sub:2,meter:false})').includes('Breite Notenzeile'),'No scrolling advice when both eighths fit');
+ok(run('pathTimeline(["e","e"],4,{sub:2,meter:false})').includes('width:260px'),'Short notation keeps a compact natural width');
+run("pathSelect(MUSIC_PATH.findIndex(d=>d.key==='teile'),1)");
+ok(!!doc.querySelector('.partsLab #anatomyExample'),'Five visual notation components use contextual examples');
+ok(doc.querySelectorAll('[data-anatomy]').length===5,'All five anatomy choices available');
+doc.querySelector('[data-anatomy="4"]').click();
+ok(doc.querySelector('#anatomyExample').textContent.includes('Punktierte Viertelnote'),'Dot selection shows dotted-note comparison');
+ok(doc.querySelector('#anatomyExample').querySelectorAll('svg').length===2,'Dotted note compares two actual notation glyphs');
+ok(doc.querySelector('[data-anatomy="4"]').getAttribute('aria-pressed')==='true','Chosen anatomy part accessible to screen readers');
+doc.querySelector('[data-anatomy="3"]').click();
+ok(doc.querySelector('#anatomyExample').textContent.includes('zwei Achtelnoten'),'Beam selection shows exactly two eighths');
+ok(doc.querySelector('#anatomyExample').textContent.includes('musst nicht wischen'),'Beam example says why no swiping is necessary');
+run("setView('home')");
+
 run("setView('exerciseHub')");
 ok(doc.querySelectorAll('[data-guide-practice]').length===6,'Six exercise topics not all expanded');
 ok(!!doc.querySelector('#guideMini'),'Quick practice available');
