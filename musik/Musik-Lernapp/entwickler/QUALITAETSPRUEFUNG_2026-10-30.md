@@ -78,3 +78,18 @@ Ergebnis: **success**. Die vollständige npm-Testsuite wurde in der GitHub-Runne
 4. GitHub-Pages-Erreichbarkeit und sofortige Auslieferung der neuen Version sind nicht durch einen separaten Live-Netzwerktest bestätigt.
 
 Diese Abnahme belegt eine deutlich umfassendere Qualitätssicherung, aber keine absolute Fehlerfreiheit.
+
+## Nachtrag: Bild- und Didaktikprüfung Version 45 (30.10.2026)
+
+**Zusammenfassung:** Die Version 45 wurde nach erfolgreichem vollständigem CI-Test in den Hauptzweig übernommen, Merge-Commit `75dac7da58ccda851403dc46fa33ad661e3f291b`. [Nachweis: GitHub Actions 41085223741](https://github.com/Adrakir/Lernprogramme/actions/runs/41085223741).
+
+**Erweiterte Prüfung und Ergebnisse:**
+- Alle **27 Einstiegsbilder** und alle **27 Bilder in der Beispiel-/Hörphase** werden im Chromium-Test tatsächlich dekodiert und sichtbar angezeigt. Getestet wurden die Bildschirmbreiten 320 und 1366 Pixel; bei 1366 Pixeln waren sämtliche WebP-Dateien absichtlich blockiert, sodass die vorhandenen JPEG-Fallbacks geladen werden mussten.
+- Ebenfalls getestet: **sieben Themenkarten**, **sechs Übungskarten**, die Bild-Großansicht und der Schließen-Button. Die ursprüngliche CSS-Regel versteckte Szenenbilder auf kleinen Geräten; diese Bilder sind nun sichtbar, ebenso Fujis Bild auf der mobilen Startseite.
+- Ein Lauf mit **96 erfolgreichen Chromium-Prüfungen**, 1.258 fachlichen Datenassertions und 2.844 Funktionstests. Die 27 Unterrichtsanimationen, Offline-Funktionen und die PDF-Heftkontrolle waren erfolgreich.
+- Die PDF-Hefte besitzen weiterhin 42 bzw. 71 lesbare Seiten.
+- Die beiden ersten Testläufe fanden einen JavaScript-Absturz beim Binden der Zoom-Schaltflächen sowie eine zu strenge Bildgrößenschwelle für bewusst kleine Vorschaubilder. Beide Probleme wurden vor der Freigabe behoben. Ein weiterer Test fixierte die Prüfung der aktuellen Serviceworker-Version, sodass der Test nicht an einer fest codierten alten Nummer scheitert.
+- Die Bildansichten sind nicht nur anklickbar, sondern besitzen eine eigene Großansicht mit Schließen-Button. Bilder bleiben außerdem beim Wechsel von der Erklärung zur Hör-/Beispielphase sichtbar.
+- GitHub Actions speichert Desktop- und Handy-Screenshots für die Sichtkontrolle.
+
+**Bekannte Grenzen:** Es wurde Chromium mit nachgestelltem WebP-Ausfall, aber **kein echter iMac mit Safari** ferngesteuert. Insbesondere die reale Safari-Version, Nutzer-Caches sowie der genaue Zeitpunkt der GitHub-Pages-Veröffentlichung lassen sich aus dem Testlauf nicht abschließend beurteilen. Hier ist ein Gerätetest durch die nutzende Person weiterhin sinnvoll.
