@@ -28,6 +28,8 @@ jobs:
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlas-schulung.test.cjs
       - name: Interaktive Klassenarbeit testen
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/atlaswerkstatt.test.cjs
+      - name: Schülertypische Fehler und Verstehensfragen testen
+        run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/praxis-schuelerfehler.test.cjs
       - name: Browser-Smoke-Test (Desktop und Smartphone)
         run: |
           cd erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler
