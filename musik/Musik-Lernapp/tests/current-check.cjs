@@ -76,6 +76,20 @@ for(let level=1;level<=3;level++){
 run("setView('home')");
 ok(!!doc.querySelector('#guideResume'),'Return to existing learning path');
 
+// Fachlicher und didaktischer Abgleich der vier Rhythmuswörter.
+ok(run("JSON.stringify(wordIds.Ananas)")==='["s","s","e"]','Ananas is two sixteenths and one eighth');
+ok(run("wordIds.Ananas.reduce((sum,id)=>sum+val(id),0)===4"),'Ananas lasts exactly one quarter-note beat');
+ok(run("scoreBeamGroups(wordIds.Ananas,4).length===1"),'Ananas is correctly grouped into a primary beam');
+ok(run("staffScore(wordIds.Ananas,4).includes('data-beam=\"secondary\"')"),'Ananas has a secondary beam for the two sixteenths');
+ok(run("MUSIC_PATH.find(d=>d.key==='woerter').pattern.reduce((sum,id)=>sum+val(id),0)===16"),'Word lesson fills exactly a 4/4 bar');
+ok(run("MUSIC_PATH.find(d=>d.key==='woerter').questions.some(q=>q.q.includes('A-na-nas'))"),'One guided word exercise includes Ananas');
+run("setView('rhythm')");
+ok([...doc.querySelectorAll('[data-wordbeat] option')].some(x=>x.textContent==='Ananas'),'The rhythm builder offers Ananas');
+ok(doc.querySelectorAll('.wordCard').length===4,'All four rhythm-word cards are shown');
+const wordPicker=doc.querySelector('[data-wordbeat="0"]');wordPicker.value='Ananas';wordPicker.dispatchEvent(new e.w.Event('change',{bubbles:true}));
+ok(doc.querySelector('.wordSentence').textContent.includes('Ananas'),'Changing a word refreshes the actual rhythm');
+run("setView('home')");
+
 const keys=run('MUSIC_PATH.map(d=>d.key)');ok(keys.length===27&&new Set(keys).size===27,'27 unique lessons');
 ok(run('guideTopics.flatMap(t=>t.keys).length===MUSIC_PATH.length'),'Topics cover all lessons');ok(run('guideTopics.flatMap(t=>t.keys).every(k=>MUSIC_PATH.some(d=>d.key===k))'),'Topic links valid');
 ok(run("notes.map(n=>n.units).join(',')==='16,8,4,2,1'"),'Note durations');ok(run('dotted.every(n=>n.units===val(n.id[0])*1.5)'),'Dotted durations');ok(run('val("barrest",3)===12&&val("barrest",4)===16'),'Whole-measure rest adapts to meter');
