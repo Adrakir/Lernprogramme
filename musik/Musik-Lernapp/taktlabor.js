@@ -125,7 +125,7 @@ function renderTaktlabor(){
 }
 function tlOpen(){tlAnswer=null;tlReveal=false;tlHint=0;setView('taktlabor');}
 const tlOldHub=renderExerciseHub;
-renderExerciseHub=function(){tlOldHub();const p=document.createElement('section');p.className='card tlEntry';p.innerHTML='<div><strong class="guideTag">Neu · mit Fuji</strong><h2>Hör- und Taktlabor</h2><p>Noten und Pausen im Takt sehen, anhören und in kleinen Schritten auszählen. 18 Aufgaben in drei Stufen – mit je drei Tipps und Rechenweg.</p></div><button id="tlOpen" class="primary">Taktlabor starten →</button>';const intro=document.querySelector('#main .guideExerciseGrid');intro?.before(p);on('tlOpen',tlOpen);};
+renderExerciseHub=function(){tlOldHub();const p=document.createElement('section');p.className='card tlEntry';p.innerHTML='<div><strong class="guideTag">Neu · mit Fuji</strong><h2>Hör- und Taktlabor</h2><p>Noten und Pausen im Takt sehen, anhören und in kleinen Schritten auszählen. 18 Aufgaben in drei Stufen – mit je drei Tipps und Rechenweg.</p></div><button id="tlOpen" class="primary">Taktlabor starten →</button>';const anchor=document.querySelector('#main .guideWorkoutAnchor');if(anchor)anchor.replaceWith(p);else document.querySelector('#main .guideExerciseGrid')?.before(p);on('tlOpen',tlOpen);};
 registerView('taktlabor',renderTaktlabor);interfaceRoutes.add('taktlabor');
 guideMeta.taktlabor=['Hör- und Taktlabor','exerciseHub'];
 guideTaskHelp.taktlabor='Höre den Takt, beobachte die farbige Zeitspur und wähle dann die richtige Zählzeit oder Dauer.';
