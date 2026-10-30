@@ -65,19 +65,19 @@ function tlExplain(task){
  return '<p><strong>So rechnest du:</strong> '+formula+'</p><p>'+task.why+'</p><details><summary>Alle Zeichen mit Dauer anzeigen</summary><ol>'+parts.map(x=>'<li>'+x+'</li>').join('')+'</ol><p>In '+task.m+'/4 dauert der vollständige Takt '+task.m+' Schläge. Ein Taktstrich fügt keine Zeit hinzu.</p></details>';
 }
 function tlTimeline(task){
- let start=0;
  const cells=task.ids.map((id,i)=>{
   const n=tlUnits(id,task.m),rest=get(id).rest,focus=task.target===i&&task.kind!=='silence';
   const html='<span class="tlBlock '+(rest?'tlRest ':'tlSound ')+(focus?'tlFocus':'')+'" style="grid-column:span '+n+'" data-tl-index="'+i+'" title="'+(rest?'Pause':'Ton')+'">'+(focus?'<b>?</b>':rest?'Pause':'Ton')+'</span>';
-  start+=n;return html;
+  return html;
  }).join('');
- return '<div class="tlTime" style="--tl-cells:'+(task.m*4)+'"><div class="tlNumbers">'+Array.from({length:task.m},(_,i)=>'<span>Schlag '+(i+1)+'</span>').join('')+'</div><div id="taktlaborTimeline" class="tlTimeline" style="--tl-cells:'+(task.m*4)+'">'+cells+'</div><div class="tlSubdiv">'+Array.from({length:task.m*4},(_,i)=>'<span'+(i%4===0?' class="tlStrong"':'')+'>'+(['1','e','&','a'][i%4])+'</span>').join('')+'</div></div>';
+ return '<div class="tlTime" style="--tl-cells:'+(task.m*4)+'"><div class="tlNumbers">'+Array.from({length:task.m},(_,i)=>'<span>Schlag '+(i+1)+'</span>').join('')+'</div><div id="taktlaborTimeline" class="tlTimeline" style="--tl-cells:'+(task.m*4)+'">'+cells+'</div><div class="tlSubdiv">'+Array.from({length:task.m*4},(_,i)=>'<span'+(i%4===0?' class="tlStrong"':'')+'>'+(i%4===0?String(Math.floor(i/4)+1):['','e','+','a'][i%4])+'</span>').join('')+'</div></div>';
 }
 function tlSave(){
  appStorage.write(TL_KEY,{version:1,results:tlResults});
 }
 function tlMark(value,fromSolution=false){
  if(tlAnswer!==null||tlReveal)return;
+ stop();
  if(fromSolution){tlReveal=true;tlResults[tlIndex()]='guided';}
  else{tlAnswer=value;tlResults[tlIndex()]=value===tlCorrectUnits(tlCurrent())?'correct':'wrong';}
  tlSave();renderTaktlabor();
@@ -108,7 +108,7 @@ function renderTaktlabor(){
   +'<h2>'+task.caption+'</h2><p>'+task.m+'/4-Takt · Die Viertelnote zählt als 1 Schlag.</p>'
   +'<div id="tlEvents" class="tlNotes">'+score+'</div>'
   +'<div class="tlLegend"><span><b class="tlLegendSound"></b> Ton</span><span><b class="tlLegendRest"></b> Pause (Stille)</span><span><b class="tlLegendFocus"></b> Gesuchtes Zeichen</span></div>'
-  +'<h3>Die Zeitspur</h3>'+tlTimeline(task)
+  +'<h3>Die Zeitspur</h3><p class="legend tlCountHint">Zähle 1 – e – und – a, 2 – e – und – a … Das Pluszeichen (+) in der Zeitspur bedeutet „und“.</p>'+tlTimeline(task)
   +'<div class="row tlTools"><button id="tlHear" class="primary">▶ Hören und mitverfolgen</button><button id="tlStop">■ Stopp</button><span class="legend">Zuerst wird eingezählt. Danach hörst du den Takt.</span></div>'
   +'<section class="tlQuestion"><h3>'+tlQuestion(task)+'</h3><div class="tlChoices" role="group" aria-label="Antwort auswählen">'+tlOptions(task).map(u=>'<button data-tl-answer="'+u+'" '+(feedback?'disabled':'')+' class="'+(feedback&&u===correct?'tlRight':feedback&&tlAnswer===u?'tlWrong':'')+'">'+tlAnswerLabel(task,u)+'</button>').join('')+'</div>'
   +(!feedback?'<div class="tlAssist"><button id="tlHint">Tipp '+Math.min(tlHint+1,3)+' von 3 '+(tlHint===3?'erneut ansehen':'öffnen')+'</button><button id="tlSolution" class="subtle">Geführte Lösung ansehen</button></div>'+(tlHint?'<p class="tlHint" role="status"><strong>Fujis Tipp '+tlHint+':</strong> '+steps[tlHint-1]+'</p>':''):'')
@@ -118,7 +118,7 @@ function renderTaktlabor(){
  on('tlHear',tlHear);on('tlStop',()=>stop());
  for(const b of document.querySelectorAll('[data-tl-level]'))b.onclick=()=>{stop();tlLevel=Number(b.dataset.tlLevel);tlAnswer=null;tlReveal=false;tlHint=0;render();};
  for(const b of document.querySelectorAll('[data-tl-answer]'))b.onclick=()=>tlMark(Number(b.dataset.tlAnswer));
- on('tlHint',()=>{tlHint=tlHint%3+1;renderTaktlabor();});
+ on('tlHint',()=>{stop();tlHint=tlHint%3+1;renderTaktlabor();});
  on('tlSolution',()=>tlMark(null,true));
  on('tlNext',()=>{stop();tlIndexes[tlLevel-1]=(tlIndexes[tlLevel-1]+1)%TL_COUNT;tlAnswer=null;tlReveal=false;tlHint=0;render();document.querySelector('#main h1')?.scrollIntoView({block:'start'});});
  on('tlPrev',()=>{stop();tlIndexes[tlLevel-1]=Math.max(0,tlIndexes[tlLevel-1]-1);tlAnswer=null;tlReveal=false;tlHint=0;render();});
