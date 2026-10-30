@@ -1,4 +1,7 @@
 /* Hör- und Taktlabor: konsequent dieselben Farben und Bedienelemente wie die Rhythmuswerkstatt. */
+.tlCoach{display:flex;align-items:center;gap:1rem;margin:1rem 0 1.5rem}.tlCoach img{flex:0 0 auto;width:90px;height:90px;object-fit:cover;border-radius:22px;border:2px solid var(--mint,#39c5a7)}.tlCoach p{margin:0}
+@media(max-width:420px){.tlCoach{align-items:flex-start}.tlCoach img{width:58px;height:58px;border-radius:16px}.tlCoach p{font-size:.94rem}}
+
 .tlEntry{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin:1.25rem 0;padding:1.2rem 1.4rem;border:2px solid var(--mint,#39c5a7);border-radius:18px}
 .tlEntry h2{margin:.35rem 0}.tlEntry p{margin:.2rem 0;max-width:42rem}.tlEntry button{flex-shrink:0}
 .tlLevels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin:1.2rem 0}
