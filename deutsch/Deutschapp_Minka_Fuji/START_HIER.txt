@@ -43,7 +43,7 @@ ZUSATZ: SCHREIBAKADEMIE / LERNCOACH (integriert im Erzählstudio)
 • Lehrkräfte: 20 Schülervorlagen, getrennte Erwartungshorizonte,
   Kriterienraster, Schreibkonferenzbogen. Im Drucken-Dialog „Als PDF speichern“
   wählen, wenn eine PDF-Datei benötigt wird. Keine automatische Schulnote.
-• Vorlesen: geräteabhängige deutsche Stimmen und einstellbares Tempo.
+• Vorlesen: lange Texte abschnittsweise, Pause/Weiter/Stopp, geräteabhängige deutsche Stimmen und einstellbares Tempo.
   Textgröße und Kontrast lassen sich in den Werkstätten anpassen.
 • Bildlupe: Jede Bildfolge lässt sich vergrößert ansehen.
 • Vier wechselnde Mini-Schreibaufgaben pro Tag.
