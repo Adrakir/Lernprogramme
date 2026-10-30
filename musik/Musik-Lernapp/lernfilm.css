@@ -3,6 +3,7 @@
 .filmCard{margin:1.2rem 0 1.45rem;padding:clamp(.8rem,3vw,1.35rem);border:2px solid var(--mint);border-radius:19px;background:var(--panel);min-width:0;max-width:100%;overflow:hidden}
 .filmTitle{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem}
 .filmTitle h3{font-size:clamp(1.14rem,2.9vw,1.5rem);line-height:1.3;margin:.12rem 0}
+.filmPortrait{width:48px;height:48px;flex:0 0 auto;border-radius:13px;object-fit:cover;border:1px solid var(--line)}
 .filmMark{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:var(--panel2);color:var(--mint);font-size:1.6rem;flex:0 0 auto}
 .filmLead{font-size:1rem;font-weight:700;line-height:1.52;margin:.5rem 0}
 .filmHint{font-size:.96rem;line-height:1.55;color:var(--ink);margin:.4rem 0 1rem}
