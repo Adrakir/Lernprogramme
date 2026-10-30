@@ -78,7 +78,7 @@
 .partCompareSymbols span{color:var(--mint);font-weight:750}
 .partBeamExample{max-width:100%;display:flex;justify-content:center;min-width:0}
 .partBeamExample .pathScore{width:max-content;max-width:100%;min-width:0;margin:.2rem 0 .4rem}
-.partBeamExample .modelSvg{max-width:none}
+.partBeamExample .modelSvg{width:100%!important;min-width:0!important;max-width:100%;height:auto}.partBeamExample .pathScore{width:100%;max-width:260px;overflow:visible}
 .pathScore{scrollbar-gutter:stable}
 @media(max-width:550px){
  .partsLab>.pathAnatomy{max-height:none}
