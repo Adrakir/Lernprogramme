@@ -54,7 +54,7 @@
   function countDone(){return data.pathway.filter((_,i)=>state.pathDone[i]).length;}
   function sceneArt(s,idx,active,interactive,themeId){
     const start=interactive?'<button type="button" class="studio-story-panel '+(active?'active':'')+'" data-studio-scene="'+idx+'" aria-pressed="'+active+'">':'<div class="studio-story-panel studio-story-panel-static">';
-    return start+'<span class="studio-scene-num">'+(idx+1)+'</span><span class="studio-scene-art" aria-hidden="true">'+(window.MF_STUDIO_ART?window.MF_STUDIO_ART.render(themeId,idx,s[0]):esc(s[0]))+'</span><strong>'+esc(s[1])+'</strong><span>'+esc(s[2])+'</span>'+(interactive?'</button>':'</div>');
+    return start+'<span class="studio-scene-num">'+(idx+1)+'</span><span class="studio-scene-art" aria-hidden="true">'+(window.MF_STUDIO_ART?window.MF_STUDIO_ART.render(themeId,idx,s[0]):esc(s[0]))+'</span><strong>'+esc(s[1])+'</strong><span>'+esc(s[2])+'</span>'+(interactive?'</button>':'<button type="button" class="studio-zoom" data-ac-zoom="'+esc(themeId)+':'+idx+'">Bild vergrößern</button></div>');
   }
   function tensionLine(){
     const current=Math.max(0,Math.min(state.scene,3));
@@ -64,7 +64,7 @@
   function storyboard(panels,interactive=false,themeId=''){
     const n=Math.max(0,Math.min(state.scene,panels.length-1));
     return '<div class="studio-storyboard" role="group" aria-label="Bilderfolge in der richtigen Reihenfolge">'+panels.map((s,i)=>sceneArt(s,i,interactive&&n===i,interactive,themeId)).join('')+'</div>'+
-     (interactive?'<div class="studio-scene-focus" role="status"><strong>Bild '+(n+1)+': '+esc(panels[n][1])+'</strong><p>'+esc(panels[n][2])+'</p><div class="studio-scene-controls"><button type="button" class="secondary" data-studio-scene="'+Math.max(n-1,0)+'" '+(n===0?'disabled':'')+'>Vorheriges Bild</button><button type="button" class="secondary" data-studio-scene="'+Math.min(n+1,panels.length-1)+'" '+(n===panels.length-1?'disabled':'')+'>Nächstes Bild</button></div></div>':'');
+     (interactive?'<div class="studio-scene-focus" role="status"><strong>Bild '+(n+1)+': '+esc(panels[n][1])+'</strong><p>'+esc(panels[n][2])+'</p><div class="studio-scene-controls"><button type="button" class="secondary" data-studio-scene="'+Math.max(n-1,0)+'" '+(n===0?'disabled':'')+'>Vorheriges Bild</button><button type="button" class="secondary" data-studio-scene="'+Math.min(n+1,panels.length-1)+'" '+(n===panels.length-1?'disabled':'')+'>Nächstes Bild</button><button type="button" class="secondary" data-ac-zoom="'+esc(themeId)+':'+n+'">Bild groß ansehen</button></div></div>':'');
   }
   const checkBox=(label,id,checked)=>'<label class="studio-check"><input type="checkbox" '+id+' '+(checked?'checked':'')+'><span>'+esc(label)+'</span></label>';
   function renderPath(){
@@ -137,7 +137,7 @@
   function renderExam(){
     const s=exam(),d=examDraft(),sim=state.examMode==='simulation',check=Array.isArray(d.ratings)?d.ratings:[];
     const sum=data.rubric.reduce((a,_,i)=>a+(Number.isInteger(check[i])?check[i]:0),0);
-    return '<div class="studio-section-intro"><h2>Klassenarbeiten üben</h2><p>Acht abwechslungsreiche Aufgaben mit Bildern oder Reizwörtern. In der Übung erhältst du Hinweise; in der Probe schreibst du ohne Hilfen. Am Ende bewertest du deine Geschichte anhand nachvollziehbarer Kriterien – nicht automatisch.</p></div>'+
+    return '<div class="studio-section-intro"><h2>Klassenarbeiten üben</h2><p>Zwanzig abwechslungsreiche Aufgaben mit Bildern oder Reizwörtern. In der Übung erhältst du Hinweise; in der Probe schreibst du ohne Hilfen. Am Ende bewertest du deine Geschichte anhand nachvollziehbarer Kriterien – nicht automatisch.</p></div>'+
      '<div class="studio-exam-settings"><label for="studio-picker"><strong>Aufgabe auswählen</strong>'+picker(data.exams,state.examId)+'</label><fieldset><legend>So möchtest du üben</legend>'+
      '<label><input type="radio" name="studio-exam-mode" value="practice" '+(!sim?'checked':'')+'> Mit Hilfen üben</label>'+
      '<label><input type="radio" name="studio-exam-mode" value="simulation" '+(sim?'checked':'')+'> Probeklassenarbeit ohne Hilfen</label></fieldset></div>'+
@@ -249,7 +249,7 @@
     if(d.studioPart){const x=draft();x.parts[d.studioPart]=el.value.slice(0,12000);x.checks=[];save();root.querySelectorAll('[data-studio-writer-check]').forEach(c=>c.checked=false);
       const n=document.getElementById('studio-writer-words'),preview=document.getElementById('studio-writer-preview'),msg=document.getElementById('studio-writer-checkinfo');
       if(n)n.textContent=words(fullDraft(x))+' Wörter · Der Hauptteil sollte genügend Raum bekommen.';
-      if(preview)preview.textContent=fullDraft(x)||'Deine Geschichte erscheint hier, sobald du zu schreiben beginnst.';
+      if(preview)preview.textContent=fullDraft(x)||'Deine Geschichte erscheint hier, sobald du zu schreiben beginnst.';window.MF_ACADEMY?.refreshWriterAnnotations?.();
       if(msg)msg.textContent='Text geändert: Überprüfung noch offen.';return;}
     if(d.studioExamText!==undefined||d.studioExamTitle!==undefined){
       const x=examDraft();if(d.studioExamText!==undefined)x.text=el.value.slice(0,20000);else x.title=el.value.slice(0,160);
@@ -265,5 +265,8 @@
   window.addEventListener('afterprint',()=>document.body.classList.remove('studio-printing'));
   window.addEventListener('pagehide',save);
   render();
+  if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}),{once:true});
+  }
   if(!location.hash||location.hash==='#studio')showPage('studio',false);
 })();
