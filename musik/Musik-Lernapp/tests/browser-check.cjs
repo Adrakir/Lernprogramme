@@ -72,6 +72,8 @@ async function main(){
    await cdp('Page.navigate',{url:url});
    await waitFor(()=>expression('Boolean(document.querySelector("#simpleStudent")||document.querySelector("#guideResume"))'));
    if(size.name==='desktop'){
+    // Vorherige mobile Durchlaeufe haben die Rolle gespeichert: hier explizit Erstbesuch simulieren.
+    await expression('guideRole=null;guideRoleChoice()');
     await waitFor(()=>expression('document.querySelector(".simpleWelcomeIntro img")?.naturalWidth>0'),15000);
     check(await expression('document.querySelector(".simpleWelcomeIntro img").getAttribute("src").endsWith(".jpg")'),'Old Safari simulation: welcome illustration loads as JPEG');
     check(await expression('document.querySelector(".simpleWelcomeIntro img").getBoundingClientRect().width>90'),'Welcome drawing is visible on an iMac-sized screen');
