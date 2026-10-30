@@ -35,6 +35,29 @@ jobs:
         run: npm test
       - name: Echter Browsertest mit Chromium (390px, 320px, Desktop)
         run: node tests/browser-check.cjs
+      - name: PDF-Hefte wirklich öffnen und Seitenzahlen vergleichen
+        run: |
+          if command -v pdfinfo >/dev/null 2>&1; then
+            pdfinfo documents/lernheft-musik.pdf | grep -E '^Pages:[[:space:]]+42      - name: Browserbilder für die Sichtprüfung bereitstellen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: musik-browser-screenshots
+          path: musik/Musik-Lernapp/tests/artifacts/
+          if-no-files-found: ignore
+
+            pdfinfo documents/arbeitsheft-musik.pdf | grep -E '^Pages:[[:space:]]+71      - name: Browserbilder für die Sichtprüfung bereitstellen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: musik-browser-screenshots
+          path: musik/Musik-Lernapp/tests/artifacts/
+          if-no-files-found: ignore
+
+            echo "PDF-Seitenzahlen 42 und 71 stimmen mit den Inhaltsverzeichnissen überein."
+          else
+            echo "::warning::pdfinfo ist auf dem Runner nicht installiert; PDF-Seitenzahl ungeprüft."
+          fi
       - name: Browserbilder für die Sichtprüfung bereitstellen
         if: always()
         uses: actions/upload-artifact@v4
