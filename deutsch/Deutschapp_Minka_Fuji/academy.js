@@ -42,7 +42,7 @@ window.MF_ACADEMY=(()=>{
   return '<div class="ac-intro"><p class="eyebrow">Dein persönlicher Schreibcoach</p><h2>Was kannst du schon – und was übst du als Nächstes?</h2><p>Hier beantwortest du zwölf kurze Orientierungsfragen zu sechs Bereichen. Für jede Frage gibt es eine passende Begründung. Danach schlägt Fuji Übungen vor. Das ist kein benoteter Test.</p></div>'+
   '<div class="ac-progress"><strong>'+number+' von '+D.diagnostics.length+' Fragen beantwortet</strong><progress value="'+number+'" max="'+D.diagnostics.length+'"></progress></div>'+
   '<div class="ac-question-list">'+D.diagnostics.map((q,i)=>'<fieldset class="ac-question"><legend><span class="ac-count">'+(i+1)+'</span> '+esc(q.q)+'</legend><p class="ac-skill-label">'+esc(skill(q.skill).name)+'</p>'+
-    q.options.map((o,j)=>'<label><input type="radio" name="ac-q-'+q.id+'" value="'+j+'" data-ac-answer="'+q.id+'" '+(a[q.id]===j?'checked':'')+'><span>'+esc(o)+'</span></label>').join('')+
+    q.options.map((o,j)=>'<label><input type="radio" name="ac-q-'+q.id+'" value="'+j+'" data-ac-answer="'+q.id+'" '+(a[q.id]===j?'checked':'')+(completed?' disabled':'')+'><span>'+esc(o)+'</span></label>').join('')+
     (completed?'<div class="ac-explain '+(a[q.id]===q.right?'correct':'review')+'"><strong>'+(a[q.id]===q.right?'Passend erkannt':'Noch einmal üben')+'</strong><p>'+esc(q.why)+'</p></div>':'')+'</fieldset>').join('')+'</div>'+
   (!completed?'<button type="button" class="primary" data-ac-submit '+(number<12?'disabled':'')+'>Auswerten und Übungen empfehlen</button><p class="muted">Beantworte alle zwölf Fragen. Deine Auswahl bleibt auf diesem Gerät gespeichert.</p>':
    resultTable()+'<button type="button" class="secondary" data-ac-redo>Neue Diagnose beginnen</button>')+
@@ -77,7 +77,7 @@ window.MF_ACADEMY=(()=>{
  function versionPanel(arr,type){
   const entries=arr.slice(-7);
   const left=entries.length>=2?entries[entries.length-2]:null,right=entries.length?entries[entries.length-1]:null;
-  return '<section class="panel ac-version-panel"><h3>Versionslupe · Vorher und nachher</h3><p>Speichere eine Fassung, ändere den Text und speichere erneut. Deine letzten sieben Versionen bleiben in diesem Browser erhalten. **Du entscheidest** selbst, ob die Änderungen besser sind.</p>'+
+  return '<section class="panel ac-version-panel"><h3>Versionslupe · Vorher und nachher</h3><p>Speichere eine Fassung, ändere den Text und speichere erneut. Deine letzten sieben Versionen bleiben in diesem Browser erhalten. Du entscheidest selbst, ob die Änderungen besser sind.</p>'+
    '<p class="muted">'+arr.length+' gespeicherte Fassungen</p>'+
    (right?'<div class="ac-version-grid"><div><strong>'+(left?'Vorher · '+esc(left.date):'Noch keine zweite Version')+'</strong><p class="ac-version-text">'+(left?esc(left.text):'Bearbeite den Text und speichere die zweite Fassung.')+'</p></div>'+
     '<div><strong>Nachher · '+esc(right.date)+'</strong><p class="ac-version-text">'+esc(right.text)+'</p></div></div>'+
