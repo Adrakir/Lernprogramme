@@ -111,6 +111,13 @@ async function main(){
    const filmShot=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false,fromSurface:true});
    fs.writeFileSync(path.join(artifacts,size.name+'-lernfilm.png'),Buffer.from(filmShot.data,'base64'));
    await expression('setView("home")');
+   await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="generalpause"),1)');
+   check(await expression('document.querySelectorAll(".filmRow").length')===2,'Fuji and Minka voices both pictured at '+size.name);
+   check(await expression('document.querySelectorAll(".filmBeat[data-film-beat=\"2\"]").length')===2,'Both voices have the same silent beat at '+size.name);
+   await expression('document.querySelector("#filmPlay").click()');
+   check(await expression('document.querySelector("#rhythmAudio").src.startsWith("blob:")'),'Two-voice Generalpause audible at '+size.name);
+   await expression('stop()');
+   await expression('setView("home")');
    await expression('setView("exerciseHub")');
    check(await expression('document.querySelectorAll("[data-guide-practice]").length')===6,'Six practice topics at '+size.name);
    await expression('document.querySelectorAll("[data-guide-practice]")[2].click()');
