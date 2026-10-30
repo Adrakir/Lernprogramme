@@ -5,6 +5,10 @@ on:
     paths:
       - "deutsch/Deutschapp_Minka_Fuji/**"
       - ".github/workflows/deutsch-tests.yml"
+  pull_request:
+    paths:
+      - "deutsch/Deutschapp_Minka_Fuji/**"
+      - ".github/workflows/deutsch-tests.yml"
   workflow_dispatch:
 
 permissions:
@@ -13,7 +17,7 @@ permissions:
 jobs:
   browser-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 22
     steps:
       - name: Repository abrufen
         uses: actions/checkout@v4
@@ -27,8 +31,15 @@ jobs:
         run: npm ci
         working-directory: deutsch/Deutschapp_Minka_Fuji
       - name: Chromium für Browsertests installieren
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
         working-directory: deutsch/Deutschapp_Minka_Fuji
       - name: Alle Deutsch-Browsertests ausführen
         run: npm test
         working-directory: deutsch/Deutschapp_Minka_Fuji
+      - name: Browserbilder und QA-Nachweise bereitstellen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deutsch-browser-qa
+          path: deutsch/Deutschapp_Minka_Fuji/tests/artifacts/
+          if-no-files-found: ignore
