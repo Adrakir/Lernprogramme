@@ -1445,10 +1445,10 @@ const MUSIC_PATH=[
  },
  {
   "key": "woerter",
-  "title": "Brot, Käse und Schokolade",
+  "title": "Brot, Käse, Schokolade und Ananas",
   "goal": "Ich benutze die Wörter als Stütze für gleichmäßige Unterteilungen und übertrage sie auf Noten.",
-  "fuji": "Ein Brot, ein Käse, eine Schokolade: Jedes ganze Wort passt hier in einen Schlag.",
-  "minka": "Brot hat einen, Käse zwei und Schokolade vier Tonanfänge. Die Wortlänge im Alltag ist egal.",
+  "fuji": "Brot, Käse, Schokolade und Ananas: Jede ganze Wortgruppe dauert hier einen Schlag. Ananas hat drei Tonanfänge.",
+  "minka": "Brot hat einen, Käse zwei, Schokolade vier und Ananas drei Tonanfänge. Bei Ananas sind die ersten zwei ganz kurz, die letzte Silbe ist länger.",
   "pattern": [
    "q",
    "e",
@@ -1457,21 +1457,23 @@ const MUSIC_PATH=[
    "s",
    "s",
    "s",
-   "q"
+   "s",
+   "s",
+   "e"
   ],
   "m": 4,
   "sub": 4,
   "steps": [
-   "Die vereinbarte Wortstütze ordnet die Silben: Brot = eine Viertel; Kä-se = zwei Achtel; Scho-ko-la-de = vier Sechzehntel. Alle drei Gruppen dauern jeweils einen Viertelschlag.",
-   "Im Beispiel sagst du auf Schlag 1 Brot, innerhalb von Schlag 2 Kä-se, innerhalb von Schlag 3 Scho-ko-la-de, auf Schlag 4 Brot. Sprich die Silben jeder Gruppe gleichmäßig.",
-   "Zähle die Tonanfänge: 1 + 2 + 4 + 1 = 8. Zähle die Schläge: vier ganze Wortgruppen = 4. Klatsche die Silben, während der Fuß vier Schritte geht. Danach lies dieselbe Folge ohne Wörter."
+   "Die Wortstütze ordnet die Silben: Brot = eine Viertelnote; Kä-se = zwei Achtelnoten; Scho-ko-la-de = vier Sechzehntelnoten; A-na-nas = zwei Sechzehntelnoten und eine Achtelnote. Alle vier Gruppen dauern jeweils genau einen Viertelschlag.",
+   "Im Beispiel sagst du auf Schlag 1 Brot, auf Schlag 2 Kä-se, auf Schlag 3 Scho-ko-la-de und auf Schlag 4 A-na-nas. Nur gleich lange Noten werden gleich schnell gesprochen: Bei Ananas ist nas doppelt so lang wie A oder na.",
+   "Zähle die Tonanfänge: 1 + 2 + 4 + 3 = 10. Die vier Wortgruppen dauern trotzdem zusammen nur vier Schläge. A-na-nas liegt auf 4, 4 e und 4 und; die letzte Silbe klingt über 4 a weiter."
   ],
-  "mis": "„Schokolade dauert vier Schläge, weil es vier Silben sind.“ Hier verteilen wir alle vier Silben auf einen einzigen Schlag.",
+  "mis": "„Mehr Silben bedeuten mehr Schläge.“ Nein: Jede Wortgruppe dauert einen Schlag. Bei Ananas dauern die Silben außerdem unterschiedlich lang.",
   "rule": "Die Wortgruppe füllt einen Schlag; ihre Silben zeigen die Unterteilung.",
   "hints": [
    "Trenne die Wörter mit Strichen in ganze Viertelschläge.",
-   "Eine Silbe pro Viertel, zwei pro Achtelpaar, vier pro Sechzehntelgruppe.",
-   "Zähle für Tonanfänge die einzelnen Silben, für Dauer die ganzen Wortgruppen."
+   "Brot: 1 Viertel. Käse: 2 Achtel. Schokolade: 4 Sechzehntel. Ananas: 2 Sechzehntel plus 1 Achtel.",
+   "Zähle die Silben für die Tonanfänge. Rechne die Notenwerte für die Dauer: Ananas = ¼ + ¼ + ½ Schlag."
   ],
   "model": "timeline",
   "topic": 4,
