@@ -68,7 +68,14 @@ async function check(browser,engine,width){
    assert.ok((await page.locator('#cwQuestion .cw-objective').textContent()).trim().length>25,label+': Lernziel '+i);
    const shapes=page.locator('#cwQuestion svg');
    if(await shapes.count()){
-    await picture('#cwQuestion svg','Aufgabe '+(i+1));
+    // Im Registertraining wird die optionale Modellkarte bewusst erst
+    // nach einem Klick auf "Karte ansehen" angezeigt.
+    if(!(await page.locator('#cwQuestion svg:visible').count())){
+      const closed=page.locator('#cwQuestion details:has(svg)').first();
+      assert.ok(await closed.count(),label+': Grafik nicht sichtbar und kein Aufklappbereich, Aufgabe '+(i+1));
+      await closed.locator('summary').click();
+    }
+    await picture('#cwQuestion svg:visible','Aufgabe '+(i+1));
     graphics++;
    }
    await fit('Klassenarbeit '+(i+1));
