@@ -113,7 +113,7 @@ async function main(){
    await expression('setView("home")');
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="generalpause"),1)');
    check(await expression('document.querySelectorAll(".filmRow").length')===2,'Fuji and Minka voices both pictured at '+size.name);
-   check(await expression('document.querySelectorAll(".filmBeat[data-film-beat=\"2\"]").length')===2,'Both voices have the same silent beat at '+size.name);
+   check(await expression('Array.from(document.querySelectorAll(".filmBeat")).filter(x=>x.dataset.filmBeat==="2").length')===2,'Both voices have the same silent beat at '+size.name);
    await expression('document.querySelector("#filmPlay").click()');
    check(await expression('document.querySelector("#rhythmAudio").src.startsWith("blob:")'),'Two-voice Generalpause audible at '+size.name);
    await expression('stop()');
