@@ -139,3 +139,13 @@ einzig richtigen Geschichte. Eigene Schülertexte werden bewusst nicht
 automatisch benotet, interpretiert oder an Dritte übertragen.
 Druckvorlagen können im Browser als PDF gespeichert werden; die
 GitHub-Web-App selbst benötigt dazu keinen PDF-Server.
+
+## Weitere Ausbaustufe: selbstständiges Schreiben und Offline-End-to-End
+
+- `upgrade-data.js`: drei sechsteilige Bildergeschichten (18 zusätzliche Vektorszenen), sieben Handlungskarten, Schreibkonferenz, drei authentische Kurzschreibaufträge.
+- `upgrade.js`: Geschichtenbaukasten (Drag & Drop sowie Pfeiltasten), erklärende regelbasierte Textmusteranalyse, Schreibproben mit echtem Textbeleg, differenzierter Übungsweg, Schreibkonferenz, Satz-für-Satz-Lesetandem, sicheres JSON-Backup und Import, individueller Lehrerblatt-Generator.
+- `upgrade.css`: reduzierte Einstiegsnavigation, Responsive-Layout für 320/390/768 Pixel, gut erreichbare Steuerelemente, sichtbare Bildvergrößerung und getrenntes Drucklayout.
+- `tests/upgrade.test.cjs`: vollständige Browserabläufe einschließlich Lernstand, fehlerhaftem Import und Lehrer-Druck.
+- `tests/offline.test.cjs`: echte HTTP/Service-Worker-Installation; Browser offline schalten, neu laden und gespeicherte Texte lesen.
+
+**Wichtig:** Einfache Regelmuster sind keine KI-Korrektur. Ein fehlender Treffer ist kein Beleg für guten Stil; ein gefundener Satzanfang ist kein sicherer Fehler. Offene Schreibproben werden selbst und anhand konkreter Textstellen reflektiert, nicht maschinell benotet. Lernempfehlungen sind unterstützende Hinweise, keine Diagnostik im schulrechtlichen Sinn. Alle Sicherungen werden lokal erstellt; die JSON-Datei kann vertrauliche Inhalte enthalten.
