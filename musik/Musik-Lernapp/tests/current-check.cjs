@@ -20,8 +20,26 @@ ok(!!doc.querySelector('script[src^="taktlabor.js"]'),'Taktlabor loaded');
 ok(!!doc.querySelector('link[href^="taktlabor.css"]'),'Taktlabor stylesheet loaded');
 
 ok(doc.querySelector('#simpleStudent'),'First visit chooses a role');click('simpleStudent');ok(doc.querySelector('#guideResume'),'Student has next step');
+ok(!!doc.querySelector('.cleanHero'),'One featured next step');
+ok(doc.querySelectorAll('.cleanAction').length===3,'Three simple alternatives');
+ok(!!doc.querySelector('.cleanProgress progress'),'Accessible learning progress');
+run("setView('themen')");
+ok(doc.querySelectorAll('[data-guide-topic]').length===7,'Seven learning topics visible');
+doc.querySelectorAll('[data-guide-topic]')[0].click();
+ok(!!doc.querySelector('.cleanFocus'),'Topic recommends next lesson');
+ok(!!doc.querySelector('.cleanLessons'),'Every step remains available');
+click('guideAllTopics');
+ok(doc.querySelectorAll('[data-guide-topic]').length===7,'Topic back navigation');
+run("setView('home')");
+
 
 run("setView('exerciseHub')");
+ok(doc.querySelectorAll('[data-guide-practice]').length===6,'Six exercise topics not all expanded');
+ok(!!doc.querySelector('#guideMini'),'Quick practice available');
+doc.querySelectorAll('[data-guide-practice]')[2].click();
+ok(!!doc.querySelector('#practicePanel'),'Chosen topic has focused exercise');
+ok(doc.querySelector('#practicePanel').textContent.includes('Takte'),'Correct topic after selection');
+ok(!!doc.querySelector('#tlOpen'),'Taktlabor preserved after topic selection');
 click('tlOpen');
 ok(run('view')==='taktlabor','Taktlabor reached from exercise area');
 ok(!!doc.querySelector('#taktlaborTimeline'),'Time grid visible');
