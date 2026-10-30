@@ -114,6 +114,12 @@ async function main(){
    await expression('document.querySelector("#pathStop").click()');
    await expression('document.querySelector(\'[data-anatomy="3"]\').click()');
    check(await expression('document.querySelector("#anatomyExample").textContent.includes("zwei Achtelnoten")'),'Two eighth notes shown at '+size.name);
+   check(await expression('Boolean(document.querySelector("#pathSoundControls"))'),'Audio settings are reachable from the lesson at '+size.name);
+   if(size.width<=375){
+    const labels=await expression('Array.from(document.querySelectorAll(".partsLab .partButtons button")).map(b=>({name:b.textContent.trim(),width:b.clientWidth,content:b.scrollWidth}))');
+    check(labels.every(b=>b.content<=b.width+2),'Anatomy button labels fit without wrapping at '+size.name+': '+JSON.stringify(labels));
+   }
+   if(size.width<610)check(await expression('getComputedStyle(document.querySelector(".audioDock")).display==="none"'),'Collapsed audio toggle does not cover text at '+size.name);
    check(await expression('(document.querySelector(".partBeamExample .pathScore").scrollWidth-document.querySelector(".partBeamExample .pathScore").clientWidth)<3'),'Short bar fits without scrolling at '+size.name);
    const layout=await expression('({page:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth})');
    check(layout.page<=layout.viewport+3,'No accidental full-page horizontal overflow at '+size.name+': '+JSON.stringify(layout));
