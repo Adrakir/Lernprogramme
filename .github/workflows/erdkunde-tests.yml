@@ -27,6 +27,8 @@ jobs:
           node-version: "22"
       - name: Vollständige geographische Datenprüfung (272 Fragen)
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/fachpruefung-gesamt.test.cjs
+      - name: Offlinecache-Bereinigung und Offline-Start prüfen
+        run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/offline-cache.test.cjs
       - name: Pruefungsfit testen
         run: node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/pruefungsfit.test.cjs
       - name: Neue Geowerkstatt testen
