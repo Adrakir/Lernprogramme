@@ -73,6 +73,38 @@ async function main(){
    await expression('document.querySelector("#simpleStudent")?.click()');
    await waitFor(()=>expression('Boolean(document.querySelector("#guideResume"))'));
    check(await expression('document.querySelectorAll(".cleanAction").length')===3,'Three student start choices at '+size.name);
+   const navigation=await expression('Array.from(document.querySelectorAll("nav.mainNav button")).map(b=>({label:b.textContent.trim(),width:Math.round(b.getBoundingClientRect().width)}))');
+   check(navigation.length===5&&navigation.every(x=>x.width>=42),'Five touchable navigation choices at '+size.name);
+   if(size.name==='iphone'){
+    const lessonChecks=await expression(`(()=>{
+      const problems=[],count=MUSIC_PATH.length;
+      for(let i=0;i<count;i++){
+        try{
+          pathSelect(i,0);
+          if(!document.querySelector("#pathExample"))problems.push("start:"+i);
+          pathStage(1);
+          if(!document.querySelector("#pathListen"))problems.push("audio:"+i);
+          pathStage(2);
+          if(!document.querySelectorAll("[data-path-answer]").length)problems.push("guided:"+i);
+          pathStage(3);
+          if(!document.querySelectorAll("[data-path-answer]").length)problems.push("independent:"+i);
+        }catch(e){problems.push("lesson "+i+": "+e.message)}
+      }
+      setView("home");
+      return {count,problems};
+    })()`);
+    check(lessonChecks.count===27&&lessonChecks.problems.length===0,'All 27 lessons render in all four stages: '+JSON.stringify(lessonChecks.problems));
+   }
+   await expression('setView("exerciseHub")');
+   check(await expression('document.querySelectorAll("[data-guide-practice]").length')===6,'Six practice topics at '+size.name);
+   await expression('document.querySelector("[data-guide-practice=\"2\"]").click()');
+   check(await expression('Boolean(document.querySelector("#practicePanel"))'),'Chosen practice opens at '+size.name);
+   await expression('setView("pruefen")');
+   check(await expression('Boolean(document.querySelector("#guideCheck"))'),'Check area reachable at '+size.name);
+   await expression('setView("documents")');
+   check(await expression('document.querySelectorAll("a[href$=\"pdf?v=20261027-hefte32\"]").length>=2'),'Both printable music books linked at '+size.name);
+   await expression('setView("home")');
+
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="teile"),1)');
    await waitFor(()=>expression('Boolean(document.querySelector("#anatomyExample"))'));
    await expression('document.querySelector(\'[data-anatomy="4"]\').click()');
@@ -80,6 +112,8 @@ async function main(){
    await expression('document.querySelector(\'[data-anatomy="3"]\').click()');
    check(await expression('document.querySelector("#anatomyExample").textContent.includes("zwei Achtelnoten")'),'Two eighth notes shown at '+size.name);
    check(await expression('(document.querySelector(".partBeamExample .pathScore").scrollWidth-document.querySelector(".partBeamExample .pathScore").clientWidth)<3'),'Short bar fits without scrolling at '+size.name);
+   const layout=await expression('({page:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth})');
+   check(layout.page<=layout.viewport+3,'No accidental full-page horizontal overflow at '+size.name+': '+JSON.stringify(layout));
    const screenshot=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false,fromSurface:true});
    fs.writeFileSync(path.join(artifacts,size.name+'-balken.png'),Buffer.from(screenshot.data,'base64'));
    await expression('pathSelect(MUSIC_PATH.findIndex(d=>d.key==="abschluss"),1)');
@@ -88,13 +122,13 @@ async function main(){
     const hasOverflow=await expression('Array.from(document.querySelectorAll(".pathScore")).some(x=>x.scrollWidth>x.clientWidth+3)');
     check(hasOverflow,'Long music score is actually scrollable at '+size.name);
     check(await expression('Array.from(document.querySelectorAll(".mobileScrollControls")).some(x=>!x.hidden)'),'Visible arrows for a long score at '+size.name);
-    await expression('document.querySelector(".mobileScrollControls [data-mobile-scroll=right]").click()');
-    check(await expression('Array.from(document.querySelectorAll(".pathScore")).some(x=>x.scrollLeft>0)'),'Right arrow really scrolls at '+size.name);
+    const moved=await expression('(()=>{const score=Array.from(document.querySelectorAll(".pathScore")).find(x=>x.scrollWidth>x.clientWidth+3&&x.mobileControls&&!x.mobileControls.hidden);if(!score)return false;score.mobileControls.querySelector("[data-mobile-scroll=right]").click();return score.scrollLeft>0})()');
+    check(moved,'Right arrow really scrolls at '+size.name);
    }
    check(await expression('document.querySelectorAll("nav.mainNav button").length')===5,'Five main navigation choices at '+size.name);
   }
   console.log('PASS: '+checks.length+' real Chromium checks ('+checks.join(', ')+')');
-  if(errors.length)console.warn('Browser exception reports: '+errors.slice(0,12).join('; '));
+  check(errors.length===0,'No uncaught JavaScript exceptions: '+errors.slice(0,8).join('; '));
  }finally{
   try{ws?.close()}catch{}
   chrome.kill('SIGTERM');server.close();
