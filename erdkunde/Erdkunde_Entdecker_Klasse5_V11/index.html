@@ -404,6 +404,19 @@ html[data-aw-active=true]{scroll-behavior:auto}.cw-question,#cwResult{scroll-mar
 @media print{.gv-list,.gv-player,.gv-actions,.gv-starter,.gv-suggestion,.gv-notice{display:none!important}}
 
 </style>
+  <style>
+/* Externes Erdkunde-Notebook: klar abgegrenztes Material, kein App-Ersatz */
+.erd-notebook{display:flex;align-items:flex-start;gap:16px;margin:16px 0;max-width:100%;min-width:0}
+.erd-notebook-icon{flex:none;font-size:clamp(36px,5vw,54px);line-height:1.2}
+.erd-notebook-main{flex:1;min-width:0}
+.erd-notebook h2{margin:.25em 0;overflow-wrap:anywhere}
+.erd-notebook p{margin:.45em 0 .8em;max-width:69ch}
+.erd-notebook-note{font-size:.89em;opacity:.89}
+.erd-notebook-link{display:inline-flex;min-height:44px;max-width:100%;align-items:center;justify-content:center;white-space:normal;text-align:center}
+@media(max-width:470px){.erd-notebook{gap:11px;padding:15px}.erd-notebook-icon{font-size:34px}}
+@media print{.erd-notebook{display:none!important}}
+
+</style>
   
   
 </head>
@@ -15012,6 +15025,47 @@ window.ErdkundeThemenTraining=Object.freeze({levels:LEVELS,topics:MODULES.length
   });
   // Für Atlas-Comic oder weitere Lernstationen öffentliches Modul verwenden:
   // window.ErdkundeVideos.open(7)
+  render();
+})();
+
+</script>
+<script>
+/* notebook-app.js */
+/* Google NotebookLM als externe Erdkunde-Ressource, ohne Inhalte vorzutäuschen. */
+(function () {
+  'use strict';
+  const notebookUrl = 'https://notebook.google.com/notebook/cc98ffba-22b1-4d1b-9326-0c17a86323c0';
+  function resourceCard(compact) {
+    return '<section class="card erd-notebook" aria-labelledby="erd-notebook-title">' +
+      '<div class="erd-notebook-icon" aria-hidden="true">📓</div>' +
+      '<div class="erd-notebook-main"><div class="eyebrow">Erdkunde · zusätzliches Material</div>' +
+      '<h2 id="erd-notebook-title">Erdkunde-Notebook (Google NotebookLM)</h2>' +
+      '<p>Öffne das zu Erdkunde gehörende Notebook in einem neuen Browser-Tab.' +
+      (compact ? '' : ' Nutze es ergänzend zu den Lernpfaden, Videos und Übungen dieser App.') + '</p>' +
+      '<p class="erd-notebook-note">Hinweis: Das Notebook liegt bei Google. Zum Lesen kann eine Google-Anmeldung oder eine Freigabe nötig sein. Der Link benötigt Internet.</p>' +
+      '<a class="btn alt erd-notebook-link" href="' + notebookUrl + '" target="_blank" rel="noopener noreferrer" aria-label="Erdkunde-Notebook bei Google NotebookLM in einem neuen Tab öffnen">📓 Notebook öffnen ↗</a>' +
+      '</div></section>';
+  }
+  const oldRender = render;
+  render = function () {
+    oldRender();
+    if (state.view === 'quiz' || state.printSet !== null) return;
+    const host = MAIN.querySelector('.flash');
+    if (!host) return;
+    if (state.tab === 'start' && state.view === 'home') {
+      const anchor = host.querySelector('.gv-starter, .explorer-hero, .hero');
+      if (anchor) anchor.insertAdjacentHTML('afterend',resourceCard(false));
+      else host.insertAdjacentHTML('afterbegin',resourceCard(false));
+      return;
+    }
+    if (state.tab === 'learn' && state.view === 'home') {
+      const anchor = host.querySelector('.section-head');
+      if (anchor) anchor.insertAdjacentHTML('afterend',resourceCard(true));
+      else host.insertAdjacentHTML('afterbegin',resourceCard(true));
+      return;
+    }
+  };
+  window.ErdkundeNotebook = Object.freeze({url:notebookUrl});
   render();
 })();
 
