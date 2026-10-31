@@ -8,7 +8,8 @@ assert(html.includes('<link rel="stylesheet" href="notebook-app.css">'),'Noteboo
 assert(worker.includes('notebook-app.js')&&worker.includes('notebook-app.css'),'Offline-Cache aktualisieren');
 assert(css.includes('@media(max-width:470px)'),'Mobile Darstellung nicht vorgesehen');
 assert(src.includes('target="_blank" rel="noopener noreferrer"'),'Sicheres Öffnen des Google-Links fehlt');
-assert(src.includes('Google-Anmeldung oder eine Freigabe'),'Zugriffshinweis fehlt');
+assert(src.includes('öffentlich für Personen mit dem Link freigegeben'),'Hinweis auf öffentliches Notebook fehlt');
+assert(src.includes('Google-Konto erforderlich'),'Google-Anmeldung muss korrekt erläutert werden');
 new vm.Script(src,{filename:'notebook-app.js'});
 const inserts=[];
 const node=()=>({insertAdjacentHTML(pos,value){inserts.push(value)},querySelector(sel){return node()}});
