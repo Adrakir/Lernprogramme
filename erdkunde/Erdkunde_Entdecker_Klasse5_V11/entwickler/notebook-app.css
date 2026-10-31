@@ -1,0 +1,10 @@
+/* Externes Erdkunde-Notebook: klar abgegrenztes Material, kein App-Ersatz */
+.erd-notebook{display:flex;align-items:flex-start;gap:16px;margin:16px 0;max-width:100%;min-width:0}
+.erd-notebook-icon{flex:none;font-size:clamp(36px,5vw,54px);line-height:1.2}
+.erd-notebook-main{flex:1;min-width:0}
+.erd-notebook h2{margin:.25em 0;overflow-wrap:anywhere}
+.erd-notebook p{margin:.45em 0 .8em;max-width:69ch}
+.erd-notebook-note{font-size:.89em;opacity:.89}
+.erd-notebook-link{display:inline-flex;min-height:44px;max-width:100%;align-items:center;justify-content:center;white-space:normal;text-align:center}
+@media(max-width:470px){.erd-notebook{gap:11px;padding:15px}.erd-notebook-icon{font-size:34px}}
+@media print{.erd-notebook{display:none!important}}
