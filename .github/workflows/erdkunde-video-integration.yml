@@ -1,4 +1,4 @@
-name: Erdkunde – Lernvideos in bestehende App integrieren
+name: Erdkunde – Lernvideos und Notebook in App integrieren
 
 on:
   push:
@@ -7,6 +7,9 @@ on:
       - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.js'
       - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.css'
       - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.test.cjs'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/notebook-app.js'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/notebook-app.css'
+      - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/notebook-app.test.cjs'
       - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/index.html'
       - 'erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/service-worker.js'
   workflow_dispatch:
@@ -35,6 +38,7 @@ jobs:
         run: |
           node --check erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.js
           node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/videos-app.test.cjs
+          node erdkunde/Erdkunde_Entdecker_Klasse5_V11/entwickler/notebook-app.test.cjs
 
       - name: Bestehende Erdkunde-Lernschritte prüfen
         run: |
@@ -61,6 +65,8 @@ jobs:
           grep -q "filme/videos/" "$F"
           grep -q "Die vier Erdviertelkugeln" "$F"
           grep -q "Orte im Atlas finden" "$F"
+          grep -q "Erdkunde-Notebook" "$F"
+          grep -q "cc98ffba-22b1-4d1b-9326-0c17a86323c0" "$F"
 
       - name: Gebündelte App aktualisieren, ohne bestehende Nutzerdateien zu verändern
         shell: bash
@@ -70,8 +76,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html
           if git diff --cached --quiet; then
-            echo "Die veröffentlichte App enthält die Videos bereits."
+            echo "Die veröffentlichte App ist bereits aktuell."
             exit 0
           fi
-          git commit -m "Erdkunde: sieben Lernvideos in vorhandene Offline-App einbauen"
+          git commit -m "Erdkunde: NotebookLM-Zusatzmaterial in vorhandene App einbauen"
           git push origin HEAD:main
