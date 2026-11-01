@@ -1,5 +1,5 @@
 /* Offline-Start der bestehenden, eigenständigen Erdkunde-App auf GitHub Pages. */
-const CACHE='erdkunde-v11-filme123-20261101-v26';
+const CACHE='erdkunde-v11-lernpfad-audio-20261101-v27';
 const APP='./index.html';
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.add(new Request(APP,{cache:'reload'}))).then(()=>self.skipWaiting()));

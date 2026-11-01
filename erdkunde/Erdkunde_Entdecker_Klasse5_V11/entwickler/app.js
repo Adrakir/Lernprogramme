@@ -172,7 +172,7 @@ function closeModal(){const e=document.getElementById('overlay');e.hidden=true;e
 function speakLesson(id){
  const m=mod(id);if(!m)return;
  const step=state.view==='guide'&&state.guideStep>=1&&state.guideStep<=4?m.lessons[state.guideStep-1]:null;
- const text=step?step[0]+'. '+step[1]+' Merke: '+step[2]:m.title+'. '+m.lessons.map(x=>x[0]+'. '+x[1]+' Merke: '+x[2]).join(' ');
+ const text=step?step[0]+'. '+step[1]+' Merke: '+step[2]:m.lessons.map(x=>x[0]+'. '+x[1]+' Merke: '+x[2]).join(' ');
  const button=MAIN.querySelector('[data-action="speak:'+id+'"]');
  if(!window.ErdkundeSpeech){msg('Bitte lade die App neu, um die Sprachausgabe zu starten.');return;}
  window.ErdkundeSpeech.speak(text,{owner:'lesson:'+id+':'+state.guideStep,button,onError(){msg('Vorlesen konnte nicht gestartet werden. Wähle unter Einstellungen eine andere deutsche Stimme.');}});

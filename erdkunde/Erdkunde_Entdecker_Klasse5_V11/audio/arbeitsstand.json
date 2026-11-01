@@ -155,10 +155,151 @@
   "voice": "Benji",
   "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
   "open": [
-    "Download and verify completed jobs before integration",
-    "Retry only submission_failed entries after provider rate limit clears",
-    "Integrate exact text recordings with existing read-aloud controls",
-    "Other topics and atlas interactive narration remain to audit"
+    "Five corrected recordings not submitted: provider reports out of credits",
+    "Remaining thirteen topics, interactive Atlas lessons and comics still require audio audit",
+    "Subjective listening review remains open"
   ],
-  "listening_review": "not_performed"
+  "listening_review": "not_performed",
+  "credits_last_observed": 0.5,
+  "quoted_cost": 19.4,
+  "actual_balance_delta": 39,
+  "credit_reconciliation": "Balance delta differs from quoted total; no credit purchases or subscriptions were initiated. Do not infer exact billed cost from quotes.",
+  "rejected": {
+    "perspektive-2": "Gleichheitszeichen wird englisch gesprochen",
+    "perspektive-4": "Überschrift fehlt in Erkennung; erneute Prüfung nötig",
+    "gradnetz-1": "Gradangaben unverständlich",
+    "gradnetz-2": "180 Grad unverständlich",
+    "gradnetz-3": "Aufzählungsziffer und Richtungsbuchstaben unnatürlich gesprochen"
+  },
+  "correction_plan": [
+    {
+      "key": "perspektive-2",
+      "text": "Draufsicht. In der Draufsicht blickst du von oben auf einen Ort. Du erkennst besonders gut Wege, Dächer, Felder, Straßenverläufe und die Lage von Dingen zueinander. Merke: Draufsicht bedeutet Blick von oben.",
+      "original": "Draufsicht. In der Draufsicht blickst du von oben auf einen Ort. Du erkennst besonders gut Wege, Dächer, Felder, Straßenverläufe und die Lage von Dingen zueinander. Merke: Draufsicht = Blick von oben."
+    },
+    {
+      "key": "perspektive-4",
+      "text": "Vom Bild zur Karte. Eine Karte zeigt nicht alles, sondern vereinfacht. Sie verwendet Farben, Linien, Symbole und eine Legende. Dadurch kannst du Informationen schneller lesen als in einem Bild. Merke: Karten sind keine Fotos. Sie sind vereinfachte Darstellungen mit Zeichen.",
+      "original": "Vom Bild zur Karte. Eine Karte zeigt nicht alles, sondern vereinfacht. Sie verwendet Farben, Linien, Symbole und eine Legende. Dadurch kannst du Informationen schneller lesen als in einem Bild. Merke: Karten sind keine Fotos: Sie sind vereinfachte Darstellungen mit Zeichen."
+    },
+    {
+      "key": "gradnetz-1",
+      "text": "Breitengrade lesen. Die geografische Breite sagt, wie weit ein Ort nördlich oder südlich vom Äquator liegt. Der Äquator ist bei null Grad. Nach Norden und Süden zählt man bis neunzig Grad. Merke: Breite bedeutet Abstand vom Äquator.",
+      "original": "Breitengrade lesen. Die geografische Breite sagt, wie weit ein Ort nördlich oder südlich vom Äquator liegt. Der Äquator ist 0°. Nach Norden und Süden zählt man bis 90°. Merke: Breite = Abstand vom Äquator."
+    },
+    {
+      "key": "gradnetz-2",
+      "text": "Längengrade lesen. Die geografische Länge sagt, wie weit ein Ort östlich oder westlich vom Nullmeridian liegt. Vom Nullmeridian zählt man nach Osten oder Westen bis hundertachtzig Grad. Merke: Länge bedeutet Abstand von Greenwich.",
+      "original": "Längengrade lesen. Die geografische Länge sagt, wie weit ein Ort östlich oder westlich vom Nullmeridian liegt. Vom Nullmeridian zählt man nach Osten oder Westen bis 180°. Merke: Länge = Abstand von Greenwich."
+    },
+    {
+      "key": "gradnetz-3",
+      "text": "Koordinaten Schritt für Schritt. Schritt eins: Suche zuerst den Breitengrad und entscheide Nord oder Süd. Schritt zwei: Suche den Längengrad und entscheide Ost oder West. Schritt drei: Schreibe immer zuerst die Breite, dann die Länge. Merke: Erst Breite, dann Länge.",
+      "original": "Koordinaten Schritt für Schritt. 1. Suche zuerst den Breitengrad und entscheide N oder S. 2. Suche den Längengrad und entscheide O oder W. 3. Schreibe immer zuerst die Breite, dann die Länge. Merke: Merksatz: erst Breite, dann Länge."
+    }
+  ],
+  "correction_attempt": {
+    "jobs": [
+      {
+        "index": 0,
+        "status": "submission_failed",
+        "error": "Out of credits on plus (monthly) plan in Private workspace."
+      },
+      {
+        "index": 1,
+        "status": "submission_failed",
+        "error": "Out of credits on plus (monthly) plan in Private workspace."
+      },
+      {
+        "index": 2,
+        "status": "submission_failed",
+        "error": "Out of credits on plus (monthly) plan in Private workspace."
+      },
+      {
+        "index": 3,
+        "status": "submission_failed",
+        "error": "Out of credits on plus (monthly) plan in Private workspace."
+      },
+      {
+        "index": 4,
+        "status": "submission_failed",
+        "error": "Out of credits on plus (monthly) plan in Private workspace."
+      }
+    ],
+    "submitted_count": 0,
+    "failed_count": 5,
+    "error_code": "INVALID_ARGUMENT"
+  },
+  "transcripts": [
+    {
+      "key": "atlanten-1",
+      "text": " Der Atlas hat mehrere Teile.  Die Kartenübersicht und das Inhaltsverzeichnis führen zu Karten.  Die Kartensammlung zeigt Regionen und Themen.  Das alphabetische Register hilft bei der gezielten Suche nach Orten.  Merke, suchst du den Titikakassei?  Im Register unter T nachsehen.",
+      "duration": 19.987875
+    },
+    {
+      "key": "atlanten-2",
+      "text": " So liest du eine Registerangabe. Beispiel 207.1L11. Auf der Atlaskarte 207.1 suchst du im Planquadrat L11.  Die Notation unterscheidet sich zwischen Atlanten. Merke die Seite und das Planquadrat gehören zusammen.",
+      "duration": 16.0941875
+    },
+    {
+      "key": "atlanten-3",
+      "text": " Plan Quadrate.  Buchstaben und Zahlen teilen eine Karte in leicht auffindbare Felder.  Bei L11 wählst du Spalte L und Zeile 11.  Merke, ein Plan Quadrat gibt einen Bereich an,  noch keine genaue geografische Koordinate.",
+      "duration": 17.0751875
+    },
+    {
+      "key": "atlanten-4",
+      "text": " Informationen aus Signaturen  In einer Kartenlegende erkennst du was Punkte, Farben, Linien und Symbole bedeuten.  Suche vor dem Antworten immer die zur Karte gehörende Legende.  Merke, ein Symbol ist nicht automatisch weltweit einheitlich.",
+      "duration": 18.3135625
+    },
+    {
+      "key": "gradnetz-1",
+      "text": " Breitengrade lesen. Die geografische Breite sagt, wie weit ein Ort nördlich oder südlich  vom Aquador liegt. Der Aquador ist No-Müro. Nach Norden und Süden zählt man bis 90-Müro.  Merke, Breite ist Abstand vom Aquador.",
+      "duration": 13.5035625
+    },
+    {
+      "key": "gradnetz-2",
+      "text": " Lengengrade lesen. Die geografische Länge sagt, wie weit ein Ort östlich oder westlich vom Null Meridian liegt.  Vom Null Meridian zählt man nach Osten oder Westen bis 108 die Discourse. Merke? Länge? Abstand vom Greenwich.",
+      "duration": 15.1699375
+    },
+    {
+      "key": "gradnetz-3",
+      "text": " Koordinaten. Schritt für Schritt. Erst suche zuerst den Breitengrad und entscheide N oder S.  Zwei. Suche den Lengengrad und entscheide O oder W.  Drei. Schreibe immer zuerst die Breite, dann die Länge.  Merke. Merksatz. Erst Breite, dann Länge.",
+      "duration": 21.637625
+    },
+    {
+      "key": "gradnetz-4",
+      "text": " Schnittpunkt finden. Ein Ort liegt dort, wo sich der gesuchte Breitengrad und der gesuchte Lengengrad schneiden.  In Übungsrastern helfen dir Zeile und Spalte beim Finden. Merke, der gesuchte Ort ist der Schnittpunkt beider Linien.",
+      "duration": 16.28
+    },
+    {
+      "key": "perspektive-1",
+      "text": " Drei Blickrichtungen vergleichen.  Das selbe Gebiet kann ganz unterschiedlich aussehen.  In der Draufsicht von oben, in der Seitenansicht von der Seite und als vereinfachte Karte.  Jede Darstellung hilft bei anderen Fragen.  Merke. Frage immer zuerst.  Von wo aus schaue ich auf den Ort?",
+      "duration": 19.525125
+    },
+    {
+      "key": "perspektive-2",
+      "text": " Draufsicht. In der Draufsicht blickst du von oben auf einen Ort.  Du erkennst besonders gut Wege, Dächer, Felder, Straßenverläufe und die Lage von Dingen zueinander.  Merke. Draufsicht equal Blick von oben.",
+      "duration": 20.525
+    },
+    {
+      "key": "perspektive-3",
+      "text": " Seitenansicht  In der Seitenansicht erkennst du Höhe, Form und Gestalt besser.  Zum Beispiel ob ein Berg steil ist oder wie hoch ein Haus wirkt.  Dafür siehst du die genaue Lage weniger gut.  Merke, Seitenansicht hilft besonders bei Höhe, Form und Steilheit.",
+      "duration": 21.392
+    },
+    {
+      "key": "perspektive-4",
+      "text": " Eine Karte zeigt nicht alles, sondern vereinfacht.  Sie verwendet Farben, Linien, Symbole und eine Legende.  Dadurch kannst du Informationen schneller lesen als in einem Bild.  Merke, Karten sind keine Fotos.  Sie sind vereinfachte Darstellungen mit Zeichen.",
+      "duration": 22.4144375
+    }
+  ],
+  "approved": [
+    "perspektive-1",
+    "perspektive-3",
+    "atlanten-1",
+    "atlanten-2",
+    "atlanten-3",
+    "atlanten-4",
+    "gradnetz-4"
+  ],
+  "status": "7_recordings_ready_5_rejected_credits_blocked"
 }

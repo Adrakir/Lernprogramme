@@ -3,6 +3,42 @@
   'use strict';
   const synth = window.speechSynthesis;
   const KEY = 'erdkunde-v11-vorlesen';
+  const RECORDINGS = [{"text": "Drei Blickrichtungen vergleichen. Dasselbe Gebiet kann ganz unterschiedlich aussehen: in der Draufsicht von oben, in der Seitenansicht von der Seite und als vereinfachte Karte. Jede Darstellung hilft bei anderen Fragen. Merke: Frage immer zuerst: Von wo aus schaue ich auf den Ort?", "url": "audio/perspektive-1.mp3?v=20261101"}, {"text": "Seitenansicht. In der Seitenansicht erkennst du Höhe, Form und Gestalt besser, zum Beispiel ob ein Berg steil ist oder wie hoch ein Haus wirkt. Dafür siehst du die genaue Lage weniger gut. Merke: Seitenansicht hilft besonders bei Höhe, Form und Steilheit.", "url": "audio/perspektive-3.mp3?v=20261101"}, {"text": "Der Atlas hat mehrere Teile. Die Kartenübersicht und das Inhaltsverzeichnis führen zu Karten. Die Kartensammlung zeigt Regionen und Themen. Das alphabetische Register hilft bei der gezielten Suche nach Orten. Merke: Suchst du den Titicacasee? Im Register unter T nachsehen.", "url": "audio/atlanten-1.mp3?v=20261101"}, {"text": "So liest du eine Registerangabe. Beispiel „207.1, L11“: Auf der Atlas-Karte 207.1 suchst du im Planquadrat L11. Die Notation unterscheidet sich zwischen Atlanten. Merke: Die Seite und das Planquadrat gehören zusammen.", "url": "audio/atlanten-2.mp3?v=20261101"}, {"text": "Planquadrate. Buchstaben und Zahlen teilen eine Karte in leicht auffindbare Felder. Bei L11 wählst du Spalte L und Zeile 11. Merke: Ein Planquadrat gibt einen Bereich an, noch keine genaue geografische Koordinate.", "url": "audio/atlanten-3.mp3?v=20261101"}, {"text": "Informationen aus Signaturen. In einer Kartenlegende erkennst du, was Punkte, Farben, Linien und Symbole bedeuten. Suche vor dem Antworten immer die zur Karte gehörende Legende. Merke: Ein Symbol ist nicht automatisch weltweit einheitlich.", "url": "audio/atlanten-4.mp3?v=20261101"}, {"text": "Schnittpunkt finden. Ein Ort liegt dort, wo sich der gesuchte Breitengrad und der gesuchte Längengrad schneiden. In Übungsrastern helfen dir Zeile und Spalte beim Finden. Merke: Der gesuchte Ort ist der Schnittpunkt beider Linien.", "url": "audio/gradnetz-4.mp3?v=20261101"}];
+  function recordingsFor(text) {
+    let remaining = spokenText(text); const sequence = [];
+    while (remaining) {
+      const entry = RECORDINGS.find(r => remaining === spokenText(r.text) || remaining.startsWith(spokenText(r.text) + ' '));
+      if (!entry) return [];
+      sequence.push(entry); remaining = remaining.slice(spokenText(entry.text).length).trim();
+    }
+    return sequence;
+  }
+  function speakRecordings(sequence, options) {
+    if (active?.owner === options.owner && options.owner) { stop(); return false; }
+    stop();
+    document.querySelectorAll('video, audio').forEach(media => { if (!media.paused) media.pause(); });
+    const token = ++serial;
+    active = {...options, token, label:options.button?.textContent};
+    if (options.button) { options.button.textContent = 'Vorlesen stoppen'; options.button.setAttribute('aria-pressed', 'true'); }
+    let index = 0;
+    function next() {
+      if (!active || active.token !== token) return;
+      if (index === sequence.length) { finish(token, 'ended'); return; }
+      const current = index++, item = sequence[current];
+      const base = window.location?.protocol === 'file:' ? 'https://adrakir.github.io/Lernprogramme/erdkunde/Erdkunde_Entdecker_Klasse5_V11/' : '';
+      const media = new window.Audio(base + item.url);
+      active.media = media; media.playbackRate = rate() / .9; media.preservesPitch = true;
+      media.onended = next;
+      function failed() {
+        if (!active || active.token !== token || active.media !== media) return;
+        stop();
+        speak(sequence.slice(current).map(r=>r.text).join(' '), {...options, systemOnly:true});
+      }
+      media.onerror = failed;
+      try { const started = media.play(); if (started?.catch) started.catch(failed); } catch (_) { failed(); }
+    }
+    next(); return true;
+  }
   let preferences = {}, active = null, serial = 0;
   try { preferences = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
   const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -22,7 +58,7 @@
   function spokenText(text) {
     const directions = {N:'Nord', S:'Süd', O:'Ost', W:'West'};
     return String(text).replace(/(\d+(?:[.,]\d+)?)\s*°\s*([NSOW])\b/g, (_, n, d) => n.replace('.', ',') + ' Grad ' + directions[d])
-      .replace(/°/g, ' Grad ').replace(/\s+/g, ' ').trim();
+      .replace(/°/g, ' Grad ').replace(/=/g, ' bedeutet ').replace(/\s+/g, ' ').trim();
   }
   function chunks(text) {
     // Sinnabschnitte verhindern, dass Browser lange Erklärungen mitten im Satz beenden.
@@ -53,10 +89,15 @@
   function stop(owner) {
     if (owner && active?.owner !== owner) return;
     const previous = active; serial++;
+    if (previous?.media) { previous.media.onended = null; previous.media.onerror = null; previous.media.pause(); previous.media.removeAttribute('src'); previous.media.load(); }
     if (previous) finish(previous.token, 'stopped');
     if (synth) synth.cancel();
   }
   function speak(text, options = {}) {
+    if (!options.systemOnly && !preferences.voice && typeof window.Audio === 'function') {
+      const sequence = recordingsFor(text);
+      if (sequence.length) return speakRecordings(sequence, options);
+    }
     if (!synth || typeof window.SpeechSynthesisUtterance !== 'function') {
       options.onError?.(); return false;
     }
@@ -92,7 +133,7 @@
       '<select id="settingSpeechRate">' + [[.75,'Langsam'],[.9,'Ruhig'],[1,'Normal']].map(([v,t]) =>
         '<option value="' + v + '"' + (rate() === v ? ' selected' : '') + '>' + t + '</option>').join('') +
       '</select><button type="button" class="btn ghost small" data-speech-preview>Stimme anhören / stoppen</button>' +
-      '<p class="mini" id="speechVoiceStatus" role="status">Die Auswahl gilt für Lernpfade, Comics und Atlas-Schritte. Natürlich klingende Stimmen werden bevorzugt. Die verfügbaren Stimmen hängen vom Gerät ab.</p></fieldset>';
+      '<p class="mini" id="speechVoiceStatus" role="status">Automatisch verwendet geprüfte Gustav-Aufnahmen, wo verfügbar. Mit einer gewählten Gerätestimme werden alle Texte von dieser Stimme gelesen. Die Auswahl gilt auch für Comics und Atlas-Schritte.</p></fieldset>';
   }
   function readSettings() {
     const voice = document.getElementById('settingVoice'), speed = document.getElementById('settingSpeechRate');

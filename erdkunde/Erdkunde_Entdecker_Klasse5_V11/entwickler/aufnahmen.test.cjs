@@ -1,0 +1,20 @@
+'use strict';
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const script=fs.readFileSync(__dirname+'/vorlesen.js','utf8');
+const recordings=JSON.parse(script.match(/const RECORDINGS = (.*);/)[1]);
+const media=[],spoken=[];
+const window={speechSynthesis:{getVoices:()=>[],cancel(){},speak:u=>spoken.push(u),addEventListener(){}},SpeechSynthesisUtterance:function(t){this.text=t;},addEventListener(){},Audio:function(src){this.src=src;this.play=()=>Promise.resolve();this.pause=()=>this.paused=true;this.removeAttribute=()=>{};this.load=()=>{};media.push(this);}};
+const document={querySelectorAll:()=>[],addEventListener(){}};
+vm.runInNewContext(script,{window,document,localStorage:{getItem:()=>null}});
+const api=window.ErdkundeSpeech,atlas=recordings.filter(x=>x.url.includes('atlanten-'));
+let finished=false;
+api.speak(atlas.map(x=>x.text).join(' '),{owner:'atlas',onFinish:()=>finished=true});
+assert.equal(media.length,1);assert.equal(spoken.length,0);
+for(let i=0;i<4;i++){assert(media[i].src.includes('atlanten-'+(i+1)));media[i].onended();}
+assert(finished);assert.equal(media.length,4);
+api.speak(atlas[0].text,{owner:'single'});const old=media.at(-1),end=old.onended;
+api.stop();assert(old.paused);end();assert.equal(media.length,5);
+api.speak(atlas[0].text,{owner:'changed'});media.at(-1).onerror();for(let i=0;i<spoken.length;i++)spoken[i].onend();assert.equal(spoken.map(x=>x.text).join(' '),atlas[0].text);
+const count=media.length;api.speak(atlas[0].text+' Neuer Satz.',{owner:'updated'});assert.equal(media.length,count,'Veraltete Aufnahme darf geänderten Text nicht ersetzen');
+assert.equal(api.spokenText('Draufsicht = Blick von oben.'),'Draufsicht bedeutet Blick von oben.');
+console.log('OK: vier vollständige Atlas-Aufnahmen, Einzelstart, Abbruch, Fehlerersatz und Schutz vor veralteten Texten');
