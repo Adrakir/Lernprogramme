@@ -50,8 +50,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git fetch origin main
-          git pull --rebase origin main
           cd erdkunde/Erdkunde_Entdecker_Klasse5_V11
           node entwickler/build-offline.js
 
@@ -69,6 +67,7 @@ jobs:
           grep -q "cc98ffba-22b1-4d1b-9326-0c17a86323c0" "$F"
 
       - name: Gebündelte App aktualisieren, ohne bestehende Nutzerdateien zu verändern
+        if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
           set -euo pipefail
