@@ -301,5 +301,24 @@
     "atlanten-4",
     "gradnetz-4"
   ],
-  "status": "7_recordings_ready_5_rejected_credits_blocked"
+  "status": "7_recordings_published_5_rejected_credits_blocked",
+  "audio_commit": "7c5b1107a15ff1e7b9e5e470c23de159324cc2a6",
+  "verification": {
+    "date": "2026-11-01",
+    "public_audio_urls": 7,
+    "chromium_playback": "all_seven_started_without_media_errors",
+    "notebook_link_preserved": true,
+    "video_public_byte_comparison": "all_seven_match",
+    "tests": [
+      "128 Atlas-Schulung",
+      "738 Atlaswerkstatt",
+      "2368 Fachprüfungen",
+      "Videoeinbindung",
+      "Offlinecache",
+      "Aufnahmesteuerung",
+      "Vorlesen"
+    ],
+    "subjective_listening": "not_performed"
+  },
+  "resume": "Read this file and current main first. Do not repeat successful generations. Resolve credit availability and discrepancy before submitting correction_plan; keep the five rejected recordings out of app selection."
 }
