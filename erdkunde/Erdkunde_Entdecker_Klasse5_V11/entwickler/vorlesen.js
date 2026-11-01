@@ -56,9 +56,18 @@
   }
   function rate() { return [.75, .9, 1].includes(Number(preferences.rate)) ? Number(preferences.rate) : .9; }
   function spokenText(text) {
-    const directions = {N:'Nord', S:'Süd', O:'Ost', W:'West'};
-    return String(text).replace(/(\d+(?:[.,]\d+)?)\s*°\s*([NSOW])\b/g, (_, n, d) => n.replace('.', ',') + ' Grad ' + directions[d])
-      .replace(/°/g, ' Grad ').replace(/=/g, ' bedeutet ').replace(/\s+/g, ' ').trim();
+    const directions = {N:'Nord', S:'Süd', O:'Ost', W:'West',NO:'Nordost',SO:'Südost',SW:'Südwest',NW:'Nordwest'};
+    return String(text)
+      .replace(/(\d+)\s*°\s*(\d+)\s*[′']\s*(\d+)\s*[″"]/g, '$1 Grad $2 Minuten $3 Sekunden ')
+      .replace(/(\d+)\s*°\s*(\d+)\s*[′']/g, '$1 Grad $2 Minuten ')
+      .replace(/(\d+(?:[.,]\d+)?)\s*°\s*([NSOW])\b/g, (_, n, d) => n.replace('.', ',') + ' Grad ' + directions[d])
+      .replace(/\b1\s*:\s*(\d[\d.]*)/g, (_, n) => 'eins zu ' + n.replace(/\./g, ''))
+      .replace(/\b\d{1,3}(?:\.\d{3})+(?:,\d+)?\b/g, n => n.replace(/\./g, ''))
+      .replace(/(?<![\p{L}\p{N}_])(NO|SO|SW|NW|N|S|O|W)(?![\p{L}\p{N}_])/gu, d => directions[d])
+      .replace(/(^|[.!?]\s+)([1-9])\.\s+(?=[A-ZÄÖÜ])/g, '$1Schritt $2: ')
+      .replace(/¼/g, ' ein Viertel ').replace(/½/g, ' ein Halb ').replace(/¾/g, ' drei Viertel ')
+      .replace(/°/g, ' Grad ').replace(/=/g, ' bedeutet ').replace(/×/g, ' mal ').replace(/÷/g, ' geteilt durch ').replace(/%/g, ' Prozent ')
+      .replace(/\s+/g, ' ').trim();
   }
   function chunks(text) {
     // Sinnabschnitte verhindern, dass Browser lange Erklärungen mitten im Satz beenden.
@@ -124,7 +133,7 @@
     next(); return true;
   }
   function voiceOptions() {
-    return '<option value="">Automatisch: beste verfügbare deutsche Stimme</option>' + voices().map(v =>
+    return '<option value="">Automatisch: Gustav-Aufnahme oder deutsche Gerätestimme</option>' + voices().map(v =>
       '<option value="' + escape(v.voiceURI) + '"' + (v.voiceURI === preferences.voice ? ' selected' : '') + '>' + escape(v.name) + ' (' + escape(v.lang) + ')</option>').join('');
   }
   function settingsHtml() {

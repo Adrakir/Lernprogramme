@@ -320,5 +320,23 @@
     ],
     "subjective_listening": "not_performed"
   },
-  "resume": "Read this file and current main first. Do not repeat successful generations. Resolve credit availability and discrepancy before submitting correction_plan; keep the five rejected recordings out of app selection."
+  "resume": "Read this file and current main first. Do not repeat successful generations. Resolve credit availability and discrepancy before submitting correction_plan; keep the five rejected recordings out of app selection.",
+  "followup_20261101": {
+    "credit_balance": 0.5,
+    "new_generations": 0,
+    "credits_purchased": 0,
+    "changes": [
+      "Unicode-safe spoken directions, including eight compass directions",
+      "Degrees, minutes and seconds expanded",
+      "Scale ratios and thousands separators prepared for German speech",
+      "Arithmetic and percent signs expanded",
+      "Explicit numbered learning steps",
+      "All 64 lesson texts and memory rules checked for complete utterance delivery"
+    ],
+    "remaining": [
+      "Five corrected role recordings still blocked by insufficient credits",
+      "Subjective listening review remains open; device voice quality varies"
+    ],
+    "validation": "Automated text/queue tests, recording playback-controller tests, Atlas and subject tests"
+  }
 }

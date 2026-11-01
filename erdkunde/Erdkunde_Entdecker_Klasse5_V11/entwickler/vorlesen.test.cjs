@@ -20,6 +20,22 @@ let i=0;while(i<b.queue.length){assert.equal(b.queue[i].lang,'de-DE');b.queue[i+
 assert.equal(b.queue.map(x=>x.text).join(' '),text);assert.equal(finished,'ended');assert.equal(button.textContent,'Schritt vorlesen');
 assert.equal(b.api.spokenText('52° N und 10° O. 50,1° S.'),'52 Grad Nord und 10 Grad Ost. 50,1 Grad Süd.');
 assert.equal(b.api.chunks('52.4 bleibt erhalten. Kein Wort fehlt.').join(' '),'52.4 bleibt erhalten. Kein Wort fehlt.');
+assert.equal(b.api.spokenText('52°30′ N, 10°15′30″ O.'),'52 Grad 30 Minuten Nord, 10 Grad 15 Minuten 30 Sekunden Ost.');
+assert.equal(b.api.spokenText('1 : 50.000; 4 cm × 50.000 = 200.000 cm; 71 %.'),'eins zu 50000; 4 cm mal 50000 bedeutet 200000 cm; 71 Prozent .');
+assert.equal(b.api.spokenText('N, NO, O, SO, S, SW, W, NW.'),'Nord, Nordost, Ost, Südost, Süd, Südwest, West, Nordwest.');
+assert.equal(b.api.spokenText('1. Suche N oder S. 2. Suche O oder W.'),'Schritt 1: Suche Nord oder Süd. Schritt 2: Suche Ost oder West.');
+assert.equal(b.api.spokenText('207.1, L11; 50,1° S; 12.5 bleibt erhalten.'),'207.1, L11; 50,1 Grad Süd; 12.5 bleibt erhalten.');
+const curriculum={};vm.createContext(curriculum);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'lernstoff.js'),'utf8')+';globalThis.modules=MODULES;',curriculum);
+let audited=0;
+for(const module of curriculum.modules)for(const lesson of module.lessons){
+ const full=lesson[0]+'. '+lesson[1]+' Merke: '+lesson[2], player=boot();
+ assert(player.api.speak(full,{owner:'audit'}));
+ let n=0;while(n<player.queue.length){assert(n<100,'Keine Endlosschleife');player.queue[n++].onend();}
+ assert.equal(player.queue.map(x=>x.text).join(' '),player.api.spokenText(full),module.id+': vollständige Erklärung und Merksatz');
+ audited++;
+}
+assert.equal(audited,64);
 b.api.speak(text,{owner:'old'});const old=b.queue.at(-1);b.api.speak('Neue Erklärung.',{owner:'new'});const size=b.queue.length;old.onend();assert.equal(b.queue.length,size,'Abgebrochene Ausgabe darf keinen weiteren Abschnitt starten');
 const cancels=b.cancelled;b.api.stop('other');assert.equal(b.cancelled,cancels);b.api.stop('new');assert.equal(b.cancelled,cancels+1);
 b.api.speak(text,{owner:'toggle'});assert.equal(b.api.speak(text,{owner:'toggle'}),false);

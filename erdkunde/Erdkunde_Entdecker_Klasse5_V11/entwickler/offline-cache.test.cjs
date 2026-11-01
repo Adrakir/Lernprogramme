@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 (async()=>{
  const src=fs.readFileSync(path.join(__dirname,'..','service-worker.js'),'utf8');
  const prefix='erdkunde-v11-thementraining-20261030-';
- const current='erdkunde-v11-lernpfad-audio-20261101-v27';
+ const current='erdkunde-v11-aussprache-20261101-v28';
  const existing=[prefix+'v16',prefix+'v17',prefix+'v18',prefix+'v19','erdkunde-v11-vorlesen-20261101-v24','erdkunde-v11-film4-20261101-v25',current,'erdkunde-entdecker-pages-old','unrelated-project'];
  const removed=[],handlers={};
  const cache={
