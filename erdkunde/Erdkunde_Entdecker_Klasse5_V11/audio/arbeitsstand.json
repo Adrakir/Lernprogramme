@@ -1,0 +1,128 @@
+{
+  "updated": "2026-11-01",
+  "video_commit": "b5e7f9481d40899286134bba579a7e67f3dcf9b1",
+  "public_video_sha256_verified": true,
+  "credits_before": 39.5,
+  "quoted_total": 19.4,
+  "plan": [
+    {
+      "key": "perspektive-1",
+      "text": "Drei Blickrichtungen vergleichen. Dasselbe Gebiet kann ganz unterschiedlich aussehen: in der Draufsicht von oben, in der Seitenansicht von der Seite und als vereinfachte Karte. Jede Darstellung hilft bei anderen Fragen. Merke: Frage immer zuerst: Von wo aus schaue ich auf den Ort?"
+    },
+    {
+      "key": "perspektive-2",
+      "text": "Draufsicht. In der Draufsicht blickst du von oben auf einen Ort. Du erkennst besonders gut Wege, Dächer, Felder, Straßenverläufe und die Lage von Dingen zueinander. Merke: Draufsicht = Blick von oben."
+    },
+    {
+      "key": "perspektive-3",
+      "text": "Seitenansicht. In der Seitenansicht erkennst du Höhe, Form und Gestalt besser, zum Beispiel ob ein Berg steil ist oder wie hoch ein Haus wirkt. Dafür siehst du die genaue Lage weniger gut. Merke: Seitenansicht hilft besonders bei Höhe, Form und Steilheit."
+    },
+    {
+      "key": "perspektive-4",
+      "text": "Vom Bild zur Karte. Eine Karte zeigt nicht alles, sondern vereinfacht. Sie verwendet Farben, Linien, Symbole und eine Legende. Dadurch kannst du Informationen schneller lesen als in einem Bild. Merke: Karten sind keine Fotos: Sie sind vereinfachte Darstellungen mit Zeichen."
+    },
+    {
+      "key": "atlanten-1",
+      "text": "Der Atlas hat mehrere Teile. Die Kartenübersicht und das Inhaltsverzeichnis führen zu Karten. Die Kartensammlung zeigt Regionen und Themen. Das alphabetische Register hilft bei der gezielten Suche nach Orten. Merke: Suchst du den Titicacasee? Im Register unter T nachsehen."
+    },
+    {
+      "key": "atlanten-2",
+      "text": "So liest du eine Registerangabe. Beispiel „207.1, L11“: Auf der Atlas-Karte 207.1 suchst du im Planquadrat L11. Die Notation unterscheidet sich zwischen Atlanten. Merke: Die Seite und das Planquadrat gehören zusammen."
+    },
+    {
+      "key": "atlanten-3",
+      "text": "Planquadrate. Buchstaben und Zahlen teilen eine Karte in leicht auffindbare Felder. Bei L11 wählst du Spalte L und Zeile 11. Merke: Ein Planquadrat gibt einen Bereich an, noch keine genaue geografische Koordinate."
+    },
+    {
+      "key": "atlanten-4",
+      "text": "Informationen aus Signaturen. In einer Kartenlegende erkennst du, was Punkte, Farben, Linien und Symbole bedeuten. Suche vor dem Antworten immer die zur Karte gehörende Legende. Merke: Ein Symbol ist nicht automatisch weltweit einheitlich."
+    },
+    {
+      "key": "gradnetz-1",
+      "text": "Breitengrade lesen. Die geografische Breite sagt, wie weit ein Ort nördlich oder südlich vom Äquator liegt. Der Äquator ist 0°. Nach Norden und Süden zählt man bis 90°. Merke: Breite = Abstand vom Äquator."
+    },
+    {
+      "key": "gradnetz-2",
+      "text": "Längengrade lesen. Die geografische Länge sagt, wie weit ein Ort östlich oder westlich vom Nullmeridian liegt. Vom Nullmeridian zählt man nach Osten oder Westen bis 180°. Merke: Länge = Abstand von Greenwich."
+    },
+    {
+      "key": "gradnetz-3",
+      "text": "Koordinaten Schritt für Schritt. 1. Suche zuerst den Breitengrad und entscheide N oder S. 2. Suche den Längengrad und entscheide O oder W. 3. Schreibe immer zuerst die Breite, dann die Länge. Merke: Merksatz: erst Breite, dann Länge."
+    },
+    {
+      "key": "gradnetz-4",
+      "text": "Schnittpunkt finden. Ein Ort liegt dort, wo sich der gesuchte Breitengrad und der gesuchte Längengrad schneiden. In Übungsrastern helfen dir Zeile und Spalte beim Finden. Merke: Der gesuchte Ort ist der Schnittpunkt beider Linien."
+    }
+  ],
+  "jobs": [
+    {
+      "index": 0,
+      "job_id": "12830a1f-ae8f-42bf-9821-20df09e9127e",
+      "status": "pending"
+    },
+    {
+      "index": 1,
+      "job_id": "861fa750-2845-4280-a987-40b5976524ad",
+      "status": "pending"
+    },
+    {
+      "index": 2,
+      "job_id": "95a1f2b9-57e0-4232-9285-88244c3cd14a",
+      "status": "pending"
+    },
+    {
+      "index": 3,
+      "job_id": "712c4c54-b868-446d-a233-44dfdcbaeab6",
+      "status": "pending"
+    },
+    {
+      "index": 4,
+      "job_id": "d85f1d5d-b434-41b6-ac1f-14e8db7513b9",
+      "status": "pending"
+    },
+    {
+      "index": 5,
+      "job_id": "e8269a01-01f1-49e7-9866-816f5ae391d2",
+      "status": "pending"
+    },
+    {
+      "index": 6,
+      "status": "submission_failed",
+      "error": "seed_audio backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 7,
+      "status": "submission_failed",
+      "error": "seed_audio backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 8,
+      "status": "submission_failed",
+      "error": "seed_audio backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 9,
+      "status": "submission_failed",
+      "error": "seed_audio backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 10,
+      "status": "submission_failed",
+      "error": "seed_audio backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 11,
+      "status": "submission_failed",
+      "error": "seed_audio backend request failed (429): rate_limit_reached"
+    }
+  ],
+  "voice": "Benji",
+  "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
+  "open": [
+    "Download and verify completed jobs before integration",
+    "Retry only submission_failed entries after provider rate limit clears",
+    "Integrate exact text recordings with existing read-aloud controls",
+    "Other topics and atlas interactive narration remain to audit"
+  ],
+  "listening_review": "not_performed"
+}
