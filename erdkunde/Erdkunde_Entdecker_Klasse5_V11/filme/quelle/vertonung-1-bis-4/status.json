@@ -1,17 +1,24 @@
 {
-  "status": "awaiting_explicit_external_speech_credit_approval",
+  "status": "episode4_completed",
   "generated_masters": [
-    "4_Paul"
+    "4_Paul",
+    "4_Herr_Welt",
+    "4_Gustav"
   ],
   "pending_masters": [
-    "4_Herr_Welt",
-    "4_Gustav",
     "123_Paul",
     "123_Herr_Welt",
     "123_Gustav"
   ],
   "accepted_job_id": "11daae63-3828-44ee-9473-32397d5fcdb1",
-  "published_video_replacements": [],
+  "video_replacements_in_this_commit": ["filme/videos/folge-4.mp4"],
+  "new_job_ids": ["c576eda9-c4c3-4ad4-a1bf-1e13a4b665ab", "64fe6f17-52e0-4b9b-84e9-479f3d4c8ee9"],
+  "credits_used": 5.4,
+  "credits_before": 82.7,
+  "credits_after": 77.3,
+  "credits_purchased": 0,
+  "duration_seconds": 89.73333333333333,
+  "listening_review": "not_performed",
   "voices": "Same Seed Audio preset identities as accepted episodes 5\u20137",
-  "reason": "Automatic approval review blocked further external submissions and credit use; no automatic retry."
+  "reason": "User explicitly approved external narration with existing credits only. Episode 4 completed; generation for episodes 1 to 3 was not started in this step."
 }
