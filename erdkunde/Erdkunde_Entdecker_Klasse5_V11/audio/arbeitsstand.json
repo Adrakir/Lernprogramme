@@ -58,62 +58,98 @@
     {
       "index": 0,
       "job_id": "12830a1f-ae8f-42bf-9821-20df09e9127e",
-      "status": "pending"
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145559_12830a1f-ae8f-42bf-9821-20df09e9127e.wav"
     },
     {
       "index": 1,
       "job_id": "861fa750-2845-4280-a987-40b5976524ad",
-      "status": "pending"
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145559_861fa750-2845-4280-a987-40b5976524ad.wav"
     },
     {
       "index": 2,
       "job_id": "95a1f2b9-57e0-4232-9285-88244c3cd14a",
-      "status": "pending"
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145559_95a1f2b9-57e0-4232-9285-88244c3cd14a.wav"
     },
     {
       "index": 3,
       "job_id": "712c4c54-b868-446d-a233-44dfdcbaeab6",
-      "status": "pending"
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145600_712c4c54-b868-446d-a233-44dfdcbaeab6.wav"
     },
     {
       "index": 4,
       "job_id": "d85f1d5d-b434-41b6-ac1f-14e8db7513b9",
-      "status": "pending"
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145559_d85f1d5d-b434-41b6-ac1f-14e8db7513b9.wav"
     },
     {
       "index": 5,
       "job_id": "e8269a01-01f1-49e7-9866-816f5ae391d2",
-      "status": "pending"
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145559_e8269a01-01f1-49e7-9866-816f5ae391d2.wav"
     },
     {
       "index": 6,
-      "status": "submission_failed",
-      "error": "seed_audio backend request failed (429): rate_limit_reached"
+      "job_id": "cb500703-86d0-43ec-b304-76bf49e6adc4",
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145733_cb500703-86d0-43ec-b304-76bf49e6adc4.wav"
     },
     {
       "index": 7,
-      "status": "submission_failed",
-      "error": "seed_audio backend request failed (429): rate_limit_reached"
+      "job_id": "ac95dd64-b18f-46d5-8669-17d2d2746567",
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145733_ac95dd64-b18f-46d5-8669-17d2d2746567.wav"
     },
     {
       "index": 8,
-      "status": "submission_failed",
-      "error": "seed_audio backend request failed (429): rate_limit_reached"
+      "job_id": "e706a6f9-895d-4714-9e67-aba0186388d4",
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145733_e706a6f9-895d-4714-9e67-aba0186388d4.wav"
     },
     {
       "index": 9,
-      "status": "submission_failed",
-      "error": "seed_audio backend request failed (429): rate_limit_reached"
+      "job_id": "a3319d39-5aab-4df2-9d65-3ec2183f6c1e",
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145733_a3319d39-5aab-4df2-9d65-3ec2183f6c1e.wav"
     },
     {
       "index": 10,
-      "status": "submission_failed",
-      "error": "seed_audio backend request failed (429): rate_limit_reached"
+      "job_id": "535c4823-911e-4e50-a388-5f7b6a099af2",
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145733_535c4823-911e-4e50-a388-5f7b6a099af2.wav"
     },
     {
       "index": 11,
-      "status": "submission_failed",
-      "error": "seed_audio backend request failed (429): rate_limit_reached"
+      "job_id": "fe769606-1b07-49e2-b101-5993376ed23c",
+      "status": "completed",
+      "type": "audio",
+      "model": "seed_audio",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LVBJQk5dLXGSXFKzcyLhWJkoqj/hf_20261101_145734_fe769606-1b07-49e2-b101-5993376ed23c.wav"
     }
   ],
   "voice": "Benji",
