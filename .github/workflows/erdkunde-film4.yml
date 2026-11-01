@@ -31,7 +31,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
           python -m pip install --upgrade pip
-          python -m pip install "numpy>=2.0,<3" "scipy>=1.14,<2"
+          python -m pip install "numpy>=2.0,<3" "scipy>=1.14,<2" "Pillow>=11,<13"
 
       - name: Gespeicherte Stimmen verwenden – ohne Sprachdienst oder Credits
         run: |

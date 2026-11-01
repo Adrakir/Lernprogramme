@@ -5,16 +5,16 @@
   "fps": 15,
   "original_commit": "44e8415f18d0b1426db61ba34396116eff8bbcbc",
   "measured_mix": {
-    "input_i": "-15.33",
-    "input_tp": "-0.06",
-    "input_lra": "6.20",
-    "input_thresh": "-26.05",
-    "output_i": "-16.20",
-    "output_tp": "-1.50",
-    "output_lra": "5.80",
-    "output_thresh": "-26.90",
+    "input_i": "-15.62",
+    "input_tp": "-0.44",
+    "input_lra": "5.60",
+    "input_thresh": "-26.31",
+    "output_i": "-15.87",
+    "output_tp": "-1.79",
+    "output_lra": "5.50",
+    "output_thresh": "-26.56",
     "normalization_type": "dynamic",
-    "target_offset": "0.20"
+    "target_offset": "-0.13"
   },
   "timeline": [
     {
@@ -29,7 +29,7 @@
       "source": "4_Paul.wav",
       "source_in": 0.0,
       "source_out": 6.760000000000001,
-      "gain": 1.4359783849279493,
+      "gain": 1.1754559528754294,
       "duration": 6.76,
       "speech_speed": 1.0,
       "speech_pitch": 1.0,
@@ -197,7 +197,7 @@
       "source": "4_Paul.wav",
       "source_in": 7.1000000000000005,
       "source_out": 10.3,
-      "gain": 1.4359783849279493,
+      "gain": 1.1754559528754294,
       "duration": 3.2,
       "speech_speed": 1.0,
       "speech_pitch": 1.0,
@@ -285,18 +285,18 @@
   "full_decode": "passed",
   "listening_review": "not_performed",
   "transcript_review": "All 11 lines aligned; phonetic ASR variants retained in recognized fields.",
-  "encoded_audio_loudness": {
+  "burned_captions": "Original band replaced; new captions visible only during actual speech.",
+  "source_gain": "RMS balanced with a source peak ceiling of 0.95; no hard clipping.",
+  "encoded_loudness": {
     "input_i": "-16.04",
-    "input_tp": "-1.48",
-    "input_lra": "5.80",
+    "input_tp": "-1.90",
+    "input_lra": "5.50",
     "input_thresh": "-26.74",
-    "output_i": "-15.90",
+    "output_i": "-15.99",
     "output_tp": "-1.50",
-    "output_lra": "5.50",
-    "output_thresh": "-26.59",
+    "output_lra": "5.20",
+    "output_thresh": "-26.67",
     "normalization_type": "dynamic",
-    "target_offset": "-0.10"
-  },
-  "visual_review": "Representative frames from all 11 scenes inspected",
-  "audio_video_duration_difference_seconds": 0.06666699999999537
+    "target_offset": "-0.01"
+  }
 }

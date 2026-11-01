@@ -18,6 +18,7 @@ from pathlib import Path
 
 import numpy as np
 from scipy.io import wavfile
+from PIL import Image, ImageDraw, ImageFont
 
 SOURCE = Path(__file__).resolve().parent
 VOICES = SOURCE / 'vertonung-1-bis-4'
@@ -88,7 +89,7 @@ def align(master, work):
         data = np.repeat(data[:, None], 2, axis=1)
     data = data.astype(np.float32) / 32768
     rms = float(np.sqrt(np.mean(data[data != 0] ** 2)))
-    gain = min(3., .115/max(rms, 1e-6))
+    gain = min(3., .115/max(rms, 1e-6), .95/max(float(np.max(np.abs(data))), 1e-6))
     for i, line in enumerate(aligned):
         cin = max(cuts[i], line['speech_start']-.13)
         cout = min(cuts[i+1], line['speech_end']+.15)
@@ -109,6 +110,32 @@ def stamp(sec):
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     return f'{hours:02}:{minutes:02}:{seconds:02},{ms:03}'
+
+
+def caption_image(line, work):
+    """Replace the original persistent subtitle band with a speech-timed band."""
+    image = Image.new('RGB', (1280, 108), '#071126')
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 23)
+    bold = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 20)
+    draw.rounded_rectangle((28, 25, 195, 80), radius=12, fill='#53cdbc')
+    draw.text((40, 41), line['role'].upper(), font=bold, fill='#071126')
+    rows, row = [], ''
+    for word in line['text'].split():
+        trial = (row+' '+word).strip()
+        if draw.textlength(trial, font=font) > 1010 and row:
+            rows.append(row)
+            row = word
+        else:
+            row = trial
+    if row:
+        rows.append(row)
+    assert len(rows) <= 2, rows
+    for j, row in enumerate(rows):
+        draw.text((220, (108-len(rows)*31)//2+j*31), row, font=font, fill='white')
+    destination = work / f"caption_{line['scene']:02d}.png"
+    image.save(destination)
+    return destination
 
 
 def main():
@@ -140,8 +167,13 @@ def main():
         pending = work / f'scene_{i:02d}.rendering.mp4'
         source_frames = BOUNDARIES[i+1]-BOUNDARIES[i]
         ratio = (frames-1)/(source_frames-1)
-        graph = f'trim=start_frame={BOUNDARIES[i]}:end_frame={BOUNDARIES[i+1]},setpts=(PTS-STARTPTS)*{ratio:.12f},fps={FPS},setsar=1,format=yuv420p'
-        run(['ffmpeg', '-nostdin', '-v', 'error', '-xerror', '-y', '-i', original, '-vf', graph, '-an',
+        local_on = lead+line['speech_start']-line['source_in']
+        local_off = lead+line['speech_end']-line['source_in']
+        subtitle = caption_image(line, work)
+        graph = (f'[0:v]trim=start_frame={BOUNDARIES[i]}:end_frame={BOUNDARIES[i+1]},setpts=(PTS-STARTPTS)*{ratio:.12f},fps={FPS},setsar=1,'
+                 f'drawbox=x=0:y=612:w=1280:h=108:color=0x071126:t=fill[clean];'
+                 f'[clean][1:v]overlay=x=0:y=612:enable=\'between(t,{local_on:.6f},{local_off:.6f})\',format=yuv420p[v]')
+        run(['ffmpeg', '-nostdin', '-v', 'error', '-xerror', '-y', '-i', original, '-i', subtitle, '-filter_complex', graph, '-map', '[v]', '-an',
              '-frames:v', frames, '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '20', '-movflags', '+faststart', pending])
         with pending.open('rb') as handle:
             os.fsync(handle.fileno())
@@ -184,7 +216,9 @@ def main():
     (work/'Gustav_Globus_Folge4_Untertitel.srt').write_text('\n'.join(srt), encoding='utf-8')
     report = dict(duration_seconds=cursor, width=1280, height=720, fps=FPS, original_commit='44e8415f18d0b1426db61ba34396116eff8bbcbc',
                   measured_mix=loud, timeline=timeline, full_decode='passed', listening_review='not_performed',
-                  transcript_review='All 11 lines aligned; phonetic ASR variants retained in recognized fields.')
+                  transcript_review='All 11 lines aligned; phonetic ASR variants retained in recognized fields.',
+                  burned_captions='Original band replaced; new captions visible only during actual speech.',
+                  source_gain='RMS balanced with a source peak ceiling of 0.95; no hard clipping.')
     (VOICES/'folge4_timeline.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
     print('FINISHED', final, round(cursor, 3), flush=True)
 
