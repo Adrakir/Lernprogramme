@@ -1,10 +1,7 @@
-name: Erdkunde – Gustav Globus Folge 4 rendern und sichern
+name: Erdkunde – Folge 4 aus gespeicherten neuen Stimmen rendern
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/erdkunde-film4.yml'
 
 permissions:
   contents: write
@@ -23,43 +20,47 @@ jobs:
         with:
           persist-credentials: true
 
-      - name: Python für den Original-Rendercode vorbereiten
+      - name: Python für den Videoschnitt vorbereiten
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Erforderliche Programme und Schriften
+      - name: Erforderliche Programme
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y espeak ffmpeg fonts-lato
+          sudo apt-get install -y ffmpeg
           python -m pip install --upgrade pip
-          python -m pip install "numpy>=2.0,<3" "pillow>=11,<13" "scipy>=1.14,<2" "basemap>=2.0,<3"
+          python -m pip install "numpy>=2.0,<3" "scipy>=1.14,<2"
 
-      - name: Originalfilm der Folge 4 reproduzierbar rendern
-        env:
-          GUSTAV_VIDEO_OUT: ${{ github.workspace }}/erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos
-          GUSTAV_VIDEO_TMP: ${{ runner.temp }}/gustav-folge4
+      - name: Gespeicherte Stimmen verwenden – ohne Sprachdienst oder Credits
         run: |
-          mkdir -p "$GUSTAV_VIDEO_OUT" "$GUSTAV_VIDEO_TMP"
-          python -u erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/quelle/build_folge4.py
+          set -euo pipefail
+          ROOT="erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme"
+          mkdir -p "$RUNNER_TEMP/gustav-folge4"
+          git fetch origin 44e8415f18d0b1426db61ba34396116eff8bbcbc
+          git show "44e8415f18d0b1426db61ba34396116eff8bbcbc:$ROOT/videos/folge-4.mp4" > "$RUNNER_TEMP/gustav-folge4/original.mp4"
+          python -u "$ROOT/quelle/revoice_folge4.py" --original "$RUNNER_TEMP/gustav-folge4/original.mp4" --work "$RUNNER_TEMP/gustav-folge4/render"
+          cp "$RUNNER_TEMP/gustav-folge4/render/folge-4-neu.mp4" "$ROOT/videos/folge-4.mp4"
+          cp "$RUNNER_TEMP/gustav-folge4/render/Gustav_Globus_Folge4_Untertitel.srt" "$ROOT/videos/Gustav_Globus_Folge4_Untertitel.srt"
 
       - name: MP4 und Laufzeit validieren
         run: |
           set -euo pipefail
           MEDIA="erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos"
-          test "$(wc -c < "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4")" -gt 200000
-          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -of default=noprint_wrappers=1 "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4"
-          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4"
-          mv "$MEDIA/Paul_und_Gustav_Globus_Folge_4_Erdviertelkugeln.mp4" "$MEDIA/folge-4.mp4"
+          test "$(wc -c < "$MEDIA/folge-4.mp4")" -gt 200000
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -of default=noprint_wrappers=1 "$MEDIA/folge-4.mp4"
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1 "$MEDIA/folge-4.mp4"
+          ffmpeg -nostdin -v error -xerror -i "$MEDIA/folge-4.mp4" -f null -
 
-      - name: Film, Untertitel und Vorschaubild veröffentlichen
+      - name: Film und Untertitel veröffentlichen
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/folge-4.mp4
           git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/Gustav_Globus_Folge4_*
+          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/quelle/vertonung-1-bis-4/folge4_timeline.json
           if git diff --cached --quiet; then echo "Folge 4 bereits unverändert gespeichert"; exit 0; fi
-          git commit -m "Erdkunde: Gustav-Globus-Folge 4 als MP4, Untertitel und Vorschau"
+          git commit -m "Erdkunde: Folge 4 mit gespeicherten neuen Stimmen reproduzieren"
           git pull --rebase origin main
           git push origin HEAD:main

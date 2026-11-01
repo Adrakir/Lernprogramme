@@ -50,6 +50,10 @@ const context={
 vm.createContext(context);
 vm.runInContext(app,context,{timeout:3000});
 assert.equal(context.window.ErdkundeVideos.count,7);
+assert.match(context.window.ErdkundeVideos.films[3].src,/folge-4\.mp4\?v=stimmen-20261101$/,'Folge 4 muss die neue Tonfassung laden');
+context.window.ErdkundeVideos.open(4);
+assert.match(main.innerHTML,/1:30/);
+assert.match(main.innerHTML,/folge-4\.mp4\?v=stimmen-20261101/);
 assert(added.some(s=>s.includes('Erdkunde sehen und verstehen')),'Startseiten-Einstieg fehlt');
 context.window.ErdkundeVideos.open(6);
 assert.equal(state.tab,'videos');
