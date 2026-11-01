@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: erdkunde-video-integration
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:
@@ -66,17 +66,8 @@ jobs:
           grep -q "Erdkunde-Notebook" "$F"
           grep -q "cc98ffba-22b1-4d1b-9326-0c17a86323c0" "$F"
 
-      - name: Gebündelte App aktualisieren, ohne bestehende Nutzerdateien zu verändern
-        if: github.ref == 'refs/heads/main'
+      - name: Gebündelte App muss bereits zum geprüften Quellcode passen
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html
-          if git diff --cached --quiet; then
-            echo "Die veröffentlichte App ist bereits aktuell."
-            exit 0
-          fi
-          git commit -m "Erdkunde: NotebookLM-Zusatzmaterial in vorhandene App einbauen"
-          git push origin HEAD:main
+          git diff --exit-code -- erdkunde/Erdkunde_Entdecker_Klasse5_V11/index.html

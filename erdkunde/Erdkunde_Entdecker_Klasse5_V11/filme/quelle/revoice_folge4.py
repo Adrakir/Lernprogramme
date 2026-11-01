@@ -28,7 +28,14 @@ BOUNDARIES = [0, 104, 195, 286, 410, 495, 622, 718, 785, 922, 1077, 1199]
 
 
 def run(args):
-    return subprocess.run(list(map(str, args)), check=True, capture_output=True, text=True)
+    # Only these two fixed executables are allowed. Arguments are separate argv
+    # entries, never shell text; paths and filter expressions cannot run commands.
+    command, *arguments = list(map(str, args))
+    if command == 'ffmpeg':
+        return subprocess.run(['ffmpeg', *arguments], shell=False, check=True, capture_output=True, text=True)
+    if command == 'ffprobe':
+        return subprocess.run(['ffprobe', *arguments], shell=False, check=True, capture_output=True, text=True)
+    raise ValueError('Only ffmpeg and ffprobe may be run')
 
 
 def probe(path):

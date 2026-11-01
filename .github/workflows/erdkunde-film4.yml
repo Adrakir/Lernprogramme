@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   rendern:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 55
     steps:
@@ -55,6 +56,11 @@ jobs:
       - name: Film und Untertitel veröffentlichen
         run: |
           set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$GITHUB_SHA" || {
+            echo "main wurde während des Renderns geändert. Bitte aus aktuellem main erneut rendern."
+            exit 1
+          }
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/folge-4.mp4
@@ -62,5 +68,4 @@ jobs:
           git add erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/quelle/vertonung-1-bis-4/folge4_timeline.json
           if git diff --cached --quiet; then echo "Folge 4 bereits unverändert gespeichert"; exit 0; fi
           git commit -m "Erdkunde: Folge 4 mit gespeicherten neuen Stimmen reproduzieren"
-          git pull --rebase origin main
           git push origin HEAD:main
