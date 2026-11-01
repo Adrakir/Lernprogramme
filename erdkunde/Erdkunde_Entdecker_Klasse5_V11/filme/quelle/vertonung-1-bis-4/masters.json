@@ -1,0 +1,350 @@
+[
+  {
+    "key": "4_Paul",
+    "lines": [
+      {
+        "ep": 4,
+        "scene": 0,
+        "role": "Paul",
+        "text": "Herr Welt, der Äquator teilt in Nord und Süd. Gibt es auch vier Erdviertel?"
+      },
+      {
+        "ep": 4,
+        "scene": 7,
+        "role": "Paul",
+        "text": "Warum sagen wir Nordost und nicht Ostnord?"
+      }
+    ],
+    "voice_name": "Reid",
+    "params": {
+      "model": "seed_audio",
+      "prompt": "Herr Welt, der Äquator teilt in Nord und Süd. Gibt es auch vier Erdviertel?\n\nWarum sagen wir Nordost und nicht Ostnord?",
+      "voice_id": "66469f5a-10db-586a-bab1-72f6ee66ba69",
+      "voice_type": "preset",
+      "format": "wav",
+      "sample_rate": 48000,
+      "speech_rate": 0,
+      "pitch_rate": 0
+    }
+  },
+  {
+    "key": "4_Herr_Welt",
+    "lines": [
+      {
+        "ep": 4,
+        "scene": 1,
+        "role": "Herr Welt",
+        "text": "Ja, Paul! Gustav Globus zeigt uns, wie das funktioniert."
+      },
+      {
+        "ep": 4,
+        "scene": 9,
+        "role": "Herr Welt",
+        "text": "Deutschland liegt nördlich des Äquators und östlich des Nullmeridians. In welchem Viertel liegt es?"
+      }
+    ],
+    "voice_name": "Arthur",
+    "params": {
+      "model": "seed_audio",
+      "prompt": "Ja, Paul! Gustav Globus zeigt uns, wie das funktioniert.\n\nDeutschland liegt nördlich des Äquators und östlich des Nullmeridians. In welchem Viertel liegt es?",
+      "voice_id": "30fc8796-ceb6-4a66-b3a7-4a145ef7f346",
+      "voice_type": "preset",
+      "format": "wav",
+      "sample_rate": 48000,
+      "speech_rate": -10,
+      "pitch_rate": 0
+    }
+  },
+  {
+    "key": "4_Gustav",
+    "lines": [
+      {
+        "ep": 4,
+        "scene": 2,
+        "role": "Gustav",
+        "text": "Der Äquator teilt die Erde in die Nordhalbkugel und die Südhalbkugel."
+      },
+      {
+        "ep": 4,
+        "scene": 3,
+        "role": "Gustav",
+        "text": "Der Nullmeridian und der gegenüberliegende hundertachtzig Grad Meridian teilen die Erde in Osten und Westen."
+      },
+      {
+        "ep": 4,
+        "scene": 4,
+        "role": "Gustav",
+        "text": "Wenn beide Teilungen zusammenkommen, entstehen vier Erdviertelkugeln."
+      },
+      {
+        "ep": 4,
+        "scene": 5,
+        "role": "Gustav",
+        "text": "Nordost liegt nördlich des Äquators und östlich des Nullmeridians. Nordwest liegt nördlich und westlich."
+      },
+      {
+        "ep": 4,
+        "scene": 6,
+        "role": "Gustav",
+        "text": "Südost liegt südlich und östlich. Südwest liegt südlich und westlich."
+      },
+      {
+        "ep": 4,
+        "scene": 8,
+        "role": "Gustav",
+        "text": "Bei den Erdvierteln nennen wir zuerst Nord oder Süd, danach Ost oder West. Das ist die übliche Namensreihenfolge."
+      },
+      {
+        "ep": 4,
+        "scene": 10,
+        "role": "Gustav",
+        "text": "Genau! Im Nordostviertel. Im nächsten Film sehen wir die Erde von der Seite und von oben."
+      }
+    ],
+    "voice_name": "Benji",
+    "params": {
+      "model": "seed_audio",
+      "prompt": "Der Äquator teilt die Erde in die Nordhalbkugel und die Südhalbkugel.\n\nDer Nullmeridian und der gegenüberliegende hundertachtzig Grad Meridian teilen die Erde in Osten und Westen.\n\nWenn beide Teilungen zusammenkommen, entstehen vier Erdviertelkugeln.\n\nNordost liegt nördlich des Äquators und östlich des Nullmeridians. Nordwest liegt nördlich und westlich.\n\nSüdost liegt südlich und östlich. Südwest liegt südlich und westlich.\n\nBei den Erdvierteln nennen wir zuerst Nord oder Süd, danach Ost oder West. Das ist die übliche Namensreihenfolge.\n\nGenau! Im Nordostviertel. Im nächsten Film sehen wir die Erde von der Seite und von oben.",
+      "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
+      "voice_type": "preset",
+      "format": "wav",
+      "sample_rate": 48000,
+      "speech_rate": -10,
+      "pitch_rate": 0
+    }
+  },
+  {
+    "key": "123_Paul",
+    "lines": [
+      {
+        "ep": 1,
+        "scene": 0,
+        "role": "Paul",
+        "text": "Herr Welt,   wie sieht unsere Erde eigentlich aus – und was ist in ihr drin?"
+      },
+      {
+        "ep": 1,
+        "scene": 7,
+        "role": "Paul",
+        "text": "Wir leben auf der dünnen Erdkruste!"
+      },
+      {
+        "ep": 2,
+        "scene": 0,
+        "role": "Paul",
+        "text": "Gustav, warum hat die Erde eigentlich zwei Hälften?"
+      },
+      {
+        "ep": 2,
+        "scene": 5,
+        "role": "Paul",
+        "text": "Und wo liegt Deutschland?"
+      },
+      {
+        "ep": 2,
+        "scene": 8,
+        "role": "Paul",
+        "text": "Liegt Australien nördlich oder südlich des Äquators?"
+      },
+      {
+        "ep": 3,
+        "scene": 0,
+        "role": "Paul",
+        "text": "Gustav, der Äquator trennt Norden und Süden. Wie teilen wir die Erde in Osten und Westen?"
+      },
+      {
+        "ep": 3,
+        "scene": 7,
+        "role": "Paul",
+        "text": "Hat die Erde jetzt vier Viertel?"
+      }
+    ],
+    "voice_name": "Reid",
+    "params": {
+      "model": "seed_audio",
+      "prompt": "Herr Welt,   wie sieht unsere Erde eigentlich aus – und was ist in ihr drin?\n\nWir leben auf der dünnen Erdkruste!\n\nGustav, warum hat die Erde eigentlich zwei Hälften?\n\nUnd wo liegt Deutschland?\n\nLiegt Australien nördlich oder südlich des Äquators?\n\nGustav, der Äquator trennt Norden und Süden. Wie teilen wir die Erde in Osten und Westen?\n\nHat die Erde jetzt vier Viertel?",
+      "voice_id": "66469f5a-10db-586a-bab1-72f6ee66ba69",
+      "voice_type": "preset",
+      "format": "wav",
+      "sample_rate": 48000,
+      "speech_rate": 0,
+      "pitch_rate": 0
+    }
+  },
+  {
+    "key": "123_Herr_Welt",
+    "lines": [
+      {
+        "ep": 1,
+        "scene": 1,
+        "role": "Herr Welt",
+        "text": "Das zeigt uns Gustav Globus!   Hallo Paul!"
+      },
+      {
+        "ep": 2,
+        "scene": 1,
+        "role": "Herr Welt",
+        "text": "Zeig uns doch den Äquator, Gustav!"
+      },
+      {
+        "ep": 3,
+        "scene": 1,
+        "role": "Herr Welt",
+        "text": "Das zeigt uns der Nullmeridian!"
+      },
+      {
+        "ep": 3,
+        "scene": 8,
+        "role": "Herr Welt",
+        "text": "Wo liegt New York – östlich oder westlich des Nullmeridians?"
+      }
+    ],
+    "voice_name": "Arthur",
+    "params": {
+      "model": "seed_audio",
+      "prompt": "Das zeigt uns Gustav Globus!   Hallo Paul!\n\nZeig uns doch den Äquator, Gustav!\n\nDas zeigt uns der Nullmeridian!\n\nWo liegt New York – östlich oder westlich des Nullmeridians?",
+      "voice_id": "30fc8796-ceb6-4a66-b3a7-4a145ef7f346",
+      "voice_type": "preset",
+      "format": "wav",
+      "sample_rate": 48000,
+      "speech_rate": -10,
+      "pitch_rate": 0
+    }
+  },
+  {
+    "key": "123_Gustav",
+    "lines": [
+      {
+        "ep": 1,
+        "scene": 2,
+        "role": "Gustav",
+        "text": "Unsere Erde ist fast kugelförmig. An Nordpol und Südpol ist sie ein wenig abgeplattet."
+      },
+      {
+        "ep": 1,
+        "scene": 3,
+        "role": "Gustav",
+        "text": "Hier siehst du den Nordpol und dort den Südpol.   Die gedachte Linie dazwischen heißt Erdachse."
+      },
+      {
+        "ep": 1,
+        "scene": 4,
+        "role": "Gustav",
+        "text": "Schauen wir nun in die Erde hinein."
+      },
+      {
+        "ep": 1,
+        "scene": 5,
+        "role": "Gustav",
+        "text": "Außen liegt die dünne Erdkruste.   Darunter der dicke Erdmantel.   Im Inneren liegt der Kern – außen flüssig, innen fest."
+      },
+      {
+        "ep": 1,
+        "scene": 6,
+        "role": "Gustav",
+        "text": "So sieht unser Erdaufbau schematisch aus."
+      },
+      {
+        "ep": 1,
+        "scene": 8,
+        "role": "Gustav",
+        "text": "Genau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt."
+      },
+      {
+        "ep": 2,
+        "scene": 2,
+        "role": "Gustav",
+        "text": "Das ist der Äquator: eine gedachte Linie rund um die Mitte der Erde. Er liegt bei null Grad geografischer Breite."
+      },
+      {
+        "ep": 2,
+        "scene": 3,
+        "role": "Gustav",
+        "text": "Nördlich davon ist die Nordhalbkugel. Südlich davon die Südhalbkugel."
+      },
+      {
+        "ep": 2,
+        "scene": 4,
+        "role": "Gustav",
+        "text": "Die Erde bleibt eine Kugel; der Äquator teilt sie nur gedanklich in zwei gleich große Hälften."
+      },
+      {
+        "ep": 2,
+        "scene": 5,
+        "role": "Gustav",
+        "text": "Deutschland liegt nördlich des Äquators: Nordhalbkugel."
+      },
+      {
+        "ep": 2,
+        "scene": 6,
+        "role": "Gustav",
+        "text": "Australien liegt südlich des Äquators: Südhalbkugel."
+      },
+      {
+        "ep": 2,
+        "scene": 7,
+        "role": "Gustav",
+        "text": "Direkt am Äquator beträgt die geografische Breite null Grad. Äquator gleich null Grad Breite."
+      },
+      {
+        "ep": 2,
+        "scene": 8,
+        "role": "Gustav",
+        "text": "Südlich! Gut gemacht! Nächstes Mal lernen wir den Nullmeridian kennen."
+      },
+      {
+        "ep": 3,
+        "scene": 2,
+        "role": "Gustav",
+        "text": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol. Er verläuft durch Greenwich bei London und hat null Grad geografische Länge."
+      },
+      {
+        "ep": 3,
+        "scene": 3,
+        "role": "Gustav",
+        "text": "Meridiane laufen von Pol zu Pol. Sie sind halbe Großkreise, keine waagerechten Breitenkreise."
+      },
+      {
+        "ep": 3,
+        "scene": 4,
+        "role": "Gustav",
+        "text": "Gegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften."
+      },
+      {
+        "ep": 3,
+        "scene": 5,
+        "role": "Gustav",
+        "text": "Östlich von null bis 180 Grad liegt die Osthalbkugel. Westlich von null bis 180 Grad liegt die Westhalbkugel."
+      },
+      {
+        "ep": 3,
+        "scene": 6,
+        "role": "Gustav",
+        "text": "Deutschland liegt etwas östlich des Nullmeridians. New York liegt westlich davon."
+      },
+      {
+        "ep": 3,
+        "scene": 7,
+        "role": "Gustav",
+        "text": "Genau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge."
+      },
+      {
+        "ep": 3,
+        "scene": 8,
+        "role": "Gustav",
+        "text": "Westlich."
+      }
+    ],
+    "voice_name": "Benji",
+    "params": {
+      "model": "seed_audio",
+      "prompt": "Unsere Erde ist fast kugelförmig. An Nordpol und Südpol ist sie ein wenig abgeplattet.\n\nHier siehst du den Nordpol und dort den Südpol.   Die gedachte Linie dazwischen heißt Erdachse.\n\nSchauen wir nun in die Erde hinein.\n\nAußen liegt die dünne Erdkruste.   Darunter der dicke Erdmantel.   Im Inneren liegt der Kern – außen flüssig, innen fest.\n\nSo sieht unser Erdaufbau schematisch aus.\n\nGenau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt.\n\nDas ist der Äquator: eine gedachte Linie rund um die Mitte der Erde. Er liegt bei null Grad geografischer Breite.\n\nNördlich davon ist die Nordhalbkugel. Südlich davon die Südhalbkugel.\n\nDie Erde bleibt eine Kugel; der Äquator teilt sie nur gedanklich in zwei gleich große Hälften.\n\nDeutschland liegt nördlich des Äquators: Nordhalbkugel.\n\nAustralien liegt südlich des Äquators: Südhalbkugel.\n\nDirekt am Äquator beträgt die geografische Breite null Grad. Äquator gleich null Grad Breite.\n\nSüdlich! Gut gemacht! Nächstes Mal lernen wir den Nullmeridian kennen.\n\nDer Nullmeridian ist eine gedachte Linie von Pol zu Pol. Er verläuft durch Greenwich bei London und hat null Grad geografische Länge.\n\nMeridiane laufen von Pol zu Pol. Sie sind halbe Großkreise, keine waagerechten Breitenkreise.\n\nGegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften.\n\nÖstlich von null bis 180 Grad liegt die Osthalbkugel. Westlich von null bis 180 Grad liegt die Westhalbkugel.\n\nDeutschland liegt etwas östlich des Nullmeridians. New York liegt westlich davon.\n\nGenau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge.\n\nWestlich.",
+      "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
+      "voice_type": "preset",
+      "format": "wav",
+      "sample_rate": 48000,
+      "speech_rate": -10,
+      "pitch_rate": 0
+    }
+  }
+]

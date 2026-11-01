@@ -71,7 +71,12 @@ function g9Run(cmd){const m=g9M();let [a,b]=cmd.split(':');if(a!=='play'&&g9.pla
  else if(a==='setPlanet'){g9.planet=['sun','earth','moon'].includes(b)?b:'earth';}
  else if(a==='assist'){g9.assist=g9.assist===b?'':b;}
  else if(a==='animate'){g9.animated=!g9.animated;}
- else if(a==='speak'){const utterance=g9.phase==='story'?m.scenes[g9.scene][2]:g9.phase==='experiment'?m.simple:g9.quiz[g9.qi]?.explain||m.simple;if('speechSynthesis' in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(utterance);u.lang='de-DE';u.rate=.9;window.speechSynthesis.speak(u);}else g9.feedback='Vorlesen ist in diesem Browser leider nicht verfügbar.';return}
+ else if(a==='speak'){
+  const scene=m.scenes[g9.scene];
+  const text=g9.phase==='story'?scene[0]+'. '+scene[1]+' '+scene[2]+' Wissen für die Klassenarbeit: '+scene[3]:g9.phase==='experiment'?m.simple:g9.quiz[g9.qi]?.explain||m.simple;
+  const button=MAIN.querySelector('[data-g9="speak"]');
+  window.ErdkundeSpeech?.speak(text,{owner:'gustav:'+m.id+':'+g9.scene,button,onError(){g9.feedback='Wähle unter Einstellungen eine andere deutsche Stimme.';}});return;
+ }
  else if(a==='observe'){g9.obs=true;const p=progress.gustav[m.id]||{};p.experiment=true;progress.gustav[m.id]=p;save()}
  else if(a==='lab'){state.tab='lab';state.lab=m.lab;g9.id=null;switchTab('lab');return;}
  else if(a==='startQuiz'||a==='restartQuiz'){g9.quiz=g9ExercisePool(m);g9.qi=0;g9.guesses=[];g9.phase='quiz';g9.selected=null;g9.answered=false;g9.feedback='';g9.hint=0;g9.assist='';}

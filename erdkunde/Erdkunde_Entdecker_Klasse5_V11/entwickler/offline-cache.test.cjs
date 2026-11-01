@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 (async()=>{
  const src=fs.readFileSync(path.join(__dirname,'..','service-worker.js'),'utf8');
  const prefix='erdkunde-v11-thementraining-20261030-';
- const current='erdkunde-v11-stimmen-20261101-v23';
+ const current='erdkunde-v11-vorlesen-20261101-v24';
  const existing=[prefix+'v16',prefix+'v17',prefix+'v18',prefix+'v19',current,'erdkunde-entdecker-pages-old','unrelated-project'];
  const removed=[],handlers={};
  const cache={

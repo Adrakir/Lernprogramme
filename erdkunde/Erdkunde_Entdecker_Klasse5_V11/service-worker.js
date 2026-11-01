@@ -1,5 +1,5 @@
 /* Offline-Start der bestehenden, eigenständigen Erdkunde-App auf GitHub Pages. */
-const CACHE='erdkunde-v11-stimmen-20261101-v23';
+const CACHE='erdkunde-v11-vorlesen-20261101-v24';
 const APP='./index.html';
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.add(new Request(APP,{cache:'reload'}))).then(()=>self.skipWaiting()));

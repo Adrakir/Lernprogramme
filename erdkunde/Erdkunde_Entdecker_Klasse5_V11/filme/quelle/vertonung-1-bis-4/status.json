@@ -1,0 +1,17 @@
+{
+  "status": "awaiting_explicit_external_speech_credit_approval",
+  "generated_masters": [
+    "4_Paul"
+  ],
+  "pending_masters": [
+    "4_Herr_Welt",
+    "4_Gustav",
+    "123_Paul",
+    "123_Herr_Welt",
+    "123_Gustav"
+  ],
+  "accepted_job_id": "11daae63-3828-44ee-9473-32397d5fcdb1",
+  "published_video_replacements": [],
+  "voices": "Same Seed Audio preset identities as accepted episodes 5\u20137",
+  "reason": "Automatic approval review blocked further external submissions and credit use; no automatic retry."
+}

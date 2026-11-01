@@ -1,0 +1,436 @@
+[
+  {
+    "ep": 1,
+    "scene": 0,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Herr Welt,   wie sieht unsere Erde eigentlich aus – und was ist in ihr drin?"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 1,
+    "parts": [
+      {
+        "role": "Herr Welt",
+        "text": "Das zeigt uns Gustav Globus!   Hallo Paul!"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 2,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Unsere Erde ist fast kugelförmig. An Nordpol und Südpol ist sie ein wenig abgeplattet."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 3,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Hier siehst du den Nordpol und dort den Südpol.   Die gedachte Linie dazwischen heißt Erdachse."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 4,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Schauen wir nun in die Erde hinein."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 5,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Außen liegt die dünne Erdkruste.   Darunter der dicke Erdmantel.   Im Inneren liegt der Kern – außen flüssig, innen fest."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 6,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "So sieht unser Erdaufbau schematisch aus."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 7,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Wir leben auf der dünnen Erdkruste!"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 1,
+    "scene": 8,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Genau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 0,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Gustav, warum hat die Erde eigentlich zwei Hälften?"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 1,
+    "parts": [
+      {
+        "role": "Herr Welt",
+        "text": "Zeig uns doch den Äquator, Gustav!"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 2,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Das ist der Äquator: eine gedachte Linie rund um die Mitte der Erde. Er liegt bei null Grad geografischer Breite."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 3,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Nördlich davon ist die Nordhalbkugel. Südlich davon die Südhalbkugel."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 4,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Die Erde bleibt eine Kugel; der Äquator teilt sie nur gedanklich in zwei gleich große Hälften."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 5,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Und wo liegt Deutschland?"
+      },
+      {
+        "role": "Gustav",
+        "text": "Deutschland liegt nördlich des Äquators: Nordhalbkugel."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 6,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Australien liegt südlich des Äquators: Südhalbkugel."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 7,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Direkt am Äquator beträgt die geografische Breite null Grad. Äquator gleich null Grad Breite."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 2,
+    "scene": 8,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Liegt Australien nördlich oder südlich des Äquators?"
+      },
+      {
+        "role": "Gustav",
+        "text": "Südlich! Gut gemacht! Nächstes Mal lernen wir den Nullmeridian kennen."
+      }
+    ],
+    "quiz": true
+  },
+  {
+    "ep": 3,
+    "scene": 0,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Gustav, der Äquator trennt Norden und Süden. Wie teilen wir die Erde in Osten und Westen?"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 1,
+    "parts": [
+      {
+        "role": "Herr Welt",
+        "text": "Das zeigt uns der Nullmeridian!"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 2,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol. Er verläuft durch Greenwich bei London und hat null Grad geografische Länge."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 3,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Meridiane laufen von Pol zu Pol. Sie sind halbe Großkreise, keine waagerechten Breitenkreise."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 4,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Gegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 5,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Östlich von null bis 180 Grad liegt die Osthalbkugel. Westlich von null bis 180 Grad liegt die Westhalbkugel."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 6,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Deutschland liegt etwas östlich des Nullmeridians. New York liegt westlich davon."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 7,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Hat die Erde jetzt vier Viertel?"
+      },
+      {
+        "role": "Gustav",
+        "text": "Genau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 3,
+    "scene": 8,
+    "parts": [
+      {
+        "role": "Herr Welt",
+        "text": "Wo liegt New York – östlich oder westlich des Nullmeridians?"
+      },
+      {
+        "role": "Gustav",
+        "text": "Westlich."
+      }
+    ],
+    "quiz": true
+  },
+  {
+    "ep": 4,
+    "scene": 0,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Herr Welt, der Äquator teilt in Nord und Süd. Gibt es auch vier Erdviertel?"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 1,
+    "parts": [
+      {
+        "role": "Herr Welt",
+        "text": "Ja, Paul! Gustav Globus zeigt uns, wie das funktioniert."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 2,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Der Äquator teilt die Erde in die Nordhalbkugel und die Südhalbkugel."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 3,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Der Nullmeridian und der gegenüberliegende hundertachtzig Grad Meridian teilen die Erde in Osten und Westen."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 4,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Wenn beide Teilungen zusammenkommen, entstehen vier Erdviertelkugeln."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 5,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Nordost liegt nördlich des Äquators und östlich des Nullmeridians. Nordwest liegt nördlich und westlich."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 6,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Südost liegt südlich und östlich. Südwest liegt südlich und westlich."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 7,
+    "parts": [
+      {
+        "role": "Paul",
+        "text": "Warum sagen wir Nordost und nicht Ostnord?"
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 8,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Bei den Erdvierteln nennen wir zuerst Nord oder Süd, danach Ost oder West. Das ist die übliche Namensreihenfolge."
+      }
+    ],
+    "quiz": false
+  },
+  {
+    "ep": 4,
+    "scene": 9,
+    "parts": [
+      {
+        "role": "Herr Welt",
+        "text": "Deutschland liegt nördlich des Äquators und östlich des Nullmeridians. In welchem Viertel liegt es?"
+      }
+    ],
+    "quiz": true
+  },
+  {
+    "ep": 4,
+    "scene": 10,
+    "parts": [
+      {
+        "role": "Gustav",
+        "text": "Genau! Im Nordostviertel. Im nächsten Film sehen wir die Erde von der Seite und von oben."
+      }
+    ],
+    "quiz": false
+  }
+]
