@@ -2,9 +2,9 @@
 (function () {
   'use strict';
   const films = Object.freeze([
-    {n:1,title:'Unsere Erde und ihr Aufbau',time:'0:43',info:'Erdkugel, Erdkruste, Erdmantel und Erdkern.',task:'Welche Erdschicht befindet sich direkt unter unseren Füßen?',topics:['geographie','erde'],lab:['world']},
-    {n:2,title:'Äquator, Nord- und Südhalbkugel',time:'1:01',info:'Der Äquator liegt auf 0° geografischer Breite.',task:'Liegt Deutschland nördlich oder südlich des Äquators?',topics:['gradnetz','erde'],lab:['coords','world']},
-    {n:3,title:'Nullmeridian, Ost- und Westhalbkugel',time:'0:59',info:'Nullmeridian und 180°-Meridian teilen die Erde in Ost und West.',task:'Durch welchen Ort bei London verläuft der Nullmeridian?',topics:['gradnetz','erde'],lab:['coords','world']},
+    {n:1,poster:'Gustav_Globus_Folge1_Vorschau.jpg',title:'Unsere Erde und ihr Aufbau',time:'0:57',info:'Erdkugel, Erdkruste, Erdmantel und Erdkern.',task:'Welche Erdschicht befindet sich direkt unter unseren Füßen?',topics:['geographie','erde'],lab:['world']},
+    {n:2,poster:'Gustav_Globus_Folge2_Vorschau.jpg',title:'Äquator, Nord- und Südhalbkugel',time:'1:08',info:'Der Äquator liegt auf 0° geografischer Breite.',task:'Liegt Deutschland nördlich oder südlich des Äquators?',topics:['gradnetz','erde'],lab:['coords','world']},
+    {n:3,poster:'Gustav_Globus_Folge3_Vorschau.jpg',title:'Nullmeridian, Ost- und Westhalbkugel',time:'1:13',info:'Nullmeridian und 180°-Meridian teilen die Erde in Ost und West.',task:'Durch welchen Ort bei London verläuft der Nullmeridian?',topics:['gradnetz','erde'],lab:['coords','world']},
     {n:4,title:'Die vier Erdviertelkugeln',time:'1:30',info:'Nordost, Nordwest, Südost und Südwest – Norden/Süden zuerst.',task:'In welcher Erdviertelkugel liegt Deutschland?',poster:'Gustav_Globus_Folge4_Vorschau.jpg',topics:['gradnetz','erde','himmelsrichtungen'],lab:['coords','world']},
     {n:5,title:'Seitenansicht und Draufsicht',time:'1:32',info:'Dieselbe Erdkugel aus verschiedenen Blickrichtungen, auch am Haus erklärt.',task:'Wo siehst du den Nordpol, wenn du von oben auf den Nordpol schaust?',poster:'Gustav_Globus_Folge5_Vorschau_compare.jpg',topics:['perspektive','luftbild','projektionen'],lab:['view','projection']},
     {n:6,title:'Das Gradnetz und Koordinaten',time:'1:51',info:'Breitenkreise und gekrümmte Meridiane: erst Breite, dann Länge.',task:'Was liest du zuerst ab: 52° N oder 10° O?',poster:'Gustav_Globus_Folge6_Vorschau_Schnittpunkt.jpg',topics:['gradnetz','atlanten'],lab:['coords','atlas']},
@@ -14,7 +14,7 @@
   const escapeText = x => String(x).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const onlineBase = 'https://adrakir.github.io/Lernprogramme/erdkunde/Erdkunde_Entdecker_Klasse5_V11/filme/videos/';
   const base = location.protocol === 'file:' ? onlineBase : 'filme/videos/';
-  const src = n => base + 'folge-' + n + '.mp4' + (n >= 4 ? '?v=stimmen-20261101' : '');
+  const src = n => base + 'folge-' + n + '.mp4' + (n <= 3 ? '?v=stimmen-20261101-r2' : '?v=stimmen-20261101');
   const poster = f => f.poster ? base + f.poster : '';
   let active = 1;
   function cardFilm(f) {

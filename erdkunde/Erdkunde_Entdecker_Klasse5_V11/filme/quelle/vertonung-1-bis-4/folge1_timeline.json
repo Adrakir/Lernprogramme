@@ -1,0 +1,471 @@
+{
+  "episode": 1,
+  "duration_seconds": 57.26666666666667,
+  "width": 1280,
+  "height": 720,
+  "fps": 15,
+  "style": "Existing textbook palette and approved character artwork; exact geographic diagrams",
+  "map_geometry": "Basemap coastlines; orthographic projection from build_hd.py",
+  "speech_speed": 1.0,
+  "listening_review": "not_performed",
+  "full_decode": "passed",
+  "measured_mix": {
+    "input_i": "-15.42",
+    "input_tp": "-0.79",
+    "input_lra": "4.30",
+    "input_thresh": "-26.17",
+    "output_i": "-16.27",
+    "output_tp": "-1.50",
+    "output_lra": "4.10",
+    "output_thresh": "-26.97",
+    "normalization_type": "dynamic",
+    "target_offset": "0.27"
+  },
+  "cues": [
+    {
+      "role": "Paul",
+      "text": "Herr Welt,   wie sieht unsere Erde eigentlich aus – und was ist in ihr drin?",
+      "start": 0.35,
+      "end": 5.67
+    },
+    {
+      "role": "Herr Welt",
+      "text": "Das zeigt uns Gustav Globus! Hallo Paul!",
+      "start": 6.816666666666666,
+      "end": 11.676666666666666
+    },
+    {
+      "role": "Gustav",
+      "text": "Unsere Erde ist fast kugelförmig.",
+      "start": 12.956666666666667,
+      "end": 15.536666666666667
+    },
+    {
+      "role": "Gustav",
+      "text": "An Nordpol und Südpol ist sie ein wenig abgeplattet.",
+      "start": 15.956666666666667,
+      "end": 19.316666666666666
+    },
+    {
+      "role": "Gustav",
+      "text": "Hier siehst du den Nordpol und dort den Südpol.",
+      "start": 20.623333333333335,
+      "end": 23.563333333333333
+    },
+    {
+      "role": "Gustav",
+      "text": "Die gedachte Linie dazwischen heißt Erdachse.",
+      "start": 24.263333333333335,
+      "end": 27.063333333333333
+    },
+    {
+      "role": "Gustav",
+      "text": "Schauen wir nun in die Erde hinein.",
+      "start": 28.35666666666667,
+      "end": 30.61666666666667
+    },
+    {
+      "role": "Gustav",
+      "text": "Außen liegt die dünne Erdkruste. Darunter der dicke Erdmantel.",
+      "start": 31.89,
+      "end": 36.75
+    },
+    {
+      "role": "Gustav",
+      "text": "Im Inneren liegt der Kern – außen flüssig, innen fest.",
+      "start": 37.489999999999995,
+      "end": 41.67
+    },
+    {
+      "role": "Gustav",
+      "text": "So sieht unser Erdaufbau schematisch aus.",
+      "start": 42.95666666666667,
+      "end": 45.99666666666667
+    },
+    {
+      "role": "Paul",
+      "text": "Wir leben auf der dünnen Erdkruste!",
+      "start": 47.290000000000006,
+      "end": 49.970000000000006
+    },
+    {
+      "role": "Gustav",
+      "text": "Genau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt.",
+      "start": 51.290000000000006,
+      "end": 56.51050000000001
+    }
+  ],
+  "scenes": [
+    {
+      "ep": 1,
+      "scene": 0,
+      "start": 0.0,
+      "end": 6.466666666666667,
+      "duration": 6.466666666666667,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 0,
+          "role": "Paul",
+          "text": "Herr Welt,   wie sieht unsere Erde eigentlich aus – und was ist in ihr drin?",
+          "speech_start": 0.0,
+          "speech_end": 5.16,
+          "coverage": 1.0,
+          "recognized": "Herr Welt, wie sieht unsere Erde eigentlich aus? Und was ist in ihr drin?",
+          "word_start": 0,
+          "word_end": 13,
+          "token_start": 0,
+          "token_end": 14,
+          "source": "123_Paul",
+          "source_in": 0.0,
+          "source_out": 5.34,
+          "gain": 1.2776883927105565,
+          "duration": 5.34,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Herr Welt,   wie sieht unsere Erde eigentlich aus – und was ist in ihr drin?",
+              "start": 0.0,
+              "end": 5.32
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 1,
+      "start": 6.466666666666667,
+      "end": 12.466666666666667,
+      "duration": 6.0,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 1,
+          "role": "Herr Welt",
+          "text": "Das zeigt uns Gustav Globus!   Hallo Paul!",
+          "speech_start": 0.0,
+          "speech_end": 4.7,
+          "coverage": 1.0,
+          "recognized": "Das zeigt uns Gustav Globus. Hallo Paul.",
+          "word_start": 0,
+          "word_end": 6,
+          "token_start": 0,
+          "token_end": 7,
+          "source": "123_Herr_Welt",
+          "source_in": 0.0,
+          "source_out": 4.88,
+          "gain": 0.89669509979869,
+          "duration": 4.88,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Das zeigt uns Gustav Globus! Hallo Paul!",
+              "start": 0.0,
+              "end": 4.86
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 2,
+      "start": 12.466666666666667,
+      "end": 20.133333333333333,
+      "duration": 7.666666666666667,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 2,
+          "role": "Gustav",
+          "text": "Unsere Erde ist fast kugelförmig. An Nordpol und Südpol ist sie ein wenig abgeplattet.",
+          "speech_start": 0.18,
+          "speech_end": 6.38,
+          "coverage": 1.0,
+          "recognized": "Unsere Erde ist fast kugelförmig. An Nordpol und Südpol ist sie ein wenig abgeplattet.",
+          "word_start": 0,
+          "word_end": 13,
+          "token_start": 0,
+          "token_end": 14,
+          "source": "1_Gustav",
+          "source_in": 0.03999999999999998,
+          "source_out": 6.56,
+          "gain": 1.3142758885943022,
+          "duration": 6.52,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Unsere Erde ist fast kugelförmig.",
+              "start": 0.14,
+              "end": 2.72
+            },
+            {
+              "text": "An Nordpol und Südpol ist sie ein wenig abgeplattet.",
+              "start": 3.14,
+              "end": 6.5
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 3,
+      "start": 20.133333333333333,
+      "end": 27.866666666666667,
+      "duration": 7.733333333333333,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 3,
+          "role": "Gustav",
+          "text": "Hier siehst du den Nordpol und dort den Südpol.   Die gedachte Linie dazwischen heißt Erdachse.",
+          "speech_start": 7.24,
+          "speech_end": 13.52,
+          "coverage": 1.0,
+          "recognized": "Hier siehst du den Nordpol und dort den Südpol. Die gedachte Linie dazwischen heißt Erdachse.",
+          "word_start": 14,
+          "word_end": 28,
+          "token_start": 14,
+          "token_end": 29,
+          "source": "1_Gustav",
+          "source_in": 7.1000000000000005,
+          "source_out": 13.7,
+          "gain": 1.3142758885943022,
+          "duration": 6.6,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Hier siehst du den Nordpol und dort den Südpol.",
+              "start": 0.13999999999999968,
+              "end": 3.079999999999999
+            },
+            {
+              "text": "Die gedachte Linie dazwischen heißt Erdachse.",
+              "start": 3.7800000000000002,
+              "end": 6.579999999999999
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 4,
+      "start": 27.866666666666667,
+      "end": 31.4,
+      "duration": 3.533333333333333,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 4,
+          "role": "Gustav",
+          "text": "Schauen wir nun in die Erde hinein.",
+          "speech_start": 14.54,
+          "speech_end": 16.64,
+          "coverage": 1.0,
+          "recognized": "Schauen wir nun in die Erde hinein.",
+          "word_start": 29,
+          "word_end": 35,
+          "token_start": 29,
+          "token_end": 36,
+          "source": "1_Gustav",
+          "source_in": 14.399999999999999,
+          "source_out": 16.82,
+          "gain": 1.3142758885943022,
+          "duration": 2.42,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Schauen wir nun in die Erde hinein.",
+              "start": 0.14000000000000057,
+              "end": 2.400000000000002
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 5,
+      "start": 31.4,
+      "end": 42.46666666666667,
+      "duration": 11.066666666666666,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 5,
+          "role": "Gustav",
+          "text": "Außen liegt die dünne Erdkruste.   Darunter der dicke Erdmantel.   Im Inneren liegt der Kern – außen flüssig, innen fest.",
+          "speech_start": 17.8,
+          "speech_end": 27.42,
+          "coverage": 1.0,
+          "recognized": "Außen liegt die dünne Erdkruste, darunter der dicke Erdmantel. Im Inneren liegt der Kern, außenflüssig, innenfest.",
+          "word_start": 36,
+          "word_end": 51,
+          "token_start": 36,
+          "token_end": 54,
+          "source": "1_Gustav",
+          "source_in": 17.66,
+          "source_out": 27.6,
+          "gain": 1.3142758885943022,
+          "duration": 9.94,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Außen liegt die dünne Erdkruste. Darunter der dicke Erdmantel.",
+              "start": 0.14000000000000057,
+              "end": 5.0
+            },
+            {
+              "text": "Im Inneren liegt der Kern – außen flüssig, innen fest.",
+              "start": 5.739999999999998,
+              "end": 9.920000000000002
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 6,
+      "start": 42.46666666666667,
+      "end": 46.800000000000004,
+      "duration": 4.333333333333333,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 6,
+          "role": "Gustav",
+          "text": "So sieht unser Erdaufbau schematisch aus.",
+          "speech_start": 29.62,
+          "speech_end": 32.5,
+          "coverage": 1.0,
+          "recognized": "So sieht unser Erdaufbau schematisch aus.",
+          "word_start": 52,
+          "word_end": 57,
+          "token_start": 54,
+          "token_end": 60,
+          "source": "1_Gustav",
+          "source_in": 29.48,
+          "source_out": 32.68,
+          "gain": 1.3142758885943022,
+          "duration": 3.2,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "So sieht unser Erdaufbau schematisch aus.",
+              "start": 0.14000000000000057,
+              "end": 3.179999999999996
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 7,
+      "start": 46.800000000000004,
+      "end": 50.800000000000004,
+      "duration": 4.0,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 7,
+          "role": "Paul",
+          "text": "Wir leben auf der dünnen Erdkruste!",
+          "speech_start": 6.46,
+          "speech_end": 8.98,
+          "coverage": 1.0,
+          "recognized": "Wir leben auf der dünnen Erdkruste.",
+          "word_start": 14,
+          "word_end": 19,
+          "token_start": 14,
+          "token_end": 20,
+          "source": "123_Paul",
+          "source_in": 6.32,
+          "source_out": 9.16,
+          "gain": 1.2776883927105565,
+          "duration": 2.84,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Wir leben auf der dünnen Erdkruste!",
+              "start": 0.13999999999999968,
+              "end": 2.8200000000000003
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 1,
+      "scene": 8,
+      "start": 50.800000000000004,
+      "end": 57.26666666666667,
+      "duration": 6.466666666666667,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 1,
+          "scene": 8,
+          "role": "Gustav",
+          "text": "Genau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt.",
+          "speech_start": 33.54,
+          "speech_end": 38.62,
+          "coverage": 1.0,
+          "recognized": "Genau, im nächsten Film zeige ich dir, wie der Equator die Erde teilt.",
+          "word_start": 58,
+          "word_end": 70,
+          "token_start": 60,
+          "token_end": 73,
+          "source": "1_Gustav",
+          "source_in": 33.4,
+          "source_out": 38.7605,
+          "gain": 1.3142758885943022,
+          "duration": 5.3605,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Genau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt.",
+              "start": 0.14000000000000057,
+              "end": 5.360500000000002
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    }
+  ],
+  "encoded_audio_measurement": {
+    "input_i": "-16.05",
+    "input_tp": "-1.52",
+    "input_lra": "3.90",
+    "input_thresh": "-26.77",
+    "output_i": "-15.86",
+    "output_tp": "-1.50",
+    "output_lra": "3.90",
+    "output_thresh": "-26.55",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.14"
+  },
+  "sha256": "d3d3f4b824b9c77345cbcad0606e6da597773b6539e946ed252468516d9bb72a",
+  "source_audio_storage": "Lossless FLAC; identical decoded PCM to downloaded WAV recordings."
+}

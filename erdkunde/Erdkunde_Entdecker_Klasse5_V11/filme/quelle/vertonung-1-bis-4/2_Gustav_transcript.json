@@ -1,0 +1,411 @@
+{
+  "duration": 46.393125,
+  "text": " Das ist der Equator. Eine gedachte Linie rund um die Mitte der Erde.  Er liegt bei null Grad geografischer Breite.  Nördlich davon ist die Nordhalbkugel. Südlich davon die Südhalbkugel.  Die Erde bleibt eine Kugel. Der Equator teilt sie nur gedanklich in zwei gleichgroße Hälften.  Deutschland liegt nördlich des Equators, Nordhalbkugel.  Australien liegt südlich des Equators, Südhalbkugel.  Direkt am Equator beträgt die geografische Breite null Grad.  Equator gleich null Grad Breite. Südlich. Gut gemacht.  Nächstes Mal lernen wir den null Meridian kennen.",
+  "words": [
+    [
+      0.11,
+      0.67,
+      " Das"
+    ],
+    [
+      0.67,
+      0.91,
+      " ist"
+    ],
+    [
+      0.91,
+      1.13,
+      " der"
+    ],
+    [
+      1.13,
+      1.63,
+      " Equator."
+    ],
+    [
+      2.25,
+      2.51,
+      " Eine"
+    ],
+    [
+      2.51,
+      2.93,
+      " gedachte"
+    ],
+    [
+      2.93,
+      3.45,
+      " Linie"
+    ],
+    [
+      3.45,
+      3.75,
+      " rund"
+    ],
+    [
+      3.75,
+      3.97,
+      " um"
+    ],
+    [
+      3.97,
+      4.11,
+      " die"
+    ],
+    [
+      4.11,
+      4.33,
+      " Mitte"
+    ],
+    [
+      4.33,
+      4.57,
+      " der"
+    ],
+    [
+      4.57,
+      4.85,
+      " Erde."
+    ],
+    [
+      5.75,
+      5.95,
+      " Er"
+    ],
+    [
+      5.95,
+      6.15,
+      " liegt"
+    ],
+    [
+      6.15,
+      6.43,
+      " bei"
+    ],
+    [
+      6.43,
+      6.77,
+      " null"
+    ],
+    [
+      6.77,
+      7.17,
+      " Grad"
+    ],
+    [
+      7.17,
+      8.03,
+      " geografischer"
+    ],
+    [
+      8.03,
+      8.47,
+      " Breite."
+    ],
+    [
+      9.71,
+      10.39,
+      " Nördlich"
+    ],
+    [
+      10.39,
+      10.77,
+      " davon"
+    ],
+    [
+      10.77,
+      11.05,
+      " ist"
+    ],
+    [
+      11.05,
+      11.23,
+      " die"
+    ],
+    [
+      11.23,
+      12.13,
+      " Nordhalbkugel."
+    ],
+    [
+      12.65,
+      13.15,
+      " Südlich"
+    ],
+    [
+      13.15,
+      13.59,
+      " davon"
+    ],
+    [
+      13.59,
+      13.85,
+      " die"
+    ],
+    [
+      13.85,
+      14.77,
+      " Südhalbkugel."
+    ],
+    [
+      15.59,
+      15.79,
+      " Die"
+    ],
+    [
+      15.79,
+      16.03,
+      " Erde"
+    ],
+    [
+      16.03,
+      16.37,
+      " bleibt"
+    ],
+    [
+      16.37,
+      16.67,
+      " eine"
+    ],
+    [
+      16.67,
+      17.11,
+      " Kugel."
+    ],
+    [
+      17.77,
+      18.01,
+      " Der"
+    ],
+    [
+      18.01,
+      18.49,
+      " Equator"
+    ],
+    [
+      18.49,
+      18.95,
+      " teilt"
+    ],
+    [
+      18.95,
+      19.11,
+      " sie"
+    ],
+    [
+      19.11,
+      19.39,
+      " nur"
+    ],
+    [
+      19.39,
+      19.97,
+      " gedanklich"
+    ],
+    [
+      19.97,
+      20.23,
+      " in"
+    ],
+    [
+      20.23,
+      20.53,
+      " zwei"
+    ],
+    [
+      20.53,
+      21.35,
+      " gleichgroße"
+    ],
+    [
+      21.35,
+      21.67,
+      " Hälften."
+    ],
+    [
+      22.83,
+      23.41,
+      " Deutschland"
+    ],
+    [
+      23.41,
+      23.77,
+      " liegt"
+    ],
+    [
+      23.77,
+      24.15,
+      " nördlich"
+    ],
+    [
+      24.15,
+      24.37,
+      " des"
+    ],
+    [
+      24.37,
+      24.87,
+      " Equators,"
+    ],
+    [
+      25.21,
+      26.09,
+      " Nordhalbkugel."
+    ],
+    [
+      27.03,
+      27.91,
+      " Australien"
+    ],
+    [
+      27.91,
+      28.11,
+      " liegt"
+    ],
+    [
+      28.11,
+      28.63,
+      " südlich"
+    ],
+    [
+      28.63,
+      28.81,
+      " des"
+    ],
+    [
+      28.81,
+      29.33,
+      " Equators,"
+    ],
+    [
+      29.59,
+      30.47,
+      " Südhalbkugel."
+    ],
+    [
+      31.61,
+      32.49,
+      " Direkt"
+    ],
+    [
+      32.49,
+      32.63,
+      " am"
+    ],
+    [
+      32.63,
+      33.13,
+      " Equator"
+    ],
+    [
+      33.13,
+      33.63,
+      " beträgt"
+    ],
+    [
+      33.63,
+      33.87,
+      " die"
+    ],
+    [
+      33.87,
+      34.61,
+      " geografische"
+    ],
+    [
+      34.61,
+      35.01,
+      " Breite"
+    ],
+    [
+      35.01,
+      35.31,
+      " null"
+    ],
+    [
+      35.31,
+      35.65,
+      " Grad."
+    ],
+    [
+      36.21,
+      37.07,
+      " Equator"
+    ],
+    [
+      37.07,
+      37.37,
+      " gleich"
+    ],
+    [
+      37.37,
+      37.71,
+      " null"
+    ],
+    [
+      37.71,
+      38.05,
+      " Grad"
+    ],
+    [
+      38.05,
+      38.53,
+      " Breite."
+    ],
+    [
+      39.57,
+      40.35,
+      " Südlich."
+    ],
+    [
+      41.17,
+      41.43,
+      " Gut"
+    ],
+    [
+      41.43,
+      41.75,
+      " gemacht."
+    ],
+    [
+      42.97,
+      43.81,
+      " Nächstes"
+    ],
+    [
+      43.81,
+      44.07,
+      " Mal"
+    ],
+    [
+      44.07,
+      44.35,
+      " lernen"
+    ],
+    [
+      44.35,
+      44.59,
+      " wir"
+    ],
+    [
+      44.59,
+      44.77,
+      " den"
+    ],
+    [
+      44.77,
+      45.01,
+      " null"
+    ],
+    [
+      45.01,
+      45.51,
+      " Meridian"
+    ],
+    [
+      45.51,
+      45.89,
+      " kennen."
+    ]
+  ]
+}

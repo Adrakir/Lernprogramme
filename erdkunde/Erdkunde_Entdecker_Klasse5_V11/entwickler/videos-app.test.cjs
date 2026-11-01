@@ -50,6 +50,7 @@ const context={
 vm.createContext(context);
 vm.runInContext(app,context,{timeout:3000});
 assert.equal(context.window.ErdkundeVideos.count,7);
+for (let n=1;n<=3;n++) assert.match(context.window.ErdkundeVideos.films[n-1].src, /\?v=stimmen-20261101-r2$/, 'Neue Tonfassungen der Folgen 1–3 müssen geladen werden');
 assert.match(context.window.ErdkundeVideos.films[3].src,/folge-4\.mp4\?v=stimmen-20261101$/,'Folge 4 muss die neue Tonfassung laden');
 context.window.ErdkundeVideos.open(4);
 assert.match(main.innerHTML,/1:30/);

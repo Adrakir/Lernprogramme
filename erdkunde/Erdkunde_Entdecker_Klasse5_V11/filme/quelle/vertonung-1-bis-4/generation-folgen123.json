@@ -1,0 +1,188 @@
+{
+  "date": "2026-11-01",
+  "credit_purchase": 0,
+  "jobs": [
+    {
+      "key": "1_Gustav",
+      "job_id": "79cd018f-5169-4ba9-b95c-41797fc22df2",
+      "cost": 3.1
+    },
+    {
+      "key": "2_Gustav",
+      "job_id": "723cba95-5671-4770-91cc-01ef20a2fc41",
+      "cost": 3.8
+    },
+    {
+      "key": "3_Gustav",
+      "job_id": "1ad036c2-2159-47b2-8859-fa744eb686ab",
+      "cost": 4.2
+    }
+  ],
+  "masters": [
+    {
+      "key": "1_Gustav",
+      "lines": [
+        {
+          "ep": 1,
+          "scene": 2,
+          "role": "Gustav",
+          "text": "Unsere Erde ist fast kugelförmig. An Nordpol und Südpol ist sie ein wenig abgeplattet."
+        },
+        {
+          "ep": 1,
+          "scene": 3,
+          "role": "Gustav",
+          "text": "Hier siehst du den Nordpol und dort den Südpol.   Die gedachte Linie dazwischen heißt Erdachse."
+        },
+        {
+          "ep": 1,
+          "scene": 4,
+          "role": "Gustav",
+          "text": "Schauen wir nun in die Erde hinein."
+        },
+        {
+          "ep": 1,
+          "scene": 5,
+          "role": "Gustav",
+          "text": "Außen liegt die dünne Erdkruste.   Darunter der dicke Erdmantel.   Im Inneren liegt der Kern – außen flüssig, innen fest."
+        },
+        {
+          "ep": 1,
+          "scene": 6,
+          "role": "Gustav",
+          "text": "So sieht unser Erdaufbau schematisch aus."
+        },
+        {
+          "ep": 1,
+          "scene": 8,
+          "role": "Gustav",
+          "text": "Genau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt."
+        }
+      ],
+      "params": {
+        "model": "seed_audio",
+        "prompt": "Unsere Erde ist fast kugelförmig. An Nordpol und Südpol ist sie ein wenig abgeplattet.\n\nHier siehst du den Nordpol und dort den Südpol.   Die gedachte Linie dazwischen heißt Erdachse.\n\nSchauen wir nun in die Erde hinein.\n\nAußen liegt die dünne Erdkruste.   Darunter der dicke Erdmantel.   Im Inneren liegt der Kern – außen flüssig, innen fest.\n\nSo sieht unser Erdaufbau schematisch aus.\n\nGenau! Im nächsten Film zeige ich dir, wie der Äquator die Erde teilt.",
+        "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
+        "voice_type": "preset",
+        "format": "wav",
+        "sample_rate": 48000,
+        "speech_rate": -10,
+        "pitch_rate": 0
+      }
+    },
+    {
+      "key": "2_Gustav",
+      "lines": [
+        {
+          "ep": 2,
+          "scene": 2,
+          "role": "Gustav",
+          "text": "Das ist der Äquator: eine gedachte Linie rund um die Mitte der Erde. Er liegt bei null Grad geografischer Breite."
+        },
+        {
+          "ep": 2,
+          "scene": 3,
+          "role": "Gustav",
+          "text": "Nördlich davon ist die Nordhalbkugel. Südlich davon die Südhalbkugel."
+        },
+        {
+          "ep": 2,
+          "scene": 4,
+          "role": "Gustav",
+          "text": "Die Erde bleibt eine Kugel; der Äquator teilt sie nur gedanklich in zwei gleich große Hälften."
+        },
+        {
+          "ep": 2,
+          "scene": 5,
+          "role": "Gustav",
+          "text": "Deutschland liegt nördlich des Äquators: Nordhalbkugel."
+        },
+        {
+          "ep": 2,
+          "scene": 6,
+          "role": "Gustav",
+          "text": "Australien liegt südlich des Äquators: Südhalbkugel."
+        },
+        {
+          "ep": 2,
+          "scene": 7,
+          "role": "Gustav",
+          "text": "Direkt am Äquator beträgt die geografische Breite null Grad. Äquator gleich null Grad Breite."
+        },
+        {
+          "ep": 2,
+          "scene": 8,
+          "role": "Gustav",
+          "text": "Südlich! Gut gemacht! Nächstes Mal lernen wir den Nullmeridian kennen."
+        }
+      ],
+      "params": {
+        "model": "seed_audio",
+        "prompt": "Das ist der Äquator: eine gedachte Linie rund um die Mitte der Erde. Er liegt bei null Grad geografischer Breite.\n\nNördlich davon ist die Nordhalbkugel. Südlich davon die Südhalbkugel.\n\nDie Erde bleibt eine Kugel; der Äquator teilt sie nur gedanklich in zwei gleich große Hälften.\n\nDeutschland liegt nördlich des Äquators: Nordhalbkugel.\n\nAustralien liegt südlich des Äquators: Südhalbkugel.\n\nDirekt am Äquator beträgt die geografische Breite null Grad. Äquator gleich null Grad Breite.\n\nSüdlich! Gut gemacht! Nächstes Mal lernen wir den Nullmeridian kennen.",
+        "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
+        "voice_type": "preset",
+        "format": "wav",
+        "sample_rate": 48000,
+        "speech_rate": -10,
+        "pitch_rate": 0
+      }
+    },
+    {
+      "key": "3_Gustav",
+      "lines": [
+        {
+          "ep": 3,
+          "scene": 2,
+          "role": "Gustav",
+          "text": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol. Er verläuft durch Greenwich bei London und hat null Grad geografische Länge."
+        },
+        {
+          "ep": 3,
+          "scene": 3,
+          "role": "Gustav",
+          "text": "Meridiane laufen von Pol zu Pol. Sie sind halbe Großkreise, keine waagerechten Breitenkreise."
+        },
+        {
+          "ep": 3,
+          "scene": 4,
+          "role": "Gustav",
+          "text": "Gegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften."
+        },
+        {
+          "ep": 3,
+          "scene": 5,
+          "role": "Gustav",
+          "text": "Östlich von null bis 180 Grad liegt die Osthalbkugel. Westlich von null bis 180 Grad liegt die Westhalbkugel."
+        },
+        {
+          "ep": 3,
+          "scene": 6,
+          "role": "Gustav",
+          "text": "Deutschland liegt etwas östlich des Nullmeridians. New York liegt westlich davon."
+        },
+        {
+          "ep": 3,
+          "scene": 7,
+          "role": "Gustav",
+          "text": "Genau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge."
+        },
+        {
+          "ep": 3,
+          "scene": 8,
+          "role": "Gustav",
+          "text": "Westlich."
+        }
+      ],
+      "params": {
+        "model": "seed_audio",
+        "prompt": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol. Er verläuft durch Greenwich bei London und hat null Grad geografische Länge.\n\nMeridiane laufen von Pol zu Pol. Sie sind halbe Großkreise, keine waagerechten Breitenkreise.\n\nGegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften.\n\nÖstlich von null bis 180 Grad liegt die Osthalbkugel. Westlich von null bis 180 Grad liegt die Westhalbkugel.\n\nDeutschland liegt etwas östlich des Nullmeridians. New York liegt westlich davon.\n\nGenau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge.\n\nWestlich.",
+        "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
+        "voice_type": "preset",
+        "format": "wav",
+        "sample_rate": 48000,
+        "speech_rate": -10,
+        "pitch_rate": 0
+      }
+    }
+  ]
+}

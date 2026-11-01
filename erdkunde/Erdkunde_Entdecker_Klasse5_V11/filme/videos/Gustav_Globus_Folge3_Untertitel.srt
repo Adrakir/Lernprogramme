@@ -1,0 +1,67 @@
+1
+00:00:00,490 --> 00:00:03,890
+Paul: Gustav, der Äquator trennt Norden und Süden.
+
+2
+00:00:04,390 --> 00:00:07,650
+Paul: Wie teilen wir die Erde in Osten und Westen?
+
+3
+00:00:08,957 --> 00:00:11,037
+Herr Welt: Das zeigt uns der Nullmeridian!
+
+4
+00:00:12,357 --> 00:00:16,137
+Gustav: Der Nullmeridian ist eine gedachte Linie von Pol zu Pol.
+
+5
+00:00:16,637 --> 00:00:20,777
+Gustav: Er verläuft durch Greenwich bei London und hat null Grad geografische Länge.
+
+6
+00:00:22,090 --> 00:00:24,270
+Gustav: Meridiane laufen von Pol zu Pol.
+
+7
+00:00:24,510 --> 00:00:27,950
+Gustav: Sie sind halbe Großkreise, keine waagerechten Breitenkreise.
+
+8
+00:00:29,223 --> 00:00:32,923
+Gustav: Gegenüber liegt der 180-Grad-Meridian.
+
+9
+00:00:33,543 --> 00:00:39,003
+Gustav: Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften.
+
+10
+00:00:40,290 --> 00:00:43,730
+Gustav: Östlich von null bis 180 Grad liegt die Osthalbkugel.
+
+11
+00:00:43,730 --> 00:00:47,930
+Gustav: Westlich von null bis 180 Grad liegt die Westhalbkugel.
+
+12
+00:00:49,223 --> 00:00:51,983
+Gustav: Deutschland liegt etwas östlich des Nullmeridians.
+
+13
+00:00:52,603 --> 00:00:54,443
+Gustav: New York liegt westlich davon.
+
+14
+00:00:55,757 --> 00:00:57,937
+Paul: Hat die Erde jetzt vier Viertel?
+
+15
+00:00:58,577 --> 00:01:02,617
+Gustav: Genau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge.
+
+16
+00:01:03,890 --> 00:01:07,830
+Herr Welt: Wo liegt New York – östlich oder westlich des Nullmeridians?
+
+17
+00:01:10,990 --> 00:01:11,750
+Gustav: Westlich.

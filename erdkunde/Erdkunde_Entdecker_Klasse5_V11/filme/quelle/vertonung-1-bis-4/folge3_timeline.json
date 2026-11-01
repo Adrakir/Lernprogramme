@@ -1,0 +1,572 @@
+{
+  "episode": 3,
+  "duration_seconds": 72.53333333333333,
+  "width": 1280,
+  "height": 720,
+  "fps": 15,
+  "style": "Existing textbook palette and approved character artwork; exact geographic diagrams",
+  "map_geometry": "Basemap coastlines; orthographic projection from build_hd.py",
+  "speech_speed": 1.0,
+  "listening_review": "not_performed",
+  "full_decode": "passed",
+  "measured_mix": {
+    "input_i": "-15.48",
+    "input_tp": "-0.42",
+    "input_lra": "5.30",
+    "input_thresh": "-26.19",
+    "output_i": "-16.18",
+    "output_tp": "-1.50",
+    "output_lra": "4.20",
+    "output_thresh": "-26.85",
+    "normalization_type": "dynamic",
+    "target_offset": "0.18"
+  },
+  "cues": [
+    {
+      "role": "Paul",
+      "text": "Gustav, der Äquator trennt Norden und Süden.",
+      "start": 0.49000000000000055,
+      "end": 3.8899999999999992
+    },
+    {
+      "role": "Paul",
+      "text": "Wie teilen wir die Erde in Osten und Westen?",
+      "start": 4.389999999999999,
+      "end": 7.65
+    },
+    {
+      "role": "Herr Welt",
+      "text": "Das zeigt uns der Nullmeridian!",
+      "start": 8.956666666666667,
+      "end": 11.036666666666667
+    },
+    {
+      "role": "Gustav",
+      "text": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol.",
+      "start": 12.356666666666667,
+      "end": 16.136666666666667
+    },
+    {
+      "role": "Gustav",
+      "text": "Er verläuft durch Greenwich bei London und hat null Grad geografische Länge.",
+      "start": 16.636666666666667,
+      "end": 20.776666666666667
+    },
+    {
+      "role": "Gustav",
+      "text": "Meridiane laufen von Pol zu Pol.",
+      "start": 22.090000000000003,
+      "end": 24.270000000000003
+    },
+    {
+      "role": "Gustav",
+      "text": "Sie sind halbe Großkreise, keine waagerechten Breitenkreise.",
+      "start": 24.510000000000005,
+      "end": 27.950000000000003
+    },
+    {
+      "role": "Gustav",
+      "text": "Gegenüber liegt der 180-Grad-Meridian.",
+      "start": 29.223333333333336,
+      "end": 32.92333333333334
+    },
+    {
+      "role": "Gustav",
+      "text": "Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften.",
+      "start": 33.54333333333334,
+      "end": 39.00333333333334
+    },
+    {
+      "role": "Gustav",
+      "text": "Östlich von null bis 180 Grad liegt die Osthalbkugel.",
+      "start": 40.29,
+      "end": 43.730000000000004
+    },
+    {
+      "role": "Gustav",
+      "text": "Westlich von null bis 180 Grad liegt die Westhalbkugel.",
+      "start": 43.730000000000004,
+      "end": 47.93
+    },
+    {
+      "role": "Gustav",
+      "text": "Deutschland liegt etwas östlich des Nullmeridians.",
+      "start": 49.223333333333336,
+      "end": 51.98333333333333
+    },
+    {
+      "role": "Gustav",
+      "text": "New York liegt westlich davon.",
+      "start": 52.60333333333333,
+      "end": 54.44333333333333
+    },
+    {
+      "role": "Paul",
+      "text": "Hat die Erde jetzt vier Viertel?",
+      "start": 55.75666666666667,
+      "end": 57.93666666666667
+    },
+    {
+      "role": "Gustav",
+      "text": "Genau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge.",
+      "start": 58.57666666666667,
+      "end": 62.61666666666667
+    },
+    {
+      "role": "Herr Welt",
+      "text": "Wo liegt New York – östlich oder westlich des Nullmeridians?",
+      "start": 63.89,
+      "end": 67.83
+    },
+    {
+      "role": "Gustav",
+      "text": "Westlich.",
+      "start": 70.9896875,
+      "end": 71.7496875
+    }
+  ],
+  "scenes": [
+    {
+      "ep": 3,
+      "scene": 0,
+      "start": 0.0,
+      "end": 8.466666666666667,
+      "duration": 8.466666666666667,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 0,
+          "role": "Paul",
+          "text": "Gustav, der Äquator trennt Norden und Süden. Wie teilen wir die Erde in Osten und Westen?",
+          "speech_start": 21.32,
+          "speech_end": 28.32,
+          "coverage": 1.0,
+          "recognized": "Gustav, der Äquator trennt Norden und Süden. Wie teilen wir die Erde in Osten und Westen?",
+          "word_start": 39,
+          "word_end": 54,
+          "token_start": 39,
+          "token_end": 55,
+          "source": "123_Paul",
+          "source_in": 21.18,
+          "source_out": 28.5,
+          "gain": 1.2776883927105565,
+          "duration": 7.32,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Gustav, der Äquator trennt Norden und Süden.",
+              "start": 0.14000000000000057,
+              "end": 3.539999999999999
+            },
+            {
+              "text": "Wie teilen wir die Erde in Osten und Westen?",
+              "start": 4.039999999999999,
+              "end": 7.300000000000001
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 1,
+      "start": 8.466666666666667,
+      "end": 11.866666666666667,
+      "duration": 3.4,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 1,
+          "role": "Herr Welt",
+          "text": "Das zeigt uns der Nullmeridian!",
+          "speech_start": 10.72,
+          "speech_end": 12.64,
+          "coverage": 1.0,
+          "recognized": "Das zeigt uns der Nullmeridian.",
+          "word_start": 13,
+          "word_end": 17,
+          "token_start": 13,
+          "token_end": 19,
+          "source": "123_Herr_Welt",
+          "source_in": 10.58,
+          "source_out": 12.82,
+          "gain": 0.89669509979869,
+          "duration": 2.24,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Das zeigt uns der Nullmeridian!",
+              "start": 0.14000000000000057,
+              "end": 2.2200000000000006
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 2,
+      "start": 11.866666666666667,
+      "end": 21.6,
+      "duration": 9.733333333333333,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 2,
+          "role": "Gustav",
+          "text": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol. Er verläuft durch Greenwich bei London und hat null Grad geografische Länge.",
+          "speech_start": 0.14,
+          "speech_end": 8.4,
+          "coverage": 0.9565217391304348,
+          "recognized": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol. Er verläuft durch Greenwich bei London und hat 0° geografische Länge.",
+          "word_start": 0,
+          "word_end": 20,
+          "token_start": 0,
+          "token_end": 23,
+          "source": "3_Gustav",
+          "source_in": 0.0,
+          "source_out": 8.58,
+          "gain": 1.1991548151208575,
+          "duration": 8.58,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Der Nullmeridian ist eine gedachte Linie von Pol zu Pol.",
+              "start": 0.14,
+              "end": 3.92
+            },
+            {
+              "text": "Er verläuft durch Greenwich bei London und hat null Grad geografische Länge.",
+              "start": 4.42,
+              "end": 8.56
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 3,
+      "start": 21.6,
+      "end": 28.733333333333334,
+      "duration": 7.133333333333334,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 3,
+          "role": "Gustav",
+          "text": "Meridiane laufen von Pol zu Pol. Sie sind halbe Großkreise, keine waagerechten Breitenkreise.",
+          "speech_start": 9.48,
+          "speech_end": 15.18,
+          "coverage": 1.0,
+          "recognized": "Meridiane laufen von Pol zu Pol. Sie sind halbe Großkreise, keine waagerechten Breitenkreise.",
+          "word_start": 21,
+          "word_end": 33,
+          "token_start": 23,
+          "token_end": 36,
+          "source": "3_Gustav",
+          "source_in": 9.34,
+          "source_out": 15.36,
+          "gain": 1.1991548151208575,
+          "duration": 6.02,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Meridiane laufen von Pol zu Pol.",
+              "start": 0.14000000000000057,
+              "end": 2.3200000000000003
+            },
+            {
+              "text": "Sie sind halbe Großkreise, keine waagerechten Breitenkreise.",
+              "start": 2.5600000000000005,
+              "end": 6.0
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 4,
+      "start": 28.733333333333334,
+      "end": 39.8,
+      "duration": 11.066666666666666,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 4,
+          "role": "Gustav",
+          "text": "Gegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften.",
+          "speech_start": 0.14,
+          "speech_end": 9.76,
+          "coverage": 0.9444444444444444,
+          "recognized": "Gegenüber liegt der 180 -Grad Meridian. Zusammen bilden beide einen Grosskreis und teilen die Erde in zwei Hälften.",
+          "word_start": 0,
+          "word_end": 17,
+          "token_start": 0,
+          "token_end": 18,
+          "source": "3_Gustav_szene4",
+          "source_in": 0.0,
+          "source_out": 9.94,
+          "gain": 1.1726616907239618,
+          "duration": 9.94,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Gegenüber liegt der 180-Grad-Meridian.",
+              "start": 0.14,
+              "end": 3.8400000000000003
+            },
+            {
+              "text": "Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften.",
+              "start": 4.46,
+              "end": 9.92
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 5,
+      "start": 39.8,
+      "end": 48.733333333333334,
+      "duration": 8.933333333333334,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 5,
+          "role": "Gustav",
+          "text": "Östlich von null bis 180 Grad liegt die Osthalbkugel. Westlich von null bis 180 Grad liegt die Westhalbkugel.",
+          "speech_start": 23.98,
+          "speech_end": 31.46,
+          "coverage": 1.0,
+          "recognized": "Östlich von Null bis 180° liegt die Osthalbkugel. Westlich von 0 bis 180° liegt die Westhalbkugel.",
+          "word_start": 51,
+          "word_end": 66,
+          "token_start": 54,
+          "token_end": 72,
+          "source": "3_Gustav",
+          "source_in": 23.84,
+          "source_out": 31.64,
+          "gain": 1.1991548151208575,
+          "duration": 7.8,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Östlich von null bis 180 Grad liegt die Osthalbkugel.",
+              "start": 0.14000000000000057,
+              "end": 3.580000000000002
+            },
+            {
+              "text": "Westlich von null bis 180 Grad liegt die Westhalbkugel.",
+              "start": 3.580000000000002,
+              "end": 7.780000000000001
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 6,
+      "start": 48.733333333333334,
+      "end": 55.266666666666666,
+      "duration": 6.533333333333333,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 6,
+          "role": "Gustav",
+          "text": "Deutschland liegt etwas östlich des Nullmeridians. New York liegt westlich davon.",
+          "speech_start": 32.2,
+          "speech_end": 37.26,
+          "coverage": 1.0,
+          "recognized": "Deutschland liegt etwas östlich des Nullmeridians. New York liegt westlich davon.",
+          "word_start": 67,
+          "word_end": 77,
+          "token_start": 72,
+          "token_end": 84,
+          "source": "3_Gustav",
+          "source_in": 32.06,
+          "source_out": 37.44,
+          "gain": 1.1991548151208575,
+          "duration": 5.38,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Deutschland liegt etwas östlich des Nullmeridians.",
+              "start": 0.14000000000000057,
+              "end": 2.8999999999999915
+            },
+            {
+              "text": "New York liegt westlich davon.",
+              "start": 3.519999999999996,
+              "end": 5.359999999999992
+            }
+          ],
+          "local_start": 0.35
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 7,
+      "start": 55.266666666666666,
+      "end": 63.4,
+      "duration": 8.133333333333333,
+      "quiz": false,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 7,
+          "role": "Paul",
+          "text": "Hat die Erde jetzt vier Viertel?",
+          "speech_start": 28.86,
+          "speech_end": 30.88,
+          "coverage": 1.0,
+          "recognized": "Hat die Erde jetzt Fier -Fiertel?",
+          "word_start": 55,
+          "word_end": 60,
+          "token_start": 55,
+          "token_end": 61,
+          "source": "123_Paul",
+          "source_in": 28.72,
+          "source_out": 31.06,
+          "gain": 1.2776883927105565,
+          "duration": 2.34,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Hat die Erde jetzt vier Viertel?",
+              "start": 0.14000000000000057,
+              "end": 2.3200000000000003
+            }
+          ],
+          "local_start": 0.35
+        },
+        {
+          "ep": 3,
+          "scene": 7,
+          "role": "Gustav",
+          "text": "Genau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge.",
+          "speech_start": 38.08,
+          "speech_end": 41.96,
+          "coverage": 1.0,
+          "recognized": "Genau, zusammen mit dem Äquator. Das entdecken wir in der nächsten Folge.",
+          "word_start": 78,
+          "word_end": 89,
+          "token_start": 84,
+          "token_end": 96,
+          "source": "3_Gustav",
+          "source_in": 37.94,
+          "source_out": 42.14,
+          "gain": 1.1991548151208575,
+          "duration": 4.2,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Genau, zusammen mit dem Äquator! Das entdecken wir in der nächsten Folge.",
+              "start": 0.14000000000000057,
+              "end": 4.18
+            }
+          ],
+          "local_start": 3.17
+        }
+      ]
+    },
+    {
+      "ep": 3,
+      "scene": 8,
+      "start": 63.4,
+      "end": 72.53333333333333,
+      "duration": 9.133333333333333,
+      "quiz": true,
+      "parts": [
+        {
+          "ep": 3,
+          "scene": 8,
+          "role": "Herr Welt",
+          "text": "Wo liegt New York – östlich oder westlich des Nullmeridians?",
+          "speech_start": 15.1,
+          "speech_end": 18.88,
+          "coverage": 0.9,
+          "recognized": "liegt New York östlich oder westlich des Nullmeridians?",
+          "word_start": 19,
+          "word_end": 26,
+          "token_start": 19,
+          "token_end": 29,
+          "source": "123_Herr_Welt",
+          "source_in": 14.959999999999999,
+          "source_out": 19.0596875,
+          "gain": 0.89669509979869,
+          "duration": 4.0996875,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Wo liegt New York – östlich oder westlich des Nullmeridians?",
+              "start": 0.14000000000000057,
+              "end": 4.08
+            }
+          ],
+          "local_start": 0.35
+        },
+        {
+          "ep": 3,
+          "scene": 8,
+          "role": "Gustav",
+          "text": "Westlich.",
+          "speech_start": 43.46,
+          "speech_end": 44.06,
+          "coverage": 1.0,
+          "recognized": "Westlich",
+          "word_start": 90,
+          "word_end": 90,
+          "token_start": 96,
+          "token_end": 97,
+          "source": "3_Gustav",
+          "source_in": 43.32,
+          "source_out": 44.24,
+          "gain": 1.1991548151208575,
+          "duration": 0.92,
+          "speech_speed": 1.0,
+          "cues": [
+            {
+              "text": "Westlich.",
+              "start": 0.14000000000000057,
+              "end": 0.8999999999999986
+            }
+          ],
+          "local_start": 7.4496875
+        }
+      ]
+    }
+  ],
+  "encoded_audio_measurement": {
+    "input_i": "-16.03",
+    "input_tp": "-1.46",
+    "input_lra": "5.60",
+    "input_thresh": "-26.72",
+    "output_i": "-16.13",
+    "output_tp": "-1.50",
+    "output_lra": "3.90",
+    "output_thresh": "-26.76",
+    "normalization_type": "dynamic",
+    "target_offset": "0.13"
+  },
+  "sha256": "a7d0b7a0b25c4fb9696350600d74a83449fa4eecf3dc1d349d786dd038f84704",
+  "source_audio_storage": "Lossless FLAC; identical decoded PCM to downloaded WAV recordings."
+}

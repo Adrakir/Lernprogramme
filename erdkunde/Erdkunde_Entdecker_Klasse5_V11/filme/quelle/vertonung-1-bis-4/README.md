@@ -1,12 +1,12 @@
-# Neuvertonung – Folge 4 fertig, Folgen 1 bis 3 vorbereitet
+# Neuvertonung – Folgen 1 bis 4 fertig
 
-Folge 4 verwendet jetzt dieselben natürlichen Figurenstimmen wie die bereits neu vertonten Folgen 5 bis 7. Folgen 1 bis 3 sind weiterhin in ihrer bisherigen Fassung vorhanden.
+Folge 4 verwendet jetzt dieselben natürlichen Figurenstimmen wie die bereits neu vertonten Folgen 5 bis 7. Folgen 1 bis 3 sind ebenfalls fertig neu vertont; der aktuelle Nachweis steht in `README_FOLGEN1-3.md` und `status.json`.
 
 ## Vorbereiteter Auftrag
 
 Die vorhandenen Dialoge der Folgen 1 bis 4 werden ohne Sprecherbezeichnungen und Regieanweisungen vorgelesen. Die Figuren erhalten dieselben Seed-Audio-Stimmen wie in den fertigen Folgen 5 bis 7: Paul = Reid, Herr Welt = Arthur, Gustav = Benji. Die Originaltexte, Szenen und Zuordnungen stehen in `plan.json`; die sechs zusammenhängenden Sprecheraufnahmen mit ihren genauen Texten und Parametern in `masters.json`.
 
-Für Folge 4 wurde `4_Paul.wav` wiederverwendet; `4_Herr_Welt.wav` und `4_Gustav.wav` sind nach ausdrücklicher Zustimmung zur Verwendung vorhandener Credits hinzugekommen. Kosten: 5,4 vorhandene Credits (82,7 vorher, 77,3 danach). Es wurden keine Credits gekauft. Die drei Aufnahmen für Folgen 1 bis 3 wurden in diesem Schritt nicht beauftragt.
+Für Folge 4 wurde `4_Paul.wav` wiederverwendet; `4_Herr_Welt.wav` und `4_Gustav.wav` sind nach ausdrücklicher Zustimmung zur Verwendung vorhandener Credits hinzugekommen. Kosten: 5,4 vorhandene Credits (82,7 vorher, 77,3 danach). Es wurden keine Credits gekauft. Die weiteren Aufnahmen und der fertige Schnitt für Folgen 1 bis 3 sind in `README_FOLGEN1-3.md` dokumentiert.
 
 ## Reproduzierbarer Schnitt für Folge 4
 

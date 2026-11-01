@@ -1,0 +1,141 @@
+{
+  "duration": 19.0596875,
+  "text": " Das zeigt uns Gustav Globus.  Hallo Paul. Zeig uns doch den Äquator, Gustav.  Das zeigt uns der Nullmeridian.  Wer liegt New York östlich oder westlich des Nullmeridians?",
+  "words": [
+    [
+      0.0,
+      0.44,
+      " Das"
+    ],
+    [
+      0.44,
+      0.78,
+      " zeigt"
+    ],
+    [
+      0.78,
+      1.04,
+      " uns"
+    ],
+    [
+      1.04,
+      1.66,
+      " Gustav"
+    ],
+    [
+      1.66,
+      2.28,
+      " Globus."
+    ],
+    [
+      3.98,
+      4.24,
+      " Hallo"
+    ],
+    [
+      4.24,
+      4.7,
+      " Paul."
+    ],
+    [
+      6.46,
+      7.02,
+      " Zeig"
+    ],
+    [
+      7.02,
+      7.18,
+      " uns"
+    ],
+    [
+      7.18,
+      7.46,
+      " doch"
+    ],
+    [
+      7.46,
+      7.7,
+      " den"
+    ],
+    [
+      7.7,
+      8.32,
+      " Äquator,"
+    ],
+    [
+      8.68,
+      9.32,
+      " Gustav."
+    ],
+    [
+      10.72,
+      11.14,
+      " Das"
+    ],
+    [
+      11.14,
+      11.5,
+      " zeigt"
+    ],
+    [
+      11.5,
+      11.72,
+      " uns"
+    ],
+    [
+      11.72,
+      11.94,
+      " der"
+    ],
+    [
+      11.94,
+      12.64,
+      " Nullmeridian."
+    ],
+    [
+      14.62,
+      15.1,
+      " Wer"
+    ],
+    [
+      15.1,
+      15.44,
+      " liegt"
+    ],
+    [
+      15.44,
+      15.9,
+      " New"
+    ],
+    [
+      15.9,
+      16.26,
+      " York"
+    ],
+    [
+      16.26,
+      16.9,
+      " östlich"
+    ],
+    [
+      16.9,
+      17.24,
+      " oder"
+    ],
+    [
+      17.24,
+      17.8,
+      " westlich"
+    ],
+    [
+      17.8,
+      18.08,
+      " des"
+    ],
+    [
+      18.08,
+      18.88,
+      " Nullmeridians?"
+    ]
+  ]
+}

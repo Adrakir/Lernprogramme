@@ -1,0 +1,23 @@
+{
+  "key": "3_Gustav_szene4",
+  "lines": [
+    {
+      "ep": 3,
+      "scene": 4,
+      "role": "Gustav",
+      "text": "Gegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften."
+    }
+  ],
+  "voice_name": "Benji",
+  "params": {
+    "model": "seed_audio",
+    "prompt": "Gegenüber liegt der 180-Grad-Meridian. Zusammen bilden beide einen Großkreis und teilen die Erde in zwei Hälften.",
+    "voice_id": "e6f9b893-51b1-51d3-afe9-9e0482cb7ac1",
+    "voice_type": "preset",
+    "format": "wav",
+    "sample_rate": 48000,
+    "speech_rate": -10,
+    "pitch_rate": 0
+  },
+  "job_id": "c6490cff-f171-4a5f-871e-f1bee6c8caff"
+}
