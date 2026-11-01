@@ -4,7 +4,8 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 (async()=>{
  const src=fs.readFileSync(path.join(__dirname,'..','service-worker.js'),'utf8');
  const prefix='erdkunde-v11-thementraining-20261030-';
- const existing=[prefix+'v16',prefix+'v17',prefix+'v18',prefix+'v19','erdkunde-entdecker-pages-old','unrelated-project'];
+ const current='erdkunde-v11-stimmen-20261101-v23';
+ const existing=[prefix+'v16',prefix+'v17',prefix+'v18',prefix+'v19',current,'erdkunde-entdecker-pages-old','unrelated-project'];
  const removed=[],handlers={};
  const cache={
   keys:async()=>existing.slice(),
@@ -26,9 +27,9 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
  let activation;
  handlers.activate({waitUntil:work=>{activation=work}});
  await activation;
- for(const key of [prefix+'v16',prefix+'v17',prefix+'v18','erdkunde-entdecker-pages-old'])
+ for(const key of [prefix+'v16',prefix+'v17',prefix+'v18',prefix+'v19','erdkunde-entdecker-pages-old'])
   assert.ok(removed.includes(key),'Alten Cache entfernen: '+key);
- assert.ok(!removed.includes(prefix+'v19'),'Aktuelle Version bleibt erhalten');
+ assert.ok(!removed.includes(current),'Aktuelle Version bleibt erhalten');
  assert.ok(!removed.includes('unrelated-project'),'Caches anderer Apps werden nicht geloescht');
  let reply;
  handlers.fetch({request:{method:'GET',mode:'navigate',url:scope+'index.html'},

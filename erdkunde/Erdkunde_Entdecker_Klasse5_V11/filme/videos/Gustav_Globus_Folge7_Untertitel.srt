@@ -1,59 +1,59 @@
 1
-00:00:00,430 --> 00:00:07,183
+00:00:00,380 --> 00:00:04,420
 Paul: Herr Welt, ich kenne die Koordinaten. Aber wie finde ich den Ort jetzt in einem Atlas?
 
 2
-00:00:07,763 --> 00:00:16,266
+00:00:05,830 --> 00:00:13,410
 Herr Welt: Zuerst wählen wir im Inhaltsverzeichnis eine passende Karte. Für unser Beispiel ist das eine Deutschlandkarte.
 
 3
-00:00:16,846 --> 00:00:25,433
+00:00:14,810 --> 00:00:23,570
 Gustav: Schau am Kartenrand! Dort stehen Breiten- und Längengrade. Die Linien im Kartenbild bilden das Gradnetz.
 
 4
-00:00:26,013 --> 00:00:34,766
+00:00:24,990 --> 00:00:29,810
 Paul: Ich suche die Gegend um Hannover. Als grobe Koordinaten nehmen wir zweiundfünfzig Grad Nord und zehn Grad Ost.
 
 5
-00:00:35,346 --> 00:00:42,683
+00:00:31,470 --> 00:00:38,170
 Gustav: Merke dir unbedingt: Wir suchen zuerst den Breitengrad und erst danach den Längengrad.
 
 6
-00:00:43,263 --> 00:00:52,766
+00:00:39,550 --> 00:00:48,870
 Gustav: Schritt eins: Suche am linken oder rechten Kartenrand zweiundfünfzig Grad nördlicher Breite. Folge der roten Linie.
 
 7
-00:00:53,346 --> 00:00:59,016
+00:00:50,270 --> 00:00:53,090
 Paul: Jetzt habe ich den Breitenkreis gefunden. Was mache ich als Nächstes?
 
 8
-00:00:59,596 --> 00:01:07,933
+00:00:54,470 --> 00:01:02,450
 Gustav: Schritt zwei: Suche oben oder unten zehn Grad östlicher Länge. Folge dem grünen Meridian.
 
 9
-00:01:08,513 --> 00:01:16,433
+00:01:03,870 --> 00:01:10,570
 Gustav: Dort, wo sich der rote Breitenkreis und der grüne Meridian treffen, liegt unser gesuchter Punkt.
 
 10
-00:01:17,013 --> 00:01:25,600
+00:01:11,950 --> 00:01:19,610
 Herr Welt: Die Stadt Hannover liegt ganz in der Nähe. Gerundete Gradangaben zeigen die ungefähre Lage, nicht jede Straße.
 
 11
-00:01:26,180 --> 00:01:32,850
+00:01:21,030 --> 00:01:24,690
 Paul: Aber in manchen Atlanten sind die Meridiane krumm. Muss ich eine gerade Linie ziehen?
 
 12
-00:01:33,430 --> 00:01:44,183
+00:01:26,070 --> 00:01:37,110
 Gustav: Nein, Paul! Die Darstellung hängt von der Kartenprojektion ab. Verfolge immer dieselbe gebogene Meridianlinie bis zum Breitenkreis.
 
 13
-00:01:44,763 --> 00:01:54,266
+00:01:38,510 --> 00:01:47,210
 Herr Welt: Nicht jeder Grad ist eingezeichnet. Liegt dein Wert zwischen zwei Linien, musst du den Abstand sorgfältig abschätzen.
 
 14
-00:01:54,846 --> 00:02:06,683
+00:01:48,590 --> 00:01:54,230
 Paul: Und jetzt probiere ich es selbst: Punkt B liegt bei fünfzig Grad Nord und zwölf Grad Ost. Was suche ich zuerst?
 
 15
-00:02:07,263 --> 00:02:15,766
+00:01:57,870 --> 00:02:07,370
 Gustav: Zuerst fünfzig Grad Nord, dann zwölf Grad Ost. Und schließlich den Schnittpunkt! Sehr gut!
