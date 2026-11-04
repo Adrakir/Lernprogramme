@@ -44,6 +44,7 @@ window.ChemistryNavigation.onEnter('home',home);window.ChemistryNavigation.onEnt
 lessons.forEach(l=>{const page=el('page-'+l.route);const bar=document.createElement('div');bar.className='lu-route-hint';bar.append(document.createTextNode('Für diese Klassenarbeit: kurz und geführt lernen.'),makeButton('Zum Lernpfad',()=>start(l.route)));page.insertBefore(bar,page.firstChild)});
 
 const direct=()=>{if(location.hash==='#lernpfad')navigate('learningpath');if(location.hash==='#nachueben')navigate('reviewpractice')};window.addEventListener('hashchange',direct);home();showList();renderPractice();direct();
+const dockQuery=matchMedia('(max-width:680px)');const dockCockpit=()=>{const button=document.getElementById('lcOpen');if(!button)return;if(dockQuery.matches)document.querySelector('.mobile-actions').appendChild(button);else document.body.appendChild(button)};if(dockQuery.addEventListener)dockQuery.addEventListener('change',dockCockpit);else dockQuery.addListener(dockCockpit);dockCockpit();
 window.ChemistryLearning={start,lessons:()=>lessons.map(l=>({route:l.route,title:l.title})),snapshot:()=>JSON.parse(JSON.stringify(data))};
 document.title='Chemie-Entdeckerlabor · Klasse 5 · Version 8.0';document.querySelectorAll('.chemistry-update-banner').forEach(b=>b.textContent='Chemie-Entdeckerlabor · Version 8.0 · Lernen → Üben → Klassenarbeit');
 })();

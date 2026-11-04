@@ -437,7 +437,7 @@ $('noteExample').addEventListener('click',()=>{if(noteKeys.some(k=>(state.notes[
 $('noteClear').addEventListener('click',()=>{if(confirm('Alle sieben Protokollfelder leeren?')){setNotes({});feedback($('noteFeedback'),null,'Das Forscherheft ist wieder leer.')}});
 $('noteSave').addEventListener('click',()=>{const txt='Chemie – Mein Versuchsprotokoll\n\n'+noteKeys.map((k,i)=>noteLabels[i]+':\n'+(state.notes[k]||'')+'\n').join('\n');const blob=new Blob([txt],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Chemie-Versuchsprotokoll.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);feedback($('noteFeedback'),true,'Die Textdatei wurde zum Speichern vorbereitet.')});
 $('mobileHome').addEventListener('click',()=>navigate('home'));
-$('mobileNext').addEventListener('click',()=>{const route=['home','matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','sheet'];navigate(route[(route.indexOf(state.route)+1)%route.length])});
+$('mobileNext').addEventListener('click',()=>navigate('learningpath'));
 
 // Chemie-Entdeckerlabor V3: local, dependency-free interactive labs.
 const deepDefaults={particles:{exp:false,answered:false},boiling:{exp:false,answered:false},flames:{exp:false,answered:false},setup:{exp:false,answered:false}};
