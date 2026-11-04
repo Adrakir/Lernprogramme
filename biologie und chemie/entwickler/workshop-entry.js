@@ -1,0 +1,3 @@
+
+/* Additional offline home-card for the Version 5 learning workshop. */
+if(document.getElementById('homeCards')){const card=document.createElement('button');card.className='card clickable';card.style.textAlign='left';card.style.color='var(--ink)';card.style.width='100%';card.innerHTML='<div class="card-top"><div class="topic-icon">🔎</div><span class="topic-code">V5 · NEU</span></div><h3>Forscherwerkstatt</h3><p>Teilchenkino, Löslichkeit, Gefahrensymbole, Forschersprache und Schreibtests.</p><span class="card-link">Jetzt entdecken →</span>';card.addEventListener('click',()=>navigate('v5academy'));document.getElementById('homeCards').appendChild(card)}

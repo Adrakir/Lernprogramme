@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'biologie und chemie/Chemie_Entdeckerlabor_V7_2.html'
+      - 'biologie und chemie/entwickler/**'
       - 'biologie und chemie/tests/**'
       - '.github/workflows/chemie-tests.yml'
   pull_request:
@@ -15,27 +16,50 @@ permissions:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Browser-Testwerkzeuge installieren
+      - name: Festgelegte Testwerkzeuge installieren
+        working-directory: 'biologie und chemie/entwickler'
         run: |
-          npm install --no-save --prefix /tmp/chemie-check playwright
-          /tmp/chemie-check/node_modules/.bin/playwright install --with-deps chromium
-      - name: Bestehende App und Wärmeleitfähigkeit prüfen
+          npm ci --ignore-scripts
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Offline-Build mit Quellen abgleichen
+        run: node 'biologie und chemie/entwickler/build-offline.cjs' --check
+      - name: Lernapp in ${{ matrix.browser }} prüfen
         env:
-          NODE_PATH: /tmp/chemie-check/node_modules
+          NODE_PATH: '${{ github.workspace }}/biologie und chemie/entwickler/node_modules'
+          CHEMIE_BROWSER: '${{ matrix.browser }}'
+        run: node 'biologie und chemie/tests/run-suite.cjs'
+      - name: A4-Druckausgabe prüfen und rendern
+        if: matrix.browser == 'chromium'
         run: |
-          node 'biologie und chemie/tests/thermal-smoke.cjs'
-          node 'biologie und chemie/tests/final-exam-smoke.cjs'
-          node 'biologie und chemie/tests/exam-visuals-smoke.cjs'
-          node 'biologie und chemie/tests/protocol-wood-smoke.cjs'
-      - name: Bildschirmansichten aufbewahren
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          python3 'biologie und chemie/tests/print-quality.py'
+      - name: Prüfansichten aufbewahren
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: chemie-browser-check
+          name: chemie-check-${{ matrix.browser }}
           path: chemie-test-artifacts/
+  atlas-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Bestehende Atlas-Grundfunktionen prüfen
+        working-directory: erdkunde/Erdkunde_Entdecker_Klasse5_V11
+        run: |
+          node entwickler/atlas-schulung.test.cjs
+          node entwickler/atlaswerkstatt.test.cjs

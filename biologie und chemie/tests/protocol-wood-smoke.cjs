@@ -1,8 +1,9 @@
+const __browserTypes=require('playwright');
 const assert=require('node:assert/strict'),path=require('node:path');
 const {pathToFileURL}=require('node:url'),{chromium}=require('playwright');
 const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'));
 (async()=>{
- const b=await chromium.launch({headless:true});const p=await b.newPage({viewport:{width:1280,height:900}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ const b=await __browserTypes[process.env.CHEMIE_BROWSER||'chromium'].launch({headless:true});const p=await b.newPage({viewport:{width:1280,height:900}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href+'#protokollfehler');assert.equal(await p.locator('#page-protocoltrainer').isVisible(),true);assert.equal(await p.locator('#peCase option').count(),6);
  await p.locator('[data-pe-line="0"]').check();await p.locator('#peCheck').click();assert.match(await p.locator('#peFeedback').innerText(),/1 richtige Aussage/);assert.equal(await p.locator('#peRepairs').isVisible(),false);await p.locator('[data-pe-line="0"]').uncheck();
  const protocolData=await p.evaluate(()=>chemistryErrorProtocols);
@@ -27,3 +28,4 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  await p.setViewportSize({width:390,height:844});assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1);await p.locator('#nav [data-page=protocoltrainer]').click();assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1);
  assert.deepEqual(errors,[]);await b.close();console.log('PASS: six error protocols, false positives, corrections, saved progress, worksheet printing, wood/iron model, eight cloze gaps and mobile layout.');
 })().catch(e=>{console.error(e);process.exit(1)});
+

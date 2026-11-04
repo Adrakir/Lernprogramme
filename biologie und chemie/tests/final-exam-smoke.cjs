@@ -1,3 +1,4 @@
+const __browserTypes=require('playwright');
 const assert=require('node:assert/strict');
 const path=require('node:path');
 const fs=require('node:fs');
@@ -5,9 +6,9 @@ const {pathToFileURL}=require('node:url');
 const {chromium}=require('playwright');
 const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'));
 (async()=>{
- const b=await chromium.launch({headless:true});const p=await b.newPage({viewport:{width:1280,height:900}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ const b=await __browserTypes[process.env.CHEMIE_BROWSER||'chromium'].launch({headless:true});const p=await b.newPage({viewport:{width:1280,height:900}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href+'#abschlusstest');
- assert.equal(await p.locator('#page-finaltest').isVisible(),true);assert.equal(await p.locator('#ceIntro').isVisible(),true);assert.equal(await p.locator('#ceSolutions details').count(),0);assert.match(await p.title(),/7\.8/);
+ assert.equal(await p.locator('#page-finaltest').isVisible(),true);assert.equal(await p.locator('#ceIntro').isVisible(),true);assert.equal(await p.locator('#ceSolutions details').count(),0);assert.match(await p.title(),/8\.0/);
  await p.locator('#ceStart').click();assert.match(await p.locator('#cePosition').innerText(),/Aufgabe 1 von 20/);
  await p.locator('#ceReview').click();assert.match(await p.locator('#ceOverviewText').innerText(),/20 von 20 Aufgaben.*nicht vollständig/);
  await p.locator('#ceSubmit').click();assert.match(await p.locator('#ceScore').innerText(),/^0 \/ 40/);assert.equal(await p.locator('#ceSolutions details').count(),20);assert.equal(await p.locator('#ceTopicResults article').count(),8);
@@ -32,6 +33,7 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
   assert.equal(await p.locator('#ceResults').isVisible(),false);
   await p.locator('#ceNext').click();
  }
+ if(await p.locator('#ceWritingWork').isVisible()){for(let i=0;i<4;i++){await p.locator('#ceWritingAnswer').fill('Eine eigene fachliche Erklärung für die Schreibaufgabe.');await p.locator('#ceWritingNext').click();}}
  assert.equal(await p.locator('#ceOverview').isVisible(),true);assert.match(await p.locator('#ceOverviewText').innerText(),/Alle 20 Aufgaben/);
  await p.locator('#ceSubmit').click();assert.match(await p.locator('#ceScore').innerText(),/^40 \/ 40 Punkte · 100 %/);
  assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('chemie5-data')).done.finaltest),true);
@@ -41,10 +43,11 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  await p.locator('#nav [data-page=finaltest]').click();assert.match(await p.locator('#ceScore').innerText(),/^40 \/ 40/);
  await p.reload();assert.equal(await p.locator('#ceResults').isVisible(),true);assert.match(await p.locator('#ceScore').innerText(),/^40 \/ 40/);
  // Returning to other learning pages does not lose the draft or results.
- await p.locator('#nav [data-page=home]').click();await p.getByRole('button',{name:'Abschlusstest zur Klassenarbeit öffnen',exact:true}).click();assert.equal(await p.locator('#page-finaltest').isVisible(),true);
+ await p.locator('#nav [data-page=home]').click();await p.locator('#luAllAreas').evaluate(e=>e.open=true);await p.getByRole('button',{name:'Abschlusstest zur Klassenarbeit öffnen',exact:true}).click();assert.equal(await p.locator('#page-finaltest').isVisible(),true);
  fs.mkdirSync('chemie-test-artifacts',{recursive:true});await p.screenshot({path:'chemie-test-artifacts/finaltest-results.png',fullPage:true});
  await p.locator('#ceNew').click();await p.setViewportSize({width:390,height:844});
  assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1,'Mobile overflow');
  await p.locator('#ceNext').click();await p.screenshot({path:'chemie-test-artifacts/finaltest-mobile.png',fullPage:true});
  assert.deepEqual(errors,[]);await b.close();console.log('PASS: final exam 20 tasks / 40 points, empty and partial scores, corrected answers, resume, submission, explanations, topic routes and phone layout.');
 })().catch(e=>{console.error(e);process.exit(1)});
+

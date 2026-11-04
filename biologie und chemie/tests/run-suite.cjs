@@ -1,0 +1,2 @@
+const {spawnSync}=require('node:child_process'),path=require('node:path');
+for(const file of ['thermal-smoke.cjs','final-exam-smoke.cjs','exam-visuals-smoke.cjs','protocol-wood-smoke.cjs','learning-upgrade-smoke.cjs']){const r=spawnSync(process.execPath,[path.join(__dirname,file)],{stdio:'inherit',env:process.env});if(r.status!==0)process.exit(r.status||1)}

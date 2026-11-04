@@ -1,12 +1,13 @@
+const __browserTypes=require('playwright');
 const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs');
 const {pathToFileURL}=require('node:url'),{chromium}=require('playwright');
 const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'));
 (async()=>{
- const browser=await chromium.launch({headless:true});const p=await browser.newPage({viewport:{width:1280,height:960}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
- await p.goto(pathToFileURL(app).href+'#abschlusstest');assert.match(await p.title(),/Version 7\.8/);
+ const browser=await __browserTypes[process.env.CHEMIE_BROWSER||'chromium'].launch({headless:true});const p=await browser.newPage({viewport:{width:1280,height:960}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto(pathToFileURL(app).href+'#abschlusstest');assert.match(await p.title(),/Version 8\.0/);
  // Print sheet includes all tasks and diagrams, without answers; no test submission.
  await p.evaluate(()=>window.print=()=>{});await p.locator('#cePrintTasks').click();
- assert.equal(await p.locator('#cePrintDocument article').count(),20);assert((await p.locator('#cePrintDocument svg').count())>=18);
+ assert.equal(await p.locator('#cePrintDocument article').count(),24);assert((await p.locator('#cePrintDocument svg').count())>=18);
  assert.equal(await p.locator('#cePrintDocument .ce-print-answer').count(),0);
  assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('chemie5-final-exam-v1')).phase),'intro');
  await p.emulateMedia({media:'print'});assert.equal(await p.locator('.app').isVisible(),false);assert.equal(await p.locator('#cePrintDocument').isVisible(),true);
@@ -34,3 +35,4 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  await p.screenshot({path:'chemie-test-artifacts/animated-thermal-phone.png',fullPage:true});
  assert.deepEqual(errors,[]);await browser.close();console.log('PASS: illustrated print view, image zoom, three model sequences, play/pause/reset/seek, navigation cleanup, conserved particles and reduced motion.');
 })().catch(e=>{console.error(e);process.exit(1)});
+

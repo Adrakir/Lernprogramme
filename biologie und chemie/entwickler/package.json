@@ -1,0 +1,7 @@
+{
+  "name": "chemie-entdeckerlabor-checks",
+  "version": "8.0.0",
+  "private": true,
+  "scripts": {"build": "node build-offline.cjs", "check": "node build-offline.cjs --check"},
+  "devDependencies": {"playwright": "1.62.1"}
+}

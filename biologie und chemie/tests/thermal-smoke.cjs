@@ -1,3 +1,4 @@
+const __browserTypes=require('playwright');
 /* Focused browser regression checks for the existing Chemie app.
  * Run: NODE_PATH=/path/to/node_modules node thermal-smoke.cjs /path/to/app.html
  */
@@ -8,12 +9,12 @@ const {pathToFileURL}=require('node:url');
 const {chromium}=require('playwright');
 const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'));
 (async()=>{
- const browser=await chromium.launch({headless:true});
+ const browser=await __browserTypes[process.env.CHEMIE_BROWSER||'chromium'].launch({headless:true});
  const ctx=await browser.newContext({viewport:{width:1365,height:1000}});
  const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href);
  assert.deepEqual(errors,[],'Startup errors');
- assert.match(await p.title(),/Version 7\.8/);
+ assert.match(await p.title(),/Version 8\.0/);
  const originals=['matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','sheet','v4lab','v4play','v4study','v5academy','chem6'];
  for(const id of originals){await p.locator(`#nav [data-page="${id}"]`).click();assert.equal(await p.locator('#page-'+id).isVisible(),true,'Existing route '+id)}
  await p.locator('#nav [data-page=thermal]').click();
@@ -84,3 +85,4 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  assert.deepEqual(errors,[],'Browser errors');
  await browser.close();console.log('PASS: original routes, model controls, notebook experiment, feedback, progress, saved notes, quiz, print summary and mobile layout.');
 })().catch(e=>{console.error(e);process.exit(1)});
+
