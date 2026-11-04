@@ -28,7 +28,9 @@ jobs:
       - name: Bestehende App und Wärmeleitfähigkeit prüfen
         env:
           NODE_PATH: /tmp/chemie-check/node_modules
-        run: node 'biologie und chemie/tests/thermal-smoke.cjs'
+        run: |
+          node 'biologie und chemie/tests/thermal-smoke.cjs'
+          node 'biologie und chemie/tests/final-exam-smoke.cjs'
       - name: Bildschirmansichten aufbewahren
         if: always()
         uses: actions/upload-artifact@v4
