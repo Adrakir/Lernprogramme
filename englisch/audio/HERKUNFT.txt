@@ -1,0 +1,7 @@
+Vier Hörtexte, neu vertont am 04.11.2026 mit HeyGen, Katalogstimme Noble Nigel.
+Voice ID: 9ec46dd0e4194158a3c958db4b15aefa; zurückgemeldete Engine orca.
+Sprechtempo bei Erstellung 0.9. Originaldauer 18.311813 Sekunden.
+Getrennt an Sprechpausen anhand der gelieferten Wortzeitmarken:
+room 0–5.6; parcel 5.6–10.32; cousin 10.32–14.65; pet 14.65–18.311813.
+Texte sind in audio-recordings.js hinterlegt; Fragen und Lösungen unverändert.
+Dateidauer, Wortzeitmarken und Einbindung geprüft. Kein vollständiger Hörtest auf Endgeräten.

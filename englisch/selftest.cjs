@@ -34,7 +34,7 @@ function app() {
     },
     window: { addEventListener() {}, matchMedia: () => ({ matches: false }) }
   });
-  for (const file of ['data.js', 'image-map.js', 'application-data.js', 'app.js', 'learning.js']) {
+  for (const file of ['data.js', 'book-update.js', 'image-map.js', 'media-update.js', 'application-data.js', 'book-exercises.js', 'app.js', 'learning.js']) {
     vm.runInContext(fs.readFileSync(path.join(__dirname, file), 'utf8'), context, { filename: file });
   }
   return {
@@ -44,10 +44,10 @@ function app() {
   };
 }
 
-test('269 cards have stable IDs, both canonical answers and existing image files', () => {
+test('307 cards have stable IDs, both canonical answers and existing image files', () => {
   const a = app();
-  assert.equal(a.run('vocab.length'), 269);
-  assert.equal(a.run("vocab.filter(v=>v.unit==='unit1').length"), 79);
+  assert.equal(a.run('vocab.length'), 307);
+  assert.equal(a.run("vocab.filter(v=>v.unit==='unit1').length"), 110);
   assert.equal(a.run('vocab.every((v,i)=>v.id===i&&v.en&&v.de&&v.example)'), true);
   for (const direction of ['de-en', 'en-de']) {
     a.node('#direction').value = direction;

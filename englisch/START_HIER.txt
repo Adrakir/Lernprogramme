@@ -1,50 +1,22 @@
-ACCESS WORTWELT – WELCOME UND UNIT 1
-Überarbeiteter App-Stand vom 20.10.2026
+ACCESS WORTWELT – WELCOME UND UNIT 1 · VERSION 11
+Aktualisiert am 04.11.2026
 
-STARTEN
-1. Die ZIP-Datei vollständig entpacken.
-2. Alle Dateien und den Ordner assets zusammenlassen.
-3. index.html mit einem aktuellen Browser öffnen.
+Online: https://adrakir.github.io/Lernprogramme/englisch/index.html
+Übersicht: https://adrakir.github.io/Lernprogramme/
 
-AM HANDY
-Eine ZIP-Datei ist keine installierbare Handy-App. Auf iPhone/iPad ist die
-Online-Version meist der einfachste Weg:
-https://access-wortwelt-unit1.node-opcua.chatgpt.site
-Falls lokale HTML-Dateien am Handy nicht richtig geöffnet werden, die
-Online-Version verwenden oder die entpackten Dateien auf einem Webserver
-bereitstellen.
+307 Lernkarten: Welcome S. 225–230 und Unit 1 S. 231–234.
+55 Alltagsaufgaben, Themenfilter, kurze Runden, Bildvergrößerung und freie Farben.
+Vier kurze Hörgeschichten mit gespeicherter britischer Sprachaufnahme (HeyGen,
+Noble Nigel), insgesamt rund 18 Sekunden. Die MP3-Dateien liegen unter audio/.
+Einzelwörter und weitere Sätze nutzen weiterhin die Gerätestimme.
 
-ENTHALTEN
-269 Lernkarten: 190 Welcome-Einträge und 79 Einträge aus Unit 1, S. 231–233.
-Lernkarten, Schreiben, Zuordnen, Quiz, Satzübungen, Groß-/Kleinschreibung,
-Lernstandscheck, Dialoge, Lückensätze, vier Hörgeschichten und Lernbilder.
-Hintergrund- und Schriftfarbe sind frei wählbar.
+Offline: Ordner vollständig herunterladen/entpacken, index.html öffnen.
+Auf dem Handy bevorzugt den Online-Link nutzen.
+Fortschritt bleibt im jeweiligen Browser; vorhandener wortwelt-v1-Schlüssel bleibt erhalten.
+Lernstände der bisherigen Sites-Adresse werden nicht automatisch zu GitHub übertragen.
 
-SCHREIBEN UND HILFEN
-Du hast bei Fehlern einen zweiten Versuch. Tipps, die angezeigte Lösung
-und die englische Hörhilfe bei Deutsch → Englisch zählen als Unterstützung,
-nicht als selbstständig gewusstes Wort. Beim nächsten Wort kannst du es
-erneut ohne Hilfe versuchen. Bei Englisch → Deutsch spricht Audio nur
-die englische Aufgabe vor.
-Lückensätze geben die gesuchte Bedeutung bei Bedarf in Klammern an.
-Die Sprachausgabe des vollständigen Satzes liest diese Hinweise nicht mit.
+Tipps, Lösung und englische Hörhilfe bei Deutsch → Englisch zählen als Unterstützung.
+Die bisherigen GitHub-Korrekturen an Tastaturbedienung und Übungshinweisen bleiben erhalten.
 
-AUDIO UND FORTSCHRITT
-Audio verwendet die englische Sprachausgabe des Geräts, bevorzugt britisch.
-Es sind keine separat aufgenommenen Audiodateien enthalten.
-Stimmen und ihre Verfügbarkeit hängen vom Gerät und Browser ab; einzelne
-Stimmen können eine Internetverbindung benötigen.
-Hörgeschichten lassen sich bei Audioproblemen auch als Leseübung bearbeiten.
-Fortschritt und Farben werden nur im jeweiligen Browser gespeichert.
-Bereits online gespeicherter Fortschritt wird nicht in diese ZIP übernommen.
-Der Browser kann die Speicherung bei lokal geöffneten Dateien einschränken.
-
-Die ZIP enthält die App-Dateien, keine persönlichen Lernstände oder Zugangsdaten.
-
-SELBSTTEST FÜR DIE WEITERENTWICKLUNG
-Im Ordner englisch mit installiertem Node.js ausführen:
-node --test selftest.cjs
-Es werden keine zusätzlichen Pakete benötigt. Die Tests prüfen Daten,
-Antwortvarianten, Rückmeldungen, Hilfenwertung und Textalternativen in
-einer isolierten Browser-Nachbildung; persönliche Lernstände bleiben unberührt.
-Für Layout, Tastaturbedienung und echte Gerätestimmen zusätzlich im Browser testen.
+Entwicklungsprüfung: node --test selftest.cjs
+Daten und Logik werden mit simulierten Seitenelementen geprüft; echte Gerätetests ergänzen dies.
