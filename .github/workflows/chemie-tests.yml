@@ -31,6 +31,8 @@ jobs:
         run: |
           node 'biologie und chemie/tests/thermal-smoke.cjs'
           node 'biologie und chemie/tests/final-exam-smoke.cjs'
+          node 'biologie und chemie/tests/exam-visuals-smoke.cjs'
+          node 'biologie und chemie/tests/protocol-wood-smoke.cjs'
       - name: Bildschirmansichten aufbewahren
         if: always()
         uses: actions/upload-artifact@v4

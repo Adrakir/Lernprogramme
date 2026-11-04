@@ -13,12 +13,12 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href);
  assert.deepEqual(errors,[],'Startup errors');
- assert.match(await p.title(),/Version 7\.7/);
+ assert.match(await p.title(),/Version 7\.8/);
  const originals=['matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','sheet','v4lab','v4play','v4study','v5academy','chem6'];
  for(const id of originals){await p.locator(`#nav [data-page="${id}"]`).click();assert.equal(await p.locator('#page-'+id).isVisible(),true,'Existing route '+id)}
  await p.locator('#nav [data-page=thermal]').click();
  assert.equal(await p.locator('#page-thermal').isVisible(),true);
- assert.match(await p.locator('#sideProgressText').innerText(),/von 16/);
+ assert.match(await p.locator('#sideProgressText').innerText(),/von 17/);
  // Model, prediction and reset, including stopping playback on navigation.
  await p.locator('input[name=thPrediction][value=wood]').check();
  await p.locator('#thTime').evaluate(e=>{e.value='10';e.dispatchEvent(new Event('input',{bubbles:true}))});

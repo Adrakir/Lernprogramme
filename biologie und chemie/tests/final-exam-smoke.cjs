@@ -7,7 +7,7 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
 (async()=>{
  const b=await chromium.launch({headless:true});const p=await b.newPage({viewport:{width:1280,height:900}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href+'#abschlusstest');
- assert.equal(await p.locator('#page-finaltest').isVisible(),true);assert.equal(await p.locator('#ceIntro').isVisible(),true);assert.equal(await p.locator('#ceSolutions details').count(),0);assert.match(await p.title(),/7\.7/);
+ assert.equal(await p.locator('#page-finaltest').isVisible(),true);assert.equal(await p.locator('#ceIntro').isVisible(),true);assert.equal(await p.locator('#ceSolutions details').count(),0);assert.match(await p.title(),/7\.8/);
  await p.locator('#ceStart').click();assert.match(await p.locator('#cePosition').innerText(),/Aufgabe 1 von 20/);
  await p.locator('#ceReview').click();assert.match(await p.locator('#ceOverviewText').innerText(),/20 von 20 Aufgaben.*nicht vollständig/);
  await p.locator('#ceSubmit').click();assert.match(await p.locator('#ceScore').innerText(),/^0 \/ 40/);assert.equal(await p.locator('#ceSolutions details').count(),20);assert.equal(await p.locator('#ceTopicResults article').count(),8);
