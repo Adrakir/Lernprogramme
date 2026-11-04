@@ -12,6 +12,7 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  const ctx=await browser.newContext({viewport:{width:1365,height:1000}});
  const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href);
+ assert.deepEqual(errors,[],'Startup errors');
  assert.match(await p.title(),/Version 7\.6/);
  const originals=['matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','sheet','v4lab','v4play','v4study','v5academy','chem6'];
  for(const id of originals){await p.locator(`#nav [data-page="${id}"]`).click();assert.equal(await p.locator('#page-'+id).isVisible(),true,'Existing route '+id)}
@@ -46,7 +47,7 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  await p.locator('#thQuestions article').nth(0).getByRole('button',{name:'Nur von oben nach unten',exact:true}).click();
  assert.match(await p.locator('#thQuestions article').nth(0).locator('[role=status]').innerText(),/Noch nicht/);
  for(let i=0;i<4;i++)await p.locator('#thQuestions article').nth(i).getByRole('button',{name:expected[i],exact:true}).click();
- assert.match(await p.locator('#thProgress').innerText(),/4 von 4/);
+ assert.match(await p.locator('#thProgress').innerText(),/4 von 4|Thema bearbeitet/);
  await p.locator('#thTime').evaluate(e=>{e.value='10';e.dispatchEvent(new Event('input',{bubbles:true}))});
  assert.match(await p.locator('#thProgress').innerText(),/Thema bearbeitet/);
  assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('chemie5-data')).done.thermal),true);

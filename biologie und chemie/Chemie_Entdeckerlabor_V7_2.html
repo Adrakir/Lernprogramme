@@ -2258,6 +2258,8 @@ document.querySelectorAll('[data-th-protocol]').forEach(b=>b.addEventListener('c
  window.LernCockpit?.record({id:'chem-thermal-protocol',topic:'thermal',correct,assisted:false,mode:'übung',skill:'anwenden'});
 }));
 render();practice();
+const openThermalLink=()=>{if(location.hash==='#waermeleitfaehigkeit')navigate('thermal')};
+window.addEventListener('hashchange',openThermalLink);openThermalLink();
 })();
 
 </script>
