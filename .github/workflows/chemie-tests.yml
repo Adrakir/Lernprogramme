@@ -1,0 +1,37 @@
+name: Chemie-App prüfen
+on:
+  push:
+    paths:
+      - 'biologie und chemie/Chemie_Entdeckerlabor_V7_2.html'
+      - 'biologie und chemie/tests/**'
+      - '.github/workflows/chemie-tests.yml'
+  pull_request:
+    paths:
+      - 'biologie und chemie/**'
+      - '.github/workflows/chemie-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Browser-Testwerkzeuge installieren
+        run: |
+          npm install --no-save --prefix /tmp/chemie-check playwright
+          /tmp/chemie-check/node_modules/.bin/playwright install --with-deps chromium
+      - name: Bestehende App und Wärmeleitfähigkeit prüfen
+        env:
+          NODE_PATH: /tmp/chemie-check/node_modules
+        run: node 'biologie und chemie/tests/thermal-smoke.cjs'
+      - name: Bildschirmansichten aufbewahren
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chemie-browser-check
+          path: chemie-test-artifacts/

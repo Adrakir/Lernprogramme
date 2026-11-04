@@ -7,7 +7,7 @@
 <meta content="#173d46" name="theme-color"/>
 <meta content="light" name="color-scheme"/>
 <meta content="Geprüftes interaktives Chemie-Entdeckerlabor für Klasse 5: Stoffe, Laborgeräte, Sicherheit, Löslichkeit, Siedetemperatur, Brenner und Experimente." name="description"/>
-<title>Chemie-Entdeckerlabor · Klasse 5 · Version 7.3</title>
+<title>Chemie-Entdeckerlabor · Klasse 5 · Version 7.6</title>
 <style>
 :root{--bg:#f2f7f6;--paper:#fff;--ink:#193440;--muted:#53717b;--navy:#153d48;--teal:#117c80;--teal2:#d7f2ec;--gold:#f5ad52;--line:#d9e7e8;--soft:#eff7f5;--red:#a64139;--redsoft:#fff0ed;--good:#147c60;--goodsoft:#e6f6ed;--shadow:0 10px 30px #123b4820;--radius:20px;--scale:1}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font:calc(16px * var(--scale))/1.58 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg)}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:3px solid #ea9c3b;outline-offset:3px}a{color:var(--teal)}.hidden,[hidden]{display:none!important}.sr-only{position:absolute;clip:rect(0,0,0,0);width:1px;height:1px;overflow:hidden}
@@ -108,7 +108,25 @@ body.high-contrast .mission-scene{background:#eef4f3}
 @media(prefers-reduced-motion:reduce){.c6-root *, .c6-root *:before{animation:none!important;transition:none!important}}
 @media print{body.c6-print .side,body.c6-print .topbar,body.c6-print .mobile-actions,body.c6-print #page-chem6 .c6-hero,body.c6-print #page-chem6 .c6-tabs,body.c6-print #c6Normal,body.c6-print #page-chem6 .c6-btn{display:none!important}body.c6-print main{padding:0!important}body.c6-print #page-chem6{display:block!important}body.c6-print #c6Print{display:block!important}body.c6-print #c6PrintTasks .c6-card,body.c6-print #c6PrintSolutions .c6-card{box-shadow:none;break-inside:avoid}body.c6-print:not(.c6-solutions) #c6PrintSolutions{display:none!important}body.c6-print.c6-solutions #c6PrintTasks{display:none!important}}
 
-.lc-storage-warning{padding:12px;border:2px solid #b65e21;border-radius:10px;background:#fff3e6;color:#5c2607;font-weight:650}.lc-theme-dark .lc-storage-warning{background:#3b281e;color:#fff3e6}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}button.card{display:block;width:100%;text-align:left;font:inherit;color:inherit}.card .card-h3{display:block;font-weight:750}.card .card-p{display:block}</style>
+.lc-storage-warning{padding:12px;border:2px solid #b65e21;border-radius:10px;background:#fff3e6;color:#5c2607;font-weight:650}.lc-theme-dark .lc-storage-warning{background:#3b281e;color:#fff3e6}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}button.card{display:block;width:100%;text-align:left;font:inherit;color:inherit}.card .card-h3{display:block;font-weight:750}.card .card-p{display:block}/* Wärmeleitfähigkeit: scoped styles use the app's contrast and font settings. */
+#page-thermal .th-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.85fr);gap:18px;align-items:start}
+#page-thermal h3{margin-top:12px}#page-thermal .th-gap{margin-top:18px}#page-thermal li{margin:8px 0}
+#page-thermal .th-prediction{border:1px solid var(--line);border-radius:12px;padding:12px;margin:15px 0;min-width:0}
+#page-thermal .th-prediction legend{font-weight:800;padding:0 6px}#page-thermal .th-prediction label{display:flex;gap:9px;align-items:start;padding:8px 0;cursor:pointer}#page-thermal input[type=radio]{margin-top:6px;accent-color:var(--teal);flex:none}
+#page-thermal .th-scene{background:var(--soft);border:1px solid var(--line);padding:15px;border-radius:14px}
+#page-thermal .th-direction,#page-thermal .th-legend{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;font-size:12px;font-weight:750}
+#page-thermal .th-direction{margin-bottom:16px}#page-thermal .th-rod-row{margin:14px 0}#page-thermal .th-rod-head{display:flex;gap:10px;justify-content:space-between;font-size:14px;flex-wrap:wrap}#page-thermal .th-rod{display:flex;margin:7px 0;border:2px solid #476978;border-radius:9px;overflow:hidden;height:28px}#page-thermal .th-rod span{flex:1;border-right:1px solid #ffffff7d}#page-thermal .th-rod span:last-child{border:0}
+#page-thermal .th-time{display:block;font-weight:750;margin-top:18px}#page-thermal .range{min-height:44px}#page-thermal .th-example svg{width:100%;max-height:210px}#page-thermal .th-questions{display:grid;grid-template-columns:1fr 1fr;gap:14px}#page-thermal .th-question{min-width:0;border:1px solid var(--line);background:var(--soft);border-radius:13px;padding:16px}#page-thermal .th-question h4{line-height:1.45}#page-thermal .th-answers{display:grid;gap:8px}#page-thermal .th-answers button{min-height:48px}#page-thermal .th-answers .answer:disabled{opacity:1}#page-thermal .th-writing{margin-top:22px}#page-thermal textarea{font:inherit;width:100%;margin-top:10px;padding:12px;border:1px solid var(--muted);border-radius:10px;background:var(--paper);color:var(--ink);resize:vertical}
+@media(max-width:900px){#page-thermal .th-layout{grid-template-columns:1fr}}
+@media(max-width:600px){#page-thermal .th-questions{grid-template-columns:1fr}#page-thermal .panel{padding:16px}#page-thermal .th-scene{padding:10px}#page-thermal .btn-row .btn{width:100%}}
+@media print{#page-thermal .th-prediction,#page-thermal .btn-row,#thTime,#thPlay,#thReset,#thPracticeReset{display:none!important}#page-thermal .th-layout,#page-thermal .th-questions{display:block}#page-thermal .panel,#page-thermal .th-question{break-inside:avoid;margin-bottom:12px}}
+
+#page-thermal .th-notebook-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}#page-thermal .th-notebook-art{width:100%;height:auto}#page-thermal .th-protocol{margin-top:20px}#page-thermal .th-protocol-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}#page-thermal .th-protocol-fields label{font-weight:750;min-width:0}#page-thermal .th-protocol-fields textarea{font-weight:400}#page-thermal .th-notebook-check{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+@media(max-width:850px){#page-thermal .th-notebook-layout,#page-thermal .th-protocol-fields{grid-template-columns:1fr}}
+
+#page-thermal .th-protocol-fields select{width:100%;margin-top:10px;white-space:normal;font:inherit;font-weight:400;background:var(--paper);color:var(--ink);border:1px solid var(--muted);border-radius:9px;padding:10px;min-height:48px}#page-thermal .th-sort-statement{font-size:18px;font-weight:750;line-height:1.5;margin-top:16px}#page-thermal .th-fair-issue{display:block;margin:4px 0}
+
+</style>
 <style id="lcStyles">
 #lcOpen{position:fixed;z-index:10001;right:14px;bottom:16px;border:2px solid #1b657c;border-radius:100px;color:#fff;background:#145a70;padding:12px 18px;min-height:48px;font:700 15px system-ui;cursor:pointer;box-shadow:0 3px 15px #0003}
 #lcModal[hidden]{display:none!important}#lcModal{position:fixed;z-index:10002;inset:0;background:rgba(4,27,37,.76);overflow:auto;padding:12px;display:flex;align-items:flex-start;justify-content:center;font:16px/1.5 system-ui;color:#183643}
@@ -127,6 +145,7 @@ body.high-contrast .mission-scene{background:#eef4f3}
 <button data-page="devices"><span class="navico">🔬</span>Laborgeräte <span class="check" data-done="devices"></span></button>
 <button data-page="safety"><span class="navico">🛡️</span>Labor-Sicherheit <span class="check" data-done="safety"></span></button>
 <button data-page="solubility"><span class="navico">🧂</span>Löslichkeit <span class="check" data-done="solubility"></span></button>
+<button data-page="thermal"><span class="navico">♨️</span>Wärmeleitfähigkeit <span class="check" data-done="thermal"></span></button>
 <button data-page="heating"><span class="navico">🌡️</span>Siedetemperatur <span class="check" data-done="heating"></span></button>
 <button data-page="burner"><span class="navico">🔥</span>Der Gasbrenner <span class="check" data-done="burner"></span></button>
 <button data-page="method"><span class="navico">📝</span>Experimente <span class="check" data-done="method"></span></button>
@@ -136,7 +155,7 @@ body.high-contrast .mission-scene{background:#eef4f3}
 <button data-page="sheet"><span class="navico">📖</span>Lernheft</button>
 <button data-page="v4lab"><span class="navico">🧪</span>Virtuelles Labor<span class="check" data-done="v4lab"></span></button><button data-page="v4play"><span class="navico">🔐</span>Chemie-Spielwelt<span class="check" data-done="v4play"></span></button><button data-page="v4study"><span class="navico">📋</span>Lernzentrale<span class="check" data-done="v4study"></span></button><button data-page="v5academy"><span class="navico">🔎</span>Forscherwerkstatt V5 <span class="check" data-done="v5academy"></span></button><button data-page="chem6"><span class="navico">🧬</span> Forschungscampus V6</button></nav>
 <div class="swipe-hint">↔ Themenleiste seitlich wischen, um alle Kapitel zu sehen</div>
-<div class="side-bottom"><b>Dein Lernfortschritt</b><div class="mini-progress"><i id="sideProgress" style="width:0%"></i></div><small id="sideProgressText">0 von 14 Bereichen geschafft</small></div>
+<div class="side-bottom"><b>Dein Lernfortschritt</b><div class="mini-progress"><i id="sideProgress" style="width:0%"></i></div><small id="sideProgressText">0 von 15 Bereichen geschafft</small></div>
 </aside>
 <main>
 <header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
@@ -144,7 +163,7 @@ body.high-contrast .mission-scene{background:#eef4f3}
 <section class="stage" id="page-home">
 <div class="hero"><div class="hero-content"><span class="eyebrow">Dein interaktives Lernlabor</span><h1>Chemie ist überall!</h1><p>Warum löst sich Zucker anders als Salz? Wo ist eine Gasflamme besonders heiß? Und woran erkennst du einen Stoff? Entdecke die Antworten selbst.</p><div class="hero-actions"><button class="btn" data-go="matter">🚀 Lernreise starten</button><button class="btn transparent" data-go="quiz">🎯 Zum Wissenscheck</button></div></div>
 <div aria-hidden="true" class="hero-art"><svg viewbox="0 0 220 260"><defs><lineargradient id="flaskG" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a8ffca"></stop><stop offset="1" stop-color="#32c5d7"></stop></lineargradient></defs><path d="M90 20h42v19h-8v75l60 102q10 18-10 18H46q-20 0-10-18l62-102V39h-8Z" fill="#ffffff25" stroke="#e9ffff" stroke-linejoin="round" stroke-width="8"></path><path d="M65 164h88l32 56q4 8-9 8H44q-13 0-7-10Z" fill="url(#flaskG)"></path><path d="M75 160q30-28 73 4" fill="none" stroke="#e7fff8" stroke-width="3"></path><circle cx="86" cy="190" fill="#e7fff8" opacity=".6" r="11"></circle><circle cx="135" cy="207" fill="#e7fff8" opacity=".7" r="7"></circle><circle cx="123" cy="179" fill="#e7fff8" r="4"></circle><circle cx="39" cy="104" fill="#ffc56e" r="12"></circle><circle cx="184" cy="92" fill="#afffeb" r="8"></circle></svg></div></div>
-<div class="section-head"><h2>Wähle dein Experiment</h2><span class="small muted">14 Lernbereiche · Experimente &amp; Tests</span></div>
+<div class="section-head"><h2>Wähle dein Experiment</h2><span class="small muted">15 Lernbereiche · Experimente &amp; Tests</span></div>
 <div class="cards" id="homeCards"></div>
 <div class="notebox warm" style="margin-top:22px"><strong>🛡️ Sicherheit zuerst</strong>Die Experimente mit Gasbrenner werden hier nur virtuell durchgeführt. Im echten Chemieraum experimentierst du ausschließlich nach Anweisung der Lehrkraft.</div>
 </section>
@@ -177,6 +196,54 @@ body.high-contrast .mission-scene{background:#eef4f3}
 <div class="sim-layout"><div class="panel"><div class="lab-glasses"><div class="glass-wrap"><b>🧂 Salz</b><div class="glass" id="saltGlass"><div class="water"></div><div class="grains"></div><div class="sediment"></div><div class="glasslabel">200 ml Wasser</div><div class="stirrer"></div></div><span class="small" id="saltText">0 g zugegeben</span></div><div class="glass-wrap"><b>🍬 Zucker</b><div class="glass" id="sugarGlass"><div class="water"></div><div class="grains"></div><div class="sediment"></div><div class="glasslabel">200 ml Wasser</div><div class="stirrer"></div></div><span class="small" id="sugarText">0 g zugegeben</span></div></div><div class="notebox"><strong id="solResultTitle">Beobachte die Gläser</strong><span id="solResult">Wähle einen Stoff aus und gib ihn in das Wasser.</span></div></div><div class="panel"><h3>🔍 Dein Versuchsaufbau</h3><p class="muted">Alle Werte sind gerundete Modellwerte – keine echten Messdaten.</p><div class="two-options"><label><input checked="" name="solute" type="radio" value="salt"/> 🧂 Salz</label><label><input name="solute" type="radio" value="sugar"/> 🍬 Zucker</label></div><div class="btn-row"><button class="btn primary" id="solAdd10">+ 10 g</button><button class="btn primary" id="solAdd25">+ 25 g</button><button class="btn" id="solReset">↺ Beide leeren</button></div><div class="measure"><div><small>Hinzugegeben</small><b id="solTotal">0 g</b></div><div><small>Davon gelöst</small><b id="solDissolved">0 g</b></div></div><div class="progressbar"><i id="solProgress" style="width:0%"></i></div><div class="legendrow"><span>0 %</span><span id="solSaturation">0 % der Löslichkeitsgrenze</span></div><details class="hint"><summary>💡 Warum zählen wir keine Löffelspitzen?</summary><p>Eine Löffelspitze ist keine genaue Maßeinheit. Unterschiedliche Löffel und Stoffe ergeben verschiedene Mengen. Für einen fairen Vergleich messen wir die Masse in Gramm, benutzen gleich viel Wasser und halten die Temperatur möglichst konstant.</p></details></div></div><div class="notebox warm"><strong>Fachwissen</strong>Bei etwa 20 °C können sich in 200 ml Wasser ungefähr <b>72 g Kochsalz</b> bzw. <b>400 g Zucker (Saccharose)</b> lösen. Die genauen Werte hängen unter anderem von Temperatur und Wasserzusammensetzung ab. Ist die Lösung gesättigt, bleibt weiteres Salz oder Zucker ungelöst.</div><div class="panel" style="margin-top:17px"><h3>Forscherfrage</h3><p>Du hast 17 Löffelspitzen Zucker zugegeben und sie lösen sich noch immer. Darf man behaupten, dass die Zuckerlösung gesättigt ist?</p><div class="answer-grid" id="solQuestion"><button class="answer" data-solanswer="0">Ja, denn 17 ist viel.</button><button class="answer" data-solanswer="1">Nein, solange sich weiterer Zucker vollständig löst.</button></div><div aria-live="polite" class="feedback" id="solQuestionFeedback">Wähle deine Vermutung.</div></div>
 <div class="notebox screen-only"><strong>✨ Mehr erforschen</strong>Neu in Version 4: Teilchenmodell und Temperatur. <button aria-label="Zum interaktiven Forscherlabor" class="smallbtn" data-go="deep">Forscherlabor öffnen →</button></div>
 </section>
+<section class="stage" hidden id="page-thermal" aria-labelledby="thermalTitle">
+<div class="page-head"><div class="tag">Stoffeigenschaften · Wärmeleitfähigkeit</div><h2 id="thermalTitle">Wie gelangt Wärme durch einen Stoff?</h2><p>Warum besteht ein Topfboden aus Metall, sein Griff aber oft aus Holz oder geeignetem Kunststoff? Erforsche, wie Materialien Wärme weitergeben.</p></div>
+<div class="notebox"><strong>Benno erklärt</strong><b>Wärmeleitung</b> ist eine Art der Energieübertragung: Energie wird von einem wärmeren zu einem kälteren Bereich weitergegeben. Der Stoff muss dabei nicht mitwandern. Die <b>Wärmeleitfähigkeit</b> beschreibt, wie gut ein Material Wärme leitet.</div>
+<div class="th-layout">
+<section class="panel" aria-labelledby="thCompareTitle"><span class="pill">1 · Vermuten und beobachten</span><h3 id="thCompareTitle">Vier Materialien im Vergleich</h3><p>Vier gleich lange und gleich dicke Stäbe sind anfangs gleich warm. Im Modell werden ihre linken Enden auf dieselbe höhere Temperatur gebracht. Welche rechten Enden werden eher warm?</p>
+<fieldset class="th-prediction"><legend>Meine Vermutung</legend><label><input type="radio" name="thPrediction" value="metal"> Die Metallstäbe leiten die Wärme besser weiter.</label><label><input type="radio" name="thPrediction" value="wood"> Holz und Kunststoff leiten die Wärme besser weiter.</label><label><input type="radio" name="thPrediction" value="same"> Alle vier Materialien leiten Wärme gleich gut.</label></fieldset>
+<div class="th-scene" role="img" aria-label="Vier Materialstäbe werden links erwärmt. Die Farbstufen zeigen die modellhafte Erwärmung; die Beobachtung darunter erklärt sie in Worten."><div class="th-direction"><span>Wärmequelle links</span><span>Energie wird nach rechts weitergegeben →</span></div><div id="thRods"></div><div class="th-legend"><span>Blau: anfangs kühler</span><span>Orange: stärker erwärmt</span></div></div>
+<label class="th-time" for="thTime">Modellverlauf: <output id="thTimeLabel" for="thTime">Start</output></label><input class="range" id="thTime" type="range" min="0" max="10" step="1" value="0">
+<div class="btn-row"><button type="button" class="btn primary" id="thPlay">▶ Vergleich abspielen</button><button type="button" class="btn" id="thReset">↺ Vergleich zurücksetzen</button></div>
+<p id="thObservation" class="feedback" role="status" aria-live="polite">Noch nicht erwärmt: Alle Stäbe haben dieselbe Anfangstemperatur. Vermute und starte den Vergleich oder bewege den Regler.</p><p id="thPredictionFeedback" class="small" role="status" aria-live="polite">Deine Vermutung wird am Ende des Modellverlaufs besprochen.</p>
+<details class="hint"><summary>So vergleichst du fair – und so liest du das Modell</summary><p>Material ändern; Länge, Dicke, Anfangstemperatur, Erwärmung und Beobachtungsdauer gleich halten. Die Farben und Modellschritte sind <b>keine Messwerte und keine echten Sekunden</b>. Wie schnell sich ein Körper erwärmt, hängt auch von seiner Wärmekapazität, Form und Umgebung ab. Holz und Kunststoffe unterscheiden sich je nach Sorte; das Modell zeigt typische Beispiele und legt keine Rangfolge zwischen diesen beiden fest.</p></details>
+<div class="notebox warm"><strong>Nur virtuell experimentieren</strong>Heiße Stäbe, Löffel und Töpfe niemals durch Anfassen prüfen. Reale Wärmeversuche nur nach Anleitung und unter Aufsicht der Lehrkraft.</div></section>
+<div><section class="panel"><span class="pill">2 · Verstehen</span><h3>Gute und schlechte Wärmeleiter</h3><ul><li><b>Metalle</b> wie Kupfer, Aluminium oder Stahl sind gute Wärmeleiter. Auch Metalle leiten unterschiedlich gut.</li><li><b>Trockenes Holz und viele Kunststoffe</b> leiten Wärme deutlich schlechter als Metalle. Sie können als Wärmedämmung dienen.</li><li><b>Schlechter Wärmeleiter</b> bedeutet: Wärme wird langsamer weitergegeben. Auch ein Holzgriff kann heiß werden.</li></ul><div class="th-example"><svg viewBox="0 0 320 185" role="img" aria-label="Topf mit metallischem Boden und Griff aus geeignetem Kunststoff"><rect x="13" y="12" width="294" height="160" rx="14" fill="#eff7f5"/><path d="M69 58h145v72q0 16-18 16H87q-18 0-18-16Z" fill="#a7bdc4" stroke="#325965" stroke-width="4"/><path d="M215 74h61v19h-61" fill="#b07b49" stroke="#6e472d" stroke-width="4"/><path d="M76 144h131" stroke="#d37830" stroke-width="8"/><path d="M105 116V87m35 29V87m35 29V87" stroke="#ad4b2b" stroke-width="4"/><path d="m99 94 6-8 6 8m23 0 6-8 6 8m23 0 6-8 6 8" stroke="#ad4b2b" stroke-width="3" fill="none"/><text x="64" y="40" fill="#193440" font-size="14">Metall leitet Wärme gut</text><text x="83" y="168" fill="#193440" font-size="12">Energie vom wärmeren Boden nach oben</text></svg><p><b>Topfboden:</b> Metall gibt Energie gut an den Inhalt weiter. <b>Griff:</b> Holz oder ein hitzebeständiger, dafür geeigneter Kunststoff verringert die Wärmeleitung zur Hand.</p></div></section>
+<section class="panel th-gap"><h3>Warum fühlt sich Metall kälter an?</h3><p>Ein Metallstück und ein Holzstück liegen lange im selben Raum und haben beide etwa <b>20 °C</b>. Deine Hand ist wärmer. Metall führt Energie schneller von deiner Hand weg und fühlt sich deshalb oft kälter an.</p><div class="notebox"><strong>Merksatz</strong>Gleich temperiert heißt nicht: gleiches Wärmegefühl. Die Temperatur misst du mit einem Thermometer.</div><details class="hint"><summary>Wärmeleitung oder elektrischer Strom?</summary><p>Bei Wärmeleitung wird Energie wegen eines Temperaturunterschieds übertragen. Elektrische Leitfähigkeit betrifft elektrischen Strom. Das sind verschiedene Stoffeigenschaften; ein guter Wärmeleiter braucht keinen angeschlossenen Stromkreis.</p></details></section></div></div>
+<section class="panel th-gap" aria-labelledby="thNotebookTitle">
+<span class="pill">Dein Heftversuch · Metall und Glas</span><h3 id="thNotebookTitle">Wärmeleitung an Stäben mit Teelichtern</h3>
+<p>Deine Heftseite vom 28.10.2026 beschreibt einen Vergleich von <b>Metallstab und Glasstab</b>. Die Teelichter dienen dabei als Beobachtungsstellen. Die Skizze hier zeigt den Vergleich vereinfacht; sie ist keine Aufbauanleitung.</p>
+<div class="th-notebook-layout"><div>
+<svg class="th-notebook-art" viewBox="0 0 680 330" role="img" aria-labelledby="thSketchTitle thSketchDesc"><title id="thSketchTitle">Vergleichsskizze: Glasstab und Metallstab auf Stativen mit je zwei Teelichtern</title><desc id="thSketchDesc">Die Stäbe liegen waagerecht auf Haltern. Eine gemeinsame schematische Wärmequelle erwärmt ihre benachbarten inneren Enden. Pfeile zeigen die Energieübertragung von der Mitte nach außen zu den Teelichtern.</desc>
+<rect x="8" y="8" width="664" height="314" rx="18" fill="#f1f7f6" stroke="#b5cecf"/>
+<g fill="none" stroke="#657f89" stroke-width="7" stroke-linecap="round"><path d="M80 274h95m-48 0V151h166M505 274h95m-48 0V151H386"/><path d="M120 176h18m409 0h18"/></g>
+<rect x="112" y="161" width="194" height="15" rx="5" fill="#d6edf3" stroke="#397c90" stroke-width="3"/><rect x="374" y="161" width="194" height="15" rx="5" fill="#91a8b2" stroke="#476978" stroke-width="3"/>
+<g fill="#d5dee2" stroke="#5c7680" stroke-width="2"><path d="M150 137h42l-4 23h-34Zm69 0h42l-4 23h-34Zm200 0h42l-4 23h-34Zm69 0h42l-4 23h-34Z"/></g>
+<g id="thWaxSamples" fill="#fff8d4" stroke="#9f894f" stroke-width="2"><ellipse cx="171" cy="139" rx="18" ry="5"/><ellipse cx="240" cy="139" rx="18" ry="5"/><ellipse cx="440" cy="139" rx="18" ry="5"/><ellipse cx="509" cy="139" rx="18" ry="5"/></g>
+<g stroke="#8e5d31" stroke-width="2"><path d="M171 129v7m69-7v7m200-7v7m69-7v7"/></g>
+<g fill="#193440" font-family="system-ui,sans-serif" font-size="17"><text x="164" y="63">Glasstab</text><text x="424" y="63">Metallstab</text><text x="133" y="105" font-size="14">2 Teelichter</text><text x="430" y="105" font-size="14">2 Teelichter</text><text x="35" y="305" font-size="14">Stativ mit Halter</text><text x="464" y="305" font-size="14">Stativ mit Halter</text></g>
+<path d="M290 202H177m213 0h113" fill="none" stroke="#b9552d" stroke-width="4"/><path d="m191 194-15 8 15 8m298-16 15 8-15 8" fill="none" stroke="#b9552d" stroke-width="4"/>
+<g id="thNotebookHeat" opacity="0"><path d="M282 158q-16-26 18-57 33 31 13 57" fill="#efa44c"/><path d="M367 158q-17-26 18-57 32 31 13 57" fill="#efa44c"/></g>
+<rect x="278" y="230" width="124" height="39" rx="9" fill="#728b95" stroke="#476978" stroke-width="3"/><path d="M300 230v-39m84 39v-39" fill="none" stroke="#476978" stroke-width="8"/>
+<text x="340" y="292" fill="#193440" text-anchor="middle" font-size="13" font-family="system-ui,sans-serif">Brenner / Wärmequelle</text>
+</svg><div class="btn-row"><button type="button" class="btn primary" id="thNotebookCompare">Modellbeobachtung zeigen</button><button type="button" class="btn" id="thNotebookReset">Skizze zurücksetzen</button></div><p id="thNotebookObservation" class="feedback" role="status" aria-live="polite">Ausgangsbild: Die Energieübertragung wird von den erwärmten Enden nach außen verglichen. Die Teelichter sind nicht angezündet.</p><p class="small muted">Schematisch, ohne Maßstab und ohne Messzeiten. Der Modellvergleich zeigt das Erwärmen von anfangs festem Wachs; er ergänzt deine Notiz und ersetzt keine echte Messung.</p>
+</div><div>
+<h4>Das steht in deiner Beobachtung</h4><p>Beim Metallstab beschreibst du eine dunkle Verfärbung am Teelichtboden und Schmelzen. Beim Glasstab notierst du keine dunkle Verfärbung. Die Notiz sagt nicht eindeutig, ob dort ebenfalls Wachs geschmolzen ist.</p>
+<h4>Beobachten und Deuten trennen</h4><p><b>Beobachtung:</b> Was ist tatsächlich sichtbar? Zum Beispiel: „Das zunächst feste Wachs wird flüssig.“</p><p><b>Auswertung:</b> Wie lässt sich das erklären? Zum Beispiel: „Der verwendete Metallstab leitet Wärme besser als der Glasstab. Deshalb kann die Energie schneller zu weiter entfernten Stellen gelangen.“</p>
+<div class="notebox warm"><strong>Dunkel werden ist kein sicherer Wärmenachweis</strong>Eine dunkle Stelle kann zum Beispiel durch Ruß entstehen. Ihre Ursache lässt sich aus dem Foto nicht sicher feststellen. Vergleiche für die Wärmeleitung das Schmelzen von vorher festem Wachs bei gleichen Bedingungen.</div>
+<details class="hint"><summary>Dein Protokoll genauer machen</summary><p>Wurde das Wachs vorher verflüssigt? Dann ergänze, ob es vor dem eigentlichen Stabvergleich wieder fest war. War es noch flüssig, belegt „flüssiges Wachs“ allein keine erneute Erwärmung durch den Stab.</p><p>Hilfreich sind: gleiche Stabmaße, gleicher Abstand zur Wärmequelle, gleichartige Teelichter, gleiche Wachsmengen und gleicher Anfangszustand. Beobachte beide Stäbe über dieselbe Dauer. Trage keine erfundenen Zeiten ein.</p></details>
+<div class="notebox"><strong>Glas leitet schlechter – es bleibt nicht immer kalt</strong>Glas kann heiß werden und bei ungleichmäßiger Erwärmung brechen. Der Heftversuch gehört unter die Aufsicht der Lehrkraft.</div>
+</div></div>
+<div class="th-protocol"><h4>Protokollwerkstatt zu deinem Heftversuch</h4><p>Trage nur ein, was du wirklich gesehen hast. Öffne anschließend die Formulierungshilfen zum Vergleichen.</p><div class="th-protocol-fields"><label>Material und Aufbau<textarea rows="3" data-note="thermal-setup" placeholder="Welche Stäbe, Halter und Beobachtungsstellen gab es?"></textarea></label><label>Beobachtung<textarea rows="3" data-note="thermal-observation" placeholder="Am Metallstab habe ich gesehen … Am Glasstab …"></textarea></label><label>Auswertung<textarea rows="3" data-note="thermal-conclusion" placeholder="Die Beobachtung lässt sich so erklären …"></textarea></label></div>
+<details class="hint"><summary>Formulierungshilfen und Muster-Auswertung</summary><p><b>Material:</b> Metallstab, Glasstab, Stative mit Haltern, je zwei gleichartige Teelichter und eine von der Lehrkraft bediente Wärmequelle.</p><p><b>Beobachtung:</b> „Beim Metallstab …; beim Glasstab …“ Beschreibe den Wachszustand und Verfärbungen getrennt. Wenn du einen Punkt nicht beobachtet hast, schreibe „nicht festgehalten“.</p><p><b>Auswertung:</b> „Der verwendete Metallstab leitet Wärme besser als der Glasstab. Wird an einem vom erwärmten Ende entfernten Punkt zunächst festes Wachs beim Metallstab früher flüssig, passt das zur besseren Wärmeleitung. Eine Verfärbung allein reicht für diesen Schluss nicht aus.“</p></details></div>
+<div class="th-notebook-check"><h4>Ordne die Aussage richtig zu</h4><p>„Das zunächst feste Wachs am Metallstab wird flüssig.“</p><div class="btn-row"><button type="button" class="btn" data-th-protocol="observation">Beobachtung</button><button type="button" class="btn" data-th-protocol="interpretation">Auswertung</button></div><p class="feedback" id="thProtocolFeedback" role="status" aria-live="polite">Ist das etwas Sichtbares oder schon eine Erklärung?</p></div>
+</section>
+
+<section class="panel th-gap" aria-labelledby="thPracticeTitle"><span class="pill">3 · Üben und erklären</span><h3 id="thPracticeTitle">Dein Wärmeleiter-Check</h3><p>Beantworte vier Fragen. Zu jeder Antwort erhältst du eine Erklärung. Bei Bedarf kannst du einen Tipp oder die Lösung öffnen und es erneut versuchen.</p><div class="th-questions" id="thQuestions"></div><p class="feedback" id="thProgress" role="status" aria-live="polite">0 von 4 Fragen gelöst. Für den Themenabschluss: Modell bis zum Ende ansehen und vier Fragen lösen.</p><button type="button" class="btn" id="thPracticeReset">Fragen erneut üben</button>
+<div class="th-writing"><label for="thExplain"><b>Erkläre mit eigenen Worten:</b> Warum sind ein metallischer Topfboden und ein schlecht wärmeleitender Griff eine sinnvolle Kombination?</label><textarea id="thExplain" data-note="thermal-explanation" rows="3" placeholder="Der Boden soll … Der Griff soll …"></textarea><details class="hint"><summary>Musterlösung zum Vergleichen</summary><p>Der Metallboden leitet Wärme gut und gibt Energie an den Topfinhalt weiter. Der Griff soll Wärme schlechter leiten, damit weniger Energie zur Hand gelangt. Trotzdem können auch solche Griffe heiß werden.</p></details></div><div class="btn-row"><button type="button" class="btn primary" id="thGoQuiz">Wärmeleitfähigkeit im Wissenscheck üben →</button><button type="button" class="btn" data-go="sheet">Zum Lernheft</button></div></section>
+<details class="hint"><summary>Für Lehrkräfte: Lernziel und Fachquellen</summary><p>Lernziel: gute und schlechte Wärmeleiter an Beispielen unterscheiden, einen fairen Vergleich planen und Temperatur vom Wärmegefühl unterscheiden. Reihenfolge: Vermutung → Vergleich → Erklärung → Anwendung. Die Animation ist qualitativ.</p><p><a href="https://www.experimente.physik.uni-freiburg.de/Thermodynamik/waermeleitungundkonvektion/waermeleitunginfestenkoerpern/waermeleitunginstaeben" target="_blank" rel="noopener noreferrer">Universität Freiburg: Wärmeleitung in Stäben</a> · <a href="https://www.lehrerfortbildung-bw.de/u_matnatech/bnt/gym/bp2016/fb2/4_energie/4_transport/07_waerme/4_ab2/4414_ab2_waermeempfinden.pdf" target="_blank" rel="noopener noreferrer">Lehrerfortbildung Baden-Württemberg: Wärmeempfinden</a></p></details>
+</section>
+
 <section class="stage" hidden="" id="page-heating">
 <div class="page-head"><div class="tag">05 · Die Siedetemperatur</div><h2>Was passiert beim Erwärmen von Wasser?</h2><p>Starte eine <b>virtuelle</b> Messreihe und beobachte die Temperaturkurve. Der Versuch zeigt ein vereinfachtes, ideales Modell bei normalem Luftdruck.</p></div>
 <div class="sim-layout"><div class="panel"><h3>📈 Heizkurve von Wasser</h3><svg aria-label="Diagramm Temperatur in Grad Celsius über Zeit in Sekunden" class="curve-svg" id="heatChart" role="img" viewbox="0 0 650 375"><g id="heatGrid"></g><path class="plot" d="" id="heatPlot"></path><circle class="marker" cx="75" cy="300" id="heatMarker" r="8"></circle></svg><div class="btn-row"><button class="btn primary" id="heatPlay">▶ Start</button><button class="btn" id="heatStep">+ 30 Sekunden</button><button class="btn" id="heatReset">↺ Zurücksetzen</button></div><div class="scoreline"><span id="heatTime">Zeit: 0 s</span><span id="heatTemp">Temperatur: 20 °C</span></div></div><div class="panel"><h3>🌡️ Im virtuellen Labor</h3><div class="heater-art"><div aria-label="Animiertes Thermometer" class="thermo"><div class="fluid" id="thermoFluid" style="height:12%"></div><div class="bulb"></div></div><div class="beaker-art" id="heatBeaker"><span class="steam">≋</span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><div class="water"></div></div></div><div class="measure"><div><small>Temperatur</small><b id="heatValue">20 °C</b></div><div><small>Zustand</small><b id="heatState" style="font-size:18px">flüssig</b></div></div><p class="muted" id="heatExplain">Das Wasser ist noch kühl. Selbst jetzt können einzelne Wassermoleküle an der Oberfläche in die Luft übergehen.</p></div></div><div class="notebox"><strong>Merksatz</strong>Wasser <b>verdunstet</b> bereits unter 100 °C an seiner Oberfläche. Beim <b>Sieden</b> bilden sich im Wasser Dampfblasen. Reines Wasser siedet bei normalem Luftdruck (ca. 1013 hPa) bei etwa <b>100 °C</b>. Während des Siedens bleibt die Temperatur bei gleichbleibendem Druck trotz Wärmezufuhr ungefähr konstant.</div><div class="panel"><h3>📊 Diagramme richtig lesen</h3><p>Die waagerechte Achse zeigt die <b>Zeit in Sekunden</b>. Die senkrechte Achse zeigt die <b>Temperatur in °C</b>. Ein waagerechter Abschnitt bei etwa 100 °C zeigt das Sieden.</p><div class="answer-grid" id="heatQuestion"><button class="answer" data-heatanswer="0">Wasser verdunstet erst ab 100 °C.</button><button class="answer" data-heatanswer="1">Wasser verdunstet auch unter 100 °C.</button></div><div aria-live="polite" class="feedback" id="heatQuestionFeedback">Welche Aussage stimmt?</div><details class="hint"><summary>💡 Was zeigt das Diagramm aus dem Heft?</summary><p>Eine der gezeichneten Kurven liegt auf einem Plateau unter 100 °C. Das ist nicht automatisch die Siedetemperatur von reinem Wasser. Solche Messwerte können z. B. durch Messfehler, einen ungünstigen Thermometerstand oder andere Versuchsbedingungen entstehen. Wichtig ist, Messung und Fachwissen sauber zu unterscheiden.</p></details></div>
@@ -208,7 +275,7 @@ body.high-contrast .mission-scene{background:#eef4f3}
 </section>
 <section class="stage" hidden="" id="page-quiz">
 <div class="page-head"><div class="tag">10 · Wissenscheck</div><h2>Bereit für die Klassenarbeit?</h2><p>Trainiere die Grundlagen, prüfe ein einzelnes Thema oder wiederhole gezielt deine Fehler. Nach jedem Test siehst du, welche Themen du noch üben solltest.</p></div>
-<div class="panel" id="examPanel"><div class="exam-config"><label>Themenbereich<select id="quizTopic"><option value="Alle">Alle Themen</option><option value="Stoffe &amp; Körper">Stoffe &amp; Körper</option><option value="Laborgeräte">Laborgeräte</option><option value="Sicherheit">Sicherheit</option><option value="Löslichkeit">Löslichkeit</option><option value="Siedetemperatur">Siedetemperatur</option><option value="Gasbrenner">Gasbrenner</option><option value="Experimente">Experimente</option></select></label><label>Aufgabenanzahl<select id="quizLength"><option value="8">8 Fragen · Kurztest</option><option selected="" value="12">12 Fragen · Klassenarbeitsübung</option><option value="20">20 Fragen · Intensiv</option></select></label><button class="btn" id="quizApply">🎯 Neuen Test starten</button><button class="btn" disabled="" id="quizMistakes">↻ Meine Fehler üben</button></div><div class="scoreline"><span id="quizStep">Frage 1 von 12</span><span id="quizScore">0 Punkte</span></div><div class="progressbar"><i id="quizProgress" style="width:0%"></i></div><div class="questions" id="quizQuestion"></div><div class="quiz-options" id="quizOptions"></div><div aria-live="polite" class="feedback" id="quizFeedback">Wähle eine Antwort.</div><div class="btn-row"><button class="btn primary" disabled="" id="quizNext">Weiter →</button><button class="btn" id="quizRestart">Test neu starten</button></div></div><div hidden="" id="quizEnd"></div>
+<div class="panel" id="examPanel"><div class="exam-config"><label>Themenbereich<select id="quizTopic"><option value="Alle">Alle Themen</option><option value="Stoffe &amp; Körper">Stoffe &amp; Körper</option><option value="Laborgeräte">Laborgeräte</option><option value="Sicherheit">Sicherheit</option><option value="Löslichkeit">Löslichkeit</option><option value="Wärmeleitfähigkeit">Wärmeleitfähigkeit</option><option value="Siedetemperatur">Siedetemperatur</option><option value="Gasbrenner">Gasbrenner</option><option value="Experimente">Experimente</option></select></label><label>Aufgabenanzahl<select id="quizLength"><option value="8">8 Fragen · Kurztest</option><option selected="" value="12">12 Fragen · Klassenarbeitsübung</option><option value="20">20 Fragen · Intensiv</option></select></label><button class="btn" id="quizApply">🎯 Neuen Test starten</button><button class="btn" disabled="" id="quizMistakes">↻ Meine Fehler üben</button></div><div class="scoreline"><span id="quizStep">Frage 1 von 12</span><span id="quizScore">0 Punkte</span></div><div class="progressbar"><i id="quizProgress" style="width:0%"></i></div><div class="questions" id="quizQuestion"></div><div class="quiz-options" id="quizOptions"></div><div aria-live="polite" class="feedback" id="quizFeedback">Wähle eine Antwort.</div><div class="btn-row"><button class="btn primary" disabled="" id="quizNext">Weiter →</button><button class="btn" id="quizRestart">Test neu starten</button></div></div><div hidden="" id="quizEnd"></div>
 </section>
 <section class="stage" hidden="" id="page-deep">
 <div class="page-head"><div class="tag">09 · Forscherlabor · Version 4</div><h2>Erforschen statt nur auswendig lernen</h2><p>Hier veränderst du selbst die Versuchsbedingungen, siehst Reaktionen in animierten Modellen und erklärst, <b>warum</b> etwas passiert. Jede Station endet mit einem Denkauftrag.</p></div>
@@ -292,7 +359,8 @@ body.high-contrast .mission-scene{background:#eef4f3}
 <h3>6. Gasbrenner und Flamme</h3><div class="card"><p>Bei geringer Luftzufuhr entsteht typischerweise eine <b>gelbe, leuchtende Flamme</b>. Bei größerer Luftzufuhr entsteht die <b>blaue, rauschende Flamme</b> mit höherer Temperatur. Die besonders heiße Zone befindet sich <b>knapp oberhalb der Spitze des inneren blauen Kegels</b>. Arbeiten mit Gasbrennern nur unter Aufsicht und nach den örtlichen Vorgaben.</p></div>
 <h3>7. Experimente protokollieren</h3><div class="card"><p><b>Frage:</b> Was untersuche ich? <b>Hypothese:</b> Was vermute ich und warum? <b>Material/Versuchsaufbau:</b> Was benötige ich? <b>Durchführung:</b> Was wird gemacht? <b>Beobachtung:</b> Was sehe oder messe ich? <b>Auswertung:</b> Was bedeuten die Ergebnisse? Beobachtungen und Deutungen unbedingt auseinanderhalten.</p></div>
 <h3>8. Diagramme und Messergebnisse überprüfen</h3><div class="card"><p>Die <b>x-Achse</b> beschreibt meist die Zeit, die <b>y-Achse</b> die Temperatur. Für eine Aussage über den Siedepunkt beachtest du Stoff, Luftdruck, Messgerät und Messbedingungen. Ein Messwert ist eine <b>Beobachtung</b>; seine Erklärung gehört in die <b>Auswertung</b>.</p><p><b>Lernstrategie:</b> Lies zuerst die Achsen und Einheiten. Beschreibe dann den Verlauf: steigt er, fällt er oder bleibt er ungefähr gleich? Erst danach folgt deine fachliche Erklärung.</p></div>
-<h3>9. Vertiefung: Temperatur und Druck</h3><div class="card"><p><b>Gleiche Wassermenge und Temperatur:</b> Kochsalz und Zucker lösen sich unterschiedlich gut. In 200 ml Wasser bei 20 °C sind als gerundete Vergleichswerte etwa 72 g Kochsalz und 408 g Zucker löslich. Diese Werte hängen von Reinheit und Bedingungen ab. Bei steigender Temperatur nimmt die Löslichkeit von Zucker stark, die von Kochsalz nur wenig zu.</p><p><b>Siedepunkt und Luftdruck:</b> Bei normalem Luftdruck siedet reines Wasser bei etwa 100 °C; bei geringerem Druck schon bei geringerer Temperatur. Stärkeres Heizen verkürzt die Zeit bis zum Sieden, erhöht bei gleichem Druck aber nicht die Siedetemperatur.</p></div>
+<h3>9. Wärmeleitfähigkeit</h3><div class="card"><p><b>Wärmeleitung:</b> Energie wird vom wärmeren zum kälteren Bereich übertragen, ohne dass der Stoff mitwandern muss. <b>Wärmeleitfähigkeit</b> beschreibt, wie gut ein Material Wärme weitergibt.</p><p><b>Gute Wärmeleiter:</b> Metalle, z. B. Kupfer, Aluminium und Stahl. <b>Schlechte Wärmeleiter:</b> trockenes Holz, viele Kunststoffe und ruhende Luft. Schlecht leitend heißt nicht: bleibt immer kalt.</p><p><b>Alltag:</b> Ein metallischer Topfboden gibt Wärme gut an den Inhalt weiter. Ein Griff aus Holz oder geeignetem hitzebeständigem Kunststoff verringert die Wärmeleitung zur Hand. Auch solche Griffe können heiß werden.</p><p><b>Wärmegefühl:</b> Metall und Holz können beide 20 °C haben. Metall fühlt sich oft kälter an, weil es Energie schneller von der wärmeren Hand ableitet. Mit einem Thermometer misst man die Temperatur.</p><p><b>Fair vergleichen:</b> Länge, Dicke, Anfangstemperatur, Erwärmung und Beobachtungsdauer gleich halten; nur das Material gezielt ändern. Heiße Gegenstände niemals durch Anfassen prüfen.</p><p class="screen-only"><button type="button" class="btn" data-go="thermal">Wärmeleitfähigkeit üben →</button></p></div>
+<h3>10. Vertiefung: Temperatur und Druck</h3><div class="card"><p><b>Gleiche Wassermenge und Temperatur:</b> Kochsalz und Zucker lösen sich unterschiedlich gut. In 200 ml Wasser bei 20 °C sind als gerundete Vergleichswerte etwa 72 g Kochsalz und 408 g Zucker löslich. Diese Werte hängen von Reinheit und Bedingungen ab. Bei steigender Temperatur nimmt die Löslichkeit von Zucker stark, die von Kochsalz nur wenig zu.</p><p><b>Siedepunkt und Luftdruck:</b> Bei normalem Luftdruck siedet reines Wasser bei etwa 100 °C; bei geringerem Druck schon bei geringerer Temperatur. Stärkeres Heizen verkürzt die Zeit bis zum Sieden, erhöht bei gleichem Druck aber nicht die Siedetemperatur.</p></div>
 <div class="notebox warm"><strong>Wichtig für die Klassenarbeit</strong>Verständlich mit eigenen Worten erklären, Fachbegriffe richtig nutzen, passende Beispiele nennen und Diagramme sorgfältig lesen.</div>
 </div></section>
 <div class="footer">Chemie-Entdeckerlabor · Klasse 5 · Funktioniert ohne Internet · Simulationen sind vereinfachte Lernmodelle · Sicherheitsregeln der Schule haben Vorrang.</div>
@@ -411,12 +479,12 @@ const state={done:{},route:'home',deviceFilter:'Alle',matter:{i:0,score:0,answer
 try{const saved=JSON.parse(localStorage.getItem('chemie5-data')||'{}');if(saved.done&&typeof saved.done==='object')state.done=saved.done;if(saved.contrast)document.body.classList.add('high-contrast');if(saved.big)document.body.classList.add('bigtext')}catch(e){console.warn('Gespeicherte Daten konnten nicht gelesen werden:',e)}
 function persist(){try{localStorage.setItem('chemie5-data',JSON.stringify({done:state.done,contrast:document.body.classList.contains('high-contrast'),big:document.body.classList.contains('bigtext')}))}catch(e){console.warn('Gespeicherte Daten konnten nicht gelesen werden:',e)}}
 function complete(k){if(!state.done[k]){state.done[k]=true;persist();updateProgress()}}
-function updateProgress(){const keys=['matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','v4lab','v4play','v4study','v5academy'];let n=keys.filter(k=>state.done[k]).length;const TOTAL_AREAS=14;$('sideProgress').style.width=(n/TOTAL_AREAS*100)+'%';$('sideProgressText').textContent=n+' von '+TOTAL_AREAS+' Bereichen geschafft';$$('[data-done]').forEach(el=>el.textContent=state.done[el.dataset.done]?'✓':'');}
-function navigate(to){if(state.heater.timer)stopHeat();if(typeof deepStopTimers==='function')deepStopTimers();const pages=['home','matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','sheet','v4lab','v4play','v4study','v5academy'];if(!pages.includes(to))to='home';state.route=to;pages.forEach(p=>{$('page-'+p).hidden=p!==to});$$('#nav button').forEach(b=>{b.classList.toggle('active',b.dataset.page===to);if(b.dataset.page===to)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});$('crumb').textContent=({home:'DEIN LERNLABOR · KLASSE 5',matter:'MODUL 1 · STOFFE & KÖRPER',devices:'MODUL 2 · LABORGERÄTE',safety:'MODUL 3 · SICHERHEIT',solubility:'MODUL 4 · LÖSLICHKEIT',heating:'MODUL 5 · SIEDETEMPERATUR',burner:'MODUL 6 · GASBRENNER',method:'MODUL 7 · EXPERIMENTE',missions:'MODUL 8 · LABOR-MISSIONEN',deep:'MODUL 9 · FORSCHERLABOR',quiz:'ABSCHLUSSTEST',sheet:'LERNHEFT · ÜBERSICHT',v4lab:'FORSCHUNGSCAMPUS · VIRTUELLES LABOR',v4play:'FORSCHUNGSCAMPUS · SPIELWELT',v4study:'FORSCHUNGSCAMPUS · LERNZENTRALE',v5academy:'CHEMIE · FORSCHERWERKSTATT V5'})[to];if('speechSynthesis'in window)speechSynthesis.cancel();$('speakToggle').textContent='🔊 Vorlesen';window.scrollTo({top:0,behavior:'instant'});}
+function updateProgress(){const keys=['thermal','matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','v4lab','v4play','v4study','v5academy'];let n=keys.filter(k=>state.done[k]).length;const TOTAL_AREAS=15;$('sideProgress').style.width=(n/TOTAL_AREAS*100)+'%';$('sideProgressText').textContent=n+' von '+TOTAL_AREAS+' Bereichen geschafft';$$('[data-done]').forEach(el=>el.textContent=state.done[el.dataset.done]?'✓':'');}
+function navigate(to){if(state.heater.timer)stopHeat();if(typeof deepStopTimers==='function')deepStopTimers();const pages=['home','thermal','matter','devices','safety','solubility','heating','burner','method','missions','deep','quiz','sheet','v4lab','v4play','v4study','v5academy'];if(!pages.includes(to))to='home';state.route=to;pages.forEach(p=>{$('page-'+p).hidden=p!==to});$$('#nav button').forEach(b=>{b.classList.toggle('active',b.dataset.page===to);if(b.dataset.page===to)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});$('crumb').textContent=({home:'DEIN LERNLABOR · KLASSE 5',thermal:'STOFFEIGENSCHAFTEN · WÄRMELEITFÄHIGKEIT',matter:'MODUL 1 · STOFFE & KÖRPER',devices:'MODUL 2 · LABORGERÄTE',safety:'MODUL 3 · SICHERHEIT',solubility:'MODUL 4 · LÖSLICHKEIT',heating:'MODUL 5 · SIEDETEMPERATUR',burner:'MODUL 6 · GASBRENNER',method:'MODUL 7 · EXPERIMENTE',missions:'MODUL 8 · LABOR-MISSIONEN',deep:'MODUL 9 · FORSCHERLABOR',quiz:'ABSCHLUSSTEST',sheet:'LERNHEFT · ÜBERSICHT',v4lab:'FORSCHUNGSCAMPUS · VIRTUELLES LABOR',v4play:'FORSCHUNGSCAMPUS · SPIELWELT',v4study:'FORSCHUNGSCAMPUS · LERNZENTRALE',v5academy:'CHEMIE · FORSCHERWERKSTATT V5'})[to];if('speechSynthesis'in window)speechSynthesis.cancel();$('speakToggle').textContent='🔊 Vorlesen';window.scrollTo({top:0,behavior:'instant'});}
 $$('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));$$('[data-go]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.go)));
 $('contrastToggle').addEventListener('click',()=>{document.body.classList.toggle('high-contrast');persist()});$('sizeToggle').addEventListener('click',()=>{document.body.classList.toggle('bigtext');persist()});$('speakToggle').addEventListener('click',()=>{if(!('speechSynthesis'in window)){alert('Vorlesen wird von diesem Browser nicht unterstützt.');return}if(speechSynthesis.speaking){speechSynthesis.cancel();$('speakToggle').textContent='🔊 Vorlesen';return}const page=$('page-'+state.route);const READ_ALOUD_LIMIT=3700,text=page.innerText.replace(/\s+/g,' ').slice(0,READ_ALOUD_LIMIT);const utter=new SpeechSynthesisUtterance(text);utter.lang='de-DE';utter.rate=Number(window.LernCockpit?.settings()?.rate)||.9;const voiceUri=window.LernCockpit?.settings()?.voice;const chosen=speechSynthesis.getVoices().find(v=>v.voiceURI===voiceUri);if(chosen)utter.voice=chosen;utter.onend=()=>{$('speakToggle').textContent='🔊 Vorlesen'};utter.onerror=()=>{$('speakToggle').textContent='🔊 Vorlesen'};speechSynthesis.speak(utter);$('speakToggle').textContent='⏹ Stopp'});
-const topics=[['matter','🧩','Stoffe & Körper','Körper oder Stoff? Sortiere Beispiele und verstehe den Unterschied.'],['devices','🔬','Laborgeräte','Erkenne Reagenzglas, Trichter, Dreifuß und viele andere Geräte.'],['safety','🛡️','Sicher experimentieren','Finde Gefahren in einer interaktiven Laborszene.'],['solubility','🧂','Löslichkeit','Führe ein virtuelles Experiment mit Salz und Zucker durch.'],['heating','🌡️','Siedetemperatur','Erwärme Wasser virtuell und lese ein Diagramm ab.'],['burner','🔥','Gasbrenner','Vergleiche Flammen und absolviere den Sicherheitscheck.'],['method','📝','Experimente planen','Ordne Versuchsphasen und trenne Beobachtung und Deutung.'],['missions','🧪','Labor-Missionen','Löse drei Forschungsfälle in mehreren Schritten.'],['deep','✨','Forscherlabor mit Animationen','Teilchenkino, Siedelabor, Flammenzonen und Geräte-Missionen.'],['quiz','🏆','Wissenscheck','Wähle Thema und Länge; übe deine Fehler gezielt.']];
-$('homeCards').innerHTML=topics.map((t,i)=>`<button type="button" class="card clickable" data-home-topic="${t[0]}" aria-label="${t[2]} öffnen"><span class="card-top"><span class="topic-icon">${t[1]}</span><span class="topic-code">${i===9?'TEST':`THEMA ${String(i+1).padStart(2,'0')}`}</span></span><span class="card-h3">${t[2]} ${state.done[t[0]]?'✓':''}</span><span class="card-p">${t[3]}</span><span class="card-link">Loslegen →</span></button>`).join('');
+const topics=[['matter','🧩','Stoffe & Körper','Körper oder Stoff? Sortiere Beispiele und verstehe den Unterschied.'],['devices','🔬','Laborgeräte','Erkenne Reagenzglas, Trichter, Dreifuß und viele andere Geräte.'],['safety','🛡️','Sicher experimentieren','Finde Gefahren in einer interaktiven Laborszene.'],['solubility','🧂','Löslichkeit','Führe ein virtuelles Experiment mit Salz und Zucker durch.'],['thermal','♨️','Wärmeleitfähigkeit','Vergleiche Metall, Holz und Kunststoff und erkläre Beispiele aus dem Alltag.'],['heating','🌡️','Siedetemperatur','Erwärme Wasser virtuell und lese ein Diagramm ab.'],['burner','🔥','Gasbrenner','Vergleiche Flammen und absolviere den Sicherheitscheck.'],['method','📝','Experimente planen','Ordne Versuchsphasen und trenne Beobachtung und Deutung.'],['missions','🧪','Labor-Missionen','Löse drei Forschungsfälle in mehreren Schritten.'],['deep','✨','Forscherlabor mit Animationen','Teilchenkino, Siedelabor, Flammenzonen und Geräte-Missionen.'],['quiz','🏆','Wissenscheck','Wähle Thema und Länge; übe deine Fehler gezielt.']];
+$('homeCards').innerHTML=topics.map((t,i)=>`<button type="button" class="card clickable" data-home-topic="${t[0]}" aria-label="${t[2]} öffnen"><span class="card-top"><span class="topic-icon">${t[1]}</span><span class="topic-code">${t[0]==='quiz'?'TEST':`THEMA ${String(i+1).padStart(2,'0')}`}</span></span><span class="card-h3">${t[2]} ${state.done[t[0]]?'✓':''}</span><span class="card-p">${t[3]}</span><span class="card-link">Loslegen →</span></button>`).join('');
 $$('[data-home-topic]').forEach(c=>{const f=()=>navigate(c.dataset.homeTopic);c.addEventListener('click',f)});
 function feedback(el,ok,txt){el.className='feedback '+(ok===null?'':ok?'good':'bad');el.textContent=txt;}
 function makeSvg(inner){return `<svg viewBox="0 0 140 120" role="img" aria-label="Gerätezeichnung"><g fill="none" stroke="#365f72" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${inner}</g></svg>`}
@@ -520,7 +588,145 @@ const methodCases=[
 ];
 function renderMethodQuestion(){const m=state.method;if(m.q>=methodCases.length){$('methodQuestion').textContent='Du bist ein echter Forscher!';$$('[data-method-answer]').forEach(b=>b.disabled=true);$('methodNext').disabled=true;feedback($('methodAnswerFeedback'),true,'Alle neun Beispiele bearbeitet. Du kannst Vermutungen, Beobachtungen und Auswertungen unterscheiden.');complete('method');return}const q=methodCases[m.q];$('methodQuestion').textContent=q[0];m.answered=false;$$('[data-method-answer]').forEach(b=>{b.disabled=false;b.classList.remove('correct','wrong')});feedback($('methodAnswerFeedback'),null,`Beispiel ${m.q+1} von ${methodCases.length}: Was beschreibt die Aussage?`);$('methodNext').disabled=true}
 $$('[data-method-answer]').forEach(b=>b.addEventListener('click',()=>{const m=state.method;if(m.answered)return;const q=methodCases[m.q],ok=b.dataset.methodAnswer===q[1];m.answered=true;b.classList.add(ok?'correct':'wrong');$$('[data-method-answer]').forEach(x=>{x.disabled=true;if(x.dataset.methodAnswer===q[1])x.classList.add('correct')});feedback($('methodAnswerFeedback'),ok,(ok?'Richtig! ':'Die richtige Kategorie ist '+q[1]+'. ')+q[2]);$('methodNext').disabled=false}));$('methodNext').addEventListener('click',()=>{state.method.q++;renderMethodQuestion()});
-const quizBank=[
+const thermalQuiz=[
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "In welche Richtung wird Energie bei Wärmeleitung von selbst übertragen?",
+  "options": [
+   "Vom wärmeren zum kälteren Bereich",
+   "Immer vom kälteren zum wärmeren Bereich",
+   "Nur von oben nach unten",
+   "Es wird dabei keine Energie übertragen"
+  ],
+  "correct": 0,
+  "ex": "Bei einem Temperaturunterschied wird Energie durch Wärmeleitung vom wärmeren zum kälteren Bereich übertragen.",
+  "hint": "Vergleiche einen warmen Topfboden mit dem noch kühleren Topfinhalt."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Welches Material leitet Wärme im Allgemeinen besonders gut?",
+  "options": [
+   "Trockenes Holz",
+   "Kupfer",
+   "Ein typischer Kunststoffgriff",
+   "Eine Schicht ruhender Luft"
+  ],
+  "correct": 1,
+  "ex": "Kupfer ist ein Metall und ein guter Wärmeleiter. Trockenes Holz, viele Kunststoffe und ruhende Luft leiten deutlich schlechter.",
+  "hint": "Welche Materialgruppe wird häufig für Topfböden verwendet?"
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Metall und Holz liegen lange im selben Raum und haben beide 20 °C. Warum fühlt sich Metall oft kälter an?",
+  "options": [
+   "Metall hat dann immer eine niedrigere Temperatur",
+   "Holz erzeugt eigene Wärme",
+   "Metall führt Energie schneller von der wärmeren Hand weg",
+   "Die Hand misst die Temperatur ganz genau"
+  ],
+  "correct": 2,
+  "ex": "Beide haben hier dieselbe Temperatur. Metall leitet Energie schneller von der wärmeren Hand ab. Deshalb ist das Wärmegefühl verschieden.",
+  "hint": "Deine Hand ist wärmer als die beiden Gegenstände. Wohin gelangt Energie aus der Hand?"
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Was hältst du beim fairen Vergleich zweier Materialstäbe gleich?",
+  "options": [
+   "Nur ihre Farbe",
+   "Nur ihren Namen",
+   "Alle Eigenschaften außer der Farbe",
+   "Länge, Dicke, Anfangstemperatur und Erwärmung; gleiche Beobachtungsdauer"
+  ],
+  "correct": 3,
+  "ex": "Nur das Material soll gezielt verschieden sein. Gleiche Abmessungen, Ausgangsbedingungen und Beobachtungsdauer machen den Vergleich aussagekräftiger.",
+  "hint": "Prüfe, ob ein kürzerer oder dickerer Stab den Vergleich verfälschen könnte."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Warum werden Topfgriffe oft aus Holz oder dafür geeignetem Kunststoff gefertigt?",
+  "options": [
+   "Diese Materialien leiten Wärme schlechter als Metall",
+   "Diese Materialien bleiben unter allen Bedingungen kalt",
+   "Sie sind die besten Wärmeleiter",
+   "Sie senken immer den Siedepunkt von Wasser"
+  ],
+  "correct": 0,
+  "ex": "Schlechte Wärmeleiter verringern die Energieübertragung zur Hand. Trotzdem können solche Griffe heiß werden; sie sind keine Garantie gegen Verbrennungen."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Was bedeutet „schlechter Wärmeleiter“?",
+  "options": [
+   "Das Material kann niemals warm werden",
+   "Es gibt Wärme unter vergleichbaren Bedingungen schlechter weiter",
+   "Es ist immer kälter als Metall",
+   "Es lässt keinen elektrischen Strom durch und ist deshalb kalt"
+  ],
+  "correct": 1,
+  "ex": "Wärmedämmende Materialien geben Wärme schlechter weiter. Das bedeutet weder, dass sie immer kalt bleiben, noch, dass gar keine Energie durch sie gelangt."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Braucht Wärmeleitung einen angeschlossenen elektrischen Stromkreis?",
+  "options": [
+   "Ja, immer eine Batterie",
+   "Ja, immer eine Steckdose",
+   "Nein; für Wärmeleitung ist ein Temperaturunterschied entscheidend",
+   "Nein, aber beide Bereiche müssen gleich warm sein"
+  ],
+  "correct": 2,
+  "ex": "Wärmeleitfähigkeit und elektrische Leitfähigkeit sind verschiedene Stoffeigenschaften. Wärme kann ohne angeschlossenen Stromkreis übertragen werden."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Wie prüfst du die Temperatur eines möglicherweise heißen Metallstabs sicher?",
+  "options": [
+   "Mit der bloßen Hand",
+   "Kurz mit dem Finger antippen",
+   "Mit der Zunge",
+   "Mit geeigneter Messtechnik nach Anleitung der Lehrkraft"
+  ],
+  "correct": 3,
+  "ex": "Heiße Materialien niemals durch Anfassen prüfen. Reale Wärmeversuche und Messungen erfolgen nur nach Anleitung und unter Aufsicht der Lehrkraft."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Welcher der beiden typischen Stäbe leitet Wärme besser: Metall oder Glas?",
+  "options": [
+   "Der Metallstab",
+   "Der Glasstab immer",
+   "Beide grundsätzlich gleich",
+   "Das hängt nur von der Farbe ab"
+  ],
+  "correct": 0,
+  "ex": "Typische Metalle leiten Wärme deutlich besser als Glas. Glas ist ein schlechterer Wärmeleiter, kann aber trotzdem heiß werden."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Welche Aussage gehört in die Beobachtung eines Wärmeleitversuchs?",
+  "options": [
+   "Metall leitet die Wärme besser.",
+   "Das zunächst feste Wachs wird flüssig.",
+   "Energie wird durch das Metall übertragen.",
+   "Die Verfärbung beweist eine hohe Wärmeleitfähigkeit."
+  ],
+  "correct": 1,
+  "ex": "Dass Wachs flüssig wird, ist sichtbar. Die Erklärung durch Wärmeleitung gehört zur Auswertung. Eine Verfärbung allein beweist die Wärmeleitfähigkeit nicht."
+ },
+ {
+  "topic": "Wärmeleitfähigkeit",
+  "q": "Warum muss das Wachs vor einem Schmelzvergleich an beiden Stäben zunächst fest sein?",
+  "options": [
+   "Weil festes Wachs immer kalt bleibt",
+   "Damit die Metallfarbe besser sichtbar wird",
+   "Schon flüssiges Wachs kann erneutes Schmelzen nicht anzeigen",
+   "Weil Glas grundsätzlich nicht warm werden kann"
+  ],
+  "correct": 2,
+  "ex": "Um den Beginn des Schmelzens zu vergleichen, braucht man denselben festen Anfangszustand. Bereits flüssiges Wachs belegt allein keine erneute Erwärmung."
+ }
+];
+const quizBank=[...thermalQuiz,
 {topic:'Stoffe & Körper',q:'Was ist eine Fensterscheibe?',options:['Ein Körper aus einem Stoff','Ein chemisches Element','Ein Stoff, der überall gleich aussieht','Eine Gasart'],correct:0,ex:'Die Scheibe ist ein Gegenstand (Körper), der überwiegend aus Glas besteht.'},
 {topic:'Stoffe & Körper',q:'Welches Beispiel ist ein Stoff?',options:['Goldring','Kaffeetasse','Kupfer','Nagel'],correct:2,ex:'Kupfer ist ein Stoff; Ring, Tasse und Nagel sind Körper.'},
 {topic:'Stoffe & Körper',q:'Was ist Luft?',options:['Ein einziges chemisches Element','Ein Gasgemisch','Ein fester Körper','Reines Wasser'],correct:1,ex:'Luft ist ein Stoffgemisch aus vor allem Stickstoff und Sauerstoff.'},
@@ -598,7 +804,7 @@ function renderQuiz(){
  const displayed=shuffle(q.options.map((op,i)=>({op,i})));$('quizQuestion').textContent=q.q;$('quizOptions').innerHTML=displayed.map((o,position)=>`<button class="answer" data-qopt="${o.i}">${String.fromCharCode(65+position)}) ${o.op}</button>`).join('');
  $$('[data-qopt]').forEach(b=>b.addEventListener('click',()=>{
   if(s.answered)return;const ok=Number(b.dataset.qopt)===q.correct;s.answered=true;
-  if(ok)s.score++;s.records.push({q,ok}); window.LernCockpit?.record({id:'chem-quiz-'+q.topic+':'+q.q,topic:({'Stoffe & Körper':'matter','Löslichkeit':'solubility','Siedetemperatur':'heating','Laborgeräte':'devices','Sicherheit':'safety','Gasbrenner':'burner'})[q.topic]||String(q.topic).toLowerCase(),correct:ok,assisted:false,mode:s.mode||'wissenscheck',skill:'wissen'});
+  if(ok)s.score++;s.records.push({q,ok}); window.LernCockpit?.record({id:'chem-quiz-'+q.topic+':'+q.q,topic:({'Stoffe & Körper':'matter','Löslichkeit':'solubility','Wärmeleitfähigkeit':'thermal','Siedetemperatur':'heating','Laborgeräte':'devices','Sicherheit':'safety','Gasbrenner':'burner'})[q.topic]||String(q.topic).toLowerCase(),correct:ok,assisted:false,mode:s.mode||'wissenscheck',skill:'wissen'});
   $$('[data-qopt]').forEach(opt=>{opt.disabled=true;if(Number(opt.dataset.qopt)===q.correct)opt.classList.add('correct');else if(opt===b)opt.classList.add('wrong')});
   feedback($('quizFeedback'),ok,(ok?'Richtig! ':'Noch nicht. ')+q.ex);
   $('quizScore').textContent=`${s.score} Punkte`;$('quizNext').disabled=false;
@@ -616,7 +822,7 @@ function finishQuiz(){
  $('quizEnd').innerHTML=`<div class="completion"><div class="big-emoji">${passed?'🏆':'🌱'}</div><h2>${passed?'Wissenscheck bestanden!':'Hier kannst du weiterlernen'}</h2><div class="end-score">${s.score} / ${total}</div><p>${percent} % richtig · Richtwert 75 % · eine Übung, keine Schulnote</p><h3>Ergebnisse nach Themen</h3><div class="diagnosis">${stats}</div>${missed?`<details class="hint" style="text-align:left"><summary>🔍 Erklärungen zu meinen Fehlern (${s.records.filter(x=>!x.ok).length})</summary>${missed}</details>`:''}<div class="btn-row" style="justify-content:center"><button class="btn primary" id="quizAgain">🔄 Neuer Test</button>${state.quizErrors.length?'<button class="btn" id="quizRetry">🎯 Meine Fehler wiederholen</button>':''}<button class="btn" id="quizToSheet">📖 Lernheft öffnen</button></div></div>`;
  $('quizAgain').addEventListener('click',()=>{startQuiz()});$('quizToSheet').addEventListener('click',()=>navigate('sheet'));
  if($('quizRetry'))$('quizRetry').addEventListener('click',()=>startQuiz('missed'));
- const topicPages={'Stoffe & Körper':'matter','Laborgeräte':'devices','Sicherheit':'safety','Löslichkeit':'solubility','Siedetemperatur':'heating','Gasbrenner':'burner','Experimente':'method'};
+ const topicPages={'Stoffe & Körper':'matter','Laborgeräte':'devices','Sicherheit':'safety','Löslichkeit':'solubility','Wärmeleitfähigkeit':'thermal','Siedetemperatur':'heating','Gasbrenner':'burner','Experimente':'method'};
  $$('[data-repeat-topic]').forEach(b=>b.addEventListener('click',()=>navigate(topicPages[b.dataset.repeatTopic])));
 }
 $('quizApply').addEventListener('click',()=>startQuiz());$('quizMistakes').addEventListener('click',()=>startQuiz('missed'));
@@ -1162,7 +1368,7 @@ window.addEventListener('afterprint',()=>{document.body.classList.remove('c6-pri
 const APP="chem"; const TITLE="Chemie-Entdeckerlabor \u00b7 Klasse 5 \u00b7 Version 7.3"; const SUBJECT=APP==='bio'?'Biologie':'Chemie';
 const HUBKEY='lerncockpit-'+APP+'-2026'; const MAX_EVENTS=3000,MAX_NATIVE_BYTES=1000000;
 const NATIVE=["chemie5-data", "chemie5-notebook", "chemie5-v3", "chemie5-campus-v4", "chemie5-v5-progress", "chemie6-study-v1"];
-const TOPICS={"matter": "Stoffe und Körper", "devices": "Laborgeräte", "safety": "Sicherheit und GHS", "solubility": "Löslichkeit", "heating": "Siedetemperatur", "burner": "Brennerflamme", "method": "Experimentieren", "missions": "Labormissionen"};
+const TOPICS={"matter": "Stoffe und Körper", "devices": "Laborgeräte", "safety": "Sicherheit und GHS", "solubility": "Löslichkeit", "heating": "Siedetemperatur", "thermal": "Wärmeleitfähigkeit", "burner": "Brennerflamme", "method": "Experimentieren", "missions": "Labormissionen"};
 const defaultSettings=()=>({theme:'system',font:'normal',focus:false,motion:'system',voice:'',rate:1,level:2,count:10,timer:false,help:true,review:'adaptive',rewards:true});
 const emptyProfile=()=>({settings:defaultSettings(),events:[],rewardKeys:[],badges:[],completedRuns:[],native:{},created:new Date().toISOString(),migration:0});
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1376,7 +1582,7 @@ if(playPage){
  const byPage={};[...nav.querySelectorAll('button[data-page]')].forEach(b=>byPage[b.dataset.page]=b);
  const fixText=(b,txt)=>{if(!b)return;[...b.childNodes].forEach(n=>{if(n.nodeType===3&&n.textContent.trim())n.textContent=txt})};
  fixText(byPage.v5academy,'Forscherwerkstatt ');fixText(byPage.chem6,' Forschungscampus');
- const groups=[[null,['home']],['Grundlagen',['matter','devices','safety','solubility','heating','burner','method']],['Labore & Spiele',['missions','deep','v4lab','v4play','v5academy','chem6']],['Üben & Nachschlagen',['quiz','sheet','v4study']]];
+ const groups=[[null,['home']],['Grundlagen',['matter','devices','safety','solubility','thermal','heating','burner','method']],['Labore & Spiele',['missions','deep','v4lab','v4play','v5academy','chem6']],['Üben & Nachschlagen',['quiz','sheet','v4study']]];
  const frag=document.createDocumentFragment();const used=new Set();
  groups.forEach(([heading,ids])=>{const els=ids.map(i=>byPage[i]).filter(Boolean);if(!els.length)return;if(heading){const d=document.createElement('div');d.className='nav-section';d.textContent=heading;frag.appendChild(d)}els.forEach(el=>{frag.appendChild(el);used.add(el)})});
  [...nav.querySelectorAll('button[data-page]')].forEach(b=>{if(!used.has(b))frag.appendChild(b)});
@@ -1910,9 +2116,150 @@ $('gjPrev').addEventListener('click',()=>{if(index>0){index--;render()}});
 $('gjNext').addEventListener('click',()=>{if(!answered)return;if(index<steps.length-1){index++;render()}else{$('gjStep').textContent='5 Schritte geschafft';$('gjTitle').textContent='Lernreise geschafft!';$('gjStatus').textContent='Alle fünf Mini-Checks bearbeitet';$('gjDone').textContent='Prima geforscht! Du hast alle fünf Themen angesehen, Benno zugehört und jede Frage beantwortet. Du kannst die Lernreise neu beginnen oder oben direkt zu einem Thema springen.';$('gjDone').hidden=false;root.querySelector('.gj-scene').hidden=true;$('gjPrev').disabled=true;$('gjNext').disabled=true;$('gjNext').textContent='Fertig';$('gjProgress').style.width='100%';$('visualLearningPath').querySelector('[role=progressbar]').setAttribute('aria-valuenow','5')}});
 $('gjRestart').addEventListener('click',()=>{index=0;render();$('gjTitle').focus()});
 render();
-document.querySelectorAll('.chemistry-update-banner').forEach(b=>{b.textContent='Chemie-Entdeckerlabor · Version 7.5 – mit geführter Benno-Lernreise; die Version-7.4-Bild-Erklärungen und Lernmodelle bleiben erhalten.'});
-document.title='Chemie-Entdeckerlabor · Klasse 5 · Version 7.5';
+document.querySelectorAll('.chemistry-update-banner').forEach(b=>{b.textContent='Chemie-Entdeckerlabor · Version 7.6 – jetzt mit Wärmeleitfähigkeit: Materialvergleich, Alltag und Übungen. Die Benno-Lernreise und bisherigen Lernbereiche bleiben erhalten.'});
+document.title='Chemie-Entdeckerlabor · Klasse 5 · Version 7.6';
 })();
+</script>
+<script id="thermalModule">
+// Wärmeleitfähigkeit: qualitative comparison, practice and existing progress integration.
+(function(){
+'use strict';
+const el=id=>document.getElementById(id);
+const materials=[['Kupfer','gut leitend',1],['Stahl','gut leitend',.65],['Trockenes Holz','schlecht leitend',.08],['Typischer Kunststoff','schlecht leitend',.08]];
+let timer=null,observed=false;
+const solved=new Set(),assisted=new Set();
+el('thRods').innerHTML=materials.map((m,i)=>`<div class="th-rod-row"><div class="th-rod-head"><b>${m[0]}</b><span>${m[1]}</span></div><div class="th-rod" id="thRod${i}" aria-hidden="true">${'<span></span>'.repeat(12)}</div></div>`).join('');
+function stop(){if(timer!==null)clearInterval(timer);timer=null;el('thPlay').textContent=Number(el('thTime').value)===10?'▶ Erneut abspielen':'▶ Vergleich abspielen';}
+function progress(){
+ const done=observed&&solved.size===4;
+ el('thProgress').textContent=done?'✓ Thema bearbeitet: Du hast den Vergleich beobachtet und alle vier Fragen gelöst. Übe später im Wissenscheck weiter.':`${solved.size} von 4 Fragen gelöst. ${observed?'Vergleich beobachtet.':'Sieh dir den Modellverlauf bis zum Ende an.'}`;
+ if(done)complete('thermal');
+}
+function render(){
+ const step=Number(el('thTime').value);
+ el('thTimeLabel').textContent=step===0?'Start':step===10?'Vergleich beendet':`Schritt ${step} von 10`;
+ el('thTime').setAttribute('aria-valuetext',el('thTimeLabel').textContent);
+ materials.forEach((m,i)=>el('thRod'+i).querySelectorAll('span').forEach((cell,j)=>{
+  // Deliberately qualitative: no temperatures, elapsed seconds or conductivity values.
+  const warmth=step===0?0:Math.min(1,(step/10)*Math.exp(-j/(1+m[2]*9)));
+  const cold=[162,215,234],hot=[237,137,63];
+  cell.style.backgroundColor=`rgb(${cold.map((v,k)=>Math.round(v+(hot[k]-v)*warmth)).join(',')})`;
+ }));
+ el('thObservation').textContent=step===0?'Noch nicht erwärmt: Alle Stäbe haben dieselbe Anfangstemperatur. Vermute und starte den Vergleich oder bewege den Regler.':step<5?'Die linken Enden werden erwärmt. Beobachte, wie unterschiedlich sich die Wärme im Modell nach rechts verteilt.':'Die Metallstäbe geben Wärme gut weiter. Bei trockenem Holz und dem gezeigten Kunststoff bleibt die Erwärmung am rechten Ende im Modell deutlich geringer.';
+ const choice=document.querySelector('input[name="thPrediction"]:checked');
+ el('thPredictionFeedback').textContent=step<10?'Deine Vermutung wird am Ende des Modellverlaufs besprochen.':!choice?'Beobachtet: Metalle leiten Wärme gut. Holz und viele Kunststoffe eignen sich eher zum Wärmedämmen.':choice.value==='metal'?'Deine Vermutung passt: Die Metallstäbe leiten die Wärme hier besser weiter.':'Deine Vermutung passt noch nicht: Die Metallstäbe leiten die Wärme besser weiter als trockenes Holz und der gezeigte Kunststoff. Eine Vermutung darf sich durch Beobachtungen ändern.';
+ if(step===10){observed=true;stop();progress();}
+}
+el('thTime').addEventListener('input',()=>{stop();render()});
+el('thPlay').addEventListener('click',()=>{
+ if(timer!==null){stop();return}
+ if(Number(el('thTime').value)===10)el('thTime').value='0';
+ render();el('thPlay').textContent='⏸ Pause';
+ timer=setInterval(()=>{if(state.route!=='thermal'||document.hidden){stop();return}el('thTime').value=String(Math.min(10,Number(el('thTime').value)+1));render()},650);
+});
+el('thReset').addEventListener('click',()=>{stop();el('thTime').value='0';document.querySelectorAll('input[name="thPrediction"]').forEach(r=>r.checked=false);render()});
+document.querySelectorAll('input[name="thPrediction"]').forEach(r=>r.addEventListener('change',render));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
+const previousNavigate=navigate;
+navigate=function(to){if(to!=='thermal')stop();previousNavigate(to)};
+function practice(){
+ solved.clear();assisted.clear();
+ el('thQuestions').replaceChildren();
+ thermalQuiz.slice(0,4).forEach((q,index)=>{
+  const card=document.createElement('article');card.className='th-question';
+  const h=document.createElement('h4');h.textContent=`${index+1}. ${q.q}`;card.appendChild(h);
+  const choices=document.createElement('div');choices.className='th-answers';
+  const feedback=document.createElement('p');feedback.className='feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');feedback.textContent='Wähle eine Antwort.';
+  shuffle(q.options.map((text,i)=>({text,i}))).forEach(({text,i})=>{
+   const b=document.createElement('button');b.type='button';b.className='answer';b.textContent=text;
+   b.addEventListener('click',()=>{
+    if(solved.has(index))return;
+    const correct=i===q.correct;
+    window.LernCockpit?.record({id:'chem-thermal-practice-'+index,topic:'thermal',correct,assisted:assisted.has(index),mode:'übung',skill:index===2?'erklären':'anwenden'});
+    feedback.textContent=(correct?'Richtig! ':'Noch nicht ganz. ')+q.ex;feedback.className='feedback '+(correct?'good':'bad');
+    if(correct){solved.add(index);b.classList.add('correct');choices.querySelectorAll('button').forEach(btn=>btn.disabled=true);progress()}
+    else{assisted.add(index);b.classList.add('wrong');b.disabled=true}
+   });choices.appendChild(b);
+  });card.appendChild(choices);card.appendChild(feedback);
+  for(const [label,text] of [['Tipp',q.hint],['Lösung mit Erklärung',q.options[q.correct]+'. '+q.ex]]){
+   const details=document.createElement('details');details.className='hint';const summary=document.createElement('summary');summary.textContent=label;const p=document.createElement('p');p.textContent=text;details.append(summary,p);details.addEventListener('toggle',()=>{if(details.open)assisted.add(index)});card.appendChild(details);
+  }el('thQuestions').appendChild(card);
+ });progress();
+}
+el('thPracticeReset').addEventListener('click',practice);
+el('thGoQuiz').addEventListener('click',()=>{navigate('quiz');el('quizTopic').value='Wärmeleitfähigkeit';startQuiz()});
+if(Array.isArray(window.LernCockpitBankChem))thermalQuiz.forEach(q=>window.LernCockpitBankChem.push(['thermal',q.q,q.options,q.correct,q.ex]));
+function notebookModel(){
+ const stage=Number(el('thNotebookTime').value);
+ el('thNotebookHeat').setAttribute('opacity',stage?'1':'0');
+ el('thNotebookTimeLabel').textContent=['Ausgangszustand','Erwärmung beginnt','Erste Beobachtungsstelle','Zweite Beobachtungsstelle'][stage];
+ el('thWaxSamples').querySelectorAll('ellipse').forEach((wax,i)=>{
+  const molten=(i===2&&stage>=2)||(i===3&&stage===3);
+  wax.setAttribute('fill',molten?'#edb85e':'#fff8d4');wax.setAttribute('ry',molten?'3':'5');
+ });
+ const texts=[
+ 'Ausgangsbild: Die Stäbe sind anfangs gleich warm, das Wachs ist fest. Die Teelichter sind nicht angezündet.',
+ 'Im Modell werden die inneren Stabenden erwärmt. Energie gelangt durch die Stäbe nach außen. Das Wachs ist an allen vier Beobachtungsstellen noch fest.',
+ 'Modellbeobachtung: Am Metallstab wird das Wachs an der näheren Beobachtungsstelle zuerst flüssig. An den übrigen Stellen ist es im gezeigten Modellabschnitt noch fest.',
+ 'Modellbeobachtung: Bei beiden Metall-Beobachtungsstellen wird das Wachs flüssig. Am Glasstab bleibt es im gezeigten Vergleichszeitraum noch fest. Das sind Modellzustände, keine nachträglich ergänzten Messdaten zu deinem Heftversuch.'
+ ];
+ el('thNotebookObservation').textContent=texts[stage];
+ el('thNotebookTime').setAttribute('aria-valuetext',el('thNotebookTimeLabel').textContent);
+}
+el('thNotebookTime').addEventListener('input',notebookModel);
+el('thNotebookCompare').addEventListener('click',()=>{el('thNotebookTime').value='3';notebookModel()});
+el('thNotebookReset').addEventListener('click',()=>{el('thNotebookTime').value='0';notebookModel()});
+el('thFairCheck').addEventListener('click',()=>{
+ const ids=['thFairSize','thFairWax','thFairHeat'],values=ids.map(id=>el(id).value);
+ if(values.some(v=>!v)){el('thFairFeedback').textContent='Wähle zuerst in allen drei Feldern eine Bedingung.';return}
+ const issues=[];
+ if(values[0]!=='same')issues.push('Stabmaße: Bei unterschiedlicher Länge und Dicke vergleichst du nicht nur das Material.');
+ if(values[1]!=='same')issues.push('Wachs: Bereits flüssiges Wachs kann nicht noch einmal durch Schmelzen das Erwärmen anzeigen. Gleiche Menge und gleicher Anfangszustand sind wichtig.');
+ if(values[2]!=='same')issues.push('Erwärmung: Gleiche Bedingungen, Abstände und Beobachtungsdauer sind nötig.');
+ el('thFairFeedback').textContent=issues.length?'Überarbeite deinen Plan: '+issues.join(' '):'Gut geplant! Du änderst gezielt das Material und hältst die anderen Bedingungen gleich. So ist der Vergleich aussagekräftiger. Reale Durchführung nur durch bzw. nach Anleitung der Lehrkraft.';
+ el('thFairFeedback').className='feedback '+(issues.length?'bad':'good');
+ window.LernCockpit?.record({id:'chem-thermal-fair',topic:'thermal',correct:!issues.length,assisted:false,mode:'übung',skill:'anwenden'});
+});
+const sorting=[
+ {text:'Das zunächst feste Wachs wird am Metallstab flüssig.',kind:'observation',why:'Du beschreibst, was du siehst: den veränderten Wachszustand.'},
+ {text:'Der verwendete Metallstab leitet Wärme besser als der Glasstab.',kind:'interpretation',why:'Die Wärmeleitfähigkeit ist hier die fachliche Deutung des Vergleichs.'},
+ {text:'Am Boden einer Teelichtschale ist eine dunkle Stelle sichtbar.',kind:'observation',why:'Die Farbe lässt sich sehen. Warum sie dunkel ist, ist damit noch nicht erklärt.'},
+ {text:'Das Wachs wird flüssig, weil Energie durch den Metallstab zu ihm gelangt.',kind:'interpretation',why:'Das Wort „weil“ verknüpft die Beobachtung mit einer Erklärung.'},
+ {text:'Am Glasstab ist in unserer Beobachtungszeit keine dunkle Stelle zu sehen.',kind:'observation',why:'Das ist eine zeitlich begrenzte Beschreibung, keine Aussage, dass Glas immer kalt bleibt.'},
+ {text:'Aus der dunklen Stelle allein kann man die Wärmeleitfähigkeit nicht sicher bestimmen.',kind:'interpretation',why:'Du beurteilst, was die Beobachtung fachlich belegen kann und was nicht.'}
+];
+let sortIndex=0,sortCorrect=0,sortAnswered=false,sortRetry=false;
+function drawSort(){
+ const root=el('thSortTask');root.replaceChildren();
+ if(sortIndex===sorting.length){root.innerHTML='<h4>Alle sechs Aussagen bearbeitet</h4><p>Beobachtungen beschreiben, Auswertungen erklären. Bei deinem Protokoll kannst du diese Trennung jetzt nutzen.</p>';el('thSortProgress').textContent=`${sortCorrect} von 6 beim ersten Versuch richtig. Alle Erklärungen wurden angezeigt.`;return}
+ sortAnswered=false;sortRetry=false;const task=sorting[sortIndex];
+ const text=document.createElement('p');text.className='th-sort-statement';text.textContent=`${sortIndex+1}/6 · „${task.text}“`;root.appendChild(text);
+ const choices=document.createElement('div');choices.className='btn-row';
+ const feedback=document.createElement('p');feedback.className='feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');feedback.textContent='Wähle Beobachtung oder Auswertung.';
+ const next=document.createElement('button');next.className='btn primary';next.type='button';next.textContent='Nächste Aussage →';next.disabled=true;
+ for(const [kind,label] of [['observation','Beobachtung'],['interpretation','Auswertung']]){
+  const b=document.createElement('button');b.className='btn';b.type='button';b.textContent=label;
+  b.addEventListener('click',()=>{
+   if(sortAnswered)return;const correct=kind===task.kind;
+   window.LernCockpit?.record({id:'chem-thermal-sort-'+sortIndex,topic:'thermal',correct,assisted:sortRetry,mode:'übung',skill:'erklären'});
+   feedback.textContent=(correct?'Richtig! ':'Noch nicht ganz. ')+task.why;
+   feedback.className='feedback '+(correct?'good':'bad');
+   if(correct){if(!sortRetry)sortCorrect++;sortAnswered=true;choices.querySelectorAll('button').forEach(btn=>btn.disabled=true);next.disabled=false;el('thSortProgress').textContent=`${sortIndex+1} von 6 Aussagen bearbeitet.`}
+   else{sortRetry=true;b.disabled=true}
+  });choices.appendChild(b);
+ }
+ next.addEventListener('click',()=>{sortIndex++;drawSort()});root.append(choices,feedback,next);
+}
+el('thSortRestart').addEventListener('click',()=>{sortIndex=0;sortCorrect=0;el('thSortProgress').textContent='Noch keine Aussage zugeordnet.';drawSort()});
+drawSort();notebookModel();
+document.querySelectorAll('[data-th-protocol]').forEach(b=>b.addEventListener('click',()=>{
+ const correct=b.dataset.thProtocol==='observation';
+ el('thProtocolFeedback').textContent=correct?'Richtig: Dass Wachs flüssig wird, kannst du sehen. Die Erklärung mit der Wärmeleitfähigkeit gehört in die Auswertung.':'Noch nicht: Der Satz beschreibt etwas Sichtbares und ist eine Beobachtung. Warum es geschieht, erklärst du erst in der Auswertung.';
+ window.LernCockpit?.record({id:'chem-thermal-protocol',topic:'thermal',correct,assisted:false,mode:'übung',skill:'anwenden'});
+}));
+render();practice();
+})();
+
 </script>
 </body>
 </html>
