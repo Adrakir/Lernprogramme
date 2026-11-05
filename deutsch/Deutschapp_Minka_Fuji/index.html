@@ -7,7 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141d32'/%3E%3Cpath d='M8 24V8h16M8 16h12M8 24h16' stroke='%23baf36b' stroke-width='3' fill='none'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css?v=medien1"><script defer src="image-compat.js?v=2"></script><script defer src="app.js?v=medien1"></script>
   <script defer src="reading.js"></script>
-  <link rel="stylesheet" href="language.css?v=medien1"><script defer src="language-practice.js?v=1"></script><script defer src="language.js?v=medien1"></script>
+  <link rel="stylesheet" href="language.css?v=quiz1"><script defer src="language-practice.js?v=1"></script><script defer src="language-game.js?v=1"></script><script defer src="language.js?v=quiz1"></script>
   <link rel="stylesheet" href="course.css?v=medien1"><script defer src="course-data.js?v=qa48"></script><script defer src="course.js?v=medien1"></script>
 <link rel="stylesheet" href="hauptteil.css?v=20261030"><script defer src="hauptteil.js?v=qa48"></script>
   <link rel="stylesheet" href="studio.css?v=3"><link rel="stylesheet" href="academy.css?v=1"><link rel="stylesheet" href="upgrade.css?v=2"><script defer src="studio-data.js?v=2"></script><script defer src="studio-art.js?v=2"></script><script defer src="academy-extra.js?v=1"></script><script defer src="academy-data.js?v=1"></script><script defer src="academy.js?v=3"></script><script defer src="academy-tools.js?v=1"></script><script defer src="upgrade-data.js?v=1"></script><script defer src="upgrade.js?v=medien1"></script><script defer src="studio.js?v=lernplakat1"></script>
@@ -180,6 +180,10 @@
       </div>
     </section>
   </main>
+  <dialog id="language-game" aria-labelledby="language-game-title">
+    <header class="language-game-head"><h2 id="language-game-title"></h2><button type="button" class="secondary" id="language-game-close">Quiz schließen</button></header>
+    <div id="language-game-body"></div>
+  </dialog>
   <dialog id="comic-lightbox" aria-labelledby="comic-lightbox-title">
     <div class="comic-lightbox-head"><h2 id="comic-lightbox-title">Comicbild</h2><button type="button" class="secondary" id="comic-close">Schließen</button></div>
     <button type="button" class="secondary" id="comic-detail" aria-pressed="false">Details vergrößern</button>

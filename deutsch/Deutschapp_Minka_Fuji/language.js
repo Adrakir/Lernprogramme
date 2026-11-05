@@ -473,7 +473,7 @@ function render() {
   const nextId=nextTopic[(nextTopic.indexOf(current)+1)%nextTopic.length];
   renderTopics();totals();
   pauseHearingExamples(root);
-  root.innerHTML = `<article class="panel language-theory"><p class="eyebrow">1 · Verstehen</p><h2 id="language-heading" tabindex="-1">${esc(t.title)}</h2><p class="language-goal"><strong>Dein Ziel:</strong> ${esc(t.goal)}</p><div class="speech"><strong>${esc(t.guide)} erklärt:</strong> ${esc(t.explanation)}</div><h3>So gehst du vor</h3><ol class="language-steps">${t.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="note compact"><strong>${t.guide === 'Minka'?'Fuji':'Minka'} ergänzt:</strong> ${esc(t.tip)}</div><button type="button" class="primary" id="language-to-training">Direkt zu den Übungen</button></article>
+  root.innerHTML = `<article class="panel language-theory"><p class="eyebrow">1 · Verstehen</p><h2 id="language-heading" tabindex="-1">${esc(t.title)}</h2><p class="language-goal"><strong>Dein Ziel:</strong> ${esc(t.goal)}</p><div class="speech"><strong>${esc(t.guide)} erklärt:</strong> ${esc(t.explanation)}</div><h3>So gehst du vor</h3><ol class="language-steps">${t.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="note compact"><strong>${t.guide === 'Minka'?'Fuji':'Minka'} ergänzt:</strong> ${esc(t.tip)}</div><div class="quiz-actions"><button type="button" class="primary" id="language-to-training">Direkt zu den Übungen</button><button type="button" class="secondary" id="language-game-open" aria-haspopup="dialog">Quiz zu diesem Thema</button></div></article>
     <article class="panel extras"><p class="eyebrow">2 · Vergleichen</p><h2>Was ändert sich im Text?</h2><div class="two-col"><div><h3>Vorher</h3><p class="model-text">${esc(t.before)}</p></div><div><h3>Überarbeitet</h3><p class="model-text">${esc(t.after)}</p></div></div><p>${esc(t.why)}</p>${t.followup?`<div class="note">${esc(t.followup)}</div>`:''}<details class="language-wordbank"><summary>${esc(t.bankTitle)}</summary>${renderBank(t)}</details></article>
     <article class="panel extras" id="language-training"><p class="eyebrow">3 · Üben</p><h2>Mit Minka & Fuji ausprobieren</h2><p>Wähle eine Übungsart oder springe zu einer bestimmten Aufgabe. Bei eigenen Texten vergleichst du mit der Musterlösung.</p><div id="language-levels" class="quiz-actions" role="group" aria-label="Übungsart"></div><label class="select-label">Aufgabe auswählen<select id="language-jump">${taskOptions(t)}</select></label><p id="language-score" role="status"></p><div id="language-task"></div></article>
     ${t.id==='rede'?'<article class="panel extras"><h2>Fujis Satzzeichen-Werkstatt</h2><p>Setze die fehlenden Zeichen. Der Satz wird unter deiner Auswahl zusammengesetzt.</p><div id="language-punctuation"></div></article>':''}
@@ -489,6 +489,8 @@ function render() {
     saveLanguage();renderTask();
   });
   document.getElementById('language-to-training').addEventListener('click',()=>renderTask(true));
+  const gameButton=document.getElementById('language-game-open');
+  gameButton.addEventListener('click',()=>MF_LANGUAGE_GAME.open(t,gameButton));
   renderTask();
   document.getElementById('language-jump').addEventListener('change',e=>{s.index=Number(e.target.value);saveLanguage();renderTask();});
   const draft=document.getElementById('language-draft');draft.value=s.draft;

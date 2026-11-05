@@ -80,6 +80,10 @@ für Piper erzeugt und sind offline verfügbar. Die Sprechweise „Rufen“ verw
 die betonte, überraschte Variante. Der Name Fuji ist als „Futschi“ eingesprochen.
 Das Lesetandem verwendet für eigene Texte weiterhin die Gerätestimme.
 
+Das Themenquiz in `language-game.js` nutzt den Aufgabenpool der 17 Themen.
+Pro Runde werden acht Fragen ohne doppelte Situation gezogen. Das Spiel hat
+einen optionalen Timer, eine Lösungserklärung pro Frage und eine Auswertung.
+
 Nur der Lehrgang speichert Fortschritt und Texte im Browserspeicher unter
 `minka-fuji-lehrgang-v1`. Eingaben werden kurz verzögert gespeichert, beim
 Verlassen sofort. Gespeicherte Strukturen werden beim Einlesen normalisiert.

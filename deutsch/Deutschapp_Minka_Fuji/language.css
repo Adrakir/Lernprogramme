@@ -42,3 +42,27 @@
 .language-demo-sentence li{padding:5px 10px;border:1px solid var(--line);border-radius:7px;background:var(--panel)}
 .language-demo-sentence .demo-verb{border-color:var(--blue)}
 .language-demo-sentence .demo-start{border-color:var(--accent)}
+
+#language-game{width:min(94vw,800px);max-height:92vh;overflow:auto;padding:clamp(12px,3vw,26px);border:2px solid var(--line);border-radius:16px;background:var(--panel);color:var(--text)}
+#language-game:not([open]){display:none}
+#language-game::backdrop{background:#02070cde}
+#language-game.game-fallback[open]{position:fixed;inset:0;margin:auto;z-index:10}
+.language-game-head,.language-game-stats{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.language-game-head h2{margin:0;line-height:1.2;overflow-wrap:anywhere}
+.language-game-clock-option{display:flex;gap:10px;align-items:center;margin:16px 0}
+.language-game-clock-option input{width:20px;min-height:20px;flex:0 0 auto}
+#language-game progress{width:100%;accent-color:var(--accent);margin:10px 0}
+.language-game-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.language-game-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.language-game-card{display:flex;gap:10px;align-items:center;min-height:52px;text-align:left;overflow-wrap:anywhere}
+.language-game-card span{border:1px solid currentColor;padding:0 5px;border-radius:5px}
+.language-game-card[data-game-color="0"]{background:#8e304a;color:#fff}
+.language-game-card[data-game-color="1"]{background:#285793;color:#fff}
+.language-game-card[data-game-color="2"]{background:#4e661b;color:#fff}
+.language-game-card:disabled{opacity:.78}
+.language-game-card.game-correct{outline:3px solid var(--accent);outline-offset:-3px;opacity:1}
+.language-game-card.game-wrong{outline:3px solid var(--pink);outline-offset:-3px}
+#language-game-feedback:empty{display:none}
+#language-game-feedback{margin:16px 0;padding:12px;border-left:4px solid var(--blue);background:var(--panel2);overflow-wrap:anywhere}
+#language-game-again{margin-top:16px}
+@media(max-width:520px){.language-game-choices{grid-template-columns:1fr}}
