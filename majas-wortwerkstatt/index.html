@@ -227,6 +227,8 @@ details ol{margin-bottom:0}
 .anna-today>*{min-width:0}
 .anna-today-picture,.anna-story-picture{overflow:hidden;border:1px solid #dedac5;border-radius:14px;background:#f4ebd5}
 .anna-story-picture{margin:0 0 18px}
+.anna-moment{margin:18px 0 22px}
+.anna-moment figcaption{padding:10px 14px;background:#fff8e9;color:#354f48;font-size:clamp(14px,2.6vw,17px);line-height:1.45}
 .anna-thumb{display:block;width:54px;flex:none;overflow:hidden;border-radius:7px}
 .anna-list-title{flex:1;overflow-wrap:anywhere}
 .anna-list .anna-thumb .anna-scene{width:100%;height:auto}
@@ -1216,6 +1218,121 @@ function annaScene(story, compact=false){
     <g transform="translate(237 13) scale(1.15)" stroke="#425751" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">${art}</g>
   </svg>`;
 }
+const annaStoryMoments = {
+  'der-kiesel-im-schuh': [3, 'Die Kreidepfeile führen Anna zu Bens Versteck.',
+    'Drei weiße Kreidepfeile zeigen zu einem großen Blumentopf. Dahinter schaut Ben hervor.',
+    `<path d="M23 122q81-34 180-18l36 51H0Z" fill="#ae9990" stroke="none"/>
+      <path d="M38 134l28-8m-10-4 10 4-5 8M101 119l28-5m-10-5 10 5-7 7m43 1 26-8m-11-3 11 3-5 10" stroke="#fffaf0" stroke-width="4" fill="none"/>
+      <circle cx="285" cy="64" r="23" fill="#bf8d6d"/><path d="M264 63q-4-32 23-29 25 2 22 24-13 2-24-11-8 14-21 16Z" fill="#785143"/>
+      <path d="M273 65h.1m21 1h.1m-16 12q6 5 13-1" fill="none"/>
+      <path d="M211 87h66l-10 57h-46Z" fill="#cd8769"/><path d="M205 79h78v12h-78Z" fill="#efaa86"/>
+      <path d="M244 79V43m0 22q-28-24-31-13-3 12 31 17m1-9q24-23 28-10 1 12-28 14" fill="#7ca16c"/>`],
+  'die-muetze-im-apfelbaum': [3, 'Oma schiebt die Mütze mit dem Besenstiel vom Zweig.',
+    'Ein langer Besenstiel reicht bis zu einer roten Mütze auf einem Ast. Neben dem Ast hängen zwei Äpfel.',
+    `<path d="M297 155l-1-75-34-28-67-9-3-13 80 7 23 15 10-42 18 2-9 143Z" fill="#98705a"/>
+      <path d="M188 45q-23-30 11-35 29-15 55 3 21-16 44-9 25-6 46 23-5 22-28 24-23 1-42-9-43 19-86 3Z" fill="#a8bd75"/>
+      <circle cx="255" cy="50" r="10" fill="#cc6158"/><circle cx="320" cy="50" r="9" fill="#d46b55"/>
+      <path d="M88 147 194 58" stroke="#b27d48" stroke-width="7"/><path d="M71 140l18-8 17 12-8 10H62Z" fill="#e2be70"/>
+      <path d="M187 45q8-24 26-16 17 7 14 26l-35 4Z" fill="#be5c65"/><path d="m186 54 43-5 1 10-43 5Z" fill="#ed8890"/><path d="M229 66l6 12m7-17 7 8" fill="none"/>`],
+  'die-pfuetze-mit-dem-himmel': [3, 'Ein Tropfen verwischt das Spiegelbild. Danach wird die Pfütze wieder glatt.',
+    'Links fallen Regentropfen in eine Pfütze und bilden Wellenringe. Rechts ist in der ruhigen Pfütze wieder eine Wolke zu sehen.',
+    `<ellipse cx="94" cy="102" rx="78" ry="34" fill="#97bfd6"/><ellipse cx="265" cy="102" rx="78" ry="34" fill="#97bfd6"/>
+      <path d="M93 30q-14 19 0 24 14-4 0-24Z" fill="#6da6c6"/><g fill="none" stroke="#f3fbfc"><ellipse cx="94" cy="102" rx="48" ry="20"/><ellipse cx="94" cy="102" rx="32" ry="13"/><ellipse cx="94" cy="102" rx="16" ry="7"/></g>
+      <path d="M229 106q-9-14 11-17 1-19 19-18 16-1 21 12 24-2 25 12 1 12-20 13Z" fill="#f8f7e9"/>
+      <path d="M169 62h23l-7-7m7 7-7 7" fill="none"/>`],
+  'das-lesezeichen-im-buch': [3, 'Der Papierfisch und Annas Regenschirm bleiben zusammen im Buch.',
+    'In einem offenen Buch stecken ein blauer Papierfisch und ein rosa Papierregenschirm.',
+    `<path d="M49 53q67-17 129 11 63-28 130-11v76q-65-13-130 13-64-26-129-13Z" fill="#92a68a"/>
+      <path d="M59 46q69-17 119 11 52-28 120-11v73q-70-15-120 13-53-28-119-13Z" fill="#fff5dd"/><path d="M178 57v75m-101-30q37-6 77 7m42 0q45-13 83-7" fill="none"/>
+      <path d="M82 78q23-24 47-9l18-12v30l-18-10q-25 19-47 1Z" fill="#84bacd"/><path d="M97 76h.1" stroke-width="5"/>
+      <path d="M241 70v31q1 12 12 7" fill="none"/><path d="M211 76q14-33 34-32 22 2 37 32-12-7-23 1-14-7-24 1-12-7-24-2Z" fill="#db8292"/>`],
+  'das-fahrrad-das-klingelte': [2, 'Der baumelnde Schlüssel stößt gegen die Klingel.',
+    'Am Fahrradkorb hängt ein Schlüsselbund. Ein Schlüssel schwingt in Richtung der Klingel am Lenker.',
+    `<path d="M36 109q97-27 181 2l73 19" stroke="#718c76" stroke-width="12" fill="none"/><path d="m211 64 17 68h90l15-68Z" fill="#dcb980"/>
+      <path d="M204 62h135m-116 23h105m-98 20h93m-77-41 8 67m15-67 1 67m24-67-8 67" fill="none"/>
+      <path d="M84 102v-13q5-30 30-32 27 0 34 32v13Z" fill="#a7b9bf"/><path d="M82 102h68" stroke-width="5"/>
+      <circle cx="213" cy="59" r="11" fill="none"/><path d="m205 68-34 26 5 7 14-7 7 2 7-6-4-5 12-10Z" fill="#e5c96c"/>
+      <path d="M156 86l-7-7m9 20-11 3m17-27 1-12" stroke="#d37d59" fill="none"/>`],
+  'der-schatten-an-der-wand': [3, 'Mit der Hand macht Anna aus dem Mäuseschatten einen Hasen.',
+    'Eine Leselampe beleuchtet eine Socke. An der Wand ist ein dunkler Schatten mit zwei langen Hasenohren zu sehen.',
+    `<rect x="149" y="21" width="185" height="116" rx="12" fill="#fff0c9" stroke="none"/>
+      <path d="M78 57l126-31v107L78 75Z" fill="#fbe4a6" stroke="none"/><path d="M41 133h97m-60 0V69" fill="none" stroke-width="5"/>
+      <path d="M51 70l16-35h27l19 35Z" fill="#8d9db8"/><path d="M108 117q5-10 15-5l11 5 6 11q-12 9-30 4Z" fill="#d49494"/>
+      <path d="M250 119q-13-13-7-29 4-11 14-15-12-42-4-49 9-5 18 43 6-41 14-37 9 5 0 49 13 7 16 20 3 17-14 23-22 7-37-5Z" fill="#5d5b76" stroke="none"/>`],
+  'der-falsche-kuchen': [4, 'Am Ende gibt es doch einen süßen Apfelkuchen.',
+    'Auf einem Teller liegen zwei Stücke Apfelkuchen. Daneben steht Annas kleines Schild mit dem Wort Süß.',
+    `<ellipse cx="164" cy="116" rx="124" ry="28" fill="#a5c4bd"/><ellipse cx="164" cy="112" rx="103" ry="17" fill="#d9e8de"/>
+      <path d="m75 104 58-52 38 60-96 7Zm91-4 60-50 37 57-97 8Z" fill="#dba06b"/>
+      <path d="m75 104 58-52 38 60Zm91-4 60-50 37 57Z" fill="#f5c988"/>
+      <path d="m96 96 43-23m-22 31 30-19m40 5 44-21m-21 29 29-19" fill="none" stroke="#bd754c"/>
+      <path d="M300 126V54m-29-12h66v44h-66Z" fill="#fff5d9"/>
+      <text x="304" y="69" text-anchor="middle" font-size="20" font-family="system-ui" fill="#654f42" stroke="none">Süß</text>`],
+  'rettung-fuer-eine-schnecke': [3, 'Das Blatt wird zur Brücke für die Schnecke.',
+    'Eine Schnecke mit braunem Haus sitzt auf einem breiten grünen Blatt am Grasrand.',
+    `<path d="M29 130q34-31 111-21 70 9 180-27v50Z" fill="#a8bd7a" stroke="none"/>
+      <path d="M71 111q63-57 184-50-34 71-151 70Z" fill="#79a66b"/><path d="M60 135q76-29 178-62m-106 38-12-22m49 10 24 11" fill="none" stroke="#e0e8a6"/>
+      <path d="M144 98q31-14 63-10l9-14q5-8 10-3l-1 22q-21 14-81 5Z" fill="#e0ae81"/>
+      <circle cx="172" cy="78" r="24" fill="#b7785c"/><path d="M174 83q-12 8-17-2-5-14 10-20 21-5 26 13" fill="none" stroke="#f0c1a2"/>
+      <path d="M220 75l-4-16m11 14 6-16m-17 2h.1m17-2h.1" fill="none"/>`],
+  'ein-brief-ohne-namen': [4, 'Die Einladung hängt jetzt am Schwarzen Brett.',
+    'An einem Korkbrett hängt eine Einladung mit einer Sonne und einer kleinen Wolke.',
+    `<rect x="52" y="17" width="255" height="128" rx="8" fill="#af8163"/><rect x="64" y="29" width="231" height="104" rx="3" fill="#ddbc90"/>
+      <path d="m92 49 35 5-5 48-35-6Zm141 12 35-6 7 44-35 6Z" fill="#f0dfac"/>
+      <rect x="135" y="36" width="90" height="88" rx="3" fill="#fff2d3"/><circle cx="180" cy="40" r="4" fill="#bd6158"/>
+      <circle cx="163" cy="65" r="11" fill="#edc05e"/><path d="M163 48v4m0 26v4m-17-17h4m26 0h4" fill="none"/>
+      <path d="M190 75q-8-7 2-12 3-12 13-5 13 0 12 10-1 7-27 7Z" fill="#abc6d1"/>
+      <path d="M150 96h58m-55 10h50" fill="none" stroke="#799686"/>`],
+  'das-fernrohr-aus-pappe': [4, 'Anna zeichnet in ihr Heft, was sie im Fernrohr entdeckt hat.',
+    'In einem aufgeschlagenen Heft ist ein Kreis gezeichnet. Darin sitzt ein kleiner Vogel auf einem Zweig. Daneben liegt ein Stift.',
+    `<path d="M60 27h229v110H60Z" fill="#7e9e91"/><path d="M70 21h208v107H70Z" fill="#fff5dc"/>
+      <path d="M90 38h.1m0 20h.1m0 20h.1m0 20h.1m0 20h.1" stroke-width="5"/>
+      <circle cx="177" cy="69" r="40" fill="#deece6"/><path d="m147 92 61-9m-40 5-5-10" fill="none" stroke="#916e50"/>
+      <path d="M157 80q-10-22 12-22 9-14 23-3l12 4-10 6q-3 22-37 15Z" fill="#82a9b9"/><path d="M186 58h.1" stroke-width="4"/>
+      <path d="m251 110 53-65 9 8-53 65-13 7Z" fill="#d59771"/>`],
+  'die-geheime-trommel': [3, 'Anna antwortet dem Regen mit ihrem Holzlöffel.',
+    'Links fallen Tropfen in einen Topf am Fenster. Rechts klopft eine Hand mit einem Holzlöffel auf einen Tisch.',
+    `<rect x="38" y="21" width="121" height="95" rx="4" fill="#91b3c7"/><path d="M98 23v91m-59-46h119" stroke="#ece7d2" stroke-width="6"/>
+      <path d="M120 39l-4 11m4 7-4 11m4 7-4 11" fill="none" stroke="#eaf8fc" stroke-width="4"/>
+      <path d="M95 98h48l-8 39h-32Z" fill="#d38e70"/><path d="M91 97h55" stroke-width="5"/>
+      <path d="M174 122h161v20H174Z" fill="#b48c68"/><path d="m230 116 65-60" stroke="#a06e47" stroke-width="9"/>
+      <ellipse cx="226" cy="117" rx="13" ry="7" fill="#d7ac76" transform="rotate(-27 226 117)"/>
+      <path d="M335 30l-47 22q-12 11 4 20l43-13" fill="#efba92"/><path d="m217 99-8-9m1 22-13-2" fill="none"/>`],
+  'der-koffer-mit-dem-loch': [3, 'Anna findet den offenen Reißverschluss am Koffer.',
+    'Ein gelber Koffer hat an der Seite einen offenen Spalt im Reißverschluss. Davor liegt der Stoffhase.',
+    `<path d="M111 48V34h50v14" fill="none" stroke-width="5"/><rect x="48" y="47" width="175" height="87" rx="14" fill="#e2b465"/>
+      <path d="M56 85h57q19-25 53-3h49" fill="none" stroke="#9b7159" stroke-width="5"/><path d="M113 85q26 20 53-3-34-22-53 3Z" fill="#5a5050"/>
+      <path d="m111 87-9 9" fill="none" stroke-width="4"/>
+      <ellipse cx="277" cy="112" rx="34" ry="18" fill="#d5a28a"/><path d="M268 94q-24-32-13-38 11-5 20 32 3-36 14-35 11 5-1 39" fill="#d5a28a"/>
+      <circle cx="280" cy="98" r="18" fill="#d5a28a"/><path d="M274 97h.1m12 0h.1m-8 7h4" fill="none"/>`],
+  'das-fenster-voller-sterne': [3, 'Abends leuchten Papiersterne in zwei Fenstern.',
+    'Links kleben Papiersterne an Annas Fenster. Rechts winkt Ben hinter seinem Fenster, an dem ebenfalls ein Stern hängt.',
+    `<rect x="38" y="20" width="124" height="115" rx="5" fill="#6b829c"/><rect x="199" y="20" width="124" height="115" rx="5" fill="#f2cf8e"/>
+      <path d="M100 22v111m-61-56h121m101-55v111m-61-56h121" fill="none" stroke="#ede2cc" stroke-width="5"/>
+      <path d="m76 42 3 14 14 3-14 3-3 14-3-14-14-3 14-3Zm42 42 3 10 11 3-11 3-3 11-3-11-10-3 10-3Z" fill="#fff1b7" stroke-width="1"/>
+      <circle cx="282" cy="87" r="18" fill="#bf8d6d"/><path d="M265 86q-7-24 18-24 17 0 18 19-12-2-18-10-7 11-18 15Z" fill="#785143"/><path d="M264 130q1-22 17-25 20 2 26 25Z" fill="#8ea596"/>
+      <path d="m230 42 3 12 13 3-13 3-3 13-3-13-13-3 13-3Z" fill="#fff6d0" stroke-width="1"/><path d="m267 110-13-15m-3-3-4-6m4 5 2-8" fill="none"/>`],
+  'die-letzte-kastanie': [3, 'Annas glänzende Kastanie wird der Kopf des kleinen Hundes.',
+    'Auf einer Bank steht ein Hund aus Kastanien und Hölzchen. Sein brauner Kopf glänzt.',
+    `<path d="M33 121h290v19H33Z" fill="#b88762"/><path d="M44 128h269" stroke="#e6b691"/>
+      <path d="m130 93-6 28m34-24-3 24m25-24 3 24m20-27 8 27m-88-39-25-20m102 20 26-26" fill="none" stroke="#b48b56" stroke-width="6"/>
+      <ellipse cx="169" cy="82" rx="49" ry="30" fill="#976046"/><ellipse cx="228" cy="55" rx="26" ry="25" fill="#a6694c"/>
+      <path d="M208 39q-16-11-12 8l9 20 8-10m28-20q15-6 10 11l-6 14-7-7" fill="#795143"/>
+      <path d="M215 45q9-7 20-3m-89 27q17-11 33-6" fill="none" stroke="#e7b58d" stroke-width="4"/>
+      <path d="M220 55h.1m15-1h.1m-7 9h.1" stroke-width="4"/>`]
+};
+
+function annaMoment(story){
+  const [after, caption, alt, art]=annaStoryMoments[story.id];
+  const [sky,ground]=annaPictures[story.id].colors;
+  return {after,html:`<figure class="anna-story-picture anna-moment">
+    <svg class="anna-scene" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="${alt}">
+      <rect width="360" height="160" fill="${sky}"/>
+      <path fill="${ground}" d="M0 113q90-18 177-4t183-2v53H0Z"/>
+      <g stroke="#425751" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${art}</g>
+    </svg><figcaption>${caption}</figcaption>
+  </figure>`};
+}
+
 </script>
 <script>const annaStories = [
   {
@@ -1428,6 +1545,7 @@ function showAnna(id){
   }
 
   const story=annaStories[index];
+  const moment=annaMoment(story);
   const previous=annaStories[index-1];
   const next=annaStories[index+1];
   app.innerHTML=`<div class="route anna-route">
@@ -1436,7 +1554,7 @@ function showAnna(id){
       <p class="kicker">${icon('book')} Annas Abenteuer · ${index+1} von ${annaStories.length}</p>
       <h1 tabindex="-1">${story.title}</h1>
       <figure class="anna-story-picture">${annaScene(story)}</figure>
-      <div class="anna-text">${story.paragraphs.map(paragraph=>`<p>${paragraph}</p>`).join('')}</div>
+      <div class="anna-text">${story.paragraphs.map((paragraph,i)=>`<p>${paragraph}</p>${i+1===moment.after?moment.html:''}`).join('')}</div>
       <section class="anna-question" aria-labelledby="anna-question-title">
         <h2 id="anna-question-title">Hast du aufgepasst?</h2><p>${story.question}</p>
         <details><summary>Antwort ansehen</summary><p>${story.answer}</p></details>
