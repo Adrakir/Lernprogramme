@@ -196,6 +196,32 @@ details ol{margin-bottom:0}
 .game-panel .tile:disabled{opacity:1}
 @media(max-width:620px){.games-grid{grid-template-columns:1fr}.game-card{min-height:0}}
 @media(max-width:440px){.game-word-grid,.memory-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.memory-card{min-height:69px}.game-catch-card{padding-inline:4px}}
+.anna-hero{display:grid;grid-template-columns:1.3fr 1fr;align-items:center;gap:14px;padding:clamp(16px,4vw,29px);margin-bottom:17px;border:1px solid #d6dbc5;border-radius:23px;background:#f0f3df}
+.anna-hero h1{font-size:clamp(30px,5.5vw,47px);margin-bottom:10px;hyphens:auto;overflow-wrap:anywhere}
+.anna-hero p:last-child{margin:0;max-width:48ch}
+.anna-art svg{display:block;width:100%;height:auto;max-height:250px}
+.anna-today{background:#fff8e2;border-color:#ead9a3}
+.anna-today h2{margin-bottom:9px}
+.anna-today p:not(.kicker){max-width:58ch}
+.anna-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 13px;padding-left:24px;margin:0}
+.anna-list li::marker{color:var(--muted);font-size:13px;font-weight:800}
+.anna-list a{min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:8px;background:#f1f6ed;color:var(--forest);text-decoration:none;font-weight:800;line-height:1.28}
+.anna-list a:hover{background:#e4f0e5}
+.anna-list svg{width:16px;height:16px}
+.anna-route{width:min(740px,100%)}
+.anna-story h1{font-size:clamp(31px,6vw,47px);margin:8px 0 19px;hyphens:auto;overflow-wrap:anywhere}
+.anna-text{max-width:65ch;font-size:clamp(17px,3vw,20px);line-height:1.72}
+.anna-text p{margin-bottom:1em}
+.anna-question{margin-top:23px;padding:13px 15px;border:1px solid #d1e4d5;border-radius:13px;background:#f1f7ee}
+.anna-question h2{font-size:21px;margin-bottom:6px}
+.anna-question p{margin-bottom:10px}
+.anna-question details{margin:0}
+.anna-question details p{margin:8px 0 0}
+@media(max-width:570px){
+ .anna-hero{grid-template-columns:1fr}
+ .anna-art{max-width:245px;width:100%;margin-inline:auto}
+ .anna-list{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -292,6 +318,38 @@ details ol{margin-bottom:0}
 <rect x="237" y="278" width="56" height="23" rx="11.5" fill="#fff5db"/><text x="265" y="294">MAJA</text>
 <rect x="365" y="267" width="57" height="23" rx="11.5" fill="#fff5db"/><text x="393.5" y="283">MINKA</text>
 </g>
+</svg>
+</div>
+<div id="anna-source" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 249" role="img" aria-label="Anna mit blonden Haaren, einer Stupsnase und leichten Sommersprossen hält einen blauen Kiesel">
+ <path fill="#dfe9d5" d="M28 148C19 92 62 32 130 30c40-26 103-20 137 8 54 6 83 41 84 88 2 48-39 80-84 85l-141 8c-50 2-89-24-98-71Z"/>
+ <circle cx="278" cy="70" r="31" fill="#f8dfaa"/>
+ <path fill="#b9d3b1" d="M29 174c62-25 87-17 132-5 54-13 124-22 189 4-13 23-48 41-92 43l-131 6c-52 0-83-24-98-48Z"/>
+ <g stroke="#36574f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <path fill="none" d="M67 182v-50m0 33-10-10m10 3 11-11M314 182v-51m0 31-11-10m11 3 8-11"/>
+  <path fill="#e8a77c" d="M67 93c-16 14-24 29-24 43 10 9 16 11 24 10 10 0 19-4 24-11-4-17-11-29-24-42Z"/>
+  <path fill="#ebc575" d="M315 104c-16 12-22 25-24 39 9 7 16 9 24 9 12 0 19-4 24-11-4-15-12-28-24-37Z"/>
+  <path fill="none" d="M67 146v-28m0 15-8-7m8 11 9-9M315 151v-23m0 13-7-6m7 9 8-8"/>
+ </g>
+ <g fill="#fff5dc"><circle cx="102" cy="64" r="3"/><circle cx="88" cy="79" r="2"/><circle cx="248" cy="43" r="3"/><circle cx="293" cy="108" r="3"/><circle cx="100" cy="152" r="3"/></g>
+ <g stroke="#3c514c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M124 148q-19-18-15-52 1-33 27-47 20-12 46-6 30-4 49 17 17 18 15 54-2 25-14 40l-22 4-70-1Z" fill="#e7b958"/>
+  <path d="M131 73q14-25 41-26m34 5q18 5 28 24m3 20q0 21-5 34m-116-27q-3 24 7 35" fill="none" stroke="#f9dc83" stroke-width="3.8"/>
+  <path d="M156 156q-25 2-39 21-10 14-14 34 27 21 74 21 44 0 81-22-4-33-24-46-10-7-30-10Z" fill="#648d79"/>
+  <path d="M143 167q9 15 32 18 22-2 35-20M128 183l-6 17m106-23q11 11 15 26" fill="none" stroke="#dae7c7" stroke-width="2.6"/>
+  <path d="M162 139v20q12 14 27 0v-20Z" fill="#e4a07c"/>
+  <path d="M130 102q-8-9-14-2-4 8 7 15l8 3m93-15q8-9 14-2 4 8-7 15l-8 3" fill="#e9a780"/>
+  <path d="M127 90q26-2 43-23 16 24 56 28l-2 21c-5 23-24 39-46 39-24 0-43-15-48-36Z" fill="#f1b991"/>
+  <path d="M128 98q10-7 14-12m70 4 10 4" fill="none" stroke="#b17754" stroke-width="1.8"/>
+  <path d="M149 108h.1m54 0h.1" stroke-width="5"/>
+  <path d="M173 120q4-6 9-2 2 3-2 5" fill="none" stroke="#9c644d" stroke-width="1.8"/>
+  <path d="M170 133q8 6 16-2" fill="none" stroke="#854f47" stroke-width="2"/>
+  <path d="M140 119h.1m6 2h.1m6-3h.1m6 4h.1m39-1h.1m6-4h.1m6 3h.1m6-2h.1" stroke="#a3694c" stroke-width="2.15"/>
+  <path d="M122 196q14-4 30-3l32 4q8 2 8 9-1 8-10 8l-37-4q-18 2-25-3" fill="#f1b991"/>
+  <path d="M227 190q-20 9-35 11" fill="none"/>
+  <path d="M145 188q2-11 12-13 11 0 14 12-3 10-13 9-9-2-13-8Z" fill="#77a8c4"/>
+  <path d="M151 187l9-4m-4-3 4 3-2 4" fill="none" stroke="#fff5da" stroke-width="1.7"/>
+ </g>
+ <path d="M270 197q12-12 25-7-6 10-21 10m-173 17q-14-2-16-12 10 1 16 12" fill="#e4a775" stroke="#7c6d57" stroke-width="1.5"/>
 </svg>
 </div>
 <script>const units = [
@@ -961,6 +1019,235 @@ function playSentencePuzzle(board){
   draw();
 }
 </script>
+<script>const annaStories = [
+  {
+    id:'der-kiesel-im-schuh',
+    title:'Der Kiesel im Schuh',
+    paragraphs:[
+      'Anna war acht Jahre alt. Heute hüpfte sie auf einem Bein durch den Flur. Etwas drückte in ihrem Schuh. Sie zog ihn aus und schüttelte ihn. Ein blauer Kiesel kullerte unter die Bank.',
+      'Beim Bücken fielen Anna die blonden Haare ins Gesicht. Auf dem Stein stand ein winziger weißer Pfeil. Er zeigte auf einen Streifen aus Kreide, der zur Haustür führte.',
+      'Draußen entdeckte Anna noch zwei Pfeile. Der letzte endete am Blumentopf. Dahinter hockte ihr Nachbar Ben. „Du hast den Start gefunden!“, rief er.',
+      'Anna hielt den Kiesel hoch. „Beim nächsten Mal legst du den Start bitte neben meinen Schuh.“ Dann zeichnete sie einen Pfeil für Ben.'
+    ],
+    question:'Wohin führte der letzte Kreidepfeil?',
+    answer:'Zum Blumentopf. Dahinter versteckte sich Ben.'
+  },
+  {
+    id:'die-muetze-im-apfelbaum',
+    title:'Die Mütze im Apfelbaum',
+    paragraphs:[
+      'Ein Windstoß riss Anna die Mütze vom Kopf. Sie segelte über den Zaun und landete im Apfelbaum. Anna sah nach oben. Die Mütze saß auf einem Zweig, als hätte der Baum plötzlich einen Kopf.',
+      'Ben wollte schon auf den Zaun steigen. „Warte mal“, sagte Anna. Sie lief in den Schuppen und holte Oma und einen Besen.',
+      'Oma hielt den Besenstiel hoch. Anna stand darunter und rief: „Ein Stück nach links!“ Beim zweiten Versuch rutschte die Mütze ab.',
+      'Anna fing sie mit beiden Händen. Ein Blatt steckte darin. Sie ließ es stecken. „Jetzt habe ich eine Herbstmütze.“'
+    ],
+    question:'Womit holte Oma die Mütze herunter?',
+    answer:'Mit dem Stiel eines Besens.'
+  },
+  {
+    id:'die-pfuetze-mit-dem-himmel',
+    title:'Die Pfütze mit dem Himmel',
+    paragraphs:[
+      'Auf dem Heimweg blieb Anna vor einer Pfütze stehen. Darin schwamm eine weiße Wolke. Anna machte einen Schritt nach rechts. Die Wolke rutschte mit.',
+      '„Da ist ein Stück Himmel auf dem Boden“, sagte sie zu Papa. Er kniete sich neben sie. In der Pfütze erschienen jetzt auch Annas Stupsnase und ihre leichten Sommersprossen. Da tippte ein Regentropfen genau auf ihre Nase im Wasser.',
+      'Das Bild zerfiel in kleine Ringe. Anna wartete. Nach einer Weile tauchten ihr Gesicht und die Wolke wieder auf.',
+      'Zu Hause malte sie eine Pfütze mit blauem Rand. Darunter schrieb sie: „Der Himmel, von unten betrachtet.“'
+    ],
+    question:'Warum war Annas Spiegelbild kurz verschwunden?',
+    answer:'Ein Regentropfen fiel in die Pfütze. Die Wellen verzerrten das Spiegelbild.'
+  },
+  {
+    id:'das-lesezeichen-im-buch',
+    title:'Das Lesezeichen im Buch',
+    paragraphs:[
+      'Aus Annas Büchereibuch fiel ein Papierfisch. Auf seiner Rückseite stand: „Seite 17 ist meine Lieblingsseite.“ Anna blätterte hin. Dort saß ein Frosch im Regen und hielt ein Seerosenblatt über den Kopf.',
+      'Anna wollte auch eine Nachricht hinterlassen. Sie faltete aus einem Zettel einen kleinen Regenschirm. Darauf schrieb sie ihre Lieblingsseite, Seite 24. Dort fraß der Frosch so viele Fliegen, dass er Schluckauf bekam.',
+      'Als Anna das Buch zurückbrachte, legte sie beide Lesezeichen hinein.',
+      'Eine Woche später stand es wieder im Regal. Jetzt steckte auch eine Papierfliege darin.'
+    ],
+    question:'Welches Lesezeichen hat Anna gebastelt?',
+    answer:'Einen kleinen Regenschirm aus Papier.'
+  },
+  {
+    id:'das-fahrrad-das-klingelte',
+    title:'Das Fahrrad, das von selbst klingelte',
+    paragraphs:[
+      'Anna schob ihr Fahrrad aus der Garage. „Kling!“ Sie hielt an. Ihre Hände waren am Lenker, aber kein Finger lag auf der Klingel.',
+      'Sie schob noch einen Meter. Wieder machte es „Kling!“ Anna schaute auf den Korb. Ihr Schlüsselbund baumelte am Rand. Bei jeder Bodenwelle schlug ein Schlüssel gegen die Klingel.',
+      'Anna steckte den Schlüssel in die Jackentasche. Jetzt war es still. Im Hof stand Ben mit seiner Gießkanne. Anna klingelte absichtlich zweimal.',
+      'Ben drehte sich um. „Fährt hier der Eiswagen?“ Anna schüttelte den Kopf. „Nur der Schlüsselwagen. Der hat heute Verspätung.“'
+    ],
+    question:'Was hatte die Klingel berührt?',
+    answer:'Ein Schlüssel, der am Korb baumelte.'
+  },
+  {
+    id:'der-schatten-an-der-wand',
+    title:'Der Schatten an der Wand',
+    paragraphs:[
+      'Als Anna abends ihre Socken suchte, bewegte sich etwas an der Wand. Es sah aus wie eine Maus mit Ohren. Anna blieb stehen. Die Maus blieb auch stehen.',
+      'Neben dem Bett leuchtete die Leselampe. Auf dem Tisch lag eine zerknüllte Socke. Der Vorhang streifte sie und bewegte ihren Schatten. Anna zog den Vorhang beiseite. Jetzt war die Maus weg.',
+      'Sie stellte die Socke vor die Lampe und formte mit der Hand zwei lange Ohren. An der Wand erschien ein Hase.',
+      '„Hab dich“, sagte Anna. Dann zog sie die Maus über den linken Fuß.'
+    ],
+    question:'Was war die vermeintliche Maus wirklich?',
+    answer:'Der Schatten einer zerknüllten Socke.'
+  },
+  {
+    id:'der-falsche-kuchen',
+    title:'Der falsche Kuchen',
+    paragraphs:[
+      'Anna durfte Oma beim Backen helfen. Sie füllte eine Tasse Mehl in die Schüssel. Dann griff sie nach dem Zucker. Zum Glück bemerkte sie das Etikett. Auf der Dose stand „Salz“.',
+      '„Das wäre ein sehr seltsamer Apfelkuchen geworden“, sagte sie. Oma lachte. „Was könnte man denn mit einem salzigen Kuchen machen?“',
+      'Anna dachte nach. „Ein Schild danebenstellen: Vorsicht, der Kuchen ist eine Brezel.“',
+      'Sie holten den richtigen Zucker. Als der Kuchen fertig war, schnitt Oma zwei Stücke ab. Anna malte trotzdem ein Schild. Darauf stand: „Süß. Ganz sicher.“'
+    ],
+    question:'Woran merkte Anna, dass sie die falsche Dose erwischt hatte?',
+    answer:'Sie las das Etikett. Auf der Dose stand „Salz“.'
+  },
+  {
+    id:'rettung-fuer-eine-schnecke',
+    title:'Rettung für eine Schnecke',
+    paragraphs:[
+      'Nach dem Regen kroch eine Schnecke über den Gehweg. Anna entdeckte sie kurz vor einer Pfütze. In diesem Moment kam ein Roller um die Ecke.',
+      'Anna trat zur Seite und winkte Ben. „Halt kurz an. Hier ist jemand auf dem Weg.“ Ben bremste. Beide gingen in die Hocke.',
+      'Anna legte ein Blatt vor die Schnecke. Nach einer Weile kroch sie darauf. Anna hob das Blatt am Rand hoch und legte es ins Gras am Wegrand.',
+      'Ben wollte weiterfahren. „Einen Moment“, sagte Anna. Die Schnecke streckte ihre Fühler aus. „Jetzt hat sie wieder freie Fahrt.“'
+    ],
+    question:'Wie brachte Anna die Schnecke ins Gras?',
+    answer:'Sie wartete, bis die Schnecke auf ein Blatt gekrochen war, und legte das Blatt ins Gras.'
+  },
+  {
+    id:'ein-brief-ohne-namen',
+    title:'Ein Brief ohne Namen',
+    paragraphs:[
+      'Im Hausflur lag ein Umschlag. Darauf war eine große Sonne gemalt. Einen Namen fand Anna nicht. Sie hob den Umschlag auf und klingelte bei Frau Sommer.',
+      '„Ist der Brief für Sie? Da ist eine Sonne drauf.“ Frau Sommer setzte ihre Brille auf. „Dreh ihn mal um.“',
+      'Auf der Rückseite stand ganz klein: „Für alle im Haus“. Gemeinsam öffneten sie den Umschlag. Darin steckte eine Einladung zum Spielenachmittag im Hof.',
+      'Anna hängte die Einladung mit Frau Sommer ans Schwarze Brett. Neben die Sonne malte sie eine Wolke. „Falls es regnet, spielen wir im Treppenhaus.“'
+    ],
+    question:'Für wen war der Brief bestimmt?',
+    answer:'Für alle Menschen im Haus.'
+  },
+  {
+    id:'das-fernrohr-aus-pappe',
+    title:'Das Fernrohr aus Pappe',
+    paragraphs:[
+      'Anna baute aus zwei leeren Papprollen ein Fernrohr. Die Rollen hielten mit Gummibändern zusammen. Auf dem Balkon richtete sie es auf den Baum gegenüber.',
+      '„Siehst du jetzt besser?“, fragte Papa. Anna schüttelte den Kopf. „Größer wird nichts. Aber ich sehe weniger durcheinander.“',
+      'Sie hielt still. Zwischen zwei Ästen hüpfte ein winziger Vogel. Ohne die Rollen hätte Anna wahrscheinlich nur Blätter gesehen.',
+      'Sie holte ihr Heft und zeichnete einen Kreis. In die Mitte malte sie den Vogel. Am Rand blieb Platz für eine Zeile: „Heute im Fernrohr: ein Vogel, der keine Sekunde stillhielt.“'
+    ],
+    question:'Wobei half Anna das Fernrohr, obwohl es nichts vergrößerte?',
+    answer:'Sie konnte sich auf einen kleinen Ausschnitt konzentrieren und entdeckte so den Vogel.'
+  },
+  {
+    id:'die-geheime-trommel',
+    title:'Die geheime Trommel',
+    paragraphs:[
+      'Am Nachmittag hörte Anna im Kinderzimmer ein leises „Tock, tock, tock“. Sie öffnete die Tür. Auf dem Flur war es still.',
+      '„Tock, tock!“ Das Geräusch kam von der Fensterbank. Draußen tropfte Regen von der Dachrinne in einen leeren Blumentopf. Jeder Tropfen traf dieselbe Stelle.',
+      'Anna holte einen Holzlöffel und klopfte damit auf den Tisch. Erst spielte der Regen, dann Anna. Manchmal kamen sie gleichzeitig dran. Das war Annas Lieblingsstelle.',
+      'Als der Regen aufhörte, klopfte sie noch einmal allein. Sie klebte einen Zettel ans Fenster. Darauf stand: „Konzert. Fortsetzung beim nächsten Regen.“'
+    ],
+    question:'Was verursachte das „Tock, tock“?',
+    answer:'Regentropfen fielen von der Dachrinne in einen leeren Blumentopf.'
+  },
+  {
+    id:'der-koffer-mit-dem-loch',
+    title:'Der Koffer mit dem Loch',
+    paragraphs:[
+      'Für eine Reise ins Wohnzimmer packte Anna ihren kleinen Koffer. Mit sollten eine Decke, zwei Bücher und ihr Stoffhase. Als sie ankam, war der Hase weg.',
+      'Anna folgte ihrer eigenen Spur. Am Teppich lag ein Radiergummi, an der Tür ein Stift. Den Hasen fand sie in der letzten Kurve vor dem Sofa.',
+      'Im Koffer klaffte ein Spalt. Der Reißverschluss war an einer Stelle offen. Anna packte alles noch einmal ein. Diesmal schloss sie den Koffer richtig.',
+      '„Einsteigen, bitte“, sagte sie zum Hasen. „Und anschnallen. Die letzte Kurve ist gefährlich.“'
+    ],
+    question:'Warum war der Hase aus dem Koffer gefallen?',
+    answer:'Der Reißverschluss war an einer Stelle offen.'
+  },
+  {
+    id:'das-fenster-voller-sterne',
+    title:'Das Fenster voller Sterne',
+    paragraphs:[
+      'Annas Fenster war morgens beschlagen. Sie malte mit dem Finger einen Stern hinein. Als sie später wiederkam, war der Stern verschwunden.',
+      'Anna nahm Papier und schnitt einen Stern aus. Beim zweiten verschnitt sie sich. Der Stern hatte nur vier Zacken. „Der bekommt einen Ehrenplatz“, sagte Anna und klebte ihn genau in die Mitte.',
+      'Abends brannte im Nachbarhaus Licht. Auf einmal tauchte dort ebenfalls ein Papierstern im Fenster auf. Ben winkte dahinter.',
+      'Anna rief Papa. „Wir haben jetzt zwei Himmel. Einen draußen und einen zwischen den Fenstern.“'
+    ],
+    question:'Welcher Stern bekam bei Anna den Ehrenplatz?',
+    answer:'Der Stern mit nur vier Zacken.'
+  },
+  {
+    id:'die-letzte-kastanie',
+    title:'Die letzte Kastanie',
+    paragraphs:[
+      'Anna hatte eine Kastanie in ihrer Jackentasche. Sie war glatt und glänzte wie ein brauner Knopf. Anna wollte daraus ein Tier basteln.',
+      'Auf dem Hof suchte Ben etwas. Aus seinem gebastelten Kastanienhund war der Kopf herausgefallen. Beide schauten unter die Bank und zwischen die Steine. Kein Kopf.',
+      'Anna holte ihre Kastanie hervor. Sie passte genau. Ben steckte sie auf das Hölzchen und stellte den Hund auf die Bank.',
+      'Anna betrachtete ihr Werk. „Jetzt hat er einen Kopf, der glänzt.“ Ben strich dem Hund über den Rücken. „Bestimmt hat er sich extra fein gemacht.“'
+    ],
+    question:'Wofür gab Anna ihre Kastanie her?',
+    answer:'Sie wurde der neue Kopf von Bens Kastanienhund.'
+  }
+];
+
+const annaDayFormatter=new Intl.DateTimeFormat('de-DE',{
+  timeZone:'Europe/Berlin',year:'numeric',month:'numeric',day:'numeric'
+});
+
+function annaStoryIndex(date=new Date()){
+  const parts=Object.fromEntries(annaDayFormatter.formatToParts(date).map(({type,value})=>[type,Number(value)]));
+  const day=Date.UTC(parts.year,parts.month-1,parts.day);
+  const start=Date.UTC(2026,10,5);
+  const elapsed=(day-start)/86400000;
+  return ((elapsed%annaStories.length)+annaStories.length)%annaStories.length;
+}
+
+const annaLink=story=>'#anna/'+story.id;
+const annaArt=()=>document.querySelector('#anna-source').innerHTML;
+
+function showAnna(id){
+  const index=annaStories.findIndex(story=>story.id===id);
+  if(index===-1){
+    const now=new Date();
+    const today=annaStories[annaStoryIndex(now)];
+    app.innerHTML=`<div class="route">${homeLink()}
+      <div class="anna-hero">
+        <div><p class="kicker">${icon('book')} Lesen und Vorlesen</p><h1 tabindex="-1">Annas kleine Abenteuer</h1>
+        <p>Anna ist acht. Sie hat blonde Haare, eine Stupsnase und leichte Sommersprossen. Bei ihr reicht manchmal schon ein blauer Kiesel, damit aus einem ganz normalen Tag ein Abenteuer wird.</p></div>
+        <div class="anna-art">${annaArt()}</div>
+      </div>
+      <section class="panel anna-today" aria-labelledby="anna-today-title">
+        <p class="kicker">${icon('star')} Geschichte des Tages · ${annaDayFormatter.format(now)}</p>
+        <h2 id="anna-today-title">${today.title}</h2><p>${today.paragraphs[0]}</p>
+        <a class="primary" href="${annaLink(today)}">Geschichte lesen ${icon('arrow')}</a>
+      </section>
+      <section class="panel" aria-labelledby="anna-archive-title"><h2 id="anna-archive-title">Alle ${annaStories.length} Abenteuer</h2>
+      <p>Jeden Tag steht eine andere Geschichte oben. Nach ${annaStories.length} Tagen beginnt die Runde von vorn. Hier kannst du jederzeit jede Geschichte lesen.</p>
+      <ol class="anna-list">${annaStories.map(story=>`<li><a href="${annaLink(story)}">${story.title} ${icon('arrow')}</a></li>`).join('')}</ol>
+      </section></div>`;
+    return;
+  }
+
+  const story=annaStories[index];
+  const previous=annaStories[index-1];
+  const next=annaStories[index+1];
+  app.innerHTML=`<div class="route anna-route">
+    <a class="crumb" href="#anna">${icon('back')} Zu Annas Geschichten</a>
+    <article class="panel anna-story">
+      <p class="kicker">${icon('book')} Annas Abenteuer · ${index+1} von ${annaStories.length}</p>
+      <h1 tabindex="-1">${story.title}</h1>
+      <div class="anna-text">${story.paragraphs.map(paragraph=>`<p>${paragraph}</p>`).join('')}</div>
+      <section class="anna-question" aria-labelledby="anna-question-title">
+        <h2 id="anna-question-title">Hast du aufgepasst?</h2><p>${story.question}</p>
+        <details><summary>Antwort ansehen</summary><p>${story.answer}</p></details>
+      </section>
+      <nav class="actions" aria-label="Annas Geschichten">
+        ${previous?`<a class="secondary" href="${annaLink(previous)}">${icon('back')} Vorherige Geschichte</a>`:''}
+        ${next?`<a class="primary" href="${annaLink(next)}">Nächste Geschichte ${icon('arrow')}</a>`:`<a class="primary" href="#anna">Alle Geschichten ${icon('arrow')}</a>`}
+      </nav>
+    </article></div>`;
+}
+</script>
 <script>const iconPaths = {
  book:'<path d="M12 6c-2.5-2-6-2.7-9-1.5v14c3-1.2 6.5-.5 9 1.5 2.5-2 6-2.7 9-1.5v-14C18 3.3 14.5 4 12 6Zm0 0v14"/>',
  puzzle:'<path d="M4 4h6a2.5 2.5 0 1 1 4 0h6v6a2.5 2.5 0 1 0 0 4v6h-6a2.5 2.5 0 1 0-4 0H4v-6a2.5 2.5 0 1 0 0-4Z"/>',
@@ -1009,7 +1296,7 @@ function showHome(){
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h1>Majas<br><em>Wortwerkstatt</em></h1>
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a></div></div>
+    <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a></div></div>
     <div class="hero-art">${intro}</div>
   </section>
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
@@ -1323,6 +1610,7 @@ function render(initial=false){
   route=page||'start';
   if(page==='fortschritt')showProgress();
   else if(page==='spiele')showGames(index);
+  else if(page==='anna')showAnna(index);
   else if(page==='quiz'){
     if(index==='ergebnis'&&quiz.length===mixed.length)showResult();
     else if(index&&Number.isInteger(number)&&number===quiz.length+1&&number<=mixed.length)showExercise(null,number,true);
