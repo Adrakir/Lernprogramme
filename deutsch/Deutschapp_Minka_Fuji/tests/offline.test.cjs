@@ -47,6 +47,10 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   await page.locator('#language-game-start').click();
   assert.match(await page.locator('.language-game-stats').textContent(),/Frage 1 von 8/);
   await page.locator('#language-game-close').click();
+  await page.locator('#language-challenge-open').click();
+  await page.locator('#language-game-start').click();
+  assert.match(await page.locator('.language-game-stats').textContent(),/Frage 1 von 9/);
+  await page.locator('#language-game-close').click();
   await page.getByRole('button',{name:'Selbst schreiben (10)'}).click();
   await page.locator('#language-solution summary').click();
   assert.match(await page.locator('#language-solution').textContent(),/Käfer.*Ursache/s);

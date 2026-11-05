@@ -70,3 +70,64 @@ test('Themenquiz: 17 Runden, Punkte, Erklärungen, Timer und Handy-Layout',async
   assert.deepEqual(errors,[]);
  }finally{await browser.close();}
 });
+
+test('Erzähl-Challenge: alle neun Wunschthemen im Mix und als eigene Runden',async()=>{
+ const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,args:['--no-sandbox','--disable-dev-shm-usage']});
+ const expected=['Abwechslungsreiche Satzanfänge','Wörtliche Rede','Redewendungen','Gefühle','Spannende Textstellen','Gegensätze','Höhepunkte','Schlingen legen','Erster Satz in der Einleitung'];
+ try{
+  const page=await browser.newPage({viewport:{width:320,height:780}});
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(app+'#sprache');
+  await page.locator('#language-challenge-open').click();
+  assert.deepEqual((await page.locator('#language-game-category option').allTextContents()).slice(1),expected);
+  await page.locator('#language-game-start').click();
+  const labels=[];
+  for(let i=0;i<9;i++){
+    assert.match(await page.locator('.language-game-stats').textContent(),new RegExp(`Frage ${i+1} von 9`));
+    labels.push(await page.locator('#language-game-question-category').textContent());
+    const options=page.locator('[data-game-answer]');
+    assert.equal(await options.count(),4);
+    await page.locator(i===0?'[data-game-answer="1"]':'[data-game-answer="0"]').click();
+    assert.match(await page.locator('#language-game-feedback').textContent(),/Lösung/);
+    await page.locator('#language-game-next').click();
+  }
+  assert.deepEqual([...labels].sort(),[...expected].sort());
+  assert.equal(await page.locator('#language-game-result').textContent(),'8 von 9 Punkten');
+  assert.match(await page.locator('#language-game-body details[open]').textContent(),/Deine Antwort.*Lösung/s);
+  await page.locator('#language-game-again').click();
+  assert.equal(await page.locator('#language-game-category').inputValue(),'');
+
+  const outcomes=await page.evaluate(()=>{
+    const pick=s=>document.querySelector(s);
+    pick('#language-game-close').click();
+    return MF_LANGUAGE_CHALLENGE.map(group=>{
+      pick('#language-challenge-open').click();
+      const category=pick('#language-game-category');
+      category.value=group.id;
+      category.dispatchEvent(new Event('change'));
+      pick('#language-game-start').click();
+      const seen=[];
+      for(let i=0;i<group.questions.length;i++){
+        const title=pick('#language-game-question').textContent;
+        const question=group.questions.find(q=>q.title===title);
+        const label=pick('#language-game-question-category').textContent;
+        if(!question)throw Error(title);
+        pick('[data-game-answer="0"]').click();
+        const feedback=pick('#language-game-feedback').textContent;
+        seen.push([title,label,new Set(question.options).size,question.explain.length,feedback.includes(question.explain)]);
+        pick('#language-game-next').click();
+      }
+      const score=pick('#language-game-result').textContent;
+      pick('#language-game-close').click();
+      return {name:group.title,seen,score};
+    });
+  });
+  assert.equal(outcomes.length,9);
+  for(const group of outcomes){
+    assert.equal(group.score,'5 von 5 Punkten');
+    assert.equal(new Set(group.seen.map(item=>item[0])).size,5);
+    assert.ok(group.seen.every(([,label,options,length,explained])=>label===group.name&&options===4&&length>=60&&explained));
+  }
+  assert.deepEqual(errors,[]);
+ }finally{await browser.close();}
+});

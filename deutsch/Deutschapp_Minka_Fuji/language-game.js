@@ -33,16 +33,32 @@ const MF_LANGUAGE_GAME = (() => {
   }
 
   function setup(){
-    body.innerHTML=`<p>Spiele ${ROUND_SIZE} Fragen zu diesem Thema. Jede richtige Antwort bringt einen Punkt. Nach jeder Frage siehst du die Lösung mit Erklärung.</p>
+    const groups=game.challenge?MF_LANGUAGE_CHALLENGE:[];
+    const count=()=>game.challenge?(groups.find(g=>g.id===game.category)?.questions.length||groups.length):ROUND_SIZE;
+    body.innerHTML=`${game.challenge?`<label class="select-label">Was möchtest du spielen?<select id="language-game-category"><option value="">Mix aus allen neun Themen</option>${groups.map(g=>`<option value="${g.id}" ${g.id===game.category?'selected':''}>${escapeHTML(g.title)}</option>`).join('')}</select></label>`:''}
+      <p id="language-game-rules"></p>
       <label class="language-game-clock-option"><input id="language-game-clock" type="checkbox" ${game.timed?'checked':''}> Mit Timer spielen · ${SECONDS} Sekunden pro Frage</label>
       <button type="button" class="primary" id="language-game-start">Runde starten</button>`;
+    const rules=()=>{
+      const group=groups.find(g=>g.id===game.category);
+      if(game.challenge)title.textContent=group?`Erzähl-Challenge · ${group.title}`:'Erzähl-Challenge';
+      body.querySelector('#language-game-rules').textContent=`Spiele ${count()} Fragen.${game.challenge&&!group?' Jedes Thema kommt einmal vor.':''} Jede richtige Antwort bringt einen Punkt. Nach jeder Frage siehst du die Lösung mit Erklärung.`;
+    };
+    const picker=body.querySelector('#language-game-category');
+    if(picker)picker.onchange=()=>{game.category=picker.value;rules();};
+    rules();
     const start=body.querySelector('#language-game-start');
     start.onclick=()=>{
       game.timed=body.querySelector('#language-game-clock').checked;
-      const recognize=shuffle(game.pool.filter(q=>q.level==='erkennen')).slice(0,ROUND_SIZE/2);
-      const used=new Set(recognize.map(q=>q.title));
-      const reason=shuffle(game.pool.filter(q=>q.level==='begruenden'&&!used.has(q.title))).slice(0,ROUND_SIZE/2);
-      game.items=shuffle([...recognize,...reason]);
+      if(game.challenge){
+        const group=groups.find(g=>g.id===game.category);
+        game.items=shuffle(group?group.questions:groups.map(g=>g.questions[Math.floor(Math.random()*g.questions.length)]));
+      }else{
+        const recognize=shuffle(game.pool.filter(q=>q.level==='erkennen')).slice(0,ROUND_SIZE/2);
+        const used=new Set(recognize.map(q=>q.title));
+        const reason=shuffle(game.pool.filter(q=>q.level==='begruenden'&&!used.has(q.title))).slice(0,ROUND_SIZE/2);
+        game.items=shuffle([...recognize,...reason]);
+      }
       game.index=0;
       game.answers=[];
       question();
@@ -54,12 +70,14 @@ const MF_LANGUAGE_GAME = (() => {
   function question(){
     stopTimer();
     const q=game.items[game.index];
+    const category=game.challenge?MF_LANGUAGE_CHALLENGE.find(g=>g.id===q.category).title:'';
     const points=game.answers.filter(a=>a.correct).length;
     body.innerHTML=`<div class="language-game-stats"><span>Frage ${game.index+1} von ${game.items.length}</span><span id="language-game-points">${points} ${points===1?'Punkt':'Punkte'}</span>${game.timed?'<span id="language-game-time" aria-label="Verbleibende Zeit"></span>':''}</div>
       <progress aria-label="Bearbeitete Fragen" value="${game.index}" max="${game.items.length}"></progress>
+      ${category?`<p class="eyebrow" id="language-game-question-category">${escapeHTML(category)}</p>`:''}
       <h3 id="language-game-question" tabindex="-1">${escapeHTML(q.title)}</h3>
       <p class="language-game-text">${escapeHTML(q.text)}</p>
-      <div class="language-game-choices" role="group" aria-label="Antwortmöglichkeiten">${shuffle(q.options.map((_,i)=>i)).map((i,position)=>`<button type="button" data-game-answer="${i}" class="language-game-card" data-game-color="${position}"><span aria-hidden="true">${'ABC'[position]}</span>${escapeHTML(q.options[i])}</button>`).join('')}</div>
+      <div class="language-game-choices" role="group" aria-label="Antwortmöglichkeiten">${shuffle(q.options.map((_,i)=>i)).map((i,position)=>`<button type="button" data-game-answer="${i}" class="language-game-card" data-game-color="${position}"><span aria-hidden="true">${'ABCD'[position]}</span>${escapeHTML(q.options[i])}</button>`).join('')}</div>
       <div id="language-game-feedback" role="status" tabindex="-1"></div>
       <button type="button" class="primary" id="language-game-next" hidden>${game.index===game.items.length-1?'Auswertung ansehen':'Nächste Frage'}</button>`;
     body.querySelectorAll('[data-game-answer]').forEach(button=>button.onclick=()=>{
@@ -131,15 +149,20 @@ const MF_LANGUAGE_GAME = (() => {
     if(e.key==='Escape'&&typeof dialog.close!=='function')close();
   });
 
+  function show(button,newGame,heading){
+    stopTimer();
+    opener=button;
+    game=newGame;
+    title.textContent=heading;
+    if(typeof dialog.showModal==='function')dialog.showModal();
+    else{dialog.classList.add('game-fallback');dialog.setAttribute('open','');}
+    setup();
+  }
+  document.getElementById('language-challenge-open').onclick=e=>show(e.currentTarget,{challenge:true,category:'',timed:false},'Erzähl-Challenge');
+
   return {
     open(topic,button){
-      stopTimer();
-      opener=button;
-      game={pool:MF_LANGUAGE_PRACTICE[topic.id],timed:false};
-      title.textContent=`Quiz · ${topic.title}`;
-      if(typeof dialog.showModal==='function')dialog.showModal();
-      else{dialog.classList.add('game-fallback');dialog.setAttribute('open','');}
-      setup();
+      show(button,{pool:MF_LANGUAGE_PRACTICE[topic.id],timed:false},`Quiz · ${topic.title}`);
     }
   };
 })();

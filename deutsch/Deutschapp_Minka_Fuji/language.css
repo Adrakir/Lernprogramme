@@ -59,6 +59,7 @@
 .language-game-card[data-game-color="0"]{background:#8e304a;color:#fff}
 .language-game-card[data-game-color="1"]{background:#285793;color:#fff}
 .language-game-card[data-game-color="2"]{background:#4e661b;color:#fff}
+.language-game-card[data-game-color="3"]{background:#594482;color:#fff}
 .language-game-card:disabled{opacity:.78}
 .language-game-card.game-correct{outline:3px solid var(--accent);outline-offset:-3px;opacity:1}
 .language-game-card.game-wrong{outline:3px solid var(--pink);outline-offset:-3px}
