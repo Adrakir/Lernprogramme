@@ -171,6 +171,31 @@ details ol{margin-bottom:0}
   .demo-controls button{font-size:13px;padding-inline:7px}
 }
 @media(prefers-reduced-motion:reduce){.demo-enter,.demo-enter .demo-kite-lift{animation:none}}
+.hero-actions{margin-top:0}
+.games-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.game-card{min-height:218px}
+.game-card h2{font-size:21px;margin:4px 0 7px;overflow-wrap:anywhere}
+.game-illustration{display:grid;place-items:center;width:70px;height:70px;margin-bottom:10px;border-radius:18px;background:var(--tint)}
+.game-illustration .demo-art{width:51px;height:51px}
+.game-counter{color:var(--forest);font-size:14px;font-weight:850;margin-bottom:8px}
+.game-word-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.game-catch-card{min-height:63px;background:#fffdf3;border-color:#d9d8c6;font-size:clamp(15px,3vw,20px);overflow-wrap:anywhere}
+.game-catch-card[aria-pressed=true]::after{content:" ✓";color:var(--deep)}
+.game-message{padding:10px 12px;border-left:4px solid #64a18c;border-radius:6px;background:#edf5ee;color:#25493f;margin:14px 0;min-height:44px}
+.memory-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.memory-card{width:100%;min-width:0;min-height:80px;padding:5px 3px;border:1px solid #b8cab9;border-radius:12px;background:#e5f2e9;color:#24584d;font-weight:850;font-size:clamp(13px,2.6vw,17px);line-height:1.18;overflow-wrap:anywhere}
+.memory-card>span{display:grid;justify-items:center;gap:3px}
+.memory-card small{font-size:11px}
+.memory-card .ico{width:24px;height:24px}
+.memory-card:not(:disabled):hover{border-color:#518e7c;box-shadow:inset 0 0 0 1px #518e7c}
+.memory-card.is-open{background:#fff9df;border-color:#e0c477;color:#513e1d}
+.memory-card.is-matched{background:#eae3f6;border-color:#c1a9dd;color:#523969}
+.game-finish>.ico{width:43px;height:43px;padding:8px;border-radius:13px;background:#f8e9bb;color:#69521d;margin-bottom:10px}
+.game-panel .field{margin-bottom:5px}
+.game-panel .sequence{margin-top:0}
+.game-panel .tile:disabled{opacity:1}
+@media(max-width:620px){.games-grid{grid-template-columns:1fr}.game-card{min-height:0}}
+@media(max-width:440px){.game-word-grid,.memory-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.memory-card{min-height:69px}.game-catch-card{padding-inline:4px}}
 </style>
 </head>
 <body>
@@ -658,6 +683,284 @@ function setupLessonDemo(unit){
   draw();
 }
 </script>
+<script>const miniGames = {
+  woerterfang: {
+    title:'Fujis Wörterfang', tone:'mint', art:'paw',
+    intro:'Finde die drei Wörter, die zur gesuchten Wortart gehören.',
+    play:playWordCatch
+  },
+  memory: {
+    title:'Minkas Wort-Memory', tone:'lilac', art:'ball',
+    intro:'Decke Karten auf und finde sechs Wortpaare. Zu „retten“ passt zum Beispiel „die Rettung“.',
+    play:playWordMemory
+  },
+  satzpuzzle: {
+    title:'Majas Satz-Puzzle', tone:'peach', art:'audio',
+    intro:'Höre einen Satz und lege die Wortkarten in die richtige Reihenfolge.',
+    play:playSentencePuzzle
+  }
+};
+
+function gameShuffle(items){
+  const result=[...items];
+  for(let i=result.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [result[i],result[j]]=[result[j],result[i]];
+  }
+  return result;
+}
+
+function showGames(id){
+  const game=Object.hasOwn(miniGames,id)?miniGames[id]:null;
+  if(!game){
+    app.innerHTML=`<div class="route">${homeLink()}
+      <div class="unit-head sand"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese</p><h1 tabindex="-1">Kleine Wortspiele</h1><p>Such dir ein Spiel aus. Du hast so viel Zeit, wie du brauchst.</p></div></div>
+      <div class="games-grid">${Object.entries(miniGames).map(([key,item])=>`<a class="station game-card ${item.tone}" href="#spiele/${key}">
+        <span class="game-illustration">${demoPictogram(item.art)}</span>
+        <h2>${item.title}</h2><p>${item.intro}</p><span class="card-foot">Spielen ${icon('arrow')}</span></a>`).join('')}</div></div>`;
+    return;
+  }
+  app.innerHTML=`<div class="route">
+    <a class="crumb" href="#spiele">${icon('back')} Zur Spielwiese</a>
+    <div class="unit-head ${game.tone}"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese</p><h1 tabindex="-1">${game.title}</h1><p>${game.intro}</p></div></div>
+    <section class="panel game-panel" id="game-board" aria-label="Spielfeld"></section></div>`;
+  game.play(document.querySelector('#game-board'));
+}
+
+function finishGame(board,title,message,replay){
+  board.innerHTML=`<div class="game-finish">${icon('trophy')}<h2 tabindex="-1">${title}</h2><p>${message}</p>
+  <div class="actions"><button class="primary" type="button">Noch eine Runde</button><a class="secondary" href="#spiele">Zur Spielwiese</a></div></div>`;
+  board.querySelector('h2').focus();
+  board.querySelector('button').onclick=()=>{
+    replay(board);
+    board.querySelector('h2').focus();
+  };
+}
+
+const catchRounds = [
+  ['Nomen',[['Kastanie','Nomen'],['schnurren','Verb'],['Jacke','Nomen'],['warm','Adjektiv'],['hüpfen','Verb'],['Garten','Nomen']]],
+  ['Verb',[['malen','Verb'],['Kissen','Nomen'],['springen','Verb'],['laut','Adjektiv'],['sammeln','Verb'],['weich','Adjektiv']]],
+  ['Adjektiv',[['weich','Adjektiv'],['suchen','Verb'],['glatt','Adjektiv'],['Katze','Nomen'],['fröhlich','Adjektiv'],['laufen','Verb']]],
+  ['Nomen',[['Drachen','Nomen'],['bunt','Adjektiv'],['Fenster','Nomen'],['spielen','Verb'],['klein','Adjektiv'],['Blatt','Nomen']]]
+];
+
+function playWordCatch(board){
+  const rounds=gameShuffle(catchRounds);
+  let round=0;
+
+  function draw(focus=false){
+    const [answerType,cards]=rounds[round];
+    const goal={Nomen:'Nomen',Verb:'Verben',Adjektiv:'Adjektive'}[answerType];
+    const words=gameShuffle(cards);
+    let found=0;
+    board.innerHTML=`<p class="game-counter">Runde ${round+1} von ${rounds.length} · <span id="catch-count">0 von 3 gefangen</span></p>
+      <h2 tabindex="-1">Fang die ${goal}!</h2>
+      <div class="game-word-grid">${words.map(([word])=>`<button class="choice game-catch-card" type="button" aria-pressed="false">${word}</button>`).join('')}</div>
+      <p class="game-message" id="game-message" role="status">Tippe auf die drei passenden Wörter.</p>
+      <button type="button" id="catch-next" class="primary" hidden>${round===rounds.length-1?'Zum Ergebnis':'Nächste Runde'} ${icon('arrow')}</button>`;
+    const message=board.querySelector('#game-message');
+    const next=board.querySelector('#catch-next');
+    board.querySelectorAll('.game-catch-card').forEach((button,i)=>{
+      const [word,type]=words[i];
+      button.onclick=()=>{
+        if(found===3||button.getAttribute('aria-pressed')==='true')return;
+        if(type!==answerType){
+          message.textContent=`„${word}“ ist ein ${type}. Suche weiter nach ${goal}.`;
+          return;
+        }
+        found+=1;
+        button.setAttribute('aria-pressed','true');
+        button.setAttribute('aria-label',`${word}, gefangen`);
+        board.querySelector('#catch-count').textContent=`${found} von 3 gefangen`;
+        message.textContent=found===3?`Geschafft! Du hast alle drei ${goal} gefunden.`:`Gefangen! „${word}“ passt.`;
+        if(found===3){
+          next.hidden=false;
+          next.focus();
+        }
+      };
+    });
+    next.onclick=()=>{
+      round+=1;
+      if(round===rounds.length)finishGame(board,'Fuji hat alle Wortschätze!',`Du hast ${rounds.length*3} passende Wörter gefangen.`,playWordCatch);
+      else draw(true);
+    };
+    if(focus)board.querySelector('h2').focus();
+  }
+  draw();
+}
+
+const memoryPairs = [
+  ['retten','die Rettung'],['zeichnen','die Zeichnung'],['üben','die Übung'],
+  ['klug','die Klugheit'],['frei','die Freiheit'],['ehrlich','die Ehrlichkeit'],
+  ['tapfer','die Tapferkeit'],['geheim','das Geheimnis'],['erleben','das Erlebnis'],
+  ['sauber','die Sauberkeit'],['rechnen','die Rechnung'],['schön','die Schönheit']
+];
+
+function playWordMemory(board){
+  const pairs=gameShuffle(memoryPairs).slice(0,6);
+  const cards=gameShuffle(pairs.flatMap((words,pair)=>words.map(word=>({word,pair}))));
+  const matched=new Set();
+  let open=[];
+  let turns=0;
+  board.innerHTML=`<p class="game-counter" id="memory-count">0 von 6 Paaren · 0 Versuche</p>
+    <h2 tabindex="-1">Welche zwei Wörter gehören zusammen?</h2>
+    <div class="memory-grid" id="memory-grid"></div>
+    <p class="game-message" id="game-message" role="status">Decke zwei Karten auf.</p>
+    <button class="primary" type="button" id="memory-next" hidden></button>`;
+  const grid=board.querySelector('#memory-grid');
+  const message=board.querySelector('#game-message');
+  const next=board.querySelector('#memory-next');
+
+  function draw(focusIndex){
+    grid.innerHTML=cards.map(({word,pair},i)=>{
+      const done=matched.has(pair);
+      const visible=done||open.includes(i);
+      return `<button type="button" class="memory-card${visible?' is-open':''}${done?' is-matched':''}" data-card="${i}" aria-label="Karte ${i+1}${visible?', '+word:''}${done?', Paar gefunden':''}" ${done?'disabled':''}>
+        ${visible?word:`<span aria-hidden="true">${icon('paw')}<small>${i+1}</small></span>`}</button>`;
+    }).join('');
+    if(focusIndex!==undefined){
+      const current=grid.querySelector(`[data-card="${focusIndex}"]:not([disabled])`);
+      (current||grid.querySelector('button:not([disabled])'))?.focus();
+    }
+  }
+
+  grid.onclick=event=>{
+    const button=event.target.closest('button[data-card]');
+    if(!button||button.disabled||open.length===2)return;
+    const i=Number(button.dataset.card);
+    if(open.includes(i))return;
+    open.push(i);
+    if(open.length===1){
+      draw(i);
+      message.textContent=`„${cards[i].word}“ ist aufgedeckt. Suche die passende Karte.`;
+      return;
+    }
+    turns+=1;
+    const [first,second]=open.map(index=>cards[index]);
+    const found=first.pair===second.pair;
+    if(found){
+      matched.add(first.pair);
+      open=[];
+      message.textContent=`Paar gefunden! „${first.word}“ und „${second.word}“ gehören zusammen.`;
+    } else {
+      message.textContent='Die Wörter gehören zu verschiedenen Paaren. Dreh beide Karten wieder um.';
+    }
+    board.querySelector('#memory-count').textContent=`${matched.size} von ${pairs.length} Paaren · ${turns} ${turns===1?'Versuch':'Versuche'}`;
+    draw(i);
+    if(!found||matched.size===pairs.length){
+      next.textContent=found?'Zum Ergebnis':'Karten umdrehen';
+      next.hidden=false;
+      next.focus();
+    }
+  };
+  next.onclick=()=>{
+    if(matched.size===pairs.length){
+      finishGame(board,'Minka hat alle Paare gefunden!',`Du hast ${pairs.length} Wortpaare in ${turns} Versuchen gefunden.`,playWordMemory);
+    } else {
+      const [first]=open;
+      open=[];
+      draw(first);
+      next.hidden=true;
+      message.textContent='Decke wieder zwei Karten auf.';
+    }
+  };
+  draw();
+}
+
+const puzzleHints = [
+  'Maja zieht sich warm an.', 'Fuji rennt einem Blatt hinterher.',
+  'Viele Kastanien liegen unter einem Baum.', 'Minka lauscht den Blättern.',
+  'Am Himmel ziehen Wolken vorbei.', 'Der Flugdrachen wird nicht nass.'
+];
+
+function playSentencePuzzle(board){
+  const rounds=gameShuffle(autumn.map((_,i)=>i)).slice(0,4);
+  let round=0;
+
+  function draw(focus=false){
+    board.querySelector('audio')?.pause();
+    const lineIndex=rounds[round];
+    const [sentence]=autumn[lineIndex];
+    const words=sentence.split(' ');
+    const tiles=gameShuffle(words.map((_,i)=>i));
+    if(tiles.every((tile,i)=>tile===i))tiles.push(tiles.shift());
+    let placed=[];
+    let correct=false;
+    board.innerHTML=`<p class="game-counter">Satz ${round+1} von ${rounds.length}</p>
+      <h2 tabindex="-1">Welchen Satz hörst du?</h2><p class="subtle">${puzzleHints[lineIndex]}</p>
+      <div class="field-actions"><button type="button" class="secondary" id="game-hear">${icon('audio')} Satz hören</button>
+      <button type="button" class="plain" id="game-pause" hidden>Stopp</button><audio id="dictation-audio" preload="none"></audio></div>
+      <p class="field">Wortkarten</p><div class="tile-set" id="puzzle-tiles" aria-label="Wortkarten"></div>
+      <p class="field">Dein Satz</p><div class="tile-set sequence" id="puzzle-placed" aria-label="Dein Satz"></div>
+      <p class="game-message" role="status">Tippe die Wörter in der gehörten Reihenfolge an. Ein Tipp auf ein Wort im Satz nimmt es zurück.</p>
+      <div class="actions"><button type="button" class="primary" id="puzzle-check" disabled>Satz prüfen</button>
+      <button type="button" class="primary" id="puzzle-next" hidden>${round===rounds.length-1?'Zum Ergebnis':'Nächster Satz'}</button></div>`;
+    const pool=board.querySelector('#puzzle-tiles');
+    const row=board.querySelector('#puzzle-placed');
+    const check=board.querySelector('#puzzle-check');
+    const next=board.querySelector('#puzzle-next');
+    const message=board.querySelector('.game-message');
+    const audio=board.querySelector('audio');
+    const stop=board.querySelector('#game-pause');
+    const hear=board.querySelector('#game-hear');
+
+    function drawTiles(focusTile){
+      const tileButton=(i,verb)=>`<button type="button" class="tile" data-tile="${i}" aria-label="${words[i]} ${verb}" ${correct?'disabled':''}>${words[i]}</button>`;
+      pool.innerHTML=tiles.filter(i=>!placed.includes(i)).map(i=>tileButton(i,'hinzufügen')).join('');
+      row.innerHTML=placed.length?placed.map(i=>tileButton(i,'zurücklegen')).join(''):'<span class="subtle">Hier entsteht dein Satz.</span>';
+      check.disabled=correct||placed.length!==words.length;
+      if(focusTile!==undefined)board.querySelector(`[data-tile="${focusTile}"]`)?.focus();
+    }
+
+    pool.onclick=row.onclick=event=>{
+      const tile=event.target.closest('button[data-tile]');
+      if(!tile||correct)return;
+      const i=Number(tile.dataset.tile);
+      if(placed.includes(i))placed=placed.filter(value=>value!==i);
+      else placed.push(i);
+      drawTiles(i);
+    };
+    hear.onclick=()=>{
+      if(!audio.getAttribute('src'))audio.src=dictationAudio[lineIndex].normal;
+      audio.currentTime=0;
+      audio.playbackRate=.9;
+      audio.play().catch(error=>{
+        if(error.name==='AbortError'||!audio.isConnected)return;
+        message.textContent=`Der Ton spielt gerade nicht. Beginne so: „${words.slice(0,2).join(' ')} …“`;
+      });
+    };
+    audio.onplaying=()=>{stop.hidden=false;};
+    audio.onended=()=>{if(document.activeElement===stop)hear.focus();stop.hidden=true;};
+    stop.onclick=()=>{
+      audio.pause();
+      audio.currentTime=0;
+      hear.focus();
+      stop.hidden=true;
+    };
+    check.onclick=()=>{
+      correct=placed.map(i=>words[i]).join(' ')===sentence;
+      if(!correct){
+        message.textContent=`Höre noch einmal hin. Der Satz beginnt mit „${words[0]}“. Du kannst Karten zurücklegen und neu sortieren.`;
+        return;
+      }
+      drawTiles();
+      message.textContent='Genau so lautet der Satz!';
+      next.hidden=false;
+      next.focus();
+    };
+    next.onclick=()=>{
+      round+=1;
+      if(round===rounds.length){
+        audio.pause();
+        finishGame(board,'Maja hat alle Sätze zusammengesetzt!',`Du hast ${rounds.length} Sätze richtig gelegt.`,playSentencePuzzle);
+      } else draw(true);
+    };
+    drawTiles();
+    if(focus)board.querySelector('h2').focus();
+  }
+  draw();
+}
+</script>
 <script>const iconPaths = {
  book:'<path d="M12 6c-2.5-2-6-2.7-9-1.5v14c3-1.2 6.5-.5 9 1.5 2.5-2 6-2.7 9-1.5v-14C18 3.3 14.5 4 12 6Zm0 0v14"/>',
  puzzle:'<path d="M4 4h6a2.5 2.5 0 1 1 4 0h6v6a2.5 2.5 0 1 0 0 4v6h-6a2.5 2.5 0 1 0-4 0H4v-6a2.5 2.5 0 1 0 0-4Z"/>',
@@ -671,6 +974,7 @@ function setupLessonDemo(unit){
  back:'<path d="M20 12H5m6-6-6 6 6 6"/>',
  audio:'<path d="M4 9v6h4l5 4V5L8 9H4Zm12 0a4 4 0 0 1 0 6m2-8a7 7 0 0 1 0 10"/>',
  bulb:'<path d="M9 18h6m-5 3h4m1-6c0-2 3-3 3-7a6 6 0 0 0-12 0c0 4 3 5 3 7Z"/>',
+ game:'<path d="M7 7h10a4 4 0 0 1 4 3.4l.7 4.8a2 2 0 0 1-3.2 1.9l-2.3-2H7.8l-2.3 2a2 2 0 0 1-3.2-1.9l.7-4.8A4 4 0 0 1 7 7Zm1 3v4m-2-2h4m5-.7h.1m2.5 2.1h.1"/>',
  trophy:'<path d="M8 4h8v7a4 4 0 0 1-8 0V4Zm0 2H4v3a4 4 0 0 0 4 4m8-7h4v3a4 4 0 0 1-4 4m-4 2v5m-4 0h8"/>'
 };
 const icon = name=>`<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name]||''}</svg>`;
@@ -705,7 +1009,7 @@ function showHome(){
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h1>Majas<br><em>Wortwerkstatt</em></h1>
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Fuji und Minka und sammle Sterne.</p>
-    <a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a></div>
+    <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a></div></div>
     <div class="hero-art">${intro}</div>
   </section>
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
@@ -1018,6 +1322,7 @@ function render(initial=false){
   const oldRoute=route;
   route=page||'start';
   if(page==='fortschritt')showProgress();
+  else if(page==='spiele')showGames(index);
   else if(page==='quiz'){
     if(index==='ergebnis'&&quiz.length===mixed.length)showResult();
     else if(index&&Number.isInteger(number)&&number===quiz.length+1&&number<=mixed.length)showExercise(null,number,true);
