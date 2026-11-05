@@ -222,6 +222,18 @@ details ol{margin-bottom:0}
  .anna-art{max-width:245px;width:100%;margin-inline:auto}
  .anna-list{grid-template-columns:1fr}
 }
+.anna-scene{display:block;width:100%;height:auto}
+.anna-today{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:center}
+.anna-today>*{min-width:0}
+.anna-today-picture,.anna-story-picture{overflow:hidden;border:1px solid #dedac5;border-radius:14px;background:#f4ebd5}
+.anna-story-picture{margin:0 0 18px}
+.anna-thumb{display:block;width:54px;flex:none;overflow:hidden;border-radius:7px}
+.anna-list-title{flex:1;overflow-wrap:anywhere}
+.anna-list .anna-thumb .anna-scene{width:100%;height:auto}
+@media(max-width:620px){
+ .anna-today{grid-template-columns:1fr;gap:14px}
+ .anna-today-picture{grid-row:1}
+}
 </style>
 </head>
 <body>
@@ -1019,6 +1031,192 @@ function playSentencePuzzle(board){
   draw();
 }
 </script>
+<script>const annaPictures = {
+  'der-kiesel-im-schuh': {
+    colors:['#f4ebd5','#e3cdb0','#d1b295'],
+    alt:'Neben einem orangefarbenen Schuh liegt ein blauer Kiesel mit einem weißen Pfeil.',
+    art:`<path d="M25 92q18 3 28-8l9-25 30 4 13 24q14 12 35 15 16 3 16 15 0 9-14 10H34q-18 0-17-14l1-13q1-6 7-8Z" fill="#d98c5d"/>
+      <path d="M18 113h138m-99-27 21 4m-16-14 23 4m-23-15 27 3" fill="none" stroke="#fff0ce" stroke-width="4"/>
+      <path d="M121 136q5-14 19-18 18-4 27 10 5 10-4 16-16 9-33 2-11-2-9-10Z" fill="#75a8c4"/>
+      <path d="m132 138 21-7m-10-4 10 4-5 8" fill="none" stroke="#fff8e7" stroke-width="2.7"/>`
+  },
+  'die-muetze-im-apfelbaum': {
+    colors:['#edf1d7','#cfdcb1','#b4c79b'],
+    alt:'Eine orangefarbene Mütze hängt auf einem Ast im Apfelbaum.',
+    art:`<path d="M75 147q9-29 15-63L73 59l12-7 21 19 20-21 9 9-18 29-3 59Z" fill="#aa795b"/>
+      <path d="M38 87c-26-10-19-39 1-44-2-23 22-39 41-30 14-15 38-9 48 6 17-5 35 5 38 21 20 7 24 33 5 46-12 8-29 6-39-1-20 15-43 11-54 4-16 11-32 9-40-2Z" fill="#9fc18c"/>
+      <path d="M91 92q33-12 59-30m-43 26-16-17" fill="none"/>
+      <circle cx="53" cy="59" r="8" fill="#dc856b"/><circle cx="147" cy="42" r="8" fill="#dc856b"/>
+      <path d="M102 76q-8-22 8-29 15-6 22 13l4 12-29 10Z" fill="#e49a69"/>
+      <path d="m101 77 35-12 4 10-35 12Z" fill="#f5c68c"/><circle cx="108" cy="47" r="5.5" fill="#f1b384"/>`
+  },
+  'die-pfuetze-mit-dem-himmel': {
+    colors:['#eaf1ee','#d1e3e2','#b8d8dc'],
+    alt:'Eine weiße Wolke spiegelt sich in einer blauen Pfütze. Ein Tropfen zieht Ringe.',
+    art:`<path d="M18 119q-6-13 33-23 24-6 41-2 32 0 46-10 28-15 49 0 9 7-1 20 26 20-9 36-24 11-67 7-31 7-67-1-34-7-25-27Z" fill="#8bbaca"/>
+      <path d="M75 124q-13 4-21-5 2-8 14-8 2-13 17-12 12-2 18 8 13-2 17 6 1 9-15 9Z" fill="#e7f4ef" stroke="#e7f4ef"/>
+      <path d="M140 64c0 0-6 8-6 12a6 6 0 0 0 12 0c0-4-6-12-6-12Z" fill="#6a9fb5"/>
+      <ellipse cx="140" cy="103" rx="14" ry="5" fill="none" stroke="#d7efed"/>
+      <ellipse cx="140" cy="103" rx="25" ry="10" fill="none" stroke="#d7efed"/>
+      <path d="M40 130q16 5 29 5m57 4q29-3 41-11" fill="none" stroke="#d7efed"/>`
+  },
+  'das-lesezeichen-im-buch': {
+    colors:['#f1e9da','#e5ceb4','#d8b492'],
+    alt:'In einem offenen Buch stecken ein Papierfisch und ein kleiner Papierregenschirm.',
+    art:`<path d="M19 83q40-17 78 7 39-23 80-7l5 52q-46-8-85 11-43-19-82-12Z" fill="#85a892"/>
+      <path d="M24 76q37-14 73 10 36-24 75-10l6 50q-43-8-81 12-35-20-79-11Z" fill="#fff3d6"/>
+      <path d="M97 86v52m-59-47q22-3 45 9m-48 2q25-2 47 8m29-11q23-13 47-10m-47 21q22-9 43-8" fill="none" stroke="#b2a58a"/>
+      <path d="M42 51q12-13 25-5l13-7v20l-13-6q-16 7-25-2Z" fill="#87b6c9"/><circle cx="51" cy="49" r="1.3" fill="#36554e"/>
+      <path d="M111 60q15-24 38 0Z" fill="#e59874"/>
+      <path d="M130 59v17q0 8 6 5" fill="none"/>`
+  },
+  'das-fahrrad-das-klingelte': {
+    colors:['#e9efdb','#d3e0c0','#aec7a5'],
+    alt:'Ein Schlüsselbund baumelt aus einem Fahrradkorb neben der Klingel.',
+    art:`<path d="M108 150c-25-6-34-34-15-54 13-13 36-11 48 2 14 16 10 41-6 50" fill="none" stroke-width="5"/>
+      <path d="m116 127-18-57 37-10 10 7m-47 3-15 53-34 1-19-35" fill="none" stroke="#669f95" stroke-width="5"/>
+      <path d="M124 58q1-13 12-13 10 1 12 13Z" fill="#eab97d"/>
+      <path d="M25 54h57l-5 34H31Z" fill="#dca779"/>
+      <path d="M41 57v28m13-28v28m13-28v28M29 67h51m-50 11h48" fill="none" stroke="#f8e4bf"/>
+      <path d="M84 56q10 7 4 15m2 1 14 9-4 7-9-5-5 1-4-6 3-7Z" fill="#f4d183"/>
+      <path d="m153 52 8-5m-7 11 10 1m-16-13 3-8" fill="none" stroke="#bc8050"/>`
+  },
+  'der-schatten-an-der-wand': {
+    colors:['#e6e7ef','#d8d3e4','#c8c2d6'],
+    alt:'Eine Leselampe beleuchtet eine Socke. An der Wand sieht ihr Schatten wie eine Maus aus.',
+    art:`<path d="M36 61 175 20l19 111-143-34Z" fill="#f7e2a8" stroke="none"/>
+      <path d="M21 99q-2-29 21-39l12 29Z" fill="#dfa477"/>
+      <path d="M26 95q-17 20-13 35m-6 6h38" fill="none" stroke-width="4"/>
+      <path d="M132 71q10-15 27-8 10 4 11 12 12 5 19 3-11 14-31 14-23 0-26-21Z" fill="#7f708f"/>
+      <path d="M145 65q-12-13 1-16 10 1 6 15m5 0q-3-13 6-12 8 3 1 14m-25 17q-15 6-14-4" fill="#7f708f"/>
+      <path d="M76 136q-13-13 1-21l6-12 14 7-4 15 16 2q9 7-4 11Z" fill="#9ab5cc"/>`
+  },
+  'der-falsche-kuchen': {
+    colors:['#f5ebd8','#ead5b8','#dec2a0'],
+    alt:'Ein Stück Apfelkuchen liegt vor zwei Vorratsdosen und einem Rührlöffel.',
+    art:`<rect x="33" y="50" width="39" height="67" rx="8" fill="#a4baa4"/>
+      <rect x="31" y="48" width="43" height="12" rx="3" fill="#709484"/>
+      <rect x="40" y="72" width="25" height="19" rx="3" fill="#f4efd4"/><path d="M47 82h11" fill="none"/>
+      <rect x="82" y="46" width="39" height="69" rx="8" fill="#dab28a"/>
+      <rect x="80" y="43" width="43" height="12" rx="3" fill="#b88a6c"/>
+      <path d="M91 75h21v18H91Z" fill="#f4efd4"/><path d="M97 82h9" fill="none"/>
+      <ellipse cx="118" cy="132" rx="74" ry="16" fill="#f2e6d0"/>
+      <path d="M73 124 146 92l21 25v14H73Z" fill="#d99f62"/>
+      <path d="m73 124 73-32 21 25Z" fill="#eabb7e"/>
+      <path d="M94 119q8-9 17-7m9-6q6-7 14-4m-15 23q13-10 25-8" fill="none" stroke="#fff2cd"/>
+      <path d="M128 55l34 12q17 6 16 12-2 7-16 4l-39-17Z" fill="#d0a17f"/>`
+  },
+  'rettung-fuer-eine-schnecke': {
+    colors:['#edf1d9','#d9e7c5','#bcd7a2'],
+    alt:'Eine Schnecke mit braunem Spiralhaus sitzt auf einem grünen Blatt.',
+    art:`<path d="M19 122q30-37 70-31 49 6 85-19-9 41-36 56-59 28-119-6Z" fill="#a5c47d"/>
+      <path d="M24 128q62-17 139-44m-75 25-17-12m41 6 18 13m7-24-12-9" fill="none" stroke="#679260"/>
+      <path d="M56 109q8-11 29-9l34-7 12-14q14-4 18 8 4 13-14 17-28 5-44 13-20 5-35-8Z" fill="#dbc290"/>
+      <path d="M103 103q-24 3-28-18-4-19 13-27 18-7 29 8 15 22-14 37Z" fill="#ce8e63"/>
+      <path d="M101 91q-15 5-18-9-2-13 10-14 10-1 12 8 1 6-7 7" fill="none"/>
+      <path d="m132 84-3-15m13 13 5-14" fill="none"/>
+      <circle cx="129" cy="68" r="2.8" fill="#3c5650"/><circle cx="147" cy="67" r="2.8" fill="#3c5650"/>`
+  },
+  'ein-brief-ohne-namen': {
+    colors:['#f4edd9','#e5d5b4','#d8c297'],
+    alt:'Auf einem hellen Briefumschlag ist eine große gelbe Sonne gemalt.',
+    art:`<path d="M37 67 103 31l64 36v68H37Z" fill="#d6aa79"/>
+      <path d="M59 55q41-7 88 0l-1 57H61Z" fill="#fff6db"/>
+      <path d="M77 66h52m-50 9h39" fill="none" stroke="#c0ae8f"/>
+      <path d="m37 67 66 39 64-39v68H37Z" fill="#f0ce9a"/>
+      <path d="m37 134 49-38m81 38-48-38" fill="none" stroke="#c69566"/>
+      <circle cx="104" cy="111" r="10" fill="#e8a747"/>
+      <path d="M104 95v-4m0 40v-4m-16-16h-5m42 0h-5m-28-12-4-4m28 28 4 4m-28-4-4 4m28-28 4-4" fill="none" stroke="#c68847" stroke-width="2"/>`
+  },
+  'das-fernrohr-aus-pappe': {
+    colors:['#eaf1df','#cddfc4','#b6cdb4'],
+    alt:'Zwei Papprollen bilden Annas Fernrohr. Ein kleiner Vogel sitzt auf einem Zweig.',
+    art:`<path d="M101 69q40-13 82-40m-25 15 10-18m-20 25 21 1" fill="none" stroke="#8a7359" stroke-width="5"/>
+      <path d="M135 46q0-13 10-19 14-6 22 7-2 16-22 18Z" fill="#829fb1"/>
+      <path d="m165 34 9 2-8 5m-20 6-1 8m7-8 2 6" fill="none"/>
+      <circle cx="158" cy="34" r="1.5" fill="#3c5650"/>
+      <path d="M28 101 85 74q14-4 23 11 9 16 2 28L52 142Z" fill="#d2a474"/>
+      <path d="m57 98 47-32q13-6 23 8 9 13 4 24l-52 38Z" fill="#e4bd8f"/>
+      <ellipse cx="45" cy="121" rx="17" ry="23" transform="rotate(-29 45 121)" fill="#a37455"/>
+      <ellipse cx="75" cy="117" rx="17" ry="22" transform="rotate(-29 75 117)" fill="#ab7d5d"/>
+      <path d="M38 111q6-5 13 5m17-10q6-4 13 5" fill="none" stroke="#e0b48a"/>
+      <path d="m83 92 15 25m-7-32 15 25" fill="none" stroke="#67978d" stroke-width="3.5"/>`
+  },
+  'die-geheime-trommel': {
+    colors:['#e6efef','#cedfe3','#b6ccd1'],
+    alt:'Regentropfen fallen in einen leeren Blumentopf. Ein Holzlöffel liegt daneben.',
+    art:`<path d="M30 39h121v17H30Z" fill="#a3b2bc"/>
+      <path d="M109 57q7 12 0 18m-1 3v7m4 4v7m-2 5v6" fill="none" stroke="#598da5" stroke-width="3.4"/>
+      <path d="m64 110 10 34h66l13-34Z" fill="#d99a77"/>
+      <ellipse cx="109" cy="110" rx="45" ry="10" fill="#a76e5d"/>
+      <ellipse cx="109" cy="110" rx="18" ry="3" fill="none" stroke="#d8e8e3"/>
+      <path d="M90 120v16m38-17v16" stroke="#f1c6a4" fill="none"/>
+      <path d="M24 124q-10-9-1-15 8-5 18 5l36 25-4 6-39-18q-7 0-10-3Z" fill="#d4a47d"/>
+      <path d="m147 89 9-8m-2 15 12-2m-3 10 9 4" fill="none" stroke="#6e97a0"/>`
+  },
+  'der-koffer-mit-dem-loch': {
+    colors:['#f2e8db','#e0cdb6','#d7b798'],
+    alt:'Neben einem offenen Koffer liegt Annas Stoffhase.',
+    art:`<path d="M23 92q-6-7 1-14l79-35q11-4 17 6l19 37-113 35Z" fill="#b07e62"/>
+      <path d="M32 90 106 56l19 33-86 23Z" fill="#f1d5aa"/>
+      <path d="M21 103h117v37H23q-8-13-2-37Z" fill="#d59e75"/>
+      <path d="M22 112h116m-77 18h33m-32 0v8m31-8v8" fill="none"/>
+      <rect x="48" y="106" width="13" height="12" rx="2" fill="#f2d38c"/>
+      <rect x="100" y="106" width="13" height="12" rx="2" fill="#f2d38c"/>
+      <path d="M148 119q-14-9-7-21 5-8 13-8-8-21-1-26 6-4 12 15 2-22 9-19 7 3 0 26 13 5 13 15 0 13-16 16-4 14-17 13-6-4-6-11Z" fill="#ece1ca"/>
+      <path d="M156 101h.1m15-2h.1" stroke-width="3.3"/>`
+  },
+  'das-fenster-voller-sterne': {
+    colors:['#e4e8ef','#ced6e5','#b5c4d8'],
+    alt:'Zwei Papiersterne hängen vor einem dunklen Fenster. Einer hat nur vier Zacken.',
+    art:`<rect x="40" y="24" width="123" height="117" rx="6" fill="#e8ce9d"/>
+      <path d="M50 34h103v97H50Z" fill="#668596"/>
+      <path d="M102 34v97M50 83h103" fill="none" stroke="#e8ce9d" stroke-width="5"/>
+      <path d="M140 52a15 15 0 1 1-17-12q-1 12 17 12Z" fill="#f6dfa6" stroke="none"/>
+      <path d="m77 52 5 12 12 4-12 4-5 12-4-12-13-4 13-4Z" fill="#f8df9f"/>
+      <path d="m125 89 4 8 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1Z" fill="#e8aa7b"/>
+      <path d="M48 141h106m-76-23q-3 7-10 7m77-10q-1 6-6 9" fill="none" stroke="#f0e5d2"/>`
+  },
+  'die-letzte-kastanie': {
+    colors:['#f2e8d7','#e5d2b7','#d8ba96'],
+    alt:'Ein kleiner Kastanienhund hat einen glänzenden braunen Kopf und Beine aus Holz.',
+    art:`<path d="M39 133h131" fill="none" stroke="#a48264"/>
+      <path d="m64 107-8 23m20-20-4 21m44-25 4 24m8-26 11 23m-85-27-14-15m91 12 17-20" fill="none" stroke="#a77c52" stroke-width="5"/>
+      <path d="M53 95q4-18 36-20 29-2 42 12 12 16-14 28-34 12-57-1-12-6-7-19Z" fill="#a76648"/>
+      <path d="M139 60q9-17 28-11 20 7 18 22-3 17-22 19-18 2-25-10-6-9 1-20Z" fill="#a65c43"/>
+      <path d="M152 52q-11 10-12 22l-10-3q-3-17 11-23Z" fill="#744c41"/>
+      <path d="M155 59q6-6 14-4m-105 39q11-9 25-7" fill="none" stroke="#edb38b" stroke-width="3.1"/>
+      <path d="M172 66h.1m11 7h.1" stroke-width="4.1"/>`
+  }
+};
+
+const annaCameo = `<g stroke="#455a50" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M45 108Q23 87 29 59q5-33 36-41 31-9 51 12 15 16 11 47-2 22-18 32Z" fill="#e8bc62"/>
+  <path d="M36 55q9-25 36-33m18 0q23 5 29 24" fill="none" stroke="#f9dd88" stroke-width="3"/>
+  <path d="M56 108q-19 3-31 22-8 13-10 33 27 11 66 10 36-1 64-14-5-22-19-38-10-10-32-13Z" fill="#719681"/>
+  <path d="M56 120q15 17 39 3m-63 19-3 14m94-15 4 14" fill="none" stroke="#d8e8c9" stroke-width="2.2"/>
+  <path d="M65 96v16q13 12 24 0V96Z" fill="#e5a67f"/>
+  <path d="M40 59q22-1 36-19 15 21 37 23l-2 15q-4 31-34 31-30 0-35-29Z" fill="#f0b993"/>
+  <path d="M55 70h.1m43 0h.1" stroke-width="4.4"/>
+  <path d="M75 82q3-4 7-1m-10 11q6 4 13-1" fill="none" stroke="#9d654e" stroke-width="1.6"/>
+  <path d="M50 81h.1m5 2h.1m5-3h.1m35 0h.1m5 3h.1m5-2h.1" stroke="#a76c50" stroke-width="1.9"/>
+</g>`;
+
+function annaScene(story, compact=false){
+  const {colors:[sky,ground,shadow],alt,art}=annaPictures[story.id];
+  const scenery=`<path fill="${ground}" d="M0 142q68-32 158-12 76 22 158-2 65-20 204 5v77H0Z"/><path fill="${shadow}" d="M0 176q84-28 170-8 77 19 152-3 80-24 198 3v42H0Z" opacity=".5"/>
+    <circle cx="91" cy="60" r="34" fill="#fff6d9" opacity=".64"/>
+    <path d="M183 52h16m-8-8v16m250-23h14m-7-7v14m-28 127h14m-7-7v14" fill="none" stroke="#fff9e5" stroke-width="2.5" stroke-linecap="round"/>`;
+  const viewBox=compact?'237 5 225 195':'0 0 520 210';
+  const role=compact?'aria-hidden="true"':`role="img" aria-label="${alt}"`;
+  return `<svg class="anna-scene" xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" ${role}>
+    <rect width="520" height="210" fill="${sky}"/>${scenery}
+    ${compact?'':`<g transform="translate(65 28) scale(.91)">${annaCameo}</g>`}
+    <ellipse cx="352" cy="167" rx="101" ry="16" fill="${shadow}" opacity=".62"/>
+    <g transform="translate(237 13) scale(1.15)" stroke="#425751" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">${art}</g>
+  </svg>`;
+}
+</script>
 <script>const annaStories = [
   {
     id:'der-kiesel-im-schuh',
@@ -1217,13 +1415,14 @@ function showAnna(id){
         <div class="anna-art">${annaArt()}</div>
       </div>
       <section class="panel anna-today" aria-labelledby="anna-today-title">
-        <p class="kicker">${icon('star')} Geschichte des Tages · ${annaDayFormatter.format(now)}</p>
+        <div><p class="kicker">${icon('star')} Geschichte des Tages · ${annaDayFormatter.format(now)}</p>
         <h2 id="anna-today-title">${today.title}</h2><p>${today.paragraphs[0]}</p>
-        <a class="primary" href="${annaLink(today)}">Geschichte lesen ${icon('arrow')}</a>
+        <a class="primary" href="${annaLink(today)}">Geschichte lesen ${icon('arrow')}</a></div>
+        <div class="anna-today-picture">${annaScene(today)}</div>
       </section>
       <section class="panel" aria-labelledby="anna-archive-title"><h2 id="anna-archive-title">Alle ${annaStories.length} Abenteuer</h2>
       <p>Jeden Tag steht eine andere Geschichte oben. Nach ${annaStories.length} Tagen beginnt die Runde von vorn. Hier kannst du jederzeit jede Geschichte lesen.</p>
-      <ol class="anna-list">${annaStories.map(story=>`<li><a href="${annaLink(story)}">${story.title} ${icon('arrow')}</a></li>`).join('')}</ol>
+      <ol class="anna-list">${annaStories.map(story=>`<li><a href="${annaLink(story)}"><span class="anna-thumb">${annaScene(story,true)}</span><span class="anna-list-title">${story.title}</span> ${icon('arrow')}</a></li>`).join('')}</ol>
       </section></div>`;
     return;
   }
@@ -1236,6 +1435,7 @@ function showAnna(id){
     <article class="panel anna-story">
       <p class="kicker">${icon('book')} Annas Abenteuer · ${index+1} von ${annaStories.length}</p>
       <h1 tabindex="-1">${story.title}</h1>
+      <figure class="anna-story-picture">${annaScene(story)}</figure>
       <div class="anna-text">${story.paragraphs.map(paragraph=>`<p>${paragraph}</p>`).join('')}</div>
       <section class="anna-question" aria-labelledby="anna-question-title">
         <h2 id="anna-question-title">Hast du aufgepasst?</h2><p>${story.question}</p>
