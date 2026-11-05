@@ -35,13 +35,13 @@ const MF_LANGUAGE_GAME = (() => {
   function setup(){
     const groups=game.challenge?MF_LANGUAGE_CHALLENGE:[];
     const count=()=>game.challenge?(groups.find(g=>g.id===game.category)?.questions.length||groups.length):ROUND_SIZE;
-    body.innerHTML=`${game.challenge?`<label class="select-label">Was möchtest du spielen?<select id="language-game-category"><option value="">Mix aus allen neun Themen</option>${groups.map(g=>`<option value="${g.id}" ${g.id===game.category?'selected':''}>${escapeHTML(g.title)}</option>`).join('')}</select></label>`:''}
+    body.innerHTML=`${game.challenge?`<label class="select-label">Was möchtest du spielen?<select id="language-game-category"><option value="">Mix aus allen neun Themen</option><option value="bilder" ${game.category==='bilder'?'selected':''}>Bildrunde aus allen neun Themen</option>${groups.map(g=>`<option value="${g.id}" ${g.id===game.category?'selected':''}>${escapeHTML(g.title)}</option>`).join('')}</select></label>`:''}
       <p id="language-game-rules"></p>
       <label class="language-game-clock-option"><input id="language-game-clock" type="checkbox" ${game.timed?'checked':''}> Mit Timer spielen · ${SECONDS} Sekunden pro Frage</label>
       <button type="button" class="primary" id="language-game-start">Runde starten</button>`;
     const rules=()=>{
       const group=groups.find(g=>g.id===game.category);
-      if(game.challenge)title.textContent=group?`Erzähl-Challenge · ${group.title}`:'Erzähl-Challenge';
+      if(game.challenge)title.textContent=group?`Erzähl-Challenge · ${group.title}`:game.category==='bilder'?'Erzähl-Challenge · Bildrunde':'Erzähl-Challenge';
       body.querySelector('#language-game-rules').textContent=`Spiele ${count()} Fragen.${game.challenge&&!group?' Jedes Thema kommt einmal vor.':''} Jede richtige Antwort bringt einen Punkt. Nach jeder Frage siehst du die Lösung mit Erklärung.`;
     };
     const picker=body.querySelector('#language-game-category');
@@ -52,7 +52,10 @@ const MF_LANGUAGE_GAME = (() => {
       game.timed=body.querySelector('#language-game-clock').checked;
       if(game.challenge){
         const group=groups.find(g=>g.id===game.category);
-        game.items=shuffle(group?group.questions:groups.map(g=>g.questions[Math.floor(Math.random()*g.questions.length)]));
+        game.items=shuffle(group?group.questions:groups.map(g=>{
+          const pool=game.category==='bilder'?g.questions.filter(q=>q.image):g.questions;
+          return pool[Math.floor(Math.random()*pool.length)];
+        }));
       }else{
         const recognize=shuffle(game.pool.filter(q=>q.level==='erkennen')).slice(0,ROUND_SIZE/2);
         const used=new Set(recognize.map(q=>q.title));
@@ -67,6 +70,22 @@ const MF_LANGUAGE_GAME = (() => {
     start.focus({preventScroll:true});
   }
 
+  function picture(q){
+    if(!q.image)return '';
+    const [file,description]=q.image;
+    return `<figure class="language-game-picture"><div class="language-game-image-view"><img src="assets/${escapeHTML(file)}" alt="${escapeHTML(description)}"></div><figcaption><button type="button" class="secondary" data-game-zoom aria-pressed="false">Bild vergrößern</button></figcaption></figure>`;
+  }
+
+  body.addEventListener('click',e=>{
+    const button=e.target.closest('[data-game-zoom]');
+    if(!button)return;
+    const view=button.closest('figure').querySelector('.language-game-image-view');
+    const enlarged=view.classList.toggle('game-picture-large');
+    button.setAttribute('aria-pressed',String(enlarged));
+    button.textContent=enlarged?'Ganzes Bild zeigen':'Bild vergrößern';
+    if(!enlarged){view.scrollLeft=0;view.scrollTop=0;}
+  });
+
   function question(){
     stopTimer();
     const q=game.items[game.index];
@@ -76,7 +95,7 @@ const MF_LANGUAGE_GAME = (() => {
       <progress aria-label="Bearbeitete Fragen" value="${game.index}" max="${game.items.length}"></progress>
       ${category?`<p class="eyebrow" id="language-game-question-category">${escapeHTML(category)}</p>`:''}
       <h3 id="language-game-question" tabindex="-1">${escapeHTML(q.title)}</h3>
-      <p class="language-game-text">${escapeHTML(q.text)}</p>
+      <p class="language-game-text">${escapeHTML(q.text)}</p>${picture(q)}
       <div class="language-game-choices" role="group" aria-label="Antwortmöglichkeiten">${shuffle(q.options.map((_,i)=>i)).map((i,position)=>`<button type="button" data-game-answer="${i}" class="language-game-card" data-game-color="${position}"><span aria-hidden="true">${'ABCD'[position]}</span>${escapeHTML(q.options[i])}</button>`).join('')}</div>
       <div id="language-game-feedback" role="status" tabindex="-1"></div>
       <button type="button" class="primary" id="language-game-next" hidden>${game.index===game.items.length-1?'Auswertung ansehen':'Nächste Frage'}</button>`;
@@ -133,7 +152,7 @@ const MF_LANGUAGE_GAME = (() => {
       ${game.items.map((q,i)=>{
         const a=game.answers[i];
         return `<details ${a.correct?'':'open'}><summary>${i+1}. ${escapeHTML(q.title)} · ${a.correct?'richtig':a.selected===null?'Zeit abgelaufen':'noch üben'}</summary>
-          <p class="language-game-text">${escapeHTML(q.text)}</p>
+          <p class="language-game-text">${escapeHTML(q.text)}</p>${picture(q)}
           <p><strong>Deine Antwort</strong> ${a.selected===null?'Keine Antwort':escapeHTML(q.options[a.selected])}</p>
           <p><strong>Lösung</strong> ${escapeHTML(q.options[q.answer])}</p><p>${escapeHTML(q.explain)}</p></details>`;
       }).join('')}

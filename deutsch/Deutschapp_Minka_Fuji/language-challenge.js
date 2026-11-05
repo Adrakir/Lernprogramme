@@ -1,5 +1,63 @@
 'use strict';
 
+// Bildnummern beziehen sich auf die sechs Illustrationen des Schuppencomics.
+const CHALLENGE_IMAGES = {
+  1:['scene-1.jpg','Minka und Fuji stehen im Herbstlaub neben dem Holzschuppen.'],
+  2:['scene-2.jpg','Minka steht mit den Vorderpfoten an der Holztür, Fuji blickt neben ihr zur Tür.'],
+  3:['scene-3.jpg','Minka liegt flach vor der Tür, Fuji steht dicht dahinter. Blätter wirbeln um beide herum.'],
+  4:['scene-4.jpg','Die Schuppentür steht einen Spalt offen. Minka und Fuji schauen hinein.'],
+  5:['scene-5.jpg','Fuji hält mit ihrer Pfote den gekippten Blumentopf. Ein Igel kommt darunter hervor, neben ihm ist Minka.'],
+  6:['scene-6.jpg','Minka und Fuji schauen einem Igel nach, der durch das Herbstlaub läuft.'],
+  wal:['whale-integrated.jpg','Der Walrücken steigt vom Kopf zu einem hohen Punkt an und fällt zum Schwanz hin ab.']
+};
+const CHALLENGE_ADDITIONS = {
+  satzanfaenge:[
+    ['Mit dem Ort beginnen','Minka und Fuji stehen am Schuppen. Welcher Satz beginnt mit einer Ortsangabe, die zum Bild passt?',['Neben dem Holzschuppen standen Minka und Fuji.','Kurz nach Sonnenuntergang standen Minka und Fuji nebeneinander.','Neugierig standen Minka und Fuji im Garten.','Minka und Fuji standen neben dem Holzschuppen.'],'„Neben dem Holzschuppen“ steht vorn und sagt, wo beide stehen. In der letzten Antwort ist derselbe Ort genannt, steht aber am Ende.',1],
+    ['Eine Bewegung genauer erzählen','Welcher Anfang zeigt, wie Minka sich bewegte, als sie unter den Türspalt blicken wollte?',['Vorsichtig duckte sich Minka vor der Tür.','Vor der Tür duckte sich Minka.','In diesem Moment duckte sich Minka.','Minka duckte sich vor der Tür.'],'„Vorsichtig“ zeigt die Art der Bewegung. Die anderen Anfänge nennen den Ort, die Zeit oder die Figur.',3],
+    ['Den Anschluss finden','Fuji lauschte. Erst einige Sekunden später klopfte es erneut. Welcher Satzanfang passt?',['Wenig später klopfte es erneut.','Lange vorher klopfte es erneut.','Gleichzeitig klopfte es erneut.','Am Vortag klopfte es erneut.'],'„Wenig später“ ordnet das zweite Klopfen nach dem Lauschen ein. Die anderen Angaben ändern die Reihenfolge oder den Zeitpunkt.']
+  ],
+  rede:[
+    ['Vor der verschlossenen Tür','Minka fragt leise nach dem Geräusch. Welche Schreibweise passt?',['„Hörst du das?“, flüsterte Minka.','„Hörst du das?“ flüsterte Minka.','„Hörst du das“, flüsterte Minka?','„Hörst du das?“, Flüsterte Minka.'],'Das Fragezeichen gehört in die Rede. Hinter dem Anführungszeichen folgt ein Komma und danach der kleingeschriebene Begleitsatz.',2],
+    ['Die Rettung im Dialog','Fuji will Minka im entscheidenden Moment warnen. Welcher Satz mit Begleitsatz davor ist richtig?',['Fuji rief: „Der Topf rutscht!“','Fuji rief, „Der Topf rutscht!“','Fuji rief: „Der Topf rutscht“!','Fuji rief „Der Topf rutscht!“'],'Nach „Fuji rief“ kommt ein Doppelpunkt. Das Ausrufezeichen gehört in die wörtliche Rede.',5],
+    ['Aussage mit Einschub','Wie setzt du den Begleitsatz in die Aussage „Der Schlüssel liegt im Laub.“ ein?',['„Der Schlüssel“, erklärte Mia, „liegt im Laub.“','„Der Schlüssel“, erklärte Mia „liegt im Laub.“','„Der Schlüssel“ erklärte Mia, „liegt im Laub.“','„Der Schlüssel“, erklärte Mia, „Liegt im Laub.“'],'Vor und nach dem eingeschobenen Begleitsatz steht ein Komma. „liegt“ beginnt klein, weil dieselbe Aussage fortgesetzt wird.']
+  ],
+  redewendungen:[
+    ['Spannung vor der Tür','Minka kann noch nicht erkennen, was hinter der Tür ist. Welche Redewendung passt zu ihrer Anspannung?',['Minka hielt den Atem an.','Minka nahm die Beine in die Hand und lief davon.','Minka war aus dem Schneider, weil alles geklärt war.','Minka sprang vor Freude an die Decke.'],'„Den Atem anhalten“ passt zum angespannten Warten. Auf dem Bild bleibt Minka dicht an der Tür, und das Rätsel ist noch offen.',2],
+    ['Der Igel ist sicher','Der befreite Igel läuft davon. Welche Redewendung drückt aus, dass Fuji sich keine Sorgen mehr macht?',['Fuji fiel ein Stein vom Herzen.','Fuji machte sich einen Kopf.','Fuji wurde mulmig zumute.','Fuji bekam kalte Füße.'],'Der „Stein“ steht für die Sorge, die nach dem guten Ausgang von Fuji abfällt. Die anderen Wendungen passen eher zu Unsicherheit.',6],
+    ['Mit einem blauen Auge davonkommen','Mia stolperte, fing sich aber ab und blieb unverletzt. „Da bin ich mit einem blauen Auge davongekommen“, sagte sie. Was meint sie?',['Es hätte schlimmer ausgehen können.','Sie hatte sich tatsächlich am Auge verletzt.','Sie wollte den Sturz sofort nachmachen.','Sie wusste nicht mehr, wohin sie gehen wollte.'],'Die Redewendung bedeutet, glimpflich davonzukommen. Mia blieb hier unverletzt, obwohl das Stolpern schlimme Folgen hätte haben können.']
+  ],
+  gefuehle:[
+    ['Unsicherheit zeigen','Minka möchte unter der Tür hindurchsehen und ist unsicher. Welcher Satz zeigt das durch ihr Verhalten?',['Minka duckte sich und zog die Pfote gleich wieder zurück.','Minka war unsicher.','Minka sah ein braunes Brett.','Minka wusste, wo der Schuppen stand.'],'Ducken und Zurückziehen zeigen das Zögern. Der zweite Satz benennt die Unsicherheit lediglich.',3],
+    ['Erleichtert zuschauen','Der Igel läuft unverletzt ins Laub. Welche Fortsetzung zeigt Fujis Erleichterung?',['Fuji ließ die Schultern sinken und atmete tief aus.','Fuji spannte alle Muskeln an und wich zurück.','Fuji rannte wütend gegen die Tür.','Fuji zitterte und suchte den Igel weiter.'],'Das Ausatmen und die gelöste Haltung passen zum Ende der Anspannung, nachdem der Igel sicher ist.',6],
+    ['Ein Gefühl mit Handlung zeigen','Sami entdeckt seinen verloren geglaubten Ball. Welche Formulierung zeigt seine Freude durch eine Handlung?',['Sami hob den Ball hoch, lachte und winkte Mia zu.','Sami war froh über den Ball.','Der Ball war blau mit weißen Streifen.','Sami hatte gestern einen Ball gesucht.'],'Das Lachen und Winken machen Samis Freude sichtbar. Ein Gefühlswort wie „froh“ nennt sie, ohne sein Verhalten zu zeigen.']
+  ],
+  spannung:[
+    ['Was liegt im Dunkeln?','Welche Fortsetzung macht den Blick in den Schuppen spannend?',['Im Dunkeln schabte etwas über den Boden. Minka konnte noch nicht erkennen, was es war.','Die Gießkanne war grün und stand an ihrem üblichen Platz.','Minka erklärte sofort, dass der Igel unter dem Topf saß.','Minka erinnerte sich daran, wie sie gestern im Garten gesessen hatte.'],'Das Geräusch ist konkret, seine Ursache bleibt unklar. So haben die Leser eine Frage, die sie zum Weiterlesen bringt.',4],
+    ['Ein Augenblick wird länger','Wie lässt sich der entscheidende Moment des Bildes spannend erzählen?',['Der Topf glitt ein Stück. Fuji drückte die Pfote fester auf den Rand. Würde der Igel es rechtzeitig schaffen?','Die Rettung gelang. Es war sehr spannend.','Der Topf hatte eine rote Farbe und war aus Ton.','Am nächsten Morgen war der Garten leer.'],'Kleine Handlungen machen das Geschehen nachvollziehbar. Die Frage hält den Ausgang bis zum nächsten Moment offen.',5],
+    ['Zeitdruck aufbauen','Welche Fortsetzung steigert die Spannung, während Lina nach ihrem Zettel sucht?',['Der Wind schob den Zettel immer näher an den Gully. Lina musste ihn vorher erreichen.','Der Zettel war aus weißem Papier und viermal gefaltet.','Lina hatte den Zettel am Morgen in ihre Tasche gesteckt.','Am Abend lag der Zettel wieder auf dem Schreibtisch.'],'Der näher rückende Gully schafft Zeitdruck und einen drohenden Verlust. Dadurch wird der nächste Handlungsschritt wichtig.']
+  ],
+  gegensaetze:[
+    ['Draußen und drinnen','Welches Gegensatzpaar passt zum Unterschied zwischen der beleuchteten Türschwelle und dem Inneren des Schuppens?',['hell und dunkel','hoch und tief','laut und leise','nah und fern'],'„Hell“ und „dunkel“ beschreiben den sichtbaren Lichtunterschied zwischen Türschwelle und Schuppeninnerem.',4],
+    ['Vor und nach der Rettung','Welche Fassung stellt die beiden Zustände des Igels einander gegenüber?',['Erst saß der Igel fest, dann war er frei.','Erst war der Igel klein, dann war er winzig.','Erst lag dort Laub, dann lag dort ein Blatt.','Erst war das Laub trocken, dann war es knisternd.'],'„Fest sitzen“ und „frei sein“ zeigen den Gegensatz zwischen der Gefahr vorher und dem Zustand im Schlussbild.',6],
+    ['Ein Gegensatz beim Tempo','Welcher Satz macht einen Wechsel vom langsamen Gehen zum schnellen Laufen deutlich?',['Zuerst schlenderte Fuji, dann rannte sie.','Zuerst rannte Fuji, dann sprintete sie.','Zuerst ging Fuji geradeaus, dann bog sie ab.','Zuerst ging Fuji leise, dann stapfte sie laut.'],'„Schlenderte“ und „rannte“ stellen langsam und schnell gegenüber. Die letzte Antwort betont vor allem die Lautstärke.']
+  ],
+  hoehepunkt:[
+    ['Die entscheidende Handlung','Was macht dieses Bild zum Höhepunkt der Igelgeschichte?',['Fuji hält den Topf, während sich entscheidet, ob der Igel herauskommt.','Die Figuren lernen sich kennen und gehen zum Schuppen.','Das Klopfen fällt Minka zum ersten Mal auf.','Die beiden sind schon auf dem Heimweg.'],'Das Bild zeigt die Rettung in dem Moment, in dem ihr Erfolg noch auf dem Spiel steht. Darin liegt der Höhepunkt.',5],
+    ['Den Höhepunkt am Wal zeigen','Wo wäre im Bild der entscheidende Moment der Geschichte eingezeichnet?',['Oben am höchsten Punkt des Rückens.','Links an der Maulspitze.','Rechts am Ende des Schwanzes.','Unten an der Bauchflosse.'],'Der ansteigende Rücken steht für wachsende Spannung. An seiner höchsten Stelle entscheidet sich, wie das Abenteuer ausgeht.', 'wal'],
+    ['Das Papierboot','Samis Papierboot treibt auf ein Gitter zu. Welcher Moment ist der Höhepunkt?',['Sami streckt sich über das Ufer und erwischt das Boot kurz vor dem Gitter.','Sami faltet das Boot am Küchentisch.','Sami setzt das Boot zum ersten Mal ins Wasser.','Sami zeigt das nasse Boot zu Hause.'],'Der Griff entscheidet, ob das Boot gerettet wird. Falten und Start führen zum Problem hin, die Heimkehr folgt danach.']
+  ],
+  schlingen:[
+    ['Ein Rätsel an der Tür','Welche Zeile legt zu diesem Bild eine Schlinge, ohne das Rätsel sofort zu lösen?',['Hinter der Tür kratzte es dreimal. Minka legte den Kopf schief.','Hinter der Tür kratzte der Igel, der unter dem Topf festsaß.','Minka war am Ende erleichtert und ging heim.','Die Tür war aus Holz und hatte einen Rahmen.'],'Das hörbare Kratzen macht neugierig. Die Ursache bleibt offen, sodass sie später aufgegriffen werden kann.',2],
+    ['Das Rätsel wird aufgelöst','Am Anfang war ein Scharren im Schuppen zu hören. Welcher Satz erklärt mit diesem Bild, woher es kam?',['Der Igel hatte unter dem Topf mit seinen Krallen über den Boden gescharrt.','Der Topf war orange und aus Ton.','Minka hatte ihren Ball am Zaun gesucht.','Im Garten lagen viele trockene Blätter.'],'Der Igel unter dem Topf erklärt das frühere Geräusch. Die Schlinge wird durch einen konkreten Zusammenhang aufgelöst.',5],
+    ['Spur und Auflösung verbinden','Am Anfang entdeckt Mia neben der Kiste feuchte Fußspuren. Welche spätere Stelle greift diesen Hinweis auf?',['Die Spur führte zum Gartentor. Dort sah Mia, wie Sami mit nassen Schuhen vom See zurückkam.','Mia entdeckte im Bücherregal einen bunten Umschlag.','Mia dachte an ein Gedicht, das sie auswendig konnte.','Mia fand eine trockene Feder in der Jacke.'],'Die nassen Schuhe und der Weg vom See erklären die feuchten Fußspuren. Die Lösung knüpft unmittelbar an den Hinweis an.']
+  ],
+  'erster-satz':[
+    ['Die Figuren vorstellen','Welcher erste Satz eröffnet eine Erzählung zu diesem Bild und nennt Figuren, Ort und Zeit?',['An einem Herbstabend standen Minka und Fuji vor dem Holzschuppen im Garten.','Vor dem Schuppen war es.','Jetzt war der Igel endlich frei.','Sie hatten alles schon verstanden.'],'Der Satz nennt beide Figuren, die Herbstzeit und den Schuppen im Garten. So können sich die Leser die Ausgangsszene vorstellen.',1],
+    ['Mit einer klaren Ausgangslage starten','Eine neue Erzählung beginnt an dieser halboffenen Tür. Welcher erste Satz führt in die Handlung ein?',['Am Abend blieben Minka und Fuji vor der offenen Schuppentür stehen.','Danach verschwanden sie zufrieden im Laub.','Der Igel war unter dem Topf gewesen, deshalb hatte es gekratzt.','Sie wussten es dort sofort.'],'Der Einstieg benennt die Figuren, den Ort und ihre erste Handlung. Die Auflösung bleibt für später offen.',4],
+    ['Den Zweck nennen','Lina geht nach Schulschluss in die Bibliothek, um ein Buch zurückzugeben. Welcher Satz passt als Einstieg?',['Nach Schulschluss ging Lina in die Bibliothek, um ein ausgeliehenes Buch zurückzugeben.','Endlich stellte Lina das gefundene Buch wieder ins Regal.','Dort war sie, und es war sehr aufregend.','Lina würde das Buch in der nächsten Woche zurückbringen.'],'Zeit, Figur, Ort und Ziel stimmen mit dem Schreibanlass überein. Der Satz eröffnet die Handlung, ohne die weitere Geschichte zu verraten.']
+  ]
+};
+
 // Die richtige Lösung steht im Datensatz zuerst. Das Spiel mischt die Antwortkarten.
 const MF_LANGUAGE_CHALLENGE = [
   ['satzanfaenge','Abwechslungsreiche Satzanfänge',[
@@ -156,5 +214,5 @@ const MF_LANGUAGE_CHALLENGE = [
       'Der Zweck „um ihre Trinkflasche zu holen“ zeigt, warum Lina zur Bank geht. Die Handlung hat einen klaren Anfang, ohne ein späteres Rätsel vorwegzunehmen.']
   ]]
 ].map(([id,title,rows])=>({
-  id,title,questions:rows.map(([title,text,options,explain])=>({title,text,options,explain,answer:0,category:id}))
+  id,title,questions:[...rows,...CHALLENGE_ADDITIONS[id]].map(([title,text,options,explain,scene])=>({title,text,options,explain,answer:0,category:id,image:CHALLENGE_IMAGES[scene]}))
 }));

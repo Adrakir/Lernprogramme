@@ -67,3 +67,9 @@
 #language-game-feedback{margin:16px 0;padding:12px;border-left:4px solid var(--blue);background:var(--panel2);overflow-wrap:anywhere}
 #language-game-again{margin-top:16px}
 @media(max-width:520px){.language-game-choices{grid-template-columns:1fr}}
+
+.language-game-picture{margin:12px 0}
+.language-game-image-view{max-height:360px;overflow:auto;border-radius:10px;background:var(--bg)}
+.language-game-image-view img{display:block;max-width:100%;max-height:230px;margin:auto;object-fit:contain}
+.language-game-image-view.game-picture-large img{width:max(100%,440px);max-width:none;max-height:none}
+.language-game-picture figcaption{margin-top:6px}

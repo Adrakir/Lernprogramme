@@ -79,7 +79,7 @@ test('Erzähl-Challenge: alle neun Wunschthemen im Mix und als eigene Runden',as
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(app+'#sprache');
   await page.locator('#language-challenge-open').click();
-  assert.deepEqual((await page.locator('#language-game-category option').allTextContents()).slice(1),expected);
+  assert.deepEqual((await page.locator('#language-game-category option').allTextContents()).slice(2),expected);
   await page.locator('#language-game-start').click();
   const labels=[];
   for(let i=0;i<9;i++){
@@ -96,6 +96,27 @@ test('Erzähl-Challenge: alle neun Wunschthemen im Mix und als eigene Runden',as
   assert.match(await page.locator('#language-game-body details[open]').textContent(),/Deine Antwort.*Lösung/s);
   await page.locator('#language-game-again').click();
   assert.equal(await page.locator('#language-game-category').inputValue(),'');
+
+  await page.locator('#language-game-category').selectOption('bilder');
+  await page.locator('#language-game-start').click();
+  const imageTopics=[];
+  for(let i=0;i<9;i++){
+    const image=page.locator('#language-game-body figure img');
+    await image.evaluate(el=>el.decode());
+    assert.ok((await image.getAttribute('alt')).length>30);
+    imageTopics.push(await page.locator('#language-game-question-category').textContent());
+    if(i===0){
+      const original=await image.evaluate(el=>el.clientWidth);
+      await page.locator('[data-game-zoom]').click();
+      assert.ok(await image.evaluate(el=>el.clientWidth)>original);
+      await page.locator('[data-game-zoom]').click();
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),320);
+    }
+    await page.locator('[data-game-answer="0"]').click();
+    await page.locator('#language-game-next').click();
+  }
+  assert.deepEqual(imageTopics.sort(),[...expected].sort());
+  assert.equal(await page.locator('#language-game-result').textContent(),'9 von 9 Punkten');
 
   const outcomes=await page.evaluate(()=>{
     const pick=s=>document.querySelector(s);
@@ -119,13 +140,14 @@ test('Erzähl-Challenge: alle neun Wunschthemen im Mix und als eigene Runden',as
       }
       const score=pick('#language-game-result').textContent;
       pick('#language-game-close').click();
-      return {name:group.title,seen,score};
+      return {name:group.title,seen,score,images:group.questions.filter(q=>q.image).length};
     });
   });
   assert.equal(outcomes.length,9);
   for(const group of outcomes){
-    assert.equal(group.score,'5 von 5 Punkten');
-    assert.equal(new Set(group.seen.map(item=>item[0])).size,5);
+    assert.equal(group.images,2);
+    assert.equal(group.score,'8 von 8 Punkten');
+    assert.equal(new Set(group.seen.map(item=>item[0])).size,8);
     assert.ok(group.seen.every(([,label,options,length,explained])=>label===group.name&&options===4&&length>=60&&explained));
   }
   assert.deepEqual(errors,[]);
