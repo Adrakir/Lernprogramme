@@ -15,6 +15,11 @@
 #language-training .select-label{display:block;max-width:540px;margin:18px 0}
 #language-score{color:var(--muted);margin-bottom:20px}
 #language-gap{display:inline-block;width:auto;max-width:100%;margin:8px;vertical-align:middle;font-family:inherit;font-size:1rem}
+#language-word-answer{display:inline-block;width:10ch;max-width:100%;margin:6px;vertical-align:middle}
+.language-word p{white-space:pre-line}
+.language-verb-table{width:100%;max-width:32rem;border-collapse:collapse;text-align:left}
+.language-verb-table caption{text-align:left;color:var(--muted);margin:12px 0}
+.language-verb-table th,.language-verb-table td{padding:6px;border-bottom:1px solid var(--line)}
 .language-writing>label{display:block;font-weight:700;margin:20px 0 10px}
 .language-punct-row{padding:20px 0;border-top:1px solid var(--line)}
 .language-punct-inputs{display:flex;flex-wrap:wrap;gap:14px}

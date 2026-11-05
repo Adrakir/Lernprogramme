@@ -73,6 +73,7 @@
     return '<div class="studio-landing"><div class="studio-welcome">'+
       '<p class="eyebrow">Dein persönlicher Lernweg · Klasse 5</p><h2>Von der Idee zur spannenden Erzählung</h2>'+
       '<p>Du musst nicht alles auf einmal können. Minka und Fuji begleiten dich Schritt für Schritt. Deine Geschichten können aber auch von Lina, Sami, Mia oder anderen Figuren handeln.</p>'+
+      link('Zum Lernplakat-Training: Präteritum, Satzanfänge und mehr','sprache')+
       '<p class="studio-progress-line"><strong>'+n+' von '+data.pathway.length+' Lernschritten selbst abgehakt</strong></p><progress value="'+n+'" max="'+data.pathway.length+'" aria-label="Selbst abgehakte Lernschritte"></progress>'+
       '<p class="muted">Die Häkchen sind deine eigene Lernweg-Planung, kein Kompetenznachweis.</p>'+nextStep+'</div>'+
       '<div class="studio-choices">'+

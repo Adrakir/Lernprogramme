@@ -4,6 +4,26 @@ const root = document.getElementById('language-lesson');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const choice = (title, text, options, answer, explain, hint) => ({title, text, options, answer, explain, hint});
 const gap = (title, before, after, options, answer, explain, hint) => ({type:'gap', title, before, after, options, answer, explain, hint});
+const word = (title, before, after, answer, explain, hint) => ({type:'word', title, before, after, answer, explain, hint});
+const verbForms = [
+  ['sein', 'bin', 'war', 'Ich ', ' allein im Schuppen.'],
+  ['haben', 'habe', 'hatte', 'Ich ', ' eine Taschenlampe dabei.'],
+  ['gehen', 'gehe', 'ging', 'Ich ', ' zum Fenster.'],
+  ['kommen', 'komme', 'kam', 'Ich ', ' an der Werkbank vorbei.'],
+  ['sehen', 'sehe', 'sah', 'Ich ', ' einen Schatten an der Wand.'],
+  ['sprechen', 'spreche', 'sprach', 'Ich ', ' ganz leise.'],
+  ['laufen', 'laufe', 'lief', 'Ich ', ' zu Fuji zurück.'],
+  ['finden', 'finde', 'fand', 'Ich ', ' eine Spur im Staub.'],
+  ['nehmen', 'nehme', 'nahm', 'Ich ', ' den Zettel vom Boden.'],
+  ['geben', 'gebe', 'gab', 'Ich ', ' Fuji den Zettel.'],
+  ['lesen', 'lese', 'las', 'Ich ', ' die Nachricht zweimal.'],
+  ['schreiben', 'schreibe', 'schrieb', 'Ich ', ' die Zahl auf.'],
+  ['denken', 'denke', 'dachte', 'Ich ', ' an den Schlüssel.'],
+  ['wissen', 'weiß', 'wusste', 'Ich ', ' plötzlich, wohin die Spur führte.'],
+  ['rufen', 'rufe', 'rief', 'Ich ', ' nach Fuji.'],
+  ['schwimmen', 'schwimme', 'schwamm', 'Ich ', ' bis zum Steg.']
+];
+
 const topics = [
   {
     id:'schlingen', title:'Schlingen legen', guide:'Minka',
@@ -105,7 +125,11 @@ const topics = [
       choice('Nach „Vorsichtig“', 'Forme „Fuji öffnete vorsichtig die Tür“ um. Welche Fassung ist richtig?', ['Vorsichtig öffnete Fuji die Tür.','Vorsichtig Fuji öffnete die Tür.','Vorsichtig die Tür Fuji öffnete.'],0,'Nach der vorangestellten Angabe „Vorsichtig“ folgt im Hauptsatz das gebeugte Verb „öffnete“.','Suche die Fassung mit dem Verb direkt nach „Vorsichtig“.'),
       choice('Ein Als-Satz am Anfang', 'Welcher Satz hat das notwendige Komma?', ['Als Minka näher kam Fuji hielt den Topf fest.','Als Minka näher kam, hielt Fuji den Topf fest.','Als, Minka näher kam hielt Fuji den Topf fest.'],1,'Das Komma trennt den vorangestellten Nebensatz „Als Minka näher kam“ vom Hauptsatz. Danach folgt „hielt“.','Wo endet der vollständige Als-Satz?'),
       gap('Den Ablauf erhalten', 'Erst hörte Minka ein Kratzen. ', ' schob Fuji die Tür auf.', ['Am Tag davor','Schon eine Woche vorher','Kurz darauf'],2,'„Kurz darauf“ führt den Ablauf vorwärts. Die anderen Angaben würden einen Rücksprung erzählen.','Die Tür wird nach dem Kratzen geöffnet.'),
-      choice('Was bringt Abwechslung?', 'Welche Überarbeitung variiert die Anfänge und erhält den Sinn?', ['Minka sah eine Spur. Minka folgte ihr. Minka fand einen Eimer.','Im Gras entdeckte Minka eine Spur. Neugierig folgte sie ihr. Neben der Tür stand ein undichter Eimer.','Dann Minka eine Spur sah. Dann folgte. Dann Eimer.'],1,'Ortsangabe, Art des Handelns und neue Ortsangabe sorgen für Abwechslung. Die Sätze bleiben vollständig und zusammenhängend.','Abwechslung hilft nur, wenn die Sätze verständlich bleiben.')
+      choice('Was bringt Abwechslung?', 'Welche Überarbeitung variiert die Anfänge und erhält den Sinn?', ['Minka sah eine Spur. Minka folgte ihr. Minka fand einen Eimer.','Im Gras entdeckte Minka eine Spur. Neugierig folgte sie ihr. Neben der Tür stand ein undichter Eimer.','Dann Minka eine Spur sah. Dann folgte. Dann Eimer.'],1,'Ortsangabe, Art des Handelns und neue Ortsangabe sorgen für Abwechslung. Die Sätze bleiben vollständig und zusammenhängend.','Abwechslung hilft nur, wenn die Sätze verständlich bleiben.'),
+      gap('Den Ort verraten', 'Fuji hörte das Klopfen aus Richtung des Zauns. ', ' entdeckte sie eine lockere Latte.', ['Einen Tag später','Mit einem lauten Knall','Am Gartentor'],2,'„Am Gartentor“ zeigt, an welcher Stelle am Zaun Fuji die Latte entdeckte.','Die Leser sollen erfahren, wo die Latte war.'),
+      choice('Die Reaktion zeigen', 'Die Tür knallte hinter Minka zu. Welcher Anfang zeigt, wie Minka auf den Knall reagierte?', ['Erschrocken fuhr Minka herum.','Am Ende des Gartens stand Minka.','Am Vormittag kehrte Minka zurück.'],0,'„Erschrocken“ zeigt Minkas unmittelbare Reaktion. Die anderen Anfänge nennen Ort oder Zeit.','Achte darauf, wie sich Minka in diesem Moment fühlte.'),
+      choice('Zwei Dinge gleichzeitig', 'Fuji lauschte. Zur selben Zeit spähte Minka durch den Spalt. Welcher Satz verbindet beides?', ['Weil Fuji lauschte, spähte Minka durch den Spalt.','Während Fuji lauschte, spähte Minka durch den Spalt.','Nachdem Fuji gelauscht hatte, spähte Minka durch den Spalt.'],1,'„Während“ zeigt, dass beides gleichzeitig geschah. „Weil“ nennt einen Grund, „nachdem“ eine Reihenfolge.','Suche den Anfang, der „zur selben Zeit“ ausdrückt.'),
+      choice('Auch ein Name passt', 'Im Satz davor waren Minka und Fuji am Fenster. Welche Fassung macht klar, wer jetzt handelt?', ['Vorsichtig schob sie es auf.','Kurz darauf schob sie es auf.','Fuji schob das Fenster auf.'],2,'Hier schafft der Name Klarheit. Ein abwechslungsreicher Text darf Sätze auch mit einer Figur beginnen.','Bei zwei Figuren kann „sie“ mehrdeutig sein.')
     ],
     write:'Überarbeite: „Dann ging Minka zur Tür. Dann hörte sie ein Kratzen. Dann rief sie Fuji. Dann öffnete Fuji die Tür.“ Nutze vier unterschiedliche Anfänge und mindestens einen Als- oder Während-Satz.',
     model:'Vorsichtig schlich Minka zur Tür. Hinter dem Holz kratzte etwas. Sofort rief sie Fuji. Als die Wolfshündin das Geräusch hörte, drückte sie die Tür auf.',
@@ -148,11 +172,134 @@ const topics = [
       choice('Begleitsatz davor', 'Fuji fragt nach dem Geräusch. Welche Zeichensetzung stimmt?', ['Fuji fragte, „Was war das?“','Fuji fragte: „Was war das?“','Fuji fragte „Was war das“?'],1,'Nach dem vorangestellten Begleitsatz steht ein Doppelpunkt. Das Fragezeichen gehört zur gesprochenen Frage und steht innerhalb der Anführungszeichen.','Begleitsatz davor → Doppelpunkt. Fragezeichen nach „das“, aber vor dem schließenden Redezeichen.'),
       choice('Aussage mit Begleitsatz danach', 'Minka sagt, dass sie eine Spur sieht.', ['„Ich sehe eine Spur.“ sagte Minka.','„Ich sehe eine Spur“, sagte Minka.','„Ich sehe eine Spur,“ sagte Minka.'],1,'Der Punkt der gesprochenen Aussage entfällt. Das Komma steht nach dem schließenden Anführungszeichen; nach Minka folgt der Schlusspunkt.','Wo steht das Komma im Bauplan „Rede“, Begleitsatz.?'),
       choice('Fragezeichen und Komma', 'Welche Fassung ist richtig?', ['„Kommst du mit?“, fragte Minka.','„Kommst du mit“, fragte Minka?','„Kommst du mit?“ fragte Minka.'],0,'Das Fragezeichen bleibt in der Rede. Danach stehen das schließende Anführungszeichen und das Komma. „Fragte“ wird kleingeschrieben.','Bei einer Frage bleibt das Fragezeichen; das Komma zum Begleitsatz kommt dazu.'),
-      choice('Begleitsatz eingeschoben', 'Der gesprochene Satz lautet: „Unter dem Steg liegt etwas.“ Welche Fassung ist richtig?', ['„Unter dem Steg“, flüsterte Fuji „liegt etwas.“','„Unter dem Steg“, flüsterte Fuji, „Liegt etwas.“','„Unter dem Steg“, flüsterte Fuji, „liegt etwas.“'],2,'Zwei Kommas grenzen den eingeschobenen Begleitsatz ab. „Liegt“ setzt denselben gesprochenen Satz fort und beginnt deshalb klein.','Du brauchst zwei Kommas. Nach der Unterbrechung geht derselbe Satz weiter.')
+      choice('Begleitsatz eingeschoben', 'Der gesprochene Satz lautet: „Unter dem Steg liegt etwas.“ Welche Fassung ist richtig?', ['„Unter dem Steg“, flüsterte Fuji „liegt etwas.“','„Unter dem Steg“, flüsterte Fuji, „Liegt etwas.“','„Unter dem Steg“, flüsterte Fuji, „liegt etwas.“'],2,'Zwei Kommas grenzen den eingeschobenen Begleitsatz ab. „liegt“ setzt denselben gesprochenen Satz fort und beginnt deshalb klein.','Du brauchst zwei Kommas. Nach der Unterbrechung geht derselbe Satz weiter.'),
+      choice('Ausruf mit Begleitsatz danach', 'Fuji will Minka in diesem Moment warnen. Welche Fassung stimmt?', ['„Stopp!“, rief Fuji.','„Stopp“, rief Fuji!','„Stopp!“, Rief Fuji.'],0,'Das Ausrufezeichen gehört in die Rede. Danach kommen Anführungszeichen, Komma und der kleingeschriebene Begleitsatz.','Setze das Ausrufezeichen direkt hinter das gerufene Wort.'),
+      choice('Wer spricht jetzt?', 'Minka fragt, Fuji antwortet. Wie wird der Wechsel am deutlichsten?', ['Beide Äußerungen haben nur ein gemeinsames Paar Anführungszeichen.','Vor Fujis Antwort beginnt ein neuer Absatz. Beide Äußerungen haben eigene Anführungszeichen.','Fujis Antwort bleibt ohne Anführungszeichen im Erzähltext stehen.'],1,'Mit dem Absatz und den eigenen Anführungszeichen erkennen die Leser den Wechsel leichter.','Markiere jede Äußerung für sich und trenne die beiden Figuren sichtbar.')
     ],
     write:'Schreibe einen Dialog mit vier Äußerungen: Minka fragt, was im Schuppen raschelt. Fuji antwortet, Minka warnt und Fuji beruhigt sie. Verwende einen vorangestellten, einen nachgestellten und einen eingeschobenen Begleitsatz.',
     model:'Minka fragte: „Was raschelt im Schuppen?“\n„Vielleicht ist es ein Igel“, antwortete Fuji.\n„Vorsicht!“, warnte Minka.\n„Wir bleiben hier“, erklärte Fuji, „bis wir sicher sind.“',
     checks:['Alle gesprochenen Wörter stehen in Anführungszeichen.','Ich habe alle drei Stellungen des Begleitsatzes ausprobiert.','Doppelpunkte, Kommas, Frage- und Ausrufezeichen passen zum Bauplan.','Meine Redeverben passen zur Äußerung; der Sprecherwechsel ist klar.']
+  },
+  {
+    id:'praeteritum', title:'Präsens und Präteritum', guide:'Fuji',
+    goal:'Verben aus dem Präsens ins Präteritum setzen und die Erzählzeit beibehalten.',
+    explanation:'Im Präsens erzählst du, was jetzt geschieht: „Ich sehe eine Spur.“ Im Präteritum erzählst du Vergangenes: „Ich sah eine Spur.“ In Schulgeschichten steht der Erzähltext meistens im Präteritum.',
+    steps:['Finde das gebeugte Verb und frage, zu wem es gehört.', 'Setze es ins Präteritum: ich suche → ich suchte, ich sehe → ich sah.', 'Lies den Erzähltext noch einmal. In wörtlicher Rede richtet sich die Zeit nach dem, was die Figur gerade meint.'],
+    tip:'Prüfe auch die Person und die Anzahl: „Minka ging“, aber „Minka und Fuji gingen“. In der Tabelle stehen die Formen mit „ich“.',
+    before:'Minka geht zum Steg und sieht eine Spur. „Ich sehe Pfotenabdrücke“, flüstert sie.',
+    after:'Minka ging zum Steg und sah eine Spur. „Ich sehe Pfotenabdrücke“, flüsterte sie.',
+    why:'„Ging“, „sah“ und „flüsterte“ gehören zum Erzähltext. Minka spricht über das, was sie in diesem Moment sieht. In ihrer Rede bleibt deshalb „sehe“ stehen.',
+    bankTitle:'Die 16 unregelmäßigen Verben vom Lernplakat',
+    verbForms,
+    tasks:[
+      ...verbForms.map(([verb, present, past, before, after]) => word(
+        `Ich-Form von „${verb}“`, before, after, past,
+        `Präsens: ich ${present}. Präteritum: ich ${past}.`,
+        `Setze den Satz mit „Gestern“ im Kopf in die Vergangenheit. Wenn du die Form noch nicht kennst, schlage „${verb}“ in der Verbtabelle nach.`
+      )),
+      gap('Ein regelmäßiges Verb', 'Fuji ', ' gestern am Ufer nach der Spur. (suchen)', ['sucht','suchte','suchten'],1,'„Suchte“ ist die Präteritumform zu „Fuji sucht“. Für mehrere Figuren wäre es „suchten“.','Bei „suchen“ hilft dir die Endung -te. Fuji ist eine einzelne Figur.'),
+      gap('Zwei Figuren', 'Minka und Fuji ', ' gemeinsam zum Steg. (gehen)', ['geht','ging','gingen'],2,'Bei „Minka und Fuji“ brauchst du die Mehrzahl: „Sie gingen“.','Ersetze „Minka und Fuji“ durch „sie beide“.'),
+      choice('Die Erzählzeit beibehalten', 'Welche Fassung steht durchgehend im Präteritum?', ['Fuji lief zum Steg und fand einen Zettel. Minka las ihn vor.','Fuji läuft zum Steg und fand einen Zettel. Minka las ihn vor.','Fuji lief zum Steg und findet einen Zettel. Minka liest ihn vor.'],0,'„Lief“, „fand“ und „las“ sind Präteritumformen.','Achte auf alle drei Verben, auch im letzten Satz.'),
+      choice('Erzähltext und Rede unterscheiden', 'Fuji erzählt Minka, was sie in diesem Augenblick hört. Welche Fassung hält den Erzähltext im Präteritum?', ['Fuji lauscht. „Ich höre ein Klopfen“, flüstert sie.','Fuji lauschte. „Ich höre ein Klopfen“, flüsterte sie.','Fuji lauschte. „Ich höre ein Klopfen“, flüstert sie.'],1,'„Lauschte“ und „flüsterte“ gehören zum Erzähltext. „Höre“ steht in der wörtlichen Rede und passt zum Augenblick.','Die Anführungszeichen grenzen die gesprochenen Wörter ab.')
+    ],
+    write:'Übertrage die Erzählung ins Präteritum. Lass Minka weiterhin sagen, was sie gerade sieht. „Fuji läuft zur Tür. Sie findet eine Spur. Minka kommt zu ihr und flüstert: ‚Ich sehe noch eine!‘“',
+    model:'Fuji lief zur Tür. Sie fand eine Spur. Minka kam zu ihr und flüsterte: „Ich sehe noch eine!“ Die Verben im Erzähltext lauten lief, fand, kam und flüsterte. In der wörtlichen Rede bleibt „sehe“ stehen.',
+    checks:['Ich habe alle gebeugten Verben im Erzähltext überprüft.','Meine Verben passen zur Person und zur Anzahl der Figuren.','In der Rede habe ich die Zeitform beibehalten, die zur Aussage passt.']
+  },
+  {
+    id:'erzaehlverben', title:'Mehr Verben fürs Erzählen', guide:'Minka',
+    goal:'Genauere Verben für Handlung, Geräusche, Wahrnehmung und Gefühle einsetzen.',
+    explanation:'Treffende Verben zeigen, was genau passiert. „Das Glas klirrte“ lässt uns das Geräusch hören. „Fuji griff nach dem Seil“ zeigt ihre Bewegung genauer als „Fuji machte etwas mit dem Seil“.',
+    steps:['Überlege, was die Figur tut, wie sie reagiert oder was sie bemerkt.', 'Wähle ein Verb, dessen Bedeutung zur Szene passt.', 'Setze es in die Erzählzeit. Bei trennbaren Verben kann ein Teil nach hinten rücken: zusammenzucken → Minka zuckte zusammen.'],
+    tip:'Beim Verb „erschrecken“ kommt es auf die Bedeutung an: „Minka erschrak“ beschreibt ihre Reaktion. „Das Klirren erschreckte Minka“ nennt den Auslöser als Satzgegenstand.',
+    before:'Fuji machte die Kiste auf. Dann machte es ein Geräusch. Minka hatte auf einmal Angst.',
+    after:'Fuji schob den Deckel zur Seite. Eine Flasche kippte um und klirrte. Minka zuckte zusammen.',
+    why:'„Schob“ zeigt die Bewegung, „klirrte“ den Klang und „zuckte zusammen“ die körperliche Reaktion. Man kann der Szene auch ohne viele Zusatzwörter folgen.',
+    bankTitle:'24 Verben nach ihrer Aufgabe · Grundform und Präteritum',
+    bank:[
+      ['Sich bewegen','kriechen → kroch\nklettern → kletterte\nspringen → sprang\nfliehen → floh','Minka kroch unter die Bank. Fuji sprang über die Pfütze.'],
+      ['Etwas wahrnehmen','lauschen → lauschte\nwittern → witterte\nriechen → roch\nertasten → ertastete','Fuji witterte eine Fährte. Minka ertastete die Kante im Dunkeln.'],
+      ['Auf etwas reagieren','zusammenzucken → zuckte zusammen\nerschrecken → erschrak oder erschreckte\nzögern → zögerte\nzittern → zitterte','Minka erschrak. Vor dem morschen Steg zögerte Fuji.'],
+      ['Etwas anfassen oder bewegen','greifen → griff\nzerren → zerrte\nschieben → schob\nheben → hob','Fuji griff nach dem Seil. Minka hob den Deckel an.'],
+      ['Geräusche beschreiben','knarren → knarrte\nrascheln → raschelte\npoltern → polterte\nklirren → klirrte','Das trockene Laub raschelte. Eine Flasche klirrte.'],
+      ['Sprechen oder schweigen','stammeln → stammelte\nkeuchen → keuchte\nschweigen → schwieg\nflehen → flehte','„Warte auf mich!“, keuchte Fuji nach dem Lauf. Minka schwieg und hörte weiter zu.']
+    ],
+    tasks:[
+      gap('Aufmerksam hören','Fuji blieb stehen und ', ' auf das leise Ticken hinter der Wand.',['witterte','lauschte','ertastete'],1,'„Lauschen“ bedeutet, dass Fuji besonders aufmerksam hinhörte. „Wittern“ und „ertasten“ gehören zu anderen Sinnen.','Fuji benutzt ihre Ohren.'),
+      gap('Geräusch im Laub','Ein Windstoß fuhr durch die trockenen Blätter. Das Laub ', '.',['raschelte','klirrte','polterte'],0,'Trockene Blätter rascheln. Gläser können klirren, schwere Gegenstände poltern.','Denk an das leichte, trockene Geräusch vieler Blätter.'),
+      gap('So reagiert Minka','Als der Deckel mit einem Knall zufiel, ', ' Minka.',['erschreckte','erschrickt','erschrak'],2,'Minka geriet selbst in Schrecken: Sie erschrak. „Erschreckte“ passt etwa in „Der Knall erschreckte Minka“.','Minka bekommt einen Schreck. Sie löst ihn bei niemandem aus.'),
+      choice('Mit wenig Luft sprechen','Fuji kommt nach einem schnellen Lauf an. Welches Verb zeigt, dass sie kaum Luft hat?',['„Ich bin da“, schwieg Fuji.','„Ich bin da“, keuchte Fuji.','„Ich bin da“, flehte Fuji.'],1,'„Keuchte“ zeigt, dass Fuji schwer atmete. „Flehte“ wäre eine dringende Bitte.','Woran hörst du, dass Fuji außer Atem ist?'),
+      word('greifen im Präteritum','Fuji ', ' nach dem Seil.', 'griff','Aus „Fuji greift“ wird „Fuji griff“.','Bei „greifen“ wird aus ei ein kurzes i.'),
+      word('kriechen im Präteritum','Minka ', ' unter die niedrige Bank.', 'kroch','Aus „Minka kriecht“ wird „Minka kroch“.','In der gesuchten Form hörst du statt ie ein o.'),
+      word('riechen im Präteritum','Im Schuppen ', ' es nach feuchtem Holz.', 'roch','Aus „Es riecht“ wird „Es roch“.','Die Form klingt am Ende wie „kroch“.'),
+      word('zusammenzucken im Präteritum','Beim Knall ', ' Minka zusammen.', 'zuckte','Bei „zusammenzucken“ steht im Aussagesatz „zuckte“ als gebeugtes Verb vorn und „zusammen“ am Ende.','„Zusammen“ steht schon da. Bilde die Vergangenheitsform zu „zucken“.')
+    ],
+    write:'Verbessere die Szene mit drei treffenden Verben: „Fuji ging zur Kiste. Darin war ein Geräusch. Minka machte die Kiste auf.“ Du kannst zeigen, wie Fuji sich bewegte, was zu hören war oder wie Minka reagierte.',
+    model:'Fuji kroch vorsichtig zur Kiste. Drinnen raschelte etwas. Minka griff nach dem Deckel, zögerte kurz und hob ihn dann an.',
+    checks:['Meine Verben zeigen genauer, was in der Szene passiert.','Meine Verben stehen im Präteritum.','Die Handlung bleibt gut verständlich.']
+  },
+  {
+    id:'erzaehlaufbau', title:'Aufbau und Spannung', guide:'Minka',
+    goal:'Einleitung, Hauptteil und Schluss so verbinden, dass die Geschichte einen roten Faden hat.',
+    explanation:'In der Einleitung erfahren die Leser, wer dabei ist, wo und wann die Geschichte beginnt. Im Hauptteil wird das Rätsel größer. Am Höhepunkt fällt die wichtigste Entscheidung oder geschieht das Aufregendste. Der Schluss zeigt, wie alles ausgeht.',
+    steps:['Gib Orientierung und lege eine Schlinge, die neugierig macht.', 'Lass eine Schwierigkeit folgen. Erzähle den Höhepunkt ausführlich mit Handlung und Wahrnehmung.', 'Greife den Hinweis spätestens am Schluss auf und runde die Geschichte kurz ab.'],
+    tip:'Denk an den Wal vom Lernplakat. Über seinen Rücken steigt die Spannung bis zum Höhepunkt. Zum Schwanz hin klingt das Abenteuer aus.',
+    before:'Minka und Fuji gingen zum Schuppen. Sie fanden einen Igel. Dann gingen sie nach Hause.',
+    after:'Am Abend suchten Minka und Fuji im Garten ihren Ball. Hinter der Schuppentür kratzte es. Drinnen stand Minka vor einem umgestülpten Blumentopf. Über ihr kippte ein Brett vom Regal. Fuji sprang vor und zog Minka zur Seite. Das Brett schlug neben ihnen auf. Als Minka den Topf anhob, entdeckte sie einen kleinen Igel. Seine Krallen hatten über den Boden gescharrt. Wenig später huschte er ins Laub.',
+    why:'Das Kratzen weckt Neugier. Als das Brett kippt, muss Fuji schnell reagieren. Der Igel erklärt das Geräusch, und sein Verschwinden rundet die Geschichte ab.',
+    bankTitle:'Die vier Stellen am Erzählwal',
+    bank:[['Einleitung','Wer? Wo? Wann? Was geht gerade vor?','Am Abend suchten Minka und Fuji im Garten ihren Ball.'],['Steigerung','Eine Schwierigkeit macht die Situation dringender.','Über Minka rutschte ein Brett bis zur Regalkante.'],['Höhepunkt','Der entscheidende Augenblick bekommt Platz.','Fuji sprang vor und zog Minka zur Seite. Das Brett schlug neben ihnen auf.'],['Schluss','Die offene Frage bekommt eine Antwort.','Der Igel huschte ins Laub. Endlich war der Schuppen still.']],
+    tasks:[
+      choice('Die Einleitung erkennen','Welche Fassung gibt Orientierung und hält das Rätsel offen?',['Fuji rettete den Igel. Danach war alles wieder ruhig.','Am Freitagabend suchten Minka und Fuji im Garten ihren Ball. Hinter der Schuppentür kratzte es.','Fuji fing den Topf gerade noch mit ihrer Pfote.'],1,'Zeit, Ort, Figuren und Ausgangssituation sind klar. Das Kratzen eröffnet das Rätsel.','Suche den Einstieg, der erklärt, wer wo und wann etwas tut.'),
+      choice('Die Spannung steigern','Minka und Fuji hörten ein Kratzen. Welche Fortsetzung macht die Lage dringender?',['Der Topf bewegte sich ruckweise auf die Regalkante zu.','Neben der Tür stand eine blaue Gießkanne.','Minka zählte am nächsten Morgen die Blumentöpfe.'],0,'Der Topf droht zu fallen. Dadurch wollen die Leser wissen, ob Fuji noch rechtzeitig eingreift.','Suche ein Ereignis, das die Figuren zum Handeln drängt.'),
+      choice('Den Höhepunkt ausbauen','Fuji muss den Topf auffangen. Welche Fassung erzählt den entscheidenden Moment anschaulich?',['Fuji fing den Topf, und das war spannend.','Fuji dachte lange über die Farbe des Topfes nach.','Der Topf kippte. Fuji stieß sich vom Boden ab und presste die Pfote gegen das raue Tongefäß. Es blieb hängen.'],2,'Die Fassung zerlegt den Moment in kleine Schritte. Die Leser können Fujis Handlung verfolgen.','Suche die Fassung, in der du genau mitbekommst, was Fuji tut.'),
+      choice('Die Schlinge im Schluss auflösen','Unter der Tür flackerte rotes Licht. Welcher Schluss greift den Hinweis auf?',['Minka ging nach Hause und dachte über ihr Abendessen nach.','Hinter der Tür lag eine blinkende Fahrradlampe. Fuji schaltete sie aus. Nun war es dunkel.','Auf dem Hof leuchtete der Mond.'],1,'Die blinkende Lampe erklärt das rote Licht. Ihre Entdeckung und das Ausschalten beenden die Szene.','Der Schluss soll beantworten, woher das rote Licht kam.')
+    ],
+    write:'Plane eine Geschichte mit vier kurzen Abschnitten: Einleitung mit rätselhaftem Geräusch, Steigerung, Höhepunkt und Schluss. Erzähle den Höhepunkt in zwei oder drei Sätzen.',
+    model:'Am frühen Abend hörten Minka und Fuji ein Klirren im Garten. Zwischen den Beeten zitterte die alte Gießkanne. Als sie vom Stein rutschte, packte Fuji den Henkel. Minka stemmte sich mit beiden Pfoten gegen den Bauch der Kanne. Drinnen klapperte ein Kiesel, den der Wind hin und her rollte. Fuji stellte die Kanne in den Schuppen. Endlich war Ruhe.',
+    checks:['Wer, wo und wann werden am Anfang klar.','Mein Hinweis wird später aufgegriffen.','Der Höhepunkt hat mehr Raum als die Auflösung.','Das Ende ergibt sich aus dem, was vorher passiert.']
+  },
+  {
+    id:'gefuehle', title:'Gedanken, Gefühle und Sinne', guide:'Fuji',
+    goal:'Zeigen, was eine Figur denkt, fühlt und in ihrer Umgebung wahrnimmt.',
+    explanation:'Gedanken lassen Leser verstehen, was eine Figur befürchtet oder hofft. Körperreaktionen und Sinneseindrücke helfen, die Szene mitzuerleben.',
+    steps:['Wähle eine Figur, aus deren Nähe du die Szene erzählst.', 'Gib ihr einen passenden Gedanken oder zeige ihre Gefühle mit einer Reaktion.', 'Beschreibe ein Geräusch, einen Geruch, eine Berührung oder etwas Sichtbares, das in der Szene wichtig ist.'],
+    tip:'Ein einzelnes genaues Detail kann reichen: „Unter Minkas Pfoten vibrierte das Holz.“ Ein Vergleich kann helfen, wenn er zum Eindruck passt.',
+    before:'Minka hatte Angst. Es war im Schuppen sehr unheimlich.',
+    after:'Minkas Pfoten zitterten. Hinter der Tür kratzte es, als schabte jemand mit einer Gabel über Holz. Was saß dort im Dunkeln?',
+    why:'Die zitternden Pfoten zeigen das Gefühl. Der Vergleich lässt das Geräusch hörbar werden. Die Frage gibt Minkas Gedanken wieder.',
+    bankTitle:'Vier Möglichkeiten, die Szene mitzuerleben',
+    bank:[['Körper','zittern, schlucken, den Atem anhalten','Minka hielt den Atem an.'],['Gedanke','Was ist zu befürchten oder zu hoffen?','Ob Fuji das Geräusch auch gehört hatte?'],['Sinne','hören, sehen, riechen, fühlen','Kalte Luft strich über Minkas Nase.'],['Vergleich','Einen Eindruck mit etwas Bekanntem verbinden','Das Licht zuckte wie eine winzige Flamme.']],
+    tasks:[
+      choice('Angst zeigen','Welche Reaktion lässt die Leser Minkas Angst spüren?',['Minka hatte Angst.','Minka war neben Fuji.','Minkas Pfoten zitterten. Sie wich bis zur Wand zurück.'],2,'Zittern und Zurückweichen machen Minkas Angst an ihrem Körper und Verhalten sichtbar.','Suche nach dem, was Minka tut und was ihr Körper dabei zeigt.'),
+      choice('Gedanken erkennen','Fuji steht am Rand eines morschen Stegs. Welche Zeile gibt ihre Sorge als Gedanken wieder?',['Hielt das Brett ihr Gewicht aus?','Der Steg war aus Holz.','„Warte hier!“, rief Fuji.'],0,'Die Frage führt in Fujis Kopf. Der zweite Satz beschreibt etwas, im dritten spricht Fuji laut.','Gesucht ist, was Fuji sich im Stillen fragt.'),
+      gap('Einen Sinneseindruck wählen','Als Minka die Tür öffnete, schlug ihr ein ', ' Geruch nach feuchtem Holz entgegen.',['greller','modriger','rauer'],1,'„Modrig“ beschreibt den Geruch von feuchtem, altem Holz. „Grell“ passt zu Licht oder Farbe, „rau“ beschreibt eine Oberfläche.','Welches Wort passt zu etwas, das Minka riecht?'),
+      choice('Einen Vergleich nutzen','Minka sieht einen Lichtpunkt, der immer wieder kurz aufblitzt. Welcher Vergleich passt?',['Der Lichtpunkt blitzte wie ein nasser Schwamm.','Der Lichtpunkt blitzte wie das Warnlämpchen an einem Fahrrad.','Der Lichtpunkt blitzte wie eine schwere Kiste.'],1,'Das Warnlämpchen gibt den kurzen, wiederholten Lichteindruck wieder.','Womit kannst du das wiederholte Aufblitzen vergleichen?')
+    ],
+    write:'Schreibe drei oder vier Sätze über Minka vor der dunklen Schuppentür. Zeige ihr Gefühl mit einer Körperreaktion. Ergänze einen Gedanken und einen passenden Sinneseindruck.',
+    model:'Minka hielt den Atem an. Durch die Ritze strich kalte Luft über ihre Pfoten. Drinnen kratzte es zum dritten Mal. Was, wenn dort jemand auf sie wartete?',
+    checks:['Eine Körperreaktion macht Minkas Gefühl sichtbar.','Die Leser erfahren, was Minka denkt.','Ein Sinneseindruck passt zu diesem Moment.']
+  },
+  {
+    id:'schreibcheck', title:'Überschrift und Schreib-Check', guide:'Minka',
+    goal:'Eine Geschichte mit einem Plan schreiben und Schritt für Schritt überarbeiten.',
+    explanation:'Eine passende Überschrift macht neugierig. Beim Überarbeiten prüfst du zuerst Handlung und Absätze, dann die Sprache und am Ende Rechtschreibung und Satzzeichen.',
+    steps:['Plane Ausgangssituation, Hinweis, Höhepunkt und Auflösung.', 'Schreibe den Entwurf. Gib wichtigen Handlungsschritten Platz und setze Absätze, wenn ein neuer Abschnitt beginnt.', 'Prüfe roten Faden, Erzählzeit, Satzanfänge und Wortwahl. Lies den Text zum Schluss auf Grammatik, Satzzeichen und Rechtschreibung.'],
+    tip:'Lies deinen Text leise vor. An Stellen, an denen du stolperst oder die Handlung unklar wird, lohnt es sich besonders, genauer hinzusehen.',
+    before:'Ein Abenteuer\nDann ist Minka beim Schuppen. Dann sah sie eine Spur. Minka ging nach Hause.',
+    after:'Die Spur im Staub\nVor dem Schuppen entdeckte Minka eine Spur im Staub. Neugierig folgte sie ihr bis zu einem Topf. Gerade als der Topf kippte, zog Minka die Pfoten zurück. Ein Igel huschte darunter hervor.',
+    why:'Die Überschrift greift den Hinweis auf. Die Spur führt zu einer Entdeckung, und die Verben im Erzähltext stehen einheitlich im Präteritum.',
+    bankTitle:'Dein Plan für die Überarbeitung',
+    bank:[['Überschrift','Passt sie zur Geschichte und macht sie neugierig?','Die Spur im Staub'],['Handlung und Absätze','Kann ich vom ersten Hinweis bis zur Lösung folgen?','Ein neuer Absatz kann den Übergang zur Auflösung zeigen.'],['Sprache','Passen Erzählzeit, Satzanfänge, Verben und Adjektive?','Unter dem Regal entdeckte Minka eine winzige Spur.'],['Letzte Kontrolle','Stimmen Rechtschreibung, Grammatik und Satzzeichen?','„Da ist die Spur!“, rief Fuji.']],
+    tasks:[
+      choice('Eine passende Überschrift','Minka entdeckt eine Spur im Staub. Erst später merkt sie, dass sie von einem Igel stammt. Welche Überschrift passt und macht neugierig?',['Die Spur im Staub','Der Fußballpokal','Minka findet den Igel und löst das Rätsel'],0,'Die Überschrift nennt einen wichtigen Hinweis und lässt die Lösung offen.','Suche den Titel, der zur Spur passt und die Ursache offenlässt.'),
+      choice('Einen Absatz setzen','Nach dem Höhepunkt und der Auflösung folgt ein kurzer Ausklang. Wo hilft ein neuer Absatz?',['Mitten in „Minka hob den Topf an“.','Vor „Wenig später war der Garten wieder still.“','Vor jedem zweiten Wort.'],1,'Ein Absatz vor dem Ausklang macht den Wechsel zum Schluss sichtbar.','Suche die Stelle, an der eine neue Phase beginnt.'),
+      choice('Den roten Faden reparieren','Erst hört Fuji ein Klopfen, dann ist das Geräusch ohne Erklärung weg. Was sollte Fuji beim Überarbeiten ergänzen?',['Mehr Adjektive für die Wolken.','Eine Liste von Fujis Lieblingsspeisen.','Was das Klopfen verursachte und wie es aufhörte.'],2,'Der Hinweis braucht eine Auflösung. Dann ergibt das Ende aus der vorherigen Handlung Sinn.','Welche Frage blieb vom Anfang offen?'),
+      choice('Den letzten Durchgang machen','Welche Fassung stimmt bei Erzählzeit, Großschreibung und Satzzeichen?',['„Da ist die spur!“, ruft Fuji.','„Da ist die Spur!“, rief Fuji.','„Da ist die Spur!“ rief Fuji.'],1,'„Spur“ ist ein Nomen, „rief“ steht im Präteritum, und nach dem schließenden Anführungszeichen folgt ein Komma.','Achte auf das Nomen, das Redeverb und die Stelle nach den Anführungszeichen.')
+    ],
+    write:'Überarbeite „Dann kommt Fuji zum Steg. Dann sah sie ein rotes licht. Ich sehe was rief Fuji. Dann geht sie nach Hause.“ Gib der Geschichte eine Überschrift und ergänze eine Auflösung. Prüfe mit der Liste.',
+    model:'Das Licht unter dem Steg\n\nAm frühen Abend kam Fuji zum See. Unter dem Steg blinkte ein rotes Licht. „Ich sehe etwas!“, rief sie. Vorsichtig beugte sie sich über die Kante. Das Licht zuckte im Wasser. Fuji streckte die Pfote aus und zog an einer Schlaufe.\n\nWenig später hielt sie eine blinkende Fahrradlampe in der Pfote. Erleichtert trug sie ihren Fund nach Hause.',
+    checks:['Meine Überschrift passt und weckt Neugier.','Der rote Faden führt vom Hinweis zur Auflösung.','Meine Absätze zeigen, wo ein neuer Teil beginnt.','Erzählzeit, Satzanfänge und Wörter passen zur Geschichte.','Rechtschreibung, Grammatik und Satzzeichen sind geprüft.']
   }
 ];
 
@@ -171,11 +318,17 @@ function renderTopics() {
   document.getElementById('language-topics').innerHTML = topics.map((t,i) => `<button type="button" data-language-topic="${t.id}" aria-pressed="${t.id === current}"><span>${i+1}.</span> ${esc(t.title)}</button>`).join('');
   document.querySelectorAll('[data-language-topic]').forEach(b => b.addEventListener('click', () => {current=b.dataset.languageTopic;render();document.getElementById('language-heading').focus({preventScroll:true});document.getElementById('language-heading').scrollIntoView({block:'start'});}));
 }
+function renderBank(t) {
+  if (t.verbForms) {
+    return `<table class="language-verb-table"><caption>Alle gebeugten Formen passen zu „ich“.</caption><thead><tr><th scope="col">Grundform</th><th scope="col">Präsens</th><th scope="col">Präteritum</th></tr></thead><tbody>${t.verbForms.map(([verb, present, past]) => `<tr><th scope="row">${esc(verb)}</th><td>${esc(present)}</td><td>${esc(past)}</td></tr>`).join('')}</tbody></table>`;
+  }
+  return `<div class="language-bank">${t.bank.map(([word,meaning,example])=>`<div class="language-word"><h4>${esc(word)}</h4><p>${esc(meaning)}</p><p class="muted">${esc(example)}</p></div>`).join('')}</div>`;
+}
 function render() {
   const t=topic(),s=state();
   renderTopics();totals();
   root.innerHTML = `<article class="panel language-theory"><p class="eyebrow">1 · Verstehen</p><h2 id="language-heading" tabindex="-1">${esc(t.title)}</h2><p class="language-goal"><strong>Dein Ziel:</strong> ${esc(t.goal)}</p><div class="speech"><strong>${esc(t.guide)} erklärt:</strong> ${esc(t.explanation)}</div><h3>So gehst du vor</h3><ol class="language-steps">${t.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="note compact"><strong>${t.guide === 'Minka'?'Fuji':'Minka'} ergänzt:</strong> ${esc(t.tip)}</div></article>
-    <article class="panel extras"><p class="eyebrow">2 · Vergleichen</p><h2>Aus wenigen Worten wird eine Szene.</h2><div class="two-col"><div><h3>Vorher</h3><p class="model-text">${esc(t.before)}</p></div><div><h3>Überarbeitet</h3><p class="model-text">${esc(t.after)}</p></div></div><p>${esc(t.why)}</p>${t.followup?`<div class="note">${esc(t.followup)}</div>`:''}<details><summary>${esc(t.bankTitle)}</summary><div class="language-bank">${t.bank.map(([word,meaning,example])=>`<div class="language-word"><h4>${esc(word)}</h4><p>${esc(meaning)}</p><p class="muted">${esc(example)}</p></div>`).join('')}</div></details></article>
+    <article class="panel extras"><p class="eyebrow">2 · Vergleichen</p><h2>Was ändert sich im Text?</h2><div class="two-col"><div><h3>Vorher</h3><p class="model-text">${esc(t.before)}</p></div><div><h3>Überarbeitet</h3><p class="model-text">${esc(t.after)}</p></div></div><p>${esc(t.why)}</p>${t.followup?`<div class="note">${esc(t.followup)}</div>`:''}<details><summary>${esc(t.bankTitle)}</summary>${renderBank(t)}</details></article>
     <article class="panel extras" id="language-training"><p class="eyebrow">3 · Üben</p><h2>Mit Minka & Fuji ausprobieren</h2><label class="select-label">Aufgabe auswählen<select id="language-jump">${t.tasks.map((q,i)=>`<option value="${i}" ${i===s.index?'selected':''}>${i+1}. ${esc(q.title)}</option>`).join('')}</select></label><p id="language-score" role="status"></p><div id="language-task"></div></article>
     ${t.id==='rede'?'<article class="panel extras"><h2>Fujis Satzzeichen-Werkstatt</h2><p>Setze die fehlenden Zeichen. Der Satz wird unter deiner Auswahl zusammengesetzt.</p><div id="language-punctuation"></div></article>':''}
     <article class="panel extras language-writing"><p class="eyebrow">4 · Selbst schreiben</p><h2>Dein Text mit Minka & Fuji</h2><p>${esc(t.write)}</p><label for="language-draft">Dein eigener Text zum Thema „${esc(t.title)}“</label><textarea id="language-draft" rows="7" maxlength="12000" placeholder="Probiere hier deine eigenen Formulierungen aus."></textarea><p class="muted" id="language-wordcount"></p><div class="writing-checks">${t.checks.map((c,i)=>`<label><input type="checkbox" data-language-check="${i}" ${s.checks[i]?'checked':''}><span>${esc(c)}</span></label>`).join('')}</div><button type="button" class="primary" id="language-review">Meine Überarbeitungshilfe</button><div id="language-writing-feedback" class="feedback" role="status"></div><details><summary>Mustertext zum Vergleichen</summary><p class="model-text">${esc(t.model)}</p><p>Dies ist eine Möglichkeit. Dein Text darf anders lauten. Prüfe mit der Checkliste, wie du dein Ziel erreicht hast.</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-to-intro">Zur Einleitung-Schreibwerkstatt</button><button type="button" class="primary" id="language-next-topic">${topics.indexOf(t)===topics.length-1?'Wieder zu den Schlingen':'Nächstes Thema'}</button></div><p class="muted">Deine Texte werden nicht automatisch benotet. Antworten und Entwürfe bleiben während der geöffneten Sitzung erhalten; beim Neuladen werden sie zurückgesetzt.</p></article>`;
@@ -206,14 +359,39 @@ function renderTask(focus=false){
   document.getElementById('language-jump').value=String(s.index);
   const completed=s.records.filter(x=>x.first!==null||x.model).length,independent=s.records.filter(x=>x.first?.correct&&!x.first.helped).length;
   document.getElementById('language-score').textContent=`${completed} von ${t.tasks.length} bearbeitet · ${independent} beim ersten Versuch ohne Hilfe richtig`;
-  const controls=q.type==='gap'?`<div class="question-text"><label>${esc(q.before)}<select id="language-gap" aria-label="Passendes Verb oder passende Formulierung wählen" ${r.solved?'disabled':''}><option value="">Bitte wählen</option>${q.options.map((o,i)=>`<option value="${i}" ${r.selected===i?'selected':''}>${esc(o)}</option>`).join('')}</select>${esc(q.after)}</label></div>`:`<p class="question-text">${esc(q.text)}</p><div class="choices" role="group" aria-label="Antwortmöglichkeiten">${q.options.map((o,i)=>`<button type="button" class="choice ${r.solved&&i===q.answer?'correct':''}" data-language-answer="${i}" aria-pressed="${r.selected===i}" ${r.solved?'disabled':''}><span class="letter" aria-hidden="true">${'ABC'[i]}</span>${esc(o)}</button>`).join('')}</div>`;
-  document.getElementById('language-task').innerHTML=`<h3 id="language-task-title" tabindex="-1">${s.index+1}. ${esc(q.title)}</h3>${controls}<div class="quiz-actions"><button type="button" class="primary" id="language-check" ${r.selected===null||r.solved?'disabled':''}>Antwort prüfen</button><button type="button" class="secondary" id="language-hint" ${r.hint?'disabled':''}>${r.hint?'Hilfe geöffnet':'Hilfe von Minka & Fuji'}</button></div><div id="language-answer-feedback" class="feedback ${r.solved?'good':''}" role="status">${esc(r.message)}</div>${r.hint?`<div class="hint-box">${esc(q.hint)}</div>`:''}<details id="language-solution" ${r.model?'open':''}><summary>Lösung mit Erklärung</summary><p><strong>${esc(q.type==='gap'?q.before+q.options[q.answer]+q.after:q.options[q.answer])}</strong></p><p>${esc(q.explain)}</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-prev-task" ${s.index===0?'disabled':''}>Vorherige Aufgabe</button><button type="button" class="primary" id="language-next-task" ${s.index===t.tasks.length-1?'disabled':''}>Nächste Aufgabe</button></div>`;
+  let controls;
+  let solution;
+  if (q.type === 'word') {
+    controls=`<p id="language-word-instruction">Schreib nur das fehlende Verb im Präteritum.</p><p class="question-text"><label>${esc(q.before)}<input id="language-word-answer" type="text" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="language-word-instruction" ${r.solved?'readonly':''}>${esc(q.after)}</label></p>`;
+    solution=q.before+q.answer+q.after;
+  } else if (q.type === 'gap') {
+    controls=`<div class="question-text"><label>${esc(q.before)}<select id="language-gap" aria-label="Passendes Verb oder passende Formulierung wählen" ${r.solved?'disabled':''}><option value="">Bitte wählen</option>${q.options.map((o,i)=>`<option value="${i}" ${r.selected===i?'selected':''}>${esc(o)}</option>`).join('')}</select>${esc(q.after)}</label></div>`;
+    solution=q.before+q.options[q.answer]+q.after;
+  } else {
+    controls=`<p class="question-text">${esc(q.text)}</p><div class="choices" role="group" aria-label="Antwortmöglichkeiten">${q.options.map((o,i)=>`<button type="button" class="choice ${r.solved&&i===q.answer?'correct':''}" data-language-answer="${i}" aria-pressed="${r.selected===i}" ${r.solved?'disabled':''}><span class="letter" aria-hidden="true">${'ABC'[i]}</span>${esc(o)}</button>`).join('')}</div>`;
+    solution=q.options[q.answer];
+  }
+  document.getElementById('language-task').innerHTML=`<h3 id="language-task-title" tabindex="-1">${s.index+1}. ${esc(q.title)}</h3>${controls}<div class="quiz-actions"><button type="button" class="primary" id="language-check" ${r.selected===null||r.solved?'disabled':''}>Antwort prüfen</button><button type="button" class="secondary" id="language-hint" ${r.hint?'disabled':''}>${r.hint?'Hilfe geöffnet':'Hilfe von Minka & Fuji'}</button></div><div id="language-answer-feedback" class="feedback ${r.solved?'good':''}" role="status">${esc(r.message)}</div>${r.hint?`<div class="hint-box">${esc(q.hint)}</div>`:''}<details id="language-solution" ${r.model?'open':''}><summary>Lösung mit Erklärung</summary><p><strong>${esc(solution)}</strong></p><p>${esc(q.explain)}</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-prev-task" ${s.index===0?'disabled':''}>Vorherige Aufgabe</button><button type="button" class="primary" id="language-next-task" ${s.index===t.tasks.length-1?'disabled':''}>Nächste Aufgabe</button></div>`;
+  const checkButton=document.getElementById('language-check');
+  const wordInput=document.getElementById('language-word-answer');
+  if (wordInput) {
+    wordInput.value=r.selected??'';
+    wordInput.addEventListener('input',()=>{
+      r.selected=wordInput.value.trim() ? wordInput.value : null;
+      r.message='';
+      checkButton.disabled=r.selected===null;
+      document.getElementById('language-answer-feedback').textContent='';
+    });
+    wordInput.addEventListener('keydown',e=>{
+      if(e.key==='Enter'&&!e.isComposing){e.preventDefault();checkButton.click();}
+    });
+  }
   const selectAnswer=i=>{r.selected=i;r.message='';renderTask();const control=q.type==='gap'?document.getElementById('language-gap'):document.querySelector(`[data-language-answer="${i}"]`);control?.focus({preventScroll:true});};
   document.querySelectorAll('[data-language-answer]').forEach(b=>b.addEventListener('click',()=>selectAnswer(Number(b.dataset.languageAnswer))));
   document.getElementById('language-gap')?.addEventListener('change',e=>selectAnswer(e.target.value===''?null:Number(e.target.value)));
-  document.getElementById('language-check').addEventListener('click',()=>{
+  checkButton.addEventListener('click',()=>{
     if(r.selected===null||r.solved)return;
-    const correct=r.selected===q.answer;
+    const correct=(q.type==='word'?r.selected.trim().toLocaleLowerCase('de'):r.selected)===q.answer;
     if(r.first===null)r.first={correct,helped:r.hint||r.model};
     r.solved=correct;r.message=correct?`Richtig. ${q.explain}`:`Das passt noch nicht. ${q.hint} Versuche es noch einmal oder öffne die Erklärung.`;
     renderTask();const feedback=document.getElementById('language-answer-feedback');feedback.tabIndex=-1;feedback.focus({preventScroll:true});
@@ -253,5 +431,14 @@ function updatePunctuation(i){
   feedback.classList.toggle('good',wrong.length===0);
   feedback.textContent=wrong.length?`Prüfe Zeichen ${wrong.join(' und ')} noch einmal. Nutze den passenden Bauplan oben.`:`Richtig. ${p.explain}`;
 }
-render();
+function openLanguageLink(focus=false){
+  const id=location.hash.slice(1);
+  if(id!=='sprache'&&!states.has(id))return false;
+  if(states.has(id))current=id;
+  render();
+  showPage('sprache',focus);
+  return true;
+}
+if(!openLanguageLink())render();
+window.addEventListener('hashchange',()=>openLanguageLink(true));
 })();

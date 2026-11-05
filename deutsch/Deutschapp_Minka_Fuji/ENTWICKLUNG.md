@@ -1,12 +1,14 @@
 # Erzählwerkstatt: Sprachtraining mit Minka & Fuji
 
 Der Lernbereich **06 · Erzählsprache trainieren** ergänzt die vorhandene App.
-`language.js` enthält sieben Themen mit Erklärungen, Vorher-Nachher-Beispielen,
-Wortschatz, je vier Aufgaben, einem Schreibauftrag, einer Checkliste und einem
-Mustertext. Die Übungen behandeln Spannungsschlingen in der Einleitung,
-Bewegungs-, Wahrnehmungs- und Redeverben, Satzanfänge, Adjektive und wörtliche
-Rede. Drei zusätzliche Satzzeichenübungen zeigen vorangestellte, nachgestellte
-und eingeschobene Begleitsätze.
+`language.js` enthält zwölf Themen mit Erklärungen, Vorher-Nachher-Beispielen,
+74 Aufgaben sowie je einem Schreibauftrag, einer Checkliste und einem
+Mustertext. Das Lernplakat-Training enthält unter anderem 16 unregelmäßige
+Verben aus der Verbtabelle, weitere Erzählverben, abwechslungsreiche
+Satzanfänge, Erzählaufbau, Gefühle, Sinneseindrücke und den Schreib-Check.
+Drei zusätzliche Satzzeichenübungen zeigen vorangestellte, nachgestellte
+und eingeschobene Begleitsätze. Die Direktlinks `#praeteritum`,
+`#satzanfaenge` und `#erzaehlverben` öffnen das jeweilige Thema.
 
 Die Einleitung-Schreibwerkstatt verlinkt den Bereich und prüft in der
 Selbsteinschätzung auch Spannungsschlinge und Wortwahl. Comics, Spannungskurve,
