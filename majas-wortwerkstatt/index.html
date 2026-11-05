@@ -71,7 +71,8 @@ h1,h2,h3{line-height:1.12;letter-spacing:-.025em}
 .crumb svg{width:17px}
 .unit-head{padding:24px 27px;border-radius:22px;background:var(--tint,var(--mint));display:flex;gap:16px;align-items:flex-start;margin-bottom:17px}
 .unit-head .icon-box{background:#fffdf5}
-.unit-head h1{font-size:clamp(31px,6vw,46px);margin:0 0 8px}
+.unit-head>div{min-width:0}
+.unit-head h1{font-size:clamp(31px,6vw,46px);margin:0 0 8px;hyphens:auto;overflow-wrap:anywhere}
 .unit-head p:last-child{margin-bottom:0}
 .unit-head .kicker{margin-bottom:7px}
 .panel{background:#fffefa;border:1px solid var(--line);border-radius:20px;padding:clamp(17px,4vw,29px);margin-bottom:15px}
@@ -121,6 +122,55 @@ details{margin:0 0 14px;padding:10px 12px;border:1px solid var(--line);border-ra
 summary{cursor:pointer;font-weight:800;color:var(--forest)}
 details ol{margin-bottom:0}
 @media(max-width:620px){.hero h1{font-size:clamp(32px,10vw,50px)}}
+.lesson-demo{margin:18px 0;padding:0;border:1px solid #bfd8cb;border-radius:16px;background:#f4faf5}
+.lesson-demo>summary{display:flex;min-height:63px;align-items:center;gap:12px;padding:10px 13px;list-style:none;border-radius:15px}
+.lesson-demo>summary::-webkit-details-marker{display:none}
+.lesson-demo>summary::after{content:"";width:8px;height:8px;border-right:2px solid;border-bottom:2px solid;transform:rotate(45deg);margin:0 5px 4px auto;flex:none}
+.lesson-demo[open]>summary::after{transform:rotate(225deg);margin-bottom:0}
+.lesson-demo>summary:hover{background:#eaf5ed}
+.lesson-demo>summary strong,.lesson-demo>summary small{display:block}
+.lesson-demo>summary small{font-size:13px;line-height:1.35;font-weight:500;color:var(--muted)}
+.demo-summary-icon{display:grid;place-items:center;flex:none;width:39px;height:39px;border-radius:13px;background:#dcefe3}
+.demo-body{padding:15px;border-top:1px solid #d6e7dc}
+.demo-body h3{font-size:clamp(20px,3.6vw,25px);margin-bottom:12px}
+.demo-stage{display:flex;align-items:center;gap:13px;flex-wrap:wrap;min-height:96px;padding:13px;border:1px solid #e2dfcf;border-radius:13px;background:#fffdf4}
+.demo-art{flex:none;width:58px;height:58px}
+.demo-example{min-width:0;flex:1 1 200px}
+.demo-label{display:block;font-size:12px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;color:#4d6c64;margin-bottom:5px}
+.demo-view{display:flex;flex-wrap:wrap;align-items:center;column-gap:8px;row-gap:5px;font-weight:800;font-size:clamp(17px,3vw,24px);line-height:1.3}
+.demo-view mark{padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.demo-view mark.noun{background:#d8ebff;color:#204875}
+.demo-view mark.verb{background:#fbdedb;color:#713a36}
+.demo-view mark.adj{background:#d6ecd3;color:#355f38}
+.demo-tile{display:inline-flex;flex-direction:column;justify-content:center;min-height:61px;padding:6px 10px;border:1px solid #bad2c5;border-radius:10px;background:#f3f8f4}
+.demo-tile.suffix{background:#f0e8f8;border-color:#d0bce2}
+.demo-tile.result{background:#e1f3e7;border-color:#a9ceb7}
+.demo-tile small{font-size:12px;font-weight:650;letter-spacing:0;color:#465e5c;margin-top:3px}
+.demo-sign{color:#537267;font-weight:850}
+.demo-note{margin:10px 0 0;min-height:3.1em;font-size:15px}
+.demo-controls{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:10px}
+.demo-controls button{gap:5px;padding:9px 10px;white-space:nowrap}
+.demo-controls svg{width:17px;height:17px}
+.demo-progress{font-size:13px;white-space:nowrap;font-weight:800;color:#4d6c64}
+.demo-chain{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:6px}
+.demo-chain-card{display:grid;justify-items:center;gap:3px;padding:6px 3px;border:2px dashed #c7ccc2;border-radius:10px;background:#fffefa;font-size:clamp(11px,2.5vw,15px)}
+.demo-chain-card.is-current{border-style:solid;border-color:#6eab95;background:#e5f3e9}
+.demo-chain-card .demo-art{width:42px;height:42px}
+.demo-kites{display:block;width:min(100%,390px);height:auto;margin-inline:auto}
+.demo-kites+.demo-example{flex-basis:100%}
+.demo-enter{animation:demo-in .24s ease-out both}
+.demo-enter .demo-kite-lift{animation:kite-up .5s ease-out both}
+@keyframes demo-in{from{opacity:.45;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@keyframes kite-up{from{transform:translateY(16px)}to{transform:translateY(0)}}
+@media(max-width:450px){
+  .demo-body{padding:11px}
+  .demo-stage{gap:8px;padding:10px}
+  .demo-stage>.demo-art{width:40px;height:40px}
+  .demo-example{flex-basis:145px}
+  .demo-note{min-height:0}
+  .demo-controls button{font-size:13px;padding-inline:7px}
+}
+@media(prefers-reduced-motion:reduce){.demo-enter,.demo-enter .demo-kite-lift{animation:none}}
 </style>
 </head>
 <body>
@@ -460,6 +510,154 @@ const dictationAudio = [
   }
 ];
 </script>
+<script>const demoArt = {
+  ball: '<circle cx="32" cy="33" r="23" fill="#ef966f"/><path d="M19 14c13 5 20 20 14 42M51 20C39 22 27 37 14 47M11 27c13 5 28 7 43 11" fill="none" stroke="#fff2d4"/><path d="M22 19c-3 2-5 4-6 7" fill="none" stroke="#fff2d4"/>',
+  flag: '<path d="M12 54h40M22 53V11m0 4c10-8 16 7 29 0v21c-13 7-19-8-29 0" fill="#f6b186"/><path d="M32 21l8 6-8 5Z" fill="#fff1c7" stroke="none"/>',
+  tree: '<path d="M7 54h49M32 53V22m0 22-11-10m11 3 9-9" fill="none"/><path d="M32 47c-6 1-9-2-12-7-8 2-14-7-10-14 1-5 5-8 11-7 1-9 12-13 18-6 6-2 12 2 12 8 9 4 7 15 0 18-4 7-13 9-19 8Z" fill="#a9d6a6"/><path d="M32 53V27m0 16-8-7m8 1 8-8" fill="none"/>',
+  door: '<path d="M9 55h47M17 55V10h30v45" fill="#fff1cf"/><path d="M22 55V15l20 5v35" fill="#e8ac78"/><path d="M34 37h3" fill="none"/><path d="M25 22v11m0 12v5" fill="none" stroke="#fff2cc"/>',
+  key: '<path d="M12 36a13 13 0 1 1 17-17l14 14 5-5 6 6-5 5 4 4-7 7-21-20a13 13 0 0 1-13 6Z" fill="#f4cf72"/><circle cx="19" cy="22" r="4.5" fill="#fff4d4"/>',
+  paw: '<path d="M19 43c5-3 7-11 13-11s8 8 13 11c8 6 6 15-3 15-4 0-7-3-10-3s-6 3-10 3c-9 0-11-9-3-15Z" fill="#e5b58b"/><ellipse cx="11" cy="29" rx="5.5" ry="7" transform="rotate(-28 11 29)" fill="#e5b58b"/><ellipse cx="24" cy="18" rx="5.5" ry="7.5" fill="#e5b58b"/><ellipse cx="40" cy="18" rx="5.5" ry="7.5" fill="#e5b58b"/><ellipse cx="53" cy="29" rx="5.5" ry="7" transform="rotate(28 53 29)" fill="#e5b58b"/>',
+  audio: '<path d="M11 35v-5a21 21 0 0 1 42 0v5M47 49c-1 5-5 8-12 8" fill="none"/><rect x="10" y="30" width="12" height="21" rx="5" fill="#8abbb2"/><rect x="42" y="30" width="12" height="21" rx="5" fill="#8abbb2"/><path d="M28 40v7m5-11v15m5-11v7" fill="none"/>',
+  leaf: '<path d="M32 58V33m0 16c-8-6-17-9-20-20 4 0 7 1 10 3-3-6-3-11-2-16 5 4 8 8 10 14 0-11 2-17 5-22 3 7 4 13 3 21 4-6 8-8 12-9 0 5-2 9-6 13 4-1 8-1 11 0-5 8-13 13-23 16Z" fill="#e99c6f"/><path d="M32 48 20 36m12 11 13-11" fill="none"/>'
+};
+
+const demoPictogram = (name) => `<svg class="demo-art" viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="#335451" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${demoArt[name]}</svg>`;
+
+const demoKites = (stage) => `<svg class="demo-kites" viewBox="0 0 390 132" aria-hidden="true">
+  <rect x="1" y="1" width="388" height="130" rx="18" fill="#edf5f0"/>
+  <path d="M0 114c49-25 96-13 142-8s78-13 128-10 70 10 120 1v35H0Z" fill="#d9e9cc"/>
+  <path d="M29 28h42m-31-7h51m194 38h31m-19-8h55" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  ${[[69,70,'#e9956b'],[195,50,'#78b6a3'],[321,31,'#e7c362']].map(([x,y,color],i)=>`<g transform="translate(${x} ${y})" opacity="${i<=stage?1:.24}">
+   <g class="${i===stage?'demo-kite-lift':''}"><path d="M0 16c-8 7-10 15 2 18 8 3 7 8 3 13" fill="none" stroke="#335451" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3 4"/>
+   <path d="M0-21 17-4 0 17-17-4Z" fill="${color}" stroke="#335451" stroke-width="2.2" stroke-linejoin="round"/>
+   <path d="M0-20v36M-16-4h32" fill="none" stroke="#335451" stroke-width="1.35"/>
+   <path d="M-9 0 0 14V0Z" fill="#fff2cb" opacity=".65"/></g>
+  </g>`).join('')}
+</svg>`;
+
+const demoTile = (word, label, tone='') => `<span class="demo-tile ${tone}"><strong>${word}</strong><small>${label}</small></span>`;
+const demoPhrase = (text) => `<span>${text}</span>`;
+const demoJoin = `<span class="demo-sign" aria-hidden="true">+</span>`;
+const demoArrow = `<span class="demo-sign" aria-hidden="true">→</span>`;
+
+const lessonDemos = {
+  wortarten:{
+    title:'Fuji findet drei Wortarten',
+    art:'ball',
+    steps:[
+      {label:'Nomen',view:demoPhrase('Fuji trägt den roten <mark class="noun">Ball</mark>.'),note:'Ball ist ein Nomen. Ein Artikel passt dazu. In der Mehrzahl heißt es „die Bälle“.'},
+      {label:'Verb',view:demoPhrase('Fuji <mark class="verb">trägt</mark> den roten Ball.'),note:'trägt ist ein Verb. Es sagt, was Fuji tut. Die Grundform heißt tragen.'},
+      {label:'Adjektiv',view:demoPhrase('Fuji trägt den <mark class="adj">roten</mark> Ball.'),note:'roten beschreibt den Ball. Wie ist er? Rot. Die Grundform des Adjektivs heißt rot.'}
+    ]
+  },
+  endungen:{
+    title:'Minkas Wörter bekommen eine Endung',
+    steps:[
+      {label:'Wortstamm finden',view:demoTile('rett<mark>en</mark>','Verb'),note:'Das Verb heißt retten. Wenn du -en weglässt, bleibt der Wortstamm rett-.'},
+      {label:'Endung anhängen',view:demoTile('rett-','Wortstamm')+demoJoin+demoTile('-ung','Nachsilbe','suffix'),note:'Minka hängt -ung hinten an den Wortstamm.'},
+      {label:'Nomen lesen',view:demoTile('die Rett<mark>ung</mark>','Nomen','result'),note:'Jetzt heißt es die Rettung. Das Nomen beginnt mit einem großen R.'}
+    ]
+  },
+  vorsilben:{
+    title:'Maja baut ein Wort von vorne',
+    art:'flag',
+    steps:[
+      {label:'Grundwort',view:demoTile('malen','Verb'),note:'Maja malt ein Bild. Die Grundform heißt malen.'},
+      {label:'Baustein davor',view:demoTile('be-','Vorsilbe','suffix')+demoJoin+demoTile('malen','Verb'),note:'be- kommt vor malen. Sprich die beiden Teile zusammen.'},
+      {label:'Neues Wort',view:demoTile('<mark>be</mark>malen','Verb','result'),note:'Maja bemalt ein Vogelhaus. Sie bringt Farbe auf seine Oberfläche.'}
+    ]
+  },
+  wortketten:{
+    title:'Eine Tür verbindet zwei Wörter',
+    steps:[
+      {label:'Erstes Wort bauen',pair:[0,1],view:demoTile('die Garten<mark>tür</mark>','Neues Nomen','result'),note:'Garten und Tür ergeben Gartentür. Tür steht am Ende. Deshalb lautet der Artikel die.'},
+      {label:'Zweites Wort bauen',pair:[1,2],view:demoTile('der <mark>Tür</mark>schlüssel','Neues Nomen','result'),note:'Tür und Schlüssel ergeben Türschlüssel. Schlüssel steht am Ende. Deshalb lautet der Artikel der.'}
+    ]
+  },
+  verben:{
+    title:'Wer spielt mit dem Ball?',
+    art:'paw',
+    steps:[
+      {label:'Ich',view:demoTile('ich','Person')+demoArrow+demoTile('spiel<mark>e</mark>','Verb','result'),note:'Maja sagt „Ich spiele.“ Der Stamm spiel- bekommt die Endung -e.'},
+      {label:'Du',view:demoTile('du','Person')+demoArrow+demoTile('spiel<mark>st</mark>','Verb','result'),note:'Maja sagt zu Fuji „Du spielst.“ Der Stamm bleibt gleich. Die Endung ist jetzt -st.'},
+      {label:'Wir',view:demoTile('wir','Person')+demoArrow+demoTile('spiel<mark>en</mark>','Verb','result'),note:'Maja und Fuji spielen zusammen. Zu wir passt die Endung -en.'}
+    ]
+  },
+  steigern:{
+    title:'Drei Drachen steigen in die Luft',
+    steps:[
+      {label:'Grundstufe',view:demoPhrase('Fujis Drachen fliegt <mark>hoch</mark>.'),note:'Die Grundstufe heißt hoch. Sie beschreibt, wie der Drachen fliegt.'},
+      {label:'1. Vergleichsstufe',view:demoPhrase('Majas Drachen fliegt <mark>höher</mark>.'),note:'Majas Drachen fliegt höher als Fujis. Bei hoch verändert sich der Wortstamm.'},
+      {label:'2. Vergleichsstufe',view:demoPhrase('Minkas Drachen fliegt <mark>am höchsten</mark>.'),note:'Minkas Drachen fliegt höher als die beiden anderen. Er fliegt am höchsten.'}
+    ]
+  },
+  herbst:{
+    title:'Majas Diktat in drei Schritten',
+    steps:[
+      {label:'Hören',art:'audio',view:demoPhrase('Höre den <mark>ganzen Satz</mark>.'),note:'Höre erst zu. So weißt du, worum es im Satz geht.'},
+      {label:'Schreiben',art:'leaf',view:demoPhrase('Höre <mark>langsam mit Pausen</mark>.'),note:'Schreibe in kleinen Teilen. Du kannst den Satz so oft anhören, wie du möchtest.'},
+      {label:'Prüfen',art:'flag',view:demoPhrase('Prüfe <mark>große Buchstaben</mark> und <mark>Satzzeichen</mark>.'),note:'Steht am Anfang ein Großbuchstabe? Sind Nomen und Namen groß? Hat der Satz am Ende ein Satzzeichen?'}
+    ]
+  }
+};
+
+function demoPanel(){
+  return `<details class="lesson-demo" id="lesson-demo">
+    <summary><span class="demo-summary-icon" aria-hidden="true">${icon('bulb')}</span>
+      <span><strong>Bild-Erklärung</strong><small>Schau dir das Beispiel Schritt für Schritt an.</small></span></summary>
+    <div class="demo-body">
+      <h3 id="demo-title"></h3>
+      <div id="demo-frame" role="status" aria-atomic="true"></div>
+      <div class="demo-controls" aria-label="Bild-Erklärung steuern">
+        <button class="secondary" type="button" id="demo-prev">${icon('back')} Zurück</button>
+        <span id="demo-progress" class="demo-progress"></span>
+        <button class="secondary" type="button" id="demo-next"></button>
+      </div>
+    </div>
+  </details>`;
+}
+
+function setupLessonDemo(unit){
+  const demo=lessonDemos[unit.id];
+  const panel=document.querySelector('#lesson-demo');
+  const title=panel.querySelector('#demo-title');
+  const frame=panel.querySelector('#demo-frame');
+  const previous=panel.querySelector('#demo-prev');
+  const next=panel.querySelector('#demo-next');
+  const counter=panel.querySelector('#demo-progress');
+  let index=0;
+  title.textContent=demo.title;
+
+  function draw(animate=false){
+    const step=demo.steps[index];
+    const artName=step.art||demo.art;
+    let picture=artName?demoPictogram(artName):'';
+    if(unit.id==='steigern')picture=demoKites(index);
+    if(step.pair){
+      picture=`<div class="demo-chain">${[['Garten','tree'],['Tür','door'],['Schlüssel','key']].map(([word,art],i)=>
+        `<span class="demo-chain-card ${step.pair.includes(i)?'is-current':''}">${demoPictogram(art)}<b>${word}</b></span>`).join('')}</div>`;
+    }
+    frame.innerHTML=`<div class="demo-stage ${animate?'demo-enter':''}">
+      ${picture}
+      <div class="demo-example"><span class="demo-label">${step.label}</span><div class="demo-view">${step.view}</div></div>
+      </div><p class="demo-note">${step.note}</p>`;
+    counter.textContent=`${index+1} von ${demo.steps.length}`;
+    previous.disabled=index===0;
+    next.innerHTML=`${index===demo.steps.length-1?'Von vorn':'Weiter'} ${icon('arrow')}`;
+  }
+
+  previous.onclick=()=>{
+    index-=1;
+    draw(true);
+    if(previous.disabled)next.focus();
+  };
+  next.onclick=()=>{
+    index=(index+1)%demo.steps.length;
+    draw(true);
+  };
+  draw();
+}
+</script>
 <script>const iconPaths = {
  book:'<path d="M12 6c-2.5-2-6-2.7-9-1.5v14c3-1.2 6.5-.5 9 1.5 2.5-2 6-2.7 9-1.5v-14C18 3.3 14.5 4 12 6Zm0 0v14"/>',
  puzzle:'<path d="M4 4h6a2.5 2.5 0 1 1 4 0h6v6a2.5 2.5 0 1 0 0 4v6h-6a2.5 2.5 0 1 0-4 0H4v-6a2.5 2.5 0 1 0 0-4Z"/>',
@@ -510,7 +708,7 @@ function showHome(){
     <a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a></div>
     <div class="hero-art">${intro}</div>
   </section>
-  <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen.</p></div></div>
+  <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
   <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
   <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">0${i+1}</span></div>
   <h3>${u.title}</h3><p>${descriptions[i]}</p><div class="card-foot"><span>${doneFor(u.id)} / ${questions[u.id].length} geschafft</span>${icon('arrow')}</div>
@@ -523,12 +721,15 @@ function showUnit(unit){
   const special = unit.id==='endungen' ? [['Zum Suchsel',6]] : unit.id==='herbst' ? [['Zum Hörteil',10]] : [];
   app.innerHTML=`<div class="route">${homeLink()}
   <div class="unit-head ${unit.tone}"><span class="icon-box">${icon(unit.icon)}</span><div><p class="kicker">Station ${units.indexOf(unit)+1} von ${units.length}</p><h1 tabindex="-1">${unit.title}</h1><p>${unit.place}</p></div></div>
-  <section class="panel"><h2>So geht’s</h2><p>${unit.story}</p><p>${unit.rule}</p><ul class="lesson-examples">${unit.examples.map(example=>`<li>${example}</li>`).join('')}</ul>
+  <section class="panel"><h2>So geht’s</h2><p>${unit.story}</p><p>${unit.rule}</p>
+  ${demoPanel()}
+  <ul class="lesson-examples">${unit.examples.map(example=>`<li>${example}</li>`).join('')}</ul>
   ${unit.id==='herbst'?`<details><summary>Vorlesevorlage für Erwachsene</summary><ol>${autumn.map(([line])=>`<li>${line}</li>`).join('')}</ol></details>`:''}
   <p class="subtle">${doneFor(unit.id)} von ${items.length} Aufgaben geschafft</p>
   <div class="actions"><a class="primary" href="${unitLink(unit.id,first||1)}">${first>1?'Weiterüben':first?'Übungen starten':'Noch einmal üben'} ${icon('arrow')}</a>
   ${special.map(([label,index])=>`<a class="secondary" href="${unitLink(unit.id,index)}">${label}</a>`).join('')}
   ${first>1?`<a class="plain" href="${unitLink(unit.id,1)}">Bei Aufgabe 1 beginnen</a>`:''}</div></section></div>`;
+  setupLessonDemo(unit);
 }
 function showProgress(){
   app.innerHTML=`<div class="route">${homeLink()}
