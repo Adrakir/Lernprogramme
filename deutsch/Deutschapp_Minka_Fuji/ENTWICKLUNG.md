@@ -1,9 +1,12 @@
 # Erzählwerkstatt: Sprachtraining mit Minka & Fuji
 
 Der Lernbereich **06 · Erzählsprache trainieren** ergänzt die vorhandene App.
-`language.js` enthält zwölf Themen mit Erklärungen, Vorher-Nachher-Beispielen,
-74 Aufgaben sowie je einem Schreibauftrag, einer Checkliste und einem
-Mustertext. Das Lernplakat-Training enthält unter anderem 16 unregelmäßige
+`language.js` verbindet 17 Themen mit Erklärungen, Vorher-Nachher-Beispielen,
+74 Grundlagenaufgaben sowie je einem Schreibauftrag, einer Checkliste und einem
+Mustertext. `language-practice.js` ergänzt je Thema 30 Übungen, insgesamt 510:
+zehn zur Auswahl, zehn zum Begründen und zehn eigene Schreibaufgaben mit
+erläuterter Musterlösung. Texte der offenen Aufgaben bleiben innerhalb der
+Sitzung auch beim Wiederholen eines Themas erhalten. Das Lernplakat-Training enthält unter anderem 16 unregelmäßige
 Verben aus der Verbtabelle, weitere Erzählverben, abwechslungsreiche
 Satzanfänge, Erzählaufbau, Gefühle, Sinneseindrücke und den Schreib-Check.
 Drei zusätzliche Satzzeichenübungen zeigen vorangestellte, nachgestellte

@@ -239,7 +239,7 @@ const topics = [
     checks:['Meine Verben zeigen genauer, was in der Szene passiert.','Meine Verben stehen im Präteritum.','Die Handlung bleibt gut verständlich.']
   },
   {
-    id:'erzaehlaufbau', title:'Aufbau und Spannung', guide:'Minka',
+    id:'erzaehlaufbau', title:'Hauptteil und Spannung', guide:'Minka',
     goal:'Einleitung, Hauptteil und Schluss so verbinden, dass die Geschichte einen roten Faden hat.',
     explanation:'In der Einleitung erfahren die Leser, wer dabei ist, wo und wann die Geschichte beginnt. Im Hauptteil wird das Rätsel größer. Am Höhepunkt fällt die wichtigste Entscheidung oder geschieht das Aufregendste. Der Schluss zeigt, wie alles ausgeht.',
     steps:['Gib Orientierung und lege eine Schlinge, die neugierig macht.', 'Lass eine Schwierigkeit folgen. Erzähle den Höhepunkt ausführlich mit Handlung und Wahrnehmung.', 'Greife den Hinweis spätestens am Schluss auf und runde die Geschichte kurz ab.'],
@@ -260,7 +260,7 @@ const topics = [
     checks:['Wer, wo und wann werden am Anfang klar.','Mein Hinweis wird später aufgegriffen.','Der Höhepunkt hat mehr Raum als die Auflösung.','Das Ende ergibt sich aus dem, was vorher passiert.']
   },
   {
-    id:'gefuehle', title:'Gedanken, Gefühle und Sinne', guide:'Fuji',
+    id:'gefuehle', title:'Gefühle zeigen', guide:'Fuji',
     goal:'Zeigen, was eine Figur denkt, fühlt und in ihrer Umgebung wahrnimmt.',
     explanation:'Gedanken lassen Leser verstehen, was eine Figur befürchtet oder hofft. Körperreaktionen und Sinneseindrücke helfen, die Szene mitzuerleben.',
     steps:['Wähle eine Figur, aus deren Nähe du die Szene erzählst.', 'Gib ihr einen passenden Gedanken oder zeige ihre Gefühle mit einer Reaktion.', 'Beschreibe ein Geräusch, einen Geruch, eine Berührung oder etwas Sichtbares, das in der Szene wichtig ist.'],
@@ -281,7 +281,7 @@ const topics = [
     checks:['Eine Körperreaktion macht Minkas Gefühl sichtbar.','Die Leser erfahren, was Minka denkt.','Ein Sinneseindruck passt zu diesem Moment.']
   },
   {
-    id:'schreibcheck', title:'Überschrift und Schreib-Check', guide:'Minka',
+    id:'schreibcheck', title:'Überarbeiten und Schreib-Check', guide:'Minka',
     goal:'Eine Geschichte mit einem Plan schreiben und Schritt für Schritt überarbeiten.',
     explanation:'Eine passende Überschrift macht neugierig. Beim Überarbeiten prüfst du zuerst Handlung und Absätze, dann die Sprache und am Ende Rechtschreibung und Satzzeichen.',
     steps:['Plane Ausgangssituation, Hinweis, Höhepunkt und Auflösung.', 'Schreibe den Entwurf. Gib wichtigen Handlungsschritten Platz und setze Absätze, wenn ein neuer Abschnitt beginnt.', 'Prüfe roten Faden, Erzählzeit, Satzanfänge und Wortwahl. Lies den Text zum Schluss auf Grammatik, Satzzeichen und Rechtschreibung.'],
@@ -303,11 +303,63 @@ const topics = [
   }
 ];
 
+function practiceTopic(id, title, guide, goal, example, bank, write, model, checks) {
+  const [before, after, why] = example;
+  return {
+    id,title,guide,goal,before,after,why,bank,write,model,checks,
+    explanation:why,steps:checks,tip:'Lies das Beispiel und vergleiche es mit deinem eigenen Versuch.',
+    bankTitle:'Merkkarte für deine Erzählung',tasks:[]
+  };
+}
+topics.push(
+  practiceTopic('einleitung','Einleitung und W-Fragen','Minka','Wer, wo, wann und die Ausgangssituation kurz klären.',
+    ['Sie waren da und suchten etwas.','Nach dem Training suchten Lina und Sami auf dem Sportplatz ihre Trinkflasche.','Zeit, Ort und Namen helfen beim Einstieg. Die Suche zeigt, was Lina und Sami gerade vorhaben.'],
+    [['Wer?','Nenne die wichtigsten Figuren.','Lina und Sami'],['Wo?','Wähle einen klaren Ort.','auf dem Sportplatz'],['Wann?','Ordne die Szene zeitlich ein.','nach dem Training'],['Was am Anfang?','Sag, was die Figuren vorhaben.','Sie suchten ihre Trinkflasche.']],
+    'Schreibe eine kurze Einleitung über Fuji und Minka im Garten. Sie suchen etwas, das sie verloren haben.',
+    'Am frühen Abend suchten Fuji und Minka im Garten ihren roten Ball. Unter der Bank blitzte kurz etwas auf.',
+    ['Nenne, wer die Geschichte erlebt.','Gib einen passenden Ort und eine Zeit an.','Mach klar, womit die Handlung beginnt.']),
+  practiceTopic('schluss','Schluss und Auflösung','Fuji','Die offene Frage beantworten und die Geschichte kurz beenden.',
+    ['Dann gingen sie nach Hause.','Unter dem Eimer saß der Igel. Er hatte mit den Krallen über die Fliesen gescharrt. Als er ins Laub huschte, wurde es still.','Der Schluss erklärt das Scharren und zeigt, was danach geschah.'],
+    [['Rückblick','Welche Frage war am Anfang offen?','Woher kam das Scharren?'],['Auflösung','Gib eine passende Antwort.','Ein Igel saß fest.'],['Folge','Zeige, was sich ändert.','Der Igel kam frei.'],['Ausklang','Ende nach wenigen passenden Sätzen.','Jetzt wurde es still.']],
+    'Löse ein grünes Licht am Gartentor auf. Schreibe einen kurzen Ausklang.',
+    'Am Tor hing Fujis leuchtender Schlüsselanhänger. Minka löste ihn vom Haken. Auf dem Heimweg leuchtete er ihr den Weg.',
+    ['Greife einen Hinweis vom Anfang wieder auf.','Erkläre, wie er entstanden ist.','Finde einen kurzen letzten Moment, der zur Geschichte passt.']),
+  practiceTopic('gedanken','Gedanken der Figuren','Minka','Zeigen, was eine Figur sich fragt, hofft oder befürchtet.',
+    ['Mia dachte über den Schuppen nach.','Mia starrte auf die Klinke. Was, wenn die Tür hinter ihr zufiel?','Die Frage gibt Mias konkrete Befürchtung wieder. Der erste Satz verrät nur, worüber sie ungefähr nachdenkt.'],
+    [['Frage','Zeige, was noch unklar ist.','Wer war hinter der Tür?'],['Wunsch','Sag, worauf die Figur hofft.','Hoffentlich war Fuji noch da!'],['Entscheidung','Erkläre, was die Figur beim Handeln abwägt.','Allein war die Kiste zu schwer.'],['Perspektive','Bleibe bei der gewählten Figur.','Sie wusste nicht, was Minka hinter der Tür tat.']],
+    'Schreibe einen kurzen Gedanken von Fuji, die einen rätselhaften Zettel findet.',
+    'Fuji drehte den Zettel um. Warum stand auf beiden Seiten dieselbe Zahl?',
+    ['Mach klar, wer denkt.','Zeige eine Frage, einen Wunsch oder eine Befürchtung.','Lass den Gedanken aus der Situation entstehen.']),
+  practiceTopic('sinne','Mit Sinnen und Vergleichen erzählen','Fuji','Wichtige Eindrücke konkret beschreiben, damit man die Szene miterlebt.',
+    ['Der Raum war seltsam.','Der Raum roch nach nassem Holz. Bei jedem Schritt knarrte eine andere Diele.','Der Geruch und das Knarren machen den Eindruck konkret.'],
+    [['Sehen','Nenne Form, Farbe oder Bewegung.','Ein schmaler Lichtstreifen wanderte über die Wand.'],['Hören','Gib Klang, Stärke oder Dauer an.','Die Tür quietschte einmal kurz.'],['Riechen und tasten','Beschreibe Geruch, Oberfläche oder Temperatur.','Das kalte Holz fühlte sich rau an.'],['Vergleichen','Vergleiche nur, was eine Eigenschaft teilt.','Der Schatten huschte wie eine Katze.']],
+    'Beschreibe den Moment, in dem Mia in einen dunklen Schuppen tritt. Nutze einen Geruch und ein Geräusch.',
+    'Mia roch feuchtes Holz. Hinter ihr knarrte die Tür, als sie langsam zufiel.',
+    ['Wähle zwei passende Sinneseindrücke.','Nutze konkrete Wörter für diese Eindrücke.','Lass Details weg, die für den Moment unwichtig sind.']),
+  practiceTopic('ueberschrift','Passende Überschrift','Minka','Einen Titel finden, der zur Handlung passt und neugierig macht.',
+    ['Eine Geschichte','Das Kratzen im Schuppen','Der Titel nennt einen wichtigen Hinweis und seinen Ort. Die Ursache des Kratzens bleibt offen.'],
+    [['Hinweis','Nutze eine Spur oder ein Geräusch.','Das Kratzen im Schuppen'],['Ort','Wähle einen Schauplatz, der wichtig ist.','Unter dem alten Steg'],['Entscheidung','Deute den Höhepunkt an.','Der letzte Griff'],['Geheimnis','Halte die Antwort offen.','Wer stand hinter der Tür?']],
+    'Erfinde einen Titel für eine Geschichte, in der eine nasse Spur zum undichten Eimer führt. Lass die Auflösung offen.',
+    'Die nasse Spur im Flur',
+    ['Wähle ein wichtiges Detail.','Wecke Neugier.','Halte die Auflösung offen.'])
+);
+
+const topicGroups = [
+  ['Aufbau und Spannung',['einleitung','schlingen','erzaehlaufbau','schluss','ueberschrift']],
+  ['Sprache und Wortwahl',['praeteritum','satzanfaenge','gehen','sehen','sagen','erzaehlverben','adjektive','rede']],
+  ['Anschaulich erzählen und überarbeiten',['gefuehle','gedanken','sinne','schreibcheck']]
+];
+const levels = [
+  ['grundlagen','Grundlagen'],['erkennen','Erkennen'],['begruenden','Begründen'],['anwenden','Selbst schreiben']
+];
+for (const t of topics) t.tasks.push(...MF_LANGUAGE_PRACTICE[t.id]);
+
 const freshRecord = () => ({selected:null, first:null, solved:false, hint:false, model:false, message:''});
 const states = new Map(topics.map(t => [t.id, {index:0, records:t.tasks.map(freshRecord), draft:'', checks:t.checks.map(() => false), feedback:false}]));
-let current = topics[0].id;
+let current = 'einleitung';
 const state = () => states.get(current);
 const topic = () => topics.find(t => t.id === current);
+const levelOf = q => q.level || 'grundlagen';
 function totals() {
   const records = [...states.values()].flatMap(s => s.records);
   const attempted = records.filter(r => r.first !== null || r.model).length;
@@ -315,8 +367,17 @@ function totals() {
   document.getElementById('language-total').textContent = `${attempted} von ${records.length} Aufgaben bearbeitet · ${independent} beim ersten Versuch ohne Hilfe richtig. Eigene Texte prüfst du mit der Checkliste.`;
 }
 function renderTopics() {
-  document.getElementById('language-topics').innerHTML = topics.map((t,i) => `<button type="button" data-language-topic="${t.id}" aria-pressed="${t.id === current}"><span>${i+1}.</span> ${esc(t.title)}</button>`).join('');
+  document.getElementById('language-topics').innerHTML = topicGroups.map(([label,ids]) => `<section class="language-topic-group" aria-label="${esc(label)}"><h2>${esc(label)}</h2><div class="language-topics">${ids.map(id => {
+    const t=topics.find(entry => entry.id===id);
+    return `<button type="button" data-language-topic="${t.id}" aria-pressed="${t.id===current}"><span>${esc(t.title)}</span><small>${t.tasks.length} Übungen</small></button>`;
+  }).join('')}</div></section>`).join('');
   document.querySelectorAll('[data-language-topic]').forEach(b => b.addEventListener('click', () => {current=b.dataset.languageTopic;render();document.getElementById('language-heading').focus({preventScroll:true});document.getElementById('language-heading').scrollIntoView({block:'start'});}));
+}
+function taskOptions(t) {
+  return levels.map(([level,label]) => {
+    const options=t.tasks.map((q,i) => levelOf(q)===level?`<option value="${i}">${i+1}. ${esc(q.title)}</option>`:'').join('');
+    return options?`<optgroup label="${label}">${options}</optgroup>`:'';
+  }).join('');
 }
 function renderBank(t) {
   if (t.verbForms) {
@@ -326,15 +387,22 @@ function renderBank(t) {
 }
 function render() {
   const t=topic(),s=state();
+  const nextTopic=topicGroups.flatMap(([,ids])=>ids);
+  const nextId=nextTopic[(nextTopic.indexOf(current)+1)%nextTopic.length];
   renderTopics();totals();
-  root.innerHTML = `<article class="panel language-theory"><p class="eyebrow">1 · Verstehen</p><h2 id="language-heading" tabindex="-1">${esc(t.title)}</h2><p class="language-goal"><strong>Dein Ziel:</strong> ${esc(t.goal)}</p><div class="speech"><strong>${esc(t.guide)} erklärt:</strong> ${esc(t.explanation)}</div><h3>So gehst du vor</h3><ol class="language-steps">${t.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="note compact"><strong>${t.guide === 'Minka'?'Fuji':'Minka'} ergänzt:</strong> ${esc(t.tip)}</div></article>
+  root.innerHTML = `<article class="panel language-theory"><p class="eyebrow">1 · Verstehen</p><h2 id="language-heading" tabindex="-1">${esc(t.title)}</h2><p class="language-goal"><strong>Dein Ziel:</strong> ${esc(t.goal)}</p><div class="speech"><strong>${esc(t.guide)} erklärt:</strong> ${esc(t.explanation)}</div><h3>So gehst du vor</h3><ol class="language-steps">${t.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="note compact"><strong>${t.guide === 'Minka'?'Fuji':'Minka'} ergänzt:</strong> ${esc(t.tip)}</div><button type="button" class="primary" id="language-to-training">Direkt zu den Übungen</button></article>
     <article class="panel extras"><p class="eyebrow">2 · Vergleichen</p><h2>Was ändert sich im Text?</h2><div class="two-col"><div><h3>Vorher</h3><p class="model-text">${esc(t.before)}</p></div><div><h3>Überarbeitet</h3><p class="model-text">${esc(t.after)}</p></div></div><p>${esc(t.why)}</p>${t.followup?`<div class="note">${esc(t.followup)}</div>`:''}<details><summary>${esc(t.bankTitle)}</summary>${renderBank(t)}</details></article>
-    <article class="panel extras" id="language-training"><p class="eyebrow">3 · Üben</p><h2>Mit Minka & Fuji ausprobieren</h2><label class="select-label">Aufgabe auswählen<select id="language-jump">${t.tasks.map((q,i)=>`<option value="${i}" ${i===s.index?'selected':''}>${i+1}. ${esc(q.title)}</option>`).join('')}</select></label><p id="language-score" role="status"></p><div id="language-task"></div></article>
+    <article class="panel extras" id="language-training"><p class="eyebrow">3 · Üben</p><h2>Mit Minka & Fuji ausprobieren</h2><p>Wähle eine Übungsart oder springe zu einer bestimmten Aufgabe. Bei eigenen Texten vergleichst du mit der Musterlösung.</p><div id="language-levels" class="quiz-actions" role="group" aria-label="Übungsart"></div><label class="select-label">Aufgabe auswählen<select id="language-jump">${taskOptions(t)}</select></label><p id="language-score" role="status"></p><div id="language-task"></div></article>
     ${t.id==='rede'?'<article class="panel extras"><h2>Fujis Satzzeichen-Werkstatt</h2><p>Setze die fehlenden Zeichen. Der Satz wird unter deiner Auswahl zusammengesetzt.</p><div id="language-punctuation"></div></article>':''}
-    <article class="panel extras language-writing"><p class="eyebrow">4 · Selbst schreiben</p><h2>Dein Text mit Minka & Fuji</h2><p>${esc(t.write)}</p><label for="language-draft">Dein eigener Text zum Thema „${esc(t.title)}“</label><textarea id="language-draft" rows="7" maxlength="12000" placeholder="Probiere hier deine eigenen Formulierungen aus."></textarea><p class="muted" id="language-wordcount"></p><div class="writing-checks">${t.checks.map((c,i)=>`<label><input type="checkbox" data-language-check="${i}" ${s.checks[i]?'checked':''}><span>${esc(c)}</span></label>`).join('')}</div><button type="button" class="primary" id="language-review">Meine Überarbeitungshilfe</button><div id="language-writing-feedback" class="feedback" role="status"></div><details><summary>Mustertext zum Vergleichen</summary><p class="model-text">${esc(t.model)}</p><p>Dies ist eine Möglichkeit. Dein Text darf anders lauten. Prüfe mit der Checkliste, wie du dein Ziel erreicht hast.</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-to-intro">Zur Einleitung-Schreibwerkstatt</button><button type="button" class="primary" id="language-next-topic">${topics.indexOf(t)===topics.length-1?'Wieder zu den Schlingen':'Nächstes Thema'}</button></div><p class="muted">Deine Texte werden nicht automatisch benotet. Antworten und Entwürfe bleiben während der geöffneten Sitzung erhalten; beim Neuladen werden sie zurückgesetzt.</p></article>`;
+    <article class="panel extras language-writing"><p class="eyebrow">4 · Selbst schreiben</p><h2>Dein Text mit Minka & Fuji</h2><p>${esc(t.write)}</p><label for="language-draft">Dein eigener Text zum Thema „${esc(t.title)}“</label><textarea id="language-draft" rows="7" maxlength="12000" placeholder="Probiere hier deine eigenen Formulierungen aus."></textarea><p class="muted" id="language-wordcount"></p><div class="writing-checks">${t.checks.map((c,i)=>`<label><input type="checkbox" data-language-check="${i}" ${s.checks[i]?'checked':''}><span>${esc(c)}</span></label>`).join('')}</div><button type="button" class="primary" id="language-review">Meine Überarbeitungshilfe</button><div id="language-writing-feedback" class="feedback" role="status"></div><details><summary>Mustertext zum Vergleichen</summary><p class="model-text">${esc(t.model)}</p><p>Dies ist eine Möglichkeit. Dein Text darf anders lauten. Prüfe mit der Checkliste, wie du dein Ziel erreicht hast.</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-to-intro">Zur Einleitung-Schreibwerkstatt</button><button type="button" class="primary" id="language-next-topic">Nächstes Thema</button></div><p class="muted">Deine Texte werden nicht automatisch benotet. Antworten und Entwürfe bleiben während der geöffneten Sitzung erhalten; beim Neuladen werden sie zurückgesetzt.</p></article>`;
   const repeat=document.createElement('button');repeat.type='button';repeat.className='secondary';repeat.id='language-repeat';repeat.textContent='Aufgaben dieses Themas neu üben';
   document.getElementById('language-score').after(repeat);
-  repeat.addEventListener('click',()=>{s.records=t.tasks.map(freshRecord);s.index=0;renderTask();});
+  repeat.addEventListener('click',()=>{
+    s.records=t.tasks.map((task,i)=>({...freshRecord(),selected:task.type==='open'?s.records[i].selected:null}));
+    s.index=0;
+    renderTask();
+  });
+  document.getElementById('language-to-training').addEventListener('click',()=>renderTask(true));
   renderTask();
   document.getElementById('language-jump').addEventListener('change',e=>{s.index=Number(e.target.value);renderTask();});
   const draft=document.getElementById('language-draft');draft.value=s.draft;
@@ -343,7 +411,7 @@ function render() {
   document.querySelectorAll('[data-language-check]').forEach(c=>c.addEventListener('change',()=>{s.checks[Number(c.dataset.languageCheck)]=c.checked;s.feedback=false;writingFeedback();}));
   document.getElementById('language-review').addEventListener('click',()=>{s.feedback=true;writingFeedback();});writingFeedback();
   document.getElementById('language-to-intro').addEventListener('click',()=>showPage('schreiben'));
-  document.getElementById('language-next-topic').addEventListener('click',()=>{current=topics[(topics.indexOf(t)+1)%topics.length].id;render();document.getElementById('language-heading').focus();});
+  document.getElementById('language-next-topic').addEventListener('click',()=>{current=nextId;render();document.getElementById('language-heading').focus();});
   if(t.id==='rede')renderPunctuation();
 }
 function writingFeedback(){
@@ -356,12 +424,23 @@ function writingFeedback(){
 }
 function renderTask(focus=false){
   const t=topic(),s=state(),q=t.tasks[s.index],r=s.records[s.index];
+  const levelPicker=document.getElementById('language-levels');
+  levelPicker.innerHTML=levels.map(([id,label])=>{
+    const index=t.tasks.findIndex(task=>levelOf(task)===id);
+    if(index<0)return '';
+    const count=t.tasks.filter(task=>levelOf(task)===id).length;
+    return `<button type="button" class="secondary" data-language-level="${index}" aria-pressed="${levelOf(q)===id}">${label} (${count})</button>`;
+  }).join('');
+  levelPicker.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{s.index=Number(b.dataset.languageLevel);renderTask(true);}));
   document.getElementById('language-jump').value=String(s.index);
   const completed=s.records.filter(x=>x.first!==null||x.model).length,independent=s.records.filter(x=>x.first?.correct&&!x.first.helped).length;
   document.getElementById('language-score').textContent=`${completed} von ${t.tasks.length} bearbeitet · ${independent} beim ersten Versuch ohne Hilfe richtig`;
   let controls;
   let solution;
-  if (q.type === 'word') {
+  if (q.type === 'open') {
+    controls=`<p class="question-text">${esc(q.text)}</p><label for="language-open-answer">Deine Lösung</label><textarea id="language-open-answer" rows="3" maxlength="4000" aria-describedby="language-open-instruction"></textarea><p id="language-open-instruction" class="muted">Vergleiche deinen Text mit dem Muster. Andere passende Lösungen sind möglich.</p>`;
+    solution=q.answer;
+  } else if (q.type === 'word') {
     controls=`<p id="language-word-instruction">Schreib nur das fehlende Verb im Präteritum.</p><p class="question-text"><label>${esc(q.before)}<input id="language-word-answer" type="text" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="language-word-instruction" ${r.solved?'readonly':''}>${esc(q.after)}</label></p>`;
     solution=q.before+q.answer+q.after;
   } else if (q.type === 'gap') {
@@ -371,7 +450,7 @@ function renderTask(focus=false){
     controls=`<p class="question-text">${esc(q.text)}</p><div class="choices" role="group" aria-label="Antwortmöglichkeiten">${q.options.map((o,i)=>`<button type="button" class="choice ${r.solved&&i===q.answer?'correct':''}" data-language-answer="${i}" aria-pressed="${r.selected===i}" ${r.solved?'disabled':''}><span class="letter" aria-hidden="true">${'ABC'[i]}</span>${esc(o)}</button>`).join('')}</div>`;
     solution=q.options[q.answer];
   }
-  document.getElementById('language-task').innerHTML=`<h3 id="language-task-title" tabindex="-1">${s.index+1}. ${esc(q.title)}</h3>${controls}<div class="quiz-actions"><button type="button" class="primary" id="language-check" ${r.selected===null||r.solved?'disabled':''}>Antwort prüfen</button><button type="button" class="secondary" id="language-hint" ${r.hint?'disabled':''}>${r.hint?'Hilfe geöffnet':'Hilfe von Minka & Fuji'}</button></div><div id="language-answer-feedback" class="feedback ${r.solved?'good':''}" role="status">${esc(r.message)}</div>${r.hint?`<div class="hint-box">${esc(q.hint)}</div>`:''}<details id="language-solution" ${r.model?'open':''}><summary>Lösung mit Erklärung</summary><p><strong>${esc(solution)}</strong></p><p>${esc(q.explain)}</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-prev-task" ${s.index===0?'disabled':''}>Vorherige Aufgabe</button><button type="button" class="primary" id="language-next-task" ${s.index===t.tasks.length-1?'disabled':''}>Nächste Aufgabe</button></div>`;
+  document.getElementById('language-task').innerHTML=`<h3 id="language-task-title" tabindex="-1">${s.index+1}. ${esc(q.title)}</h3>${controls}<div class="quiz-actions"><button type="button" class="primary" id="language-check" ${r.selected===null||r.solved?'disabled':''}>${q.type==='open'?'Mit Musterlösung vergleichen':'Antwort prüfen'}</button><button type="button" class="secondary" id="language-hint" ${r.hint?'disabled':''}>${r.hint?'Hilfe geöffnet':'Hilfe von Minka & Fuji'}</button></div><div id="language-answer-feedback" class="feedback ${r.solved?'good':''}" role="status">${esc(r.message)}</div>${r.hint?`<div class="hint-box">${esc(q.hint)}</div>`:''}<details id="language-solution" ${r.model?'open':''}><summary>${q.type==='open'?'Musterlösung mit Erklärung':'Lösung mit Erklärung'}</summary><p class="model-text"><strong>${esc(solution)}</strong></p><p>${esc(q.explain)}</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-prev-task" ${s.index===0?'disabled':''}>Vorherige Aufgabe</button><button type="button" class="primary" id="language-next-task" ${s.index===t.tasks.length-1?'disabled':''}>Nächste Aufgabe</button></div>`;
   const checkButton=document.getElementById('language-check');
   const wordInput=document.getElementById('language-word-answer');
   if (wordInput) {
@@ -386,11 +465,28 @@ function renderTask(focus=false){
       if(e.key==='Enter'&&!e.isComposing){e.preventDefault();checkButton.click();}
     });
   }
+  const openInput=document.getElementById('language-open-answer');
+  if(openInput){
+    openInput.value=r.selected??'';
+    openInput.addEventListener('input',()=>{
+      r.selected=openInput.value.trim()?openInput.value:null;
+      checkButton.disabled=r.selected===null;
+    });
+  }
   const selectAnswer=i=>{r.selected=i;r.message='';renderTask();const control=q.type==='gap'?document.getElementById('language-gap'):document.querySelector(`[data-language-answer="${i}"]`);control?.focus({preventScroll:true});};
   document.querySelectorAll('[data-language-answer]').forEach(b=>b.addEventListener('click',()=>selectAnswer(Number(b.dataset.languageAnswer))));
   document.getElementById('language-gap')?.addEventListener('change',e=>selectAnswer(e.target.value===''?null:Number(e.target.value)));
   checkButton.addEventListener('click',()=>{
     if(r.selected===null||r.solved)return;
+    if(q.type==='open'){
+      r.model=true;
+      r.message='Vergleiche deinen Text mit dem Muster und achte auf die Erklärung darunter.';
+      renderTask();
+      const feedback=document.getElementById('language-answer-feedback');
+      feedback.tabIndex=-1;
+      feedback.focus();
+      return;
+    }
     const correct=(q.type==='word'?r.selected.trim().toLocaleLowerCase('de'):r.selected)===q.answer;
     if(r.first===null)r.first={correct,helped:r.hint||r.model};
     r.solved=correct;r.message=correct?`Richtig. ${q.explain}`:`Das passt noch nicht. ${q.hint} Versuche es noch einmal oder öffne die Erklärung.`;

@@ -17,7 +17,7 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
  });
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
  const port=server.address().port;
- const browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+ const browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,args:['--no-sandbox','--disable-dev-shm-usage']});
  const context=await browser.newContext({serviceWorkers:'allow'});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
@@ -26,7 +26,7 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   const cache=await page.evaluate(async()=>{
     const names=await caches.keys();const c=await caches.open(names.find(n=>n.startsWith('minka-fuji-deutsch-')));
     const script=(name)=>'./'+Array.from(document.querySelectorAll('script[src]')).map(el=>el.getAttribute('src')).find(src=>src.startsWith(name+'?'));
-    const keys=['./index.html',script('studio.js'),'./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg',script('image-compat.js')];
+    const keys=['./index.html',script('studio.js'),script('language-practice.js'),script('language.js'),'./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg',script('image-compat.js')];
     return Promise.all(keys.map(async k=>({key:k,available:!!await c.match(k)})));
   });
   assert.ok(cache.every(x=>x.available),JSON.stringify(cache));
@@ -35,6 +35,12 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   assert.equal(await page.locator('.up-scene svg').count(),6);
   await context.setOffline(true);
   await page.reload();
+  await page.locator('[data-page="sprache"]').click();
+  await page.locator('[data-language-topic="schluss"]').click();
+  assert.equal(await page.locator('#language-jump option').count(),30);
+  await page.getByRole('button',{name:'Selbst schreiben (10)'}).click();
+  await page.locator('#language-solution summary').click();
+  assert.match(await page.locator('#language-solution').textContent(),/Käfer.*Ursache/s);
   await page.locator('[data-page="entdecken"]').click();
   await page.waitForFunction(()=>document.querySelector('#comic-image')?.naturalWidth>0);
   assert.ok(await page.locator('#comic-image').evaluate(img=>img.naturalWidth>0),'Comic-Bild ist offline sichtbar');

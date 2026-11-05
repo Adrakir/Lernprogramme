@@ -2,6 +2,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { pathToFileURL } = require('node:url');
 const path = require('node:path');
+const fs = require('node:fs');
+const vm = require('node:vm');
 const { chromium } = require('playwright');
 
 const app = process.env.DEUTSCH_APP_URL || pathToFileURL(path.resolve(__dirname, '../index.html')).href;
@@ -11,7 +13,24 @@ const solutions = {
   praeteritum:['war','hatte','ging','kam','sah','sprach','lief','fand','nahm','gab','las','schrieb','dachte','wusste','rief','schwamm',1,2,0,1],
   erzaehlverben:[1,0,2,1,'griff','kroch','roch','zuckte'], erzaehlaufbau:[1,0,2,1], gefuehle:[2,0,1,1], schreibcheck:[0,1,2,1]
 };
-const taskCount=Object.values(solutions).reduce((total,answers)=>total+answers.length,0);
+const practice=vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../language-practice.js'),'utf8')+'\nMF_LANGUAGE_PRACTICE');
+const topicIds=['einleitung','schlingen','erzaehlaufbau','schluss','ueberschrift','praeteritum','satzanfaenge','gehen','sehen','sagen','erzaehlverben','adjektive','rede','gefuehle','gedanken','sinne','schreibcheck'];
+const baseCount=Object.values(solutions).reduce((total,answers)=>total+answers.length,0);
+const taskCount=baseCount+topicIds.length*30;
+test('Alle Themen des Lernplakats haben je 30 Zusatzaufgaben mit konkreten Erklärungen',()=>{
+  assert.deepEqual(Object.keys(practice).sort(),[...topicIds].sort());
+  for(const id of topicIds){
+    const tasks=practice[id];
+    assert.equal(tasks.length,30,id);
+    assert.equal(new Set(tasks.map(q=>JSON.stringify([q.text,q.options]))).size,30,id);
+    for(const level of ['erkennen','begruenden','anwenden'])assert.equal(tasks.filter(q=>q.level===level).length,10,`${id}: ${level}`);
+    for(const q of tasks){
+      assert.ok(q.explain.length>=40,`${id}: ${q.title} · Erklärung`);
+      if(q.level==='anwenden')assert.ok(q.type==='open'&&q.answer.length>=15,`${id}: ${q.title} · Muster`);
+      else assert.ok(q.options[q.answer]&&new Set(q.options).size===q.options.length,`${id}: ${q.title} · Auswahl`);
+    }
+  }
+});
 test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darstellung', async t => {
   const browser = await chromium.launch({
     headless:true,
@@ -20,7 +39,7 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
   });
   const page=await browser.newPage({viewport:{width:1280,height:900}});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  async function open(){await page.goto(app);await page.click('[data-page="sprache"]');}
+  async function open(){await page.goto(app);await page.click('[data-page="sprache"]');await page.click('[data-language-topic="schlingen"]');}
   async function answer(index){
     if(typeof index==='string') await page.fill('#language-word-answer',index);
     else if(await page.locator('#language-gap').count()) await page.selectOption('#language-gap', String(index));
@@ -28,8 +47,8 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
     await page.click('#language-check');
   }
   try {
-    await t.test('Alle Aufgaben lassen sich lösen; Wortschatz und Mustertexte sind erreichbar',async()=>{
-      await open();assert.equal(await page.locator('[data-language-topic]').count(),Object.keys(solutions).length);
+    await t.test('Alle Grundlagen lassen sich lösen; Wortschatz und Mustertexte sind erreichbar',async()=>{
+      await open();assert.equal(await page.locator('[data-language-topic]').count(),topicIds.length);
       for(const [id,answers] of Object.entries(solutions)){
         await page.click(`[data-language-topic="${id}"]`);
         const bank=page.locator('.language-theory + article details');
@@ -41,28 +60,28 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
           assert.match(await page.locator('#language-answer-feedback').textContent(),/^Richtig\./);
           assert.equal(await page.locator('#language-check').isDisabled(),true);
         }
-        assert.ok((await page.locator('#language-score').textContent()).startsWith(`${answers.length} von ${answers.length} bearbeitet · ${answers.length} beim ersten Versuch`));
+        assert.ok((await page.locator('#language-score').textContent()).startsWith(`${answers.length} von ${answers.length+30} bearbeitet · ${answers.length} beim ersten Versuch`));
         await page.locator('.language-writing details summary').click();
         assert.ok((await page.locator('.language-writing details .model-text').textContent()).length>100);
       }
-      assert.ok((await page.locator('#language-total').textContent()).startsWith(`${taskCount} von ${taskCount} Aufgaben bearbeitet · ${taskCount} beim ersten Versuch`));
+      assert.ok((await page.locator('#language-total').textContent()).startsWith(`${baseCount} von ${taskCount} Aufgaben bearbeitet · ${baseCount} beim ersten Versuch`));
       await page.click('[data-language-topic="rede"]');
       await page.fill('#language-draft','Minka fragte: „Kommst du mit?“');
       await page.click('#language-repeat');
-      assert.match(await page.locator('#language-score').textContent(),/0 von 6 bearbeitet/);
-      assert.ok((await page.locator('#language-total').textContent()).startsWith(`${taskCount-6} von ${taskCount} Aufgaben bearbeitet`));
+      assert.match(await page.locator('#language-score').textContent(),/0 von 36 bearbeitet/);
+      assert.ok((await page.locator('#language-total').textContent()).startsWith(`${baseCount-6} von ${taskCount} Aufgaben bearbeitet`));
       assert.equal(await page.locator('#language-draft').inputValue(),'Minka fragte: „Kommst du mit?“');
     });
     await t.test('Verbesserungen, Hilfen und geöffnete Lösungen zählen nicht als unabhängiger Erstversuch',async()=>{
       await open();await answer(0);
       assert.match(await page.locator('#language-answer-feedback').textContent(),/noch nicht/);
       await answer(1);
-      assert.match(await page.locator('#language-score').textContent(),/1 von 4 bearbeitet · 0 beim ersten Versuch/);
+      assert.match(await page.locator('#language-score').textContent(),/1 von 34 bearbeitet · 0 beim ersten Versuch/);
       await page.selectOption('#language-jump','1');await page.click('#language-hint');await answer(2);
       await page.selectOption('#language-jump','2');await page.click('#language-solution summary');
       await page.waitForFunction(total=>document.querySelector('#language-total').textContent.startsWith(`3 von ${total}`),taskCount);
       await answer(0);
-      assert.match(await page.locator('#language-score').textContent(),/3 von 4 bearbeitet · 0 beim ersten Versuch/);
+      assert.match(await page.locator('#language-score').textContent(),/3 von 34 bearbeitet · 0 beim ersten Versuch/);
       await page.click('[data-language-topic="gehen"]');await page.click('[data-language-topic="schlingen"]');
       assert.equal(await page.locator('#language-jump').inputValue(),'2');
       assert.equal(await page.locator('#language-check').isDisabled(),true);
@@ -82,9 +101,62 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
       await input.fill(' War ');
       await input.press('Enter');
       assert.match(await page.locator('#language-answer-feedback').textContent(),/^Richtig\./);
-      assert.match(await page.locator('#language-score').textContent(),/1 von 20 bearbeitet · 0 beim ersten Versuch/);
+      assert.match(await page.locator('#language-score').textContent(),/1 von 50 bearbeitet · 0 beim ersten Versuch/);
       await page.goto(`${app}#erzaehlverben`);
       assert.equal(await page.locator('#language-heading').textContent(),'Mehr Verben fürs Erzählen');
+    });
+    await t.test('Schülerweg: von der Merkkarte zur Begründung und zur eigenen Lösung',async()=>{
+      await page.goto(`${app}#einleitung`);
+      await page.click('#language-to-training');
+      assert.equal(await page.locator('#language-task-title').evaluate(el=>el===document.activeElement),true);
+      await page.getByRole('button',{name:'Begründen (10)'}).click();
+      assert.match(await page.locator('#language-task .question-text').textContent(),/Welche Regel/);
+      await answer(1);
+      assert.match(await page.locator('#language-answer-feedback').textContent(),/noch nicht/);
+      await answer(0);
+      assert.match(await page.locator('#language-answer-feedback').textContent(),/^Richtig\./);
+      await page.getByRole('button',{name:'Selbst schreiben (10)'}).click();
+      const draft='Am Montag suchten Minka und Fuji im Schuppen nach dem Ball. <b>Eigener Text</b>';
+      await page.fill('#language-open-answer',draft);
+      await page.getByRole('button',{name:'Mit Musterlösung vergleichen'}).click();
+      assert.equal(await page.locator('#language-solution').evaluate(el=>el.open),true);
+      assert.match(await page.locator('#language-solution').textContent(),/Trinkflasche.*Zeitpunkt/s);
+      assert.match(await page.locator('#language-score').textContent(),/2 von 30 bearbeitet · 0 beim ersten Versuch/);
+      await page.click('#language-next-task');
+      assert.equal(await page.locator('#language-open-answer').inputValue(),'');
+      await page.click('#language-prev-task');
+      assert.equal(await page.locator('#language-open-answer').inputValue(),draft);
+      assert.equal(await page.locator('#language-task b').count(),0);
+      await page.click('#language-repeat');
+      await page.getByRole('button',{name:'Selbst schreiben (10)'}).click();
+      assert.equal(await page.locator('#language-open-answer').inputValue(),draft);
+      assert.match(await page.locator('#language-score').textContent(),/0 von 30 bearbeitet/);
+    });
+    await t.test('Alle 510 Zusatzaufgaben zeigen die zugehörige Lösung und Erklärung',async()=>{
+      await open();
+      const failures=await page.evaluate(({practice,solutions})=>{
+        const failures=[];
+        for(const [id,tasks] of Object.entries(practice)){
+          document.querySelector('[data-language-topic="'+id+'"]').click();
+          const jump=document.getElementById('language-jump');
+          const base=solutions[id]?.length||0;
+          if(jump.options.length!==base+30)failures.push(id+': count');
+          tasks.forEach((q,i)=>{
+            jump.value=String(base+i);
+            jump.dispatchEvent(new Event('change'));
+            const solution=document.querySelector('#language-solution');
+            const expected=q.type==='open'?q.answer:q.options[q.answer];
+            if(solution.querySelector('strong').textContent!==expected||!solution.textContent.includes(q.explain)) failures.push(id+': solution '+i);
+            if(q.type!=='open'){
+              document.querySelector('[data-language-answer="'+q.answer+'"]').click();
+              document.getElementById('language-check').click();
+              if(!document.getElementById('language-answer-feedback').textContent.startsWith('Richtig.'))failures.push(id+': score '+i);
+            }
+          });
+        }
+        return failures;
+      },{practice,solutions});
+      assert.deepEqual(failures,[]);
     });
     await t.test('Entwürfe und Checklisten bleiben je Thema erhalten, auch beim Wechsel des Lernbereichs',async()=>{
       await open();await page.click('#language-review');
@@ -142,7 +214,7 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
     await t.test('Auf Handy und Tablet kein horizontaler Überlauf; Touch-Ziele bleiben erreichbar',async()=>{
       for(const width of [320,390,768]){
         await page.setViewportSize({width,height:844});await page.click('[data-page="sprache"]');
-        for(const id of Object.keys(solutions)){
+        for(const id of topicIds){
           await page.click(`[data-language-topic="${id}"]`);
           await page.locator('.language-theory + article details summary').click();
           const size=await page.evaluate(()=>({
