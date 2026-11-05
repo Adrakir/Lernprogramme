@@ -145,8 +145,13 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
         for(const id of Object.keys(solutions)){
           await page.click(`[data-language-topic="${id}"]`);
           await page.locator('.language-theory + article details summary').click();
-          const size=await page.evaluate(()=>({content:document.documentElement.scrollWidth,viewport:innerWidth}));
-          assert.ok(size.content<=size.viewport+1,`${id}: ${size.content} > ${size.viewport}`);
+          const size=await page.evaluate(()=>({
+            content:document.documentElement.scrollWidth,
+            viewport:innerWidth,
+            overflow:[...document.querySelectorAll('#sprache *')].filter(el=>el.getBoundingClientRect().right>innerWidth+1)
+              .slice(0,8).map(el=>el.id||el.className||el.tagName)
+          }));
+          assert.ok(size.content<=size.viewport+1,`${id}: ${size.content} > ${size.viewport} (${size.overflow.join(', ')})`);
           for(const button of await page.locator('#language-topics button').all()){
             assert.ok((await button.boundingBox()).height>=44);
           }
