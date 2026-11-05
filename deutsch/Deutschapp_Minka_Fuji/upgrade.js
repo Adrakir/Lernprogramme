@@ -2,7 +2,7 @@
 /* Erzählwerkstatt Ausbau: explizite Selbstprüfung statt automatischer Bewertung. */
 window.MF_UPGRADE=(()=>{
  const D=window.MF_UPGRADE_DATA,R=document.getElementById('studio-app');if(!D||!R)return null;
- const KEY='mf-deutsch-ausbau-v1',BACKUP_KEYS=['minka-fuji-studio-v1','mf-deutsch-akademie-v1','mf-deutsch-textlupe-v1','minka-fuji-lehrgang-v1','minka-fuji-hauptteil-v1',KEY];
+ const KEY='mf-deutsch-ausbau-v1',BACKUP_KEYS=['minka-fuji-studio-v1','mf-deutsch-akademie-v1','mf-deutsch-textlupe-v1','minka-fuji-lehrgang-v1','minka-fuji-hauptteil-v1','minka-fuji-sprachwerkstatt-v1',KEY];
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const blank=()=>({scene:'leuchtturm',order:['peak','intro','thought','trigger','ending','obstacle','resolution'],notes:{},diagnostic:{},analysis:'',conference:{},planDone:{},voiceIndex:0,teacher:{title:'',focus:['aufbau','spannung'],level:'mittel',minutes:45,scene:'leuchtturm',extra:''},readingText:'',readingAt:-1});
  let S=blank();try{const old=JSON.parse(localStorage.getItem(KEY)||'null');if(old&&typeof old==='object')S={...blank(),...old,notes:old.notes||{},diagnostic:old.diagnostic||{},conference:old.conference||{},planDone:old.planDone||{},teacher:{...blank().teacher,...old.teacher}};}catch{}
@@ -139,28 +139,52 @@ window.MF_UPGRADE=(()=>{
   return '<div class="studio-section-intro"><h2>Schreibcoach, Diagnose und Übungsplan</h2><p>Erkenne Sprachmuster in deinem Text, belege selbst die Wirkung und übe gezielt an deinen Schwierigkeiten. Es gibt keine vorgetäuschte KI-Korrektur.</p><nav aria-label="Werkzeuge in diesem Bereich" class="up-jump-nav"><button data-up-jump="up-feedback-analysis">Text überprüfen</button><button data-up-jump="up-feedback-writing">Schreibproben</button><button data-up-jump="up-feedback-path">Mein Lernplan</button><button data-up-jump="up-feedback-conf">Schreibkonferenz</button></nav></div>'+
    panelAnalysis()+writingDiag()+pathway()+conference();
  }
- const sentences=text=>{
-  const raw=String(text||'').replace(/\r/g,'').trim(),parts=raw.match(/[^.!?\n]+(?:[.!?]+|(?=\n|$))/gu)||[];
-  return parts.map(x=>x.trim()).filter(Boolean).slice(0,160);
- };
- let reader={token:0,index:0,lines:[],paused:false};
+ function sentences(text){
+   const parts=[];
+   for(const paragraph of String(text||'').trim().split(/\r?\n+/u)){
+     let start=0;
+     for(const match of paragraph.matchAll(/[.!?…]+[“”»«"’‘)\]]*(?=\s|$)/gu)){
+       const end=match.index+match[0].length;
+       const part=paragraph.slice(start,end).trim();
+       const rest=paragraph.slice(end).trimStart();
+       if(rest&&(/(?:\bz\.\s*B\.|\bu\.\s*a\.|\bd\.\s*h\.|\bDr\.|\bNr\.)$/iu.test(part)||/^(?:z\.\s*B\.|u\.\s*a\.|d\.\s*h\.)/iu.test(paragraph.slice(Math.max(start,end-2)))))continue;
+       if(part)parts.push(part);
+       start=end;
+     }
+     const tail=paragraph.slice(start).trim();
+     if(tail)parts.push(tail);
+   }
+   return parts.slice(0,160);
+ }
+ let reader={token:0,index:0,end:0,lines:[],paused:false};
  function drawReader(){
    const list=sentences(S.readingText);const el=R.querySelector('#up-read-lines');
    if(el)el.innerHTML=list.length?list.map((x,i)=>'<button type="button" class="up-read-line '+(i===reader.index&&reader.lines.length?'playing':'')+'" data-up-sentence="'+i+'" aria-current="'+(i===reader.index&&reader.lines.length?'true':'false')+'">'+esc(x)+'</button>').join(''):'<p>Übernimm eine Geschichte aus der Schreibwerkstatt oder füge Text ein.</p>';
  }
- function stopRead(){reader.token++;reader.lines=[];reader.index=0;reader.paused=false;try{window.speechSynthesis?.cancel();}catch{}const s=R.querySelector('#up-read-status');if(s)s.textContent='Vorlesen angehalten.';drawReader();}
+ function stopRead(){
+   const hadSpeech=reader.lines.length>0;
+   reader.token++;reader.lines=[];reader.index=0;reader.end=0;reader.paused=false;
+   if(hadSpeech){try{window.speechSynthesis?.cancel();if(window.speechSynthesis?.paused)window.speechSynthesis.resume();}catch{}}
+   const s=R.querySelector('#up-read-status');if(s)s.textContent='Vorlesen angehalten.';drawReader();
+ }
  function readStep(token){
    if(token!==reader.token||reader.paused)return;
-   if(reader.index>=reader.lines.length){const s=R.querySelector('#up-read-status');if(s)s.textContent='Alle Sätze vorgelesen.';reader.lines=[];drawReader();return;}
+   if(reader.index>=reader.end){const s=R.querySelector('#up-read-status');if(s)s.textContent=reader.single?'Der Satz wurde vorgelesen.':'Alle Sätze vorgelesen.';reader.lines=[];drawReader();return;}
    drawReader();
    const status=R.querySelector('#up-read-status');if(status)status.textContent='Satz '+(reader.index+1)+' von '+reader.lines.length+' wird vorgelesen.';
    if(!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window)){if(status)status.textContent='Dieser Browser hat keine Sprachausgabe. Antippen hebt den Satz trotzdem hervor.';return;}
    const u=new SpeechSynthesisUtterance(reader.lines[reader.index]);u.lang='de-DE';u.rate=0.88;
    u.onend=()=>{if(token===reader.token){reader.index++;readStep(token);}};
    u.onerror=()=>{if(token===reader.token&&status)status.textContent='Die Stimme ist nicht verfügbar. Du kannst einzelne Sätze trotzdem auswählen.';};
-   try{window.speechSynthesis.speak(u);}catch{}
+   try{window.speechSynthesis.speak(u);}catch{u.onerror();}
  }
- function beginRead(index=0){stopRead();reader.lines=sentences(S.readingText);reader.index=index;reader.paused=false;const token=reader.token;readStep(token);}
+ function beginRead(index=0,single=false){
+   stopRead();
+   reader.lines=sentences(S.readingText);
+   if(!reader.lines.length){R.querySelector('#up-read-status').textContent='Füge zuerst einen Text zum Vorlesen ein.';return;}
+   reader.index=index;reader.single=single;reader.end=single?index+1:reader.lines.length;
+   readStep(reader.token);
+ }
  function reading(){
    return '<section class="panel up-reading"><h2>Lesetandem: jeden Satz verstehen</h2><p>Lies deine eigene Geschichte oder eine Beispielgeschichte. Beim Vorlesen wird jeweils ein Satz hervorgehoben; tippe auf einen Satz, um ihn einzeln zu hören.</p>'+
     '<div class="up-actions"><button type="button" class="secondary" data-up-loadreading="writer">Geschichte übernehmen</button><button type="button" class="secondary" data-up-loadreading="analysis">Text aus dem Coach übernehmen</button></div>'+
@@ -245,6 +269,7 @@ window.MF_UPGRADE=(()=>{
 }
  const click=e=>{
   const b=e.target.closest('button');if(!b||!R.contains(b))return;const d=b.dataset;
+  if(d.studioView&&d.studioView!=='portfolio'&&reader.lines.length)stopRead();
   if(d.upRoute){next(d.upRoute);return;}
   if(d.upJump){R.querySelector('#'+d.upJump)?.scrollIntoView({behavior:'smooth',block:'start'});return;}
   if(d.upMove){const [i,v]=d.upMove.split(':').map(Number);move(i,v);return;}
@@ -267,8 +292,8 @@ window.MF_UPGRADE=(()=>{
   if(d.upBackup!==undefined){downloadBackup();return;}
   if(d.upPrint){teacherPrint(d.upPrint);return;}
   if(d.upLoadreading){S.readingText=d.upLoadreading==='writer'?loadStoryText():S.analysis;save();renderAgain();return;}
-  if(d.upRead){if(d.upRead==='start')beginRead();else if(d.upRead==='stop')stopRead();else if(d.upRead==='pause'){reader.paused=true;window.speechSynthesis?.pause();const el=R.querySelector('#up-read-status');if(el)el.textContent='Vorlesen pausiert.';}else if(d.upRead==='resume'){reader.paused=false;if(window.speechSynthesis?.paused)window.speechSynthesis.resume();else if(reader.lines.length)readStep(reader.token);}return;}
-  if(d.upSentence!==undefined){beginRead(Number(d.upSentence));return;}
+  if(d.upRead){if(d.upRead==='start')beginRead();else if(d.upRead==='stop')stopRead();else if(d.upRead==='pause'&&reader.lines.length){reader.paused=true;window.speechSynthesis?.pause();const el=R.querySelector('#up-read-status');if(el)el.textContent='Vorlesen pausiert.';}else if(d.upRead==='resume'&&reader.paused){reader.paused=false;if(window.speechSynthesis?.paused)window.speechSynthesis.resume();else if(reader.lines.length&&!window.speechSynthesis?.speaking)readStep(reader.token);}return;}
+  if(d.upSentence!==undefined){beginRead(Number(d.upSentence),true);return;}
  };
  const change=e=>{
   const x=e.target,d=x.dataset;
@@ -288,7 +313,7 @@ window.MF_UPGRADE=(()=>{
   if(d.upDraft){const r=S.diagnostic[d.upDraft]||(S.diagnostic[d.upDraft]={});r.text=x.value.slice(0,4500);r.checked=false;save();return;}
   if(d.upEvidence){const r=S.diagnostic[d.upEvidence]||(S.diagnostic[d.upEvidence]={});r.evidence=x.value.slice(0,350);r.checked=false;save();return;}
   if(d.upConftext!==undefined){S.conference['text'+S.conference.selected]=x.value;save();return;}
-  if(x.id==='up-reading-text'){S.readingText=x.value.slice(0,20000);save();stopRead();drawReader();return;}
+  if(x.id==='up-reading-text'){S.readingText=x.value.slice(0,20000);save();stopRead();return;}
   if(x.id==='up-teacher-title'){S.teacher.title=x.value;save();return;}
   if(x.id==='up-teacher-extra'){S.teacher.extra=x.value;save();}
  };
@@ -300,6 +325,7 @@ window.MF_UPGRADE=(()=>{
  R.addEventListener('click',click);R.addEventListener('change',change);R.addEventListener('input',input);
  window.addEventListener('afterprint',()=>document.body.classList.remove('ac-printing'));
  window.addEventListener('pagehide',stopRead);
+ document.addEventListener('learningpagechange',e=>{if(e.detail.id!=='studio'&&reader.lines.length)stopRead();});
  function renderAgain(){const active=R.querySelector('.studio-tabs .active');if(active)active.click();}
  return Object.freeze({render,post,metrics,art,stopRead});
 })();

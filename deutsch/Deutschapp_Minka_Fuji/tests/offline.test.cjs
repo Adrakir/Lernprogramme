@@ -6,7 +6,7 @@ const path=require('node:path');
 const {chromium}=require('playwright');
 const ROOT=path.resolve(__dirname,'..');
 test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte lokal',async()=>{
- const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.webp':'image/webp','.jpg':'image/jpeg'};
+ const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.webmanifest':'application/manifest+json','.svg':'image/svg+xml','.webp':'image/webp','.jpg':'image/jpeg','.mp3':'audio/mpeg'};
  const server=http.createServer(async(req,res)=>{
   let url;try{url=new URL(req.url,'http://localhost')}catch{res.writeHead(400).end();return;}
   const local=path.resolve(ROOT,'.'+decodeURIComponent(url.pathname));
@@ -26,7 +26,7 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   const cache=await page.evaluate(async()=>{
     const names=await caches.keys();const c=await caches.open(names.find(n=>n.startsWith('minka-fuji-deutsch-')));
     const script=(name)=>'./'+Array.from(document.querySelectorAll('script[src]')).map(el=>el.getAttribute('src')).find(src=>src.startsWith(name+'?'));
-    const keys=['./index.html',script('studio.js'),script('language-practice.js'),script('language.js'),'./upgrade.js?v=3','./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg',script('image-compat.js')];
+    const keys=['./index.html',script('studio.js'),script('language-practice.js'),script('language.js'),script('upgrade.js'),'./upgrade-data.js?v=1','./assets/scene-1.webp','./assets/scene-1.jpg','./assets/guides.jpg','./assets/whale.webp','./assets/whale.jpg',script('image-compat.js')];
     return Promise.all(keys.map(async k=>({key:k,available:!!await c.match(k)})));
   });
   assert.ok(cache.every(x=>x.available),JSON.stringify(cache));
@@ -35,6 +35,11 @@ test('Deutsch-App bleibt nach Erstladen offline benutzbar und sichert Texte loka
   assert.equal(await page.locator('.up-scene svg').count(),6);
   await context.setOffline(true);
   await page.reload();
+  const clip=await page.evaluate(async()=>{
+   const response=await fetch('./assets/audio/fluestern.mp3',{headers:{Range:'bytes=0-99'}});
+   return {status:response.status,length:(await response.arrayBuffer()).byteLength,range:response.headers.get('Content-Range')};
+  });
+  assert.equal(clip.status,206);assert.equal(clip.length,100);assert.match(clip.range,/^bytes 0-99\/\d+$/);
   await page.locator('[data-page="sprache"]').click();
   await page.locator('[data-language-topic="schluss"]').click();
   assert.equal(await page.locator('#language-jump option').count(),30);

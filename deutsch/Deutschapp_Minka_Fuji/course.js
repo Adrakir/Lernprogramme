@@ -69,12 +69,13 @@
     el('course-map').innerHTML=[...lessons.map((l,i)=>({title:l.short,done:state.lessons[l.id].done,index:i})),{title:'Deine Geschichte',done:state.final.done,index:8}].map(x=>`<button type="button" data-course-lesson="${x.index}" ${state.current===x.index?'aria-current="step"':''}><span class="course-station-number ${x.done?'complete':''}" aria-hidden="true">${x.done?'✓':String(x.index+1).padStart(2,'0')}</span><span>${escape(x.title)}<small>${x.done?'Abgeschlossen':x.index===8?'Planen · schreiben · überarbeiten':'Beispiel · üben · anwenden'}</small></span></button>`).join('');
     document.querySelectorAll('[data-course-lesson]').forEach(b=>b.addEventListener('click',()=>openLesson(Number(b.dataset.courseLesson))));
   }
-  function pauseFilm(){clearInterval(filmTimer);filmTimer=null;const play=el('course-play');if(play){play.textContent='Animation abspielen';play.setAttribute('aria-pressed','false');}}
+  function pauseFilm(){clearInterval(filmTimer);filmTimer=null;el('course-stage')?.removeAttribute('data-playing');const play=el('course-play');if(play){play.textContent='Animation abspielen';play.setAttribute('aria-pressed','false');}}
   function focusWorkspace(){const heading=el('course-heading');heading?.focus({preventScroll:true});heading?.closest('.course-work-card').scrollIntoView({block:'start',behavior:'auto'});}
   function openLesson(index){pauseFilm();state.current=index;state.started=true;save();render();focusWorkspace();}
   function openPhase(index){pauseFilm();if(state.current===8)state.final.phase=index;else selectedState().phase=index;save();render();focusWorkspace();}
   function render(){
     pauseFilm();renderDashboard();
+    pauseHearingExamples(el('course-workspace'));
     if(state.current===8){renderFinal();return;}
     const lesson=selectedLesson(),s=selectedState();
     el('course-workspace').innerHTML=`<article class="panel course-work-card"><div class="course-lesson-heading"><p class="eyebrow">Station ${state.current+1} von 9 · ${lesson.minutes}</p><h2 id="course-heading" tabindex="-1">${escape(lesson.title)}</h2><p>${escape(lesson.goal)}</p></div>${phaseNavigation(stageNames,s.phase)}<div id="course-stage"></div><div id="course-step-actions" class="course-step-actions"></div></article>`;
@@ -97,10 +98,12 @@
       if(!state.motion||motionQuery.matches)return;
       if(selectedState().frame===l.frames.length-1)setFrame(0);
       el('course-play').textContent='Animation pausieren';el('course-play').setAttribute('aria-pressed','true');
+      el('course-stage').setAttribute('data-playing','');
       filmTimer=setInterval(()=>{if(selectedState().frame>=l.frames.length-1){pauseFilm();return;}setFrame(selectedState().frame+1);if(selectedState().frame===l.frames.length-1)pauseFilm();},6500);
     };
     el('course-motion').onchange=e=>{state.motion=!e.target.checked;pauseFilm();save();updateMotion();};
     setFrame(selectedState().frame);updateMotion();
+    if(l.id==='stimmen'||l.id==='dialog')addHearingExamples(el('course-stage'));
   }
   function updateMotion(){
     const reduced=!state.motion||motionQuery.matches;

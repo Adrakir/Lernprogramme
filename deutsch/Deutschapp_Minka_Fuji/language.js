@@ -356,10 +356,68 @@ for (const t of topics) t.tasks.push(...MF_LANGUAGE_PRACTICE[t.id]);
 
 const freshRecord = () => ({selected:null, first:null, solved:false, hint:false, model:false, message:''});
 const states = new Map(topics.map(t => [t.id, {index:0, records:t.tasks.map(freshRecord), draft:'', checks:t.checks.map(() => false), feedback:false}]));
+const storageKey='minka-fuji-sprachwerkstatt-v1';
+const dirtyTopics=new Set();
 let current = 'einleitung';
+let saveTimer=null, storageAvailable=true;
 const state = () => states.get(current);
 const topic = () => topics.find(t => t.id === current);
 const levelOf = q => q.level || 'grundlagen';
+const indexValid = (i,count) => Number.isInteger(i)&&i>=0&&i<count;
+const taskKey = q => `${levelOf(q)}:${q.title}`;
+const isCorrect = (q,value) => q.type==='word' ? typeof value==='string'&&value.trim().toLocaleLowerCase('de')===q.answer : q.type!=='open'&&value===q.answer;
+function restoreLanguage(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(storageKey)||'null');
+    if(!saved||saved.version!==1)return;
+    if(states.has(saved.current))current=saved.current;
+    for(const t of topics){
+      const from=saved.topics?.[t.id],s=states.get(t.id);
+      if(!from||typeof from!=='object')continue;
+      const index=t.tasks.findIndex(q=>taskKey(q)===from.task);
+      if(index>=0)s.index=index;
+      if(typeof from.draft==='string')s.draft=from.draft.slice(0,12000);
+      s.checks=t.checks.map((_,i)=>from.checks?.[i]===true);
+      t.tasks.forEach((q,i)=>{
+        const source=from.records?.[taskKey(q)],r=s.records[i];
+        if(!source||typeof source!=='object')return;
+        if(q.type==='open'||q.type==='word'){
+          if(typeof source.selected==='string')r.selected=source.selected.slice(0,q.type==='open'?4000:40);
+        }else if(indexValid(source.selected,q.options.length))r.selected=source.selected;
+        if(q.type!=='open'&&typeof source.first?.correct==='boolean'&&typeof source.first?.helped==='boolean')r.first=source.first;
+        r.hint=source.hint===true;r.model=source.model===true;r.solved=source.solved===true&&isCorrect(q,r.selected);
+        if(r.solved)r.message=`Richtig. ${q.explain}`;
+      });
+    }
+  }catch{storageAvailable=false;}
+}
+function showStorage(){
+  const info=document.getElementById('language-storage');
+  const message=storageAvailable?'Entwürfe und Aufgabenstand werden in diesem Browser gespeichert.':'Speichern ist hier gerade nicht möglich. Kopiere wichtige Texte, bevor du die Seite schließt.';
+  if(info&&info.textContent!==message)info.textContent=message;
+}
+function flushLanguage(){
+  if(saveTimer===null)return;
+  clearTimeout(saveTimer);saveTimer=null;
+  let previous;
+  try{previous=JSON.parse(localStorage.getItem(storageKey)||'null');}catch{}
+  const saved={version:1,current,topics:previous?.version===1?{...previous.topics}:{}};
+  for(const t of topics){
+    if(!dirtyTopics.has(t.id))continue;
+    const s=states.get(t.id),records={};
+    s.records.forEach(({selected,first,solved,hint,model},i)=>{
+      if(selected!==null||first||hint||model)records[taskKey(t.tasks[i])]={selected,first,solved,hint,model};
+    });
+    if(s.index||s.draft||s.checks.some(Boolean)||Object.keys(records).length)saved.topics[t.id]={task:taskKey(t.tasks[s.index]),draft:s.draft,checks:s.checks,records};
+    else delete saved.topics[t.id];
+  }
+  try{localStorage.setItem(storageKey,JSON.stringify(saved));dirtyTopics.clear();storageAvailable=true;}catch{storageAvailable=false;}
+  showStorage();
+}
+function saveLanguage(topicChanged=true){
+  if(topicChanged)dirtyTopics.add(current);
+  clearTimeout(saveTimer);saveTimer=setTimeout(flushLanguage,220);
+}
 function totals() {
   const records = [...states.values()].flatMap(s => s.records);
   const attempted = records.filter(r => r.first !== null || r.model).length;
@@ -371,7 +429,7 @@ function renderTopics() {
     const t=topics.find(entry => entry.id===id);
     return `<button type="button" data-language-topic="${t.id}" aria-pressed="${t.id===current}"><span>${esc(t.title)}</span><small>${t.tasks.length} Übungen</small></button>`;
   }).join('')}</div></section>`).join('');
-  document.querySelectorAll('[data-language-topic]').forEach(b => b.addEventListener('click', () => {current=b.dataset.languageTopic;render();document.getElementById('language-heading').focus({preventScroll:true});document.getElementById('language-heading').scrollIntoView({block:'start'});}));
+  document.querySelectorAll('[data-language-topic]').forEach(b => b.addEventListener('click', () => {current=b.dataset.languageTopic;saveLanguage(false);render();document.getElementById('language-heading').focus({preventScroll:true});document.getElementById('language-heading').scrollIntoView({block:'start'});}));
 }
 function taskOptions(t) {
   return levels.map(([level,label]) => {
@@ -385,34 +443,63 @@ function renderBank(t) {
   }
   return `<div class="language-bank">${t.bank.map(([word,meaning,example])=>`<div class="language-word"><h4>${esc(word)}</h4><p>${esc(meaning)}</p><p class="muted">${esc(example)}</p></div>`).join('')}</div>`;
 }
+function addSentenceStartDemo(container){
+  const panel=document.createElement('section');
+  panel.className='language-demo';
+  panel.innerHTML='<h3>Schiebe den Satzanfang nach vorn</h3><ol class="language-demo-sentence" aria-label="Satzbausteine"><li>Fuji</li><li class="demo-verb">öffnete</li><li>vorsichtig</li><li>die Tür.</li></ol><button class="secondary" type="button" aria-pressed="false">„Vorsichtig“ nach vorn</button><p aria-live="polite">Das gebeugte Verb „öffnete“ steht hinter dem ersten Satzglied „Fuji“.</p>';
+  container.append(panel);
+  const list=panel.querySelector('ol'),button=panel.querySelector('button'),note=panel.querySelector('p');
+  const [figure,verb,start,end]=list.children;
+  button.addEventListener('click',()=>{
+    const moved=button.getAttribute('aria-pressed')==='true';
+    const nodes=[figure,verb,start,end];
+    const animate=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const positions=animate?nodes.map(node=>node.getBoundingClientRect()):[];
+    start.textContent=moved?'vorsichtig':'Vorsichtig';
+    start.classList.toggle('demo-start',!moved);
+    list.append(...(moved?nodes:[start,verb,figure,end]));
+    if(animate)nodes.forEach((node,i)=>{
+      const next=node.getBoundingClientRect();
+      node.animate?.([{transform:`translate(${positions[i].left-next.left}px, ${positions[i].top-next.top}px)`},{transform:'none'}],{duration:380,easing:'ease-out'});
+    });
+    button.setAttribute('aria-pressed',String(!moved));
+    button.textContent=moved?'„Vorsichtig“ nach vorn':'Zurück zum ersten Satz';
+    note.textContent=moved?'Das gebeugte Verb „öffnete“ steht hinter dem ersten Satzglied „Fuji“.':'„Vorsichtig öffnete Fuji die Tür.“ Das gebeugte Verb „öffnete“ bleibt an zweiter Satzgliedstelle. Danach folgt „Fuji“.';
+  });
+}
 function render() {
   const t=topic(),s=state();
   const nextTopic=topicGroups.flatMap(([,ids])=>ids);
   const nextId=nextTopic[(nextTopic.indexOf(current)+1)%nextTopic.length];
   renderTopics();totals();
+  pauseHearingExamples(root);
   root.innerHTML = `<article class="panel language-theory"><p class="eyebrow">1 · Verstehen</p><h2 id="language-heading" tabindex="-1">${esc(t.title)}</h2><p class="language-goal"><strong>Dein Ziel:</strong> ${esc(t.goal)}</p><div class="speech"><strong>${esc(t.guide)} erklärt:</strong> ${esc(t.explanation)}</div><h3>So gehst du vor</h3><ol class="language-steps">${t.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="note compact"><strong>${t.guide === 'Minka'?'Fuji':'Minka'} ergänzt:</strong> ${esc(t.tip)}</div><button type="button" class="primary" id="language-to-training">Direkt zu den Übungen</button></article>
-    <article class="panel extras"><p class="eyebrow">2 · Vergleichen</p><h2>Was ändert sich im Text?</h2><div class="two-col"><div><h3>Vorher</h3><p class="model-text">${esc(t.before)}</p></div><div><h3>Überarbeitet</h3><p class="model-text">${esc(t.after)}</p></div></div><p>${esc(t.why)}</p>${t.followup?`<div class="note">${esc(t.followup)}</div>`:''}<details><summary>${esc(t.bankTitle)}</summary>${renderBank(t)}</details></article>
+    <article class="panel extras"><p class="eyebrow">2 · Vergleichen</p><h2>Was ändert sich im Text?</h2><div class="two-col"><div><h3>Vorher</h3><p class="model-text">${esc(t.before)}</p></div><div><h3>Überarbeitet</h3><p class="model-text">${esc(t.after)}</p></div></div><p>${esc(t.why)}</p>${t.followup?`<div class="note">${esc(t.followup)}</div>`:''}<details class="language-wordbank"><summary>${esc(t.bankTitle)}</summary>${renderBank(t)}</details></article>
     <article class="panel extras" id="language-training"><p class="eyebrow">3 · Üben</p><h2>Mit Minka & Fuji ausprobieren</h2><p>Wähle eine Übungsart oder springe zu einer bestimmten Aufgabe. Bei eigenen Texten vergleichst du mit der Musterlösung.</p><div id="language-levels" class="quiz-actions" role="group" aria-label="Übungsart"></div><label class="select-label">Aufgabe auswählen<select id="language-jump">${taskOptions(t)}</select></label><p id="language-score" role="status"></p><div id="language-task"></div></article>
     ${t.id==='rede'?'<article class="panel extras"><h2>Fujis Satzzeichen-Werkstatt</h2><p>Setze die fehlenden Zeichen. Der Satz wird unter deiner Auswahl zusammengesetzt.</p><div id="language-punctuation"></div></article>':''}
-    <article class="panel extras language-writing"><p class="eyebrow">4 · Selbst schreiben</p><h2>Dein Text mit Minka & Fuji</h2><p>${esc(t.write)}</p><label for="language-draft">Dein eigener Text zum Thema „${esc(t.title)}“</label><textarea id="language-draft" rows="7" maxlength="12000" placeholder="Probiere hier deine eigenen Formulierungen aus."></textarea><p class="muted" id="language-wordcount"></p><div class="writing-checks">${t.checks.map((c,i)=>`<label><input type="checkbox" data-language-check="${i}" ${s.checks[i]?'checked':''}><span>${esc(c)}</span></label>`).join('')}</div><button type="button" class="primary" id="language-review">Meine Überarbeitungshilfe</button><div id="language-writing-feedback" class="feedback" role="status"></div><details><summary>Mustertext zum Vergleichen</summary><p class="model-text">${esc(t.model)}</p><p>Dies ist eine Möglichkeit. Dein Text darf anders lauten. Prüfe mit der Checkliste, wie du dein Ziel erreicht hast.</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-to-intro">Zur Einleitung-Schreibwerkstatt</button><button type="button" class="primary" id="language-next-topic">Nächstes Thema</button></div><p class="muted">Deine Texte werden nicht automatisch benotet. Antworten und Entwürfe bleiben während der geöffneten Sitzung erhalten; beim Neuladen werden sie zurückgesetzt.</p></article>`;
+    <article class="panel extras language-writing"><p class="eyebrow">4 · Selbst schreiben</p><h2>Dein Text mit Minka & Fuji</h2><p>${esc(t.write)}</p><label for="language-draft">Dein eigener Text zum Thema „${esc(t.title)}“</label><textarea id="language-draft" rows="7" maxlength="12000" placeholder="Probiere hier deine eigenen Formulierungen aus."></textarea><p class="muted" id="language-wordcount"></p><div class="writing-checks">${t.checks.map((c,i)=>`<label><input type="checkbox" data-language-check="${i}" ${s.checks[i]?'checked':''}><span>${esc(c)}</span></label>`).join('')}</div><button type="button" class="primary" id="language-review">Meine Überarbeitungshilfe</button><div id="language-writing-feedback" class="feedback" role="status"></div><details><summary>Mustertext zum Vergleichen</summary><p class="model-text">${esc(t.model)}</p><p>Dies ist eine Möglichkeit. Dein Text darf anders lauten. Prüfe mit der Checkliste, wie du dein Ziel erreicht hast.</p></details><div class="quiz-actions"><button type="button" class="secondary" id="language-to-intro">Zur Einleitung-Schreibwerkstatt</button><button type="button" class="primary" id="language-next-topic">Nächstes Thema</button></div><p class="muted">Deine Texte werden nicht automatisch benotet.</p><p class="muted" id="language-storage" role="status"></p></article>`;
+  const comparison=root.querySelector('.language-theory + article');
+  if(t.id==='satzanfaenge')addSentenceStartDemo(comparison);
+  if(t.id==='sagen'||t.id==='rede')addHearingExamples(comparison);
   const repeat=document.createElement('button');repeat.type='button';repeat.className='secondary';repeat.id='language-repeat';repeat.textContent='Aufgaben dieses Themas neu üben';
   document.getElementById('language-score').after(repeat);
   repeat.addEventListener('click',()=>{
     s.records=t.tasks.map((task,i)=>({...freshRecord(),selected:task.type==='open'?s.records[i].selected:null}));
     s.index=0;
-    renderTask();
+    saveLanguage();renderTask();
   });
   document.getElementById('language-to-training').addEventListener('click',()=>renderTask(true));
   renderTask();
-  document.getElementById('language-jump').addEventListener('change',e=>{s.index=Number(e.target.value);renderTask();});
+  document.getElementById('language-jump').addEventListener('change',e=>{s.index=Number(e.target.value);saveLanguage();renderTask();});
   const draft=document.getElementById('language-draft');draft.value=s.draft;
   function wordcount(){const n=s.draft.trim()?s.draft.trim().split(/\s+/u).length:0;document.getElementById('language-wordcount').textContent=`${n} ${n===1?'Wort':'Wörter'} · Dein Entwurf gehört nur zu diesem Thema.`;}
-  draft.addEventListener('input',()=>{s.draft=draft.value;s.feedback=false;wordcount();writingFeedback();});wordcount();
-  document.querySelectorAll('[data-language-check]').forEach(c=>c.addEventListener('change',()=>{s.checks[Number(c.dataset.languageCheck)]=c.checked;s.feedback=false;writingFeedback();}));
+  draft.addEventListener('input',()=>{s.draft=draft.value;s.feedback=false;saveLanguage();wordcount();writingFeedback();});wordcount();
+  document.querySelectorAll('[data-language-check]').forEach(c=>c.addEventListener('change',()=>{s.checks[Number(c.dataset.languageCheck)]=c.checked;s.feedback=false;saveLanguage();writingFeedback();}));
   document.getElementById('language-review').addEventListener('click',()=>{s.feedback=true;writingFeedback();});writingFeedback();
   document.getElementById('language-to-intro').addEventListener('click',()=>showPage('schreiben'));
-  document.getElementById('language-next-topic').addEventListener('click',()=>{current=nextId;render();document.getElementById('language-heading').focus();});
+  document.getElementById('language-next-topic').addEventListener('click',()=>{current=nextId;saveLanguage(false);render();document.getElementById('language-heading').focus();});
   if(t.id==='rede')renderPunctuation();
+  showStorage();
 }
 function writingFeedback(){
   const s=state(),t=topic(),box=document.getElementById('language-writing-feedback');box.classList.remove('good');
@@ -431,7 +518,7 @@ function renderTask(focus=false){
     const count=t.tasks.filter(task=>levelOf(task)===id).length;
     return `<button type="button" class="secondary" data-language-level="${index}" aria-pressed="${levelOf(q)===id}">${label} (${count})</button>`;
   }).join('');
-  levelPicker.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{s.index=Number(b.dataset.languageLevel);renderTask(true);}));
+  levelPicker.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{s.index=Number(b.dataset.languageLevel);saveLanguage();renderTask(true);}));
   document.getElementById('language-jump').value=String(s.index);
   const completed=s.records.filter(x=>x.first!==null||x.model).length,independent=s.records.filter(x=>x.first?.correct&&!x.first.helped).length;
   document.getElementById('language-score').textContent=`${completed} von ${t.tasks.length} bearbeitet · ${independent} beim ersten Versuch ohne Hilfe richtig`;
@@ -458,7 +545,7 @@ function renderTask(focus=false){
     wordInput.addEventListener('input',()=>{
       r.selected=wordInput.value.trim() ? wordInput.value : null;
       r.message='';
-      checkButton.disabled=r.selected===null;
+      checkButton.disabled=r.selected===null;saveLanguage();
       document.getElementById('language-answer-feedback').textContent='';
     });
     wordInput.addEventListener('keydown',e=>{
@@ -470,10 +557,10 @@ function renderTask(focus=false){
     openInput.value=r.selected??'';
     openInput.addEventListener('input',()=>{
       r.selected=openInput.value.trim()?openInput.value:null;
-      checkButton.disabled=r.selected===null;
+      checkButton.disabled=r.selected===null;saveLanguage();
     });
   }
-  const selectAnswer=i=>{r.selected=i;r.message='';renderTask();const control=q.type==='gap'?document.getElementById('language-gap'):document.querySelector(`[data-language-answer="${i}"]`);control?.focus({preventScroll:true});};
+  const selectAnswer=i=>{r.selected=i;r.message='';saveLanguage();renderTask();const control=q.type==='gap'?document.getElementById('language-gap'):document.querySelector(`[data-language-answer="${i}"]`);control?.focus({preventScroll:true});};
   document.querySelectorAll('[data-language-answer]').forEach(b=>b.addEventListener('click',()=>selectAnswer(Number(b.dataset.languageAnswer))));
   document.getElementById('language-gap')?.addEventListener('change',e=>selectAnswer(e.target.value===''?null:Number(e.target.value)));
   checkButton.addEventListener('click',()=>{
@@ -481,21 +568,22 @@ function renderTask(focus=false){
     if(q.type==='open'){
       r.model=true;
       r.message='Vergleiche deinen Text mit dem Muster und achte auf die Erklärung darunter.';
+      saveLanguage();
       renderTask();
       const feedback=document.getElementById('language-answer-feedback');
       feedback.tabIndex=-1;
       feedback.focus();
       return;
     }
-    const correct=(q.type==='word'?r.selected.trim().toLocaleLowerCase('de'):r.selected)===q.answer;
+    const correct=isCorrect(q,r.selected);
     if(r.first===null)r.first={correct,helped:r.hint||r.model};
-    r.solved=correct;r.message=correct?`Richtig. ${q.explain}`:`Das passt noch nicht. ${q.hint} Versuche es noch einmal oder öffne die Erklärung.`;
+    saveLanguage();r.solved=correct;r.message=correct?`Richtig. ${q.explain}`:`Das passt noch nicht. ${q.hint} Versuche es noch einmal oder öffne die Erklärung.`;
     renderTask();const feedback=document.getElementById('language-answer-feedback');feedback.tabIndex=-1;feedback.focus({preventScroll:true});
   });
-  document.getElementById('language-hint').addEventListener('click',()=>{r.hint=true;renderTask();});
-  document.getElementById('language-solution').addEventListener('toggle',e=>{if(e.target.open&&e.target.isConnected){r.model=true;totals();document.getElementById('language-score').textContent=`${s.records.filter(x=>x.first!==null||x.model).length} von ${t.tasks.length} bearbeitet · ${s.records.filter(x=>x.first?.correct&&!x.first.helped).length} beim ersten Versuch ohne Hilfe richtig`;}});
-  document.getElementById('language-prev-task').addEventListener('click',()=>{s.index--;renderTask(true);});
-  document.getElementById('language-next-task').addEventListener('click',()=>{s.index++;renderTask(true);});
+  document.getElementById('language-hint').addEventListener('click',()=>{r.hint=true;saveLanguage();renderTask();});
+  document.getElementById('language-solution').addEventListener('toggle',e=>{if(e.target.open&&e.target.isConnected){if(!r.model){r.model=true;saveLanguage();}totals();document.getElementById('language-score').textContent=`${s.records.filter(x=>x.first!==null||x.model).length} von ${t.tasks.length} bearbeitet · ${s.records.filter(x=>x.first?.correct&&!x.first.helped).length} beim ersten Versuch ohne Hilfe richtig`;}});
+  document.getElementById('language-prev-task').addEventListener('click',()=>{s.index--;saveLanguage();renderTask(true);});
+  document.getElementById('language-next-task').addEventListener('click',()=>{s.index++;saveLanguage();renderTask(true);});
   totals();if(focus)document.getElementById('language-task-title').focus();
 }
 
@@ -535,6 +623,10 @@ function openLanguageLink(focus=false){
   showPage('sprache',focus);
   return true;
 }
+restoreLanguage();
 if(!openLanguageLink())render();
+window.addEventListener('pagehide',flushLanguage);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)flushLanguage();});
+document.addEventListener('learningpagechange',e=>{if(e.detail.id!=='sprache')flushLanguage();});
 window.addEventListener('hashchange',()=>openLanguageLink(true));
 })();

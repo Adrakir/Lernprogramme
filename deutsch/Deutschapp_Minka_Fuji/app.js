@@ -14,6 +14,16 @@ function showPage(id, focus = true) {
 $$('[data-page]').forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
 $$('[data-go]').forEach(b => b.addEventListener('click', () => showPage(b.dataset.go)));
 
+function pauseHearingExamples(root=document,except=null){
+  root.querySelectorAll('.hearing-examples audio').forEach(audio=>{if(audio!==except&&!audio.paused)audio.pause();});
+}
+function addHearingExamples(container){
+  container.append($('#hearing-examples').content.cloneNode(true));
+}
+document.addEventListener('play',e=>{if(e.target.matches?.('.hearing-examples audio'))pauseHearingExamples(document,e.target);},true);
+document.addEventListener('learningpagechange',()=>pauseHearingExamples());
+document.addEventListener('toggle',e=>{if(e.target.matches?.('.hearing-examples')&&!e.target.open)pauseHearingExamples(e.target);},true);
+
 const scenes = [
   {part:'intro',alt:'Minka und Fuji stehen an einem Herbstnachmittag im Garten neben dem alten Holzschuppen.',text:'An einem windigen Herbstnachmittag suchten die Katze Minka und der Wolfhund Fuji ihren roten Ball im Garten. Er war beim Spielen hinter den alten Holzschuppen gerollt. Gemeinsam liefen die beiden zu dem kleinen Gebäude am Zaun.',speaker:'Minka',dialogue:'„Jetzt weißt du, wer dabei ist, wann und wo die Geschichte spielt und was wir am Anfang tun. Das ist unsere Einleitung!“'},
   {part:'body',alt:'Minka lauscht an der Schuppentür, während Fuji aufmerksam die Ohren aufstellt.',text:'Da drang ein leises Kratzen aus dem Schuppen. Minka blieb stehen. „Hast du das gehört?“, flüsterte sie. Fuji stellte die Ohren auf. Kratz. Kratz. Wer mochte dort drinnen sein?',speaker:'Fuji',dialogue:'„Ein rätselhaftes Geräusch! Der Hauptteil beginnt. Eine Frage bleibt offen und macht neugierig.“'},
@@ -33,6 +43,7 @@ function renderScene(index) {
   sceneIndex = index;
   const scene = scenes[index];
   $('#comic-image').src = `assets/scene-${index+1}.jpg`; $('#comic-image').alt = scene.alt;
+  $('#comic-zoom').setAttribute('aria-label',`Bild ${index+1} vergrößern. ${scene.alt}`);
   $('#comic-number').textContent = `Bild ${index+1}`;
   $('#comic-narrative').textContent = scene.text;
   $('#comic-dialogue').innerHTML = `<strong>${scene.speaker} erklärt:</strong> ${escapeHTML(scene.dialogue)}`;
@@ -48,6 +59,30 @@ $$('[data-part]').forEach(b => b.addEventListener('click',()=>renderScene(scenes
 $('#scene-prev').addEventListener('click',()=>renderScene(sceneIndex-1));
 $('#scene-next').addEventListener('click',()=>renderScene(sceneIndex+1));
 renderScene(0);
+const comicLightbox=$('#comic-lightbox');
+const comicViewport=$('#comic-image-viewport'),comicDetail=$('#comic-detail');
+function setComicDetail(enlarged){
+  comicViewport.classList.toggle('comic-enlarged',enlarged);
+  comicDetail.setAttribute('aria-pressed',String(enlarged));
+  comicDetail.textContent=enlarged?'Ganzes Bild zeigen':'Details vergrößern';
+  if(!enlarged){comicViewport.scrollTop=0;comicViewport.scrollLeft=0;}
+}
+comicDetail.addEventListener('click',()=>setComicDetail(comicDetail.getAttribute('aria-pressed')!=='true'));
+$('#comic-zoom').addEventListener('click',()=>{
+  const image=$('#comic-image'),large=$('#comic-large-image');
+  large.src=image.src;large.alt=image.alt;
+  setComicDetail(false);
+  $('#comic-lightbox-title').textContent=`Das Kratzen im Schuppen · Bild ${sceneIndex+1} von ${scenes.length}`;
+  if(typeof comicLightbox.showModal==='function')comicLightbox.showModal();
+  else{comicLightbox.classList.add('comic-fallback');comicLightbox.setAttribute('open','');$('#comic-close').focus();}
+});
+function closeComicLightbox(){
+  if(typeof comicLightbox.close==='function')comicLightbox.close();
+  else{comicLightbox.removeAttribute('open');$('#comic-zoom').focus();}
+}
+$('#comic-close').addEventListener('click',closeComicLightbox);
+comicLightbox.addEventListener('click',e=>{if(e.target===comicLightbox)closeComicLightbox();});
+comicLightbox.addEventListener('keydown',e=>{if(e.key==='Escape'&&typeof comicLightbox.close!=='function')closeComicLightbox();});
 
 const stations = [
   {name:'Einleitung',scene:0,quote:'„Wir suchen unseren Ball im Garten.“',explain:'Die Figuren, der Ort, der Zeitpunkt und die Ausgangssituation werden eingeführt. Die Spannung ist noch gering.'},
@@ -61,10 +96,19 @@ function setStation(index){
   if(!Number.isInteger(index)||!stations[index])throw new Error('Unbekannte Station.');
   stationIndex=index; const s=stations[index];
   $$('.wal-point').forEach((dot,i)=>dot.classList.toggle('current',i===index));
+  $$('[data-wal-button]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.walButton)===index)));
   $$('[data-station]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.station)===index)));
   $('#curve-explanation').innerHTML=`<strong>${index+1}. ${s.name}</strong><p>${escapeHTML(s.quote)}</p><p>${escapeHTML(s.explain)}</p><button type="button" id="show-curve-scene" class="secondary">Passendes Comicbild ansehen</button>`;
   $('#show-curve-scene').addEventListener('click',()=>{renderScene(s.scene);showPage('entdecken');});
 }
+$$('[data-wal-button]').forEach(button=>{
+  const index=Number(button.dataset.walButton);
+  button.setAttribute('aria-label',`Station ${index+1}: ${stations[index].name}`);
+  button.addEventListener('click',()=>setStation(index));
+  button.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();setStation(index);}
+  });
+});
 $('#curve-stations').innerHTML=stations.map((s,i)=>`<button type="button" data-station="${i}" aria-pressed="false"><b>${i+1}</b>${s.name}</button>`).join('');
 $$('[data-station]').forEach(b=>b.addEventListener('click',()=>setStation(Number(b.dataset.station))));setStation(0);
 const curveEvents=[

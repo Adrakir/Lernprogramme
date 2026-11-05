@@ -17,8 +17,10 @@ Die Einleitung-Schreibwerkstatt verlinkt den Bereich und prüft in der
 Selbsteinschätzung auch Spannungsschlinge und Wortwahl. Comics, Spannungskurve,
 18 Wissensaufgaben und sechs Lesegeschichten mit 72 Aufgaben bleiben erhalten.
 
-Die Daten der Bereiche 01–06 liegen nur im Arbeitsspeicher der geöffneten Seite. Ein Themen- oder
-Bereichswechsel erhält Eingaben; Neuladen setzt sie zurück. Eine geöffnete Hilfe,
+Die Bereiche 01–05 halten ihre Eingaben in der geöffneten Seite. Die Sprachwerkstatt
+speichert Entwürfe, die zuletzt gewählte Aufgabe pro Thema und den Übungsstand unter
+`minka-fuji-sprachwerkstatt-v1` im Browser. Ein blockierter oder voller Speicher
+wird angezeigt. Das Portfolio nimmt den Schlüssel in die Sicherung auf. Eine geöffnete Hilfe,
 Lösung oder ein korrigierter Fehlversuch wird nicht als unabhängiger Erstversuch
 gezählt. Freie Texte werden nur mit einer transparenten Selbsteinschätzung
 überarbeitet, nicht automatisch bewertet. Es werden keine Texte übertragen.
@@ -68,6 +70,15 @@ Schritt abspielen. Wiedergabe pausiert beim Verlassen des Bereichs und bei einem
 verborgenen Dokument. Betriebssystemeinstellung `prefers-reduced-motion` sowie
 eine eigene Abschaltmöglichkeit erhalten alle Inhalte ohne Bewegung. Die Bilder
 stammen aus der bestehenden App; es gibt keine zusätzlichen Medienabrufe.
+
+Die Pause hält die laufenden Bildeffekte an. Im Bereich Satzanfänge lässt sich
+„Vorsichtig“ per Tastatur oder Antippen nach vorn setzen. Im Schuppencomic gibt
+es eine Bildlupe mit vergrößertem Ausschnitt; die Punkte auf dem Spannungswal
+lassen sich direkt oder per Tastatur wählen. Die vier festen MP3-Hörbeispiele
+wurden lokal mit der [Thorsten-Voice](https://thorsten-voice.de/anleitungen/piper/)
+für Piper erzeugt und sind offline verfügbar. Die Sprechweise „Rufen“ verwendet
+die betonte, überraschte Variante. Der Name Fuji ist als „Futschi“ eingesprochen.
+Das Lesetandem verwendet für eigene Texte weiterhin die Gerätestimme.
 
 Nur der Lehrgang speichert Fortschritt und Texte im Browserspeicher unter
 `minka-fuji-lehrgang-v1`. Eingaben werden kurz verzögert gespeichert, beim

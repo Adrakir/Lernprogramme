@@ -38,3 +38,24 @@
  nav.navigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
  nav.navigation button{min-width:0;width:100%;word-break:normal;overflow-wrap:normal;hyphens:none}
 }
+
+.top-practice{min-width:80px;flex-shrink:0}
+.comic-frame.comic-zoom{display:block;width:100%;padding:0}
+.comic-zoom-label{position:absolute;right:8px;bottom:8px;background:#0d1424;color:#fff;padding:4px 10px;border-radius:8px}
+#comic-lightbox{width:min(92vw,710px);max-height:94vh;padding:16px;border:2px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);overflow:auto}
+#comic-lightbox::backdrop{background:#02070cdb}
+.comic-lightbox-head{display:flex;gap:12px;align-items:start;justify-content:space-between;margin-bottom:12px}
+.comic-lightbox-head h2{font-size:1rem;margin:0}
+#comic-large-image{display:block;width:auto;max-width:100%;max-height:76vh;margin:auto;object-fit:contain}
+.wal-button{cursor:pointer;outline:none}
+.curve circle.wal-hit{fill:transparent;stroke:transparent;stroke-width:24px;vector-effect:non-scaling-stroke;pointer-events:all}
+.wal-button:hover .wal-point,.wal-button:focus-visible .wal-point{stroke:#fff;stroke-width:11}
+.hearing-examples{margin:18px 0}
+.hearing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.hearing-grid figure{margin:0;padding:12px;background:var(--panel2);border-radius:10px;min-width:0}
+.hearing-grid figcaption{margin-bottom:6px}
+.hearing-grid audio{display:block;width:100%;max-width:100%}
+@media(max-width:600px){.hearing-grid{grid-template-columns:1fr}.top .brand{gap:8px;font-size:1rem}}
+#comic-image-viewport{margin-top:10px;overflow:auto;max-height:72vh}
+#comic-image-viewport.comic-enlarged #comic-large-image{width:160%;max-width:none;max-height:none}
+#comic-lightbox.comic-fallback[open]{position:fixed;inset:0;margin:auto;z-index:10}

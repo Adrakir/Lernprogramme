@@ -39,7 +39,13 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
   });
   const page=await browser.newPage({viewport:{width:1280,height:900}});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  async function open(){await page.goto(app);await page.click('[data-page="sprache"]');await page.click('[data-language-topic="schlingen"]');}
+  async function open(){
+    await page.goto(app);
+    await page.evaluate(()=>localStorage.removeItem('minka-fuji-sprachwerkstatt-v1'));
+    await page.reload();
+    await page.click('[data-page="sprache"]');
+    await page.click('[data-language-topic="schlingen"]');
+  }
   async function answer(index){
     if(typeof index==='string') await page.fill('#language-word-answer',index);
     else if(await page.locator('#language-gap').count()) await page.selectOption('#language-gap', String(index));
@@ -51,7 +57,7 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
       await open();assert.equal(await page.locator('[data-language-topic]').count(),topicIds.length);
       for(const [id,answers] of Object.entries(solutions)){
         await page.click(`[data-language-topic="${id}"]`);
-        const bank=page.locator('.language-theory + article details');
+        const bank=page.locator('.language-wordbank');
         await bank.locator('summary').click();
         if(id==='praeteritum') assert.equal(await bank.locator('tbody tr').count(),16);
         else assert.ok(await bank.locator('.language-word').count()>=4);
@@ -178,7 +184,7 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
       for(const check of await page.locator('[data-language-check]').all())await check.check();
       await page.click('#language-review');assert.match(await page.locator('#language-writing-feedback').textContent(),/Selbsteinschätzung/);
       await page.reload();await page.click('[data-page="sprache"]');
-      assert.equal(await page.locator('#language-draft').inputValue(),'');
+      assert.equal(await page.locator('#language-draft').inputValue(),draft);
     });
     await t.test('Satzzeichen einzeln prüfen, korrigieren und beim Themenwechsel erhalten',async()=>{
       await page.click('[data-language-topic="rede"]');
@@ -216,7 +222,7 @@ test('Erzählwerkstatt: Interaktionen, Lernbilanz, Schreibtexte und mobile Darst
         await page.setViewportSize({width,height:844});await page.click('[data-page="sprache"]');
         for(const id of topicIds){
           await page.click(`[data-language-topic="${id}"]`);
-          await page.locator('.language-theory + article details summary').click();
+          await page.locator('.language-wordbank summary').click();
           const size=await page.evaluate(()=>({
             content:document.documentElement.scrollWidth,
             viewport:innerWidth,
