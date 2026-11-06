@@ -320,6 +320,8 @@ details ol{margin-bottom:0}
 
 .detective-cover,.detective-art{aspect-ratio:1;width:100%;background-color:#f2e7d3;background-size:400% 600%;background-repeat:no-repeat}
 .detective-cover{display:block;max-width:260px;justify-self:center;border-radius:14px}
+.featured-comic{margin:16px 0;background:#fff2dd;border-color:#dfc699}
+.featured-comic .detective-cover{max-width:290px}
 .detective-page{background:#fff8e8}
 .detective-page-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 12px}
 .detective-page-heading h2{margin:0;font-size:clamp(1.1rem,2.5vw,1.7rem)}
@@ -2741,6 +2743,7 @@ function showHome(){
     <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a><a class="secondary" href="#tagescomic">Tagescomics</a></div></div>
     <div class="hero-art">${bearPicture('leseecke',true)}</div>
   </section>
+  ${featuredComicIntro()}
   <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
     <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung, -nis und -schaft und prüfe letzte Buchstaben durch Verlängern.</p>
     <div class="actions"><a class="primary" href="#hoeren">${icon('audio')} Hörverstehen</a><a class="secondary" href="#endungen">Nomenendungen</a><a class="secondary" href="#verlaengern">Wörter verlängern</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
@@ -3294,6 +3297,37 @@ function showSchoolComic(id,part){
 
 const detectiveEpisodes=[
   {
+    id:'tom-und-der-schulhund',title:'Tom und der Schulhund',summary:'Der Schulhund geht Tom aus dem Weg. Maja findet heraus, was Tom gerade braucht, und gewinnt einen neuen Freund.',
+    featured:true,
+    pages:['Morgens · Ein Montag wie jeder andere','Im Klassenzimmer · Flocke ist zu Besuch','In der Pause · Eine Einladung','Auf der Bank · Unter vier Augen','Zu Hause · Toms eigener Plan','Am nächsten Tag · Flocke kommt näher'],
+    panels:[
+      ['', 'Tom hängt seine Jacke auf. Heute hat er es eilig gehabt.', 'Tom und Maja kommen morgens an der Schulgarderobe an.'],
+      ['Tom','Duschen finde ich doof. Baden dauert mir zu lange.', 'In einer Erinnerung weicht Tom zu Hause dem lauten Duschstrahl aus.'],
+      ['Tom','Und Zähneputzen? Das schiebe ich am liebsten auf später.', 'Tom stellt seine Zahnbürste zurück in den Becher.'],
+      ['Bärli','Was steht heute an? Hoffentlich etwas mit Pfoten!', 'Bärli schaut aus Majas Blumenranzen. Nur Maja bemerkt ihn.'],
+      ['Direktor','Das ist Flocke. Wartet ab, ob er zu euch kommt.', 'Der Direktor kommt mit dem karamellfarbenen Schulhund ins Klassenzimmer.'],
+      ['', 'Flocke schnuppert bei den Kindern. Fast alle dürfen ihn streicheln.', 'Ein Kind streichelt Flocke vorsichtig an der Schulter.'],
+      ['Tom','Hallo, Flocke. Magst du auch zu mir kommen?', 'Tom bietet Flocke aus ein wenig Abstand seine Hand an. Der Hund dreht den Kopf weg.'],
+      ['Tom','Schade. Bei mir will er gar nicht bleiben.', 'Tom zieht die Hand zurück. Flocke bleibt auf Abstand.'],
+      ['Bärli','Bei Tom riecht es heute streng. Vielleicht ist der Geruch Flocke zu stark.', 'Bärli flüstert Maja etwas zu. Die anderen sehen ihn nicht.'],
+      ['', 'Als Maja an Tom vorbeigeht, bemerkt sie den Geruch auch.', 'Maja kommt an Toms Tisch und seiner Sporttasche vorbei.'],
+      ['', 'Auf dem Schulhof finden sich die Spielgruppen. Tom bleibt allein am Zaun.', 'Andere Kinder spielen zusammen. Tom steht ein Stück entfernt am Zaun.'],
+      ['Maja','Tom, fängst du den Ball? Mir fehlt noch jemand im Team.', 'Maja geht mit einem blauen Ball zu Tom.'],
+      ['Tom','Klar! Ich kann ihn sogar mit einer Hand fangen.', 'Maja und Tom spielen zusammen und lachen.'],
+      ['Maja','Kann ich dir was sagen? Dein Shirt riecht heute stark. Ist dir das auch aufgefallen?', 'Maja und Tom sitzen auf einer ruhigen Bank, abseits der anderen.'],
+      ['Tom','Nach dem Sport habe ich es wieder angezogen. Die Dusche ist mir zu laut.', 'Tom erklärt es Maja. Sie hört zu.'],
+      ['Bärli','Frag ihn, was ihm helfen würde. Er kennt sich selbst am besten.', 'Bärli sitzt auf der Bank und zwinkert Maja zu.'],
+      ['Tom','Können wir es erst mal ohne laute Dusche versuchen?', 'Tom bespricht seinen Wunsch zu Hause mit einer erwachsenen Bezugsperson.'],
+      ['', 'Tom probiert einen weichen Waschlappen und zieht ein frisches Shirt an.', 'Tom wäscht sich am Waschbecken mit einem weichen Waschlappen.'],
+      ['Tom','Die milde Zahnpasta geht. Mit der Sanduhr weiß ich, wann ich fertig bin.', 'Tom putzt sich mit einer weichen Bürste die Zähne. Am Waschbecken steht eine Sanduhr.'],
+      ['Maja','Heute wieder Ball? Ich hab schon trainiert!', 'Am nächsten Morgen begrüßt Maja Tom mit dem blauen Ball.'],
+      ['Direktor','Setz dich seitlich hin und gib Flocke ein bisschen Zeit.', 'Tom hockt sich ruhig hin. Der Direktor bleibt mit Flocke in seiner Nähe.'],
+      ['', 'Diesmal schnuppert Flocke, kommt von selbst näher und setzt sich neben Tom.', 'Flocke geht freiwillig zu Tom und bleibt ruhig bei ihm sitzen.'],
+      ['Tom','Hallo, Flocke. Ich streichle dich ganz vorsichtig.', 'Tom streichelt Flocke sanft an der Schulter. Maja freut sich.'],
+      ['Tom','Wer spielt mit? Maja und ich brauchen noch zwei fürs Team!', 'Maja und Tom laden zwei Kinder zum Ballspiel ein. Bärli winkt aus Majas Ranzen.']
+    ]
+  },
+  {
     id:'buecherkiste',title:'Der Schlüssel der Bücherkiste',summary:'Ein leerer Haken und ein orangefarbener Faden führen Maja und Bärli durch die Schulbücherei.',
     pages:['Morgens · Die verschlossene Kiste','Vor der Lesestunde · Wer war hier?','Auf Spurensuche · Ein falscher Treffer','Die Probe · Ein Faden am Wagen','Die Auflösung · Der Magnet','Zum Schluss · Die Bücher sind frei'],
     pausePage:4,puzzle:'Am Haken und am Bücherwagen siehst du orangefarbene Fäden. Wo würdest du jetzt nachsehen? Begründe deine Vermutung.',
@@ -3388,9 +3422,19 @@ const detectiveEpisodes=[
   }
 ];
 const detectiveAsset='./baerli/tagescomics/';
+const featuredComic=detectiveEpisodes.find(episode=>episode.featured);
+const dailyDetectiveEpisodes=detectiveEpisodes.filter(episode=>!episode.featured);
 // One placement per panel in reading order. Head and foot reserve space
 // inside the frame when an overlay would obscure a face or a clue.
 const detectivePlacement={
+  'tom-und-der-schulhund':[
+    'head-left','lower-center','head-center','head-right',
+    'head-center','foot-left','head-left','lower-left',
+    'lower-right','head-left','head-left','lower-left',
+    'head-right','head-left','head-right','lower-right',
+    'lower-left','foot-left','head-center','head-right',
+    'head-center','foot-left','head-center','foot-left'
+  ],
   buecherkiste:[
     'head-left','lower-center','head-left','foot-left',
     'lower-left','lower-left','lower-center','head-right',
@@ -3417,7 +3461,7 @@ const detectivePlacement={
   ]
 };
 function detectiveToday(date=new Date()){
-  return bearToday(date,detectiveEpisodes.length);
+  return bearToday(date,dailyDetectiveEpisodes.length);
 }
 function detectiveArt(episode,index){
   // A small inset removes the seams between neighboring drawings.
@@ -3433,8 +3477,19 @@ function detectiveArt(episode,index){
   const y=top*100/(1536-height);
   return `style="background-image:url('${detectiveAsset}${episode.id}.webp');background-size:${102400/width}% ${153600/height}%;background-position:${x}% ${y}%"`;
 }
+function featuredComicIntro(){
+  const episode=featuredComic;
+  const href='#tagescomic/'+episode.id+'/1';
+  return `<section class="panel comic-intro featured-comic" aria-labelledby="featured-comic-title"><div>
+    <p class="kicker">${icon('book')} Neuer Comic mit Maja und Bärli</p>
+    <h2 id="featured-comic-title">${escapeHtml(episode.title)}</h2>
+    <p>Flocke besucht die Klasse. Nur bei Tom bleibt der Hund auf Abstand. Maja merkt, dass Tom auch in der Pause allein ist, und geht zu ihm.</p>
+    <p class="subtle">6 Comicseiten mit 24 Bildern</p>
+    <a class="primary" href="${href}">Comic lesen ${icon('arrow')}</a>
+  </div><a href="${href}" class="detective-cover" aria-label="Tom und der Schulhund lesen" ${detectiveArt(episode,22)}></a></section>`;
+}
 function detectiveIntro(){
-  const today=detectiveEpisodes[detectiveToday()];
+  const today=dailyDetectiveEpisodes[detectiveToday()];
   return `<section class="panel comic-intro" aria-labelledby="detective-intro"><div>
     <p class="kicker">${icon('book')} Maja und Bärli ermitteln</p><h2 id="detective-intro">Tagescomics</h2>
     <p>Drei neue Schulfälle mit je sechs Comicseiten. Nur Maja sieht Bärli. Findest du die Lösung vor den beiden?</p>
@@ -3442,14 +3497,14 @@ function detectiveIntro(){
   </div><a href="#tagescomic" class="detective-cover" aria-label="Comic des Tages lesen" ${detectiveArt(today,0)}></a></section>`;
 }
 function showDetective(id,part){
-  const today=detectiveEpisodes[detectiveToday()];
+  const today=dailyDetectiveEpisodes[detectiveToday()];
   const episode=detectiveEpisodes.find(item=>item.id===id)||today;
   const page=Math.min(episode.pages.length,Math.max(1,Number.isInteger(+part)?+part:1));
   const first=(page-1)*4;
   const link=(item,n)=>`#tagescomic/${item.id}/${n}`;
   app.innerHTML=`<div class="route">${homeLink()}
     <div class="unit-head lilac"><span class="icon-box">${icon('book')}</span><div>
-    <p class="kicker">${episode===today?'Comic des Tages · '+annaDayFormatter.format(new Date()):'Maja und Bärli ermitteln'}</p>
+    <p class="kicker">${episode.featured?'Schulcomic mit Maja und Bärli':episode===today?'Comic des Tages · '+annaDayFormatter.format(new Date()):'Maja und Bärli ermitteln'}</p>
     <h1 tabindex="-1">${escapeHtml(episode.title)}</h1><p>${escapeHtml(episode.summary)}</p></div></div>
     <section class="panel detective-page" aria-labelledby="detective-page-title">
     <div class="detective-page-heading"><h2 id="detective-page-title">${escapeHtml(episode.pages[page-1])}</h2><span>Seite ${page} von ${episode.pages.length}</span></div>
@@ -3463,10 +3518,10 @@ function showDetective(id,part){
     ${page===episode.pausePage?`<aside class="detective-pause"><h3>Detektivpause</h3><p>${escapeHtml(episode.puzzle)}</p></aside>`:''}
     <nav class="actions detective-turn" aria-label="Comic umblättern">
       ${page>1?`<a class="secondary" href="${link(episode,page-1)}">${icon('back')} Vorherige Seite</a>`:''}
-      ${page<episode.pages.length?`<a class="primary" href="${link(episode,page+1)}">${page===episode.pausePage?(episode.id==='blaue-punkte'?'Zur Spur am Wagen':'Zur Auflösung'):'Nächste Seite'} ${icon('arrow')}</a>`:'<a class="primary" href="#tagescomic">Zum Comic des Tages</a>'}
+      ${page<episode.pages.length?`<a class="primary" href="${link(episode,page+1)}">${page===episode.pausePage?(episode.id==='blaue-punkte'?'Zur Spur am Wagen':'Zur Auflösung'):'Nächste Seite'} ${icon('arrow')}</a>`:episode.featured?'<a class="primary" href="#start">Zur Startseite</a>':'<a class="primary" href="#tagescomic">Zum Comic des Tages</a>'}
     </nav></section>
-    <nav class="panel comic-archive" aria-label="Comicarchiv"><h2>Alle drei Tagescomics</h2>
-    <p>Die Fälle wechseln täglich. Du kannst jeden jederzeit lesen.</p>
+    <nav class="panel comic-archive" aria-label="Comicarchiv"><h2>Alle Comics</h2>
+    <p>Die Detektivfälle wechseln täglich. Du kannst alle Comics jederzeit lesen.</p>
     <div class="actions">${detectiveEpisodes.map(item=>`<a class="secondary" href="${link(item,1)}"${item===episode?' aria-current="true"':''}>${escapeHtml(item.title)}</a>`).join('')}
     <a class="plain" href="#schulgeschichten">Zu den Tagesgeschichten</a></div></nav>
   </div>`;
