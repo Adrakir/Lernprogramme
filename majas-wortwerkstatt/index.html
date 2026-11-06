@@ -236,6 +236,35 @@ details ol{margin-bottom:0}
  .anna-today{grid-template-columns:1fr;gap:14px}
  .anna-today-picture{grid-row:1}
 }
+.anna-extra-grid,.anna-image-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.anna-extra-grid .station{min-height:0}
+.anna-extra-grid h3{margin-top:10px}
+.anna-listen,.anna-retell{padding:13px 15px;margin:0 0 18px;border:1px solid #cadfce;border-radius:13px;background:#f0f7ee}
+.anna-listen h2,.anna-retell h2{font-size:22px;margin:0 0 7px}
+.anna-listen p,.anna-retell p{margin:0 0 9px}
+.anna-listen .actions{margin:0 0 10px}
+.anna-speed{display:flex;align-items:center;gap:7px;font-weight:750}
+.anna-speed select{min-height:44px;padding:4px 7px;border:1px solid #aabdb0;border-radius:8px;color:inherit;background:#fffdfa;font:inherit}
+.anna-paragraph-controls{display:flex;flex-wrap:wrap;gap:5px}
+.anna-paragraph-controls button{padding-inline:10px}
+.anna-paragraph-controls button[aria-current=true]{background:#d4edda;border-color:#57957a}
+.anna-audio-status:empty{display:none}
+.anna-listen .anna-audio-status:not(:empty){margin:8px 0 0}
+.anna-text p[data-story-paragraph]{border-radius:6px;outline:3px solid transparent;outline-offset:3px}
+.anna-text p.anna-reading{background:#fff0c4;outline-color:#e3b962}
+.anna-question .anna-detective{margin-top:9px}
+.anna-detective-answers{display:grid;gap:6px;margin:8px 0}
+.anna-detective-answers button{text-align:left;font-weight:600}
+.anna-detective-answers button b{display:block}
+.anna-detective-answers .anna-clue-found{background:#d5efdc;border-color:#59947b;color:#205b45}
+.anna-evidence{margin-top:13px}
+.anna-detective .anna-clue-message{margin-top:10px}
+.anna-image-card{display:flex;flex-direction:column;gap:8px;padding:6px;border:1px solid #b9cdbf;border-radius:12px;background:#fffefa;color:var(--ink);text-align:left;font:inherit}
+.anna-image-card span{padding:2px 5px 6px}
+.anna-image-card[aria-pressed=true]{background:#e4f2e7;border:2px solid #68977f;padding:5px}
+.anna-image-card svg{border-radius:7px}
+.anna-retell{margin:16px 0 0}
+@media(max-width:620px){.anna-extra-grid,.anna-image-choices{grid-template-columns:1fr}.anna-image-card{max-width:420px}}
 </style>
 </head>
 <body>
@@ -1324,15 +1353,13 @@ const annaStoryMoments = {
 function annaMoment(story){
   const [after, caption, alt, art]=annaStoryMoments[story.id];
   const [sky,ground]=annaPictures[story.id].colors;
-  return {after,html:`<figure class="anna-story-picture anna-moment">
-    <svg class="anna-scene" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="${alt}">
+  const image=`<svg class="anna-scene" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" role="img" aria-label="${alt}">
       <rect width="360" height="160" fill="${sky}"/>
       <path fill="${ground}" d="M0 113q90-18 177-4t183-2v53H0Z"/>
       <g stroke="#425751" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${art}</g>
-    </svg><figcaption>${caption}</figcaption>
-  </figure>`};
+    </svg>`;
+  return {after,image,html:`<figure class="anna-story-picture anna-moment">${image}<figcaption>${caption}</figcaption></figure>`};
 }
-
 </script>
 <script>const annaStories = [
   {
@@ -1520,7 +1547,10 @@ function annaStoryIndex(date=new Date()){
 const annaLink=story=>'#anna/'+story.id;
 const annaArt=()=>document.querySelector('#anna-source').innerHTML;
 
-function showAnna(id){
+function showAnna(id,part){
+  if(id==='entscheidung'){showAnnaChoice(part);return;}
+  if(id==='bilder'){showAnnaImageGame(part);return;}
+  if(id==='fall'){showAnnaCase(part);return;}
   const index=annaStories.findIndex(story=>story.id===id);
   if(index===-1){
     const now=new Date();
@@ -1537,8 +1567,9 @@ function showAnna(id){
         <a class="primary" href="${annaLink(today)}">Geschichte lesen ${icon('arrow')}</a></div>
         <div class="anna-today-picture">${annaScene(today)}</div>
       </section>
+      ${annaExtraLinks()}
       <section class="panel" aria-labelledby="anna-archive-title"><h2 id="anna-archive-title">Alle ${annaStories.length} Abenteuer</h2>
-      <p>Jeden Tag steht eine andere Geschichte oben. Nach ${annaStories.length} Tagen beginnt die Runde von vorn. Hier kannst du jederzeit jede Geschichte lesen.</p>
+      <p>Jeden Tag steht eine andere Geschichte oben. Nach ${annaStories.length} Tagen beginnt die Runde von vorn. Jede Geschichte hat ein Hörkino und eine Lesedetektiv-Aufgabe.</p>
       <ol class="anna-list">${annaStories.map(story=>`<li><a href="${annaLink(story)}"><span class="anna-thumb">${annaScene(story,true)}</span><span class="anna-list-title">${story.title}</span> ${icon('arrow')}</a></li>`).join('')}</ol>
       </section></div>`;
     return;
@@ -1554,16 +1585,657 @@ function showAnna(id){
       <p class="kicker">${icon('book')} Annas Abenteuer · ${index+1} von ${annaStories.length}</p>
       <h1 tabindex="-1">${story.title}</h1>
       <figure class="anna-story-picture">${annaScene(story)}</figure>
-      <div class="anna-text">${story.paragraphs.map((paragraph,i)=>`<p>${paragraph}</p>${i+1===moment.after?moment.html:''}`).join('')}</div>
+      ${annaListenControls(story)}
+      <div class="anna-text">${story.paragraphs.map((paragraph,i)=>`<p data-story-paragraph>${paragraph}</p>${i+1===moment.after?moment.html:''}`).join('')}</div>
       <section class="anna-question" aria-labelledby="anna-question-title">
         <h2 id="anna-question-title">Hast du aufgepasst?</h2><p>${story.question}</p>
         <details><summary>Antwort ansehen</summary><p>${story.answer}</p></details>
+        ${annaDetective(story)}
       </section>
       <nav class="actions" aria-label="Annas Geschichten">
         ${previous?`<a class="secondary" href="${annaLink(previous)}">${icon('back')} Vorherige Geschichte</a>`:''}
         ${next?`<a class="primary" href="${annaLink(next)}">Nächste Geschichte ${icon('arrow')}</a>`:`<a class="primary" href="#anna">Alle Geschichten ${icon('arrow')}</a>`}
       </nav>
     </article></div>`;
+  setupAnnaListen(story);
+  setupAnnaDetective();
+}
+</script>
+<script>const annaAudioCues = {
+  "der-kiesel-im-schuh": [
+    [
+      0.14,
+      9.625
+    ],
+    [
+      10.145,
+      19.131
+    ],
+    [
+      19.651,
+      28.614
+    ],
+    [
+      29.134,
+      35.706
+    ]
+  ],
+  "die-muetze-im-apfelbaum": [
+    [
+      0.14,
+      11.146
+    ],
+    [
+      11.666,
+      18.168
+    ],
+    [
+      18.688,
+      26.803
+    ],
+    [
+      27.323,
+      33.198
+    ]
+  ],
+  "die-pfuetze-mit-dem-himmel": [
+    [
+      0.14,
+      8.174
+    ],
+    [
+      8.694,
+      21.871
+    ],
+    [
+      22.391,
+      28.568
+    ],
+    [
+      29.088,
+      35.021
+    ]
+  ],
+  "das-lesezeichen-im-buch": [
+    [
+      0.14,
+      11.645
+    ],
+    [
+      12.165,
+      24.588
+    ],
+    [
+      25.108,
+      29.183
+    ],
+    [
+      29.703,
+      34.754
+    ]
+  ],
+  "das-fahrrad-das-klingelte": [
+    [
+      0.14,
+      8.221
+    ],
+    [
+      8.741,
+      18.179
+    ],
+    [
+      18.699,
+      26.873
+    ],
+    [
+      27.393,
+      34.336
+    ]
+  ],
+  "der-schatten-an-der-wand": [
+    [
+      0.14,
+      8.383
+    ],
+    [
+      8.903,
+      19.41
+    ],
+    [
+      19.93,
+      26.176
+    ],
+    [
+      26.696,
+      30.806
+    ]
+  ],
+  "der-falsche-kuchen": [
+    [
+      0.14,
+      9.521
+    ],
+    [
+      10.041,
+      17.494
+    ],
+    [
+      18.014,
+      23.518
+    ],
+    [
+      24.038,
+      34.011
+    ]
+  ],
+  "rettung-fuer-eine-schnecke": [
+    [
+      0.14,
+      7.512
+    ],
+    [
+      8.032,
+      15.881
+    ],
+    [
+      16.401,
+      24.435
+    ],
+    [
+      24.955,
+      32.501
+    ]
+  ],
+  "ein-brief-ohne-namen": [
+    [
+      0.14,
+      9.486
+    ],
+    [
+      10.006,
+      15.985
+    ],
+    [
+      16.505,
+      24.783
+    ],
+    [
+      25.303,
+      34.022
+    ]
+  ],
+  "das-fernrohr-aus-pappe": [
+    [
+      0.14,
+      8.952
+    ],
+    [
+      9.472,
+      16.728
+    ],
+    [
+      17.248,
+      24.191
+    ],
+    [
+      24.711,
+      35.09
+    ]
+  ],
+  "die-geheime-trommel": [
+    [
+      0.14,
+      7.895
+    ],
+    [
+      8.415,
+      17.378
+    ],
+    [
+      17.898,
+      27.14
+    ],
+    [
+      27.66,
+      36.925
+    ]
+  ],
+  "der-koffer-mit-dem-loch": [
+    [
+      0.14,
+      9.184
+    ],
+    [
+      9.704,
+      17.564
+    ],
+    [
+      18.084,
+      26.977
+    ],
+    [
+      27.497,
+      32.942
+    ]
+  ],
+  "das-fenster-voller-sterne": [
+    [
+      0.14,
+      7.756
+    ],
+    [
+      8.276,
+      18.899
+    ],
+    [
+      19.419,
+      27.198
+    ],
+    [
+      27.718,
+      32.919
+    ]
+  ],
+  "die-letzte-kastanie": [
+    [
+      0.14,
+      8.174
+    ],
+    [
+      8.694,
+      17.645
+    ],
+    [
+      18.165,
+      25.027
+    ],
+    [
+      25.547,
+      33.418
+    ]
+  ]
+};
+
+const annaClues = {
+  'der-kiesel-im-schuh': [[2],['Zur Haustür.','Unter die Bank.']],
+  'die-muetze-im-apfelbaum': [[2],['Mit einem langen Seil.','Mit einer Leiter.']],
+  'die-pfuetze-mit-dem-himmel': [[1,2],['Anna trat in die Pfütze.','Papa hielt seine Hand darüber.']],
+  'das-lesezeichen-im-buch': [[1],['Einen Frosch aus Papier.','Einen Papierfisch.']],
+  'das-fahrrad-das-klingelte': [[1],['Ein Stein sprang gegen die Klingel.','Ben klingelte von hinten.']],
+  'der-schatten-an-der-wand': [[1],['Ein Hase aus Papier.','Eine Maus hinter dem Vorhang.']],
+  'der-falsche-kuchen': [[0],['Sie probierte den fertigen Kuchen.','Oma zeigte auf den Ofen.']],
+  'rettung-fuer-eine-schnecke': [[2],['Sie schob sie mit einem Stock ins Gras.','Ben trug sie auf dem Roller dorthin.']],
+  'ein-brief-ohne-namen': [[2],['Nur für Frau Sommer.','Für die Kinder im Nachbarhaus.']],
+  'das-fernrohr-aus-pappe': [[1,2],['Es machte den Vogel größer.','Es brachte den Vogel zum Stillhalten.']],
+  'die-geheime-trommel': [[1],['Ein Vogel klopfte ans Fenster.','Jemand spielte im Flur Trommel.']],
+  'der-koffer-mit-dem-loch': [[2],['Der Hase war zu schwer.','Anna hatte ihn neben dem Sofa vergessen.']],
+  'das-fenster-voller-sterne': [[1],['Der Stern mit den meisten Zacken.','Der erste Stern aus Papier.']],
+  'die-letzte-kastanie': [[2],['Als neues Bein für den Hund.','Als Knopf für Bens Jacke.']]
+};
+
+function annaDetective(story){
+  const [indices,distractors]=annaClues[story.id];
+  const choices=gameShuffle([story.answer,...distractors]);
+  return `<details class="anna-detective">
+    <summary>Lesedetektiv starten</summary>
+    <p><b>1. Was ist die richtige Antwort?</b></p><p>${story.question}</p>
+    <div class="anna-detective-answers">${choices.map(choice=>`<button type="button" class="choice" data-answer="${choice===story.answer}">${choice}</button>`).join('')}</div>
+    <div class="anna-evidence" hidden>
+      <p><b>2. Wo im Text steht der Hinweis?</b></p>
+      <div class="anna-detective-answers">${story.paragraphs.map((paragraph,i)=>`<button type="button" class="choice" data-evidence="${indices.includes(i)}"><b>Absatz ${i+1}</b> ${paragraph}</button>`).join('')}</div>
+    </div>
+    <p class="game-message anna-clue-message" role="status" hidden></p>
+  </details>`;
+}
+
+function setupAnnaDetective(){
+  const panel=document.querySelector('.anna-detective');
+  const evidence=panel.querySelector('.anna-evidence');
+  const message=panel.querySelector('.anna-clue-message');
+  panel.onclick=event=>{
+    const button=event.target.closest('button[data-answer],button[data-evidence]');
+    if(!button||button.disabled)return;
+    message.hidden=false;
+    if(button.hasAttribute('data-answer')){
+      if(button.dataset.answer==='false'){
+        message.textContent='Lies noch einmal nach. Welche Antwort passt wirklich zur Geschichte?';
+        return;
+      }
+      panel.querySelectorAll('[data-answer]').forEach(answer=>{answer.disabled=true;});
+      button.classList.add('anna-clue-found');
+      evidence.hidden=false;
+      message.textContent='Richtig! Wähle jetzt den Absatz, der deine Antwort belegt.';
+      evidence.querySelector('button').focus();
+      return;
+    }
+    if(button.dataset.evidence==='false'){
+      message.textContent='Dieser Absatz liefert den gesuchten Hinweis noch nicht. Probiere einen anderen.';
+      return;
+    }
+    evidence.querySelectorAll('button').forEach(answer=>{answer.disabled=true;});
+    button.classList.add('anna-clue-found');
+    message.textContent='Textspur gefunden! In diesem Absatz steht der Hinweis für deine Antwort.';
+    message.tabIndex=-1;
+    message.focus();
+  };
+}
+
+function annaListenControls(story){
+  return `<section class="anna-listen" aria-labelledby="anna-listen-title">
+    <h2 id="anna-listen-title">Hörkino</h2>
+    <p>Höre die Geschichte ganz oder in einzelnen Absätzen. Der vorgelesene Absatz wird markiert.</p>
+    <audio id="anna-audio-player" preload="none" src="./anna-audio/${story.id}.mp3"></audio>
+    <div class="actions">
+      <button type="button" class="primary" id="anna-play">${icon('audio')} Ganze Geschichte</button>
+      <button type="button" class="secondary" id="anna-pause" disabled>Pause</button>
+      <label class="anna-speed">Tempo <select id="anna-speed"><option value="0.93">Normal</option><option value="0.78">Langsam</option></select></label>
+    </div>
+    <div class="anna-paragraph-controls" aria-label="Absatz zum Anhören auswählen">${story.paragraphs.map((_,i)=>`<button type="button" class="secondary" data-listen-paragraph="${i}">Absatz ${i+1}</button>`).join('')}</div>
+    <p class="anna-audio-status" role="status"></p>
+  </section>`;
+}
+
+function setupAnnaListen(story){
+  const audio=document.querySelector('#anna-audio-player');
+  const pause=document.querySelector('#anna-pause');
+  const speed=document.querySelector('#anna-speed');
+  const status=document.querySelector('.anna-audio-status');
+  const paragraphs=[...document.querySelectorAll('[data-story-paragraph]')];
+  const buttons=[...document.querySelectorAll('[data-listen-paragraph]')];
+  const cues=annaAudioCues[story.id];
+  let limit=null;
+  let resumeAt=null;
+  let playingParagraph=-1;
+
+  function mark(index){
+    if(index===playingParagraph)return;
+    playingParagraph=index;
+    paragraphs.forEach((paragraph,i)=>paragraph.classList.toggle('anna-reading',i===index));
+    buttons.forEach((button,i)=>button.setAttribute('aria-current',i===index?'true':'false'));
+  }
+
+  function fail(){
+    status.textContent='Die Aufnahme konnte gerade nicht abgespielt werden. Versuche es noch einmal.';
+    pause.disabled=true;
+    mark(-1);
+  }
+
+  function play(){
+    audio.playbackRate=Number(speed.value);
+    audio.play().catch(error=>{if(error.name!=='AbortError'&&audio.isConnected)fail();});
+  }
+
+  function start(index){
+    audio.pause();
+    limit=index===null?null:cues[index][1];
+    resumeAt=null;
+    audio.currentTime=index===null?0:cues[index][0];
+    mark(index??-1);
+    play();
+  }
+
+  document.querySelector('#anna-play').onclick=()=>start(null);
+  buttons.forEach((button,i)=>button.onclick=()=>start(i));
+  speed.onchange=()=>{audio.playbackRate=Number(speed.value);};
+  pause.onclick=()=>{
+    if(audio.paused){
+      if(resumeAt!==null)audio.currentTime=resumeAt;
+      play();
+    }else{
+      resumeAt=audio.currentTime;
+      audio.pause();
+    }
+  };
+  audio.onplaying=()=>{
+    pause.disabled=false;
+    pause.textContent='Pause';
+    status.textContent='Die Geschichte wird vorgelesen.';
+  };
+  audio.onpause=()=>{pause.textContent='Weiterhören';};
+  audio.ontimeupdate=()=>{
+    const current=audio.currentTime;
+    if(limit!==null&&current>=limit){
+      audio.pause();
+      limit=null;
+      pause.disabled=true;
+      status.textContent='Dieser Absatz ist zu Ende.';
+      return;
+    }
+    if(audio.paused)return;
+    const index=cues.findIndex(([start,end])=>start<=current&&current<end);
+    if(index>=0)mark(index);
+  };
+  audio.onended=()=>{
+    pause.disabled=true;
+    mark(-1);
+    status.textContent='Die Geschichte ist zu Ende.';
+  };
+  audio.onerror=fail;
+}
+
+const annaChoices = {
+  folgen:{
+    label:'Allein der Spur folgen',
+    title:'Ein Zeichen für Ben',
+    paragraphs:[
+      'Anna folgte den Pfeilen bis zur Bank am Spielplatz. Dort lag eine Dose. Darin waren Kreide und ein Zettel von Ben. „Wer mich findet, darf die nächste Spur malen.“',
+      'Anna nahm die Kreide. Statt Pfeilen malte sie winzige Sterne bis zur Tischtennisplatte. Dort wartete sie auf Ben. Er brauchte eine Weile, denn am ersten Stern blieb er stehen und zählte alle Zacken.',
+      'Als er Anna endlich fand, sagte er: „Beim nächsten Mal nimm bitte Kreise.“ Anna grinste. „Die musst du dann nicht zählen.“'
+    ]
+  },
+  ben:{
+    label:'Ben dazuholen',
+    title:'Zwei Spuren und ein Schatz',
+    paragraphs:[
+      'Anna klingelte bei Ben. Zusammen folgten sie den Pfeilen. Vor der Bank hörte die Kreidespur auf. „Hier geht es nicht weiter“, sagte Ben.',
+      'Anna drehte den Kiesel um. Auf der Rückseite war ein Stern. Ben sah unter die Bank und entdeckte einen Kreidestern am Holz. Genau darunter steckte eine flache Dose.',
+      'In der Dose lag eine Zeichnung vom Hof. Ben erkannte die Handschrift seiner Schwester. Auf dem Blatt stand: „Schatz gefunden. Jetzt seid ihr dran.“ Anna und Ben versteckten die Dose neu. Dieses Mal malten sie zwei Spuren, damit seine Schwester sich entscheiden musste.'
+    ]
+  }
+};
+
+const annaCase = [
+  {
+    title:'Das leere Fenster',
+    paragraphs:[
+      'Heute sollte in der Bücherei das Geschichtenfest beginnen. Im Fenster hing sonst ein großer gelber Papierstern. Doch als Anna und Maja ankamen, war der Platz leer.',
+      '„Hast du etwas gesehen, Fuji?“, fragte Maja. Fuji schnupperte an der Fensterbank und tappte zur Garderobe. Minka sprang auf die Bank daneben. Unter ihr lag ein kleines blaues Band.',
+      'Anna hob es auf. „Der Stern hing an so einem Band.“ Maja zeigte zur Tür. An der Klinke klebte ein winziges gelbes Stück Papier.',
+      'Hinter der Tür hörten sie ein leises Rascheln. Fuji legte den Kopf schief. Maja drückte vorsichtig die Klinke herunter.'
+    ],
+    clue:'Welche beiden Spuren haben Anna und Maja gefunden?',
+    answer:'Ein blaues Band an der Garderobe und ein gelbes Stück Papier an der Türklinke.'
+  },
+  {
+    title:'Die Spur im Lesegarten',
+    paragraphs:[
+      'Hinter der Tür lag der Lesegarten. Die Büchereifrau stapelte Sitzkissen auf einer Bank. „Sucht ihr den Stern?“, fragte sie. „Vorhin stand die Tür offen. Dann kam ein kräftiger Windstoß.“',
+      'Fuji lief bis zum Beerenstrauch. Im nassen Gras lag ein zweites gelbes Stück Papier. Minka schlüpfte unter die Zweige und kam mit einer blauen Faser am Schnurrhaar wieder heraus.',
+      'Anna kniete sich hin. Zwischen den Zweigen zog sich ein blaues Band bis zum Zaun. „Das Band ist hängen geblieben“, sagte Maja. „Aber wo ist der Rest?“',
+      'Anna blickte nach oben. Hinter dem Zaun bewegte sich etwas Gelbes. Es raschelte wieder.'
+    ],
+    clue:'Was könnte mit dem Stern passiert sein?',
+    answer:'Der Wind könnte ihn aus der Bücherei geweht haben. Das blaue Band und das gelbe Papier führen durch den Garten zum Zaun.'
+  },
+  {
+    title:'Ein Stern mit neuer Zacke',
+    paragraphs:[
+      'Das gelbe Etwas hing im Haselstrauch hinter dem Zaun. Es war der Stern. Die Büchereifrau öffnete das Gartentor. Maja hielt den Zweig fest, während Anna den Stern vorsichtig herauslöste.',
+      'An einer Stelle fehlte eine Zacke. „Jetzt sieht er aus, als hätte ihn jemand angeknabbert“, sagte Anna. Maja holte gelbes Papier. Gemeinsam klebten sie eine neue Zacke an.',
+      'Kurz vor dem Fest hing der Stern wieder im Fenster. Am neuen Band hing eine Karte. Darauf stand „Gerettet von Anna, Maja, Fuji und Minka“.',
+      'Fuji legte sich unter das Fenster. Minka setzte sich neben ihn. Beim nächsten Windstoß schauten beide sofort nach oben.'
+    ],
+    clue:'Wie haben Anna und Maja den Stern repariert?',
+    answer:'Sie klebten eine neue Zacke aus gelbem Papier an und hängten den Stern mit einem neuen Band auf.'
+  }
+];
+
+const annaCaseArt = [
+  annaExtraPicture('Im Fenster der Bücherei fehlt der Stern. Auf der Bank liegt ein blaues Band.',
+    `<rect x="72" y="22" width="138" height="100" rx="7" fill="#e8c896"/><rect x="84" y="34" width="114" height="76" fill="#a9c7ce"/><path d="M141 34v76m-56-38h112" stroke="#f5e2bd" stroke-width="6"/><path d="M222 112h97v15h-97Z" fill="#ba8a65"/><path d="M244 105q5-21 22-11 14 10 27 2 9-4 11-14" stroke="#668dad" stroke-width="7" fill="none"/>`),
+  annaExtraPicture('Ein blaues Band hängt im Beerenstrauch. Darunter liegt ein Stück gelbes Papier.',
+    `<path d="M132 119q-56-5-60-32 6-23 31-19 3-33 34-29 16-29 47-18 16 1 25 18 24-14 44 4 16 12 10 30 32 10 26 33-7 17-40 15Z" fill="#9eb986"/>
+    <path d="M101 79q38 26 73-2t65 9" fill="none" stroke="#6e99ba" stroke-width="6"/><path d="m158 128 20-15 26 11-21 18Z" fill="#ecc868"/><circle cx="231" cy="60" r="6" fill="#bc737b"/><circle cx="214" cy="50" r="5" fill="#bc737b"/>`,'#e8efdc'),
+  annaExtraPicture('Der geflickte gelbe Papierstern hängt an einem neuen blauen Band.',
+    `<path d="M183 5v30" fill="none" stroke="#709bb9" stroke-width="7"/><path d="m183 27 15 38 40 3-31 25 10 38-34-21-35 21 10-38-31-25 41-3Z" fill="#edc365"/>
+    <path d="m183 27 15 38-30 0Z" fill="#ffe6a3"/><path d="M76 64h19m-9-9v18m175-22h19m-10-9v18" fill="none" stroke="#c29e58"/>`)
+];
+
+const annaChoiceArt={
+  folgen:annaExtraPicture('Mehrere Kreidesterne zeigen Anna den Weg über den Hof.',
+    `<path d="M29 127q82-46 158-18t150-28v79H29Z" fill="#bcb7b2" stroke="none"/><path d="m78 127 7-12 13 5-5-13 10-10-14 1-5-13-4 13-14 1 11 8Zm80-24 6-9 10 4-4-10 8-8-11 1-4-10-4 10-11 1 8 6Zm82-15 6-9 10 4-4-10 8-8-11 1-4-10-4 10-11 1 8 6Z" fill="#fff3c8"/>`),
+  ben:annaExtraPicture('Unter einer Bank steckt eine flache Schatzdose.',
+    `<path d="M66 63h227v16H66Z" fill="#b58b68"/><path d="M88 79v53m184-53v53" stroke-width="7" fill="none"/><rect x="131" y="101" width="97" height="28" rx="8" fill="#83a997"/><path d="M134 110h91m-54 10h17" fill="none" stroke="#f2dd9a"/>`)
+};
+
+function annaExtraLinks(){
+  return `<section class="panel anna-extras" aria-labelledby="anna-extras-title">
+    <h2 id="anna-extras-title">Mit Anna weiterlesen und spielen</h2>
+    <div class="anna-extra-grid">
+      <a class="station game-card sand" href="#anna/entscheidung"><span class="icon-box">${icon('arrow')}</span><h3>Du entscheidest für Anna</h3><p>Eine Kieselspur, zwei Wege und zwei verschiedene Enden.</p></a>
+      <a class="station game-card mint" href="#anna/bilder"><span class="icon-box">${icon('puzzle')}</span><h3>Drei Bilder, eine Geschichte</h3><p>Ordne Anfang, Mitte und Ende und erzähle die Geschichte nach.</p></a>
+      <a class="station game-card lilac" href="#anna/fall"><span class="icon-box">${icon('book')}</span><h3>Der verschwundene Stern</h3><p>Ein Rätsel in drei Folgen mit Anna, Maja, Fuji und Minka.</p></a>
+    </div>
+  </section>`;
+}
+
+function annaExtraPage(kicker,title,content){
+  app.innerHTML=`<div class="route anna-route">
+    <a class="crumb" href="#anna">${icon('back')} Zu Annas Geschichten</a>
+    <article class="panel anna-story">
+      <p class="kicker">${icon('book')} ${kicker}</p><h1 tabindex="-1">${title}</h1>${content}
+    </article></div>`;
+}
+
+function showAnnaChoice(part){
+  if(Object.hasOwn(annaChoices,part)){
+    const ending=annaChoices[part];
+    annaExtraPage('Du entscheidest für Anna',ending.title,`
+      <figure class="anna-story-picture">${annaChoiceArt[part]}</figure>
+      <div class="anna-text">${ending.paragraphs.map(p=>`<p>${p}</p>`).join('')}</div>
+      <div class="actions"><a class="primary" href="#anna/entscheidung">Noch einmal entscheiden</a>
+      <a class="secondary" href="#anna/entscheidung/${part==='folgen'?'ben':'folgen'}">Das andere Ende lesen</a></div>`);
+    return;
+  }
+  annaExtraPage('Du entscheidest für Anna','Der zweite Kiesel',`
+    <figure class="anna-story-picture">${annaScene(annaStories[0])}</figure>
+    <div class="anna-text"><p>Auf dem Weg nach Hause entdeckte Anna einen zweiten blauen Kiesel. Auch auf ihm war ein Pfeil. Er zeigte zum Spielplatz.</p>
+    <p>Ben war noch zu Hause. Anna konnte gleich losgehen oder ihn fragen, ob er mitkam. Was soll sie tun?</p></div>
+    <div class="actions">${Object.entries(annaChoices).map(([key,{label}])=>`<a class="secondary" href="#anna/entscheidung/${key}">${label} ${icon('arrow')}</a>`).join('')}</div>`);
+}
+
+function showAnnaCase(part){
+  const number=Number(part);
+  const episode=Number.isInteger(number)?annaCase[number-1]:null;
+  if(!episode){
+    annaExtraPage('Ein Rätsel in drei Folgen','Der verschwundene Stern',`
+      <p>Vor dem Geschichtenfest verschwindet der Papierstern aus der Bücherei. Anna, Maja, Fuji und Minka machen sich auf die Suche.</p>
+      <ol class="anna-list">${annaCase.map((item,i)=>`<li><a href="#anna/fall/${i+1}"><span>${item.title}</span> ${icon('arrow')}</a></li>`).join('')}</ol>`);
+    return;
+  }
+  annaExtraPage(`Der verschwundene Stern · Folge ${number} von ${annaCase.length}`,episode.title,`
+    <figure class="anna-story-picture">${annaCaseArt[number-1]}</figure>
+    <div class="anna-text">${episode.paragraphs.map(p=>`<p>${p}</p>`).join('')}</div>
+    <section class="anna-question"><h2>Deine Spur</h2><p>${episode.clue}</p><details><summary>Hinweis ansehen</summary><p>${episode.answer}</p></details></section>
+    <nav class="actions" aria-label="Folgen des Falls"><a class="secondary" href="#anna/fall">Alle Folgen</a>
+    ${number<annaCase.length?`<a class="primary" href="#anna/fall/${number+1}">Nächste Folge ${icon('arrow')}</a>`:''}</nav>`);
+}
+
+function annaExtraPicture(alt,art,background='#f3ebd4'){
+  return `<svg class="anna-scene" viewBox="0 0 360 160" role="img" aria-label="${alt}">
+    <rect width="360" height="160" fill="${background}"/>
+    <path d="M0 126q88-17 171-4t189-6v44H0Z" fill="#d7ddbd"/>
+    <g stroke="#425751" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${art}</g></svg>`;
+}
+
+const imageRounds = [
+  {id:'die-muetze-im-apfelbaum', captions:['Eine Mütze hängt im Apfelbaum.','Der Besenstiel erreicht den Ast.','Anna hat die Mütze mit einem Blatt darin.'],
+    end:annaExtraPicture('Eine Hand hält eine Mütze. Oben steckt ein Herbstblatt.',
+      `<path d="M130 96q-4-55 44-61 40-3 58 53l-3 19-94 5Z" fill="#e39971"/>
+       <path d="m123 99 111-12 5 19-114 13Z" fill="#f6c192"/><circle cx="178" cy="36" r="12" fill="#efb084"/>
+       <path d="M188 91q-5-42 29-39-2 32-29 39Zm0 1 19-28" fill="#9fb675"/>
+       <path d="M256 139q-20-10-37-18-9-9-2-17 8-5 16 0l11 6q-3-13 4-17 8-3 12 9l9 17 45 8-7 22Z" fill="#f1bc98"/>`)},
+  {id:'die-pfuetze-mit-dem-himmel', captions:['Anna entdeckt eine Wolke in der Pfütze.','Ein Tropfen zieht Kreise im Wasser.','Anna malt die Pfütze und den Himmel auf ein Blatt.'],
+    start:annaExtraPicture('Eine helle Wolke spiegelt sich in einer ganz ruhigen Pfütze.',
+      `<ellipse cx="179" cy="104" rx="112" ry="34" fill="#94bdcf"/><path d="M111 105q2-14 25-13 2-23 26-21 19-2 29 17 24-4 34 9 7 15-23 17h-73q-18 1-18-9Z" fill="#eef5e9" stroke="none"/><path d="M92 117q19 9 37 10m104-7 26-7" fill="none" stroke="#d3e8e9"/>`,'#e7f1ef'),
+    end:annaExtraPicture('Auf einem Blatt Papier ist eine blaue Pfütze mit einer Wolke gemalt.',
+      `<path d="m100 23 157 8-5 108-156-4Z" fill="#fff7dd"/><ellipse cx="174" cy="79" rx="54" ry="22" fill="#85b8d2"/>
+       <path d="M146 80q-3-9 9-10 2-12 16-11 11 0 16 9 13-1 16 8 2 8-10 9h-38q-9 0-9-5Z" fill="#f0f5df" stroke="none"/>
+       <path d="m219 125 54-47 7 8-55 46-13 5Z" fill="#dda777"/><path d="M122 117h63" fill="none" stroke="#a3957d"/>`)},
+  {id:'der-koffer-mit-dem-loch', captions:['Anna packt den Stoffhasen in den Koffer.','Der offene Reißverschluss verrät, warum der Hase fehlt.','Der Koffer ist richtig zu. Der Hase kann wieder mitfahren.'],
+    start:annaExtraPicture('Der Stoffhase schaut aus dem geöffneten Koffer, während Anna packt.',
+      `<path d="m94 90 19-48 127-7 19 55Z" fill="#c88e69"/><path d="m106 82 13-32 113-6 13 38Z" fill="#efcc9e"/>
+       <path d="M155 99q-15-18-6-29 4-6 10-7-8-19 0-25 6-3 12 14 2-18 9-17 9 3 0 25 17 4 18 16 1 13-12 19Z" fill="#ece3ce"/>
+       <path d="M163 77h.1m19-2h.1" stroke-width="5"/><rect x="92" y="89" width="169" height="45" rx="8" fill="#d5a275"/>
+       <path d="M103 105h147m-93 15h35" fill="none"/>`),
+    end:annaExtraPicture('Der Koffer ist geschlossen. Der Reißverschluss läuft ohne Lücke um ihn herum.',
+      `<path d="M152 55V41h47v14" fill="none" stroke-width="6"/><rect x="95" y="53" width="162" height="79" rx="14" fill="#dca96b"/>
+       <path d="M103 93h146m-13 2v14m-4-10h9" fill="none" stroke="#8e7157"/><path d="m268 101 12 14 30-30" fill="none" stroke="#578666" stroke-width="6"/>`)}
+];
+
+function showAnnaImageGame(part){
+  const game=imageRounds.find(item=>item.id===part);
+  if(!game){
+    annaExtraPage('Bilderspiel','Drei Bilder, eine Geschichte',`
+      <p>Wähle eine Geschichte und bringe ihre Bilder in die Reihenfolge Anfang, Mitte, Ende.</p>
+      <ol class="anna-list">${imageRounds.map(({id})=>`<li><a href="#anna/bilder/${id}"><span>${annaStories.find(story=>story.id===id).title}</span> ${icon('arrow')}</a></li>`).join('')}</ol>`);
+    return;
+  }
+  const story=annaStories.find(item=>item.id===part);
+  const pictures=[game.start||annaScene(story),annaMoment(story).image,game.end];
+  let shuffled=gameShuffle([0,1,2]);
+  if(shuffled.join()==='0,1,2')shuffled=[1,2,0];
+  let picks=[];
+  annaExtraPage('Bilderspiel',story.title,`
+    <p>Tippe auf die Bilder in der Reihenfolge der Geschichte. Du kannst deine Auswahl danach prüfen.</p>
+    <div class="anna-image-choices"></div>
+    <p class="game-message" role="status">Welches Bild zeigt den Anfang?</p>
+    <div class="actions"><button class="primary" type="button" id="anna-picture-check" disabled>Reihenfolge prüfen</button>
+    <button class="secondary" type="button" id="anna-picture-reset">Auswahl löschen</button>
+    <a class="secondary" href="#anna/bilder">Andere Bildergeschichte</a></div>
+    <div class="anna-retell" hidden><h2>Jetzt erzählst du</h2><p>Erzähle zu jedem Bild einen Satz. Du kannst mit „Zuerst“, „Dann“ und „Am Ende“ beginnen.</p>
+    <a href="${annaLink(story)}">Die ganze Geschichte lesen</a></div>`);
+  const board=document.querySelector('.anna-image-choices');
+  const message=document.querySelector('.game-message');
+  const check=document.querySelector('#anna-picture-check');
+  const retell=document.querySelector('.anna-retell');
+  let done=false;
+  function draw(focus){
+    board.innerHTML=(done?[0,1,2]:shuffled).map(i=>{
+      const position=picks.indexOf(i);
+      return `<button class="anna-image-card" type="button" data-image="${i}" aria-pressed="${position>=0}" ${done?'disabled':''}>
+        ${pictures[i]}<span><strong>${position>=0?position+1+'. ':''}</strong>${game.captions[i]}</span></button>`;
+    }).join('');
+    check.disabled=done||picks.length!==3;
+    if(focus!==undefined)board.querySelector(`[data-image="${focus}"]`).focus();
+  }
+  board.onclick=event=>{
+    const button=event.target.closest('[data-image]');
+    if(!button||done)return;
+    const i=Number(button.dataset.image);
+    picks=picks.includes(i)?picks.filter(value=>value!==i):[...picks,i];
+    message.textContent=['Welches Bild zeigt den Anfang?','Welches Bild gehört in die Mitte?','Welches Bild zeigt das Ende?','Alle drei Bilder sind ausgewählt.'][picks.length];
+    draw(i);
+  };
+  check.onclick=()=>{
+    if(picks.join()!=='0,1,2'){
+      message.textContent='Die Reihenfolge passt noch nicht. Tippe ausgewählte Bilder erneut an oder lösche die Auswahl.';
+      return;
+    }
+    done=true;
+    message.textContent='Richtig! So beginnt die Geschichte, so geht sie weiter und so endet sie.';
+    retell.hidden=false;
+    draw();
+    retell.querySelector('a').focus();
+  };
+  document.querySelector('#anna-picture-reset').onclick=()=>{
+    picks=[];
+    done=false;
+    retell.hidden=true;
+    message.textContent='Welches Bild zeigt den Anfang?';
+    draw(shuffled[0]);
+  };
+  draw();
 }
 </script>
 <script>const iconPaths = {
@@ -1919,16 +2591,17 @@ function showResult(){
 }
 function render(initial=false){
   document.querySelector('#dictation-audio')?.pause();
+  document.querySelector('#anna-audio-player')?.pause();
   active=null;
   syncStars();
-  const [page,index]=location.hash.slice(1).split('/');
+  const [page,index,part]=location.hash.slice(1).split('/');
   const unit=unitById(page);
   const number=Number(index);
   const oldRoute=route;
   route=page||'start';
   if(page==='fortschritt')showProgress();
   else if(page==='spiele')showGames(index);
-  else if(page==='anna')showAnna(index);
+  else if(page==='anna')showAnna(index,part);
   else if(page==='quiz'){
     if(index==='ergebnis'&&quiz.length===mixed.length)showResult();
     else if(index&&Number.isInteger(number)&&number===quiz.length+1&&number<=mixed.length)showExercise(null,number,true);
