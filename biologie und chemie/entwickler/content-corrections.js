@@ -92,7 +92,7 @@ if(playPage){
  const byPage={};[...nav.querySelectorAll('button[data-page]')].forEach(b=>byPage[b.dataset.page]=b);
  const fixText=(b,txt)=>{if(!b)return;[...b.childNodes].forEach(n=>{if(n.nodeType===3&&n.textContent.trim())n.textContent=txt})};
  fixText(byPage.v5academy,'Forscherwerkstatt ');fixText(byPage.chem6,' Forschungscampus');
- const groups=[[null,['home','learningpath','practicehub']],['Grundlagen',['matter','devices','safety','solubility','thermal','heating','burner','method']],['Zusatzwissen & Spiele',['missions','deep','v4lab','v4play','v5academy','chem6']],['Üben & Nachschlagen',['protocoltrainer','quiz','sheet','v4study']],['Zum Abschluss',['finaltest']]];
+ const groups=[[null,['home','learningpath','practicehub']],['Grundlagen',['matter','devices','safety','solubility','thermal','heating','burner','method']],['Zusatzwissen & Spiele',['missions','deep','v4lab','v4play','v5academy','chem6']],['Üben & Nachschlagen',['protocoltrainer','quiz','sheet','v4study']],['Zum Abschluss',['probearbeit','finaltest']]];
  const frag=document.createDocumentFragment();const used=new Set();
  groups.forEach(([heading,ids])=>{const els=ids.map(i=>byPage[i]).filter(Boolean);if(!els.length)return;if(heading){const d=document.createElement('div');d.className='nav-section';d.textContent=heading;frag.appendChild(d)}els.forEach(el=>{frag.appendChild(el);used.add(el)})});
  [...nav.querySelectorAll('button[data-page]')].forEach(b=>{if(!used.has(b))frag.appendChild(b)});

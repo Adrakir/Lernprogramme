@@ -125,5 +125,12 @@
     "attrs": {
       "id": "chemistryProtocolLevels"
     }
+  },
+  {
+    "file": "chemie-probearbeit.js",
+    "tag": "script",
+    "attrs": {
+      "id": "chemieProbearbeit"
+    }
   }
 ]

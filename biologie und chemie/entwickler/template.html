@@ -9,7 +9,25 @@
 <meta content="Geprüftes interaktives Chemie-Entdeckerlabor für Klasse 5: Stoffe, Laborgeräte, Sicherheit, Löslichkeit, Siedetemperatur, Brenner und Experimente." name="description"/>
 <title>Chemie-Entdeckerlabor · Klasse 5 · Version 7.6</title>
 <!-- CHEMIE_SOURCE:base.css -->
-<!-- CHEMIE_SOURCE:lcStyles.css --><!-- CHEMIE_SOURCE:learning-upgrade.css --></head>
+<!-- CHEMIE_SOURCE:lcStyles.css --><!-- CHEMIE_SOURCE:learning-upgrade.css --><style>
+.cp-entry{margin:0 0 16px}
+#page-probearbeit{max-width:980px}
+#page-probearbeit [hidden]{display:none!important}
+#page-probearbeit .cp-task{margin:14px 0}
+#page-probearbeit h3{margin:0 0 6px}
+#page-probearbeit .cp-field{margin:14px 0;min-width:0}
+#page-probearbeit .cp-field>label{display:block;font-weight:650;margin-bottom:5px}
+#page-probearbeit select,#page-probearbeit textarea,#page-probearbeit .cp-number{width:100%;max-width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--muted);border-radius:8px;background:var(--paper);color:var(--ink);font:inherit}
+#page-probearbeit textarea{resize:vertical}
+#page-probearbeit .cp-number{max-width:11ch}
+#page-probearbeit .cp-symbols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:0 16px}
+#page-probearbeit .cp-symbols img{display:block;object-fit:contain}
+#page-probearbeit .cp-feedback,#page-probearbeit .cp-bank{background:var(--soft);border-radius:8px;padding:9px 12px;margin:8px 0}
+#page-probearbeit .cp-feedback p{margin:0}
+#page-probearbeit .cp-check{display:flex;gap:7px;align-items:baseline;margin:7px 0;cursor:pointer}
+#page-probearbeit .cp-check input{flex:none}
+</style>
+</head>
 <body>
 <div class="app">
 <aside aria-label="Navigation" class="side">
@@ -29,15 +47,51 @@
 <button data-page="deep"><span class="navico">✨</span> Forscherlabor <span class="check" data-done="deep"></span></button>
 <button data-page="quiz"><span class="navico">🏆</span>Wissenscheck <span class="check" data-done="quiz"></span></button>
 <button data-page="sheet"><span class="navico">📖</span>Lernheft</button>
-<button data-page="v4lab"><span class="navico">🧪</span>Virtuelles Labor<span class="check" data-done="v4lab"></span></button><button data-page="v4play"><span class="navico">🔐</span>Chemie-Spielwelt<span class="check" data-done="v4play"></span></button><button data-page="v4study"><span class="navico">📋</span>Lernzentrale<span class="check" data-done="v4study"></span></button><button data-page="v5academy"><span class="navico">🔎</span>Forscherwerkstatt V5 <span class="check" data-done="v5academy"></span></button><button data-page="chem6"><span class="navico">🧬</span> Forschungscampus V6</button><button data-page="protocoltrainer"><span class="navico">🔍</span>Protokoll-Fehlertrainer<span class="check" data-done="protocoltrainer"></span></button><button data-page="finaltest"><span class="navico">🎓</span>Abschlusstest<span class="check" data-done="finaltest"></span></button></nav>
+<button data-page="v4lab"><span class="navico">🧪</span>Virtuelles Labor<span class="check" data-done="v4lab"></span></button><button data-page="v4play"><span class="navico">🔐</span>Chemie-Spielwelt<span class="check" data-done="v4play"></span></button><button data-page="v4study"><span class="navico">📋</span>Lernzentrale<span class="check" data-done="v4study"></span></button><button data-page="v5academy"><span class="navico">🔎</span>Forscherwerkstatt V5 <span class="check" data-done="v5academy"></span></button><button data-page="chem6"><span class="navico">🧬</span> Forschungscampus V6</button><button data-page="protocoltrainer"><span class="navico">🔍</span>Protokoll-Fehlertrainer<span class="check" data-done="protocoltrainer"></span></button><button data-page="probearbeit"><span class="navico">📝</span>Probearbeit</button><button data-page="finaltest"><span class="navico">🎓</span>Abschlusstest<span class="check" data-done="finaltest"></span></button></nav>
 <div class="swipe-hint">↔ Themenleiste seitlich wischen, um alle Kapitel zu sehen</div>
 <div class="side-bottom"><b>Fortschritt in den Werkstätten</b><div class="mini-progress"><i id="sideProgress" style="width:0%"></i></div><small id="sideProgressText">0 von 17 Bereichen geschafft</small></div>
 </aside>
 <main>
 <header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
 <section class="stage" hidden="" id="page-chem6"><div id="c6Root"></div></section>
+<section class="stage" hidden id="page-probearbeit" aria-labelledby="cpTitle">
+<div class="page-head"><div class="tag">Probearbeit zum Lernheft</div>
+<h2 id="cpTitle" tabindex="-1">Probe für die Klassenarbeit</h2>
+<p>9 Aufgaben · 37 Punkte · etwa 30 Minuten. Lösungen erscheinen nach der Abgabe.</p>
+<a class="btn" href="Chemie_Probearbeit.pdf" download>Probearbeit als PDF herunterladen</a>
+</div>
+<section class="panel" id="cpReview" hidden aria-labelledby="cpReviewTitle">
+<h3 id="cpReviewTitle">Deine Auswertung</h3>
+<p id="cpResult" role="status" tabindex="-1"></p>
+<p>Vergleiche deine geschriebenen Antworten unten mit den Musterlösungen. Kreuze jedes Kriterium an, das du erfüllt hast.</p>
+</section>
+<form id="cpForm">
+<p id="cpStatus"></p>
+<div id="cpQuestions"></div>
+<div class="btn-row">
+<button type="submit" id="cpSubmit" class="btn primary">Probearbeit abgeben</button>
+<button type="button" id="cpReset" class="btn" hidden>Neu beginnen</button>
+</div>
+</form>
+<template id="cpBurner"><svg viewBox="0 0 230 110" width="230" style="max-width:100%" role="img" aria-label="Brennerskizze. A zeigt auf das lange obere Bauteil. B zeigt auf die Manschette mit einer Öffnung.">
+<rect x="55" y="10" width="36" height="74" fill="#d2dee1" stroke="#193247" stroke-width="2"/>
+<rect x="51" y="58" width="44" height="18" fill="#92abb2" stroke="#193247" stroke-width="2"/>
+<circle cx="67" cy="67" r="4" fill="#193247"/>
+<path d="M91 82h19q12 0 13 9t19 6" fill="none" stroke="#193247" stroke-width="5"/>
+<rect x="32" y="90" width="84" height="10" rx="3" fill="#748d97" stroke="#193247" stroke-width="2"/>
+<path d="M159 30H81m6-4-6 4 6 4M159 67H85m6-4-6 4 6 4" fill="none" stroke="#006965" stroke-width="2"/>
+<g fill="#006965"><circle cx="176" cy="30" r="13"/><circle cx="176" cy="67" r="13"/></g>
+<g fill="#fff" font-family="sans-serif" font-size="15" font-weight="bold" text-anchor="middle"><text x="176" y="35">A</text><text x="176" y="72">B</text></g>
+</svg></template>
+</section>
 <section class="stage" hidden id="page-finaltest" aria-labelledby="ceTitle">
 <div class="page-head"><div class="tag">Abschluss · Vorbereitung auf die Klassenarbeit</div><h2 id="ceTitle">Deine Übungsklassenarbeit in Chemie</h2><p>Passend zur Themenliste deiner Klassenarbeit: Sicherheit, Geräte mit Gasbrenner, Wärmeleitfähigkeit, Siedepunkt, Löslichkeit in Wasser, Protokolle und Unterrichtsexperimente.</p></div>
+<section class="panel cp-entry" aria-label="Probearbeit zum Lernheft">
+<strong>Probearbeit zum Lernheft</strong>
+<p>9 Aufgaben mit Lückentext · 37 Punkte · etwa 30 Minuten</p>
+<div class="btn-row"><button class="btn primary" type="button" data-go="probearbeit">Probearbeit öffnen</button>
+<a class="btn" href="Chemie_Probearbeit.pdf" download>Probearbeit als PDF</a></div>
+</section>
 <section class="panel" id="ceIntro"><span class="pill">Teil A: 20 Aufgaben / 40 Punkte · Teil B: 4 Schreibaufgaben / 12 Kriterienpunkte</span><h3 style="margin-top:12px">Zeige, was du schon kannst</h3><p>Plane insgesamt ungefähr 40–45 Minuten ein. Du siehst immer eine Aufgabe und kannst vor der Abgabe zurückgehen und Antworten ändern. Lösungen und Erklärungen erscheinen erst nach der Abgabe. Drei Aufgaben enthalten steuerbare Animationen: Starte sie selbst, pausiere oder wähle mit dem Regler ein Standbild. Die Zeichnungen sind schematisch.</p><p>Bei Zuordnungen erhältst du Teilpunkte. Unbeantwortete Teilaufgaben zählen als 0 Punkte. Der Test ist eine Klassenarbeitsübung; er vergibt keine offizielle Schulnote.</p><div class="notebox"><strong>Genau deine Themen</strong>Bei den Stoffeigenschaften werden ausschließlich Wärmeleitfähigkeit, Siedepunkt und Löslichkeit in Wasser geprüft. Der Metall-Glas-Versuch aus deinem Heft ist enthalten. Angaben aus nicht vorliegenden Buchseiten oder weiteren Unterrichtsversuchen werden nicht vorausgesetzt.</div><p id="ceSaveNotice" class="small" role="status" aria-live="polite">Deine Eingaben werden in diesem Browser gespeichert.</p><div class="btn-row"><button type="button" class="btn primary" id="ceStart">Abschlusstest beginnen</button><button type="button" class="btn" id="cePrintTasks">Klassenarbeit drucken</button><button type="button" class="btn" data-go="protocoltrainer">Vorher Protokollfehler üben</button></div></section>
 <section class="panel" id="ceWork" hidden aria-labelledby="ceTaskTitle"><div class="scoreline"><span id="cePosition"></span><span id="ceAnswered"></span></div><div class="progressbar" role="progressbar" aria-label="Bearbeitete Aufgaben" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0" id="ceBar"><i id="ceFill"></i></div><span class="pill" id="ceTopic" style="margin-top:18px"></span><h3 id="ceTaskTitle" tabindex="-1" style="margin-top:16px"></h3><p id="cePrompt"></p><div id="ceFigure"></div><div id="ceInputs"></div><p id="ceScoring" class="small muted"></p><div class="btn-row ce-nav"><button type="button" class="btn" id="cePrev">← Zurück</button><button type="button" class="btn primary" id="ceNext">Weiter →</button><button type="button" class="btn" id="ceReview">Antwortübersicht</button></div></section>
 <section class="panel" hidden id="ceWritingWork"><div class="scoreline"><span id="ceWritingPosition"></span><span>Teil B · Eigene Erklärungen</span></div><h3 id="ceWritingTitle" tabindex="-1"></h3><p id="ceWritingPrompt"></p><label for="ceWritingAnswer">Meine Antwort</label><textarea class="lu-open-answer" id="ceWritingAnswer" rows="7" maxlength="5000"></textarea><p class="small muted">Die Kriterien und Musterantworten erscheinen nach der Abgabe. Freie Antworten werden nicht automatisch benotet.</p><div class="btn-row"><button type="button" class="btn" id="ceWritingPrev">← Zurück</button><button type="button" class="btn primary" id="ceWritingNext">Weiter →</button><button type="button" class="btn" id="ceWritingReview">Antwortübersicht</button></div></section><section class="panel" id="ceOverview" hidden aria-labelledby="ceOverviewTitle"><h3 id="ceOverviewTitle" tabindex="-1">Vor der Abgabe</h3><p id="ceOverviewText"></p><p>Tippe auf eine Aufgabe, um sie noch einmal anzusehen. Die Übersicht zeigt nur, ob Eingaben vorhanden sind – keine Bewertung.</p><div id="ceOverviewGrid" class="ce-overview"></div><div class="btn-row"><button type="button" class="btn" id="ceContinue">Zurück zur Bearbeitung</button><button type="button" class="btn primary" id="ceSubmit">Jetzt abgeben und auswerten</button></div></section>
@@ -50,6 +104,12 @@
 <div class="hero"><div class="hero-content"><span class="eyebrow">Dein interaktives Lernlabor</span><h1>Chemie ist überall!</h1><p>Warum löst sich Zucker anders als Salz? Wo ist eine Gasflamme besonders heiß? Und woran erkennst du einen Stoff? Entdecke die Antworten selbst.</p><div class="hero-actions"><button class="btn" data-go="matter">🚀 Lernreise starten</button><button class="btn transparent" data-go="quiz">🎯 Zum Wissenscheck</button></div></div>
 <div aria-hidden="true" class="hero-art"><svg viewbox="0 0 220 260"><defs><lineargradient id="flaskG" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a8ffca"></stop><stop offset="1" stop-color="#32c5d7"></stop></lineargradient></defs><path d="M90 20h42v19h-8v75l60 102q10 18-10 18H46q-20 0-10-18l62-102V39h-8Z" fill="#ffffff25" stroke="#e9ffff" stroke-linejoin="round" stroke-width="8"></path><path d="M65 164h88l32 56q4 8-9 8H44q-13 0-7-10Z" fill="url(#flaskG)"></path><path d="M75 160q30-28 73 4" fill="none" stroke="#e7fff8" stroke-width="3"></path><circle cx="86" cy="190" fill="#e7fff8" opacity=".6" r="11"></circle><circle cx="135" cy="207" fill="#e7fff8" opacity=".7" r="7"></circle><circle cx="123" cy="179" fill="#e7fff8" r="4"></circle><circle cx="39" cy="104" fill="#ffc56e" r="12"></circle><circle cx="184" cy="92" fill="#afffeb" r="8"></circle></svg></div></div>
 <div class="section-head"><h2>Wähle dein Experiment</h2><span class="small muted">17 Lernbereiche · Experimente &amp; Tests</span></div>
+<section class="panel cp-entry" aria-label="Probearbeit zum Lernheft">
+<strong>Probearbeit zum Lernheft</strong>
+<p>9 Aufgaben mit Lückentext · 37 Punkte · etwa 30 Minuten</p>
+<div class="btn-row"><button class="btn primary" type="button" data-go="probearbeit">Probearbeit öffnen</button>
+<a class="btn" href="Chemie_Probearbeit.pdf" download>Probearbeit als PDF</a></div>
+</section>
 <div class="cards" id="homeCards"></div>
 <div class="notebox warm" style="margin-top:22px"><strong>🛡️ Sicherheit zuerst</strong>Die Experimente mit Gasbrenner werden hier nur virtuell durchgeführt. Im echten Chemieraum experimentierst du ausschließlich nach Anweisung der Lehrkraft.</div>
 </details></section>
@@ -242,7 +302,7 @@
 </section>
 <section class="stage" hidden="" id="page-sheet"><div class="study-sheet"><div class="page-head"><div class="tag">Zusammenfassung · Zum Nachschlagen</div><h2>Mein Chemie-Lernheft</h2><p>Wichtige Erklärungen und Merksätze für die 5. Klasse – passend zu deinen Heftseiten. Mit der Druckfunktion kannst du die Lernübersicht auf Papier ausgeben oder als PDF speichern.</p><div class="btn-row screen-only"><button class="btn primary" id="printSheet">🖨️ Lernheft drucken / als PDF speichern</button></div></div>
 <h3>1. Körper und Stoffe</h3><div class="card"><p><b>Körper</b> ist ein Gegenstand oder ein räumlich abgegrenzter Teil der Materie, z. B. Fensterscheibe, Ring oder Tropfen. <b>Stoff</b> beschreibt das Material, z. B. Glas, Gold oder Wasser. Stoffe haben charakteristische Eigenschaften: Farbe, Dichte, Löslichkeit, Schmelz- und Siedetemperatur. Luft ist ein Gasgemisch.</p><div class="scrollable"><table><tr><th>Körper</th><th>Stoff (Beispiel)</th></tr><tr><td>Fensterscheibe</td><td>Glas</td></tr><tr><td>Goldring</td><td>Gold</td></tr><tr><td>Regentropfen</td><td>Wasser</td></tr><tr><td>Kaffeetasse</td><td>Porzellan</td></tr><tr><td>Alufolie</td><td>Aluminium</td></tr><tr><td>Papierblatt</td><td>Papier</td></tr></table></div></div>
-<h3>2. Laborgeräte</h3><div class="card"><p><b>Reagenzglas:</b> kleine Stoffproben untersuchen. <b>Reagenzglashalter:</b> Reagenzglas beim Erhitzen sicher halten. <b>Becherglas:</b> Flüssigkeiten aufnehmen, mischen oder erwärmen. <b>Messzylinder:</b> Volumen abmessen. <b>Trichter:</b> Flüssigkeiten umfüllen oder filtern. <b>Glasstab:</b> umrühren. <b>Stativ/Klemme:</b> Aufbau fixieren. <b>Dreifuß/Drahtnetz:</b> Heizaufbauten stützen und Wärme verteilen.</p></div>
+<h3>2. Laborgeräte</h3><div class="card"><p><b>Reagenzglas:</b> kleine Stoffproben untersuchen. <b>Holzzange (Reagenzglashalter):</b> Reagenzglas beim Erhitzen sicher halten. <b>Becherglas:</b> Flüssigkeiten aufnehmen, mischen oder erwärmen. <b>Messzylinder:</b> Volumen abmessen. <b>Trichter:</b> Flüssigkeiten umfüllen oder filtern. <b>Glasstab:</b> umrühren. <b>Stativ/Klemme:</b> Aufbau fixieren. <b>Dreifuß/Drahtnetz:</b> Heizaufbauten stützen und Wärme verteilen.</p></div>
 <h3>3. Regeln im Chemielabor</h3><div class="card"><p>Anweisungen der Lehrkraft folgen. Schutzbrille und erforderliche Schutzausrüstung tragen; lange Haare zusammenbinden. Nicht essen, trinken oder Stoffe probieren. Taschen und Stolperfallen wegräumen. Gasbrenner nie ohne Erlaubnis oder unbeaufsichtigt benutzen. Bei Unfällen oder verschütteten Stoffen sofort Bescheid sagen. Geruchsproben nur mit ausdrücklicher Erlaubnis und durch vorsichtiges Zufächeln; niemals direkt über das Gefäß beugen.</p></div>
 <h3>4. Löslichkeit und Sättigung</h3><div class="card"><p>Ein Stoff ist <b>löslich</b>, wenn er sich in einem Lösungsmittel – z. B. Wasser – lösen kann. Die <b>Löslichkeit</b> gibt unter bestimmten Bedingungen an, wie viel Stoff sich maximal lösen kann. Bei einer <b>gesättigten Lösung</b> bleibt zusätzlich zugegebener Stoff ungelöst, sofern die Bedingungen gleich bleiben.</p><p>Bei etwa 20 °C lösen sich in 200 ml Wasser ungefähr <b>72 g Kochsalz</b> und <b>400 g Zucker (Saccharose)</b>. Für einen fairen Vergleich Wasser- und Stoffmengen genau messen; Löffelspitzen sind keine verlässliche Maßeinheit.</p></div>
 <h3>5. Verdunsten, Sieden und Siedetemperatur</h3><div class="card"><p><b>Verdunsten:</b> Wasser geht an der Oberfläche auch deutlich unter 100 °C in die Gasphase über. <b>Sieden:</b> Im Wasser entstehen Dampfblasen. Die Siedetemperatur von reinem Wasser liegt bei Normaldruck bei ungefähr <b>100 °C</b>. Die Siedetemperatur von Ethanol (Trinkalkohol) liegt bei Normaldruck bei ungefähr <b>78,3 °C</b>. Der Siedepunkt ist vom äußeren Druck abhängig.</p><p><b>Heizkurve:</b> x-Achse = Zeit, y-Achse = Temperatur. Während des Siedens steigt die Temperatur des reinen Wassers bei gleichbleibendem Druck trotz weiterer Wärmezufuhr ungefähr nicht weiter.</p></div>
@@ -375,6 +435,8 @@
 <!-- CHEMIE_SOURCE:chemistryFinalExam.js -->
 <!-- CHEMIE_SOURCE:protocolErrorTrainer.js -->
 <!-- CHEMIE_SOURCE:woodIronExperiment.js -->
-<!-- CHEMIE_SOURCE:learning-upgrade.js --><!-- CHEMIE_SOURCE:protocol-levels.js --></body>
+<!-- CHEMIE_SOURCE:learning-upgrade.js --><!-- CHEMIE_SOURCE:protocol-levels.js -->
+<!-- CHEMIE_SOURCE:chemie-probearbeit.js -->
+</body>
 </html>
 
