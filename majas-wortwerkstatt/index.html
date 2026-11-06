@@ -317,6 +317,32 @@ details ol{margin-bottom:0}
 .comic-dialogue.bear-line b{color:#634575}
 .comic-task{margin:14px 0 20px}
 @media(max-width:650px){.comic-intro,.comic-panels{grid-template-columns:1fr}}
+
+.detective-cover,.detective-art{aspect-ratio:1;width:100%;background-color:#f2e7d3;background-size:400% 600%;background-repeat:no-repeat}
+.detective-cover{display:block;max-width:260px;justify-self:center;border-radius:14px}
+.detective-page{background:#fff8e8}
+.detective-page-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 12px}
+.detective-page-heading h2{margin:0;font-size:clamp(1.1rem,2.5vw,1.7rem)}
+.detective-page-heading span{white-space:nowrap;color:#4b5f57;font-weight:700}
+.detective-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:950px;margin:auto}
+.detective-panel{position:relative;margin:0;min-width:0;border:2px solid #4a473e;border-radius:5px;overflow:hidden;background:#f2e7d3}
+.detective-panel figcaption{position:absolute;top:7%;left:4%;max-width:92%;width:max-content;padding:7px 11px;color:#23362f;font-size:clamp(.9rem,2.05vw,1.1rem);line-height:1.25;box-sizing:border-box}
+.detective-panel .detective-bottom{top:auto;bottom:7%;left:auto;right:4%}
+.detective-balloon{background:#fffdf7;border:2px solid #413d36;border-radius:19px;box-shadow:1px 2px 0 #39382a45}
+.detective-balloon b{color:#28635c}
+.detective-balloon::after{content:'';position:absolute;width:10px;height:10px;left:16px;bottom:-7px;border-right:2px solid #413d36;border-bottom:2px solid #413d36;background:inherit;transform:skew(15deg) rotate(35deg)}
+.detective-balloon.detective-bottom::after{bottom:auto;top:-7px;left:auto;right:16px;transform:skew(15deg) rotate(215deg)}
+.detective-balloon.detective-bear{background:#f2e5fa}
+.detective-balloon.detective-bear b{color:#69477d}
+.detective-caption{background:#fff0bb;border:1px solid #695b3c;border-radius:4px}
+.detective-pause{margin-top:15px;padding:12px 16px;background:#ede4f4;border-left:4px solid #795a86;border-radius:8px}
+.detective-pause h3{margin:0 0 6px}.detective-pause p{margin:0}
+.detective-turn{margin-top:16px}
+@media(max-width:620px){
+  .detective-panels{grid-template-columns:1fr}
+  .detective-page-heading{align-items:flex-start;flex-direction:column}
+  .detective-panel figcaption{font-size:clamp(.9rem,4vw,1.1rem)}
+}
 </style>
 </head>
 <body>
@@ -2712,7 +2738,7 @@ function showHome(){
     <div class="actions"><a class="primary" href="#hoeren">${icon('audio')} Hörverstehen</a><a class="secondary" href="#endungen">Nomenendungen</a><a class="secondary" href="#verlaengern">Wörter verlängern</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
   </section>
   ${bearIntro()}
-  ${comicIntro()}
+  ${detectiveIntro()}
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
   <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
   <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">0${i+1}</span></div>
@@ -3228,13 +3254,6 @@ const schoolComicPageSize=2;
 function comicToday(date=new Date()){
   return bearToday(date,schoolComics.length);
 }
-function comicIntro(){
-  return `<section class="panel comic-intro" aria-labelledby="comic-intro-title"><div>
-    <p class="kicker">${icon('book')} Maja und Bärli in der Schule</p><h2 id="comic-intro-title">Tagescomics</h2>
-    <p>Bärli kann sich unsichtbar machen. In der Schule kann nur Maja ihn sehen. Drei gezeichnete Abenteuer warten auf euch.</p>
-    <a class="primary" href="#tagescomic">Zum Comic des Tages ${icon('arrow')}</a>
-  </div><a class="comic-teaser" href="#tagescomic" aria-label="Comic des Tages lesen">${comicArt(schoolComics[comicToday()],0)}</a></section>`;
-}
 function comicArt(comic,i){
   const x=i%2*100;
   const y=Math.floor(i/2)*100/3;
@@ -3246,22 +3265,162 @@ function showSchoolComic(id,part){
   const pageCount=Math.ceil(comic.panels.length/schoolComicPageSize);
   const page=Math.min(pageCount,Math.max(1,Number.isInteger(+part)?+part:1));
   const first=(page-1)*schoolComicPageSize;
-  const link=(c= comic,n=1)=>`#tagescomic/${c.id}/${n}`;
+  const link=(c= comic,n=1)=>`#schulgeschichten/${c.id}/${n}`;
   app.innerHTML=`<div class="route">${homeLink()}
     <div class="unit-head lilac"><span class="icon-box">${icon('book')}</span><div>
-    <p class="kicker">${comic===today?'Comic des Tages · '+annaDayFormatter.format(new Date()):'Maja und Bärli in der Schule'}</p>
+    <p class="kicker">${comic===today?'Tagesgeschichte · '+annaDayFormatter.format(new Date()):'Maja und Bärli in der Schule'}</p>
     <h1 tabindex="-1">${escapeHtml(comic.title)}</h1><p>${escapeHtml(comic.summary)}</p></div></div>
-    <nav class="panel comic-archive" aria-label="Schulcomics auswählen"><h2>Alle drei Schulcomics</h2><p>Der Tagescomic wechselt täglich. Du kannst jede Folge jederzeit lesen.</p>
+    <nav class="panel comic-archive" aria-label="Schulgeschichten auswählen"><h2>Alle drei Tagesgeschichten</h2><p>Die Tagesgeschichte wechselt täglich. Du kannst jede Geschichte jederzeit lesen.</p>
     <div class="actions">${schoolComics.map(c=>`<a class="secondary" href="${link(c)}"${c===comic?' aria-current="true"':''}>${escapeHtml(c.title)}</a>`).join('')}</div></nav>
-    <section class="panel" aria-labelledby="comic-page"><div class="task-top"><h2 id="comic-page">Seite ${page} von ${pageCount}</h2><span>Comic mit ${comic.panels.length} Bildern</span></div>
+    <section class="panel" aria-labelledby="comic-page"><div class="task-top"><h2 id="comic-page">Seite ${page} von ${pageCount}</h2><span>Geschichte mit ${comic.panels.length} Bildern</span></div>
     <div class="comic-panels">${comic.panels.slice(first,first+schoolComicPageSize).map(([caption,,...dialogue],i)=>`<figure class="comic-panel">
       ${comicArt(comic,first+i)}<figcaption><p class="comic-caption"><b>Bild ${first+i+1}.</b> ${escapeHtml(caption)}</p>
       ${dialogue.filter((_,i)=>i%2===0).map((speaker,i)=>`<p class="comic-dialogue ${speaker==='Bärli'?'bear-line':''}"><b>${escapeHtml(speaker)}</b> ${escapeHtml(dialogue[i*2+1])}</p>`).join('')}</figcaption></figure>`).join('')}</div>
     ${page===pageCount?`<details class="comic-task"><summary>Bärlis Aufgabe nach dem Lesen</summary><p>${escapeHtml(comic.task)}</p><details><summary>Musterlösung ansehen</summary><p>${escapeHtml(comic.answer)}</p></details><div class="actions"><a class="secondary" href="#${comic.unit}">${unitById(comic.unit).title} üben</a></div></details>`:''}
-    <nav class="actions" aria-label="Comic umblättern">
+    <nav class="actions" aria-label="Tagesgeschichte umblättern">
       ${page>1?`<a class="secondary" href="${link(comic,page-1)}">${icon('back')} Vorherige Seite</a>`:''}
-      ${page<pageCount?`<a class="primary" href="${link(comic,page+1)}">Nächste Seite ${icon('arrow')}</a>`:'<a class="primary" href="#tagescomic">Zum Comic des Tages</a>'}
+      ${page<pageCount?`<a class="primary" href="${link(comic,page+1)}">Nächste Seite ${icon('arrow')}</a>`:'<a class="primary" href="#schulgeschichten">Zur Tagesgeschichte</a>'}
     </nav></section><div class="actions"><a class="secondary" href="#baerli">Bärlis Kurzgeschichten</a><a class="secondary" href="#baerli/schrank">Bärlis Schrank</a></div>
+  </div>`;
+}
+
+const detectiveEpisodes=[
+  {
+    id:'buecherkiste',title:'Der Schlüssel der Bücherkiste',summary:'Ein leerer Haken und ein orangefarbener Faden führen Maja und Bärli durch die Schulbücherei.',
+    pages:['Morgens · Die verschlossene Kiste','Vor der Lesestunde · Wer war hier?','Auf Spurensuche · Ein falscher Treffer','Die Probe · Ein Faden am Wagen','Die Auflösung · Der Magnet','Zum Schluss · Die Bücher sind frei'],
+    puzzle:'Am Haken und am Bücherwagen hängt derselbe orangefarbene Faden. Wo würdest du jetzt nachsehen? Begründe deine Vermutung.',
+    panels:[
+      ['', 'Vor der Lesestunde öffnet Maja ihren Blumenranzen.', 'Bärli schaut aus Majas Ranzen. Maja trägt einen türkisen Pullover und Schlagjeans.'],
+      ['Bärli','Für die anderen bin ich jetzt unsichtbar. Siehst du mich noch?', 'Bärli tippt auf sein Ohrfähnchen und schimmert violett.'],
+      ['Frau Burger','Oh je. Die Bücherkiste ist abgeschlossen.', 'Frau Burger steht neben einer hölzernen Kiste in der Bücherei.'],
+      ['', 'Vom Schlüssel ist nur ein Faden übrig.', 'An einem leeren Wandhaken hängt ein orangefarbener Faden.'],
+      ['Maja','Der Faden ist orange. So sah die Schlaufe am Schlüssel aus.', 'Maja untersucht den Faden am Haken.'],
+      ['Frau Burger','Ohne den Schlüssel bekommen wir den Deckel nicht auf.', 'Frau Burger prüft das Schloss der Kiste.'],
+      ['Jona','Der Bücherwagen stand eben noch am Haken. Jetzt ist er drüben.', 'Jona zeigt in Richtung Leseraum.'],
+      ['Bärli','Dann schauen wir nach, wo er hingefahren ist.', 'Maja und Bärli gehen in den Leseraum.'],
+      ['Maja','Da liegt etwas Oranges!', 'Auf dem Boden liegt ein kleiner orangefarbener Gegenstand.'],
+      ['', 'Eine Blattader verrät den falschen Treffer.', 'Auf dem Boden liegt ein orangefarbenes Blatt.'],
+      ['Maja','Der Bücherwagen steht noch hier.', 'Maja bemerkt einen Wagen mit Büchern.'],
+      ['Bärli','Unter dem Stuhl ist nur Staub. Der bleibt aber freiwillig.', 'Bärli schaut unter einen niedrigen Stuhl.'],
+      ['Frau Burger','Ich fahre die Bücher kurz zurück.', 'Frau Burger schiebt den Bücherwagen an.'],
+      ['', 'Unter dem Griff ist ein Magnet für Zettel.', 'Eine kleine magnetische Klammer sitzt unter dem Griff.'],
+      ['Maja','Da hängt auch ein orangefarbener Faden!', 'Unter dem Griff ist ein orangefarbener Faden zu sehen.'],
+      ['Bärli','Gleiche Farbe, zwei Fundorte. Was fällt dir auf?', 'Maja und Bärli sehen einander nachdenklich an.'],
+      ['Maja','Frau Burger, können Sie kurz anhalten?', 'Maja bittet Frau Burger, den Wagen anzuhalten.'],
+      ['Maja','Die Schlaufe baumelt unter dem Magneten. Da hängt der Schlüssel!', 'Maja kniet neben dem Wagen und zeigt auf den Griff.'],
+      ['', 'Der silberne Schlüssel hängt an seiner Schlaufe.', 'Ein silberner Schlüssel mit orangefarbener Schlaufe hängt am Magneten.'],
+      ['Frau Burger','Der Magnet hat ihn erwischt, als ich am Haken vorbeifuhr.', 'Frau Burger nimmt den Schlüssel vom Magneten.'],
+      ['Maja','Jetzt können wir die Bücherkiste öffnen.', 'Maja dreht den Schlüssel im Schloss der Holzkiste.'],
+      ['Jona','Zum Glück ist mein Lieblingsbuch noch da!', 'Die Kinder lesen und wählen Bücher aus.'],
+      ['', 'Maja hängt den Schlüssel zurück. Der Wagen bleibt auf Abstand.', 'Maja hängt den Schlüssel wieder an seinen Haken.'],
+      ['Bärli','Ich lese gerade ein Buch mit Kopfstand-Technik.', 'Bärli hält ein Buch verkehrt herum. Maja lacht.']
+    ]
+  },
+  {
+    id:'blaue-punkte',title:'Die Spur der blauen Punkte',summary:'Im Kunstraum tauchen blaue Tupfen auf. Maja prüft mit Nele und Bärli, woher sie kommen.',
+    pages:['Vor Kunst · Seltsame Tupfen','Erste Spur · Das blaue Band','Genauer hinsehen · Gleiche Abstände','Die Probe · Eine frische Bahn','Die Auflösung · Ein blauer Reifen','Nach Kunst · Ein Mond im Klassenzimmer'],
+    puzzle:'Die neuen Tupfen haben denselben Abstand wie die alten. Was hat sie wohl gemacht, und warum erscheinen sie immer wieder?',
+    panels:[
+      ['', 'Im Kunstraum wartet Nele mit einer Überraschung.', 'Maja kommt mit ihrem Blumenranzen im Kunstraum an.'],
+      ['Bärli','Unsichtbar! Hoffentlich male ich mich nicht aus Versehen wieder an.', 'Bärli berührt sein gelbes Ohrfähnchen.'],
+      ['Nele','Schau, mein Mond ist fertig. Die Farbe ist noch nass.', 'Nele zeigt ein großes Mondbild.'],
+      ['', 'Neben dem Tisch verläuft eine blaue Punktspur.', 'Auf weißem Schutzpapier am Boden liegen blaue Tupfen.'],
+      ['Maja','War die Spur vorhin schon da?', 'Maja und Nele knien neben den Tupfen.'],
+      ['Bärli','Da oben hängt etwas Blaues. Schau mal.', 'Bärli zeigt zu einem blauen Band.'],
+      ['Maja','Das Band ist trocken. Davon tropft nichts.', 'Ein trockenes blaues Band hängt am Regal.'],
+      ['', 'Zwischen zwei Tupfen liegt immer ungefähr dieselbe Strecke.', 'Gleichmäßig verteilte blaue Punkte auf einem Papierstreifen.'],
+      ['Nele','Meine Schuhe sind sauber. Und die Tupfen haben keine Sohlenform.', 'Maja prüft Neles saubere Schuhe.'],
+      ['Bärli','Vielleicht hat etwas die Strecke immer wieder abgerollt.', 'Bärli misst den Abstand mit den Pfoten.'],
+      ['', 'Neben dem Tisch steht ein Wagen für die Farbtöpfe.', 'Auf einem kleinen Wagen stehen Malutensilien.'],
+      ['Maja','Der Wagen hat Räder. Lass uns eins genauer ansehen.', 'Die Kinder sehen von den Tupfen zum Wagen.'],
+      ['Maja','Auf dem Reifen klebt ein frischer blauer Tropfen.', 'Auf einem schwarzen Gummirad sitzt ein blauer Farbtupfen.'],
+      ['Maja','Können wir den Wagen auf einem frischen Papier testen?', 'Maja fragt Frau Burger, ob sie einen Versuch machen dürfen.'],
+      ['Frau Burger','Ich schiebe langsam. Ihr beobachtet das Papier.', 'Frau Burger rollt den Wagen auf weißem Papier.'],
+      ['Bärli','Da kommen neue Punkte. Vergleiche sie mit den alten!', 'Maja und Bärli betrachten die neuen Tupfen.'],
+      ['', 'Die beiden Punktspuren passen zusammen.', 'Zwei Papierstreifen haben Tupfen mit ähnlichen Abständen.'],
+      ['Nele','Hier ist noch ein Tropfen. Beim Fahren ist Farbe aufs Rad gekommen.', 'Nele zeigt blaue Farbe am Wagen.'],
+      ['Frau Burger','Wir wischen den Reifen ab und versuchen es noch einmal.', 'Frau Burger säubert das Rad mit einem Tuch.'],
+      ['Maja','Diesmal bleibt das Papier weiß. Damit ist der Fall geklärt.', 'Der saubere Wagen rollt über ein weißes Blatt.'],
+      ['Nele','Mein Mond bekommt einen Platz an der Wand.', 'Nele hält das fertige Mondbild hoch.'],
+      ['Maja','Mit blauen Tupfen könnte ich sogar Krater malen.', 'Maja malt runde Mondkrater auf ein Stück Papier.'],
+      ['', 'Das Mondbild hängt in der kleinen Klassengalerie.', 'Über dem aufgeräumten Tisch hängt Neles Mondbild.'],
+      ['Bärli','Erster Bär auf dem Mond! Leider nur bis zur Garderobe.', 'Bärli ahmt einen Mondspaziergang nach.']
+    ]
+  },
+  {
+    id:'lesefenster',title:'Das Flüstern am Lesefenster',summary:'In der stillen Bücherei raschelt es. Maja und Bärli testen, ob sie den richtigen Hinweis gefunden haben.',
+    pages:['Morgens · Ein Rascheln','Zwischen den Regalen · Woher kommt es?','Am Fenster · Der erste Hinweis','Die Probe · Auf und zu','Die Auflösung · Der Papierstreifen','Vor der Pause · Das neue Lesezeichen'],
+    puzzle:'Bei geschlossenem Fenster war es still. Beim Öffnen begann es wieder. Was macht das Geräusch? Was würdest du prüfen?',
+    panels:[
+      ['', 'Heute liest Majas Klasse in der Schulbücherei.', 'Maja und Bärli sind neben dem Blumenranzen in der Bücherei.'],
+      ['Bärli','Für die anderen bin ich verschwunden. Für dich ist hier mein Ohr.', 'Bärli tippt auf sein Ohrfähnchen und schimmert.'],
+      ['Frau Burger','Ein bisschen frische Luft, dann lesen wir los.', 'Frau Burger öffnet das Fenster einen Spalt.'],
+      ['Maja','Hast du das gehört? Da hat etwas geraschelt.', 'Maja dreht sich zwischen den Regalen zum Geräusch.'],
+      ['Jona','Ich höre es auch. Es klingt wie eine leise Stimme.', 'Maja und Jona halten zwischen den Regalen inne.'],
+      ['', 'Die Seiten im offenen Buch bewegen sich kaum.', 'Nahaufnahme eines offenen Buchs mit stillen Seiten.'],
+      ['Bärli','Vielleicht schnarcht ein Kissen. Gucken kostet nichts.', 'Bärli deutet auf ein Lesekissen.'],
+      ['Maja','Nur ein Bleistift. Der flüstert höchstens, wenn man schreibt.', 'Maja hebt ein Kissen an und findet einen Bleistift.'],
+      ['', 'Am Fenster bewegt sich der Vorhang.', 'Ein Vorhang flattert leicht neben dem Fenster.'],
+      ['Jona','Von der Tür aus höre ich es schwächer.', 'Jona lauscht von der Büchereitür aus.'],
+      ['', 'Im Rahmen steckt ein kleiner Papierstreifen.', 'Ein bunter Streifen Papier steckt oben am Fensterrahmen.'],
+      ['Maja','Der Streifen flattert. Vielleicht hören wir genau das.', 'Maja schaut zum bewegten Streifen nach oben.'],
+      ['Maja','Frau Burger, machen Sie das Fenster zum Test bitte kurz zu?', 'Frau Burger schließt das Fenster.'],
+      ['', 'Das Rascheln hört auf. Einen Moment lang ist es ganz still.', 'Maja hält in der ruhigen Bücherei einen Finger vor die Lippen.'],
+      ['Frau Burger','Ich öffne es wieder einen Spalt.', 'Frau Burger öffnet das Fenster ein kleines Stück.'],
+      ['Bärli','Da ist es wieder. Sieh genau hin, was sich bewegt.', 'Die Kinder und Bärli beobachten das Fenster.'],
+      ['', 'Die Luft bewegt den Papierstreifen. Er schlägt gegen den Rahmen.', 'Der Papierstreifen flattert im Wind gegen den Rahmen.'],
+      ['Frau Burger','Ich nehme den Streifen herunter. Ihr könnt unten bleiben.', 'Frau Burger erreicht den Streifen, die Kinder schauen von unten zu.'],
+      ['Maja','Danke! Jetzt probieren wir es noch einmal ohne den Streifen.', 'Frau Burger reicht Maja das Papier.'],
+      ['Jona','Das Fenster ist offen und es raschelt nicht mehr.', 'Die Kinder lauschen am offenen Fenster.'],
+      ['Maja','Aus dem Streifen kann ich ein Lesezeichen falten.', 'Maja faltet den bunten Streifen zu einem Lesezeichen.'],
+      ['Jona','Das kommt in mein Buch. Es darf nur beim Lesen flüstern.', 'Maja überreicht Jona das Lesezeichen.'],
+      ['Bärli','Psst, Buch. Verrat mir bitte, wie es weitergeht.', 'Bärli hält sein Ohr an ein Buch.'],
+      ['', 'Zur Pause verschwindet Bärli im Ranzen. Maja zwinkert ihm zu.', 'Maja lächelt, während Bärli in ihren Ranzen klettert.']
+    ]
+  }
+];
+const detectiveAsset='./baerli/tagescomics/';
+function detectiveToday(date=new Date()){
+  return bearToday(date,detectiveEpisodes.length);
+}
+function detectiveArt(episode,index){
+  const x=index%4*100/3;
+  const y=Math.floor(index/4)*20;
+  return `style="background-image:url('${detectiveAsset}${episode.id}.webp');background-position:${x}% ${y}%"`;
+}
+function detectiveIntro(){
+  const today=detectiveEpisodes[detectiveToday()];
+  return `<section class="panel comic-intro" aria-labelledby="detective-intro"><div>
+    <p class="kicker">${icon('book')} Maja und Bärli ermitteln</p><h2 id="detective-intro">Tagescomics</h2>
+    <p>Drei neue Schulfälle mit je sechs Comicseiten. Nur Maja sieht Bärli. Findest du die Lösung vor den beiden?</p>
+    <div class="actions"><a class="primary" href="#tagescomic">Comic des Tages</a><a class="secondary" href="#schulgeschichten">Tagesgeschichten</a></div>
+  </div><a href="#tagescomic" class="detective-cover" aria-label="Comic des Tages lesen" ${detectiveArt(today,0)}></a></section>`;
+}
+function showDetective(id,part){
+  const today=detectiveEpisodes[detectiveToday()];
+  const episode=detectiveEpisodes.find(item=>item.id===id)||today;
+  const page=Math.min(episode.pages.length,Math.max(1,Number.isInteger(+part)?+part:1));
+  const first=(page-1)*4;
+  const link=(item,n)=>`#tagescomic/${item.id}/${n}`;
+  app.innerHTML=`<div class="route">${homeLink()}
+    <div class="unit-head lilac"><span class="icon-box">${icon('book')}</span><div>
+    <p class="kicker">${episode===today?'Comic des Tages · '+annaDayFormatter.format(new Date()):'Maja und Bärli ermitteln'}</p>
+    <h1 tabindex="-1">${escapeHtml(episode.title)}</h1><p>${escapeHtml(episode.summary)}</p></div></div>
+    <section class="panel detective-page" aria-labelledby="detective-page-title">
+    <div class="detective-page-heading"><h2 id="detective-page-title">${escapeHtml(episode.pages[page-1])}</h2><span>Seite ${page} von ${episode.pages.length}</span></div>
+    <div class="detective-panels">${episode.panels.slice(first,first+4).map(([speaker,line,alt],i)=>`<figure class="detective-panel">
+      <div class="detective-art" role="img" aria-label="${escapeHtml(alt)}" ${detectiveArt(episode,first+i)}></div>
+      <figcaption class="${speaker?'detective-balloon':'detective-caption'} ${speaker==='Bärli'?'detective-bear':''} ${i%2?'detective-bottom':''}">${speaker?`<b>${escapeHtml(speaker)}</b> `:''}${escapeHtml(line)}</figcaption>
+    </figure>`).join('')}</div>
+    ${page===4?`<aside class="detective-pause"><h3>Detektivpause</h3><p>${escapeHtml(episode.puzzle)}</p></aside>`:''}
+    <nav class="actions detective-turn" aria-label="Comic umblättern">
+      ${page>1?`<a class="secondary" href="${link(episode,page-1)}">${icon('back')} Vorherige Seite</a>`:''}
+      ${page<episode.pages.length?`<a class="primary" href="${link(episode,page+1)}">${page===4?'Zur Auflösung':'Nächste Seite'} ${icon('arrow')}</a>`:'<a class="primary" href="#tagescomic">Zum Comic des Tages</a>'}
+    </nav></section>
+    <nav class="panel comic-archive" aria-label="Comicarchiv"><h2>Alle drei Tagescomics</h2>
+    <p>Die Fälle wechseln täglich. Du kannst jeden jederzeit lesen.</p>
+    <div class="actions">${detectiveEpisodes.map(item=>`<a class="secondary" href="${link(item,1)}"${item===episode?' aria-current="true"':''}>${escapeHtml(item.title)}</a>`).join('')}
+    <a class="plain" href="#schulgeschichten">Zu den Tagesgeschichten</a></div></nav>
   </div>`;
 }
 
@@ -3280,7 +3439,8 @@ function render(initial=false){
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
   else if(page==='baerli')showBear(index);
-  else if(page==='tagescomic')showSchoolComic(index,part);
+  else if(page==='schulgeschichten'||page==='tagescomic'&&schoolComics.some(story=>story.id===index))showSchoolComic(index,part);
+  else if(page==='tagescomic')showDetective(index,part);
   else if(page==='kombitest'){
     const test=index===testPart?testParts[index]:null;
     const step=Number(part);
