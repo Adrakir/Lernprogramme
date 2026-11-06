@@ -280,6 +280,27 @@ details ol{margin-bottom:0}
 .anna-write details p,.anna-write details ul{margin:8px 0 0}
 .anna-save-note{margin-top:10px;font-size:14px}
 @media(max-width:620px){.anna-extras .anna-extra-grid{grid-template-columns:1fr}}
+
+.bear-picture{display:block;width:100%;height:auto;border-radius:16px}
+.hero-art .bear-picture{max-width:460px;margin:auto}
+.bear-intro,.bear-story,.bear-wardrobe{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(16px,4vw,36px);align-items:center}
+.bear-intro>img{display:block;width:100%;height:auto;max-width:245px;justify-self:center;border-radius:16px}
+.bear-story>div>p:not(.kicker){line-height:1.75;font-size:1.12rem}
+.bear-story details summary{padding-block:8px}
+.bear-story-list{columns:2;gap:32px;padding-left:1.5rem}
+.bear-story-list li{padding:5px 0;break-inside:avoid}
+.bear-story-list a[aria-current]{font-weight:800;text-decoration:underline}
+.bear-dress-stage{position:relative;width:100%;max-width:360px;justify-self:center;overflow:hidden;border-radius:16px}
+.bear-dress-stage img{display:block;width:100%;height:auto}
+.bear-dress-stage svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.bear-item-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px}
+.bear-item{display:grid;justify-items:start;gap:8px;padding:12px;background:#f7f0e8;border:1px solid #e4d9cd;border-radius:12px}
+.bear-item [aria-pressed="true"]{background:#ded2e7}
+@media(max-width:620px){
+  .bear-intro,.bear-story,.bear-wardrobe{grid-template-columns:1fr}
+  .bear-story .bear-picture{grid-row:1}
+  .bear-story-list{columns:1}
+}
 </style>
 </head>
 <body>
@@ -412,7 +433,7 @@ details ol{margin-bottom:0}
 </div>
 <script>const units = [
   {id:'wortarten', title:'Wortarten', icon:'book', tone:'mint', place:'Fuji sortiert Tierwörter', story:'Fuji schnuppert an drei Kisten. Auf jeder steht eine andere Wortart. Kannst du ihm beim Sortieren helfen?', rule:'Nomen (Namenwörter) schreibt man groß. Oft passen ein Artikel und eine Mehrzahl dazu. Verben (Tunwörter) kannst du verändern. Adjektive (Wiewörter) beschreiben, wie etwas ist.', examples:['der Hund → die Hunde','spielen → ich spiele, du spielst','Minka ist weich. → Wie ist Minka?']},
-  {id:'endungen', title:'Nomen-Endungen', icon:'puzzle', tone:'lilac', place:'Minka baut neue Wörter', story:'Minka schiebt Wortkarten über den Tisch. Mit den passenden Endungen werden daraus Nomen.', rule:'Mit den Nachsilben -heit, -keit, -ung und -nis kannst du Nomen erkennen. In diesen Übungen entstehen Nomen mit -heit und -keit aus Adjektiven und Nomen mit -ung aus Verben. Bei -nis kann ein Adjektiv oder ein Verb dazugehören. Prüfe den Artikel und schreibe das Nomen groß.', examples:['wahr → die Wahrheit','freundlich → die Freundlichkeit','retten → die Rettung','geheim → das Geheimnis']},
+  {id:'endungen', title:'Nomen-Endungen', icon:'puzzle', tone:'lilac', place:'Minka baut neue Wörter', story:'Minka schiebt Wortkarten über den Tisch. Mit den passenden Endungen werden daraus Nomen.', rule:'Mit den Nachsilben -heit, -keit, -ung, -nis und -schaft kannst du Nomen erkennen. In diesen Übungen entstehen Nomen mit -heit und -keit aus Adjektiven und Nomen mit -ung aus Verben. Bei -nis kann ein Adjektiv oder ein Verb dazugehören. -schaft kann zum Beispiel aus einem Nomen ein neues Nomen bilden. Prüfe den Artikel und schreibe das Nomen groß.', examples:['wahr → die Wahrheit','freundlich → die Freundlichkeit','retten → die Rettung','geheim → das Geheimnis','der Freund → die Freundschaft']},
   {id:'vorsilben', title:'Vorsilben', icon:'flag', tone:'peach', place:'Maja setzt Bausteine davor', story:'Maja hat Karten mit ver-, be- und er- gefunden. Probiere aus, wie sich Wörter dadurch verändern.', rule:'Eine Vorsilbe steht vor dem Wortstamm. Sie kann die Bedeutung ändern. Bei ver-, be- und er- bleibt der Baustein auch im Satz am Verb.', examples:['ver- + laufen → verlaufen','be- + zahlen → bezahlen','er- + zählen → erzählen']},
   {id:'wortketten', title:'Zusammengesetzte Nomen', icon:'link', tone:'sand', place:'Fuji folgt der Wörterkette', story:'Eine Spur führt vom Garten bis zum Schlüssel. Das mittlere Wort verbindet zwei neue Nomen.', rule:'Zwei Nomen können ein neues Wort bilden. Du schreibst es zusammen und am Anfang groß. Das letzte Nomen bestimmt den Artikel. In einer Wortkette ist der mittlere Baustein einmal hinten und einmal vorne.', examples:['der Garten + die Tür → die Gartentür','die Tür + der Schlüssel → der Türschlüssel','die Katze + das Futter → das Katzenfutter']},
   {id:'verben', title:'Verben verändern', icon:'paw', tone:'sky', place:'Fuji wechselt die Person', story:'Fuji bellt. Maja sagt: „Ich spiele mit dir.“ Je nachdem, wer etwas tut, verändert sich das Verb.', rule:'Die Grundform heißt zum Beispiel spielen. Im Präsens (Gegenwart) passt du das Verb an die Person an. Bei manchen Verben ändert sich auch ein Buchstabe im Wortstamm.', examples:['ich spiele · du spielst · er/sie/es spielt','wir spielen · ihr spielt · sie spielen','ich falle → du fällst → er fällt']},
@@ -2605,6 +2626,19 @@ questions.endungen.push(
   write('Schreibe das verwandte Adjektiv.','die Pünktlichkeit','pünktlich','Wie ist Maja, wenn sie zur richtigen Zeit kommt?','Maja ist pünktlich. Das Adjektiv wird kleingeschrieben.')
 );
 
+const schaftPracticeStart=questions.endungen.length+1;
+const schaftPractice=[
+  write('Bilde ein Nomen mit -schaft und schreibe den Artikel dazu.','der Freund','die Freundschaft','Hänge -schaft an Freund.','Freund + schaft ergibt Freundschaft. Das neue Nomen hat den Artikel die.'),
+  write('Bilde ein Nomen mit -schaft und schreibe den Artikel dazu.','der Nachbar','die Nachbarschaft','Hänge -schaft an Nachbar.','Nachbar + schaft ergibt Nachbarschaft. Die Nachbarschaft bezeichnet zum Beispiel die Menschen, die in der Nähe wohnen.'),
+  write('Bilde ein Nomen mit -schaft und schreibe den Artikel dazu.','das Land','die Landschaft','Hänge -schaft an Land.','Land + schaft ergibt Landschaft. Landschaft wird großgeschrieben und hat den Artikel die.'),
+  mark('Markiere die beiden Nomen mit -schaft.','Die Mannschaft wandert durch die Landschaft.',[1,5],'Schau auf das Ende jedes Nomens.','Mannschaft und Landschaft enden beide auf -schaft. Beide haben den Artikel die.'),
+  pick('Welches Wort ist mit „die Freundschaft“ verwandt?','die Freundschaft',['das Hindernis','der Freund','die Freude'],'der Freund','Prüfe, welcher Baustein vor -schaft steht.','In Freundschaft steckt der Freund. Aus Freund und -schaft entsteht das Nomen die Freundschaft.'),
+  pick('Welche Nachsilbe steckt in diesem Nomen?','die Mannschaft',['-schaft','-nis','-ung','-heit','-keit'],'-schaft','Schau auf die Buchstaben ganz am Ende.','Mann + schaft ergibt Mannschaft. Eine Mannschaft ist eine Gruppe, die gemeinsam spielt oder etwas unternimmt.'),
+  mark('Markiere nur die Nachsilbe.','Freund schaft',[1],'Die Nachsilbe steht am Ende.','Die Nachsilbe lautet -schaft. Du schreibst das Wort zusammen: Freundschaft.'),
+  pick('Welche beiden Nomen enden auf -schaft?','Wähle das passende Wortpaar.',['Freundschaft und Landschaft','Gesundheit und Mannschaft','Zeichnung und Nachbarschaft'],'Freundschaft und Landschaft','Bei beiden Wörtern muss am Ende -schaft stehen.','Freundschaft und Landschaft haben dieselbe Nachsilbe. Gesundheit endet auf -heit und Zeichnung auf -ung.')
+];
+questions.endungen.push(...schaftPractice);
+
 const newUnits = [
   {id:'hoeren',title:'Hörverstehen',icon:'audio',tone:'sky',place:'Mit Anna auf Hörspur',story:'Höre eine Geschichte und löse fünf Fragen dazu. Du kannst an jeder Aufgabe erneut hören.',rule:'Beim ersten Hören achtest du darauf, wer vorkommt und was passiert. Beim zweiten Hören sammelst du Hinweise zu Orten, Gründen und zur Reihenfolge.',examples:['Wer ist dabei? · Wo passiert es? · Was geschieht zuerst?','Warum handelt die Figur so? Welche Stelle hilft dir?'],description:'6 Hörgeschichten mit 30 Fragen'},
   {id:'verlaengern',title:'Wörter verlängern',icon:'puzzle',tone:'mint',place:'Fuji hört auf den letzten Laut',story:'Fuji hört bei „Hund“ am Ende fast ein t. Maja sagt „Hunde“. Jetzt ist das d gut zu hören.',rule:'Stehen b, d oder g ganz am Ende, klingen sie oft ähnlich wie p, t oder k. Verlängere das Wort so, dass nach dem fraglichen Buchstaben ein Vokal folgt. Bei Nomen hilft oft die Mehrzahl, bei Adjektiven eine Form wie „ein gelbes Tuch“.',examples:['Hund → Hunde → d','Weg → Wege → g','Korb → Körbe → b','stark → starke → k'],description:'30 Aufgaben zu b/p, d/t und g/k'},
@@ -2618,8 +2652,12 @@ for(const unit of [...newUnits,units.find(unit=>unit.id==='endungen')]){
 const testParts = {
   hoeren:{title:'Teil 1 · Hörverstehen',items:questions.hoeren.slice(15,20)},
   woerter:{title:'Teil 2 · Nomenendungen und Verlängern',items:[
-    ...questions.endungen.slice(endingPracticeStart-1,endingPracticeStart+3),
-    questions.endungen[endingPracticeStart+5],questions.endungen[endingPracticeStart+8],
+    questions.endungen[endingPracticeStart+3], // -nis: Erkenntnis
+    questions.endungen[endingPracticeStart-1], // -ung: Sicherung
+    questions.endungen[endingPracticeStart+2], // -heit: Klarheit
+    questions.endungen[endingPracticeStart+1], // -keit: Pünktlichkeit
+    schaftPractice[0], // -schaft: Freundschaft
+    schaftPractice[3], // -schaft: im Satz erkennen
     ...[1,8,15,19,21,27].map(i=>questions.verlaengern[i])
   ]}
 };
@@ -2641,34 +2679,37 @@ const move = hash=>{
   else location.hash=hash;
 };
 function showHome(){
-  const intro = document.querySelector('#scene-source').innerHTML;
   const descriptions = [
-    'Nomen, Verben und Adjektive entdecken','Mit -heit, -keit, -ung und -nis bauen','ver-, be- und er- vorne einsetzen',
+    'Nomen, Verben und Adjektive entdecken','Mit -heit, -keit, -ung, -nis und -schaft bauen','ver-, be- und er- vorne einsetzen',
     'Wörter verbinden und den Artikel finden','Von ich bis sie in der Gegenwart','Die drei Vergleichsstufen üben','Großschreibung und Hörsätze üben',
     ...newUnits.map(unit=>unit.description)
   ];
   app.innerHTML=`<section class="hero">
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h1>Majas<br><em>Wortwerkstatt</em></h1>
-    <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Fuji und Minka und sammle Sterne.</p>
+    <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
     <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a></div></div>
-    <div class="hero-art">${intro}</div>
+    <div class="hero-art">${bearPicture('leseecke',true)}</div>
   </section>
   <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
-    <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung und -nis und prüfe letzte Buchstaben durch Verlängern.</p>
+    <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung, -nis und -schaft und prüfe letzte Buchstaben durch Verlängern.</p>
     <div class="actions"><a class="primary" href="#hoeren">${icon('audio')} Hörverstehen</a><a class="secondary" href="#endungen">Nomenendungen</a><a class="secondary" href="#verlaengern">Wörter verlängern</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
   </section>
+  ${bearIntro()}
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
   <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
   <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">0${i+1}</span></div>
   <h3>${u.title}</h3><p>${descriptions[i]}</p><div class="card-foot"><span>${doneFor(u.id)} / ${questions[u.id].length} geschafft</span>${icon('arrow')}</div>
   </a>`).join('')}
   <a class="station quiz sand" href="#quiz"><div class="station-top"><span class="icon-box">${icon('trophy')}</span><span class="number">FINALE</span></div><h3>Werkstatt-Quiz</h3><p>14 gemischte Aufgaben ohne Zeitdruck</p><div class="card-foot"><span>${best===null?'Zum Quiz':'Rekord '+best+' / '+mixed.length}</span>${icon('arrow')}</div></a></div></section>`;
+  app.querySelector('.hero-art img').addEventListener('error',()=>{
+    app.querySelector('.hero-art').innerHTML=document.querySelector('#scene-source').innerHTML;
+  },{once:true});
 }
 function showUnit(unit){
   const items=questions[unit.id];
   const first = items.findIndex(q=>!progress.has(q.id))+1;
-  const special = unit.id==='endungen' ? [['Zum Suchsel',6],['Nomen mit Artikel bilden',endingPracticeStart]] : unit.id==='herbst' ? [['Zum Hörteil',10]] : [];
+  const special = unit.id==='endungen' ? [['Zum Suchsel',6],['Nomen mit Artikel bilden',endingPracticeStart],['-schaft üben',schaftPracticeStart]] : unit.id==='herbst' ? [['Zum Hörteil',10]] : [];
   const rounds = unit.id==='hoeren' ? listeningRounds.map(([id],i)=>[annaStories.find(story=>story.id===id).title,i*5+1]) :
     unit.id==='lesen' ? readingTexts.map((text,i)=>[text.title,i*6+1]) : [];
   app.innerHTML=`<div class="route">${homeLink()}
@@ -2703,7 +2744,7 @@ function showCombinationTest(){
   app.innerHTML=`<div class="route">${homeLink()}
     <div class="unit-head sand"><span class="icon-box">${icon('trophy')}</span><div><h1 tabindex="-1">Kombitest üben</h1><p>Wähle einen Teil. Die Aufgaben haben kein Zeitlimit. Nach der Abgabe siehst du die Punkte und zu jeder Aufgabe eine Erklärung.</p></div></div>
     <section class="panel"><h2>Welchen Teil möchtest du üben?</h2>
-    <p>In Teil 1 hörst du eine Geschichte und beantwortest fünf Fragen. In Teil 2 löst du zwölf Aufgaben zu Nomenendungen und zum Verlängern.</p>
+    <p>In Teil 1 hörst du eine Geschichte und beantwortest fünf Fragen. In Teil 2 löst du zwölf Aufgaben zu <strong>-nis, -ung, -heit, -keit und -schaft</strong> sowie zum Verlängern.</p>
     <div class="actions">${Object.entries(testParts).map(([id,part])=>`<button class="secondary" type="button" data-test-part="${id}">${part.title}</button>`).join('')}</div></section></div>`;
   app.querySelectorAll('[data-test-part]').forEach(button=>button.onclick=()=>{
     testPart=button.dataset.testPart;
@@ -2777,8 +2818,8 @@ function showExercise(unit,number,isQuiz,part=null){
    ${q.listen?`<div class="field-actions"><button class="secondary" type="button" data-speak="normal">${icon('audio')} Ganzer Satz</button><button class="secondary" type="button" data-speak="slow">${icon('audio')} Langsam mit Pausen</button><button class="plain" type="button" id="stop-audio">Stopp</button></div><audio id="dictation-audio" preload="metadata"></audio><p class="inline-status" id="audio-status" role="status"></p><div id="reading-alternative" hidden><button class="plain" id="toggle-reading" type="button" aria-expanded="false">Satz kurz lesen und dann schreiben</button><p class="context" id="reading" hidden>${escapeHtml(q.listen)}</p></div>`:''}
    <form id="answer-form">${answerView(q)}
    <div class="actions"><button class="primary" id="check" type="submit">${isQuiz?'Antwort abgeben':'Prüfen'}</button>
-   ${isQuiz?'':`<button class="secondary" id="help" type="button" aria-expanded="false">${icon('bulb')} Tipp</button><button class="plain" id="reveal" type="button">Lösung zeigen</button>`}</div></form>
-   ${isQuiz?'':`<div class="tip" id="tip" hidden><p>${escapeHtml(q.hint)}</p></div>`}
+   ${isQuiz?'':`<button class="secondary" id="help" type="button" aria-expanded="false">${icon('bulb')} Bärlis Tipp</button><button class="plain" id="reveal" type="button">Lösung zeigen</button>`}</div></form>
+   ${isQuiz?'':`<div class="tip bear-tip" id="tip" hidden><p><strong>Bärli meint:</strong> ${escapeHtml(q.hint)}</p></div>`}
    <div id="feedback" role="status" aria-atomic="true"></div>
    <div class="actions" id="after">
    ${!isQuiz&&number>1?`<a class="plain" href="${unitLink(unit.id,number-1)}">${icon('back')} Zurück</a>`:''}
@@ -2953,6 +2994,10 @@ function checkAnswer(){
     persist();
     syncStars();
     showFeedback(hadStar?'Richtig gelöst!':'Richtig! Du bekommst einen Stern.',true,true);
+    const reward=hadStar?null:bearItems.find(item=>item.stars===progress.size);
+    if(reward){
+      feedback.insertAdjacentHTML('beforeend',`<p>Bärli hat jetzt einen neuen Schatz: <a href="#baerli/schrank">${escapeHtml(reward.title)}</a>.</p>`);
+    }
   } else {
     const caseOnly=q.type==='write'&&given.toLocaleLowerCase('de-DE')===q.answer.toLocaleLowerCase('de-DE');
     const articleMissing=q.type==='write'&&/^(der|die|das) /.test(q.answer)&&given===q.answer.split(' ').slice(1).join(' ');
@@ -3011,6 +3056,123 @@ function showResult(part=null){
    ${part==='hoeren'?`<details><summary>Hörtext zum Nachlesen</summary>${readingPassage(annaStories.find(story=>story.id===test.items[0].track))}</details>`:''}
    <div class="actions"><a class="primary" href="#${test?'kombitest':'quiz'}">Neue Runde</a><a class="secondary" href="#start">Zur Stationenkarte</a></div></section></div>`;
 }
+const bearScenes = {
+  leseecke:'Maja und Bärli schauen gemeinsam in ein großes Bilderbuch.',
+  regenweg:'Maja und Bärli beobachten ein Papierboot in einer Pfütze.',
+  werkstatt:'Bärli trägt einen Papierhut und Maja lacht am Basteltisch.',
+  kostuemkiste:'Maja und Bärli probieren Verkleidungen aus einer Truhe an.'
+};
+
+const bearStories = [
+  ['leseecke','Der Buchstaben-Bauch','Beim Lesen entdeckte Maja das Wort „Mut“. Bärli hielt sich den Bauch. „Ob da drin wohl Platz für eine Portion Mut ist?“ Maja schlug vor, erst einmal den nächsten Satz laut zu lesen. Danach wollte Bärli gleich eine zweite Portion.','Lies dir schwierige Wörter erst leise und dann laut vor.'],
+  ['regenweg','Das Boot namens Plitsch','Maja setzte ein Papierboot in die Pfütze. „Kapitäne brauchen Namen“, sagte Bärli und taufte es Plitsch. Als ein Blatt davortrieb, lenkte Maja das Boot mit einem Zweig zur Seite. „Plitsch hat bestanden“, erklärte Bärli. „Und ich bin fast trocken.“','Erzähle das Abenteuer mit zuerst, danach und zum Schluss.'],
+  ['werkstatt','Die Mütze mit Plan','Bärli faltete aus einer Seite Altpapier einen Hut. Er setzte ihn auf und konnte nichts mehr sehen. Maja zeichnete einen kleinen Hut neben einen großen. Beim zweiten Versuch passte die Mütze und Bärli sah sogar seinen eigenen Unsinn kommen.','Vergleiche drei Größen mit klein, kleiner und am kleinsten.'],
+  ['kostuemkiste','Der Schal als Schlange','In der Truhe raschelte es. Bärli zog an einer roten Spitze und rief: „Hilfe, eine Schlange!“ Maja hielt das andere Ende hoch. Es war ein langer Schal. Bärli wickelte ihn um den Hals. „Jetzt ist die Schlange zahm.“','Welche zwei Hinweise verraten, dass es ein Schal ist?'],
+  ['leseecke','Majas leise Lesestimme','Maja stockte bei einem langen Satz. Bärli setzte sich neben sie und zeigte auf den Punkt. „Da darfst du Luft holen. Sogar ich brauche Luft, wenn ich Quatsch erzähle.“ Maja las den Satz noch einmal. Diesmal konnte sie ihn bis zum Ende verstehen.','Mach beim Vorlesen am Punkt eine Pause.'],
+  ['werkstatt','Die Freundschaftskarte','Maja klebte ein Herz auf eine Karte. Bärli schrieb darunter „Freund“. Dann schob Maja die Buchstaben für „schaft“ hinter das Wort. „Freundschaft“, las Bärli. „Das ist ein langes Wort für uns zwei.“','Bilde das Nomen aus Freund und -schaft. Denk an den Artikel.'],
+  ['regenweg','Der Wind und das Bild','Maja trug ihr Bild unter dem Arm. Ein Windstoß riss es ihr aus der Hand. Bärli legte sich auf die Ecke des Papiers und hielt sie fest. Maja lachte. „Jetzt habe ich ein Bild mit Bärengewicht.“','Verlängere Bild zu Bilder und höre auf das d.'],
+  ['kostuemkiste','Der Detektiv mit dem Hut','Bärli setzte seinen Hut auf und suchte Majas Stift. In der Truhe fand er ein Band, eine Socke und einen Papierstern. Maja zeigte auf sein Ohr. Dort steckte der Stift. „Fall gelöst“, sagte Bärli. „Mein Ohr war gut vorbereitet.“','Nenne drei Dinge aus der Truhe und ihre Artikel.'],
+  ['werkstatt','Das Heft voller Fragen','Auf dem Basteltisch lag ein leeres Heft. Bärli malte ein großes Fragezeichen hinein. „Das ist mein Plan für heute.“ Maja ergänzte eine Frage zum Klebstoff. Dann fanden sie gemeinsam heraus, wie viel Kleber ein Papierstern wirklich brauchte.','Schreib eine Warum-Frage und markiere das Fragezeichen.'],
+  ['leseecke','Die geheime Karte','Zwischen zwei Seiten fand Maja eine Karte mit einem gezeichneten Schlüssel. Bärli flüsterte: „Ein Geheimnis!“ Auf der Rückseite stand ein Wort, das Maja schon kannte. Es lautete „Bücherei“. Die beiden brachten die Karte zum Ausleihtisch zurück.','Schreibe das Geheimnis mit Artikel und markiere -nis.'],
+  ['regenweg','Der Weg mit zwei Enden','Maja blieb an der Weggabelung stehen. Bärli wollte den kurzen Weg nehmen, doch dort stand das Wasser hoch. Auf dem längeren Weg kamen sie trockenen Fußes an. „Meine beste Abkürzung“, sagte Bärli, „ist heute der Umweg.“','Erkläre mit weil, warum die beiden den längeren Weg nehmen.'],
+  ['kostuemkiste','Der Umhang für zwei','Maja hielt einen Umhang hoch. Für Bärli war er viel zu groß. Also legte er den Stoff über zwei Stühle und kroch darunter. „Hier eröffnet die kleinste Bärenbücherei der Welt“, rief er. Maja brachte das erste Buch.','Finde zwei Adjektive, mit denen du die Bücherei beschreiben kannst.'],
+  ['werkstatt','Die verschwundene Zeichnung','Maja wollte Bärli ihre Zeichnung zeigen, doch auf dem Tisch lag nur ein Stapel Papier. Bärli hob jedes Blatt einzeln an. Ganz unten fand er die Zeichnung, ein Bild von zwei Freunden. „Gut versteckt“, sagte Bärli. „Dabei wollte das Bild bestimmt gesehen werden.“','Welches Verb gehört zu die Zeichnung?'],
+  ['leseecke','Ein Wort für das Lachen','Maja las eine lustige Stelle vor. Bärli prustete so laut, dass das Lesezeichen wackelte. Maja schrieb „Fröhlichkeit“ auf einen Zettel. Bärli legte ihn ins Buch. „Damit wir die Stelle morgen wiederfinden.“','Bilde aus fröhlich ein Nomen mit -keit.'],
+  ['regenweg','Die Rettung am Rand','Ein Blatt trieb an den Rand der Pfütze. Darauf saß ein winziger Käfer. Maja legte einen Zweig ans Ufer und der Käfer krabbelte ins Trockene. Bärli winkte ihm nach. „Bei der nächsten Fahrt gibt es Schwimmwesten.“','Suche das Verb, das zu die Rettung gehört.'],
+  ['kostuemkiste','Eine Krone für die Wahrheit','Bärli fand eine Papierkrone und setzte sie sich auf. „König Bärli kennt jede Antwort“, verkündete er. Maja fragte, wo ihre Schere lag. Bärli wusste es nicht und sagte es auch. Maja grinste. „Dann bist du heute König der Wahrheit.“','Welches Adjektiv steckt in Wahrheit?'],
+  ['werkstatt','Der Ranzen auf Reisen','Maja packte ihr Heft in den Ranzen. Bärli legte eine Papierblume dazu. „Was soll die denn in der Schule?“, fragte Maja. „Sie lernt heute, still auf einer Bank zu sitzen“, antwortete Bärli.','Nenne drei Schulsachen mit ihren Artikeln.'],
+  ['leseecke','Das Ende auf Seite sieben','Auf Seite sieben brach die Geschichte mitten im Abenteuer ab. Maja erfand, dass sich hinter der Tür ein Igel versteckte. Bärli fand, dort sollte ein Kuchen stehen. Also bekam der Igel ein Stück Kuchen. Jetzt waren beide mit dem Ende zufrieden.','Erfinde ein anderes Ende in zwei Sätzen.'],
+  ['regenweg','Die Pfütze im Plural','Bärli sprang über eine Pfütze. Vor ihm lagen gleich drei weitere. „Das ist eine ganze Pfützenschaft!“, sagte er. Maja lachte. „Ich glaube, die Mehrzahl heißt einfach Pfützen.“ Bärli sprang weiter und zählte mit.','Bilde die Mehrzahl zu der Korb und der Weg.'],
+  ['kostuemkiste','Der Stern auf dem Kostüm','Bärli nähte mit Majas Hilfe einen Stern auf seinen Umhang. Beim Drehen blitzte er im Licht. „Wie heißt du jetzt?“, fragte Maja. „Herr Sternenschwung“, sagte Bärli und verbeugte sich so tief, dass der Umhang über seine Ohren rutschte.','Schreibe Bärlis Antwort als wörtliche Rede.'],
+  ['werkstatt','Die Ausstellung der Mannschaft','Majas Gruppe stellte Papierboote auf den Tisch. Bärli wollte seines ganz nach vorne schieben. Dann merkte er, dass die Boote zusammen wie eine Flotte aussahen. „Eine ganze Mannschaft“, sagte er und rückte sein Boot zu den anderen.','Markiere in Mannschaft die Nachsilbe -schaft.']
+];
+
+const bearGroups={kleidung:'Kleidung',spielzeug:'Spielzeug',schule:'Schulsachen'};
+const bearItems=[
+  {id:'hut',group:'kleidung',title:'Detektivhut',stars:3,art:'<path fill="#405a54" d="M119 80q-13-11 30-19l16-34q55-23 98 2l11 31q43 7 35 18-73 23-190 2Z"/><path d="M150 62q61 13 124-2" stroke="#d6ab58" stroke-width="10" fill="none"/>'},
+  {id:'ball',group:'spielzeug',title:'Streifenball',stars:6,art:'<circle cx="350" cy="378" r="39" fill="#df9b55"/><path d="M317 360q31 40 70 29m-57-42q-9 40 19 69" fill="none" stroke="#fff1cf" stroke-width="8"/>'},
+  {id:'heft',group:'schule',title:'Sternenheft',stars:9,art:'<path fill="#80afa9" d="M43 330h66v77H43q-10 0-10-10v-57q0-10 10-10Z"/><path d="M45 332v74m15-56h35m-35 12h35" fill="none" stroke="#f9e7ab" stroke-width="4"/>'},
+  {id:'schal',group:'kleidung',title:'Regenbogenschal',stars:13,art:'<path fill="#bf594c" d="M150 177q50 15 133-1l7 19q-18 7-38 10l9 49-25 5-10-52q-50 4-77-11Z"/><path d="m157 186q47 13 122-2m-43 58 20-4" fill="none" stroke="#f3c67a" stroke-width="6"/>'},
+  {id:'boot',group:'spielzeug',title:'Papierboot',stars:17,art:'<path fill="#d58989" d="M305 378h93l-16 29h-56Z"/><path fill="#f8e5ad" d="m324 377 28-34 28 34Z"/><path d="M352 346v30" fill="none"/>'},
+  {id:'stift',group:'schule',title:'Riesenbuntstift',stars:21,art:'<path fill="#d99059" d="m29 393 52-66 16 12-52 66-22 9Z"/><path fill="#f2d3a0" d="m23 414 6-21 16 12Z"/><path d="m25 407 5 4m9-11 51-65" fill="none"/>'},
+  {id:'krone',group:'kleidung',title:'Papierkrone',stars:25,art:'<path fill="#ebbf59" d="m149 36 35 18 34-36 31 34 37-18-13 44q-57-13-112 2Z"/><circle cx="218" cy="53" r="7" fill="#b65865"/>'},
+  {id:'drachen',group:'spielzeug',title:'Mini-Drachen',stars:30,art:'<path fill="#e0a34f" d="m350 293 36 36-36 42-34-42Z"/><path fill="#a57cb0" d="m350 293 36 36-36 42Z"/><path d="M316 329h70m-36 42q-22 19 12 42" fill="none"/>'},
+  {id:'ranzen',group:'schule',title:'Bärenranzen',stars:36,art:'<path fill="none" d="M49 349v-10q0-9 11-9t11 9v10"/><rect fill="#ad745d" x="28" y="346" width="75" height="65" rx="17"/><path fill="#d8a475" d="M29 361q31 20 73 0l-3 18q-43 19-67 0Z"/><rect x="57" y="371" width="15" height="13" rx="3" fill="#eec472"/>'}
+];
+const bearOutfitKey='majas-wortwerkstatt-baerli-auswahl-v1';
+let bearOutfit={};
+try {
+  const saved=JSON.parse(localStorage.getItem(bearOutfitKey)||'{}');
+  if(saved&&typeof saved==='object')bearOutfit=saved;
+} catch {}
+
+function bearPicture(scene,eager=false){
+  return `<img class="bear-picture" src="./baerli/${scene}.webp" alt="${bearScenes[scene]}" width="623" height="623" ${eager?'fetchpriority="high"':'loading="lazy"'}>`;
+}
+function bearToday(date=new Date()){
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('de-DE',{
+    timeZone:'Europe/Berlin',year:'numeric',month:'numeric',day:'numeric'
+  }).formatToParts(date).map(({type,value})=>[type,Number(value)]));
+  const day=Date.UTC(parts.year,parts.month-1,parts.day)/86400000;
+  const start=Date.UTC(2026,10,6)/86400000;
+  return ((day-start)%bearStories.length+bearStories.length)%bearStories.length;
+}
+function bearIntro(){
+  const story=bearStories[bearToday()];
+  return `<section class="panel bear-intro" aria-labelledby="baerli-home"><div>
+    <p class="kicker">${icon('star')} Majas bester Freund</p><h2 id="baerli-home">Hallo, ich bin Bärli!</h2>
+    <p>Ich bin Majas Lernberater. Mit ihr knacke ich Wörter, erfinde Quatsch und probiere Verkleidungen aus. Jeder Aufgabenstern bringt uns näher an neue Schätze.</p>
+    <p>Heute erleben wir <strong>${escapeHtml(story[1])}</strong>.</p>
+    <div class="actions"><a class="primary" href="#baerli">Geschichte des Tages</a><a class="secondary" href="#baerli/schrank">Bärlis Schrank</a></div>
+  </div><img src="./baerli/baerli.webp" alt="Bärli in seinem lila Strickanzug mit gelbem Ohrfähnchen" width="600" height="600" loading="lazy"></section>`;
+}
+function showBearWardrobe(){
+  const usable=bearItems.filter(item=>progress.size>=item.stars);
+  const equipped=usable.filter(item=>bearOutfit[item.group]===item.id);
+  const next=bearItems.find(item=>progress.size<item.stars);
+  app.innerHTML=`<div class="route">${homeLink()}
+    <div class="unit-head lilac"><span class="icon-box">${icon('star')}</span><div><h1 tabindex="-1">Bärlis Schrank</h1><p>Zieh Bärli etwas an und stell ihm Spielzeug und Schulsachen dazu.</p></div></div>
+    <section class="panel bear-wardrobe"><div class="bear-dress-stage">
+      <img src="./baerli/baerli.webp" alt="Bärli trägt seinen lila Strickanzug" width="600" height="600">
+      <svg viewBox="0 0 450 450" aria-hidden="true"><g stroke="#52434b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${equipped.map(item=>item.art).join('')}</g></svg>
+    </div><div><h2>Deine Sammlung</h2><p>Du hast <strong>${progress.size} ${progress.size===1?'Stern':'Sterne'}</strong>. Jede erstmals richtig gelöste Stationsaufgabe bringt einen Stern. Sterne bleiben beim Anziehen erhalten.</p>
+    <p>${next?`Bis zum nächsten Schatz, „${next.title}“, fehlen dir noch ${next.stars-progress.size} Sterne.`:'Du hast alle Schätze freigeschaltet!'}</p>
+    <p id="bear-equipped" role="status">${equipped.length?'Ausgewählt: '+equipped.map(item=>item.title).join(', '):'Bärli trägt gerade sein Lieblingsoutfit.'}</p>
+    <div class="actions"><a class="primary" href="#stationen">Aufgaben lösen</a><a class="secondary" href="#baerli">Zur Geschichte</a></div></div></section>
+    ${Object.entries(bearGroups).map(([group,label])=>`<section class="panel"><h2>${label}</h2><div class="bear-item-list">${bearItems.filter(item=>item.group===group).map(item=>{
+      const unlocked=usable.includes(item);
+      const selected=equipped.includes(item);
+      const verb=group==='kleidung'?(selected?'Ausziehen':'Anziehen'):(selected?'Wegräumen':'Dazustellen');
+      return `<div class="bear-item"><strong>${item.title}</strong><span>${unlocked?'Freigeschaltet':'Ab '+item.stars+' Sternen'}</span>
+        ${unlocked?`<button class="secondary" type="button" data-bear-item="${item.id}" aria-label="${item.title} auswählen" aria-pressed="${selected}">${verb}</button>`:''}</div>`;
+    }).join('')}</div></section>`).join('')}
+  </div>`;
+  app.querySelectorAll('[data-bear-item]').forEach(button=>button.onclick=()=>{
+    const item=usable.find(item=>item.id===button.dataset.bearItem);
+    if(bearOutfit[item.group]===item.id)delete bearOutfit[item.group];
+    else bearOutfit[item.group]=item.id;
+    try {localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));} catch {}
+    showBearWardrobe();
+    app.querySelector(`[data-bear-item="${item.id}"]`).focus({preventScroll:true});
+  });
+}
+function showBear(page){
+  if(page==='schrank'){showBearWardrobe();return;}
+  const now=new Date();
+  const today=bearToday(now);
+  const chosen=page&&/^\d+$/.test(page)?Number(page)-1:today;
+  const index=bearStories[chosen]?chosen:today;
+  const [scene,title,story,tip]=bearStories[index];
+  app.innerHTML=`<div class="route">${homeLink()}
+    <article class="panel bear-story"><div><p class="kicker">${icon('book')} ${index===today?'Geschichte des Tages · '+annaDayFormatter.format(now):'Maja und Bärli · Geschichte '+(index+1)}</p>
+    <h1 tabindex="-1">${escapeHtml(title)}</h1><p>${escapeHtml(story)}</p>
+    <details><summary>${icon('bulb')} Bärlis Lernidee</summary><p>${escapeHtml(tip)}</p></details>
+    <div class="actions"><a class="secondary" href="#baerli/schrank">Bärlis Schrank</a>${index!==today?'<a class="plain" href="#baerli">Zur Geschichte des Tages</a>':''}</div></div>
+    ${bearPicture(scene)}</article>
+    <section class="panel"><h2>Alle ${bearStories.length} Geschichten</h2><p>Jeden Tag steht hier eine andere Geschichte. Nach ${bearStories.length} Tagen beginnt die Runde von vorn.</p>
+    <ol class="bear-story-list">${bearStories.map(([,label],i)=>`<li><a href="#baerli/${i+1}"${i===index?' aria-current="page"':''}>${escapeHtml(label)}</a></li>`).join('')}</ol></section></div>`;
+}
+
 function render(initial=false){
   document.querySelector('#dictation-audio')?.pause();
   document.querySelector('#hearing-audio')?.pause();
@@ -3025,6 +3187,7 @@ function render(initial=false){
   if(page==='fortschritt')showProgress();
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
+  else if(page==='baerli')showBear(index);
   else if(page==='kombitest'){
     const test=index===testPart?testParts[index]:null;
     const step=Number(part);
