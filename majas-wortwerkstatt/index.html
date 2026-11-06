@@ -2484,7 +2484,148 @@ let memory = {};
 try { memory = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch {}
 const progress = new Set(Array.isArray(memory.solved) ? memory.solved : []);
 let best = Number.isInteger(memory.best) ? memory.best : null;
+// Each listening round uses a recording from the story archive.
+const listeningRounds = [
+  ['der-kiesel-im-schuh', [
+    ['Wo beginnt die Geschichte?', 'Im Flur', 'Im Garten', 'In der Schule', 'Anna hüpft im Flur auf einem Bein.'],
+    ['Welche Farbe hat der Stein?', 'Blau', 'Grün', 'Rot', 'Unter die Bank kullert ein blauer Kiesel.'],
+    ['Was ist auf dem Kiesel zu sehen?', 'Ein weißer Pfeil', 'Ein gelber Stern', 'Ein roter Punkt', 'Auf dem Stein steht ein winziger weißer Pfeil.'],
+    ['Was entdeckt Anna direkt nach dem Pfeil auf dem Stein?', 'Einen Streifen aus Kreide', 'Ben hinter dem Topf', 'Die zwei Pfeile draußen', 'Der Pfeil auf dem Kiesel zeigt zuerst auf den Kreidestreifen im Flur.'],
+    ['Warum sind die Pfeile für Anna wichtig?', 'Sie zeigen ihr den Weg.', 'Sie zeigen die Uhrzeit an.', 'Sie verraten Bens Alter.', 'Anna folgt der Spur nach draußen, bis sie Ben findet.']
+  ]],
+  ['die-muetze-im-apfelbaum', [
+    ['Was setzt das Abenteuer in Gang?', 'Ein Windstoß', 'Ein lauter Knall', 'Ein Regenschauer', 'Der Wind reißt Anna die Mütze vom Kopf.'],
+    ['Wo landet die Mütze?', 'Auf einem Zweig im Apfelbaum', 'Im Schuppen', 'Unter dem Zaun', 'Die Mütze fliegt über den Zaun und bleibt im Apfelbaum hängen.'],
+    ['Was wollte Ben zuerst tun?', 'Auf den Zaun steigen', 'Einen Apfel pflücken', 'Nach Hause laufen', 'Ben wollte auf den Zaun steigen, bevor Anna ihn bremste.'],
+    ['In welcher Reihenfolge passiert es?', 'Anna holt Hilfe → die Mütze rutscht ab → Anna fängt sie', 'Anna fängt die Mütze → sie rutscht ab → Anna holt Hilfe', 'Die Mütze rutscht ab → Anna holt Hilfe → sie fängt die Mütze', 'Anna holt Oma und einen Besen. Dann rutscht die Mütze ab und Anna fängt sie.'],
+    ['Warum nennt Anna sie am Ende „Herbstmütze“?', 'Ein Blatt steckt darin.', 'Sie ist jetzt nass.', 'Sie ist mit Äpfeln bemalt.', 'Nach der Landung steckt ein Blatt in der Mütze. Anna lässt es stecken.']
+  ]],
+  ['das-lesezeichen-im-buch', [
+    ['Was fällt zuerst aus dem Buch?', 'Ein Papierfisch', 'Ein Papierboot', 'Ein Papierstern', 'Auf der Rückseite des Papierfischs steht eine Nachricht.'],
+    ['Wo steht die Nachricht über Seite 17?', 'Auf der Rückseite des Papierfischs', 'Vorn auf dem Buch', 'Auf einem Schild am Regal', 'Anna liest den Hinweis auf dem Papierfisch, bevor sie zu Seite 17 blättert.'],
+    ['Was steht auf Annas Lieblingsseite?', 'Der Frosch bekommt Schluckauf.', 'Der Frosch springt aus dem Teich.', 'Der Frosch versteckt einen Fisch.', 'Auf Seite 24 frisst der Frosch so viele Fliegen, dass er Schluckauf bekommt.'],
+    ['Welches Papierstück taucht erst eine Woche später auf?', 'Eine Papierfliege', 'Ein Papierfisch', 'Ein Papierregenschirm', 'Bei der Rückgabe liegen Fisch und Schirm im Buch. Später steckt zusätzlich eine Papierfliege darin.'],
+    ['Was legt die neue Papierfliege nahe?', 'Jemand hat auf die Lesezeichen reagiert.', 'Anna hat ihr Buch verloren.', 'Das Buch hat eine neue Titelseite.', 'Die Fliege passt zur Szene auf Annas Lieblingsseite. Vermutlich hat jemand die Nachricht gelesen und ein weiteres Lesezeichen ergänzt.']
+  ]],
+  ['das-fahrrad-das-klingelte', [
+    ['Wo beginnt die Geschichte?', 'An der Garage', 'Am Eisstand', 'Am Gartenzaun', 'Anna schiebt ihr Fahrrad aus der Garage.'],
+    ['Wo baumelt der Schlüsselbund zuerst?', 'Am Rand des Fahrradkorbs', 'An Bens Gießkanne', 'An Annas Jackentasche', 'Anna schaut auf den Korb und sieht den Schlüsselbund am Rand.'],
+    ['Wie sorgt Anna für Ruhe?', 'Sie steckt den Schlüssel in die Jackentasche.', 'Sie hält den Korb fest.', 'Sie schließt die Garagentür.', 'In der Tasche kann der Schlüssel die Klingel nicht mehr berühren.'],
+    ['Wann klingelt Anna absichtlich?', 'Als Ben mit der Gießkanne im Hof steht', 'Bevor sie das Fahrrad aus der Garage schiebt', 'Während sie den Schlüssel am Korb untersucht', 'Erst nachdem Anna den Schlüssel wegsteckt, sieht sie Ben und klingelt zweimal.'],
+    ['Warum fragt Ben nach dem Eiswagen?', 'Das Klingeln erinnert ihn offenbar daran.', 'Anna trägt eine Eistüte.', 'Ben sieht ein Schild am Fahrrad.', 'Ben hört Annas Klingeln und fragt daraufhin nach dem Eiswagen.']
+  ]],
+  ['ein-brief-ohne-namen', [
+    ['Wo findet Anna den Umschlag?', 'Im Hausflur', 'Auf dem Spielplatz', 'Im Garten', 'Gleich am Anfang liegt der Umschlag im Hausflur.'],
+    ['Was ist vorne auf den Umschlag gemalt?', 'Eine Sonne', 'Eine Wolke', 'Ein Haus', 'Die Sonne sieht Anna schon, bevor sie den Umschlag umdreht.'],
+    ['Warum drehen sie den Umschlag um?', 'Sie suchen einen Hinweis, für wen er ist.', 'Die Sonne ist auf der Rückseite.', 'Anna möchte auf die Rückseite malen.', 'Vorne fehlt ein Name. Hinten finden sie den Hinweis für alle im Haus.'],
+    ['Was steckt im Umschlag?', 'Eine Einladung zum Spielenachmittag', 'Ein Rezept für Apfelkuchen', 'Ein Plan für eine Schatzsuche', 'Anna und Frau Sommer öffnen den Umschlag und finden darin die Einladung.'],
+    ['Was ist der Plan bei Regen?', 'Im Treppenhaus spielen', 'Im Hof unter einem Baum spielen', 'Den Nachmittag absagen', 'Anna malt eine Wolke dazu und nennt das Treppenhaus als Ausweichort.']
+  ]],
+  ['die-geheime-trommel', [
+    ['Wo hört Anna das Tock zuerst?', 'Im Kinderzimmer', 'In der Küche', 'Im Treppenhaus', 'Anna hört das Geräusch am Nachmittag im Kinderzimmer.'],
+    ['Wo ist es still?', 'Auf dem Flur', 'An der Fensterbank', 'Am Blumentopf', 'Als Anna die Tür öffnet, ist auf dem Flur nichts zu hören.'],
+    ['Womit klopft Anna auf den Tisch?', 'Mit einem Holzlöffel', 'Mit einem Stift', 'Mit einem Spielzeughammer', 'Anna holt einen Holzlöffel und benutzt ihn zum Klopfen.'],
+    ['Was gefällt Anna am besten?', 'Wenn Regen und Anna gleichzeitig klopfen', 'Wenn sie ganz allein klopft', 'Wenn es auf dem Flur still ist', 'Die Stelle, an der beide gleichzeitig spielen, ist ihre Lieblingsstelle.'],
+    ['Wann soll das Konzert weitergehen?', 'Beim nächsten Regen', 'Am nächsten Morgen', 'Beim ersten Schnee', 'Anna schreibt auf ihren Zettel, dass es beim nächsten Regen weitergeht.']
+  ]]
+];
+questions.hoeren = listeningRounds.flatMap(([track,rows],round)=>rows.map(([prompt,right,a,b,why],i)=>{
+  const options=[right,a,b];
+  const offset=(round+i)%3;
+  return {...pick(prompt,'',options.slice(offset).concat(options.slice(0,offset)),right,
+    ['Achte beim Hören auf den Anfang.','Höre noch einmal auf die Einzelheiten.','Suche im Hörtext nach dem passenden Hinweis.','Achte darauf, was vorher und nachher passiert.','Verbinde die Hinweise aus der Geschichte.'][i],why),track};
+}));
+
+const extensionWords = [
+  ['Hun_','Hund','Hunde','d','t'],['Ra_','Rad','Räder','d','t'],['Bil_','Bild','Bilder','d','t'],
+  ['Kin_','Kind','Kinder','d','t'],['Wal_','Wald','Wälder','d','t'],['Mun_','Mund','Münder','d','t'],
+  ['Win_','Wind','Winde','d','t'],['Stran_','Strand','Strände','d','t'],['Zel_','Zelt','Zelte','t','d'],
+  ['Hef_','Heft','Hefte','t','d'],['Hu_','Hut','Hüte','t','d'],['Bun_','Bund','Bünde','d','t'],
+  ['Ber_','Berg','Berge','g','k'],['We_','Weg','Wege','g','k'],['Zu_','Zug','Züge','g','k'],
+  ['Ta_','Tag','Tage','g','k'],['Kru_','Krug','Krüge','g','k'],['Zwei_','Zweig','Zweige','g','k'],
+  ['Wer_','Werk','Werke','k','g'],['Geschen_','Geschenk','Geschenke','k','g'],['Schran_','Schrank','Schränke','k','g'],
+  ['Kor_','Korb','Körbe','b','p'],['Die_','Dieb','Diebe','b','p'],['Sie_','Sieb','Siebe','b','p'],
+  ['Kal_','Kalb','Kälber','b','p'],['Stau_','Staub','staubig','b','p'],['Lo_','Lob','loben','b','p'],
+  ['gel_','gelb','gelbe','b','p'],['kal_','kalt','kalte','t','d'],['star_','stark','starke','k','g']
+];
+questions.verlaengern = extensionWords.map(([gap,word,long,right,other],i)=>{
+  const why=`„${word}“ gehört zu „${long}“. In der verlängerten Form steht nach dem ${right} ein Vokal. So hörst du den Buchstaben ${right} deutlicher.`;
+  const hint=/^[A-ZÄÖÜ]/.test(word)?'Bilde die Mehrzahl oder suche ein verwandtes Wort.':'Setze das Adjektiv vor ein Nomen, zum Beispiel „ein … Tuch“.';
+  if(i%3===1 && i<25) return write('Schreibe die Mehrzahl als Verlängerung.',word,long,hint,why);
+  if(i%3===2) return write('Verlängere das Wort und schreibe es richtig.',gap,word,`Höre auf „${long}“. Schreib das kurze Wort mit dem passenden Endbuchstaben.`,why);
+  return pick('Welcher Buchstabe fehlt am Ende?',gap,i%2?[right,other]:[other,right],right,hint,why);
+});
+
+const readingTexts = [
+  {title:'Das Leuchten im Burghof', parts:[
+    'Am Montag fuhr Majas Klasse zur Burg Nebelstein. Im Hof wartete Herr Noll mit einer Laterne. Er erklärte zwei Regeln: Auf der steilen Treppe durften alle nur mit einer Begleitung gehen. Nach dem Abendessen sollten alle im Hof bleiben.',
+    'Am Abend wollte die Klasse im Hof Sternbilder suchen. Doch plötzlich bewegte sich hinter dem Tor ein Licht. Maja blieb stehen. „Holt Herrn Noll!“, rief sie. Hinter dem Tor raschelte es.'
+  ], prompt:'Schreibe drei bis fünf Sätze weiter. Erkläre das Licht und löse die Spannung auf. Halte dich an die Burgregeln.',
+  model:'Herr Noll kam in den Hof. Er öffnete das Tor und leuchtete hinaus. Dort stand die Hausmeisterin mit ihrer Taschenlampe. Sie hatte im Laub nach ihrem Schlüssel gesucht. Gemeinsam fanden sie ihn, und die Klasse konnte endlich nach den Sternen schauen.',
+  note:'Das Licht bekommt eine Erklärung. Maja bleibt im Hof, bis ein Erwachsener kommt. Am Schluss kehrt die Klasse zu ihrem Plan zurück.'},
+  {title:'Der schnellere Heimweg', parts:[
+    'Maja wollte nach der Schule rechtzeitig zur Probe kommen. Deshalb nahm sie den schmalen Weg am Bach. Der Weg sah auf dem Plan kürzer aus als die breite Straße.',
+    'Nach wenigen Minuten versperrte ein umgestürzter Ast den Weg. Maja ging zurück und nahm die breite Straße. Vor der Bücherei traf sie Jona. Er war die ganze Zeit auf der breiten Straße geblieben und stand schon eine Weile dort.',
+    '„Warum kommst du erst jetzt?“, fragte Jona. Maja zeigte auf ihre schlammigen Schuhe. „Meine Abkürzung war wohl keine.“'
+  ], prompt:'Was könnte Maja Jona antworten? Erkläre in zwei oder drei Sätzen, warum sie später ankam.',
+  model:'„Ich dachte, der Bachweg sei schneller. Dort lag aber ein Ast quer über dem Weg. Deshalb musste ich zurückgehen und den längeren Weg nehmen.“',
+  note:'Die Antwort verbindet Ursache und Folge. Der Ast blockiert den kürzeren Weg, deshalb kostet der Rückweg zusätzliche Zeit.'}
+];
+questions.lesen = [
+  ['Wer fährt in der Einleitung zur Burg?', 'Majas Klasse', 'Jona und sein Vater', 'Herr Noll mit seiner Klasse', 'Im ersten Satz fährt Majas Klasse los.'],
+  ['Wann fährt die Klasse los?', 'Am Montag', 'Am Freitag', 'Nach dem Abendessen', 'Der erste Satz nennt den Montag.'],
+  ['Welche Regel gilt auf der steilen Treppe?', 'Nur mit Begleitung hinaufgehen.', 'Nur nach dem Abendessen hinaufgehen.', 'Auf jeder Stufe stehen bleiben.', 'Herr Noll nennt die Begleitung als Regel.'],
+  ['Was hat die Klasse am Abend vor?', 'Im Hof Sternbilder suchen.', 'Im Turm übernachten.', 'Vor dem Tor Fangen spielen.', 'Der zweite Absatz nennt den Plan: Sternbilder im Hof suchen.'],
+  ['Was macht das Ende spannend?', 'Die Herkunft des Lichts und des Raschelns bleibt offen.', 'Herr Noll hat eine Laterne.', 'Die Klasse kommt an einem Montag an.', 'Die Geschichte endet mit zwei ungeklärten Hinweisen hinter dem Tor.'],
+  ['Welche Fortsetzung passt zur Regel für den Abend?', 'Maja wartet im Hof auf Herrn Noll.', 'Die Klasse läuft hinter das Tor.', 'Maja klettert allein die Treppe hinauf.', 'Nach dem Essen sollen alle im Hof bleiben.'],
+  ['Warum nimmt Maja zuerst den Bachweg?', 'Sie will rechtzeitig zur Probe kommen.', 'Sie sucht einen Ast.', 'Sie soll Jona an der Bücherei abholen.', 'Der Bachweg sieht kürzer aus. Maja hofft, Zeit zu sparen.'],
+  ['Welches Hindernis versperrt den Weg?', 'Ein umgestürzter Ast', 'Ein verschlossenes Tor', 'Ein abgestelltes Fahrrad', 'Der zweite Absatz nennt den umgestürzten Ast.'],
+  ['Was passiert zuerst?', 'Maja geht am Bach entlang.', 'Maja trifft Jona.', 'Maja geht zur breiten Straße zurück.', 'Maja biegt zuerst in den Bachweg ein und kehrt erst am Ast um.'],
+  ['Woran erkennt man, dass Jona früher ankam?', 'Er wartet dort schon eine Weile.', 'Seine Schuhe sind schlammig.', 'Er zeigt auf den Plan.', 'Jona ist auf der breiten Straße geblieben und steht bereits eine Weile vor der Bücherei.'],
+  ['Warum war die Abkürzung langsamer?', 'Maja musste umkehren und noch den anderen Weg nehmen.', 'Jona hielt Maja an der Bücherei auf.', 'Maja ging vom Bach bis zur Probe ohne Hindernis.', 'Der kürzere Weg war versperrt. Hin- und Rückweg bis zum Ast kosteten Zeit.'],
+  ['Was meint Maja mit „Meine Abkürzung war wohl keine“?', 'Der geplante kürzere Weg hat keine Zeit gespart.', 'Sie kennt das Wort Abkürzung nicht.', 'Die breite Straße war gesperrt.', 'Eine kürzere Strecke hilft nur, wenn sie begehbar ist.']
+].map(([prompt,right,a,b,why],i)=>{
+  const options=[right,a,b];
+  const offset=i%3;
+  return {...pick(prompt,'',options.slice(offset).concat(options.slice(0,offset)),right,'Suche den passenden Hinweis im Lesetext.',why),reading:i<6?0:1};
+});
+
+const endingPracticeStart=questions.endungen.length+1;
+questions.endungen.push(
+  ...[['sichern','die Sicherung','sicher','ung'],['ordnen','die Ordnung','ordn','ung'],
+     ['pünktlich','die Pünktlichkeit','pünktlich','keit'],['klar','die Klarheit','klar','heit'],
+     ['erkennen','die Erkenntnis','erkennt','nis'],['finster','die Finsternis','finster','nis'],
+     ['hindern','das Hindernis','hinder','nis'],['erleben','das Erlebnis','erleb','nis']]
+    .map(([base,noun,stem,suffix])=>write('Bilde das Nomen und schreibe den Artikel dazu.',base,noun,
+      `Das Nomen endet auf -${suffix}. Achte auf die Großschreibung und den Artikel.`,
+      `„${base}“ und „${noun}“ gehören zusammen. Das Nomen besteht hier aus ${stem} + ${suffix}. Der Artikel lautet „${noun.split(' ')[0]}“.`)),
+  mark('Markiere die Nomen mit -heit oder -keit.','Maja zeigt Klarheit und Pünktlichkeit beim Üben.',[2,4],'Suche die beiden Nachsilben am Wortende.','Klarheit gehört zu klar, Pünktlichkeit zu pünktlich.'),
+  mark('Markiere die Nomen mit -nis.','Die Finsternis war für Fuji ein Erlebnis.',[1,6],'Suche die Wortenden.','Finsternis und Erlebnis enden beide auf -nis. Die Artikel sind verschieden: die Finsternis, das Erlebnis.'),
+  write('Schreibe das verwandte Verb in der Grundform.','die Sicherung','sichern','Ergänze: Wir … das Tor.','Wir sichern das Tor. Die Sicherung gehört zum Verb sichern.'),
+  write('Schreibe das verwandte Adjektiv.','die Pünktlichkeit','pünktlich','Wie ist Maja, wenn sie zur richtigen Zeit kommt?','Maja ist pünktlich. Das Adjektiv wird kleingeschrieben.')
+);
+
+const newUnits = [
+  {id:'hoeren',title:'Hörverstehen',icon:'audio',tone:'sky',place:'Mit Anna auf Hörspur',story:'Höre eine Geschichte und löse fünf Fragen dazu. Du kannst an jeder Aufgabe erneut hören.',rule:'Beim ersten Hören achtest du darauf, wer vorkommt und was passiert. Beim zweiten Hören sammelst du Hinweise zu Orten, Gründen und zur Reihenfolge.',examples:['Wer ist dabei? · Wo passiert es? · Was geschieht zuerst?','Warum handelt die Figur so? Welche Stelle hilft dir?'],description:'6 Hörgeschichten mit 30 Fragen'},
+  {id:'verlaengern',title:'Wörter verlängern',icon:'puzzle',tone:'mint',place:'Fuji hört auf den letzten Laut',story:'Fuji hört bei „Hund“ am Ende fast ein t. Maja sagt „Hunde“. Jetzt ist das d gut zu hören.',rule:'Stehen b, d oder g ganz am Ende, klingen sie oft ähnlich wie p, t oder k. Verlängere das Wort so, dass nach dem fraglichen Buchstaben ein Vokal folgt. Bei Nomen hilft oft die Mehrzahl, bei Adjektiven eine Form wie „ein gelbes Tuch“.',examples:['Hund → Hunde → d','Weg → Wege → g','Korb → Körbe → b','stark → starke → k'],description:'30 Aufgaben zu b/p, d/t und g/k'},
+  {id:'lesen',title:'Lesen und weitererzählen',icon:'book',tone:'peach',place:'Maja liest zwischen den Zeilen',story:'Lies vom Licht im Burghof und von einer Abkürzung, die Zeit kostet.',rule:'Markiere beim Lesen Hinweise auf Wer, Wo und Wann. Bei einer Warum-Frage verbindest du Ursache und Folge. Beim Weiterschreiben greifen deine ersten Sätze die offene Stelle der Geschichte auf.',examples:['Einleitung → Wer? Wo? Wann?','Warum kam Maja spät? → Hindernis und Folge verbinden.'],description:'Einleitungen verstehen, Gründe erklären und Geschichten fortsetzen'}
+];
+units.push(...newUnits);
+for(const unit of [...newUnits,units.find(unit=>unit.id==='endungen')]){
+  questions[unit.id].forEach((q,i)=>{q.id=unit.id+'-'+(i+1);q.unit=unit.id;});
+}
+
+const testParts = {
+  hoeren:{title:'Teil 1 · Hörverstehen',items:questions.hoeren.slice(15,20)},
+  woerter:{title:'Teil 2 · Nomenendungen und Verlängern',items:[
+    ...questions.endungen.slice(endingPracticeStart-1,endingPracticeStart+3),
+    questions.endungen[endingPracticeStart+5],questions.endungen[endingPracticeStart+8],
+    ...[1,8,15,19,21,27].map(i=>questions.verlaengern[i])
+  ]}
+};
+
 let quiz = [];
+let testPart = null;
 let active = null;
 let route = '';
 const persist = ()=>{
@@ -2503,7 +2644,8 @@ function showHome(){
   const intro = document.querySelector('#scene-source').innerHTML;
   const descriptions = [
     'Nomen, Verben und Adjektive entdecken','Mit -heit, -keit, -ung und -nis bauen','ver-, be- und er- vorne einsetzen',
-    'Wörter verbinden und den Artikel finden','Von ich bis sie in der Gegenwart','Die drei Vergleichsstufen üben','Großschreibung und Hörsätze üben'
+    'Wörter verbinden und den Artikel finden','Von ich bis sie in der Gegenwart','Die drei Vergleichsstufen üben','Großschreibung und Hörsätze üben',
+    ...newUnits.map(unit=>unit.description)
   ];
   app.innerHTML=`<section class="hero">
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
@@ -2511,6 +2653,10 @@ function showHome(){
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Fuji und Minka und sammle Sterne.</p>
     <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a></div></div>
     <div class="hero-art">${intro}</div>
+  </section>
+  <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
+    <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung und -nis und prüfe letzte Buchstaben durch Verlängern.</p>
+    <div class="actions"><a class="primary" href="#hoeren">${icon('audio')} Hörverstehen</a><a class="secondary" href="#endungen">Nomenendungen</a><a class="secondary" href="#verlaengern">Wörter verlängern</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
   </section>
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
   <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
@@ -2522,18 +2668,22 @@ function showHome(){
 function showUnit(unit){
   const items=questions[unit.id];
   const first = items.findIndex(q=>!progress.has(q.id))+1;
-  const special = unit.id==='endungen' ? [['Zum Suchsel',6]] : unit.id==='herbst' ? [['Zum Hörteil',10]] : [];
+  const special = unit.id==='endungen' ? [['Zum Suchsel',6],['Nomen mit Artikel bilden',endingPracticeStart]] : unit.id==='herbst' ? [['Zum Hörteil',10]] : [];
+  const rounds = unit.id==='hoeren' ? listeningRounds.map(([id],i)=>[annaStories.find(story=>story.id===id).title,i*5+1]) :
+    unit.id==='lesen' ? readingTexts.map((text,i)=>[text.title,i*6+1]) : [];
   app.innerHTML=`<div class="route">${homeLink()}
   <div class="unit-head ${unit.tone}"><span class="icon-box">${icon(unit.icon)}</span><div><p class="kicker">Station ${units.indexOf(unit)+1} von ${units.length}</p><h1 tabindex="-1">${unit.title}</h1><p>${unit.place}</p></div></div>
   <section class="panel"><h2>So geht’s</h2><p>${unit.story}</p><p>${unit.rule}</p>
-  ${demoPanel()}
+  ${lessonDemos[unit.id]?demoPanel():''}
   <ul class="lesson-examples">${unit.examples.map(example=>`<li>${example}</li>`).join('')}</ul>
   ${unit.id==='herbst'?`<details><summary>Vorlesevorlage für Erwachsene</summary><ol>${autumn.map(([line])=>`<li>${line}</li>`).join('')}</ol></details>`:''}
   <p class="subtle">${doneFor(unit.id)} von ${items.length} Aufgaben geschafft</p>
   <div class="actions"><a class="primary" href="${unitLink(unit.id,first||1)}">${first>1?'Weiterüben':first?'Übungen starten':'Noch einmal üben'} ${icon('arrow')}</a>
   ${special.map(([label,index])=>`<a class="secondary" href="${unitLink(unit.id,index)}">${label}</a>`).join('')}
-  ${first>1?`<a class="plain" href="${unitLink(unit.id,1)}">Bei Aufgabe 1 beginnen</a>`:''}</div></section></div>`;
-  setupLessonDemo(unit);
+  ${first>1?`<a class="plain" href="${unitLink(unit.id,1)}">Bei Aufgabe 1 beginnen</a>`:''}</div>
+  ${rounds.length?`<h3>${unit.id==='hoeren'?'Hörgeschichte wählen':'Lesetext wählen'}</h3><ul class="progress-list">${rounds.map(([title,i])=>`<li><a href="${unitLink(unit.id,i)}">${escapeHtml(title)}</a></li>`).join('')}</ul>`:''}
+  </section>${unit.id==='lesen'?readingTexts.map(readingWorkshop).join(''):''}</div>`;
+  if(lessonDemos[unit.id])setupLessonDemo(unit);
 }
 function showProgress(){
   app.innerHTML=`<div class="route">${homeLink()}
@@ -2544,11 +2694,34 @@ function showProgress(){
 }
 function showQuiz(){
   app.innerHTML=`<div class="route">${homeLink()}
-    <div class="unit-head sand"><span class="icon-box">${icon('trophy')}</span><div><p class="kicker">Dein Finale</p><h1 tabindex="-1">Werkstatt-Quiz</h1><p>Maja, Fuji und Minka haben Aufgaben aus allen sieben Stationen für dich gesammelt.</p></div></div>
+    <div class="unit-head sand"><span class="icon-box">${icon('trophy')}</span><div><p class="kicker">Dein Finale</p><h1 tabindex="-1">Werkstatt-Quiz</h1><p>Maja, Fuji und Minka haben Aufgaben aus sieben Stationen für dich gesammelt.</p></div></div>
     <section class="panel"><h2>Bereit für die Runde?</h2><p>Du löst 14 Aufgaben in deinem Tempo. Für jede richtige Antwort bekommst du einen Punkt. Die Lösungen und Erklärungen siehst du am Ende.</p><button class="primary" id="start-quiz" type="button">Quiz starten ${icon('arrow')}</button></section></div>`;
-  document.querySelector('#start-quiz').onclick=()=>{quiz=[];move('#quiz/1');};
+  document.querySelector('#start-quiz').onclick=()=>{testPart=null;quiz=[];move('#quiz/1');};
 }
 const escapeHtml = str=>String(str).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function showCombinationTest(){
+  app.innerHTML=`<div class="route">${homeLink()}
+    <div class="unit-head sand"><span class="icon-box">${icon('trophy')}</span><div><h1 tabindex="-1">Kombitest üben</h1><p>Wähle einen Teil. Die Aufgaben haben kein Zeitlimit. Nach der Abgabe siehst du die Punkte und zu jeder Aufgabe eine Erklärung.</p></div></div>
+    <section class="panel"><h2>Welchen Teil möchtest du üben?</h2>
+    <p>In Teil 1 hörst du eine Geschichte und beantwortest fünf Fragen. In Teil 2 löst du zwölf Aufgaben zu Nomenendungen und zum Verlängern.</p>
+    <div class="actions">${Object.entries(testParts).map(([id,part])=>`<button class="secondary" type="button" data-test-part="${id}">${part.title}</button>`).join('')}</div></section></div>`;
+  app.querySelectorAll('[data-test-part]').forEach(button=>button.onclick=()=>{
+    testPart=button.dataset.testPart;
+    quiz=[];
+    move('#kombitest/'+testPart+'/1');
+  });
+}
+function readingPassage(text){
+  return `<h3>${escapeHtml(text.title)}</h3>${(text.parts||text.paragraphs).map(p=>`<p>${escapeHtml(p)}</p>`).join('')}`;
+}
+function readingWorkshop(text,i){
+  return `<section class="panel"><h2>Schreibwerkstatt · ${escapeHtml(text.title)}</h2>
+    <details><summary>Lesetext öffnen</summary>${readingPassage(text)}</details>
+    <label class="field" for="reading-write-${i}">${escapeHtml(text.prompt)}</label>
+    <textarea class="answer" id="reading-write-${i}" rows="4"></textarea>
+    <p class="subtle">Vergleiche deinen Entwurf mit dem Beispiel. Wenn du die Station verlässt, wird der Entwurf verworfen.</p>
+    <details><summary>Musterlösung zum Vergleichen</summary><p>${escapeHtml(text.model)}</p><p>${escapeHtml(text.note)}</p></details></section>`;
+}
 const fmt = text=>escapeHtml(text).replace(/«([^»]+)»/g,'<strong>$1</strong>');
 const normalize = str=>str.trim().normalize('NFC').replace(/\s+/g,' ');
 const shuffledTiles = tiles=>[tiles.at(-1),...tiles.slice(0,-1)];
@@ -2583,17 +2756,24 @@ function solutionText(q){
   if(q.type==='search')return q.set.join(', ');
   return q.answer;
 }
-function showExercise(unit,number,isQuiz){
-  const list=isQuiz?mixed:questions[unit.id];
+function showExercise(unit,number,isQuiz,part=null){
+  const test=part?testParts[part]:null;
+  const list=test?.items||(isQuiz?mixed:questions[unit.id]);
   const q=list[number-1];
   const theme=unit||unitById(q.unit);
-  active={q,number,isQuiz,list,unit,chosen:new Set(),order:[],found:new Set(),start:null,checked:false};
+  active={q,number,isQuiz,list,unit,part,chosen:new Set(),order:[],found:new Set(),start:null,checked:false};
   if(q.type==='search')active.board=puzzleBoard(q.set);
-  app.innerHTML=`<div class="route"><a class="crumb" href="#${isQuiz?'quiz':unit.id}">${icon('back')} ${isQuiz?'Zum Quizstart':'Zur Stationsübersicht'}</a>
-   <div class="unit-head ${isQuiz?'sand':theme.tone}"><span class="icon-box">${icon(isQuiz?'trophy':theme.icon)}</span><div><p class="kicker">${isQuiz?'Werkstatt-Quiz':'Station '+(units.indexOf(theme)+1)}</p><h1 tabindex="-1">${theme.title}</h1></div></div>
+  app.innerHTML=`<div class="route"><a class="crumb" href="#${test?'kombitest':isQuiz?'quiz':unit.id}">${icon('back')} ${test?'Zum Kombitest':isQuiz?'Zum Quizstart':'Zur Stationsübersicht'}</a>
+   <div class="unit-head ${isQuiz?'sand':theme.tone}"><span class="icon-box">${icon(isQuiz?'trophy':theme.icon)}</span><div><p class="kicker">${test?test.title:isQuiz?'Werkstatt-Quiz':'Station '+(units.indexOf(theme)+1)}</p><h1 tabindex="-1">${theme.title}</h1></div></div>
    <section class="panel"><div class="task-top"><span>Aufgabe ${number} von ${list.length}</span>${!isQuiz&&progress.has(q.id)?'<span>✓ Bereits geschafft</span>':''}</div>
    <div class="bar" role="progressbar" aria-label="Aufgabennummer" aria-valuemin="0" aria-valuemax="${list.length}" aria-valuenow="${number}"><span style="width:${100*number/list.length}%"></span></div>
    <h2>${escapeHtml(q.prompt)}</h2>${q.context?`<div class="context">${fmt(q.context)}</div>`:''}
+   ${q.track?`<div class="context"><p>Höre die Geschichte. Du kannst anhalten oder sie erneut abspielen.</p>
+   <audio id="hearing-audio" controls preload="none" src="./anna-audio/${q.track}.mp3" aria-label="Hörgeschichte" style="width:100%;max-width:32rem"></audio>
+   <div class="field-actions"><button class="secondary" id="hearing-speed" type="button" aria-pressed="false">Langsamer hören</button></div>
+   <p class="inline-status" id="hearing-status" role="status"></p>
+   ${isQuiz?'':`<details><summary>Hörtext zum Nachlesen</summary>${readingPassage(annaStories.find(story=>story.id===q.track))}</details>`}</div>`:''}
+   ${q.reading!==undefined?`<div class="context">${readingPassage(readingTexts[q.reading])}</div>`:''}
    ${q.listen?`<div class="field-actions"><button class="secondary" type="button" data-speak="normal">${icon('audio')} Ganzer Satz</button><button class="secondary" type="button" data-speak="slow">${icon('audio')} Langsam mit Pausen</button><button class="plain" type="button" id="stop-audio">Stopp</button></div><audio id="dictation-audio" preload="metadata"></audio><p class="inline-status" id="audio-status" role="status"></p><div id="reading-alternative" hidden><button class="plain" id="toggle-reading" type="button" aria-expanded="false">Satz kurz lesen und dann schreiben</button><p class="context" id="reading" hidden>${escapeHtml(q.listen)}</p></div>`:''}
    <form id="answer-form">${answerView(q)}
    <div class="actions"><button class="primary" id="check" type="submit">${isQuiz?'Antwort abgeben':'Prüfen'}</button>
@@ -2627,6 +2807,19 @@ function showExercise(unit,number,isQuiz){
   if(q.type==='sort')drawTiles();
   if(q.type==='search')drawPuzzle();
   if(q.listen)setupAudio(q);
+  if(q.track){
+    const audio=document.querySelector('#hearing-audio');
+    const speed=document.querySelector('#hearing-speed');
+    speed.onclick=()=>{
+      const slow=speed.getAttribute('aria-pressed')==='false';
+      speed.setAttribute('aria-pressed',String(slow));
+      audio.defaultPlaybackRate=audio.playbackRate=slow?.8:1;
+      speed.textContent=slow?'Normales Tempo':'Langsamer hören';
+    };
+    audio.onerror=()=>{
+      document.querySelector('#hearing-status').textContent='Die Aufnahme konnte nicht geladen werden. Prüfe deine Verbindung und lade die Seite neu.';
+    };
+  }
 }
 function drawTiles(focus){
   const {q,order,checked}=active;
@@ -2786,9 +2979,10 @@ function showFeedback(message,correct,withSolution){
   }
 }
 function nextQuestion(){
-  const {number,list,isQuiz,unit}=active;
+  const {number,list,isQuiz,unit,part}=active;
   if(isQuiz){
-    move(number<list.length?'#quiz/'+(number+1):'#quiz/ergebnis');
+    const path=part?'#kombitest/'+part:'#quiz';
+    move(path+'/'+(number<list.length?number+1:'ergebnis'));
   } else if(number<list.length){
     move(unitLink(unit.id,number+1));
   } else {
@@ -2801,19 +2995,25 @@ function showEnd(unit){
   <p>Du hast ${count} von ${questions[unit.id].length} Aufgaben dieser Station richtig gelöst.</p>
   <div class="actions"><a class="primary" href="#start">Zur Stationenkarte ${icon('arrow')}</a><a class="secondary" href="#${unit.id}">Station wiederholen</a></div></section></div>`;
 }
-function showResult(){
+function showResult(part=null){
+  const test=part?testParts[part]:null;
+  const total=test?.items.length||mixed.length;
   const correct=quiz.filter(result=>result.correct).length;
-  best=best===null?correct:Math.max(best,correct);
-  persist();
+  if(!test){
+    best=best===null?correct:Math.max(best,correct);
+    persist();
+  }
   app.innerHTML=`<div class="route">${homeLink()}
-   <div class="unit-head sand"><span class="icon-box">${icon('trophy')}</span><div><p class="kicker">Werkstatt-Quiz</p><h1 tabindex="-1">${correct} von ${mixed.length} Punkten</h1><p>${correct===mixed.length?'Du hast alle Aufgaben richtig gelöst!':'Hier kannst du deine Antworten mit den Lösungen vergleichen.'}</p></div></div>
+   <div class="unit-head sand"><span class="icon-box">${icon('trophy')}</span><div><p class="kicker">${test?test.title:'Werkstatt-Quiz'}</p><h1 tabindex="-1">${correct} von ${total} Punkten</h1><p>${correct===total?'Du hast alle Aufgaben richtig gelöst!':'Hier kannst du deine Antworten mit den Lösungen vergleichen.'}</p></div></div>
    <section class="panel"><h2>Deine Antworten und die Lösungen</h2><ol class="review-list">
    ${quiz.map(({q,given,correct:ok})=>`<li><strong>${ok?'✓ Richtig':'Noch üben'} · ${unitById(q.unit).title}</strong><br>${escapeHtml(q.prompt)} ${q.context?fmt(q.context):''}<br>
    Deine Antwort · ${escapeHtml(given)}<br>Lösung · ${escapeHtml(solutionText(q))}<br>${escapeHtml(q.why)}</li>`).join('')}</ol>
-   <div class="actions"><a class="primary" href="#quiz">Neue Runde</a><a class="secondary" href="#start">Zur Stationenkarte</a></div></section></div>`;
+   ${part==='hoeren'?`<details><summary>Hörtext zum Nachlesen</summary>${readingPassage(annaStories.find(story=>story.id===test.items[0].track))}</details>`:''}
+   <div class="actions"><a class="primary" href="#${test?'kombitest':'quiz'}">Neue Runde</a><a class="secondary" href="#start">Zur Stationenkarte</a></div></section></div>`;
 }
 function render(initial=false){
   document.querySelector('#dictation-audio')?.pause();
+  document.querySelector('#hearing-audio')?.pause();
   document.querySelector('#anna-audio-player')?.pause();
   active=null;
   syncStars();
@@ -2825,7 +3025,15 @@ function render(initial=false){
   if(page==='fortschritt')showProgress();
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
+  else if(page==='kombitest'){
+    const test=index===testPart?testParts[index]:null;
+    const step=Number(part);
+    if(test&&part==='ergebnis'&&quiz.length===test.items.length)showResult(index);
+    else if(test&&Number.isInteger(step)&&step===quiz.length+1&&step<=test.items.length)showExercise(null,step,true,index);
+    else showCombinationTest();
+  }
   else if(page==='quiz'){
+    if(testPart){testPart=null;quiz=[];}
     if(index==='ergebnis'&&quiz.length===mixed.length)showResult();
     else if(index&&Number.isInteger(number)&&number===quiz.length+1&&number<=mixed.length)showExercise(null,number,true);
     else showQuiz();
