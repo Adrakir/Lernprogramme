@@ -265,6 +265,21 @@ details ol{margin-bottom:0}
 .anna-image-card svg{border-radius:7px}
 .anna-retell{margin:16px 0 0}
 @media(max-width:620px){.anna-extra-grid,.anna-image-choices{grid-template-columns:1fr}.anna-image-card{max-width:420px}}
+.anna-extras .anna-extra-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.anna-word-tip,.anna-write-invite{margin:0 0 16px;padding:9px 12px;border-radius:9px;background:#f1f6ed;color:#264d40}
+.anna-write-invite{margin:16px 0 0;font-weight:750}
+.anna-word{display:inline;appearance:none;padding:0 1px;margin:0;border:0;border-radius:3px;background:#e7f3ea;color:#235741;font:inherit;font-weight:700;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+.anna-word:hover,.anna-word[aria-expanded=true]{background:#cde8d5}
+.anna-word-definition{margin:-6px 0 14px;padding:9px 12px;border-left:4px solid #60937a;border-radius:7px;background:#f1f7ef;color:#25493b;font-size:16px}
+.anna-write{padding:14px;margin:15px 0;border:1px solid #c9dfce;border-radius:13px;background:#f2f7ee}
+.anna-write h2{font-size:22px;margin:0 0 9px}
+.anna-write label{display:block;margin:0 0 10px}
+.anna-write label span{display:block;font-size:14px}
+.anna-write textarea,.anna-write input{display:block;width:100%;min-width:0;min-height:44px;margin-top:5px;padding:8px;border:1px solid #9bb6a5;border-radius:8px;background:#fffdf9;color:inherit;font:inherit}
+.anna-write textarea{resize:vertical}
+.anna-write details p,.anna-write details ul{margin:8px 0 0}
+.anna-save-note{margin-top:10px;font-size:14px}
+@media(max-width:620px){.anna-extras .anna-extra-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1551,6 +1566,7 @@ function showAnna(id,part){
   if(id==='entscheidung'){showAnnaChoice(part);return;}
   if(id==='bilder'){showAnnaImageGame(part);return;}
   if(id==='fall'){showAnnaCase(part);return;}
+  if(id==='schreiben'){showAnnaWriting(part);return;}
   const index=annaStories.findIndex(story=>story.id===id);
   if(index===-1){
     const now=new Date();
@@ -1586,12 +1602,14 @@ function showAnna(id,part){
       <h1 tabindex="-1">${story.title}</h1>
       <figure class="anna-story-picture">${annaScene(story)}</figure>
       ${annaListenControls(story)}
-      <div class="anna-text">${story.paragraphs.map((paragraph,i)=>`<p data-story-paragraph>${paragraph}</p>${i+1===moment.after?moment.html:''}`).join('')}</div>
+      <p class="anna-word-tip"><strong>Wörterlupe</strong> · Tippe auf ein unterstrichenes Wort, wenn du wissen möchtest, was es bedeutet.</p>
+      <div class="anna-text">${story.paragraphs.map((paragraph,i)=>`${annaWordParagraph(story,paragraph,i)}${i+1===moment.after?moment.html:''}`).join('')}</div>
       <section class="anna-question" aria-labelledby="anna-question-title">
         <h2 id="anna-question-title">Hast du aufgepasst?</h2><p>${story.question}</p>
         <details><summary>Antwort ansehen</summary><p>${story.answer}</p></details>
         ${annaDetective(story)}
       </section>
+      <p class="anna-write-invite"><a href="${annaWritingLink(story)}">Jetzt ein eigenes Abenteuer schreiben ${icon('arrow')}</a></p>
       <nav class="actions" aria-label="Annas Geschichten">
         ${previous?`<a class="secondary" href="${annaLink(previous)}">${icon('back')} Vorherige Geschichte</a>`:''}
         ${next?`<a class="primary" href="${annaLink(next)}">Nächste Geschichte ${icon('arrow')}</a>`:`<a class="primary" href="#anna">Alle Geschichten ${icon('arrow')}</a>`}
@@ -1599,6 +1617,7 @@ function showAnna(id,part){
     </article></div>`;
   setupAnnaListen(story);
   setupAnnaDetective();
+  setupAnnaWords(story);
 }
 </script>
 <script>const annaAudioCues = {
@@ -2095,6 +2114,7 @@ function annaExtraLinks(){
       <a class="station game-card sand" href="#anna/entscheidung"><span class="icon-box">${icon('arrow')}</span><h3>Du entscheidest für Anna</h3><p>Eine Kieselspur, zwei Wege und zwei verschiedene Enden.</p></a>
       <a class="station game-card mint" href="#anna/bilder"><span class="icon-box">${icon('puzzle')}</span><h3>Drei Bilder, eine Geschichte</h3><p>Ordne Anfang, Mitte und Ende und erzähle die Geschichte nach.</p></a>
       <a class="station game-card lilac" href="#anna/fall"><span class="icon-box">${icon('book')}</span><h3>Der verschwundene Stern</h3><p>Ein Rätsel in drei Folgen mit Anna, Maja, Fuji und Minka.</p></a>
+      <a class="station game-card sky" href="#anna/schreiben"><span class="icon-box">${icon('book')}</span><h3>Annas Schreibwerkstatt</h3><p>Plane und schreibe dein eigenes Abenteuer.</p></a>
     </div>
   </section>`;
 }
@@ -2236,6 +2256,209 @@ function showAnnaImageGame(part){
     draw(shuffled[0]);
   };
   draw();
+}
+
+const annaWords = {
+  'der-kiesel-im-schuh': {
+    'Kiesel':'Ein kleiner Stein, der oft rund und glatt ist.',
+    'kullerte':'Rollte ein Stück weiter, wie eine kleine Kugel.',
+    'hockte':'Saß tief unten mit gebeugten Beinen.'
+  },
+  'die-muetze-im-apfelbaum': {
+    'Windstoß':'Ein kurzer, kräftiger Wind.',
+    'segelte':'Glitt durch die Luft und wurde vom Wind getragen.',
+    'Schuppen':'Ein kleines Gebäude, in dem man zum Beispiel Gartengeräte abstellt.'
+  },
+  'die-pfuetze-mit-dem-himmel': {
+    'Heimweg':'Der Weg zurück nach Hause.',
+    'zerfiel':'Das Bild löste sich auf. Die Ringe im Wasser machten es undeutlich.',
+    'tauchten':'Hier bedeutet „tauchten … auf“, dass Gesicht und Wolke wieder zu sehen waren.'
+  },
+  'das-lesezeichen-im-buch': {
+    'Rückseite':'Die Seite hinten, gegenüber von der Vorderseite.',
+    'Seerosenblatt':'Das runde Blatt einer Wasserpflanze. Es schwimmt auf dem Wasser.',
+    'Schluckauf':'Ein „Hicks“, der plötzlich kommt und sich oft mehrmals wiederholt.'
+  },
+  'das-fahrrad-das-klingelte': {
+    'Lenker':'Daran hält man sich beim Fahrradfahren fest und lenkt nach rechts oder links.',
+    'baumelte':'Hing locker herunter und schwang hin und her.',
+    'Bodenwelle':'Eine kleine Erhöhung im Weg. Das Fahrrad hüpft dort ein bisschen.'
+  },
+  'der-schatten-an-der-wand': {
+    'zerknüllte':'Zusammengedrückte. Die Socke lag wie ein kleines Knäuel auf dem Tisch.',
+    'streifte':'Berührte etwas ganz leicht beim Vorbeigehen oder Vorbeischwingen.',
+    'beiseite':'Zur Seite, damit etwas aus dem Weg ist.'
+  },
+  'der-falsche-kuchen': {
+    'Etikett':'Ein kleiner Zettel oder Aufkleber, auf dem steht, was in der Dose ist.',
+    'seltsamer':'Ungewöhnlicher. Der Kuchen hätte anders geschmeckt als erwartet.',
+    'Brezel':'Ein Gebäck mit verschlungenen Armen, das oft mit Salz bestreut ist.'
+  },
+  'rettung-fuer-eine-schnecke': {
+    'Gehweg':'Der Teil neben der Straße, auf dem Menschen zu Fuß gehen.',
+    'Hocke':'Eine tiefe Haltung mit gebeugten Knien. So konnten die Kinder die Schnecke aus der Nähe sehen.',
+    'Fühler':'Die beweglichen Fortsätze am Kopf der Schnecke. Mit ihnen nimmt sie ihre Umgebung wahr.'
+  },
+  'ein-brief-ohne-namen': {
+    'Umschlag':'Eine Hülle aus Papier, in die man einen Brief steckt.',
+    'Einladung':'Eine Nachricht, in der jemand darum bittet, zu einem Treffen oder Fest zu kommen.',
+    'Schwarze Brett':'Eine Tafel im Flur, an die man Nachrichten für alle hängen kann.'
+  },
+  'das-fernrohr-aus-pappe': {
+    'Papprollen':'Runde Röhren aus Pappe, wie das Innere einer Küchenrolle.',
+    'durcheinander':'Hier meint Anna, dass sie ohne die Rollen zu viele Dinge auf einmal sieht.',
+    'winziger':'Sehr kleiner.'
+  },
+  'die-geheime-trommel': {
+    'Fensterbank':'Das schmale Brett direkt unter dem Fenster.',
+    'Dachrinne':'Eine lange Rinne am Dachrand, die Regenwasser auffängt und ableitet.',
+    'Fortsetzung':'Der nächste Teil. Annas Konzert soll beim nächsten Regen weitergehen.'
+  },
+  'der-koffer-mit-dem-loch': {
+    'Spur':'Zeichen, die zeigen, wo jemand entlanggegangen ist. Hier sind es Dinge, die aus dem Koffer gefallen sind.',
+    'klaffte':'Stand weit offen.',
+    'anschnallen':'Einen Gurt schließen, damit man bei der Fahrt sicher sitzt.'
+  },
+  'das-fenster-voller-sterne': {
+    'beschlagen':'Winzige Wassertropfen machten die Scheibe trüb. Darum konnte Anna mit dem Finger darauf malen.',
+    'verschnitt':'Schnitt beim Basteln aus Versehen an der falschen Stelle.',
+    'Ehrenplatz':'Ein besonders guter Platz, an dem alle etwas sehen können.'
+  },
+  'die-letzte-kastanie': {
+    'glänzte':'Die Kastanie war so glatt, dass sie das Licht wie ein kleiner Spiegel zurückwarf.',
+    'herausgefallen':'Von innen nach draußen gefallen. Der Kopf saß vorher am Kastanienhund.',
+    'Hölzchen':'Ein kleines, dünnes Stück Holz.'
+  }
+};
+
+function annaWordParagraph(story,paragraph,index){
+  const dictionary=annaWords[story.id];
+  const words=Object.keys(dictionary);
+  const pattern=new RegExp('('+words.join('|')+')','gu');
+  const parts=paragraph.split(pattern);
+  const helpId='anna-word-help-'+index;
+  const text=parts.map((part,i)=>i%2
+    ? `<button type="button" class="anna-word" data-anna-word="${escapeHtml(part)}" aria-expanded="false" aria-controls="${helpId}">${escapeHtml(part)}</button>`
+    : escapeHtml(part)).join('');
+  return `<div class="anna-word-line"><p data-story-paragraph>${text}</p><div class="anna-word-definition" id="${helpId}" role="status" hidden></div></div>`;
+}
+
+function setupAnnaWords(story){
+  const reader=document.querySelector('.anna-text');
+  let open=null;
+  function close(){
+    if(!open)return;
+    open.setAttribute('aria-expanded','false');
+    document.getElementById(open.getAttribute('aria-controls')).hidden=true;
+    open=null;
+  }
+  reader.addEventListener('click',event=>{
+    const button=event.target.closest('[data-anna-word]');
+    if(!button)return;
+    const wasOpen=button===open;
+    close();
+    if(wasOpen)return;
+    const word=button.dataset.annaWord;
+    const definition=document.getElementById(button.getAttribute('aria-controls'));
+    definition.innerHTML=`<strong>${escapeHtml(word)}</strong> · ${escapeHtml(annaWords[story.id][word])}`;
+    definition.hidden=false;
+    button.setAttribute('aria-expanded','true');
+    open=button;
+  });
+  reader.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&open){
+      const button=open;
+      close();
+      button.focus();
+    }
+  });
+}
+
+const annaWritingIdeas = {
+  kiesel:{
+    story:'der-kiesel-im-schuh',
+    label:'Eine geheimnisvolle Spur',
+    task:'Anna entdeckt eine Spur. Erfinde, wer sie gelegt hat und wohin sie führt.',
+    questions:['Wo entdeckt Anna den ersten Hinweis?','Wohin führt die Spur? Was macht Anna unterwegs neugierig?','Was entdeckt Anna am Ziel?'],
+    opening:'Auf der ersten Treppenstufe lag ein Zettel. Darauf stand nur ein einziges Wort …'
+  },
+  muetze:{
+    story:'die-muetze-im-apfelbaum',
+    label:'Etwas fliegt davon',
+    task:'Ein Windstoß trägt etwas fort. Erzähle, wie Anna es wiederbekommt.',
+    questions:['Wo ist Anna und was fliegt plötzlich davon?','Wo landet die Sache? Wer oder was kann helfen?','Wie holt Anna sie zurück? Was findet sie dabei?'],
+    opening:'Anna wollte gerade ihr Bild zeigen, da fegte der Wind über den Hof.'
+  },
+  trommel:{
+    story:'die-geheime-trommel',
+    label:'Ein rätselhaftes Geräusch',
+    task:'Anna hört etwas Seltsames und geht dem Geräusch nach.',
+    questions:['Wann und wo hört Anna das Geräusch?','Wo sucht sie zuerst? Welchen Hinweis bemerkt sie?','Was steckt wirklich dahinter? Wie reagiert Anna?'],
+    opening:'Unter der Bank machte es dreimal leise „Tock“. Anna blieb stehen und lauschte.'
+  }
+};
+
+function annaWritingLink(story){
+  const idea=Object.entries(annaWritingIdeas).find(([,item])=>item.story===story.id);
+  return '#anna/schreiben'+(idea?'/'+idea[0]:'');
+}
+
+function showAnnaWriting(part){
+  if(!Object.hasOwn(annaWritingIdeas,part)){
+    annaExtraPage('Eigene Geschichten','Annas Schreibwerkstatt',`
+      <p>Such dir eine Idee aus. Plane Anfang, Mitte und Ende und schreib dein eigenes Abenteuer.</p>
+      <ol class="anna-list">${Object.entries(annaWritingIdeas).map(([id,idea])=>`<li><a href="#anna/schreiben/${id}">${idea.label} ${icon('arrow')}</a></li>`).join('')}</ol>
+      <p class="subtle anna-save-note">Deine Entwürfe bleiben in diesem Browser auf diesem Gerät.</p>`);
+    return;
+  }
+
+  const idea=annaWritingIdeas[part];
+  const storageKey='majas-wortwerkstatt-anna-entwurf-'+part;
+  let draft={};
+  try{
+    const saved=JSON.parse(localStorage.getItem(storageKey)||'{}');
+    if(saved&&typeof saved==='object')draft=saved;
+  }catch{}
+  const stages=['Anfang','Mitte','Ende'];
+  annaExtraPage('Annas Schreibwerkstatt',idea.label,`
+    <p>${idea.task}</p>
+    <div class="anna-write">
+      <h2>1. Plane dein Abenteuer</h2>
+      <div class="anna-write-plan">${idea.questions.map((question,i)=>`<label>
+        <strong>${stages[i]}</strong><span>${question}</span>
+        <textarea data-draft="plan${i}" rows="2" maxlength="400"></textarea>
+      </label>`).join('')}</div>
+      <details><summary>Beispiel für einen ersten Satz</summary><p>${idea.opening}</p></details>
+      <h2>2. Schreib deine Geschichte</h2>
+      <label><strong>Titel</strong><input data-draft="title" type="text" maxlength="100"></label>
+      <label><strong>Dein Abenteuer</strong><textarea data-draft="story" rows="9" maxlength="5000"></textarea></label>
+      <p class="anna-save-note" role="status">Dein Entwurf wird beim Schreiben in diesem Browser gespeichert.</p>
+      <details><summary>3. Lies deinen Text noch einmal</summary>
+        <ul><li>Erfährt man am Anfang, wer dabei ist und wo es losgeht?</li>
+        <li>Passiert in der Mitte etwas, das neugierig macht?</li>
+        <li>Erfährt man am Ende, wie das Abenteuer ausgeht?</li></ul>
+      </details>
+    </div>
+    <div class="actions"><a class="secondary" href="#anna/schreiben">Andere Schreibidee</a>
+      <a href="#anna/${idea.story}">Annas Geschichte noch einmal lesen</a></div>`);
+
+  const editor=document.querySelector('.anna-write');
+  const fields=[...editor.querySelectorAll('[data-draft]')];
+  const status=editor.querySelector('.anna-save-note');
+  for(const field of fields){
+    const value=draft[field.dataset.draft];
+    if(typeof value==='string')field.value=value.slice(0,field.maxLength);
+  }
+  if(fields.some(field=>field.value))status.textContent='Dein gespeicherter Entwurf ist wieder da.';
+  editor.addEventListener('input',event=>{
+    if(!event.target.matches('[data-draft]'))return;
+    try{
+      localStorage.setItem(storageKey,JSON.stringify(Object.fromEntries(fields.map(field=>[field.dataset.draft,field.value]))));
+      status.textContent='Entwurf in diesem Browser gespeichert.';
+    }catch{
+      status.textContent='Speichern ist hier gerade nicht möglich. Kopiere deinen Text vor dem Schließen.';
+    }
+  });
 }
 </script>
 <script>const iconPaths = {
