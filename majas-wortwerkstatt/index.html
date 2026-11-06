@@ -301,6 +301,22 @@ details ol{margin-bottom:0}
   .bear-story .bear-picture{grid-row:1}
   .bear-story-list{columns:1}
 }
+
+.comic-intro{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center;gap:20px}
+.comic-teaser{display:block}
+.comic-art{aspect-ratio:3/2;width:100%;background-color:#f3e8d5;background-size:200% 400%;background-repeat:no-repeat}
+.comic-teaser .comic-art{border-radius:12px}
+.comic-archive [aria-current="true"]{background:#e8dded}
+.comic-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.comic-panel{min-width:0;margin:0;border:1px solid #e0d5c4;border-radius:14px;overflow:hidden;background:#fffaf1}
+.comic-panel figcaption{padding:clamp(12px,2.5vw,20px)}
+.comic-caption{margin:0 0 12px;color:#3e5353}
+.comic-dialogue{margin:8px 0 0;padding:9px 12px;border:1px solid #d9dfd6;border-radius:14px;background:#fff;line-height:1.55}
+.comic-dialogue b{display:block;margin-bottom:2px;color:#245a53}
+.comic-dialogue.bear-line{background:#f1e9f6;border-color:#e0cfe9}
+.comic-dialogue.bear-line b{color:#634575}
+.comic-task{margin:14px 0 20px}
+@media(max-width:650px){.comic-intro,.comic-panels{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -2688,7 +2704,7 @@ function showHome(){
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h1>Majas<br><em>Wortwerkstatt</em></h1>
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a></div></div>
+    <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a><a class="secondary" href="#tagescomic">Tagescomics</a></div></div>
     <div class="hero-art">${bearPicture('leseecke',true)}</div>
   </section>
   <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
@@ -2696,6 +2712,7 @@ function showHome(){
     <div class="actions"><a class="primary" href="#hoeren">${icon('audio')} Hörverstehen</a><a class="secondary" href="#endungen">Nomenendungen</a><a class="secondary" href="#verlaengern">Wörter verlängern</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
   </section>
   ${bearIntro()}
+  ${comicIntro()}
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
   <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
   <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">0${i+1}</span></div>
@@ -3109,13 +3126,13 @@ try {
 function bearPicture(scene,eager=false){
   return `<img class="bear-picture" src="./baerli/${scene}.webp" alt="${bearScenes[scene]}" width="623" height="623" ${eager?'fetchpriority="high"':'loading="lazy"'}>`;
 }
-function bearToday(date=new Date()){
+function bearToday(date=new Date(),count=bearStories.length){
   const parts=Object.fromEntries(new Intl.DateTimeFormat('de-DE',{
     timeZone:'Europe/Berlin',year:'numeric',month:'numeric',day:'numeric'
   }).formatToParts(date).map(({type,value})=>[type,Number(value)]));
   const day=Date.UTC(parts.year,parts.month-1,parts.day)/86400000;
   const start=Date.UTC(2026,10,6)/86400000;
-  return ((day-start)%bearStories.length+bearStories.length)%bearStories.length;
+  return ((day-start)%count+count)%count;
 }
 function bearIntro(){
   const story=bearStories[bearToday()];
@@ -3167,10 +3184,85 @@ function showBear(page){
     <article class="panel bear-story"><div><p class="kicker">${icon('book')} ${index===today?'Geschichte des Tages · '+annaDayFormatter.format(now):'Maja und Bärli · Geschichte '+(index+1)}</p>
     <h1 tabindex="-1">${escapeHtml(title)}</h1><p>${escapeHtml(story)}</p>
     <details><summary>${icon('bulb')} Bärlis Lernidee</summary><p>${escapeHtml(tip)}</p></details>
-    <div class="actions"><a class="secondary" href="#baerli/schrank">Bärlis Schrank</a>${index!==today?'<a class="plain" href="#baerli">Zur Geschichte des Tages</a>':''}</div></div>
+    <div class="actions"><a class="secondary" href="#baerli/schrank">Bärlis Schrank</a><a class="secondary" href="#tagescomic">Tagescomics</a>${index!==today?'<a class="plain" href="#baerli">Zur Geschichte des Tages</a>':''}</div></div>
     ${bearPicture(scene)}</article>
     <section class="panel"><h2>Alle ${bearStories.length} Geschichten</h2><p>Jeden Tag steht hier eine andere Geschichte. Nach ${bearStories.length} Tagen beginnt die Runde von vorn.</p>
     <ol class="bear-story-list">${bearStories.map(([,label],i)=>`<li><a href="#baerli/${i+1}"${i===index?' aria-current="page"':''}>${escapeHtml(label)}</a></li>`).join('')}</ol></section></div>`;
+}
+
+const schoolComics=[
+  {id:'lesezeichen',unit:'hoeren',title:'Der Wal unter der Heizung',summary:'Ein Hörtext, ein verlorenes Lesezeichen und ein ziemlich stiller Detektiv.',panels:[
+    ['In der Garderobe klappt Maja den Blumenranzen auf. Bärli hat es sich zwischen Brotdose und Federmappe bequem gemacht.','Maja öffnet ihren bordeauxroten Blumenranzen. Bärli schaut heraus.','Maja','Bereit für Deutsch?','Bärli','Bereit seit dem Frühstück. Ich habe sogar meine Ohren dabei.'],
+    ['Zwei Kinder kommen um die Ecke. Bärli berührt sein gelbes Ohrfähnchen. Für die anderen ist er jetzt unsichtbar. Maja sieht ihn immer noch.','Bärli tippt ans Ohrfähnchen. Ein violetter Schimmer erscheint. Ein Kind läuft vorbei.','Bärli','Unsichtbar. Aber falls du mich suchst, ich bin direkt unter deiner Nase.','Maja','Ich sehe dich. Und den Krümel auf deiner Schnauze auch.'],
+    ['Frau Winter liest von einem Kind vor, das am Strand eine Flasche findet. Die Geschichte verrät erst später, dass in der Flasche ein Brief steckt.','Frau Winter liest vor. Maja und die Klasse hören zu, Bärli sitzt auf Majas Tisch.','Frau Winter','Hört darauf, was zuerst passiert. Den Brief schauen wir uns später an.','Bärli','Mein Tipp: Merke dir erst den Fundort. Dann den Fund.'],
+    ['Maja möchte mit ihrem blauen Wal-Lesezeichen die richtige Buchseite markieren. Doch die kleine Innentasche im Ranzen ist leer.','Maja sucht besorgt in ihrem offenen Ranzen.','Maja','Der Wal war heute Morgen noch hier.','Bärli','Dann ist er entweder weggeschwommen oder herausgerutscht. In diesem Raum tippe ich auf das Zweite.'],
+    ['Bärli schleicht zwischen den Stuhlbeinen hindurch. Unter der Heizung blitzt etwas Blaues. Maja erinnert sich, dass sie dort vorhin den Ranzen geöffnet hat.','Unter der Heizung ist ein blaues Stück Papier zu sehen. Bärli zeigt darauf, Maja beugt sich hinunter.','Bärli','Erst siehst du nur eine Ecke. Was könnte das sein?','Maja','Mein Wal! Ich erkenne seine Schwanzflosse.'],
+    ['Als die Klasse kurz die Bücher aufschlägt, zieht Maja das Lesezeichen hervor und schiebt es zwischen die Seiten.','Maja hält das wiedergefundene blaue Wal-Lesezeichen in der Hand.','Maja','Da ist er. Sogar noch mit beiden Flossen.','Bärli','Für einen Wal war das ein erstaunlich trockener Ausflug.'],
+    ['Frau Winter fragt nach der Reihenfolge im Hörtext. Maja meldet sich. Sie hat beim Zuhören gut aufgepasst.','Maja meldet sich. Frau Winter und die Kinder sehen zu Maja. Bärli bleibt für sie unsichtbar.','Maja','Zuerst fand das Kind die Flasche am Strand. Danach öffnete es die Flasche. Zum Schluss zog es den Brief heraus.','Frau Winter','Genau. Du hast alle drei Schritte in der richtigen Reihenfolge erzählt.'],
+    ['Nach dem Unterricht steckt Maja den Wal ins Reißverschlussfach. Bärli übt neben ihr das Winken mit zwei Bärenflossen.','In der Garderobe verstaut Maja den Wal. Bärli spreizt die Arme wie Flossen.','Maja','So, jetzt kann der Wal nicht mehr hinausrutschen.','Bärli','Schade. Ich hatte ihm schon Schwimmunterricht angeboten.']
+  ],task:'Was fand das Kind aus dem Hörtext zuerst? Erzähle danach auch Majas Suche in drei Schritten.',answer:'Das Kind fand zuerst die Flasche. Maja entdeckte zuerst, dass der Wal fehlte. Danach zeigte Bärli ihr die blaue Ecke unter der Heizung. Zum Schluss zog Maja das Lesezeichen hervor.'},
+  {id:'wortkarten',unit:'endungen',title:'Das Geheimnis der fünf Endungen',summary:'Maja und Nele lösen ein Worträtsel. Bärli spielt Lupe, Rätselmeister und Schlussapplaus.',panels:[
+    ['Maja betritt das Klassenzimmer mit ihrem Blumenranzen. Auf jedem Tisch liegen bunte Wortkarten. Bärli hat schon einen Platz im Bücherregal gefunden.','Maja trägt ihren bordeauxroten Blumenranzen ins Klassenzimmer. Bärli sitzt auf dem Bücherregal.','Bärli','Es riecht nach Papier und einem Rätsel.','Maja','Das Papier stimmt. Beim Rätsel warten wir auf Frau Winter.'],
+    ['Bevor die Stunde beginnt, tippt Bärli auf sein Ohrfähnchen. Nur Maja sieht den feinen Schimmer. Die anderen Kinder holen ihre Hefte heraus.','Bärli berührt sein Ohrfähnchen, während die anderen Kinder ihre Schulsachen auspacken.','Bärli','Jetzt kann ich als Geheimberater arbeiten.','Maja','Ein Geheimberater, der mir beim Denken hilft. Die Antwort möchte ich selbst finden.'],
+    ['Frau Winter zeigt fünf Karten. Darauf stehen die Endungen -heit, -keit, -ung, -nis und -schaft. Zu jeder sollen die Kinder ein Nomen mit Artikel finden.','Frau Winter zeigt fünf bunte Karten vor der Tafel.','Frau Winter','Sucht zuerst das verwandte Wort. Prüft dann, welche Endung wirklich passt.','Bärli','Fünf Endungen auf einmal. Zum Glück habe ich eine sehr große Lupe.'],
+    ['Bärli hält seine Spielzeuglupe über die Karten. Maja verbindet klar mit -heit und freundlich mit -keit.','Bärli hält eine Spielzeuglupe über Majas Karten, während Maja überlegt.','Maja','Aus klar wird die Klarheit. Aus freundlich wird die Freundlichkeit.','Bärli','Siehst du? Sogar durch meine Lupe stehen vorne zwei große Buchstaben.'],
+    ['Maja bildet aus zeichnen die Zeichnung. Bei geheim hält sie kurz inne. Zwei Nomen sehen auf den Karten ähnlich aus.','Maja ordnet Karten auf dem Tisch. Bärli hält die Pfoten zusammen.','Maja','Aus geheim wird das Geheimnis. Das hat einen anderen Artikel als die Zeichnung.','Bärli','Ganz genau. Hör dir den Artikel mit dem Nomen an. Das Geheimnis klingt richtig.'],
+    ['Nele setzt sich neben Maja. Die beiden suchen eine Karte für -schaft. Maja legt Freund auf den Tisch. Nele findet die passende Endung.','Maja und Nele setzen Papierkarten zusammen. Bärli schaut zu, ohne dass Nele ihn sieht.','Nele','Freund und -schaft ergibt die Freundschaft.','Maja','Und das beste Beispiel sitzt gerade neben mir. Sogar zweimal.'],
+    ['Die Mädchen zeigen der Klasse alle fünf Wörter. Nele erklärt die Freundschaft, Maja nennt die anderen vier. Frau Winter bittet die Klasse, auf die Artikel zu achten.','Maja und Nele präsentieren ihre Karten, die Klasse klatscht. Bärli verbeugt sich leise.','Maja','Die Klarheit, die Freundlichkeit, die Zeichnung, das Geheimnis und die Freundschaft.','Frau Winter','Fünf Endungen, fünf passende Nomen. Und die Artikel stimmen auch.'],
+    ['In der Garderobe gibt Maja Bärli ein leises High Five. Nele winkt von der Tür aus.','Maja und Bärli geben sich beim Blumenranzen ein High Five.','Bärli','Unser Geheimnis hat jetzt sogar eine Endung.','Maja','Und unsere Freundschaft bleibt trotzdem offen für neue Abenteuer.']
+  ],task:'Bilde zu klar, freundlich, zeichnen, geheim und Freund je ein Nomen. Sprich den Artikel dazu.',answer:'die Klarheit (-heit), die Freundlichkeit (-keit), die Zeichnung (-ung), das Geheimnis (-nis), die Freundschaft (-schaft).'},
+  {id:'papierboot',unit:'verlaengern',title:'Kapitän Bärli und das Pausenboot',summary:'Ein Windstoß schickt ein Papierboot auf Reisen. Maja muss schnell und vorsichtig entscheiden.',panels:[
+    ['In der großen Pause trommelt der Regen gegen die Scheiben. Auf dem Schulhof sammelt sich Wasser. Maja bleibt mit Bärli am Fenster stehen.','Maja und Bärli sehen aus dem Klassenfenster in den Regen. Unter dem Fenster steht der Blumenranzen.','Bärli','Ich sehe einen Ozean.','Maja','Das ist der Schulhof. Aber für deine Größe ist es vermutlich beides.'],
+    ['Maja faltet ein blaues Papierboot. Bärli baut sich einen Kapitänshut. Als Schritte näherkommen, tippt er auf sein Ohrfähnchen und macht sich für alle außer Maja unsichtbar.','Maja faltet ein blaues Papierboot. Bärli trägt einen Papierhut, sein Ohr schimmert violett.','Bärli','Kapitän bereit. Wo ist die Mannschaft?','Maja','Hier. Aber deine Mannschaft will trockene Socken behalten.'],
+    ['Als der Regen nachlässt, dürfen die Kinder unter das Vordach. Jona steht mit Maja an der trockenen Kante. Das Boot liegt noch auf einer niedrigen Mauer.','Maja und Jona stehen unter dem Vordach, das Papierboot liegt auf einer niedrigen trockenen Kante.','Jona','Wollen wir es später im Waschbecken schwimmen lassen?','Maja','Gute Idee. Auf dem Hof fließt das Wasser gerade zu schnell.'],
+    ['Eine Böe pustet das Boot von der Kante direkt ins Wasser. Maja streckt die Hand aus, hält aber an, bevor sie auf die rutschigen Steine tritt.','Das Papierboot rutscht ins Wasser. Maja zieht die ausgestreckte Hand zurück, Bärli hebt seine Pfote.','Bärli','Stopp, die Steine glänzen. Wie ist der Boden wohl?','Maja','Nass und glatt. Ich bleibe hier auf dem Trockenen.'],
+    ['Bärli zeigt auf einen langen, losen Ast neben einer Bank. Maja hebt ihn auf. Jona hält eine leere Papierablage bereit, damit sie das nasse Boot tragen können.','Bärli zeigt auf einen Ast neben einer Bank. Maja hat ihn entdeckt.','Bärli','Mit dem Ast kommst du weiter als mit deiner Hand.','Maja','Und ich kann auf der trockenen Seite bleiben. Jona, hältst du die Ablage?'],
+    ['Maja zieht das Boot langsam näher. Beim ersten Versuch dreht es sich quer. Beim zweiten gleitet es bis an die Kante, und sie hebt es in Jonas Ablage.','Maja zieht das blaue Papierboot vorsichtig mit einem Ast heran. Jona hält eine Ablage.','Jona','Gerettet! Es ist nur ein bisschen zerknittert.','Bärli','Das nennt man bei uns auf See eine bewegte Vergangenheit.'],
+    ['Drinnen lassen die Kinder das Boot auf einem Tuch trocknen. Frau Winter fragt, warum sie nicht einfach hinterhergelaufen sind.','Frau Winter hört Maja und Jona zu. Auf einem Tuch trocknet das zerknitterte Boot.','Maja','Weil die nassen Steine rutschig waren. Der Ast war lang genug.','Frau Winter','Ihr habt erst überlegt und dann zusammengearbeitet. Das war eine gute Lösung.'],
+    ['Nach der Pause klebt Maja einen Papierstreifen über den Knick. Bärli rückt seinen Hut schief. Durch das Fenster fällt wieder Sonnenlicht.','Bärli steht mit schiefem Papierhut neben dem reparierten Boot. Maja lacht.','Bärli','Neuer Name für unser Schiff: Die unerschrockene Knitterente.','Maja','Dann bekommt sie später ein ganzes Waschbecken für sich.']
+  ],task:'Warum blieb Maja am Rand? Erkläre mit weil. Verlängere dann Ast und Zweig.',answer:'Maja blieb am Rand, weil die nassen Steine rutschig waren. Ast → Äste: Man hört das t. Zweig → Zweige: Man hört das g.'}
+];
+
+const schoolComicAsset='./baerli/comics/';
+const schoolComicPageSize=2;
+function comicToday(date=new Date()){
+  return bearToday(date,schoolComics.length);
+}
+function comicIntro(){
+  return `<section class="panel comic-intro" aria-labelledby="comic-intro-title"><div>
+    <p class="kicker">${icon('book')} Maja und Bärli in der Schule</p><h2 id="comic-intro-title">Tagescomics</h2>
+    <p>Bärli kann sich unsichtbar machen. In der Schule kann nur Maja ihn sehen. Drei gezeichnete Abenteuer warten auf euch.</p>
+    <a class="primary" href="#tagescomic">Zum Comic des Tages ${icon('arrow')}</a>
+  </div><a class="comic-teaser" href="#tagescomic" aria-label="Comic des Tages lesen">${comicArt(schoolComics[comicToday()],0)}</a></section>`;
+}
+function comicArt(comic,i){
+  const x=i%2*100;
+  const y=Math.floor(i/2)*100/3;
+  return `<div class="comic-art" role="img" aria-label="${escapeHtml(comic.panels[i][1])}" style="background-image:url('${schoolComicAsset}${comic.id}.webp');background-position:${x}% ${y}%"></div>`;
+}
+function showSchoolComic(id,part){
+  const today=schoolComics[comicToday()];
+  const comic=schoolComics.find(c=>c.id===id)||today;
+  const pageCount=Math.ceil(comic.panels.length/schoolComicPageSize);
+  const page=Math.min(pageCount,Math.max(1,Number.isInteger(+part)?+part:1));
+  const first=(page-1)*schoolComicPageSize;
+  const link=(c= comic,n=1)=>`#tagescomic/${c.id}/${n}`;
+  app.innerHTML=`<div class="route">${homeLink()}
+    <div class="unit-head lilac"><span class="icon-box">${icon('book')}</span><div>
+    <p class="kicker">${comic===today?'Comic des Tages · '+annaDayFormatter.format(new Date()):'Maja und Bärli in der Schule'}</p>
+    <h1 tabindex="-1">${escapeHtml(comic.title)}</h1><p>${escapeHtml(comic.summary)}</p></div></div>
+    <nav class="panel comic-archive" aria-label="Schulcomics auswählen"><h2>Alle drei Schulcomics</h2><p>Der Tagescomic wechselt täglich. Du kannst jede Folge jederzeit lesen.</p>
+    <div class="actions">${schoolComics.map(c=>`<a class="secondary" href="${link(c)}"${c===comic?' aria-current="true"':''}>${escapeHtml(c.title)}</a>`).join('')}</div></nav>
+    <section class="panel" aria-labelledby="comic-page"><div class="task-top"><h2 id="comic-page">Seite ${page} von ${pageCount}</h2><span>Comic mit ${comic.panels.length} Bildern</span></div>
+    <div class="comic-panels">${comic.panels.slice(first,first+schoolComicPageSize).map(([caption,,...dialogue],i)=>`<figure class="comic-panel">
+      ${comicArt(comic,first+i)}<figcaption><p class="comic-caption"><b>Bild ${first+i+1}.</b> ${escapeHtml(caption)}</p>
+      ${dialogue.filter((_,i)=>i%2===0).map((speaker,i)=>`<p class="comic-dialogue ${speaker==='Bärli'?'bear-line':''}"><b>${escapeHtml(speaker)}</b> ${escapeHtml(dialogue[i*2+1])}</p>`).join('')}</figcaption></figure>`).join('')}</div>
+    ${page===pageCount?`<details class="comic-task"><summary>Bärlis Aufgabe nach dem Lesen</summary><p>${escapeHtml(comic.task)}</p><details><summary>Musterlösung ansehen</summary><p>${escapeHtml(comic.answer)}</p></details><div class="actions"><a class="secondary" href="#${comic.unit}">${unitById(comic.unit).title} üben</a></div></details>`:''}
+    <nav class="actions" aria-label="Comic umblättern">
+      ${page>1?`<a class="secondary" href="${link(comic,page-1)}">${icon('back')} Vorherige Seite</a>`:''}
+      ${page<pageCount?`<a class="primary" href="${link(comic,page+1)}">Nächste Seite ${icon('arrow')}</a>`:'<a class="primary" href="#tagescomic">Zum Comic des Tages</a>'}
+    </nav></section><div class="actions"><a class="secondary" href="#baerli">Bärlis Kurzgeschichten</a><a class="secondary" href="#baerli/schrank">Bärlis Schrank</a></div>
+  </div>`;
 }
 
 function render(initial=false){
@@ -3188,6 +3280,7 @@ function render(initial=false){
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
   else if(page==='baerli')showBear(index);
+  else if(page==='tagescomic')showSchoolComic(index,part);
   else if(page==='kombitest'){
     const test=index===testPart?testParts[index]:null;
     const step=Number(part);
