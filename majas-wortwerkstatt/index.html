@@ -394,6 +394,9 @@ legend{font-weight:700;padding:0 7px}
 
 .cloud-person,.cloud-heart{pointer-events:none}
 
+.star-ledger{display:flex;gap:12px;flex-wrap:wrap}.star-ledger p{flex:1 1 120px;border-radius:12px;background:#fff1c9;padding:14px}.star-ledger strong{font-size:25px;display:block}.star-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.star-level-card{padding:15px;border:1px solid #d8dfd2;border-radius:13px;background:#f6f8ee;display:flex;flex-direction:column}.star-level-card h3{font-size:18px}.star-level-card .primary,.star-level-card .secondary{margin-top:auto}.star-level-card .subtle{font-size:13px;margin-top:8px}.star-purchase:disabled{opacity:.65}.shop-notice{margin:12px 0}.witch-heading{display:flex;gap:14px;align-items:center}.witch-heading>div:first-child{flex:0 0 70px}.witch-heading svg{width:70px;height:85px}.witch-heading h2{font-size:26px}.witch-tray{display:flex;gap:10px;margin:15px 0}.witch-tray button{flex:1;display:flex;gap:9px;align-items:center;justify-content:center;min-height:68px;border:2px solid #c9d4c9;background:#fffaf0;color:#29493f;border-radius:13px;font-weight:800}.witch-tray button[aria-pressed=true]{background:#e5f2df;border-color:#39795b}.witch-tray svg{width:48px;height:48px}.witch-tray b{display:block}.witch-grid{display:grid;grid-template-columns:repeat(var(--witch-size),minmax(0,1fr));gap:4px;width:min(100%,440px);margin:0 auto;padding:8px;background:#dbe9ce;border-radius:18px}.witch-cell{position:relative;display:block;aspect-ratio:1;min-width:0;padding:0;border:2px solid transparent;border-radius:8px;overflow:visible;touch-action:manipulation}.witch-ground{background:#ecf2d3;border-color:#c3cda9;cursor:pointer}.witch-tree{background:#cde0bd}.witch-cell:disabled{cursor:default;color:inherit;opacity:1}.witch-cell>svg{width:100%;height:100%;display:block;pointer-events:none}.witch-slot{font-size:25px;color:#76996e}.witch-selected{border-color:#226b5b;box-shadow:0 0 0 2px #226b5b}.witch-tip-cell{outline:3px dashed #b16e23;outline-offset:-4px}.witch-person{position:absolute;inset:-9% 7% 4%;pointer-events:none}.witch-person>svg{width:100%;height:100%;display:block}.witch-lila{inset:-20% 3% 2%}.witch-cell:has(.witch-lila) .witch-maja{inset:5% 43% 0 -4%}.witch-status{font-size:15px;min-height:3.2em;margin:15px 0 8px}.witch-actions button{flex:1 1 130px;min-height:46px}.witch-heading .kicker{font-size:11px}.bear-item{align-items:center;gap:10px}.bear-item .shop-item-preview{width:75px;height:75px;background:#f3ecdf;border-radius:11px;flex:none}.bear-item .shop-item-preview svg{width:75px;height:75px}.shop-item-copy{flex:1}.shop-item-copy strong,.shop-item-copy span{display:block}.shop-item-copy span{font-size:14px;color:var(--muted)}@media(max-width:620px){.star-levels{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.star-level-card{padding:12px}.star-level-card h3{font-size:17px}.star-level-card button,.star-level-card a{font-size:14px;padding:9px}.witch-game{padding:13px}.witch-heading{gap:7px}.witch-heading>div:first-child{flex-basis:48px}.witch-heading svg{width:48px;height:65px}.witch-heading h2{font-size:22px}.witch-heading p:last-child{font-size:14px}.witch-grid{gap:3px;padding:5px}.witch-tray button{gap:6px;font-size:15px}.bear-item{flex-wrap:wrap}.bear-item .shop-item-preview,.bear-item .shop-item-preview svg{width:62px;height:62px}.star-ledger p{flex-basis:75px;padding:10px;font-size:13px}.star-ledger strong{font-size:22px}}@media(max-width:360px){.star-levels{grid-template-columns:1fr}.witch-grid{gap:2px;padding:4px}.witch-cell{border-width:1px}}
+.bear-item{display:flex;flex-wrap:wrap}.shop-item-copy{min-width:100px}
+
 </style>
 </head>
 <body>
@@ -914,6 +917,11 @@ function setupLessonDemo(unit){
 }
 </script>
 <script>const miniGames = {
+  hexenpfad: {
+    title:'Hexenpfad · Wegpuzzle', tone:'lilac', art:'hexenpfad',
+    intro:'Lege und drehe Puzzleteile, damit Maja die freundliche Hexe Lila erreicht. Zwölf Waldwege warten auf dich.',
+    play:playWitchPath
+  },
   wolkenwege: {
     title:'Wolkenwege · Maja & Bärli', tone:'sky', art:'wolkenwege',
     intro:'Bringe die beiden in zwölf Rätselleveln zusammen. Wechsle zwischen Maja und Bärli und öffne ihnen die Brücken.',
@@ -1014,18 +1022,18 @@ function playCloudGame(root){
  const saved=cloudRead();let levelIndex=Math.max(0,Math.min(cloudLevels.length-1,Number(location.hash.split('/')[2]||saved.current||1)-1));
  if(!Number.isInteger(levelIndex))levelIndex=0;
  const level=cloudLevels[levelIndex],completed=(saved.completed&&typeof saved.completed==='object')?saved.completed:{};
- let s=cloudInitial(level),who='m',history=[],moves=0,sound=false;
+ let s=cloudInitial(level),who='m',history=[],moves=0,sound=false,rewardMessage='';
  const resumed=saved.sessions?.[levelIndex];
  const validState=x=>x&&typeof x.on==='boolean'&&['m','b'].every(k=>Array.isArray(x[k])&&x[k].length===2&&x[k].every(Number.isInteger)&&cloudTile(level,x[k])&&cloudTile(level,x[k])!=='#')&&(x.on||![x.m,x.b].some(p=>cloudTile(level,p)==='='))&&(cloudPressed(level,x)||![x.m,x.b].some(p=>cloudTile(level,p)==='+'));
  if(validState(resumed?.s)){s=resumed.s;who=resumed.who==='b'?'b':'m';history=Array.isArray(resumed.history)?resumed.history.filter(validState).slice(-250):[];moves=Number.isInteger(resumed.moves)&&resumed.moves>=0?resumed.moves:history.length;}
  root.classList.add('cloud-game');
- root.innerHTML=`<div class="cloud-top"><label for="cloud-level">Dein Level<select id="cloud-level">${cloudLevels.map((l,i)=>`<option value="${i+1}" ${i===levelIndex?'selected':''}>${i+1}. ${escapeHtml(l.title)}${completed[i]?' · ♥':''}</option>`).join('')}</select></label><span id="cloud-hearts"></span><button class="secondary" id="cloud-sound" type="button" aria-pressed="false">Ton aus</button></div>
+ root.innerHTML=`<div class="cloud-top"><label for="cloud-level">Dein Level<select id="cloud-level">${cloudLevels.map((l,i)=>`<option value="${i+1}" ${i===levelIndex?'selected':''}>${i+1}. ${escapeHtml(l.title)}${completed[i]?' · ♥':''}${starLevelOpen('wolkenwege',i+1)?'':' · '+starLevelCost('wolkenwege',i+1)+' ★'}</option>`).join('')}</select></label><span id="cloud-hearts"></span><button class="secondary" id="cloud-sound" type="button" aria-pressed="false">Ton aus</button></div>
  <h2 id="cloud-level-title">${levelIndex+1}. ${escapeHtml(level.title)}</h2><p class="cloud-instruction">${escapeHtml(level.intro)}</p>
  <div class="cloud-players" role="group" aria-label="Figur auswählen"><button type="button" data-cloud-who="m"><svg viewBox="-26 -33 52 66" aria-hidden="true">${cloudAvatar('m')}</svg><span>Maja<small>Taste 1</small></span></button><button type="button" data-cloud-who="b"><svg viewBox="-26 -33 52 66" aria-hidden="true">${cloudAvatar('b')}</svg><span>Bärli<small>Taste 2</small></span></button></div>
  <div id="cloud-map" tabindex="0" aria-label="Spielfeld mit Pfeiltasten steuern"></div><p id="cloud-status" class="cloud-status" role="status" aria-live="polite"></p>
  <div class="cloud-control-row"><div class="cloud-pad" role="group" aria-label="Ausgewählte Figur bewegen"><button type="button" data-cloud-dir="0" aria-label="Nach oben">↑</button><button type="button" data-cloud-dir="3" aria-label="Nach links">←</button><span id="cloud-active-name"></span><button type="button" data-cloud-dir="1" aria-label="Nach rechts">→</button><button type="button" data-cloud-dir="2" aria-label="Nach unten">↓</button></div><div class="cloud-tools"><button class="secondary" id="cloud-undo" type="button">Schritt zurück</button><button class="secondary" id="cloud-tip" type="button">Tipp zeigen</button><button class="plain" id="cloud-reset" type="button">Level neu starten</button></div></div>
  <p id="cloud-hint" class="tip" hidden role="status"></p><div id="cloud-win" class="cloud-win" hidden aria-labelledby="cloud-win-title"></div>
- <details class="cloud-help"><summary>Spielregeln und Steuerung</summary><p>Bringe Maja und Bärli auf dasselbe Feld. Wähle eine Figur, dann tippe auf ein markiertes Nachbarfeld oder auf die Pfeile. Am PC gehen auch die Pfeiltasten und W, A, S, D. Mit 1 und 2 wechselst du die Figur.</p><p><strong>☆ Gelber Stern:</strong> Betreten schaltet alle gelben Brücken um. <strong>◇ Grüner Knopf:</strong> Eine Figur bleibt darauf stehen, während die andere die grünen Brücken überquert. Eine benutzte Brücke lässt sich erst schließen, wenn niemand mehr darauf steht.</p><p>Kein Zeitlimit. Du kannst jederzeit einen Schritt zurückgehen oder das Level neu starten. Alle Level sind frei wählbar. Herzen und Spielstand werden auf diesem Gerät gespeichert.</p></details><p id="cloud-save" class="subtle"></p>`;
+ <details class="cloud-help"><summary>Spielregeln und Steuerung</summary><p>Bringe Maja und Bärli auf dasselbe Feld. Wähle eine Figur, dann tippe auf ein markiertes Nachbarfeld oder auf die Pfeile. Am PC gehen auch die Pfeiltasten und W, A, S, D. Mit 1 und 2 wechselst du die Figur.</p><p><strong>☆ Gelber Stern:</strong> Betreten schaltet alle gelben Brücken um. <strong>◇ Grüner Knopf:</strong> Eine Figur bleibt darauf stehen, während die andere die grünen Brücken überquert. Eine benutzte Brücke lässt sich erst schließen, wenn niemand mehr darauf steht.</p><p>Kein Zeitlimit. Du kannst jederzeit einen Schritt zurückgehen oder das Level neu starten. Die ersten drei Level sind kostenlos; weitere kannst du mit Sternen kaufen. Herzen und Spielstand werden auf diesem Gerät gespeichert.</p></details><p id="cloud-save" class="subtle"></p>`;
  const $=selector=>root.querySelector(selector);
  function save(){
   saved.current=levelIndex+1;saved.completed=completed;if(!saved.sessions||typeof saved.sessions!=='object')saved.sessions={};
@@ -1042,7 +1050,7 @@ function playCloudGame(root){
   $('#cloud-hearts').textContent=`♥ ${cloudLevels.filter((_,i)=>completed[i]).length} / ${cloudLevels.length}`;
   $('#cloud-win').hidden=!won;
   if(won){
-   $('#cloud-win').innerHTML=`<h3 id="cloud-win-title">Wieder zusammen! ♥</h3><p>Maja und Bärli haben sich in Level ${levelIndex+1} gefunden. Gut mitgedacht!</p><div class="actions">${levelIndex<cloudLevels.length-1?`<a class="primary" id="cloud-next" href="#spiele/wolkenwege/${levelIndex+2}">Nächstes Level ${icon('arrow')}</a>`:'<strong>Alle zwölf Wolkenwege sind offen. Wähle oben ein Level, das du noch spielen möchtest.</strong>'}<a class="secondary" href="#spiele">Zur Spielwiese</a></div>`;
+   $('#cloud-win').innerHTML=`<h3 id="cloud-win-title">Wieder zusammen! ♥</h3><p>Maja und Bärli haben sich in Level ${levelIndex+1} gefunden. Gut mitgedacht!</p>${rewardMessage?`<p>${escapeHtml(rewardMessage)}</p>`:''}<div class="actions">${levelIndex<cloudLevels.length-1?`<a class="primary" id="cloud-next" href="#spiele/wolkenwege/${levelIndex+2}">Nächstes Level ${icon('arrow')}</a>`:'<strong>Du hast den letzten Wolkenweg geschafft. Wähle oben ein Level zum Wiederholen.</strong>'}<a class="secondary" href="#spiele">Zur Spielwiese</a></div>`;
   }
   save();
  }
@@ -1052,7 +1060,7 @@ function playCloudGame(root){
   const next=cloudStep(level,s,who,d);
   if(!next){draw('Hier geht es gerade nicht weiter. Schau nach einem anderen Weg oder wechsle die Figur.');return;}
   history.push(s);if(history.length>250)history.shift();s=next;moves++;$('#cloud-hint').hidden=true;
-  if(cloudTogether(s)){completed[levelIndex]=true;const opt=$('#cloud-level').options[levelIndex];if(!opt.textContent.includes('♥'))opt.textContent+=' · ♥';}
+  if(cloudTogether(s)){rewardMessage=starGameReward('wolkenwege',levelIndex+1).message;completed[levelIndex]=true;const opt=$('#cloud-level').options[levelIndex];if(!opt.textContent.includes('♥'))opt.textContent+=' · ♥';}
   draw();tone(cloudTogether(s));
   if(cloudTogether(s)){const title=$('#cloud-win-title');title.tabIndex=-1;title.focus();}
  }
@@ -1079,6 +1087,93 @@ function playCloudGame(root){
 demoArt.wolkenwege = `<path d="M6 43h52v12H6Z" fill="#c9ddce"/><path d="M6 39h52v10H6Z" fill="#f3e2b3"/><g transform="translate(20 28) scale(.5)">${cloudAvatar('m')}</g><g transform="translate(46 28) scale(.5)">${cloudAvatar('b')}</g><path d="M29 13q4-6 8 0-4 7-8 0Z" fill="#b95773" stroke="none"/>`;
 
 
+// Road-piece puzzle: create a continuous path to a friendly forest witch.
+const witchPaths=[
+ [[1,0],[1,1],[1,2],[1,3]],
+ [[2,0],[2,1],[1,1],[1,2],[1,3]],
+ [[3,0],[3,1],[2,1],[1,1],[1,2],[1,3],[0,3]],
+ [[0,0],[0,1],[1,1],[2,1],[2,2],[2,3],[2,4]],
+ [[4,0],[4,1],[3,1],[3,2],[2,2],[1,2],[1,3],[1,4]],
+ [[0,0],[1,0],[1,1],[1,2],[2,2],[3,2],[3,3],[3,4],[4,4]],
+ [[4,0],[3,0],[2,0],[2,1],[2,2],[1,2],[0,2],[0,3],[0,4]],
+ [[0,0],[0,1],[0,2],[1,2],[1,3],[2,3],[3,3],[3,2],[3,1],[4,1],[4,0]],
+ [[4,0],[4,1],[4,2],[3,2],[2,2],[2,1],[1,1],[0,1],[0,2],[0,3],[1,3],[1,4]],
+ [[0,0],[1,0],[2,0],[2,1],[2,2],[1,2],[0,2],[0,3],[0,4],[1,4],[2,4],[3,4],[4,4]],
+ [[4,0],[4,1],[3,1],[2,1],[2,0],[1,0],[0,0],[0,1],[0,2],[1,2],[1,3],[1,4],[2,4],[3,4],[4,4]],
+ [[0,0],[0,1],[1,1],[2,1],[2,2],[3,2],[4,2],[4,3],[4,4],[3,4],[2,4],[1,4],[0,4]]
+];
+const witchNames=['Die Hexe am Waldrand','Die erste Wegkurve','Hinauf zur Zauberhütte','Am Pilz vorbei','Der gewundene Bachweg','Durch den Blätterwald','Das Waldgeheimnis','Die große Schleife','Unter dem Sternenhimmel','Drei Waldlichtungen','Der lange Zauberweg','Das Fest bei Hexe Lila'];
+function witchDirection(a,b){return cloudDirs.findIndex(([dr,dc])=>a[0]+dr===b[0]&&a[1]+dc===b[1]);}
+function witchMask(tile){const base=tile.kind==='straight'?[1,3]:[0,1];return base.reduce((v,d)=>v|(1<<((d+tile.rot)%4)),0);}
+function witchTileFor(a,p,b){const mask=(1<<witchDirection(p,a))|(1<<witchDirection(p,b));for(const kind of ['straight','bend'])for(let rot=0;rot<4;rot++)if(witchMask({kind,rot})===mask)return {kind,rot};throw Error('Broken witch path');}
+const witchLevels=witchPaths.map((path,i)=>{
+ const size=i<3?4:5,open=new Set(path.map(p=>p.join(','))),solution={},inventory={straight:0,bend:0};
+ path.slice(1,-1).forEach((p,j)=>{const tile=witchTileFor(path[j],p,path[j+2]);solution[p.join(',')]=tile;inventory[tile.kind]++;});
+ if(i>=3){inventory.straight++;inventory.bend++;let extra=0;for(let r=0;r<size&&extra<2;r++)for(let c=0;c<size&&extra<2;c++)if(!open.has([r,c].join(','))&&path.some(p=>Math.abs(p[0]-r)+Math.abs(p[1]-c)===1)){open.add([r,c].join(','));extra++;}}
+ return {title:witchNames[i],size,path,open:[...open],solution,inventory,start:path[0],goal:path.at(-1),startMask:1<<witchDirection(path[0],path[1]),goalMask:1<<witchDirection(path.at(-1),path.at(-2))};
+});
+function witchFindPath(level,placed){
+ const start=level.start.join(','),goal=level.goal.join(','),q=[[start]],seen=new Set([start]);
+ const mask=key=>key===start?level.startMask:key===goal?level.goalMask:placed[key]?witchMask(placed[key]):0;
+ for(let i=0;i<q.length;i++){const route=q[i],key=route.at(-1);if(key===goal)return route;const [r,c]=key.split(',').map(Number),ports=mask(key);
+  cloudDirs.forEach(([dr,dc],d)=>{const next=[r+dr,c+dc].join(',');if((ports&(1<<d))&&(mask(next)&(1<<((d+2)%4)))&&!seen.has(next)){seen.add(next);q.push([...route,next]);}});
+ }
+ return null;
+}
+function witchRoad(tile,ghost=false){
+ const mask=typeof tile==='number'?tile:witchMask(tile);let lines='';for(let d=0;d<4;d++)if(mask&(1<<d)){const [dr,dc]=cloudDirs[d];lines+=`<path d="M32 32L${32+dc*34} ${32+dr*34}"/>`;}
+ return `<svg viewBox="0 0 64 64" aria-hidden="true" class="witch-road"><g fill="none" stroke="${ghost?'#cdbf98':'#f8db9c'}" stroke-width="22" stroke-linecap="butt">${lines}</g><g fill="none" stroke="#c79a61" stroke-width="1.5" stroke-dasharray="3 5">${lines}</g></svg>`;
+}
+function witchPortrait(){return `<svg viewBox="0 0 80 90" aria-hidden="true"><path d="M18 76q4-31 21-31t23 31" fill="#5a9994" stroke="#394f68" stroke-width="2"/><path d="M29 75v10m21-10v10" stroke="#765a86" stroke-width="6"/><path d="M25 85h11m11 0h11" stroke="#4f425c" stroke-width="5" stroke-linecap="round"/><path d="M22 42q-7-19 11-26 22-7 28 16l-3 28-11-6" fill="#ba7858"/><circle cx="40" cy="34" r="16" fill="#ffdbb7" stroke="#795d69" stroke-width="1.5"/><path d="M31 34v1m16-1v1m-12 7q6 5 11-1" fill="none" stroke="#4c4a58" stroke-width="2" stroke-linecap="round"/><path d="M14 23q23-7 51-2l5 7q-31 9-58 0Z" fill="#796498" stroke="#4a435e" stroke-width="2"/><path d="M24 23 41 2q3-3 14 4l-7 5 10 13" fill="#8d75aa" stroke="#4a435e" stroke-width="2"/><path d="m40 15 2-5 2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3Z" fill="#f7d679"/><path d="m22 58-7 7m43-7 7 7" stroke="#ffdbb7" stroke-width="5" stroke-linecap="round"/></svg>`;}
+function witchPieceName(tile){const names=['oben','rechts','unten','links'];return (tile.kind==='straight'?'Gerade':'Kurve')+' nach '+names.filter((_,d)=>witchMask(tile)&(1<<d)).join(' und ');}
+function playWitchPath(root){
+ const index=Math.max(0,Math.min(11,Number(root.dataset.level||1)-1)),level=witchLevels[index],storage='majas-wortwerkstatt-hexenpfad-v1';
+ let data={};try{data=JSON.parse(localStorage.getItem(storage)||'{}')||{};}catch{}if(!data||typeof data!=='object'||Array.isArray(data))data={};
+ let placed={},chosen='straight',selected=null,walker=level.start.join(','),won=false,walking=false,highlight=null;
+ const previous=data[index];
+ if(previous&&typeof previous==='object')for(const [key,t]of Object.entries(previous))if(Object.hasOwn(level.solution,key)||level.open.includes(key)){
+  if(key!==level.start.join(',')&&key!==level.goal.join(',')&&t&&['straight','bend'].includes(t.kind)&&Number.isInteger(t.rot)&&t.rot>=0&&t.rot<4)placed[key]={kind:t.kind,rot:t.rot};
+ }
+ for(const kind of ['straight','bend'])if(Object.values(placed).filter(t=>t.kind===kind).length>level.inventory[kind])placed={};
+ root.classList.add('witch-game');
+ root.innerHTML=`<div class="witch-heading"><div>${witchPortrait()}</div><div><p class="kicker">Maja besucht Hexe Lila</p><h2>${index+1}. ${escapeHtml(level.title)}</h2><p>Setze Wegteile ein und drehe sie, bis Maja bis zur freundlichen Hexe laufen kann.</p></div></div>
+ <p class="subtle">1. Teil wählen · 2. Freies Feld antippen · 3. Bei Bedarf drehen · 4. Weg prüfen</p><div class="witch-tray" role="group" aria-label="Puzzleteile wählen"><button type="button" data-witch-kind="straight">${witchRoad({kind:'straight',rot:0})}<span>Gerade <b id="witch-straight-count"></b></span></button><button type="button" data-witch-kind="bend">${witchRoad({kind:'bend',rot:0})}<span>Kurve <b id="witch-bend-count"></b></span></button></div>
+ <div id="witch-grid" class="witch-grid" style="--witch-size:${level.size}" role="group" aria-label="Wegpuzzle zur Hexe"></div>
+ <p id="witch-status" class="witch-status" role="status" aria-live="polite">Wähle eine Gerade oder Kurve und tippe auf ein helles Feld. Die grünen Felder sind Wald.</p>
+ <div class="actions witch-actions"><button class="secondary" id="witch-rotate" type="button" disabled>↻ Teil drehen</button><button class="secondary" id="witch-remove" type="button" disabled>Teil zurücklegen</button><button class="primary" id="witch-check" type="button">Weg prüfen</button><button class="secondary" id="witch-tip" type="button">Tipp zeigen</button><button class="plain" id="witch-reset" type="button">Neu beginnen</button></div>
+ <p id="witch-hint" class="tip" hidden></p><div id="witch-win" class="cloud-win" hidden></div><div class="actions"><a class="secondary" href="#spiele/hexenpfad">Alle Hexenpfad-Level</a><a class="plain" href="#sterne">Sternenbeutel</a></div><p id="witch-save" class="subtle"></p>`;
+ const $=s=>root.querySelector(s);
+ function save(){data[index]=placed;try{localStorage.setItem(storage,JSON.stringify(data));$('#witch-save').textContent='Deine gelegten Teile bleiben auf diesem Gerät gespeichert.';}catch{$('#witch-save').textContent='Die Teile können hier gerade nicht gespeichert werden.';}}
+ function draw(){
+  const start=level.start.join(','),goal=level.goal.join(',');let cells='';
+  for(let r=0;r<level.size;r++)for(let c=0;c<level.size;c++){const key=[r,c].join(','),open=level.open.includes(key),tile=placed[key],fixed=key===start||key===goal;
+   cells+=`<button type="button" class="witch-cell ${open?'witch-ground':'witch-tree'} ${selected===key?'witch-selected':''} ${highlight===key?'witch-tip-cell':''}" data-witch-cell="${key}" aria-label="Reihe ${r+1}, Spalte ${c+1}: ${key===start?'Majas Start':key===goal?'Hexe Lila':tile?witchPieceName(tile):open?'freies Wegfeld':'Wald'}" ${!open||walking||won||fixed?'disabled':''}>${fixed?witchRoad(key===start?level.startMask:level.goalMask):tile?witchRoad(tile):open?'<span class="witch-slot" aria-hidden="true">＋</span>':'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 42v16" stroke="#856849" stroke-width="6"/><path d="m30 4 20 24H39l15 18H7l14-18H12Z" fill="#63977b"/><circle cx="47" cy="51" r="5" fill="#e8c57b"/></svg>'}${key===goal?`<span class="witch-person witch-lila">${witchPortrait()}</span>`:''}${walker===key?`<span class="witch-person witch-maja"><svg viewBox="-26 -33 52 66" aria-hidden="true">${cloudAvatar('m')}</svg></span>`:''}</button>`;
+  }
+  $('#witch-grid').innerHTML=cells;
+  for(const kind of ['straight','bend']){const left=level.inventory[kind]-Object.values(placed).filter(t=>t.kind===kind).length;$('#witch-'+kind+'-count').textContent='× '+left;const choice=root.querySelector('[data-witch-kind="'+kind+'"]');choice.setAttribute('aria-pressed',String(chosen===kind));choice.disabled=walking||won;}
+  $('#witch-rotate').disabled=!selected||!placed[selected]||won||walking;$('#witch-remove').disabled=$('#witch-rotate').disabled;$('#witch-check').disabled=walking||won;$('#witch-reset').disabled=walking;$('#witch-tip').disabled=walking||won;
+ }
+ root.querySelectorAll('[data-witch-kind]').forEach(b=>b.onclick=()=>{if(won||walking)return;chosen=b.dataset.witchKind;draw();$('#witch-status').textContent=(chosen==='straight'?'Gerade':'Kurve')+' gewählt. Tippe auf ein freies Wegfeld.';});
+ $('#witch-grid').onclick=e=>{const cell=e.target.closest('[data-witch-cell]');if(!cell||cell.disabled||won||walking)return;const key=cell.dataset.witchCell;selected=key;highlight=null;$('#witch-hint').hidden=true;
+  if(!placed[key]){const left=level.inventory[chosen]-Object.values(placed).filter(t=>t.kind===chosen).length;if(left<=0){$('#witch-status').textContent='Davon liegt kein Teil mehr in der Kiste. Wähle die andere Form oder lege ein Teil zurück.';draw();return;}placed[key]={kind:chosen,rot:0};}
+  draw();save();$('#witch-status').textContent=witchPieceName(placed[key])+' ausgewählt. Du kannst dieses Teil jetzt drehen oder zurücklegen.';
+ };
+ $('#witch-rotate').onclick=()=>{if(!placed[selected]||won||walking)return;placed[selected]={...placed[selected],rot:(placed[selected].rot+1)%4};draw();save();$('#witch-status').textContent=witchPieceName(placed[selected])+'.';};
+ $('#witch-remove').onclick=()=>{if(!placed[selected]||won||walking)return;delete placed[selected];draw();save();$('#witch-status').textContent='Das Teil ist zurück in der Kiste.';};
+ $('#witch-reset').onclick=()=>{if(walking)return;placed={};selected=null;walker=level.start.join(',');won=false;highlight=null;$('#witch-win').hidden=true;$('#witch-hint').hidden=true;draw();save();$('#witch-status').textContent='Alle Teile liegen wieder in der Kiste. Deine verdienten Sterne bleiben erhalten.';};
+ $('#witch-tip').onclick=()=>{const key=Object.keys(level.solution).find(k=>!placed[k]||witchMask(placed[k])!==witchMask(level.solution[k]));$('#witch-hint').hidden=false;if(key){highlight=key;const [r,c]=key.split(',').map(Number);$('#witch-hint').textContent=`Schau auf das umrandete Feld in Reihe ${r+1}, Spalte ${c+1}. Hier hilft eine ${witchPieceName(level.solution[key]).toLocaleLowerCase('de-DE')}. Wähle die Form und drehe das Teil passend.`;draw();}else $('#witch-hint').textContent='Deine Teile verbinden den Start mit Hexe Lila. Tippe auf „Weg prüfen“.';};
+ $('#witch-check').onclick=()=>{
+  const route=witchFindPath(level,placed);if(!route){$('#witch-status').textContent='Der Weg ist noch unterbrochen. Die Wege müssen an den Kanten genau zusammenpassen. Du kannst Teile drehen und zurücklegen.';return;}
+  won=true;walking=true;selected=null;const reward=starGameReward('hexenpfad',index+1);save();draw();$('#witch-status').textContent='Der Weg passt! Maja macht sich auf den Weg zu Hexe Lila.';
+  function finish(){walking=false;walker=level.goal.join(',');draw();$('#witch-status').textContent='Maja ist bei Hexe Lila angekommen!';$('#witch-win').hidden=false;$('#witch-win').innerHTML=`<h3 tabindex="-1">Willkommen bei Hexe Lila!</h3><p>„Wie schön, dass du den Weg gefunden hast, Maja! Bärli bekommt auch einen Becher Zauberkakao.“</p><p>${escapeHtml(reward.message)}</p><div class="actions">${index<11?`<a class="primary" href="#spiele/hexenpfad/${index+2}">Nächstes Level</a>`:''}<a class="secondary" href="#baerli/schrank">Für Bärli einkaufen</a></div>`;$('#witch-win h3').focus();}
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){finish();return;}
+  let i=0;const walk=()=>{if(!root.isConnected)return;walker=route[i++];draw();if(i<route.length)setTimeout(walk,170);else finish();};walk();
+ };
+ draw();
+}
+demoArt.hexenpfad='<path d="M8 49h48v10H8Z" fill="#c7ddbe"/><path d="M9 49h19V30h25" stroke="#e2b77c" stroke-width="11"/><path d="m36 25 10-21 11 21m-24 0h28" stroke="#796498" stroke-width="4" fill="#a18cba"/>';
+
+
 function gameShuffle(items){
   const result=[...items];
   for(let i=result.length-1;i>0;i--){
@@ -1093,21 +1188,26 @@ function showGames(id){
   if(!game){
     app.innerHTML=`<div class="route">${homeLink()}
       <div class="unit-head sand"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese</p><h1 tabindex="-1">Majas Spielwiese</h1><p>Such dir ein Spiel aus. Du hast so viel Zeit, wie du brauchst.</p></div></div>
+      ${starButtons()}<p>Schaffe ein Level und verdiene Sterne für Bärlis Laden oder weitere Level.</p>
       <div class="games-grid">${Object.entries(miniGames).map(([key,item])=>`<a class="station game-card ${item.tone}" href="#spiele/${key}">
         <span class="game-illustration">${demoPictogram(item.art)}</span>
-        <h2>${item.title}</h2><p>${item.intro}</p><span class="card-foot">Spielen ${icon('arrow')}</span></a>`).join('')}</div></div>`;
+        <h2>${item.title}</h2><p>${item.intro}</p><span class="card-foot">Level wählen ${icon('arrow')}</span></a>`).join('')}</div></div>`;
     return;
   }
-  app.innerHTML=`<div class="route ${id==='wolkenwege'?'cloud-route':''}">
-    <a class="crumb" href="#spiele">${icon('back')} Zur Spielwiese</a>
-    <div class="unit-head ${game.tone}"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese</p><h1 tabindex="-1">${game.title}</h1><p>${game.intro}</p></div></div>
-    <section class="panel game-panel" id="game-board" aria-label="Spielfeld"></section></div>`;
+  const part=location.hash.split('/')[2],n=Number(part);
+  if(!part||!Number.isInteger(n)||n<1||n>starLevelCount(id)){showGameLevels(id);return;}
+  if(!starLevelOpen(id,n)){showGameLevels(id,'Dieses Level gehört dir noch nicht. Kaufe es unten mit Sternen oder wähle ein kostenloses Level.');return;}
+  app.innerHTML=`<div class="route ${['wolkenwege','hexenpfad'].includes(id)?'cloud-route':''}">
+    <a class="crumb" href="#spiele/${id}">${icon('back')} Zur Levelauswahl</a>
+    <div class="unit-head ${game.tone}"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese · Level ${n}</p><h1 tabindex="-1">${game.title}</h1><p>${game.intro}</p></div></div>
+    <section class="panel game-panel" id="game-board" data-game="${id}" data-level="${n}" aria-label="Spielfeld"></section></div>`;
   game.play(document.querySelector('#game-board'));
 }
 
 function finishGame(board,title,message,replay){
-  board.innerHTML=`<div class="game-finish">${icon('trophy')}<h2 tabindex="-1">${title}</h2><p>${message}</p>
-  <div class="actions"><button class="primary" type="button">Noch eine Runde</button><a class="secondary" href="#spiele">Zur Spielwiese</a></div></div>`;
+  const reward=starGameReward(board.dataset.game,+board.dataset.level);
+  board.innerHTML=`<div class="game-finish">${icon('trophy')}<h2 tabindex="-1">${title}</h2><p>${message}</p><p class="tip">${escapeHtml(reward.message)}</p>
+  <div class="actions"><button class="primary" type="button">Noch eine Runde</button><a class="secondary" href="#spiele/${board.dataset.game}">Weitere Level</a><a class="secondary" href="#baerli/schrank">Für Bärli einkaufen</a><a class="plain" href="#spiele">Zur Spielwiese</a></div></div>`;
   board.querySelector('h2').focus();
   board.querySelector('button').onclick=()=>{
     replay(board);
@@ -1122,8 +1222,14 @@ const catchRounds = [
   ['Nomen',[['Drachen','Nomen'],['bunt','Adjektiv'],['Fenster','Nomen'],['spielen','Verb'],['klein','Adjektiv'],['Blatt','Nomen']]]
 ];
 
+catchRounds.push(
+ ['Nomen',[['Brücke','Nomen'],['Straße','Nomen'],['Hexe','Nomen'],['fliegen','Verb'],['blau','Adjektiv'],['leise','Adjektiv']]],
+ ['Verb',[['bauen','Verb'],['drehen','Verb'],['laufen','Verb'],['Lampe','Nomen'],['bunt','Adjektiv'],['Wald','Nomen']]],
+ ['Adjektiv',[['mutig','Adjektiv'],['freundlich','Adjektiv'],['hell','Adjektiv'],['Stern','Nomen'],['spielen','Verb'],['Katze','Nomen']]],
+ ['Nomen',[['Rucksack','Nomen'],['Hut','Nomen'],['Stift','Nomen'],['malen','Verb'],['hüpfen','Verb'],['schmal','Adjektiv']]]
+);
 function playWordCatch(board){
-  const rounds=gameShuffle(catchRounds);
+  const rounds=gameShuffle(catchRounds).slice(0,[4,6,8][Number(board.dataset.level||1)-1]);
   let round=0;
 
   function draw(focus=false){
@@ -1175,12 +1281,12 @@ const memoryPairs = [
 ];
 
 function playWordMemory(board){
-  const pairs=gameShuffle(memoryPairs).slice(0,6);
+  const pairs=gameShuffle(memoryPairs).slice(0,[6,8,10][Number(board.dataset.level||1)-1]);
   const cards=gameShuffle(pairs.flatMap((words,pair)=>words.map(word=>({word,pair}))));
   const matched=new Set();
   let open=[];
   let turns=0;
-  board.innerHTML=`<p class="game-counter" id="memory-count">0 von 6 Paaren · 0 Versuche</p>
+  board.innerHTML=`<p class="game-counter" id="memory-count">0 von ${pairs.length} Paaren · 0 Versuche</p>
     <h2 tabindex="-1">Welche zwei Wörter gehören zusammen?</h2>
     <div class="memory-grid" id="memory-grid"></div>
     <p class="game-message" id="game-message" role="status">Decke zwei Karten auf.</p>
@@ -1252,7 +1358,7 @@ const puzzleHints = [
 ];
 
 function playSentencePuzzle(board){
-  const rounds=gameShuffle(autumn.map((_,i)=>i)).slice(0,4);
+  const rounds=gameShuffle(autumn.map((_,i)=>i)).slice(0,[4,5,6][Number(board.dataset.level||1)-1]);
   let round=0;
 
   function draw(focus=false){
@@ -2910,7 +3016,7 @@ let route = '';
 const persist = ()=>{
   try {localStorage.setItem(storageKey,JSON.stringify({solved:[...progress],best}));} catch {}
 };
-const syncStars = ()=>{document.querySelector('#star-count').textContent=progress.size+(progress.size===1?' Stern':' Sterne');};
+const syncStars = ()=>{const amount=starBalance();document.querySelector('#star-count').textContent=amount+(amount===1?' Stern':' Sterne');document.querySelector('#show-progress').setAttribute('aria-label',starCount(amount)+' im Sternenbeutel');};
 const unitById = id=>units.find(unit=>unit.id===id);
 const doneFor = id=>questions[id].filter(q=>progress.has(q.id)).length;
 const unitLink = (id,number)=>'#'+id+(number ? '/'+number:'');
@@ -2940,7 +3046,7 @@ function showHome(){
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h2>Mehr <em>entdecken</em></h2>
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#spiele/wolkenwege">Maja &amp; Bärli: Wolkenwege</a></div></div>
+    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#spiele/wolkenwege">Maja &amp; Bärli: Wolkenwege</a><a class="secondary" href="#spiele/hexenpfad">Wegpuzzle zur Hexe</a><a class="secondary" href="#baerli/schrank">Bärlis Laden</a></div></div>
     <div class="hero-art">${bearPicture('leseecke',true)}</div>
   </section>
   ${learningHome()}
@@ -2980,8 +3086,8 @@ function showUnit(unit){
 }
 function showProgress(){
   app.innerHTML=`<div class="route">${homeLink()}
-    <div class="unit-head sand"><span class="icon-box">${icon('star')}</span><div><p class="kicker">Deine Sammlung</p><h1 tabindex="-1">Deine Sterne</h1><p>Du bekommst für jede erstmals richtig gelöste Stationsaufgabe einen Stern.</p><a class="secondary" href="#lernuebersicht">Lernübersicht nach Bereichen</a></div></div>
-    <section class="panel"><h2>${progress.size} von ${Object.values(questions).flat().length} Sternen</h2>
+    <div class="unit-head sand"><span class="icon-box">${icon('star')}</span><div><p class="kicker">Deine Sammlung</p><h1 tabindex="-1">Erreichte Lernleistungen</h1><p>Deine gelösten Stationsaufgaben bleiben hier erhalten, auch wenn du Sterne ausgibst.</p><a class="secondary" href="#lernuebersicht">Lernübersicht nach Bereichen</a></div></div>
+    <section class="panel"><h2>${progress.size} von ${Object.values(questions).flat().length} Stationsaufgaben geschafft</h2>
     <ul class="progress-list">${units.map(u=>`<li><a href="#${u.id}">${u.title}</a><span>${doneFor(u.id)} / ${questions[u.id].length}</span></li>`).join('')}</ul>
     <p class="subtle" style="margin-top:13px">${best===null?'Dein Quiz-Rekord erscheint nach deiner ersten Runde.':'Quiz-Rekord: '+best+' von '+mixed.length+' Punkten.'}</p></section></div>`;
 }
@@ -3252,10 +3358,7 @@ function checkAnswer(){
     persist();
     syncStars();
     showFeedback(hadStar?'Richtig gelöst!':'Richtig! Du bekommst einen Stern.',true,true);
-    const reward=hadStar?null:bearItems.find(item=>item.stars===progress.size);
-    if(reward){
-      feedback.insertAdjacentHTML('beforeend',`<p>Bärli hat jetzt einen neuen Schatz: <a href="#baerli/schrank">${escapeHtml(reward.title)}</a>.</p>`);
-    }
+    if(!hadStar)feedback.insertAdjacentHTML('beforeend',`<p>Im Sternenbeutel: <strong>${starBalance()} Sterne</strong>. <a href="#baerli/schrank">Für Bärli einkaufen</a> oder <a href="#spiele">ein Spiellevel freischalten</a>.</p>`);
   } else {
     const caseOnly=q.type==='write'&&given.toLocaleLowerCase('de-DE')===q.answer.toLocaleLowerCase('de-DE');
     const articleMissing=q.type==='write'&&/^(der|die|das) /.test(q.answer)&&given===q.answer.split(' ').slice(1).join(' ');
@@ -3365,6 +3468,89 @@ try {
   if(saved&&typeof saved==='object')bearOutfit=saved;
 } catch {}
 
+// Persistent star wallet: learning achievements are never spent or deleted.
+const starWalletKey='majas-wortwerkstatt-sternenbeutel-v1';
+function starCount(n){return n+(n===1?' Stern':' Sterne');}
+function starBlank(){return {version:1,rewards:{},purchases:{},migrated:true};}
+function starClean(value){
+ if(!value||value.version!==1||typeof value!=='object')return null;
+ const clean=starBlank();
+ for(const [key,v]of Object.entries(value.rewards||{}))if(v&&Number.isInteger(v.amount)&&v.amount>=0&&v.amount<=2&&typeof v.day==='string')clean.rewards[key]={amount:v.amount,day:v.day};
+ for(const [key,v]of Object.entries(value.purchases||{}))if(v&&Number.isInteger(v.cost)&&v.cost>=0&&v.cost<=100&&typeof v.label==='string')clean.purchases[key]={cost:v.cost,label:v.label,day:typeof v.day==='string'?v.day:''};
+ return clean;
+}
+function starDay(){return new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Berlin'}).format(new Date());}
+function starRead(){try{return starClean(JSON.parse(localStorage.getItem(starWalletKey)||'null'));}catch{return null;}}
+function starTotals(state,learned=progress.size){const bonus=Object.values(state.rewards).reduce((sum,v)=>sum+v.amount,0),spent=Object.values(state.purchases).reduce((sum,v)=>sum+v.cost,0);return {earned:learned+bonus,spent,balance:Math.max(0,learned+bonus-spent)};}
+function starMigrate(){
+ const value=starRead();if(value)return value;
+ const next=starBlank();
+ // Keep all rewards from the previous threshold-based wardrobe.
+ for(const item of bearItems)if(progress.size>=item.stars||Object.values(bearOutfit).includes(item.id))next.purchases['item:'+item.id]={cost:0,label:item.title+' (übernommen)',day:starDay()};
+ try{const old=JSON.parse(localStorage.getItem('majas-wortwerkstatt-wolkenwege-v1')||'{}');
+  for(const [i,done]of Object.entries(old.completed||{}))if(done&&/^\d+$/.test(i)&&+i<12){const n=+i+1;next.rewards['first:wolkenwege:'+n]={amount:2,day:starDay()};next.rewards['daily:wolkenwege:'+n+':'+starDay()]={amount:0,day:starDay()};}
+  for(const i of new Set([...Object.keys(old.sessions||{}),...Object.keys(old.completed||{})]))if(/^\d+$/.test(i)&&+i<12)next.purchases['level:wolkenwege:'+(+i+1)]={cost:0,label:'Wolkenwege · Level '+(+i+1)+' (übernommen)',day:starDay()};
+ }catch{}
+ try{localStorage.setItem(starWalletKey,JSON.stringify(next));}catch{}
+ return next;
+}
+let starWallet=starMigrate();
+function starRefresh(){const latest=starRead();if(latest)starWallet=latest;return starWallet;}
+function starBalance(){return starTotals(starRefresh()).balance;}
+function starOwned(id){return Object.hasOwn(starRefresh().purchases,id);}
+function starCommit(next){try{localStorage.setItem(starWalletKey,JSON.stringify(next));starWallet=next;syncStars();return true;}catch{return false;}}
+function starLevelCount(id){return ['wolkenwege','hexenpfad'].includes(id)?12:3;}
+function starLevelCost(id,n){if(['wolkenwege','hexenpfad'].includes(id))return n<=3?0:n<=6?2:n<=9?3:4;return n===1?0:n===2?3:5;}
+function starLevelOpen(id,n){return Object.hasOwn(miniGames,id)&&Number.isInteger(n)&&n>=1&&n<=starLevelCount(id)&&(starLevelCost(id,n)===0||starOwned('level:'+id+':'+n));}
+function starOffer(id){
+ if(id.startsWith('item:')){const item=bearItems.find(x=>'item:'+x.id===id);return item?{cost:item.stars,label:item.title}:null;}
+ const m=id.match(/^level:([a-z]+):(\d+)$/);if(!m)return null;const game=m[1],n=+m[2];
+ if(!Object.hasOwn(miniGames,game)||n<1||n>starLevelCount(game))return null;
+ return {cost:starLevelCost(game,n),label:miniGames[game].title+' · Level '+n};
+}
+function starPurchase(id){
+ const offer=starOffer(id);if(!offer)return {ok:false,message:'Diesen Schatz gibt es hier nicht.'};
+ const current=starRefresh();if(Object.hasOwn(current.purchases,id))return {ok:true,already:true,message:'Das gehört dir bereits. Es werden keine weiteren Sterne abgezogen.'};
+ const balance=starTotals(current).balance;if(balance<offer.cost)return {ok:false,message:`Dir ${offer.cost-balance===1?'fehlt':'fehlen'} noch ${starCount(offer.cost-balance)}. Übe eine Station oder spiele ein kostenloses Level.`};
+ const next=structuredClone(current);next.purchases[id]={cost:offer.cost,label:offer.label,day:starDay()};
+ if(!starCommit(next))return {ok:false,message:'Der Kauf konnte nicht gespeichert werden. Es wurden keine Sterne abgezogen. Versuche es noch einmal.'};
+ return {ok:true,message:`Gekauft! ${offer.cost} ${offer.cost===1?'Stern wurde':'Sterne wurden'} abgezogen. Du hast noch ${starCount(starTotals(next).balance)}.`};
+}
+function starGameReward(game,n){
+ if(!starLevelOpen(game,n))return {amount:0,message:'Dieses Level ist noch nicht freigeschaltet.'};
+ const current=starRefresh(),first='first:'+game+':'+n,daily='daily:'+game+':'+n+':'+starDay();
+ if(Object.hasOwn(current.rewards,daily))return {amount:0,message:'Heute hast du die Sterne für dieses Level schon gesammelt. Deine bisherigen Sterne bleiben im Beutel.'};
+ const amount=Object.hasOwn(current.rewards,first)?1:2,next=structuredClone(current);
+ if(!Object.hasOwn(next.rewards,first))next.rewards[first]={amount,day:starDay()};
+ next.rewards[daily]={amount:Object.hasOwn(current.rewards,first)?1:0,day:starDay()};
+ if(!starCommit(next))return {amount:0,message:'Geschafft! Die Belohnung konnte gerade nicht gespeichert werden. Öffne das Level später noch einmal und versuche es erneut.'};
+ return {amount,message:`+${amount} ${amount===1?'Stern':'Sterne'} für dein ${amount===2?'erstes Lösen':'heutiges Wiederholen'}! Jetzt im Beutel: ${starCount(starTotals(next).balance)}.`};
+}
+function starButtons(){return `<div class="actions"><a class="secondary" href="#sterne">${icon('star')} Sternenbeutel: ${starBalance()}</a><a class="secondary" href="#baerli/schrank">Bärlis Laden &amp; Schrank</a></div>`;}
+function showStarWallet(){
+ const state=starRefresh(),total=starTotals(state),purchases=Object.values(state.purchases);
+ app.innerHTML=`<div class="route">${homeLink()}<div class="unit-head sand"><span class="icon-box">${icon('star')}</span><div><h1 tabindex="-1">Dein Sternenbeutel</h1><p>Sterne sammeln, sparen und für schöne Dinge ausgeben.</p></div></div>
+ <section class="panel"><h2>${starCount(total.balance)} zum Ausgeben</h2><div class="star-ledger"><p><strong>${total.earned}</strong> insgesamt verdient</p><p><strong>− ${total.spent}</strong> ausgegeben</p><p><strong>= ${total.balance}</strong> im Beutel</p></div>
+ <p>Eine erstmals gelöste Stationsaufgabe bringt 1 Stern. Ein erstmals geschafftes Spiellevel bringt 2 Sterne. An einem späteren Tag bekommst du für das Wiederholen dieses Levels 1 Stern.</p><p>Beim Kaufen werden Sterne abgezogen. Deine Lernleistungen bleiben erhalten. Gekaufte Dinge und Level gehören dir dauerhaft.</p>
+ <div class="actions"><a class="primary" href="#baerli/schrank">Für Bärli einkaufen</a><a class="secondary" href="#spiele">Spiellevel entdecken</a><a class="secondary" href="#stationen">Sterne verdienen</a><a class="plain" href="#fortschritt">Erreichte Lernleistungen</a></div></section>
+ <section class="panel"><h2>Deine Käufe</h2>${purchases.length?`<ul class="progress-list">${purchases.slice().reverse().map(v=>`<li><span>${escapeHtml(v.label)}</span><strong>${v.cost===0?'Übernommen':v.cost+' ★'}</strong></li>`).join('')}</ul>`:'<p>Hier stehen später deine gekauften Gegenstände und Spiellevel.</p>'}<p class="subtle">Bisher freigeschaltete Sachen und bereits begonnene Wolkenwege wurden kostenlos übernommen. Der Sternenbeutel bleibt in diesem Browser gespeichert.</p></section></div>`;
+}
+function starGameLevelName(id,n){
+ if(id==='wolkenwege')return cloudLevels[n-1].title;
+ if(id==='hexenpfad')return witchLevels[n-1].title;
+ if(id==='memory')return [6,8,10][n-1]+' Wortpaare';
+ if(id==='satzpuzzle')return [4,5,6][n-1]+' Hörsätze';
+ return [4,6,8][n-1]+' Wörterfang-Runden';
+}
+function showGameLevels(id,message=''){
+ const game=miniGames[id];
+ app.innerHTML=`<div class="route"><a class="crumb" href="#spiele">${icon('back')} Zur Spielwiese</a><div class="unit-head ${game.tone}"><span class="icon-box">${icon('game')}</span><div><h1 tabindex="-1">${game.title}</h1><p>${game.intro}</p></div></div>${starButtons()}
+ <p id="game-shop-message" class="inline-status" tabindex="-1" role="status">${escapeHtml(message)}</p><section class="panel"><h2>Wähle dein Level</h2><p>${['wolkenwege','hexenpfad'].includes(id)?'Die ersten drei Level sind kostenlos.':'Das erste Level ist kostenlos.'} Weitere Level kannst du mit Sternen dauerhaft kaufen.</p>
+ <div class="star-levels">${Array.from({length:starLevelCount(id)},(_,i)=>{const n=i+1,open=starLevelOpen(id,n),cost=starLevelCost(id,n);return `<div class="star-level-card"><h3>${n}. ${escapeHtml(starGameLevelName(id,n))}</h3><p>${open?(cost===0?'Kostenlos':'Gehört dir'):cost+' Sterne'}</p>${open?`<a class="primary" href="#spiele/${id}/${n}">Spielen ${icon('arrow')}</a>`:`<button type="button" class="secondary" data-buy-level="${n}" ${starBalance()<cost?'disabled':''}>Für ${cost} Sterne kaufen</button>${starBalance()<cost?`<p class="subtle">Noch ${starCount(cost-starBalance())} sammeln</p>`:''}`}</div>`;}).join('')}</div></section></div>`;
+ app.querySelectorAll('[data-buy-level]').forEach(b=>b.onclick=()=>{const n=+b.dataset.buyLevel,result=starPurchase('level:'+id+':'+n);showGameLevels(id,result.message);document.querySelector('#game-shop-message').focus({preventScroll:true});});
+}
+
+
 function bearPicture(scene,eager=false){
   return `<img class="bear-picture" src="./baerli/${scene}.webp" alt="${bearScenes[scene]}" width="623" height="623" ${eager?'fetchpriority="high"':'loading="lazy"'}>`;
 }
@@ -3380,41 +3566,43 @@ function bearIntro(){
   const story=bearStories[bearToday()];
   return `<section class="panel bear-intro" aria-labelledby="baerli-home"><div>
     <p class="kicker">${icon('star')} Majas bester Freund</p><h2 id="baerli-home">Hallo, ich bin Bärli!</h2>
-    <p>Ich bin Majas Lernberater. Mit ihr knacke ich Wörter, erfinde Quatsch und probiere Verkleidungen aus. Jeder Aufgabenstern bringt uns näher an neue Schätze.</p>
+    <p>Ich bin Majas Lernberater. Mit ihr knacke ich Wörter, erfinde Quatsch und probiere Verkleidungen aus. Mit deinen Sternen kannst du für mich einkaufen oder neue Spiellevel öffnen.</p>
     <p>Heute erleben wir <strong>${escapeHtml(story[1])}</strong>.</p>
     <div class="actions"><a class="primary" href="#baerli">Geschichte des Tages</a><a class="secondary" href="#baerli/schrank">Bärlis Schrank</a></div>
   </div><img src="./baerli/baerli.webp" alt="Bärli in seinem lila Strickanzug mit gelbem Ohrfähnchen" width="600" height="600" loading="lazy"></section>`;
 }
-function showBearWardrobe(){
-  const usable=bearItems.filter(item=>progress.size>=item.stars);
-  const equipped=usable.filter(item=>bearOutfit[item.group]===item.id);
-  const next=bearItems.find(item=>progress.size<item.stars);
+function showBearWardrobe(message=''){
+  const owned=bearItems.filter(item=>starOwned('item:'+item.id));
+  const equipped=owned.filter(item=>bearOutfit[item.group]===item.id);
+  const boxes={hut:'100 0 230 110',ball:'300 330 100 100',heft:'20 315 100 110',schal:'140 160 160 110',boot:'300 330 110 95',stift:'15 315 100 110',krone:'140 5 160 95',drachen:'300 280 100 150',ranzen:'15 315 100 115'};
   app.innerHTML=`<div class="route">${homeLink()}
-    <div class="unit-head lilac"><span class="icon-box">${icon('star')}</span><div><h1 tabindex="-1">Bärlis Schrank</h1><p>Zieh Bärli etwas an und stell ihm Spielzeug und Schulsachen dazu.</p></div></div>
+    <div class="unit-head lilac"><span class="icon-box">${icon('star')}</span><div><h1 tabindex="-1">Bärlis Laden &amp; Schrank</h1><p>Kaufe Kleidung, Spielsachen und Schulsachen für Bärli.</p></div></div>
     <section class="panel bear-wardrobe"><div class="bear-dress-stage">
       <img src="./baerli/baerli.webp" alt="Bärli trägt seinen lila Strickanzug" width="600" height="600">
       <svg viewBox="0 0 450 450" aria-hidden="true"><g stroke="#52434b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${equipped.map(item=>item.art).join('')}</g></svg>
-    </div><div><h2>Deine Sammlung</h2><p>Du hast <strong>${progress.size} ${progress.size===1?'Stern':'Sterne'}</strong>. Jede erstmals richtig gelöste Stationsaufgabe bringt einen Stern. Sterne bleiben beim Anziehen erhalten.</p>
-    <p>${next?`Bis zum nächsten Schatz, „${next.title}“, fehlen dir noch ${next.stars-progress.size} Sterne.`:'Du hast alle Schätze freigeschaltet!'}</p>
-    <p id="bear-equipped" role="status">${equipped.length?'Ausgewählt: '+equipped.map(item=>item.title).join(', '):'Bärli trägt gerade sein Lieblingsoutfit.'}</p>
-    <div class="actions"><a class="primary" href="#stationen">Aufgaben lösen</a><a class="secondary" href="#baerli">Zur Geschichte</a></div></div></section>
+    </div><div><h2>${starCount(starBalance())} im Beutel</h2><p>Ein Kauf zieht den angegebenen Preis ab. Was du gekauft hast, gehört dir dauerhaft. Anziehen und Wechseln sind kostenlos.</p>
+    <p id="bear-equipped">${equipped.length?'Ausgewählt: '+equipped.map(item=>item.title).join(', '):'Bärli trägt gerade sein Lieblingsoutfit.'}</p>
+    <div class="actions"><a class="primary" href="#stationen">Sterne verdienen</a><a class="secondary" href="#sterne">Sternenbeutel und Käufe</a><a class="secondary" href="#spiele">Spielen</a></div></div></section>
+    <p id="shop-status" class="shop-notice" tabindex="-1" role="status">${escapeHtml(message)}</p>
     ${Object.entries(bearGroups).map(([group,label])=>`<section class="panel"><h2>${label}</h2><div class="bear-item-list">${bearItems.filter(item=>item.group===group).map(item=>{
-      const unlocked=usable.includes(item);
-      const selected=equipped.includes(item);
-      const verb=group==='kleidung'?(selected?'Ausziehen':'Anziehen'):(selected?'Wegräumen':'Dazustellen');
-      return `<div class="bear-item"><strong>${item.title}</strong><span>${unlocked?'Freigeschaltet':'Ab '+item.stars+' Sternen'}</span>
-        ${unlocked?`<button class="secondary" type="button" data-bear-item="${item.id}" aria-label="${item.title} auswählen" aria-pressed="${selected}">${verb}</button>`:''}</div>`;
+      const has=owned.includes(item),selected=equipped.includes(item),verb=group==='kleidung'?(selected?'Ausziehen':'Anziehen'):(selected?'Wegräumen':'Dazustellen');
+      return `<div class="bear-item"><span class="shop-item-preview" aria-hidden="true"><svg viewBox="${boxes[item.id]}"><g stroke="#52434b" stroke-width="2.5">${item.art}</g></svg></span><div class="shop-item-copy"><strong>${item.title}</strong><span>${has?'Gehört dir':item.stars+' Sterne'}</span></div>
+        ${has?`<button class="secondary" type="button" data-bear-item="${item.id}" aria-label="${item.title} auswählen" aria-pressed="${selected}">${verb}</button>`:`<button class="secondary star-purchase" type="button" data-buy-item="${item.id}" ${starBalance()<item.stars?'disabled':''}>Für ${item.stars} Sterne kaufen</button>${starBalance()<item.stars?`<span class="subtle">Noch ${starCount(item.stars-starBalance())}</span>`:''}`}</div>`;
     }).join('')}</div></section>`).join('')}
   </div>`;
+  app.querySelectorAll('[data-buy-item]').forEach(button=>button.onclick=()=>{
+    const item=bearItems.find(x=>x.id===button.dataset.buyItem),result=starPurchase('item:'+item.id);
+    if(result.ok){bearOutfit[item.group]=item.id;try{localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));}catch{}}
+    showBearWardrobe(result.message);document.querySelector('#shop-status').focus({preventScroll:true});
+  });
   app.querySelectorAll('[data-bear-item]').forEach(button=>button.onclick=()=>{
-    const item=usable.find(item=>item.id===button.dataset.bearItem);
-    if(bearOutfit[item.group]===item.id)delete bearOutfit[item.group];
-    else bearOutfit[item.group]=item.id;
-    try {localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));} catch {}
-    showBearWardrobe();
-    app.querySelector(`[data-bear-item="${item.id}"]`).focus({preventScroll:true});
+    const item=owned.find(item=>item.id===button.dataset.bearItem);
+    if(bearOutfit[item.group]===item.id)delete bearOutfit[item.group];else bearOutfit[item.group]=item.id;
+    try{localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));}catch{}
+    showBearWardrobe();app.querySelector(`[data-bear-item="${item.id}"]`).focus({preventScroll:true});
   });
 }
+
 function showBear(page){
   if(page==='schrank'){showBearWardrobe();return;}
   const now=new Date();
@@ -4277,6 +4465,7 @@ function render(initial=false){
   else if(page==='sprechwerkstatt')speakingWorkshop(index);
   else if(page==='lernuebersicht'||page==='erwachsene')showLearningOverview(page==='erwachsene');
   else if(page==='fortschritt')showProgress();
+  else if(page==='sterne')showStarWallet();
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
   else if(page==='baerli')showBear(index);
@@ -4315,11 +4504,12 @@ function render(initial=false){
   }
 }
 document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
-document.querySelector('#show-progress').onclick=()=>move('#fortschritt');
+document.querySelector('#show-progress').onclick=()=>move('#sterne');
 window.addEventListener('hashchange',()=>{if(location.hash!=='#inhalt')render();});
 render(true);
 </script>
 </body>
 </html>
+
 
 
