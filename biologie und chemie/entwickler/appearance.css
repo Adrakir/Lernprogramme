@@ -46,7 +46,7 @@ body.lc-theme-dark textarea{background:var(--paper);color:var(--ink)}
 @media screen{
 body.lc-theme-dark .equipment-pop,
 body.lc-theme-dark .hint,
-body.lc-theme-dark .chip,
+body.lc-theme-dark .chip:not(.selected),
 body.lc-theme-dark .deep-tab:not(.active):not([aria-selected="true"]){background:var(--paper);color:var(--ink);border-color:var(--line)}
-body.lc-theme-dark .device{color:var(--ink)}
+body.lc-theme-dark .device,body.lc-theme-dark .chip{color:var(--ink)}
 }
