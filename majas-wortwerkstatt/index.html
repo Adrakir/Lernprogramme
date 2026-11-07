@@ -392,6 +392,8 @@ legend{font-weight:700;padding:0 7px}
 .cloud-route .unit-head{padding:17px 22px}.cloud-route .unit-head h1{font-size:clamp(25px,4vw,34px);margin:0}.cloud-route .unit-head .kicker,.cloud-route .unit-head p:last-child{display:none}
 @media(max-width:620px){.cloud-route .unit-head{padding:13px;gap:9px}.cloud-route .unit-head h1{font-size:25px}.cloud-top label{flex-basis:130px;min-width:0}.cloud-top select{font-size:14px}.cloud-top{margin-bottom:12px}.cloud-top button{font-size:12px;padding:8px}.cloud-top>span{font-size:13px}}
 
+.cloud-person,.cloud-heart{pointer-events:none}
+
 </style>
 </head>
 <body>
@@ -1020,7 +1022,7 @@ function playCloudGame(root){
  root.innerHTML=`<div class="cloud-top"><label for="cloud-level">Dein Level<select id="cloud-level">${cloudLevels.map((l,i)=>`<option value="${i+1}" ${i===levelIndex?'selected':''}>${i+1}. ${escapeHtml(l.title)}${completed[i]?' · ♥':''}</option>`).join('')}</select></label><span id="cloud-hearts"></span><button class="secondary" id="cloud-sound" type="button" aria-pressed="false">Ton aus</button></div>
  <h2 id="cloud-level-title">${levelIndex+1}. ${escapeHtml(level.title)}</h2><p class="cloud-instruction">${escapeHtml(level.intro)}</p>
  <div class="cloud-players" role="group" aria-label="Figur auswählen"><button type="button" data-cloud-who="m"><svg viewBox="-26 -33 52 66" aria-hidden="true">${cloudAvatar('m')}</svg><span>Maja<small>Taste 1</small></span></button><button type="button" data-cloud-who="b"><svg viewBox="-26 -33 52 66" aria-hidden="true">${cloudAvatar('b')}</svg><span>Bärli<small>Taste 2</small></span></button></div>
- <div id="cloud-map"></div><p id="cloud-status" class="cloud-status" role="status" aria-live="polite"></p>
+ <div id="cloud-map" tabindex="0" aria-label="Spielfeld mit Pfeiltasten steuern"></div><p id="cloud-status" class="cloud-status" role="status" aria-live="polite"></p>
  <div class="cloud-control-row"><div class="cloud-pad" role="group" aria-label="Ausgewählte Figur bewegen"><button type="button" data-cloud-dir="0" aria-label="Nach oben">↑</button><button type="button" data-cloud-dir="3" aria-label="Nach links">←</button><span id="cloud-active-name"></span><button type="button" data-cloud-dir="1" aria-label="Nach rechts">→</button><button type="button" data-cloud-dir="2" aria-label="Nach unten">↓</button></div><div class="cloud-tools"><button class="secondary" id="cloud-undo" type="button">Schritt zurück</button><button class="secondary" id="cloud-tip" type="button">Tipp zeigen</button><button class="plain" id="cloud-reset" type="button">Level neu starten</button></div></div>
  <p id="cloud-hint" class="tip" hidden role="status"></p><div id="cloud-win" class="cloud-win" hidden aria-labelledby="cloud-win-title"></div>
  <details class="cloud-help"><summary>Spielregeln und Steuerung</summary><p>Bringe Maja und Bärli auf dasselbe Feld. Wähle eine Figur, dann tippe auf ein markiertes Nachbarfeld oder auf die Pfeile. Am PC gehen auch die Pfeiltasten und W, A, S, D. Mit 1 und 2 wechselst du die Figur.</p><p><strong>☆ Gelber Stern:</strong> Betreten schaltet alle gelben Brücken um. <strong>◇ Grüner Knopf:</strong> Eine Figur bleibt darauf stehen, während die andere die grünen Brücken überquert. Eine benutzte Brücke lässt sich erst schließen, wenn niemand mehr darauf steht.</p><p>Kein Zeitlimit. Du kannst jederzeit einen Schritt zurückgehen oder das Level neu starten. Alle Level sind frei wählbar. Herzen und Spielstand werden auf diesem Gerät gespeichert.</p></details><p id="cloud-save" class="subtle"></p>`;
@@ -1056,7 +1058,7 @@ function playCloudGame(root){
  }
  root.querySelectorAll('[data-cloud-who]').forEach(b=>b.onclick=()=>select(b.dataset.cloudWho));
  root.querySelectorAll('[data-cloud-dir]').forEach(b=>b.onclick=()=>move(+b.dataset.cloudDir));
- $('#cloud-map').onclick=e=>{const tile=e.target.closest('[data-cloud-step]');if(tile)move(+tile.dataset.cloudStep);};
+ $('#cloud-map').onclick=e=>{const tile=e.target.closest('[data-cloud-step]');if(tile){move(+tile.dataset.cloudStep);$('#cloud-map').focus({preventScroll:true});}};
  $('#cloud-undo').onclick=()=>{if(history.length){s=history.pop();moves=Math.max(0,moves-1);$('#cloud-hint').hidden=true;draw('Ein Schritt zurück. Probiere einen anderen Weg.');}};
  $('#cloud-reset').onclick=()=>{s=cloudInitial(level);history=[];moves=0;who='m';$('#cloud-hint').hidden=true;draw('Der Wolkenweg beginnt von vorn. Deine gesammelten Herzen bleiben erhalten.');};
  $('#cloud-tip').onclick=()=>{const step=cloudSolve(level,s);$('#cloud-hint').hidden=false;$('#cloud-hint').textContent=cloudTogether(s)?'Die beiden sind schon zusammen. Du kannst das nächste Level wählen.':step?`${level.tip} Nächster möglicher Schritt: ${step.who==='m'?'Maja':'Bärli'} ${cloudDirNames[step.d]}.`:'Von hier führt gerade kein Weg zum Treffen. Gehe einen Schritt zurück oder starte dieses Level neu.';};
@@ -1065,7 +1067,7 @@ function playCloudGame(root){
  function moveRoute(n){location.hash='#spiele/wolkenwege/'+n;}
  root.onkeydown=e=>{
   if(e.target.matches('select,input,textarea'))return;
-  if((e.key==='Enter'||e.key===' ')&&e.target.closest('[data-cloud-step]')){e.preventDefault();move(+e.target.closest('[data-cloud-step]').dataset.cloudStep);return;}
+  if((e.key==='Enter'||e.key===' ')&&e.target.closest('[data-cloud-step]')){e.preventDefault();move(+e.target.closest('[data-cloud-step]').dataset.cloudStep);$('#cloud-map').focus({preventScroll:true});return;}
   const map={ArrowUp:0,w:0,W:0,ArrowRight:1,d:1,D:1,ArrowDown:2,s:2,S:2,ArrowLeft:3,a:3,A:3};
   if(e.altKey||e.ctrlKey||e.metaKey)return;
   if(Object.hasOwn(map,e.key)){e.preventDefault();if(!e.repeat)move(map[e.key]);}
