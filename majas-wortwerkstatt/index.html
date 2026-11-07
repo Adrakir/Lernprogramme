@@ -353,6 +353,31 @@ details ol{margin-bottom:0}
   .detective-panel figcaption{font-size:clamp(.9rem,4vw,1.1rem)}
 }
 @media(max-width:360px){.station h3{overflow-wrap:anywhere;hyphens:auto}}
+
+.learning-check{display:flex;align-items:flex-start;gap:10px;margin:10px 0;line-height:1.5}
+.learning-check input{flex:0 0 auto;width:20px;height:20px;margin-top:2px}
+.learning-steps{padding-left:1.6rem}.learning-steps li{padding:8px 0;line-height:1.6}
+.learning-steps li strong{display:block;color:#2c6053}
+.reading-practice{font-size:clamp(18px,3vw,23px);line-height:1.9;max-width:68ch;margin:20px auto}
+.learning-table-wrap{overflow-x:auto;max-width:100%}
+.learning-table{border-collapse:collapse;width:100%;font-size:15px}
+.learning-table th,.learning-table td{padding:9px 10px;border-bottom:1px solid #ddd5c4;text-align:left;vertical-align:top}
+.learning-table td{text-align:center}
+.route select{padding:10px 12px;min-height:44px;max-width:100%;font:inherit;border:1px solid #afbdb3;border-radius:8px;background:#fff;color:#23443d}
+@media(max-width:620px){
+ .learning-table,.learning-table tbody{display:block}
+ .learning-table thead{display:none}
+ .learning-table tr{display:block;border:1px solid #d8ddcf;border-radius:10px;margin-bottom:12px;padding:8px}
+ .learning-table th{display:block;padding:5px;border:0}
+ .learning-table td{display:flex;justify-content:space-between;padding:5px;border:0;text-align:right}
+ .learning-table td::before{content:attr(data-label);text-align:left}
+}
+.reading-practice p,.context p{white-space:pre-line}
+#learning-reading-audio,#speaking-playback{display:block;width:100%;max-width:36rem;margin:12px 0}
+.station h3{overflow-wrap:anywhere;hyphens:auto}
+fieldset{border:1px solid #d4d9ce;border-radius:10px;padding:12px;min-width:0;margin:16px 0}
+legend{font-weight:700;padding:0 7px}
+@media print{.topbar,.crumb,.hero,.actions{display:none!important}.shell{width:100%}.learning-table{font-size:11pt}.panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -2740,9 +2765,10 @@ function showHome(){
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h1>Majas<br><em>Wortwerkstatt</em></h1>
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#stationen">Station aussuchen ${icon('arrow')}</a><a class="secondary" href="#tagescomic/tom-und-der-schulhund/1">Tom und der Schulhund</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a><a class="secondary" href="#tagescomic">Tagescomics</a></div></div>
+    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#tagescomic/tom-und-der-schulhund/1">Tom und der Schulhund</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a><a class="secondary" href="#tagescomic">Tagescomics</a></div></div>
     <div class="hero-art">${bearPicture('leseecke',true)}</div>
   </section>
+  ${learningHome()}
   ${featuredComics.map(featuredComicIntro).join('')}
   <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
     <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung, -nis und -schaft und prüfe letzte Buchstaben durch Verlängern.</p>
@@ -2752,8 +2778,8 @@ function showHome(){
   ${detectiveIntro()}
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
   <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
-  <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">0${i+1}</span></div>
-  <h3>${u.title}</h3><p>${descriptions[i]}</p><div class="card-foot"><span>${doneFor(u.id)} / ${questions[u.id].length} geschafft</span>${icon('arrow')}</div>
+  <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">${String(i+1).padStart(2,'0')}</span></div>
+  <h3>${u.title}</h3><p>${u.description||descriptions[i]}</p><div class="card-foot"><span>${doneFor(u.id)} / ${questions[u.id].length} geschafft</span>${icon('arrow')}</div>
   </a>`).join('')}
   <a class="station quiz sand" href="#quiz"><div class="station-top"><span class="icon-box">${icon('trophy')}</span><span class="number">FINALE</span></div><h3>Werkstatt-Quiz</h3><p>14 gemischte Aufgaben ohne Zeitdruck</p><div class="card-foot"><span>${best===null?'Zum Quiz':'Rekord '+best+' / '+mixed.length}</span>${icon('arrow')}</div></a></div></section>`;
   app.querySelector('.hero-art img').addEventListener('error',()=>{
@@ -2776,13 +2802,14 @@ function showUnit(unit){
   <div class="actions"><a class="primary" href="${unitLink(unit.id,first||1)}">${first>1?'Weiterüben':first?'Übungen starten':'Noch einmal üben'} ${icon('arrow')}</a>
   ${special.map(([label,index])=>`<a class="secondary" href="${unitLink(unit.id,index)}">${label}</a>`).join('')}
   ${first>1?`<a class="plain" href="${unitLink(unit.id,1)}">Bei Aufgabe 1 beginnen</a>`:''}</div>
+  ${unit.id==='hoerauftraege'?`<h3>Hörtext wählen</h3><ul class="progress-list">${listeningTasks.map((task,i)=>`<li><a href="#hoerauftraege/${i*5+1}">${escapeHtml(task.title)}</a></li>`).join('')}</ul>`:''}
   ${rounds.length?`<h3>${unit.id==='hoeren'?'Hörgeschichte wählen':'Lesetext wählen'}</h3><ul class="progress-list">${rounds.map(([title,i])=>`<li><a href="${unitLink(unit.id,i)}">${escapeHtml(title)}</a></li>`).join('')}</ul>`:''}
-  </section>${unit.id==='lesen'?readingTexts.map(readingWorkshop).join(''):''}</div>`;
+  </section>${unit.id==='lesen'?readingTexts.slice(0,2).map(readingWorkshop).join(''):''}</div>`;
   if(lessonDemos[unit.id])setupLessonDemo(unit);
 }
 function showProgress(){
   app.innerHTML=`<div class="route">${homeLink()}
-    <div class="unit-head sand"><span class="icon-box">${icon('star')}</span><div><p class="kicker">Deine Sammlung</p><h1 tabindex="-1">Deine Sterne</h1><p>Du bekommst für jede erstmals richtig gelöste Stationsaufgabe einen Stern.</p></div></div>
+    <div class="unit-head sand"><span class="icon-box">${icon('star')}</span><div><p class="kicker">Deine Sammlung</p><h1 tabindex="-1">Deine Sterne</h1><p>Du bekommst für jede erstmals richtig gelöste Stationsaufgabe einen Stern.</p><a class="secondary" href="#lernuebersicht">Lernübersicht nach Bereichen</a></div></div>
     <section class="panel"><h2>${progress.size} von ${Object.values(questions).flat().length} Sternen</h2>
     <ul class="progress-list">${units.map(u=>`<li><a href="#${u.id}">${u.title}</a><span>${doneFor(u.id)} / ${questions[u.id].length}</span></li>`).join('')}</ul>
     <p class="subtle" style="margin-top:13px">${best===null?'Dein Quiz-Rekord erscheint nach deiner ersten Runde.':'Quiz-Rekord: '+best+' von '+mixed.length+' Punkten.'}</p></section></div>`;
@@ -2868,6 +2895,8 @@ function showExercise(unit,number,isQuiz,part=null){
    <div class="field-actions"><button class="secondary" id="hearing-speed" type="button" aria-pressed="false">Langsamer hören</button></div>
    <p class="inline-status" id="hearing-status" role="status"></p>
    ${isQuiz?'':`<details><summary>Hörtext zum Nachlesen</summary>${readingPassage(annaStories.find(story=>story.id===q.track))}</details>`}</div>`:''}
+   ${q.spokenTask!==undefined?spokenTaskControls(q.spokenTask):''}
+   ${q.comic?`<p><a href="#tagescomic/${q.comic}/1">Comic noch einmal lesen</a></p>`:''}
    ${q.reading!==undefined?`<div class="context">${readingPassage(readingTexts[q.reading])}</div>`:''}
    ${q.listen?`<div class="field-actions"><button class="secondary" type="button" data-speak="normal">${icon('audio')} Ganzer Satz</button><button class="secondary" type="button" data-speak="slow">${icon('audio')} Langsam mit Pausen</button><button class="plain" type="button" id="stop-audio">Stopp</button></div><audio id="dictation-audio" preload="metadata"></audio><p class="inline-status" id="audio-status" role="status"></p><div id="reading-alternative" hidden><button class="plain" id="toggle-reading" type="button" aria-expanded="false">Satz kurz lesen und dann schreiben</button><p class="context" id="reading" hidden>${escapeHtml(q.listen)}</p></div>`:''}
    <form id="answer-form">${answerView(q)}
@@ -2885,11 +2914,12 @@ function showExercise(unit,number,isQuiz,part=null){
   document.querySelector('#next').onclick=()=>nextQuestion();
   if(!isQuiz){
     document.querySelector('#help').onclick=()=>{
+      active.assisted=true;
       const tip=document.querySelector('#tip');
       tip.hidden=!tip.hidden;
       document.querySelector('#help').setAttribute('aria-expanded',String(!tip.hidden));
     };
-    document.querySelector('#reveal').onclick=()=>showFeedback('Hier ist die Lösung.',false,true);
+    document.querySelector('#reveal').onclick=()=>{active.assisted=true;showFeedback('Hier ist die Lösung.',false,true);};
   }
   app.querySelectorAll('[data-choice]').forEach(button=>button.onclick=()=>{
     if(active.checked)return;
@@ -2899,9 +2929,11 @@ function showExercise(unit,number,isQuiz,part=null){
     else active.chosen.add(index);
     app.querySelectorAll('[data-choice]').forEach(control=>control.setAttribute('aria-pressed',String(active.chosen.has(Number(control.dataset.choice)))));
   });
+  app.querySelectorAll('details').forEach(details=>details.addEventListener('toggle',()=>{if(details.open&&active?.q===q)active.assisted=true;}));
   if(q.type==='sort')drawTiles();
   if(q.type==='search')drawPuzzle();
   if(q.listen)setupAudio(q);
+  if(q.spokenTask!==undefined)setupSpokenTask(q.spokenTask);
   if(q.track){
     const audio=document.querySelector('#hearing-audio');
     const speed=document.querySelector('#hearing-speed');
@@ -3036,6 +3068,7 @@ function checkAnswer(){
     if(field)field.focus();
     return;
   }
+  learningRecord(q,correct);
   if(active.isQuiz){
     active.checked=true;
     quiz.push({q,given,correct});
@@ -3056,7 +3089,8 @@ function checkAnswer(){
     const caseOnly=q.type==='write'&&given.toLocaleLowerCase('de-DE')===q.answer.toLocaleLowerCase('de-DE');
     const articleMissing=q.type==='write'&&/^(der|die|das) /.test(q.answer)&&given===q.answer.split(' ').slice(1).join(' ');
     const periodMissing=q.listen&&given+'.'===q.answer;
-    const message=caseOnly?'Fast richtig. Prüfe die Groß- und Kleinschreibung.':articleMissing?'Das Nomen stimmt. Ergänze noch den Artikel.':periodMissing?'Fast richtig. Am Ende fehlt der Punkt.':'Versuche es noch einmal. Der Tipp kann dir helfen.';
+    const punctuationOnly=q.type==='write'&&given.replace(/[.,!?„“"]/g,'').replace(/\s+/g,' ').trim()===q.answer.replace(/[.,!?„“"]/g,'').replace(/\s+/g,' ').trim();
+    const message=punctuationOnly&&!caseOnly?'Die Wörter stimmen. Prüfe Komma, Punkt und Redezeichen.':caseOnly?'Fast richtig. Prüfe die Groß- und Kleinschreibung.':articleMissing?'Das Nomen stimmt. Ergänze noch den Artikel.':periodMissing?'Fast richtig. Am Ende fehlt der Punkt.':'Versuche es noch einmal. Der Tipp kann dir helfen.';
     showFeedback(message,false,false);
   }
 }
@@ -3562,6 +3596,7 @@ function showDetective(id,part){
     <nav class="actions detective-turn" aria-label="Comic umblättern">
       ${page>1?`<a class="secondary" href="${link(episode,page-1)}">${icon('back')} Vorherige Seite</a>`:''}
       ${page<episode.pages.length?`<a class="primary" href="${link(episode,page+1)}">${page===episode.pausePage?(episode.id==='blaue-punkte'?'Zur Spur am Wagen':'Zur Auflösung'):'Nächste Seite'} ${icon('arrow')}</a>`:episode.featuredCover!==undefined?'<a class="primary" href="#start">Zur Startseite</a>':'<a class="primary" href="#tagescomic">Zum Comic des Tages</a>'}
+      ${page===episode.pages.length?`<a class="secondary" href="#comicwerkstatt/${comicLearning.findIndex(row=>row[0]===episode.id)*2+1}">Mit dem Comic üben</a><a class="secondary" href="#schreibwerkstatt/comic-${episode.id}">Eigene Szene schreiben</a>`:''}
     </nav></section>
     <nav class="panel comic-archive" aria-label="Comicarchiv"><h2>Alle Comics</h2>
     <p>Die Detektivfälle wechseln täglich. Du kannst alle Comics jederzeit lesen.</p>
@@ -3570,7 +3605,491 @@ function showDetective(id,part){
   </div>`;
 }
 
+// Additional practice uses the existing exercise types and stable task identifiers.
+const curriculumUnits=[
+  {id:'rechtschreiben',title:'Rechtschreibstrategien',icon:'puzzle',tone:'mint',place:'Bärli begründet jede Schreibung',story:'Entscheide, welche Hilfe zu einem Wort passt, und überprüfe deine Schreibung.',rule:'Verlängere Wörter, leite verwandte Wörter ab und prüfe Wortbausteine. Bei Merkwörtern helfen Wörterliste und Wiederholung. Mit einem Adjektiv kannst du ein Nomen erkennen.',examples:['Hände → Hand','fahren → Fahrrad','der kleine Hund → Hund großschreiben'],description:'Ableiten, Wortbausteine, Merkwörter und Nachschlagen'},
+  {id:'saetze',title:'Sätze und Satzzeichen',icon:'book',tone:'lilac',place:'Maja baut verständliche Sätze',story:'Verschiebe Satzteile, frage nach Personen und verwandle Sprechblasen in wörtliche Rede.',rule:'Ein Satz hat einen Satzkern mit einem Verb. Frage mit „Wer oder was?“ nach dem Subjekt. Prüfe, welche Wörter beim Umstellen zusammenbleiben. Satzzeichen helfen beim Lesen.',examples:['Maja liest im Garten. → Im Garten liest Maja.','Wer liest? → Maja','Maja sagt: „Ich lese.“'],description:'Sätze umstellen, Satzarten und wörtliche Rede'},
+  {id:'textsorten',title:'Texte und Medien entdecken',icon:'book',tone:'sand',place:'Fuji sucht die passende Textstelle',story:'Lies Gedicht, Sachtext, Brief, Einladung, Anleitung und Erzählung. Suche Belege für deine Antworten.',rule:'Überlege zuerst, wozu ein Text geschrieben wurde. Lies die Überschrift. Suche die passende Textstelle und prüfe, ob deine Antwort dazu passt. Bilder und Wörter erzählen manchmal Unterschiedliches.',examples:['Eine Anleitung zeigt Handlungsschritte.','Ein Sachtext erklärt.','Eine Einladung braucht Ort und Zeit.'],description:'Sechs Textarten mit Fragen und Textbelegen'},
+  {id:'hoerauftraege',title:'Hören und handeln',icon:'audio',tone:'sky',place:'Maja hört auf die wichtigen Angaben',story:'Höre eine Durchsage, einen Auftrag oder ein Gespräch. Beantworte danach fünf Fragen.',rule:'Vor dem Hören liest du die Frage. Höre erst auf den Zusammenhang und danach gezielt auf die benötigte Angabe. Du darfst wiederholen und nachfragen.',examples:['Welche Zeit wurde genannt?','Was soll zuerst passieren?','Wo widersprechen sich zwei Angaben?'],description:'Durchsagen, Gespräche und Anleitungen verstehen'},
+  {id:'comicwerkstatt',title:'Mit Comics lernen',icon:'book',tone:'rose',place:'Bärli entdeckt Gründe und Redezeichen',story:'Nutze die Schulcomics zum Begründen und Schreiben. Am Ende kannst du selbst eine Szene ergänzen.',rule:'Begründe deine Antwort mit einem Hinweis aus dem Comic. Setze vor eine wörtliche Rede einen Begleitsatz mit Doppelpunkt. Eigene Fortsetzungen können verschieden und trotzdem passend sein.',examples:['Warum macht Melody nicht weiter?','Maja sagt: „Wir beginnen.“'],description:'Verstehen, Redezeichen und eigene Comicideen'}
+];
+units.push(...curriculumUnits);
+const skillByUnit={
+  wortarten:'sprache',endungen:'sprache',vorsilben:'sprache',wortketten:'sprache',verben:'sprache',steigern:'sprache',
+  herbst:'schreiben',verlaengern:'schreiben',rechtschreiben:'schreiben',saetze:'sprache',
+  hoeren:'zuhoeren',hoerauftraege:'zuhoeren',lesen:'lesen',textsorten:'lesen',comicwerkstatt:'lesen'
+};
+const skillLabels={lesen:'Lesen',zuhoeren:'Zuhören',schreiben:'Schreiben',sprache:'Sprache untersuchen',sprechen:'Sprechen'};
+
+const derivedWords=[
+ ['Hände','Hand','ä','a'],['Bäume','Baum','äu','au'],['Häuser','Haus','äu','au'],
+ ['Zähne','Zahn','ä','a'],['Mäuse','Maus','äu','au'],['Wälder','Wald','ä','a'],
+ ['kälter','kalt','ä','a'],['träumen','Traum','äu','au'],['kräftig','Kraft','ä','a'],['gefährlich','Gefahr','ä','a']
+];
+questions.rechtschreiben=derivedWords.map(([word,base,sound,origin],i)=>{
+ const why='„'+word+'“ gehört zu „'+base+'“. Im verwandten Wort steht '+origin+'. Das hilft bei der Schreibung mit '+sound+'.';
+ return i%2?write('Schreibe das verwandte Wort, das bei der Schreibung hilft.',word,base,'Suche die Grundform oder die Einzahl.',why):
+  pick('Welches Wort hilft dir, die Schreibung zu begründen?',word,[base,word+'e',word+'er'],base,'Suche ein Wort aus derselben Wortfamilie.',why);
+});
+questions.rechtschreiben.push(...[
+ ['Fahrrad','fahr','fahren','Der Wortstamm fahr bleibt erhalten. Dazu kommt Rad.'],
+ ['Vorleserin','les','lesen','Im Wort Vorleserin steckt der Stamm les.'],
+ ['Spielzeug','spiel','spielen','Spiel und spielen gehören zu derselben Wortfamilie.'],
+ ['Bezahlung','zahl','zahlen','be- steht vor zahl, -ung dahinter.'],
+ ['Freundlichkeit','freund','Freund','Die Wörter Freund, freundlich und Freundlichkeit sind verwandt.']
+].flatMap(([word,stem,base,why])=>[
+ write('Welcher Wortstamm steckt im Wort? Schreibe ihn klein.',word,stem,'Suche das verwandte Wort „'+base+'“.',why),
+ write('Schreibe das verwandte Wort.',word+' → '+base.slice(0,2)+'…',base,'Gesucht ist „'+base+'“.',why)
+]));
+questions.rechtschreiben.push(
+ ...[['Tiger','Tieger'],['Maschine','Maschiene'],['ihre','ire'],['Schnee','Schne'],['Haare','Hare']].map(([right,wrong],i)=>pick('Welche Schreibung steht so im Wörterbuch?',wrong,i%2?[wrong,right]:[right,wrong],right,'Das ist ein Merkwort. Du darfst nachschlagen.','Merke dir die Schreibung „'+right+'“. Sie wird in diesem Wort mit '+(right==='Tiger'?'i':right==='Maschine'?'i':right==='ihre'?'ih':right==='Schnee'?'ee':'aa')+' geschrieben.')),
+ ...[
+  ['Welche Reihenfolge passt im Wörterbuch?',['Ball','Baum','Bett'],'Vergleiche bei gleichem ersten Buchstaben die nächsten Buchstaben.'],
+  ['Ordne die Wörter für eine Wörterliste.',['Hase','Haus','Heft'],'Nach Ha entscheidet der nächste Buchstabe: s steht vor u.'],
+  ['Ordne diese Wörter alphabetisch.',['Karte','Katze','Kiste'],'Vergleiche erst Ka und Ki, dann Kar und Kat.']
+ ].map(([prompt,tiles,why])=>sort(prompt,'',tiles,'Vergleiche Buchstabe für Buchstabe.',why)),
+ mark('Welche Wörter sind Nomen? Nutze die Adjektivprobe.','Maja zeigt viel Freude und große Geduld.',[0,3,6],'die große Freude, die große Geduld; Maja ist ein Name.','Maja ist ein Name. Freude und Geduld sind Nomen. Vor beide kann eine Nomengruppe mit Adjektiv treten.'),
+ write('Verbessere die Großschreibung.','die kleine katze schläft.','Die kleine Katze schläft.','Achte auf Satzanfang und Nomen.','Die steht am Satzanfang. Katze ist das Nomen in der Gruppe „die kleine Katze“.',{long:true})
+);
+
+questions.saetze=[
+ ...[
+ ['Maja','liest','im Garten'],['Fuji','schläft','auf dem Teppich'],['Melody','schreibt','am Tisch'],['Tom','spielt','auf dem Hof'],['Nele','malt','in der Schule'],['Bärli','sitzt','auf der Bank']
+ ].flatMap(([who,verb,where])=>[
+  write('Stelle die Ortsangabe an den Anfang. Schreibe den ganzen Satz.',who+' '+verb+' '+where+'.',where[0].toUpperCase()+where.slice(1)+' '+verb+' '+who+'.','Das Verb bleibt an zweiter Satzgliedstelle.','Aus „'+who+' '+verb+' '+where+'“ wird „'+where[0].toUpperCase()+where.slice(1)+' '+verb+' '+who+'“.',{long:true}),
+  write('Wer oder was tut etwas? Schreibe das Subjekt.',who+' '+verb+' '+where+'.',who,'Frage: Wer oder was '+verb+'?','„'+who+'“ ist das Subjekt. Das Prädikat lautet „'+verb+'“.'),
+  write('Was tut die Figur? Schreibe das Prädikat.',who+' '+verb+' '+where+'.',verb,'Suche das Verb in der Personalform.','Das Prädikat „'+verb+'“ bildet den Satzkern.')
+ ]),
+ ...[['Wo ist Fuji?','Fragesatz'],['Maja liest.','Aussagesatz'],['Pass auf!','Ausrufesatz']].map(([context,right])=>pick('Welche Satzart ist das?',context,['Aussagesatz','Fragesatz','Ausrufesatz'],right,'Achte auf Bedeutung und Satzschlusszeichen.','„'+context+'“ ist ein '+right+'.')),
+ ...[
+ ['Maja','Ich lese ein Buch.'],['Tom','Ich spiele im Hof.'],['Melody','Ich beginne jetzt.'],
+ ['Bärli','Wir schaffen das.'],['Nele','Mein Bild ist fertig.'],['Fuji','Ich warte hier.']
+ ].map(([who,line])=>write('Setze die Redezeichen. Schreibe den ganzen Satz.',who+' sagt: '+line,who+' sagt: „'+line+'“','Nach dem Doppelpunkt beginnt die Rede. Setze die Anführungszeichen.','Eine richtige Schreibung ist '+who+' sagt: „'+line+'“.',{long:true,also:[who+' sagt: "'+line+'"']})),
+ ...[
+ ['Maja packt Stift Heft und Buch ein.','Maja packt Stift, Heft und Buch ein.'],
+ ['Tom läuft hüpft und lacht.','Tom läuft, hüpft und lacht.'],
+ ['Nele malt einen roten blauen und gelben Stern.','Nele malt einen roten, blauen und gelben Stern.']
+ ].map(([context,right])=>write('Ergänze das fehlende Komma.',context,right,'Das Komma trennt die ersten Teile der Aufzählung. Vor und steht hier kein Komma.','Richtig ist: '+right,{long:true}))
+];
+
+const genreTexts=[
+ {title:'Flockes Nase',genre:'Sachtext',parts:['Hunde untersuchen ihre Umgebung auch mit der Nase. Beim Schnuppern nehmen sie viele Gerüche wahr. Ein Hund kann sich von einem Geruch abwenden. Daraus kann man allein noch nicht sicher wissen, warum er Abstand hält.','Wer einen Hund begrüßen möchte, wartet ruhig. Die Person, die den Hund führt, kann erklären, wie die Begegnung gut gelingt.']},
+ {title:'Die Regenpause',genre:'Gedicht',parts:['Der Regen klopft ans Fensterbrett,\nder Hof glänzt silberhell.\nBärli kuschelt sich ins Bett,\ndie Tropfen fallen schnell.']},
+ {title:'Einladung zur Lesezeit',genre:'Einladung',parts:['Liebe Nele,\nkomm am Samstag um 15 Uhr zu mir nach Hause. Wir lesen im Wohnzimmer und basteln danach Lesezeichen. Bring bitte dein Lieblingsbuch mit. Sag mir am Freitag Bescheid, ob du kommen kannst.\nDeine Maja']},
+ {title:'Ein Lesezeichen falten',genre:'Anleitung',parts:['Du brauchst ein quadratisches Stück Papier. Lege es mit einer Spitze nach oben vor dich. Falte die untere Spitze genau auf die obere. Streiche den Knick glatt. Nun kannst du das Dreieck auf einer Seite bemalen. Verwende es als Lesezeichen.']},
+ {title:'Ein Brief an Frau Burger',genre:'Brief',parts:['Liebe Frau Burger,\nwir möchten in unserer Klasse Bücher vorstellen. Können wir dafür am Freitag die letzte Viertelstunde der Deutschstunde nutzen? Wir würden jeweils zwei Minuten sprechen.\nViele Grüße\nMaja und Nele']},
+ {title:'Das leise Klingeln',genre:'Erzählung',parts:['Maja hörte ein Klingeln, obwohl vor dem Tor niemand stand. Bärli schaute unter die Bank. Dort rollte eine kleine Fahrradklingel im Wind hin und her. Maja hob sie auf und legte sie in die Fundkiste. „Jetzt hat sie einen festen Platz“, sagte sie.']}
+];
+const genreStart=readingTexts.length;
+readingTexts.push(...genreTexts);
+const genreQuestions=[
+ [
+ ['Wozu wurde der Text geschrieben?','Um zu informieren.','Um zu einem Fest einzuladen.','Um ein Lied vorzugeben.','Er erklärt, wie Hunde Gerüche wahrnehmen.'],
+ ['Womit untersucht ein Hund seine Umgebung auch?','Mit der Nase.','Mit einem Heft.','Mit einer Klingel.','Das steht im ersten Satz.'],
+ ['Was weiß man aus dem Abwenden allein?','Den genauen Grund noch nicht.','Dass der Hund immer Angst hat.','Dass das Kind etwas falsch gemacht hat.','Der Text sagt ausdrücklich, dass man den Grund daraus allein nicht sicher weiß.'],
+ ['Was soll man beim Begrüßen zuerst tun?','Ruhig warten.','Den Hund festhalten.','Ihm sofort nachlaufen.','Der zweite Absatz nennt das ruhige Warten.'],
+ ['Ein Bild zeigt einen rennenden Hund. Beweist das Angst?','Nein, ein einzelnes Bild reicht dafür nicht.','Ja, jeder rennende Hund hat Angst.','Ja, Bilder erklären immer alles.','Beobachtung und Deutung sind verschieden. Auch der Text warnt vor vorschnellen Schlüssen.']
+ ],[
+ ['Welche Textart liegt vor?','Ein Gedicht.','Ein Rezept.','Ein Brief.','Der Text hat Verse und Reimwörter.'],
+ ['Was reimt sich auf Fensterbrett?','Bett','hell','schnell','Fensterbrett und Bett enden gleich klingend.'],
+ ['Welche Wörter reimen sich außerdem?','hell und schnell','Regen und Bett','Bärli und Hof','hell und schnell bilden das zweite Reimpaar.'],
+ ['Was bedeutet „Der Regen klopft“ hier?','Die Tropfen machen ein Geräusch.','Der Regen hat eine Hand.','Jemand steht an der Tür.','Das Klopfen beschreibt den Klang der Regentropfen.'],
+ ['Wie viele Verse hat das Gedicht?','Vier.','Zwei.','Sechs.','Jede der vier Zeilen ist ein Vers.']
+ ],[
+ ['Wozu dient der Text?','Zum Einladen.','Zum Erklären von Hundegebell.','Zum Berichten über gestern.','Maja bittet Nele zu einer gemeinsamen Lesezeit.'],
+ ['Wann soll Nele kommen?','Samstag um 15 Uhr.','Freitag um 15 Uhr.','Samstag um 10 Uhr.','Der zweite Satz nennt Tag und Uhrzeit.'],
+ ['Was soll Nele mitbringen?','Ihr Lieblingsbuch.','Eine Taschenlampe.','Eine Fahrradklingel.','Die Bitte steht im Satz mit „Bring bitte“.'],
+ ['Was passiert nach dem Lesen?','Lesezeichen basteln.','Ball spielen.','Eine Klassenarbeit schreiben.','Das Wort danach verbindet Lesen und Basteln.'],
+ ['Bis wann soll Nele antworten?','Bis Freitag.','Bis Sonntag.','Bis Montag.','„Sag mir am Freitag Bescheid“ nennt den Rückmeldetag.']
+ ],[
+ ['Welche Textart ist das?','Eine Anleitung.','Ein Gedicht.','Eine Erzählung.','Der Text beschreibt nacheinander Handlungsschritte.'],
+ ['Welches Material brauchst du?','Quadratisches Papier.','Eine runde Holzscheibe.','Einen langen Schal.','Der erste Satz nennt das Material.'],
+ ['Wie soll das Papier am Anfang liegen?','Mit einer Spitze nach oben.','Mit einer Spitze unter dem Tisch.','Zusammengerollt.','Der zweite Satz beschreibt die Ausgangslage.'],
+ ['Was geschieht direkt vor dem Bemalen?','Den Knick glattstreichen.','Eine Schere holen.','Das fertige Zeichen einpacken.','Diese Reihenfolge steht im Text.'],
+ ['Welche Ergänzung würde beim Verstehen helfen?','Bilder zu den einzelnen Schritten.','Ein Foto von einem Hund.','Eine unlesbare Überschrift.','Bilder können zeigen, wohin gefaltet werden soll.']
+ ],[
+ ['An wen richtet sich der Brief?','An Frau Burger.','An Bärli.','An den Direktor.','Die Anrede nennt Frau Burger.'],
+ ['Was wünschen sich Maja und Nele?','Zeit für Buchvorstellungen.','Mehr Hausaufgaben.','Eine andere Pause.','Im ersten Satz steht ihr Wunsch.'],
+ ['Welche Zeit schlagen sie vor?','Die letzte Viertelstunde am Freitag.','Den ganzen Montag.','Die erste Minute der Pause.','Der zweite Satz nennt ihren konkreten Vorschlag.'],
+ ['Wie lange soll jedes Kind sprechen?','Zwei Minuten.','Fünf Minuten.','Eine Stunde.','„Jeweils zwei Minuten“ ist die geplante Länge.'],
+ ['Welcher Schluss passt zu diesem Brief?','Viele Grüße, Maja und Nele','Zutaten für vier Personen','Es war einmal','Die Grußformel und die Namen schließen den Brief passend ab.']
+ ],[
+ ['Welche Textart ist das?','Eine Erzählung.','Eine Einladung.','Eine Materialliste.','Ein Ereignis wird mit einem Anfang und einer Lösung erzählt.'],
+ ['Was macht Maja neugierig?','Ein Klingeln ohne sichtbare Person.','Ein fertiges Bild.','Eine heiße Suppe.','Das steht gleich am Anfang.'],
+ ['Wo liegt die Klingel?','Unter der Bank.','Im Schulranzen.','Auf dem Dach.','Bärli schaut unter die Bank und findet sie dort.'],
+ ['Was löst das Rätsel?','Die Klingel bewegt sich im Wind.','Ein Kind klopft an die Tür.','Der Direktor kommt herein.','Der Wind lässt die kleine Klingel hin und her rollen.'],
+ ['Warum endet das Klingeln dort?','Maja legt die Klingel in die Fundkiste.','Bärli wirft sie weg.','Das Tor wird gestrichen.','Durch das Aufheben und Ablegen hat die Klingel einen festen Platz.']
+ ]
+];
+const choiceRow=(row,index)=>{
+ const [prompt,answer,a,b,why]=row;
+ const options=[answer,a,b], offset=index%3;
+ return pick(prompt,'',options.slice(offset).concat(options.slice(0,offset)),answer,'Suche die passende Stelle im Text oder höre gezielt auf die Angabe.',why);
+};
+questions.textsorten=genreQuestions.flatMap((rows,g)=>rows.map((row,i)=>({...choiceRow(row,g+i),reading:genreStart+g})));
+
+const listeningTasks=[
+ {title:'Durchsage in der Schule',text:'Achtung, Klasse drei. Die Bücherei öffnet heute erst um zehn Uhr. Bringt eure Bücher in der zweiten Pause zurück. Der Leseraum bleibt bis dahin geschlossen.',rows:[
+  ['Wer wird angesprochen?','Klasse drei.','Die Eltern.','Klasse eins.','Die Durchsage beginnt mit Klasse drei.'],
+  ['Wann öffnet die Bücherei?','Um zehn Uhr.','Um acht Uhr.','Um zwölf Uhr.','Die Uhrzeit lautet zehn Uhr.'],
+  ['Wann sollen die Bücher zurückgebracht werden?','In der zweiten Pause.','Vor Schulbeginn.','Nach den Ferien.','Der zweite Satz nennt die zweite Pause.'],
+  ['Welcher Raum bleibt zunächst geschlossen?','Der Leseraum.','Die Turnhalle.','Das Lehrerzimmer.','Das ist die letzte Information.'],
+  ['Ein Kind sagt „Ich gehe sofort hinein“. Was passt dazu?','Es muss noch warten.','Es darf jetzt schon hinein.','Es soll das Buch wegwerfen.','Der Raum ist bis zur Öffnung geschlossen.']
+ ]},
+ {title:'Bastelauftrag',text:'Lege ein Blatt Papier auf den Tisch. Male zuerst einen grünen Kreis. Zeichne danach einen blauen Stern daneben. Schreibe deinen Namen zum Schluss auf die Rückseite.',rows:[
+  ['Was brauchst du zuerst?','Ein Blatt Papier.','Eine Schere.','Einen Schal.','Ein Blatt soll auf den Tisch gelegt werden.'],
+  ['Was wird zuerst gemalt?','Ein grüner Kreis.','Ein roter Stern.','Eine blaue Linie.','Zuerst ist das Signalwort für den Kreis.'],
+  ['Welche Farbe hat der Stern?','Blau.','Gelb.','Grün.','Der Stern soll blau sein.'],
+  ['Wo soll der Name stehen?','Auf der Rückseite.','Mitten im Kreis.','Auf dem Tisch.','Der Name gehört auf die Rückseite.'],
+  ['Wann schreibst du deinen Namen?','Zum Schluss.','Vor dem Kreis.','Vor dem Hinlegen.','Zum Schluss ist die letzte Handlung.']
+ ]},
+ {title:'Gespräch am Schultor',text:'Maja fragt: Treffen wir uns nachher um drei am Spielplatz? Melody antwortet: Um drei habe ich Musik. Um vier kann ich dort sein. Maja sagt: Gut, dann um vier am Spielplatz.',rows:[
+  ['Welchen Ort nennt Maja?','Den Spielplatz.','Die Bücherei.','Das Kino.','Der Spielplatz ist der Treffpunkt.'],
+  ['Welche Zeit schlägt Maja zuerst vor?','Drei Uhr.','Vier Uhr.','Zwei Uhr.','Zuerst fragt sie nach drei Uhr.'],
+  ['Warum kann Melody dann nicht?','Sie hat Musik.','Sie schläft.','Sie sucht ihren Ranzen.','Melody nennt ihre Musikstunde.'],
+  ['Welche Zeit vereinbaren beide am Ende?','Vier Uhr.','Drei Uhr.','Fünf Uhr.','Maja bestätigt vier Uhr.'],
+  ['Was hilft hier besonders beim Zuhören?','Auf die geänderte Uhrzeit achten.','Nur den ersten Satz merken.','Den Ort vergessen.','Die Absprache ändert sich im Gespräch.']
+ ]},
+ {title:'Nachricht für zu Hause',text:'Hallo Papa, ich bin nach der Schule noch bei Nele. Wir üben unsere Buchvorstellung. Um halb fünf bin ich wieder zu Hause. Mein Fahrrad steht bei uns im Hof.',rows:[
+  ['Für wen ist die Nachricht?','Für Papa.','Für Frau Burger.','Für den Direktor.','Die Anrede lautet Hallo Papa.'],
+  ['Wo ist das Kind?','Bei Nele.','Im Schwimmbad.','Im Laden.','Es sagt, dass es noch bei Nele ist.'],
+  ['Was üben die Kinder?','Ihre Buchvorstellung.','Ein Fußballspiel.','Ein Lied.','Die Buchvorstellung ist der Grund.'],
+  ['Wann kommt es zurück?','Um halb fünf.','Um fünf.','Um halb drei.','Halb fünf bedeutet 16.30 Uhr am Nachmittag.'],
+  ['Wo steht das Fahrrad?','Zu Hause im Hof.','Bei Nele im Keller.','Am Schultor.','„Bei uns im Hof“ bezieht sich auf das Zuhause.']
+ ]},
+ {title:'Spielregeln',text:'Beim Wortball stehen wir im Kreis. Wer den Ball fängt, nennt ein Tier. Dann wirft das Kind den Ball vorsichtig weiter. Ein Tiername darf in einer Runde nur einmal vorkommen.',rows:[
+  ['Wie stehen die Kinder?','Im Kreis.','In einer Reihe.','Unter dem Tisch.','Der Kreis ist die Aufstellung.'],
+  ['Was nennt man nach dem Fangen?','Ein Tier.','Eine Zahl.','Eine Farbe.','Beim Fangen wird ein Tiername genannt.'],
+  ['Wie wird geworfen?','Vorsichtig.','So fest wie möglich.','Immer auf den Boden.','Das Wort vorsichtig beschreibt das Werfen.'],
+  ['Darf ein Tiername zweimal vorkommen?','In einer Runde nur einmal.','Immer dreimal.','Beliebig oft.','Die letzte Regel verbietet Wiederholungen innerhalb einer Runde.'],
+  ['„Hund“ wurde schon genannt. Was passt jetzt?','Katze','Hund','Hund noch einmal','Katze ist ein neuer Tiername.']
+ ]},
+ {title:'Zwei Wetterangaben',text:'Im ersten Bericht heißt es: Am Nachmittag bleibt es trocken. In einer späteren Nachricht wird Regen ab vier Uhr angekündigt. Frau Burger sagt: Nehmt für den Heimweg vorsichtshalber eure Regenjacke mit.',rows:[
+  ['Was sagt der erste Bericht?','Es bleibt trocken.','Es schneit.','Es stürmt.','Der erste Bericht nennt trockenes Wetter.'],
+  ['Was sagt die spätere Nachricht?','Regen ab vier Uhr.','Sonne bis Mitternacht.','Schnee ab drei Uhr.','Die neue Angabe lautet Regen ab vier Uhr.'],
+  ['Was hat sich geändert?','Die Vorhersage für den Nachmittag.','Der Wochentag.','Der Schulweg.','Trockenes Wetter und angekündigter Regen passen nicht unverändert zusammen.'],
+  ['Was empfiehlt Frau Burger?','Eine Regenjacke mitnehmen.','Die Tasche zu Hause lassen.','Sofort umkehren.','Sie empfiehlt die Jacke vorsichtshalber.'],
+  ['Welche Nachfrage wäre passend?','Welche Wetterangabe ist die neuere?','Wie heißt unser Ball?','Wo liegt mein Buch?','Die zeitliche Reihenfolge hilft, die widersprüchlichen Angaben einzuordnen.']
+ ]}
+];
+questions.hoerauftraege=listeningTasks.flatMap((task,g)=>task.rows.map((row,i)=>({...choiceRow(row,g+i),spokenTask:g})));
+const comicLearning=[
+ ['melody-und-die-hausaufgaben','Warum möchte Melody das Heft zuklappen?','Sie weiß nicht, wo sie anfangen soll.','Sie hat ihr Heft verloren.','Sie kennt Maja nicht.','Melody sagt, dass sie schon auf die letzte Frage schaut. Die Karte hilft ihr, nur die erste Aufgabe zu sehen.','Melody','Ich beginne mit einer Frage.','Erfinde zwei neue Sprechblasen für Melody nach der Schule.'],
+ ['tom-und-der-schulhund','Woran erkennt man, dass Maja Tom schon vor dem nächsten Tag einbezieht?','Sie lädt ihn zum Ballspiel ein.','Sie versteckt den Ball.','Sie spricht vor der Klasse über ihn.','Maja geht in der Pause mit dem Ball zu Tom und spielt mit ihm.','Maja','Spielst du mit?','Schreibe einen freundlichen Dialog zwischen Tom und Maja auf dem Schulhof.'],
+ ['buecherkiste','Welcher Hinweis verbindet Haken und Wagen?','Orangefarbene Fäden.','Blaue Farbe.','Ein Regenmantel.','An beiden Stellen sind orangefarbene Fäden zu sehen.','Maja','Hier hängt ein Faden.','Erfinde eine weitere Szene mit dem wiedergefundenen Schlüssel.'],
+ ['blaue-punkte','Warum prüft die Klasse den Wagen auf frischem Papier?','Um die Vermutung zu testen.','Um ein Gedicht zu lesen.','Um die Schuhe zu verstecken.','Eine neue Spur und später das saubere Papier zeigen, welche Rolle das Rad spielt.','Nele','Die Punkte passen zusammen.','Schreibe zwei Sätze über eine neue Farbspur im Kunstraum.'],
+ ['lesefenster','Was spricht für den Papierstreifen als Geräuschquelle?','Ohne ihn bleibt es am offenen Fenster still.','Jona hat einen Stift.','Das Buch ist bunt.','Nach dem Entfernen des Streifens hören die Kinder bei offenem Fenster kein Rascheln mehr.','Maja','Jetzt ist es still.','Erfinde ein anderes leises Geräusch und eine plausible Erklärung.']
+];
+questions.comicwerkstatt=comicLearning.flatMap(([id,prompt,right,a,b,why,speaker,line],i)=>[
+ {...choiceRow([prompt,right,a,b,why],i),comic:id},
+ {...write('Verwandle die Sprechblase in wörtliche Rede.',speaker+' sagt: '+line,speaker+' sagt: „'+line+'“','Setze nach dem Doppelpunkt die Anführungszeichen.','Der Begleitsatz steht zuerst. Der Punkt der Rede steht vor dem schließenden Anführungszeichen.',{long:true,also:[speaker+' sagt: "'+line+'"']}),comic:id}
+]);
+for(const unit of curriculumUnits){
+ questions[unit.id].forEach((q,i)=>{q.id=unit.id+'-'+(i+1);q.unit=unit.id;});
+}
+
+const learningKey='majas-wortwerkstatt-lernweg-v1';
+let learning={};
+try {
+ const value=JSON.parse(localStorage.getItem(learningKey)||'{}');
+ if(value&&typeof value==='object'&&!Array.isArray(value))learning=value;
+} catch {}
+for(const key of ['tasks','reading','writing','speaking','daily','notes']){
+ if(!learning[key]||typeof learning[key]!=='object'||Array.isArray(learning[key]))learning[key]={};
+}
+let learningStorageOk=true;
+function saveLearning(){
+ try {localStorage.setItem(learningKey,JSON.stringify(learning));learningStorageOk=true;}
+ catch {learningStorageOk=false;}
+ const status=document.querySelector('#learning-save-status');
+ if(status)status.textContent=learningStorageOk?'Auf diesem Gerät gespeichert.':'Speichern ist gerade nicht möglich. Kopiere deinen Text vor dem Verlassen der Seite.';
+}
+const learningDate=(date=new Date())=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Berlin'}).format(date);
+const learningAllTasks=()=>Object.values(questions).flat();
+function learningRecord(q,correct){
+ const previous=learning.tasks[q.id]||{};
+ const attempts=(Number(previous.attempts)||0)+1;
+ if(!correct)active.mistakes=(active.mistakes||0)+1;
+ learning.tasks[q.id]={
+  unit:q.unit,correct,independent:correct&&!active.assisted&&!active.mistakes,
+  attempts,assisted:!!active.assisted,day:learningDate(),at:new Date().toISOString()
+ };
+ saveLearning();
+}
+function learningTaskStatus(id){
+ const result=learning.tasks[id];
+ return result?(result.correct?(result.independent?'Selbstständig gelöst':'Mit Hilfe oder nach Korrektur gelöst'):'Noch einmal üben'):progress.has(id)?'Bereits früher gelöst':'Noch offen';
+}
+function learningSummary(){
+ const rows=Object.fromEntries(Object.keys(skillLabels).map(id=>[id,{independent:0,supported:0,retry:0,legacy:0}]));
+ for(const q of learningAllTasks()){
+  const row=rows[skillByUnit[q.unit]||'sprache'];
+  const result=learning.tasks[q.id];
+  if(!result){if(progress.has(q.id))row.legacy++;continue;}
+  if(!result.correct)row.retry++;
+  else if(result.independent)row.independent++;
+  else row.supported++;
+ }
+ return rows;
+}
+function learningHeader(title,text){
+ return `<div class="route">${homeLink()}<div class="unit-head mint"><span class="icon-box">${icon('book')}</span><div><h1 tabindex="-1">${escapeHtml(title)}</h1><p>${escapeHtml(text)}</p></div></div>`;
+}
+function learningSaveStatus(){
+ return '<p class="subtle" id="learning-save-status" role="status">Deine Einträge werden auf diesem Gerät gespeichert.</p>';
+}
+function learningHome(){
+ return `<section class="panel" aria-labelledby="learning-home"><h2 id="learning-home">Mit Bärli weiterlernen</h2>
+ <p>Lies mit Bärli, schreibe eigene Texte und übe das Erzählen. Dein Tagesplan schlägt dir drei kleine Schritte vor.</p>
+ <div class="actions"><a class="primary" href="#lernweg">Mein Tagesplan</a><a class="secondary" href="#lesetraining">Lesetraining</a><a class="secondary" href="#schreibwerkstatt">Schreibwerkstatt</a><a class="secondary" href="#sprechwerkstatt">Sprechen und Erzählen</a><a class="plain" href="#lernuebersicht">Lernübersicht</a></div></section>`;
+}
+function learningReadingReview(id){
+ const row=learning.reading[id];
+ return row?.checked? (row.support==='allein'?'Selbst eingeschätzt · allein geübt':'Selbst eingeschätzt · gemeinsam geübt'):'Noch keine Selbsteinschätzung';
+}
+function readingTraining(id){
+ const stories=annaStories.slice(0,6);
+ const selected=stories.find(story=>story.id===id);
+ if(!selected){
+  app.innerHTML=learningHeader('Lesetraining mit Bärli','Erst zuhören, dann mitlesen und danach selbst vorlesen.')+
+   `<section class="panel"><h2>Eine kurze Lesezeit</h2><p>Wähle eine Geschichte. Du kannst sie in deinem Tempo mehrfach lesen. Nach dem Üben schaust du auf Genauigkeit, Pausen und Betonung.</p><ul class="progress-list">${stories.map(story=>`<li><a href="#lesetraining/${story.id}">${escapeHtml(story.title)}</a><span>${learningReadingReview(story.id)}</span></li>`).join('')}</ul></section></div>`;return;
+ }
+ const draft=learning.reading[selected.id]||{};
+ app.innerHTML=learningHeader('Lesetraining · '+selected.title,'Du brauchst etwa fünf bis zehn Minuten. Dein eigenes Tempo zählt.')+
+  `<section class="panel"><ol class="learning-steps"><li>Höre erst zu. Schau dabei in den Text.</li><li>Lies beim zweiten Hören mit.</li><li>Lies selbst laut. Du darfst schwierige Stellen wiederholen.</li></ol>
+  <audio id="learning-reading-audio" controls preload="none" src="./anna-audio/${selected.id}.mp3" aria-label="Geschichte zum Mitlesen"></audio>
+  <label>Vorlesetempo <select id="reading-tempo"><option value="0.93">Normal</option><option value="0.78">Langsam</option></select></label>
+  <div class="reading-practice">${selected.paragraphs.map(paragraph=>`<p>${escapeHtml(paragraph)}</p>`).join('')}</div></section>
+  <section class="panel"><h2>Wie war dein Vorlesen?</h2><p>Das ist deine Selbsteinschätzung. Eine erwachsene Person kann mit dir zuhören.</p>
+  <form id="reading-review"><fieldset><legend>Darauf habe ich geachtet</legend>${[
+   ['genau','Ich habe die Wörter genau gelesen.'],['pause','Ich habe an Satzzeichen Pausen gemacht.'],['betont','Ich habe Fragen und Ausrufe passend betont.']
+  ].map(([key,label])=>`<label class="learning-check"><input type="checkbox" name="${key}" ${draft[key]?'checked':''}> ${label}</label>`).join('')}</fieldset>
+  <label class="field" for="reading-support">Wie hast du geübt?</label><select id="reading-support" name="support"><option value="gemeinsam" ${draft.support!=='allein'?'selected':''}>Gemeinsam mit Unterstützung</option><option value="allein" ${draft.support==='allein'?'selected':''}>Allein</option></select>
+  <label class="field" for="reading-note">Diese Stelle möchte ich noch üben</label><input class="answer" id="reading-note" name="note" value="${escapeHtml(draft.note||'')}" maxlength="400">
+  <div class="actions"><button class="primary">Lesezeit festhalten</button><a class="secondary" href="#lernweg">Zum Tagesplan</a></div></form>${learningSaveStatus()}</section></div>`;
+ const form=document.querySelector('#reading-review');
+ const capture=()=>Object.fromEntries(new FormData(form));
+ form.oninput=()=>{
+  learning.reading[selected.id]={...learning.reading[selected.id],...capture(),genau:form.elements.genau.checked,pause:form.elements.pause.checked,betont:form.elements.betont.checked};
+  saveLearning();
+ };
+ form.onsubmit=event=>{
+  event.preventDefault();
+  learning.reading[selected.id]={...learning.reading[selected.id],...capture(),checked:true,at:learningDate(),genau:form.elements.genau.checked,pause:form.elements.pause.checked,betont:form.elements.betont.checked};
+  saveLearning();
+ };
+ const audio=document.querySelector('#learning-reading-audio');
+ audio.defaultPlaybackRate=audio.playbackRate=.93;
+ document.querySelector('#reading-tempo').onchange=e=>{audio.defaultPlaybackRate=audio.playbackRate=Number(e.target.value);};
+ audio.onerror=()=>{document.querySelector('#learning-save-status').textContent='Die Aufnahme lädt gerade nicht. Du kannst den Text mit einer erwachsenen Person lesen.';};
+}
+
+const writingTasks=[
+ {id:'erlebnis',title:'Ein Erlebnis erzählen',goal:'Erzähle, wie Maja und Bärli auf dem Schulhof etwas Unerwartetes entdecken.',plan:'Wer ist dabei? Wo und wann passiert es? Was wird entdeckt? Wie endet es?',words:['Zuerst','Auf einmal','Vorsichtig','Zum Glück'],model:'In der großen Pause entdeckte Maja einen blauen Handschuh unter der Bank. Bärli hielt ihn erst für eine Mütze. Maja fragte in ihrer Klasse nach. Nele hatte den Handschuh schon gesucht. Erleichtert zog sie ihn an und bedankte sich.',criteria:['Ich habe erklärt, wer, wo und wann.','Meine Ereignisse passen in der Reihenfolge zusammen.','Mein Schluss löst das kleine Problem.']},
+ {id:'einladung',title:'Eine Einladung schreiben',goal:'Lade Nele zu einem Lesenachmittag mit Maja ein.',plan:'Für wen schreibst du? Wann und wo trefft ihr euch? Was soll Nele mitbringen? Bis wann soll sie antworten?',words:['Liebe Nele','am Samstag','Bring bitte','Sag mir Bescheid'],model:'Liebe Nele, komm am Samstag um 15 Uhr zu mir nach Hause. Wir lesen und basteln im Wohnzimmer. Bring bitte dein Lieblingsbuch mit. Sag mir am Freitag Bescheid, ob du kommen kannst. Ich freue mich auf dich! Deine Maja',criteria:['Anrede und Absender sind dabei.','Ort, Tag und Uhrzeit sind klar.','Meine Bitte und die Rückmeldung sind verständlich.']},
+ {id:'beschreibung',title:'Ein Tier beschreiben',goal:'Beschreibe Flocke so, dass ihn jemand erkennen könnte.',plan:'Wie groß ist der Hund? Welche Farbe hat sein Fell? Wie sehen Ohren, Augen und Schwanz aus?',words:['mittelgroß','karamellfarben','weich','herabhängende Ohren'],model:'Flocke ist ein mittelgroßer Hund mit karamellfarbenem Fell. Seine Ohren hängen seitlich am Kopf herunter. Er hat dunkle Augen und eine dunkle Nase. Wenn er wartet, sitzt er ruhig neben dem Direktor.',criteria:['Ich nenne sichtbare Merkmale.','Meine Adjektive sind genau.','Ich unterscheide Aussehen und Vermutungen.']},
+ {id:'anleitung',title:'Eine Spielanleitung schreiben',goal:'Erkläre das Spiel Wortball für ein Kind, das es noch nicht kennt.',plan:'Was braucht ihr? Wo steht ihr? Was tut ein Kind zuerst und danach? Welche Regel gilt?',words:['Ihr braucht','Zuerst','Danach','Achtet darauf'],model:'Ihr braucht einen weichen Ball. Stellt euch in einen Kreis. Ein Kind wirft den Ball vorsichtig zu einem anderen Kind. Wer fängt, nennt ein Tier und wirft weiter. Jeder Tiername darf in einer Runde nur einmal vorkommen.',criteria:['Ich nenne das Material.','Die Schritte sind in sinnvoller Reihenfolge.','Ein anderes Kind könnte mit meiner Erklärung mitspielen.']},
+ {id:'buchtipp',title:'Ein Buch empfehlen',goal:'Schreibe einen Buchtipp zu einem Buch, das du kennst.',plan:'Wie heißt das Buch und wer hat es geschrieben? Worum geht es? Wem könnte es gefallen und warum?',words:['Das Buch heißt','Die Hauptfigur','Mir gefällt','Ich empfehle es'],model:'Das Buch heißt „Die kleine Schuldetektivin“. Es ist hier ein erfundenes Beispiel. Maja sucht darin einen Schlüssel. Mir gefallen die Hinweise, weil ich selbst miträtseln kann. Ich würde das Buch Kindern empfehlen, die kurze Rätselgeschichten mögen.',criteria:['Titel und bekannte Angaben stimmen.','Ich verrate eine Idee der Handlung.','Ich begründe meine Empfehlung.']},
+ {id:'brief',title:'Eine Bitte als Brief',goal:'Bitte Frau Burger um Zeit für eine Buchvorstellung.',plan:'Wen sprichst du an? Was wünschst du dir und warum? Welchen Vorschlag machst du?',words:['Liebe Frau Burger','wir möchten','weil','Viele Grüße'],model:'Liebe Frau Burger, wir möchten am Freitag unsere Lieblingsbücher vorstellen, weil wir neue Lesetipps sammeln wollen. Können wir dafür die letzte Viertelstunde nutzen? Jedes Kind würde etwa zwei Minuten sprechen. Viele Grüße, Maja und Nele',criteria:['Meine Anrede passt zur Empfängerin.','Ich erkläre Wunsch und Grund.','Gruß und Absender schließen den Brief ab.']}
+];
+function findWritingTask(id){
+ const standard=writingTasks.find(task=>task.id===id);
+ if(standard)return standard;
+ const comic=comicLearning.find(row=>'comic-'+row[0]===id);
+ if(comic)return {id,title:'Comic weitergestalten',goal:comic[8],plan:'Wer spricht? Was passiert nach der letzten Szene? Welche Figur sagt welchen Satz?',words:['Maja fragt','Bärli flüstert','Danach','Zum Schluss'],model:'Maja fragte: „Was machen wir als Nächstes?“ Bärli klappte sein kleines Heft auf. „Erst sammeln wir Ideen“, antwortete er. Gemeinsam zeichneten sie einen Plan.',criteria:['Meine neue Szene passt zum Comic.','Man erkennt, welche Figur spricht.','Ich habe meine Sätze und Redezeichen geprüft.']};
+}
+function writingWorkshop(id){
+ const task=findWritingTask(id);
+ if(!task){
+  app.innerHTML=learningHeader('Schreibwerkstatt','Planen, schreiben und überarbeiten. Maja und Bärli begleiten dich.')+
+  `<section class="panel"><h2>Wähle deinen Schreibauftrag</h2><ul class="progress-list">${writingTasks.map(task=>`<li><a href="#schreibwerkstatt/${task.id}">${escapeHtml(task.title)}</a><span>${learning.writing[task.id]?.reviewed?'Selbst geprüft':learning.writing[task.id]?.draft?'Entwurf gespeichert':'Neu'}</span></li>`).join('')}</ul><p>Du kannst zunächst auf Papier schreiben. Nutze die Schritte zum Planen und kontrolliere später deinen Text mit einer erwachsenen Person.</p></section></div>`;return;
+ }
+ const draft=learning.writing[task.id]||{};
+ app.innerHTML=learningHeader(task.title,task.goal)+`<section class="panel">
+ <form id="writing-form">
+ <h2>1. Ideen und Reihenfolge</h2><p>${escapeHtml(task.plan)}</p><label class="field" for="writing-plan">Meine Stichwörter</label><textarea class="answer" id="writing-plan" name="plan" rows="3">${escapeHtml(draft.plan||'')}</textarea>
+ <p>Wortschatzhilfe · ${task.words.map(escapeHtml).join(' · ')}</p>
+ <h2>2. Mein Entwurf</h2><label class="field" for="writing-draft">Schreibe deinen Text</label><textarea class="answer" id="writing-draft" name="draft" rows="6">${escapeHtml(draft.draft||'')}</textarea>
+ <details><summary>Ein Beispiel zum Vergleichen</summary><p>${escapeHtml(task.model)}</p><p>Das ist eine Möglichkeit. Dein eigener Text darf anders aussehen.</p></details>
+ <h2>3. Überarbeiten</h2><p>Lies laut. Versteht jemand anderes deinen Text? Ergänze fehlende Informationen und prüfe schwierige Wörter.</p>
+ <label class="field" for="writing-revised">Meine überarbeitete Fassung</label><textarea class="answer" id="writing-revised" name="revised" rows="6">${escapeHtml(draft.revised||'')}</textarea>
+ <fieldset><legend>Meine Prüfung</legend>${[...task.criteria,'Ich habe Satzanfänge, Nomen und Satzzeichen überprüft.'].map((text,i)=>`<label class="learning-check"><input type="checkbox" name="check${i}" ${draft['check'+i]?'checked':''}> ${escapeHtml(text)}</label>`).join('')}</fieldset>
+ <label class="field" for="writing-helper">Wie habe ich geprüft?</label><select id="writing-helper" name="support"><option value="gemeinsam" ${draft.support!=='allein'?'selected':''}>Mit einer anderen Person</option><option value="allein" ${draft.support==='allein'?'selected':''}>Selbst mit der Checkliste</option></select>
+ <div class="actions"><button class="primary">Überarbeitung festhalten</button><a class="secondary" href="#lernweg">Zum Tagesplan</a></div>
+ <p id="writing-status" role="status">Die Checkliste hält deine Einschätzung fest. Dein Text wird dabei nicht automatisch benotet.</p></form>${learningSaveStatus()}</section></div>`;
+ const form=document.querySelector('#writing-form');
+ const capture=()=>{
+  const values=Object.fromEntries(new FormData(form));
+  form.querySelectorAll('input[type=checkbox]').forEach(input=>values[input.name]=input.checked);
+  return values;
+ };
+ form.oninput=()=>{learning.writing[task.id]={...capture(),reviewed:false};saveLearning();};
+ form.onsubmit=e=>{
+  e.preventDefault();
+  const values=capture();
+  if(!values.revised.trim()){
+   document.querySelector('#writing-status').textContent='Ergänze zuerst deine überarbeitete Fassung.';document.querySelector('#writing-revised').focus();return;
+  }
+  if([0,1,2,3].some(i=>!values['check'+i])){
+   document.querySelector('#writing-status').textContent='Prüfe erst alle vier Punkte der Checkliste.';return;
+  }
+  learning.writing[task.id]={...values,reviewed:true,at:learningDate()};saveLearning();
+  document.querySelector('#writing-status').textContent='Deine Überarbeitung und deine Einschätzung sind festgehalten. Du kannst sie später gemeinsam besprechen.';
+ };
+}
+
+const speakingTasks=[
+ ['erzaehlen','Ein Erlebnis nacherzählen','Erzähle die Suche nach dem Wal-Lesezeichen mit zuerst, danach und zum Schluss.','Die wichtigen Ereignisse waren in der richtigen Reihenfolge.'],
+ ['beschreiben','Eine Figur beschreiben','Beschreibe Bärli, ohne seinen Namen zu nennen. Kann jemand die Figur erkennen?','Ich habe genaue und erkennbare Merkmale genannt.'],
+ ['begruenden','Eine Meinung begründen','Welche Hilfe für Melody findest du gut? Erkläre deinen Grund mit weil.','Ich habe meine Meinung mit einem Grund verbunden.'],
+ ['nachfragen','Freundlich nachfragen','Du hast einen Auftrag nicht verstanden. Formuliere eine genaue Nachfrage.','Meine Nachfrage zeigt, welche Angabe mir fehlt.'],
+ ['buch','Ein Buch kurz vorstellen','Nenne Titel und Hauptfigur. Erzähle kurz, worum es geht, und begründe deine Empfehlung.','Meine Vorstellung war verständlich und hatte einen Lesetipp.'],
+ ['rollen','Eine Szene zu zweit sprechen','Spielt einen Dialog zwischen Maja und Melody. Hört einander zu und lasst die andere Person aussprechen.','Wir haben einander zugehört und an die Beiträge angeknüpft.']
+];
+let learningRecorder=null;
+let learningStream=null;
+let learningRecordingUrl=null;
+let learningSpeech=null;
+function cleanupLearningMedia(){
+ document.querySelector('#learning-reading-audio')?.pause();
+ if(learningRecorder&&learningRecorder.state!=='inactive'){
+  learningRecorder.onstop=null;learningRecorder.stop();
+ }
+ learningStream?.getTracks().forEach(track=>track.stop());
+ learningRecorder=null;learningStream=null;
+ if(learningRecordingUrl){URL.revokeObjectURL(learningRecordingUrl);learningRecordingUrl=null;}
+ if(learningSpeech)window.speechSynthesis?.cancel();
+ learningSpeech=null;
+}
+function speakingWorkshop(id){
+ const task=speakingTasks.find(task=>task[0]===id);
+ if(!task){
+  app.innerHTML=learningHeader('Sprechen und Erzählen','Du kannst allein üben oder eine andere Person zum Zuhören einladen.')+
+   `<section class="panel"><ul class="progress-list">${speakingTasks.map(([id,title])=>`<li><a href="#sprechwerkstatt/${id}">${escapeHtml(title)}</a><span>${learning.speaking[id]?.checked?'Selbst eingeschätzt':'Noch offen'}</span></li>`).join('')}</ul></section></div>`;return;
+ }
+ const draft=learning.speaking[id]||{};
+ app.innerHTML=learningHeader(task[1],task[2])+`<section class="panel"><h2>So bereitest du dich vor</h2><p>Sammle drei Stichwörter. Sprich verständlich und mache sinnvolle Pausen. Deine Zuhörperson kann anschließend eine Frage stellen.</p>
+ <label class="field" for="speaking-notes">Meine Stichwörter</label><textarea class="answer" id="speaking-notes" rows="3">${escapeHtml(draft.notes||'')}</textarea>
+ <h3>Optional aufnehmen und selbst anhören</h3><p>Beim Start fragt dein Browser nach dem Mikrofon. Die Aufnahme bleibt bis zum Verlassen dieser Seite im Arbeitsspeicher.</p>
+ <div class="actions"><button class="secondary" id="record-start">Aufnahme starten</button><button class="secondary" id="record-stop" disabled>Aufnahme stoppen</button></div>
+ <audio id="speaking-playback" controls hidden></audio><p id="record-status" role="status"></p>
+ <form id="speaking-review"><fieldset><legend>Meine Einschätzung</legend>
+ <label class="learning-check"><input type="checkbox" name="clear" ${draft.clear?'checked':''}> Ich habe deutlich gesprochen.</label>
+ <label class="learning-check"><input type="checkbox" name="content" ${draft.content?'checked':''}> ${escapeHtml(task[3])}</label></fieldset>
+ <label class="field" for="speaking-feedback">Rückmeldung meiner Zuhörperson</label><p>Zum Beispiel „Mir hat gefallen, dass …“ und „Noch verständlicher wäre …“.</p><textarea class="answer" id="speaking-feedback" name="feedback" rows="3">${escapeHtml(draft.feedback||'')}</textarea>
+ <div class="actions"><button class="primary">Sprechübung festhalten</button><a class="secondary" href="#lernweg">Zum Tagesplan</a></div></form>${learningSaveStatus()}</section></div>`;
+ const notes=document.querySelector('#speaking-notes');
+ const form=document.querySelector('#speaking-review');
+ const capture=()=>({...Object.fromEntries(new FormData(form)),notes:notes.value,clear:form.elements.clear.checked,content:form.elements.content.checked});
+ const save=()=>{learning.speaking[id]={...learning.speaking[id],...capture()};saveLearning();};
+ form.oninput=notes.oninput=save;
+ form.onsubmit=e=>{e.preventDefault();learning.speaking[id]={...capture(),checked:true,at:learningDate()};saveLearning();};
+ const start=document.querySelector('#record-start'),stop=document.querySelector('#record-stop'),status=document.querySelector('#record-status');
+ start.onclick=async()=>{
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){status.textContent='Aufnehmen ist in diesem Browser nicht verfügbar. Übe mit einer Zuhörperson.';return;}
+  start.disabled=true;
+  const current=route;
+  try{
+   const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+   if(route!==current||!document.contains(start)){stream.getTracks().forEach(track=>track.stop());return;}
+   learningStream=stream;
+   const chunks=[];
+   const recorder=new MediaRecorder(stream);
+   learningRecorder=recorder;
+   recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+   recorder.onstop=()=>{
+    stream.getTracks().forEach(track=>track.stop());
+    learningStream=null;learningRecorder=null;
+    if(!document.contains(start))return;
+    if(learningRecordingUrl)URL.revokeObjectURL(learningRecordingUrl);
+    learningRecordingUrl=URL.createObjectURL(new Blob(chunks,{type:recorder.mimeType||'audio/webm'}));
+    const audio=document.querySelector('#speaking-playback');
+    audio.src=learningRecordingUrl;audio.hidden=false;
+    start.disabled=false;stop.disabled=true;status.textContent='Aufnahme bereit. Höre sie dir an.';
+   };
+   recorder.onerror=()=>{cleanupLearningMedia();start.disabled=false;stop.disabled=true;status.textContent='Die Aufnahme konnte nicht abgeschlossen werden. Du kannst ohne Aufnahme weiterüben.';};
+   recorder.start();stop.disabled=false;status.textContent='Aufnahme läuft. Beende sie mit Aufnahme stoppen.';
+  }catch{
+   learningStream?.getTracks().forEach(track=>track.stop());learningStream=null;
+   if(document.contains(start)){start.disabled=false;status.textContent='Das Mikrofon konnte nicht geöffnet werden. Du kannst mit einer Zuhörperson weiterüben.';}
+  }
+ };
+ stop.onclick=()=>{if(learningRecorder?.state==='recording')learningRecorder.stop();};
+}
+function spokenTaskControls(index){
+ return `<section class="context"><p>Höre den Text „${escapeHtml(listeningTasks[index].title)}“. Die Stimme kommt von deinem Gerät.</p>
+ <div class="actions"><button type="button" class="secondary" id="task-speech">Hörtext abspielen</button><button type="button" class="plain" id="task-speech-stop">Stopp</button><label>Tempo <select id="task-speech-speed"><option value="0.9">Normal</option><option value="0.75">Langsam</option></select></label></div>
+ <p id="task-speech-status" role="status"></p>
+ <details><summary>Vorlesevorlage und Text zum Prüfen</summary><p>${escapeHtml(listeningTasks[index].text)}</p><p>Eine andere Person kann dir den Text vorlesen.</p></details></section>`;
+}
+function setupSpokenTask(index){
+ const status=document.querySelector('#task-speech-status');
+ document.querySelector('#task-speech').onclick=()=>{
+  if(!window.speechSynthesis?.speak||!window.SpeechSynthesisUtterance){status.textContent='Die Gerätestimme ist nicht verfügbar. Nutze die Vorlesevorlage mit einer anderen Person.';return;}
+  window.speechSynthesis.cancel();
+  const speech=new SpeechSynthesisUtterance(listeningTasks[index].text);
+  speech.lang='de-DE';speech.rate=Number(document.querySelector('#task-speech-speed').value);
+  const voice=window.speechSynthesis.getVoices().find(v=>v.lang.replace('_','-').startsWith('de-'));
+  if(voice)speech.voice=voice;
+  speech.onend=()=>{if(document.contains(status))status.textContent='Du kannst die Angaben jetzt prüfen.';};
+  speech.onerror=()=>{if(document.contains(status))status.textContent='Die Gerätestimme konnte nicht starten. Nutze die Vorlesevorlage.';};
+  learningSpeech=speech;window.speechSynthesis.speak(speech);status.textContent='Der Hörtext wird abgespielt.';
+ };
+ document.querySelector('#task-speech-stop').onclick=()=>{window.speechSynthesis?.cancel();status.textContent='Gestoppt.';};
+}
+
+function learningDaily(){
+ const day=learningDate();
+ if(!Array.isArray(learning.daily[day])){
+  const eligible=learningAllTasks().filter(q=>['rechtschreiben','saetze','textsorten','hoerauftraege'].includes(q.unit));
+  const retry=eligible.find(q=>learning.tasks[q.id]&&!learning.tasks[q.id].correct);
+  const next=retry||eligible.find(q=>!progress.has(q.id))||eligible.slice().sort((a,b)=>(learning.tasks[a.id]?.at||'').localeCompare(learning.tasks[b.id]?.at||''))[0];
+  const writing=writingTasks.find(task=>!learning.writing[task.id]?.reviewed)||writingTasks[bearToday(new Date(),writingTasks.length)];
+  const story=annaStories[bearToday(new Date(),6)];
+  learning.daily[day]=[
+   {kind:'reading',id:story.id,label:'Eine Geschichte laut lesen',href:'#lesetraining/'+story.id},
+   {kind:'task',id:next.id,label:retry?'Eine unsichere Aufgabe wiederholen':'Eine Aufgabe mit Bärli lösen',href:'#'+next.unit+'/'+(questions[next.unit].indexOf(next)+1)},
+   {kind:'writing',id:writing.id,label:'Ideen sammeln und einen Text schreiben',href:'#schreibwerkstatt/'+writing.id}
+  ];
+  saveLearning();
+ }
+ return learning.daily[day];
+}
+function dailyComplete(item){
+ if(item.kind==='task')return !!learning.tasks[item.id]?.correct&&learning.tasks[item.id]?.day===learningDate();
+ if(item.kind==='reading')return learning.reading[item.id]?.at===learningDate()&&learning.reading[item.id]?.checked;
+ return learning.writing[item.id]?.at===learningDate()&&learning.writing[item.id]?.reviewed;
+}
+function showLearningPlan(){
+ const tasks=learningDaily();
+ app.innerHTML=learningHeader('Mein Tagesplan','Drei kleine Schritte mit Bärli. Du kannst zwischen den Schritten pausieren.')+
+  `<section class="panel"><h2>${annaDayFormatter.format(new Date())}</h2><ol class="learning-steps">${tasks.map(item=>`<li><a href="${item.href}">${escapeHtml(item.label)}</a> <strong>${dailyComplete(item)?'✓ Erledigt':'Noch offen'}</strong></li>`).join('')}</ol>
+  <p>Für gelöste Stationsaufgaben sammelst du Sterne. Lese- und Schreibzeiten hältst du mit deiner eigenen Einschätzung fest.</p>
+  <div class="actions"><a class="secondary" href="#lernuebersicht">Meine Lernübersicht</a><a class="secondary" href="#stationen">Selbst eine Station wählen</a></div></section></div>`;
+}
+function showLearningOverview(adult=false){
+ const summary=learningSummary();
+ const title=adult?'Für Erwachsene':'Meine Lernübersicht';
+ app.innerHTML=learningHeader(title,adult?'Lernwege und Beobachtungen auf diesem Gerät.':'Hier siehst du deine Übungen und deine eigenen Einschätzungen.')+
+  `<section class="panel"><h2>Geprüfte Stationsaufgaben</h2><p>Die Rückmeldung bezieht sich auf die letzte Bearbeitung. „Mit Hilfe“ umfasst aufgerufene Tipps, Lösungen oder eine Korrektur nach einem Fehler.</p>
+  <div class="learning-table-wrap"><table class="learning-table"><thead><tr><th>Bereich</th><th>Selbstständig</th><th>Mit Hilfe</th><th>Noch üben</th><th>Früher gelöst</th></tr></thead><tbody>${Object.entries(skillLabels).filter(([id])=>id!=='sprechen').map(([id,label])=>`<tr><th>${label}</th><td data-label="Selbstständig">${summary[id].independent}</td><td data-label="Mit Hilfe">${summary[id].supported}</td><td data-label="Noch üben">${summary[id].retry}</td><td data-label="Früher gelöst">${summary[id].legacy}</td></tr>`).join('')}</tbody></table></div>
+  <p>Bei früher gelösten Aufgaben wurde die Art der Unterstützung noch nicht erfasst.</p>
+  <h3>Eigene und gemeinsame Einschätzungen</h3><ul><li>Lesetraining · ${Object.values(learning.reading).filter(x=>x.checked).length} Lesezeiten festgehalten</li><li>Schreibwerkstatt · ${Object.values(learning.writing).filter(x=>x.reviewed).length} Texte mit Checkliste geprüft</li><li>Sprechen · ${Object.values(learning.speaking).filter(x=>x.checked).length} Sprechaufträge eingeschätzt</li></ul>
+  <p>Offene Texte, Aussprache und Handschrift brauchen eine eigene oder gemeinsame Rückmeldung.</p>
+  <div class="actions"><a class="primary" href="#lernweg">Zum Tagesplan</a><a class="secondary" href="#${adult?'lernuebersicht':'erwachsene'}">${adult?'Zur Kinderansicht':'Erwachsenenansicht öffnen'}</a></div></section>
+  ${adult?`<section class="panel"><h2>Beobachtungen</h2><p>Nutzen Sie konkrete Beispiele. Etwa „Liest Satzenden vollständig“ oder „Findet beim Ableiten ein passendes Grundwort“.</p>
+  <label class="field" for="adult-notes">Meine Notizen</label><textarea class="answer" id="adult-notes" rows="6">${escapeHtml(learning.notes.text||'')}</textarea>${learningSaveStatus()}
+  <details><summary>Lernziele und Rückmeldung</summary><ul><li>Lesen · Wörter genau erkennen, Pausen und Betonung, passende Textbelege.</li><li>Schreiben · Ideen, Entwurf und Überarbeitung vergleichen. Bei Papiertexten zusätzlich Lesbarkeit betrachten.</li><li>Zuhören · wichtige Angaben auswählen und Änderungen bemerken.</li><li>Sprechen · verständlich erzählen, nachfragen und Gründe nennen.</li><li>Sprache · Wortbildung, Satzkern und Redezeichen anwenden.</li></ul><p>Geben Sie zunächst eine konkrete Stärke und anschließend einen nächsten Übungsschritt zurück.</p></details>
+  <button class="secondary" id="learning-print" type="button">Übersicht drucken</button>
+  <p class="subtle">Diese Ansicht ist auf dem gemeinsamen Gerät zugänglich. Sie hat keine Passwortsperre.</p></section>`:''}</div>`;
+ if(adult){
+  document.querySelector('#adult-notes').oninput=e=>{learning.notes.text=e.target.value;saveLearning();};
+  document.querySelector('#learning-print').onclick=()=>window.print();
+ }
+}
+
 function render(initial=false){
+  cleanupLearningMedia();
   document.querySelector('#dictation-audio')?.pause();
   document.querySelector('#hearing-audio')?.pause();
   document.querySelector('#anna-audio-player')?.pause();
@@ -3581,7 +4100,12 @@ function render(initial=false){
   const number=Number(index);
   const oldRoute=route;
   route=page||'start';
-  if(page==='fortschritt')showProgress();
+  if(page==='lernweg')showLearningPlan();
+  else if(page==='lesetraining')readingTraining(index);
+  else if(page==='schreibwerkstatt')writingWorkshop(index);
+  else if(page==='sprechwerkstatt')speakingWorkshop(index);
+  else if(page==='lernuebersicht'||page==='erwachsene')showLearningOverview(page==='erwachsene');
+  else if(page==='fortschritt')showProgress();
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
   else if(page==='baerli')showBear(index);
