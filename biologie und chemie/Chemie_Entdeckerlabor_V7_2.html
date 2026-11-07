@@ -969,7 +969,7 @@ function renderPairs(){
  $$('[data-pair-right]').forEach(b=>b.addEventListener('click',()=>{st.right=+b.dataset.pairRight;renderPairs();checkPairs()}));
 }
 function checkPairs(){let st=state.pairs;if(st.left===null||st.right===null)return;
- const correct=st.left===st.right;if(correct){st.matched.add(st.left);feedback($('pairFeedback'),true,`${bodyMaterials[st.left][0]} besteht überwiegend aus ${bodyMaterials[st.left][1]}. ${st.matched.size===8?'Alle Paare gefunden!':'Weiter so!'} `);if(st.matched.size===8)complete('matter');}
+ const correct=st.left===st.right;if(correct){st.matched.add(st.left);feedback($('pairFeedback'),true,`${bodyMaterials[st.left][0]} besteht überwiegend aus ${bodyMaterials[st.left][1]}. ${st.matched.size===8?'Alle Paare gefunden!':'Weiter so!'} `);if(st.matched.size===8){pairRightOrder=[...pairLeftOrder];complete('matter');}}
  else feedback($('pairFeedback'),false,`${bodyMaterials[st.left][0]} passt hier nicht zu ${bodyMaterials[st.right][1]}. Überlege: Aus welchem Material besteht dieser Körper?`);
  st.left=null;st.right=null;renderPairs();
 }
