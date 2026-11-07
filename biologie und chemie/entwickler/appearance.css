@@ -1,0 +1,12 @@
+/* Grey reading surfaces and adjustable display dimming. */
+body:not(.lc-theme-dark){--bg:#d1d5db;--paper:#e7e9ec}
+body:not(.lc-theme-dark) .panel,
+body:not(.lc-theme-dark) .card,
+body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
+.controls{flex-wrap:wrap}
+.chem-brightness{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--ink);padding:5px 8px;border:1px solid var(--muted);border-radius:9px;background:var(--paper)}
+.chem-brightness input{width:110px;min-height:32px;accent-color:var(--teal)}
+.chem-brightness output{min-width:4ch;font-variant-numeric:tabular-nums}
+#chemDisplayShade{position:fixed;inset:0;z-index:2147483647;background:#000;opacity:var(--chem-display-dim,0);pointer-events:none}
+@media(max-width:620px){.topbar{flex-wrap:wrap}.controls{width:100%}.chem-brightness{flex:1}.chem-brightness input{flex:1;min-width:80px}}
+@media print{#chemDisplayShade,.chem-brightness{display:none!important}}

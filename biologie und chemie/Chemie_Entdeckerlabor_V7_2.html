@@ -177,6 +177,19 @@ html,body{max-width:100%;overflow-x:clip}.app{max-width:100%;overflow-x:clip}#ce
 #page-probearbeit .cp-check{display:flex;gap:7px;align-items:baseline;margin:7px 0;cursor:pointer}
 #page-probearbeit .cp-check input{flex:none}
 </style>
+<style data-chemie-source="appearance.css">/* Grey reading surfaces and adjustable display dimming. */
+body:not(.lc-theme-dark){--bg:#d1d5db;--paper:#e7e9ec}
+body:not(.lc-theme-dark) .panel,
+body:not(.lc-theme-dark) .card,
+body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
+.controls{flex-wrap:wrap}
+.chem-brightness{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--ink);padding:5px 8px;border:1px solid var(--muted);border-radius:9px;background:var(--paper)}
+.chem-brightness input{width:110px;min-height:32px;accent-color:var(--teal)}
+.chem-brightness output{min-width:4ch;font-variant-numeric:tabular-nums}
+#chemDisplayShade{position:fixed;inset:0;z-index:2147483647;background:#000;opacity:var(--chem-display-dim,0);pointer-events:none}
+@media(max-width:620px){.topbar{flex-wrap:wrap}.controls{width:100%}.chem-brightness{flex:1}.chem-brightness input{flex:1;min-width:80px}}
+@media print{#chemDisplayShade,.chem-brightness{display:none!important}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -202,7 +215,7 @@ html,body{max-width:100%;overflow-x:clip}.app{max-width:100%;overflow-x:clip}#ce
 <div class="side-bottom"><b>Fortschritt in den Werkstätten</b><div class="mini-progress"><i id="sideProgress" style="width:0%"></i></div><small id="sideProgressText">0 von 17 Bereichen geschafft</small></div>
 </aside>
 <main>
-<header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
+<header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><label class="chem-brightness" for="chemBrightness">Helligkeit <input id="chemBrightness" type="range" min="60" max="100" step="1" value="100"><output id="chemBrightnessValue" for="chemBrightness">100 %</output></label><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
 <section class="stage" hidden="" id="page-chem6"><div id="c6Root"></div></section>
 <section class="stage" hidden id="page-probearbeit" aria-labelledby="cpTitle">
 <div class="page-head"><div class="tag">Probearbeit zum Lernheft</div>
@@ -3124,6 +3137,29 @@ select.value=String(data.level);show();
   };
   window.addEventListener('hashchange', openDirect);
   openDirect();
+})();
+</script>
+<div id="chemDisplayShade" aria-hidden="true"></div>
+<script data-chemie-source="appearance.js">(() => {
+  'use strict';
+  const key = 'chemie-display-brightness-v1';
+  const input = document.getElementById('chemBrightness');
+  const output = document.getElementById('chemBrightnessValue');
+  function apply(value) {
+    const number = Number(value);
+    const brightness = Number.isFinite(number) ? Math.min(100, Math.max(60, number)) : 100;
+    input.value = String(brightness);
+    output.value = brightness + ' %';
+    document.documentElement.style.setProperty('--chem-display-dim', String(1 - brightness / 100));
+    return brightness;
+  }
+  let saved = null;
+  try { saved = localStorage.getItem(key); } catch {}
+  apply(saved === null ? 100 : saved);
+  input.addEventListener('input', () => {
+    const brightness = apply(input.value);
+    try { localStorage.setItem(key, String(brightness)); } catch {}
+  });
 })();
 </script>
 </body>

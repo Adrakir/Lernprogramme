@@ -1,0 +1,21 @@
+(() => {
+  'use strict';
+  const key = 'chemie-display-brightness-v1';
+  const input = document.getElementById('chemBrightness');
+  const output = document.getElementById('chemBrightnessValue');
+  function apply(value) {
+    const number = Number(value);
+    const brightness = Number.isFinite(number) ? Math.min(100, Math.max(60, number)) : 100;
+    input.value = String(brightness);
+    output.value = brightness + ' %';
+    document.documentElement.style.setProperty('--chem-display-dim', String(1 - brightness / 100));
+    return brightness;
+  }
+  let saved = null;
+  try { saved = localStorage.getItem(key); } catch {}
+  apply(saved === null ? 100 : saved);
+  input.addEventListener('input', () => {
+    const brightness = apply(input.value);
+    try { localStorage.setItem(key, String(brightness)); } catch {}
+  });
+})();

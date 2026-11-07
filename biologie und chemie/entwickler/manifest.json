@@ -132,5 +132,15 @@
     "attrs": {
       "id": "chemieProbearbeit"
     }
+  },
+  {
+    "file": "appearance.css",
+    "tag": "style",
+    "attrs": {}
+  },
+  {
+    "file": "appearance.js",
+    "tag": "script",
+    "attrs": {}
   }
 ]
