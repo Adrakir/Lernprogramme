@@ -402,6 +402,10 @@ legend{font-weight:700;padding:0 7px}
 .c3-camera [data-c3-camera="in"],.c3-camera [data-c3-camera="out"]{font-size:23px;flex:0 0 44px;padding:3px 9px}
 
 </style>
+<style>
+.prep-courses,.prep-tests{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.prep-tests{grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}.prep-coach{padding:18px;background:#edf4ee;border-radius:16px;margin:18px 0}.prep-word{font-size:1.8rem;font-weight:750;margin:18px 0}.prep-audio audio{display:block;width:100%;margin:16px 0}.prep-audio details{margin-top:18px}.prep-audio details p{line-height:1.8}.prep-review{padding-left:24px}.prep-review li{padding:16px;margin:12px 0;border-left:4px solid #d7b886;background:#faf7f0;border-radius:8px}.prep-review li.prep-right{border-color:#4f8b76}.prep-score{font-size:1.7rem;font-weight:750}.prep-fireworks{width:100%;max-height:190px;object-fit:contain}.prep-cheer{text-align:center;font-weight:700;color:#4b7262}.melody-score{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.melody-score>span{padding:12px 18px;border:2px solid #d4d0c6;border-radius:14px;min-width:80px;text-align:center}.melody-score small{display:block;font-size:.8rem}.melody-score .current{border-color:#ac674c;background:#fff0d8}.melody-score .done{background:#dceee4;border-color:#5e8978}.melody-hold{height:26px;background:#eee8dc;border-radius:20px;position:relative;overflow:hidden}.melody-hold span{display:block;height:100%;width:0;background:#88b6a3}.melody-hold b{position:absolute;left:68%;top:0;color:#79552b}.melody-keys{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:22px 0}.melody-key{min-width:0;min-height:130px;border:2px solid #c5b89e;border-bottom:8px solid #c5b89e;border-radius:12px;background:#fffdf6;color:#3c493f;touch-action:none;user-select:none;-webkit-user-select:none}.melody-key small{display:block;margin-top:25px;color:#776d60}.melody-key.playing{background:#baddca;transform:translateY(3px);border-bottom-width:5px}.melody-game select{padding:9px;border-radius:8px}.choice[aria-pressed=true]{outline:3px solid #49806a;background:#e1eee5}.prep-audio summary{cursor:pointer;padding:12px 0}#prep-question .answer{width:100%;max-width:550px}#prep-question .options{display:grid;gap:12px}#prep-question .choice{text-align:left;min-height:52px}.melody-game button,.prep-tests a{touch-action:manipulation}@media(max-width:600px){.prep-courses{grid-template-columns:1fr}.melody-keys{grid-template-columns:repeat(4,minmax(0,1fr))}.melody-key{min-height:100px}.melody-key small{margin-top:12px}.melody-score{gap:6px}.melody-score>span{padding:8px;min-width:60px}}
+
+</style>
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt</a>
@@ -921,6 +925,7 @@ function setupLessonDemo(unit){
 }
 </script>
 <script>const miniGames = {
+  melodie:{title:"Miau & Klavier",tone:"sand",art:"music",intro:"Melodien anhören und nachspielen – mit kurzen und langen Tönen.",play:board=>playMelody(board)},
   hexenpfad: {
     title:'Hexenpfad · Wegpuzzle', tone:'lilac', art:'hexenpfad',
     intro:'Lege und drehe Puzzleteile, damit Maja die freundliche Hexe Lila erreicht. Zwölf Waldwege warten auf dich.',
@@ -3266,7 +3271,7 @@ function showHome(){
   <div class="home-priorities">
   <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
     <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung, -nis und -schaft und prüfe letzte Buchstaben durch Verlängern.</p>
-    <div class="actions"><a class="primary" href="#hoeren">${icon('audio')} Hörverstehen</a><a class="secondary" href="#endungen">Nomenendungen</a><a class="secondary" href="#verlaengern">Wörter verlängern</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
+    <div class="actions"><a class="primary" href="#pruefung/hoeren">${icon('audio')} 16.11. · Hörverständnis</a><a class="primary" href="#pruefung/nomen">19.11. · Nomen und Verlängern</a><a class="secondary" href="#pruefung">Geführt üben &amp; 10 Abschlusstests</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
   </section>
   <section class="panel" aria-labelledby="daily-stories"><h2 id="daily-stories">Tagesgeschichten</h2>
     <p>Entdecke die heutige Geschichte mit Maja und Bärli oder höre ein Abenteuer mit Anna.</p>
@@ -3277,7 +3282,7 @@ function showHome(){
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h2>Mehr <em>entdecken</em></h2>
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#spiele/wolkenwege">Maja &amp; Bärli: Wolkenwege</a><a class="secondary" href="#spiele/hexenpfad">Wegpuzzle zur Hexe</a><a class="secondary" href="#baerli/schrank">Bärlis Laden</a></div></div>
+    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#spiele/wolkenwege">Maja &amp; Bärli: Wolkenwege</a><a class="secondary" href="#spiele/hexenpfad">Wegpuzzle zur Hexe</a><a class="secondary" href="#spiele/melodie">Miau &amp; Klavier</a><a class="secondary" href="#baerli/schrank">Bärlis Laden</a></div></div>
     <div class="hero-art">${bearPicture('leseecke',true)}</div>
   </section>
   ${learningHome()}
@@ -3730,8 +3735,8 @@ function starRefresh(){const latest=starRead();if(latest)starWallet=latest;retur
 function starBalance(){return starTotals(starRefresh()).balance;}
 function starOwned(id){return Object.hasOwn(starRefresh().purchases,id);}
 function starCommit(next){try{localStorage.setItem(starWalletKey,JSON.stringify(next));starWallet=next;syncStars();return true;}catch{return false;}}
-function starLevelCount(id){return ['wolkenwege','hexenpfad'].includes(id)?12:3;}
-function starLevelCost(id,n){if(['wolkenwege','hexenpfad'].includes(id))return n<=3?0:n<=6?2:n<=9?3:4;return n===1?0:n===2?3:5;}
+function starLevelCount(id){return id==='melodie'?5:['wolkenwege','hexenpfad'].includes(id)?12:3;}
+function starLevelCost(id,n){if(id==='melodie')return n<=3?0:2;if(['wolkenwege','hexenpfad'].includes(id))return n<=3?0:n<=6?2:n<=9?3:4;return n===1?0:n===2?3:5;}
 function starLevelOpen(id,n){return Object.hasOwn(miniGames,id)&&Number.isInteger(n)&&n>=1&&n<=starLevelCount(id)&&(starLevelCost(id,n)===0||starOwned('level:'+id+':'+n));}
 function starOffer(id){
  if(id.startsWith('item:')){const item=bearItems.find(x=>'item:'+x.id===id);return item?{cost:item.stars,label:item.title}:null;}
@@ -3767,6 +3772,7 @@ function showStarWallet(){
  <section class="panel"><h2>Deine Käufe</h2>${purchases.length?`<ul class="progress-list">${purchases.slice().reverse().map(v=>`<li><span>${escapeHtml(v.label)}</span><strong>${v.cost===0?'Übernommen':v.cost+' ★'}</strong></li>`).join('')}</ul>`:'<p>Hier stehen später deine gekauften Gegenstände und Spiellevel.</p>'}<p class="subtle">Bisher freigeschaltete Sachen und bereits begonnene Wolkenwege wurden kostenlos übernommen. Der Sternenbeutel bleibt in diesem Browser gespeichert.</p></section></div>`;
 }
 function starGameLevelName(id,n){
+ if(id==='melodie')return melodySongs[n-1].title;
  if(id==='wolkenwege')return cloudWorlds[n-1].title;
  if(id==='hexenpfad')return witchLevels[n-1].title;
  if(id==='memory')return [6,8,10][n-1]+' Wortpaare';
@@ -3776,7 +3782,7 @@ function starGameLevelName(id,n){
 function showGameLevels(id,message=''){
  const game=miniGames[id];
  app.innerHTML=`<div class="route"><a class="crumb" href="#spiele">${icon('back')} Zur Spielwiese</a><div class="unit-head ${game.tone}"><span class="icon-box">${icon('game')}</span><div><h1 tabindex="-1">${game.title}</h1><p>${game.intro}</p></div></div>${starButtons()}
- <p id="game-shop-message" class="inline-status" tabindex="-1" role="status">${escapeHtml(message)}</p><section class="panel"><h2>Wähle dein Level</h2><p>${['wolkenwege','hexenpfad'].includes(id)?'Die ersten drei Level sind kostenlos.':'Das erste Level ist kostenlos.'} Weitere Level kannst du mit Sternen dauerhaft kaufen.</p>
+ <p id="game-shop-message" class="inline-status" tabindex="-1" role="status">${escapeHtml(message)}</p><section class="panel"><h2>Wähle dein Level</h2><p>${['wolkenwege','hexenpfad','melodie'].includes(id)?'Die ersten drei Level sind kostenlos.':'Das erste Level ist kostenlos.'} Weitere Level kannst du mit Sternen dauerhaft kaufen.</p>
  <div class="star-levels">${Array.from({length:starLevelCount(id)},(_,i)=>{const n=i+1,open=starLevelOpen(id,n),cost=starLevelCost(id,n);return `<div class="star-level-card"><h3>${n}. ${escapeHtml(starGameLevelName(id,n))}</h3><p>${open?(cost===0?'Kostenlos':'Gehört dir'):cost+' Sterne'}</p>${open?`<a class="primary" href="#spiele/${id}/${n}">Spielen ${icon('arrow')}</a>`:`<button type="button" class="secondary" data-buy-level="${n}" ${starBalance()<cost?'disabled':''}>Für ${cost} Sterne kaufen</button>${starBalance()<cost?`<p class="subtle">Noch ${starCount(cost-starBalance())} sammeln</p>`:''}`}</div>`;}).join('')}</div></section></div>`;
  app.querySelectorAll('[data-buy-level]').forEach(b=>b.onclick=()=>{const n=+b.dataset.buyLevel,result=starPurchase('level:'+id+':'+n);showGameLevels(id,result.message);document.querySelector('#game-shop-message').focus({preventScroll:true});});
 }
@@ -4678,7 +4684,195 @@ function showLearningOverview(adult=false){
  }
 }
 
+// Two preparation courses and five genuinely distinct final tests per course.
+const prepListen=[
+ ['der-falsche-kuchen',[
+ ['Wem hilft Anna beim Backen?','Oma','Ben','Papa','Gleich am Anfang darf Anna Oma helfen.'],
+ ['Was gibt Anna zuerst in die Schüssel?','Eine Tasse Mehl','Eine Tasse Salz','Zwei Äpfel','Anna füllt zuerst eine Tasse Mehl hinein.'],
+ ['Woran erkennt Anna die falsche Dose?','Am Etikett mit dem Wort Salz','An einem Loch','Am klingelnden Deckel','Anna bemerkt das Etikett, bevor sie die Dose benutzt.'],
+ ['Warum wäre der falsche Kuchen seltsam geworden?','Er wäre salzig statt süß geworden.','Er hätte keine Form gehabt.','Er wäre aus Papier gewesen.','In der falschen Dose ist Salz statt Zucker.'],
+ ['Was steht am Ende auf Annas Schild?','Süß. Ganz sicher.','Vorsicht, heiß!','Für Ben','Das letzte Schild beschreibt den fertigen süßen Kuchen.']]],
+ ['rettung-fuer-eine-schnecke',[
+ ['Wann entdeckt Anna die Schnecke?','Nach dem Regen','Vor dem Frühstück','Mitten in der Nacht','Die Geschichte beginnt nach dem Regen.'],
+ ['Wer kommt auf einem Roller?','Ben','Oma','Papa','Anna winkt Ben und er bremst.'],
+ ['Wohin bringt Anna die Schnecke?','Ins Gras am Wegrand','In ihren Ranzen','Auf die Bank','Anna legt das Blatt ins Gras am Wegrand.'],
+ ['Was tut Anna, bevor sie das Blatt hochhebt?','Sie wartet, bis die Schnecke darauf kriecht.','Sie schüttelt das Blatt.','Sie hebt den Roller hoch.','Die Schnecke kriecht erst auf das Blatt. Dann hebt Anna es am Rand hoch.'],
+ ['Warum bittet Anna Ben anzuhalten?','Damit die Schnecke sicher weiterkommt.','Damit Ben ein Bild malt.','Damit der Regen aufhört.','Die Schnecke ist auf dem Gehweg. Anna verhindert, dass der Roller sie gefährdet.']]],
+ ['der-koffer-mit-dem-loch',[
+ ['Wohin geht Annas Reise?','Ins Wohnzimmer','In die Schule','Zum Bahnhof','Es ist eine Spielreise ins Wohnzimmer.'],
+ ['Welches Stofftier fehlt?','Ein Hase','Ein Hund','Eine Katze','Anna vermisst ihren Stoffhasen.'],
+ ['Wo findet Anna den Hasen?','In der letzten Kurve vor dem Sofa','Unter der Bank im Hof','An der Haustür','Der Hase liegt in der letzten Kurve vor dem Sofa.'],
+ ['Warum sind Dinge aus dem Koffer gefallen?','Der Reißverschluss ist teilweise offen.','Der Koffer ist zu schwer.','Ben hat sie herausgenommen.','An einer Stelle ist der Reißverschluss offen.'],
+ ['Was macht Anna beim zweiten Versuch anders?','Sie schließt den Koffer richtig.','Sie lässt alle Bücher zurück.','Sie nimmt einen Roller.','Sie packt noch einmal ein und schließt den Koffer richtig.']]],
+ ['das-fenster-voller-sterne',[
+ ['Womit malt Anna den ersten Stern?','Mit dem Finger','Mit einem Pinsel','Mit einem Stift','Anna malt mit dem Finger ins beschlagene Fenster.'],
+ ['Was passiert mit dem ersten Stern?','Er verschwindet später.','Er fällt auf den Boden.','Ben nimmt ihn mit.','Als Anna später wiederkommt, ist der gemalte Stern verschwunden.'],
+ ['Welcher Papierstern bekommt den Ehrenplatz?','Der mit vier Zacken','Der größte mit acht Zacken','Der mit einem Loch','Anna gibt dem Stern mit vier Zacken einen Ehrenplatz.'],
+ ['Wo ist der Ehrenplatz?','In der Mitte des Fensters','Oben am Schrank','Neben dem Bett','Anna klebt den Stern genau in die Mitte.'],
+ ['Warum spricht Anna am Ende von zwei Himmeln?','Es gibt Sterne draußen und Papiersterne an den Fenstern.','Es gibt zwei Sonnen.','Papa hat die Decke blau gestrichen.','Auch Ben zeigt einen Papierstern im Fenster. Die Sterne verbinden die beiden Fenster.']]],
+ ['die-letzte-kastanie',[
+ ['Wo hat Anna ihre Kastanie?','In der Jackentasche','Im Schuh','Im Fahrradkorb','Die Kastanie liegt zuerst in ihrer Jackentasche.'],
+ ['Was wollte Anna mit der Kastanie machen?','Ein Tier basteln','Einen Kuchen backen','Ein Fenster schmücken','Anna wollte daraus ein Tier basteln.'],
+ ['Was fehlt an Bens Kastanienhund?','Der Kopf','Ein Ohr aus Papier','Die Leine','Der Kopf ist aus dem gebastelten Hund herausgefallen.'],
+ ['Wo suchen die beiden zuerst?','Unter der Bank und zwischen den Steinen','Im Schuppen und auf dem Dach','Im Wohnzimmer und im Koffer','Der Text nennt die Bank und die Steine.'],
+ ['Wie hilft Anna Ben?','Sie gibt ihre Kastanie als neuen Kopf her.','Sie kauft einen Stoffhund.','Sie malt einen Kopf an die Wand.','Annas Kastanie passt auf das Hölzchen und wird zum neuen Kopf.']]]
+];
+const prepNounSets=[
+ [['zeichnen','die Zeichnung','ung'],['frei','die Freiheit','heit'],['fröhlich','die Fröhlichkeit','keit'],['Freund','die Freundschaft','schaft'],['erleben','das Erlebnis','nis']],
+ [['retten','die Rettung','ung'],['schön','die Schönheit','heit'],['freundlich','die Freundlichkeit','keit'],['Mann','die Mannschaft','schaft'],['geheim','das Geheimnis','nis']],
+ [['ordnen','die Ordnung','ung'],['klar','die Klarheit','heit'],['pünktlich','die Pünktlichkeit','keit'],['Nachbar','die Nachbarschaft','schaft'],['hindern','das Hindernis','nis']],
+ [['wohnen','die Wohnung','ung'],['gesund','die Gesundheit','heit'],['sauber','die Sauberkeit','keit'],['Land','die Landschaft','schaft'],['kennen','die Kenntnis','nis']],
+ [['prüfen','die Prüfung','ung'],['sicher','die Sicherheit','heit'],['möglich','die Möglichkeit','keit'],['bereit','die Bereitschaft','schaft'],['erkennen','die Erkenntnis','nis']]
+];
+const prepPluralSets=[
+ [['Hund','Hunde','Hunt'],['Korb','Körbe','Korp'],['Berg','Berge','Berk'],['Hut','Hüte','Hud'],['Werk','Werke','Werg']],
+ [['Rad','Räder','Rat'],['Sieb','Siebe','Siep'],['Zug','Züge','Zuk'],['Zelt','Zelte','Zeld'],['Geschenk','Geschenke','Gescheng']],
+ [['Kind','Kinder','Kint'],['Dieb','Diebe','Diep'],['Tag','Tage','Tak'],['Heft','Hefte','Hefd'],['Schrank','Schränke','Schrang']],
+ [['Bild','Bilder','Bilt'],['Kalb','Kälber','Kalp'],['Krug','Krüge','Kruk'],['Brot','Brote','Brod'],['Stock','Stöcke','Stogg']],
+ [['Wald','Wälder','Walt'],['Stab','Stäbe','Stap'],['Zweig','Zweige','Zweik'],['Boot','Boote','Bood'],['Weg','Wege','Wek']]
+];
+// Keep distractors as single, plausible misspellings.
+prepPluralSets[1][4][2]='Gescheng'.replace(' ','');
+function prepChoice(id,prompt,right,a,b,why,skill){return {id,type:'choice',prompt,answer:right,options:[right,a,b],why,skill,hints:['Höre die passende Stelle noch einmal.','Achte auf die genannten Personen, Orte oder die Reihenfolge.',why]};}
+function prepListeningRows(track,rows,prefix){return rows.map(([prompt,right,a,b,why],i)=>({...prepChoice(prefix+'-'+i,prompt,right,a,b,why,'hoeren'),track}));}
+function prepWords(n){
+ const nouns=prepNounSets[n-1].map(([base,answer,suffix],i)=>({id:'n'+n+'-s'+i,type:'write',prompt:'Bilde das Nomen mit -'+suffix+' und schreibe den Artikel dazu.',context:base,answer,skill:suffix,why:'Zu „'+base+'“ gehört „'+answer+'“. Die Nachsilbe ist -'+suffix+'. Das Nomen beginnt groß.',hints:['Das Nomen endet auf -'+suffix+'. Schreibe es groß.','Schreibe den Artikel '+answer.split(' ')[0]+' davor.','Die Lösung lautet: '+answer+'.']}));
+ const plural=prepPluralSets[n-1].map(([word,long],i)=>({id:'n'+n+'-p'+i,type:'write',prompt:'Verlängere das Nomen: Schreibe seine Mehrzahl.',context:word,answer:long,skill:'verlaengern',why:word+' → '+long+'. In der längeren Form hörst du den fraglichen Laut vor einem Vokal.',hints:['Sage: ein '+word+' – viele …','Lies das Wort langsam und bilde die Mehrzahl.','Die Mehrzahl lautet: '+long+'.']}));
+ const spelling=prepPluralSets[n-1].map(([word,long,wrong],i)=>({id:'n'+n+'-b'+i,type:'choice',prompt:'Welche Schreibweise ist richtig? Verlängere zuerst im Kopf.',context:word.slice(0,-1)+'_',answer:word,options:[word,wrong],skill:'verlaengern',why:word+' ist richtig: '+word+' → '+long+'.',hints:['Bilde zuerst die Mehrzahl.','Die Mehrzahl ist '+long+'. Höre auf den letzten Laut des kurzen Wortes.','Richtig ist '+word+'.']}));
+ return [...nouns,...plural,...spelling];
+}
+function prepNormalize(s){return String(s).trim().normalize('NFC').replace(/\s+/g,' ').replace(/[.!]$/,'').replace(/^(Der|Die|Das) /,v=>v.toLowerCase());}
+function prepCorrect(q,given){return prepNormalize(given)===prepNormalize(q.answer);}
+const prepTopics={hoeren:{title:'Hörverständnis',date:'16.11.2026',intro:'Genau zuhören, wichtige Angaben merken und Gründe verstehen.'},nomen:{title:'Nomen und Verlängern',date:'19.11.2026',intro:'-ung, -heit, -keit, -schaft und -nis; Nomen mit der Mehrzahl verlängern.'}};
+function prepTasks(topic,mode,n){
+ if(topic==='hoeren'){
+  if(mode==='gefuehrt')return prepListeningRows('der-schatten-an-der-wand',[
+   ['Was sucht Anna am Anfang?','Ihre Socken','Einen Schlüssel','Ihren Koffer','Im ersten Satz sucht Anna ihre Socken.'],
+   ['Was leuchtet neben dem Bett?','Die Leselampe','Eine Taschenlampe','Eine Kerze','Neben dem Bett steht die eingeschaltete Leselampe.'],
+   ['Was bewegt die zerknüllte Socke?','Der Vorhang','Eine echte Maus','Ein Hund','Der Vorhang streift die Socke und bewegt dadurch den Schatten.'],
+   ['Was formt Anna mit ihrer Hand?','Zwei lange Ohren','Einen Stern','Ein Papierboot','Sie formt mit der Hand zwei lange Ohren. Der Schatten sieht nun wie ein Hase aus.'],
+   ['Was ist die vermeintliche Maus?','Der Schatten einer Socke','Ein Stofftier','Ein Loch in der Wand','Lampe, Socke und Vorhang erklären gemeinsam den Schatten.']],'guide');
+  if(mode==='ueben'){const [track,rows]=listeningRounds[(n-1)%5];return prepListeningRows(track,rows,'practice-'+n);}
+  const [track,rows]=prepListen[n-1];return prepListeningRows(track,rows,'test-'+n);
+ }
+ return prepWords(n).slice(0,mode==='gefuehrt'?10:15);
+}
+function prepPercent(answers){return answers.length?Math.round(100*answers.filter(x=>x.correct).length/answers.length):0;}
+
+const prepKey='majas-wortwerkstatt-klassenarbeiten-nov2026-v1';
+let extraCleanup=null;
+function prepRead(){try{const v=JSON.parse(localStorage.getItem(prepKey)||'{}');if(v&&typeof v==='object'&&!Array.isArray(v))return v;}catch{}return {};}
+function prepWrite(value){try{localStorage.setItem(prepKey,JSON.stringify(value));return true;}catch{return false;}}
+function prepReward(topic,mode,n,score){
+ const id='prep:'+topic+':'+mode+':'+n,amount=mode==='test'?(score>=80?2:1):1,current=starRefresh(),old=current.rewards[id]?.amount||0;
+ if(old>=amount)return 'Die Sterne für diesen Durchgang hast du bereits verdient.';
+ const next=structuredClone(current);next.rewards[id]={amount,day:starDay()};
+ return starCommit(next)?'+'+(amount-old)+' '+((amount-old)===1?'Stern':'Sterne')+' für deinen Lernweg.':'Die Sterne konnten gerade nicht gespeichert werden.';
+}
+function prepHeader(topic,title){return `<div class="route">${homeLink()}<div class="unit-head ${topic==='hoeren'?'sky':'mint'}"><span class="icon-box">${icon(topic==='hoeren'?'audio':'book')}</span><div><p class="kicker">Klassenarbeit · ${prepTopics[topic]?.date||'November'}</p><h1 tabindex="-1">${title}</h1></div></div>`;}
+function showPrep(topic,mode){
+ if(!Object.hasOwn(prepTopics,topic)){
+  app.innerHTML=`<div class="route">${homeLink()}<div class="unit-head sky"><span class="icon-box">${icon('book')}</span><div><h1 tabindex="-1">Fit für die Klassenarbeiten</h1><p>Erst gemeinsam lernen, dann selbst üben und zum Schluss einen Abschlusstest lösen.</p></div></div><div class="prep-courses">${Object.entries(prepTopics).map(([id,v])=>`<section class="panel"><p class="kicker">${v.date}</p><h2>${v.title}</h2><p>${v.intro}</p><a class="primary" href="#pruefung/${id}">Lernweg öffnen ${icon('arrow')}</a></section>`).join('')}</div></div>`;return;
+ }
+ const number=Number(location.hash.split('/')[3]||1),n=Number.isInteger(number)&&number>=1&&number<=5?number:1;
+ if(!['gefuehrt','ueben','test'].includes(mode)){
+  const saved=prepRead();app.innerHTML=prepHeader(topic,prepTopics[topic].title)+`<p>${prepTopics[topic].intro}</p><section class="panel"><h2>1. Geführt lernen</h2><p>Bärli zeigt dir den Denkweg. Du bekommst Erklärungen und übst jeden Schritt mit.</p><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Mit Bärli beginnen</a></section><section class="panel"><h2>2. Selbst üben – mit Hilfen</h2><p>Pro Aufgabe kannst du drei Hilfen öffnen. Danach darfst du noch einmal prüfen.</p><div class="actions">${[1,2,3,4,5].map(i=>`<a class="secondary" href="#pruefung/${topic}/ueben/${i}">Übung ${i}</a>`).join('')}</div></section><section class="panel"><h2>3. Fünf verschiedene Abschlusstests</h2><p>Ohne Tipps während der Bearbeitung. Am Ende siehst du alle Fehler, Erklärungen und passende Übungsempfehlungen. Ab 80 % gibt es ein kurzes Feuerwerk.</p><div class="prep-tests">${[1,2,3,4,5].map(i=>{const r=saved[topic+':test:'+i];return `<a class="secondary" href="#pruefung/${topic}/test/${i}">Test ${i}${r?.done?' · '+prepPercent(r.answers||[])+' %':''}</a>`;}).join('')}</div><p class="subtle">Die Hörtexte der Abschlusstests unterscheiden sich von den Hörtexten des geführten Lernwegs und der Übungen.</p></section><a class="plain" href="#pruefung">Beide Klassenarbeiten ansehen</a></div>`;return;
+ }
+ runPrep(topic,mode,n);
+}
+function prepFireworks(host){
+ host.innerHTML='<canvas class="prep-fireworks" width="640" height="190" aria-label="Ein buntes Feuerwerk für deinen Lernerfolg"></canvas><p class="prep-cheer">Geschafft! Gut geübt! ★ ★ ★</p>';
+ const canvas=host.querySelector('canvas'),ctx=canvas.getContext('2d');if(!ctx)return ()=>{};
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches,colors=['#b35a77','#397d78','#a27525','#6466a3','#4587a8'];let frame=0,start;
+ const particles=Array.from({length:125},(_,i)=>{const group=i%5,angle=(i/5)*Math.PI*2/25;return {x:70+group*125,y:70+(group%2)*25,dx:Math.cos(angle)*(22+(i%4)*9),dy:Math.sin(angle)*(22+(i%4)*9),color:colors[group]};});
+ function draw(t){if(!canvas.isConnected)return;start=start||t;const age=reduced ? .65 :Math.min(1.8,(t-start)/1000);ctx.clearRect(0,0,640,190);particles.forEach(p=>{ctx.globalAlpha=Math.max(0,1-age/2);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x+p.dx*age,p.y+p.dy*age+22*age*age,2.3,0,Math.PI*2);ctx.fill();});if(!reduced&&age<1.8)frame=requestAnimationFrame(draw);}
+ frame=requestAnimationFrame(draw);return ()=>cancelAnimationFrame(frame);
+}
+function runPrep(topic,mode,n){
+ const questions=prepTasks(topic,mode,n),test=mode==='test',guided=mode==='gefuehrt',key=topic+':'+mode+':'+n,data=prepRead();
+ let session=data[key];if(!session||!Array.isArray(session.answers)||session.answers.length>questions.length||session.answers.some((a,i)=>!a||a.id!==questions[i].id||typeof a.given!=='string'||typeof a.correct!=='boolean')||(session.done&&session.answers.length!==questions.length))session={answers:[],done:false,assisted:false};
+ const audioTrack=questions[0].track,story=annaStories.find(s=>s.id===audioTrack);let hintCount=0,tries=0,firstCorrect=null,given='',checked=false,readingUsed=!!session.assisted;
+ function save(){data[key]=session;return prepWrite(data);}
+ const title=(guided?'Mit Bärli lernen':test?'Abschlusstest '+n:'Übung '+n)+' · '+prepTopics[topic].title;
+ app.innerHTML=prepHeader(topic,title)+`<a class="crumb" href="#pruefung/${topic}">${icon('back')} Zum Lernweg</a>${topic==='hoeren'?`<section class="panel prep-audio"><h2>${escapeHtml(story.title)}</h2><p>${guided?'Höre zuerst, wer vorkommt und wo die Geschichte spielt. Höre danach noch einmal auf die Einzelheiten.':'Du darfst den Hörtext anhalten und noch einmal hören.'}</p><audio id="prep-audio" controls preload="metadata" src="./anna-audio/${audioTrack}.mp3" aria-label="Hörtext für den Lernweg"></audio><button class="secondary" type="button" id="prep-slow">Langsamer hören</button><p id="prep-audio-message" class="inline-status" role="status"></p><details id="prep-reading"><summary>Hörtext als Lesehilfe öffnen</summary><p class="subtle">Wenn du mitliest, wird das Ergebnis als „mit Lesehilfe“ gespeichert.</p>${story.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</details></section>`:''}<section class="panel" id="prep-question"></section><section id="prep-result" hidden></section></div>`;
+ const root=document.querySelector('#prep-question'),result=document.querySelector('#prep-result'),audio=document.querySelector('#prep-audio');let stopFireworks=()=>{};
+ extraCleanup=()=>{audio?.pause();stopFireworks();};
+ if(audio){audio.onerror=()=>document.querySelector('#prep-audio-message').textContent='Der Ton lässt sich gerade nicht abspielen. Prüfe die Lautstärke oder nutze die gekennzeichnete Lesehilfe.';document.querySelector('#prep-slow').onclick=e=>{audio.playbackRate=audio.playbackRate<1?1:.8;e.target.textContent=audio.playbackRate<1?'Normale Geschwindigkeit':'Langsamer hören';};document.querySelector('#prep-reading').ontoggle=e=>{if(e.target.open){readingUsed=true;session.assisted=true;save();}};}
+ function finish(){
+  session.done=true;session.assisted=readingUsed;save();root.hidden=true;audio?.pause();result.hidden=false;
+  const score=prepPercent(session.answers),good=score>=80,reward=prepReward(topic,mode,n,score);
+  result.innerHTML=`<div class="panel"><h2 tabindex="-1">${test?'Dein Testergebnis':'Dein Übungsergebnis'}</h2><p class="prep-score">${session.answers.filter(x=>x.correct).length} / ${questions.length} richtig · ${score} %</p><p>${test?'Gewertet wird deine erste abgegebene Antwort.':'Hier siehst du, was schon beim ersten Prüfen richtig war. Mit Hilfen hast du anschließend weitergeübt.'}${readingUsed?' Dieser Durchgang wurde mit Lesehilfe bearbeitet.':''}</p><p>${reward}</p><div id="prep-celebration"></div><h3>Dein nächster Schritt</h3><p>${good?'Gut gemacht! Wiederhole die wenigen Stellen, bei denen du noch unsicher warst.':'Ein Test zeigt dir, was du als Nächstes üben kannst. Starte mit den Erklärungen und probiere später eine weitere Variante.'}</p><div class="actions"><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Geführt wiederholen</a><a class="secondary" href="#pruefung/${topic}/ueben/${n}">Passende Übung</a><a class="secondary" href="#pruefung/${topic}">Weitere Tests</a><button class="plain" type="button" id="prep-retry">Diesen Durchgang neu starten</button></div><h3>Aufgaben und Erklärungen</h3><ol class="prep-review">${questions.map((q,i)=>{const a=session.answers[i];return `<li class="${a.correct?'prep-right':'prep-wrong'}"><strong>${escapeHtml(q.prompt)} ${escapeHtml(q.context||'')}</strong><p>${a.correct?'✓ Richtig':'Noch üben'} · Deine erste Antwort: ${escapeHtml(a.given||'keine Antwort')}</p><p>Richtig: <strong>${escapeHtml(q.answer)}</strong></p><p>${escapeHtml(q.why)}</p>${!a.correct?`<a href="#${q.skill==='hoeren'?'pruefung/hoeren/ueben/'+n:q.skill==='verlaengern'?'verlaengern':'endungen'}">Diesen Bereich üben</a>`:''}</li>`;}).join('')}</ol></div>`;
+  if(test&&good)stopFireworks=prepFireworks(document.querySelector('#prep-celebration'));
+  document.querySelector('#prep-retry').onclick=()=>{extraCleanup?.();delete data[key];prepWrite(data);runPrep(topic,mode,n);};result.querySelector('h2').focus();
+ }
+ function draw(){
+  if(session.done||session.answers.length===questions.length){finish();return;}
+  const q=questions[session.answers.length];hintCount=0;tries=0;firstCorrect=typeof session.firstCorrect==='boolean'?session.firstCorrect:null;checked=false;given=typeof session.draft==='string'?session.draft:'';
+  const options=q.options?gameShuffle(q.options):[];
+  const coach=topic==='hoeren'?'Bärlis Hörplan: 1. Wer und wo? 2. Wichtige Einzelheiten. 3. Was geschieht zuerst? 4. Warum? Höre die passende Stelle noch einmal.':q.skill==='verlaengern'?`Bärli macht es vor: Hund → Hunde. Nach dem d hörst du ein e. Deshalb endet Hund auf d. Versuche das jetzt mit „${q.context}“.`:`Bärli erklärt: Nomen schreibt man groß. -ung, -heit, -keit und -schaft haben hier den Artikel die. Bei -nis lernst du den Artikel mit: das Erlebnis, aber die Kenntnis. Beispiel für diese Aufgabe: ${q.answer}.`;
+  root.innerHTML=`<p class="kicker">Aufgabe ${session.answers.length+1} von ${questions.length}</p><div class="bar"><span style="width:${session.answers.length/questions.length*100}%"></span></div>${guided?`<div class="prep-coach"><strong>Bärli begleitet dich</strong><p>${escapeHtml(coach)}</p></div>`:''}<h2>${escapeHtml(q.prompt)}</h2>${q.context?`<div class="prep-word">${escapeHtml(q.context)}</div>`:''}<form id="prep-form">${q.type==='choice'?`<div class="options">${options.map(v=>`<button class="choice" type="button" data-prep-option="${escapeHtml(v)}" aria-pressed="false">${escapeHtml(v)}</button>`).join('')}</div>`:'<label class="field" for="prep-answer">Deine Antwort</label><input class="answer" id="prep-answer" autocomplete="off" autocapitalize="off" spellcheck="false">'}<div class="actions"><button class="primary" type="submit" id="prep-check">${test?'Antwort abgeben':'Prüfen'}</button>${test?'':'<button class="secondary" type="button" id="prep-help">Hilfe 1 von 3</button>'}</div></form><div id="prep-help-text" class="tip" hidden></div><p id="prep-feedback" class="inline-status" role="status"></p><button class="primary" type="button" id="prep-next" hidden>Weiter</button>`;
+  if(q.type==='write'){const input=document.querySelector('#prep-answer');input.value=given;input.oninput=()=>{given=input.value;session.draft=given;save();};}
+  else root.querySelectorAll('[data-prep-option]').forEach(b=>b.onclick=()=>{if(checked)return;given=b.dataset.prepOption;session.draft=given;root.querySelectorAll('[data-prep-option]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));save();});
+  if(!test)document.querySelector('#prep-help').onclick=()=>{hintCount=Math.min(3,hintCount+1);document.querySelector('#prep-help-text').hidden=false;document.querySelector('#prep-help-text').textContent=q.hints[hintCount-1];document.querySelector('#prep-help').textContent=hintCount===3?'Alle Hilfen geöffnet':'Hilfe '+(hintCount+1)+' von 3';};
+  function record(correct){session.answers.push({id:q.id,given,correct:firstCorrect??correct,skill:q.skill,help:hintCount>0||guided});delete session.draft;delete session.firstCorrect;save();}
+  document.querySelector('#prep-form').onsubmit=e=>{e.preventDefault();if(checked)return;if(!given.trim()){document.querySelector('#prep-feedback').textContent='Wähle eine Antwort oder schreibe sie in das Feld.';return;}
+   const correct=prepCorrect(q,given);if(firstCorrect===null){firstCorrect=correct;session.firstCorrect=correct;save();}
+   if(test){record(correct);draw();return;}
+   tries++;document.querySelector('#prep-feedback').textContent=correct?'Richtig! '+q.why:'Noch nicht ganz. Nutze eine Hilfe und probiere es erneut.';
+   if(correct){checked=true;record(correct);document.querySelector('#prep-next').hidden=false;document.querySelector('#prep-check').disabled=true;document.querySelector('#prep-next').focus();}
+  };
+  document.querySelector('#prep-next').onclick=()=>draw();
+ }
+ draw();
+}
+
+const melodySongs=[
+ {title:'Bruder Jakob',notes:'C4 D4 E4 C4 C4 D4 E4 C4 E4 F4 G4 E4 F4 G4 G4 A4 G4 F4 E4 C4 G4 A4 G4 F4 E4 C4 C4 G3 C4 C4 G3 C4',beats:[1,1,1,1,1,1,1,1,1,1,2,1,1,2,.5,.5,.5,.5,1,1,.5,.5,.5,.5,1,1,1,1,2,1,1,2]},
+ {title:'Alle meine Entchen',notes:'C4 D4 E4 F4 G4 G4 A4 A4 A4 A4 G4 F4 F4 F4 F4 E4 E4 D4 D4 D4 D4 C4',beats:[1,1,1,1,2,2,1,1,1,1,4,1,1,1,1,2,2,1,1,1,1,4]},
+ {title:'Die Zauberflöte',subtitle:'Das klinget so herrlich · kurzer, vereinfachter Anfang',notes:'G3 C4 C4 E4 D4 C4 B3 D4 D4 F4 E4 D4',beats:[1,1,1,1,1,2,1,1,1,1,1,2]},
+ {title:'Hänschen klein',notes:'G4 E4 E4 F4 D4 D4 C4 D4 E4 F4 G4 G4 G4 G4 E4 E4 F4 D4 D4 C4 E4 G4 G4 C4',beats:[1,1,2,1,1,2,1,1,1,1,1,1,2,1,1,2,1,1,2,1,1,1,1,4]},
+ {title:'Morgen kommt der Weihnachtsmann',notes:'C4 C4 G4 G4 A4 A4 G4 F4 F4 E4 E4 D4 D4 C4',beats:[1,1,1,1,1,1,2,1,1,1,1,1,1,2]}
+];
+const melodyKey='majas-wortwerkstatt-melodien-v1';
+function melodyNotes(song){return song.notes.split(' ').map((note,i)=>({note,beats:song.beats[i]}));}
+function melodyPitch(note){const names={C:0,D:2,E:4,F:5,G:7,A:9,B:11};return 440*Math.pow(2,(12*(Number(note[1])+1)+names[note[0]]-69)/12);}
+function melodyTiming(actual,expected){return actual>=expected*.55&&actual<=expected*1.7;}
+function playMelody(board){
+ const level=Number(board.dataset.level)||1,song=melodySongs[level-1],notes=melodyNotes(song),chunks=[];for(let i=0;i<notes.length;i+=4)chunks.push(notes.slice(i,i+4));
+ let saved;try{saved=JSON.parse(localStorage.getItem(melodyKey)||'{}');}catch{}if(!saved||typeof saved!=='object'||Array.isArray(saved))saved={};
+ let phrase=saved[level]?.done?0:Math.min(chunks.length-1,Math.max(0,Number(saved[level]?.phrase)||0)),step=0,mode='piano',busy=false,held=null,disposed=false,ctx=null,timers=[],voices=new Set(),pulse=0;
+ const keys=[...new Set(notes.map(x=>x.note))].sort((a,b)=>melodyPitch(a)-melodyPitch(b)),shortcuts='asdfghjk';
+ const label=n=>({C:'Do',D:'Re',E:'Mi',F:'Fa',G:'Sol',A:'La',B:'Si'}[n[0]])+(n.endsWith('3')?' tief':'');
+ function save(done=false){saved[level]={phrase,done};try{localStorage.setItem(melodyKey,JSON.stringify(saved));}catch{}}
+ function audio(){if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx;}
+ function tone(note){let c;try{c=audio();}catch{return ()=>{};}const osc=c.createOscillator(),gain=c.createGain(),filter=c.createBiquadFilter(),now=c.currentTime,f=melodyPitch(note);osc.type=mode==='meow'?'sawtooth':'triangle';osc.frequency.setValueAtTime(mode==='meow'?f*1.12:f,now);osc.frequency.exponentialRampToValueAtTime(f,now+.13);filter.type='lowpass';filter.frequency.setValueAtTime(mode==='meow'?1900:2400,now);filter.frequency.exponentialRampToValueAtTime(mode==='meow'?550:1100,now+.35);gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(.11,now+.025);osc.connect(filter);filter.connect(gain);gain.connect(c.destination);osc.start();let stopped=false;const stop=()=>{if(stopped)return;stopped=true;gain.gain.cancelScheduledValues(c.currentTime);gain.gain.setTargetAtTime(0,c.currentTime,.025);osc.stop(c.currentTime+.15);voices.delete(stop);};voices.add(stop);return stop;}
+ function clear(){timers.forEach(clearTimeout);timers=[];voices.forEach(stop=>stop());cancelAnimationFrame(pulse);busy=false;held=null;board.querySelectorAll('.melody-key').forEach(b=>b.classList.remove('playing'));}
+ function status(s){board.querySelector('#melody-status').textContent=s;}
+ function target(){return chunks[phrase][step];}
+ function show(){
+ board.innerHTML=`<div class="melody-game"><p class="kicker">Melodie ${level} · Abschnitt ${phrase+1} von ${chunks.length}</p><h2>${song.title}</h2>${song.subtitle?`<p>${song.subtitle}</p>`:''}<p>Erst anhören, dann nachspielen. Halte die Taste bis zum Stern und lass dann los. Du darfst jeden Abschnitt beliebig oft versuchen.</p><div class="actions"><button class="primary" id="melody-listen">▶ Abschnitt anhören</button><label>Klang <select id="melody-sound"><option value="piano">Klavier</option><option value="meow">Miau</option></select></label><label><input type="checkbox" id="melody-memory"> Ohne Notenhilfe</label></div><div id="melody-score" class="melody-score"></div><div class="melody-hold"><span id="melody-fill"></span><b>★</b></div><p id="melody-status" role="status" aria-live="polite">Höre dir den Abschnitt an oder beginne direkt.</p><div class="melody-keys">${keys.map((n,i)=>`<button class="melody-key" data-note="${n}" aria-label="${label(n)}, Taste ${shortcuts[i].toUpperCase()}"><strong>${label(n)}</strong><small>${shortcuts[i].toUpperCase()}</small></button>`).join('')}</div><div class="actions"><button class="secondary" id="melody-again">Abschnitt von vorn</button><button class="plain" id="melody-reset">Lied von vorn</button></div>${level===3?'<p class="subtle">Mozart-Motiv in vereinfachtem Rhythmus. <a href="https://www.bildung-lsa.de/files/99101e51c0e3caac728208965cefdf34/zauberfl_te.pdf" target="_blank" rel="noopener">Notenvorlage</a></p>':''}</div>`;
+ board.querySelector('#melody-sound').value=mode;
+ board.querySelector('#melody-sound').onchange=e=>{clear();mode=e.target.value;};
+ board.querySelector('#melody-memory').onchange=drawScore;
+ board.querySelector('#melody-listen').onclick=listen;
+ board.querySelector('#melody-again').onclick=()=>{clear();step=0;drawScore();status('Noch einmal von vorn. Du schaffst das!');};
+ board.querySelector('#melody-reset').onclick=()=>{clear();phrase=0;step=0;save();show();};
+ board.querySelectorAll('[data-note]').forEach(b=>{b.onpointerdown=e=>{e.preventDefault();b.setPointerCapture(e.pointerId);press(b.dataset.note);};b.onpointerup=()=>release();b.onpointercancel=()=>cancelHold();});drawScore();
+ }
+ function drawScore(){const hidden=board.querySelector('#melody-memory').checked;board.querySelector('#melody-score').innerHTML=chunks[phrase].map((x,i)=>`<span class="${i<step?'done':i===step?'current':''}">${hidden?'♪':label(x.note)}<small>${x.beats===.5?'kurz':x.beats>=2?'lang':'mittel'}</small></span>`).join('');}
+ function listen(){clear();busy=true;step=0;drawScore();status('Bärli spielt vor. Höre auf die Tonlängen.');let at=150;chunks[phrase].forEach(x=>{timers.push(setTimeout(()=>{if(disposed)return;const stop=tone(x.note),b=board.querySelector(`[data-note="${x.note}"]`);b.classList.add('playing');timers.push(setTimeout(()=>{stop();b.classList.remove('playing');},x.beats*550));},at));at+=x.beats*550+130;});timers.push(setTimeout(()=>{busy=false;status('Jetzt bist du dran!');},at));}
+ function press(note){if(disposed||busy||held||step>=chunks[phrase].length)return;const stop=tone(note);held={note,start:performance.now(),stop};board.querySelector(`[data-note="${note}"]`).classList.add('playing');function fill(){if(!held)return;const ratio=(performance.now()-held.start)/(target().beats*550);board.querySelector('#melody-fill').style.width=Math.min(100,ratio*70)+'%';if(ratio>=1)status('Jetzt loslassen!');pulse=requestAnimationFrame(fill);}fill();}
+ function cancelHold(){if(!held)return;held.stop();held=null;cancelAnimationFrame(pulse);board.querySelectorAll('.melody-key').forEach(b=>b.classList.remove('playing'));board.querySelector('#melody-fill').style.width='0%';}
+ function release(){if(!held)return;const h=held,duration=performance.now()-h.start,q=target();cancelHold();if(h.note!==q.note){status('Versuche den nächsten Ton noch einmal. Du verlierst keine Sterne.');return;}if(!melodyTiming(duration,q.beats*550)){status(duration<q.beats*550?'Halte den Ton etwas länger.':'Lass beim Stern etwas früher los.');return;}step++;drawScore();if(step<chunks[phrase].length){status('Gut! Weiter mit dem nächsten Ton.');return;}if(phrase+1<chunks.length){busy=true;status('Abschnitt geschafft!');timers.push(setTimeout(()=>{if(disposed)return;phrase++;step=0;save();busy=false;show();},800));return;}save(true);const reward=starGameReward('melodie',level);board.innerHTML=`<div class="panel melody-finish"><h2>Du hast ${song.title} gespielt!</h2><p>Alle Töne und Tonlängen geschafft. ${escapeHtml(reward.message)}</p><a class="primary" href="#spiele/melodie">Weitere Lieder</a><button class="secondary" id="melody-replay">Noch einmal spielen</button></div>`;board.querySelector('#melody-replay').onclick=()=>{phrase=0;step=0;save();show();};}
+ function keydown(e){if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey||e.repeat)return;const i=shortcuts.indexOf(e.key.toLowerCase());if(i>=0&&keys[i]){e.preventDefault();press(keys[i]);}}
+ function keyup(e){if(held&&shortcuts[keys.indexOf(held.note)]===e.key.toLowerCase())release();}
+ function blur(){cancelHold();}
+ window.addEventListener('keydown',keydown);window.addEventListener('keyup',keyup);window.addEventListener('blur',blur);
+ extraCleanup=()=>{disposed=true;clear();window.removeEventListener('keydown',keydown);window.removeEventListener('keyup',keyup);window.removeEventListener('blur',blur);ctx?.close();};show();
+}
+
 function render(initial=false){
+  if(extraCleanup){extraCleanup();extraCleanup=null;}
   cleanupLearningMedia();
   document.querySelector('#dictation-audio')?.pause();
   document.querySelector('#hearing-audio')?.pause();
@@ -4697,6 +4891,7 @@ function render(initial=false){
   else if(page==='lernuebersicht'||page==='erwachsene')showLearningOverview(page==='erwachsene');
   else if(page==='fortschritt')showProgress();
   else if(page==='sterne')showStarWallet();
+  else if(page==='pruefung')showPrep(index,part);
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
   else if(page==='baerli')showBear(index);
@@ -4741,6 +4936,7 @@ render(true);
 </script>
 </body>
 </html>
+
 
 
 
