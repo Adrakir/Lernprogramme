@@ -388,6 +388,10 @@ legend{font-weight:700;padding:0 7px}
 .home-priorities .actions{align-items:stretch}.home-priorities .actions a{flex:1 1 150px;text-align:center}
 .hero h2{font-size:clamp(32px,5vw,52px);margin-bottom:14px}.hero h2 em{font-style:normal;color:var(--forest)}
 @media(max-width:720px){.home-priorities{grid-template-columns:1fr;gap:12px}.home-priorities .panel{padding:16px}.home-priorities h2{margin-bottom:8px}.home-priorities p{margin-bottom:10px}.home-priorities .actions{gap:8px;margin-top:10px}.home-priorities .actions a{font-size:15px;padding:10px;flex-basis:140px}}
+.cloud-game{background:#fffefa}.cloud-top{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px}.cloud-top label{flex:1 1 190px;font-size:13px;font-weight:800}.cloud-top select{display:block;width:100%;margin-top:4px;font-size:15px}.cloud-top>span{font-weight:800;color:#a14764;white-space:nowrap}.cloud-top button{font-size:14px;min-height:44px;padding:9px 12px}.cloud-instruction{max-width:65ch}.cloud-players{display:flex;gap:12px;margin:12px 0}.cloud-players button{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;border:2px solid #cbd8d0;border-radius:14px;background:#fffef9;color:var(--ink);min-height:68px;font-weight:800;font-size:18px}.cloud-players button[aria-pressed=true]{border-color:#246b5b;background:#dcefe7;box-shadow:0 3px 0 #246b5b}.cloud-players svg{width:43px;height:55px}.cloud-players small{display:block;font-size:11px;font-weight:600;color:#586b6c}.cloud-svg{display:block;width:100%;max-height:450px;margin:auto;touch-action:manipulation;user-select:none}.cloud-neighbor{cursor:pointer}.cloud-neighbor:hover{filter:brightness(1.06)}.cloud-neighbor:focus-visible{outline:none;filter:drop-shadow(0 0 3px #185b4a)}.cloud-status{min-height:3.1em;margin:12px 0 8px;font-size:15px;font-weight:700;color:#36565d}.cloud-control-row{display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap}.cloud-pad{display:grid;grid-template-columns:52px 58px 52px;grid-template-rows:48px 48px 48px;gap:5px;flex:none}.cloud-pad button{border:1px solid #99b7ae;border-radius:12px;background:#e3f0e9;color:#174f43;box-shadow:0 3px 0 #93b9a9;font-size:29px;touch-action:manipulation}.cloud-pad button:active{transform:translateY(2px);box-shadow:none}.cloud-pad button:disabled{opacity:.4}.cloud-pad [data-cloud-dir="0"]{grid-area:1/2}.cloud-pad [data-cloud-dir="3"]{grid-area:2/1}.cloud-pad [data-cloud-dir="1"]{grid-area:2/3}.cloud-pad [data-cloud-dir="2"]{grid-area:3/2}.cloud-pad span{grid-area:2/2;align-self:center;justify-self:center;font-size:13px;font-weight:800}.cloud-tools{display:flex;flex-direction:column;gap:8px;min-width:145px}.cloud-tools button{min-height:44px}.cloud-help{margin:20px 0 12px}.cloud-help p{font-size:15px}.cloud-win{padding:18px;margin-top:18px;border:2px solid #9ec7a8;background:#e5f3e6;border-radius:16px}.cloud-win h3{font-size:26px;color:#285d46}.cloud-heart{animation:cloud-heart 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes cloud-heart{50%{transform:translateY(-4px) scale(1.1)}}@media(max-width:620px){.cloud-game{padding:14px}.cloud-top{gap:8px}.cloud-game h2{font-size:24px}.cloud-players{gap:8px}.cloud-control-row{gap:14px}.cloud-tools{min-width:130px}.cloud-tools button{padding:9px;font-size:14px}.cloud-instruction{font-size:15px}.cloud-status{font-size:14px}.cloud-players button{gap:5px}}@media(max-width:370px){.cloud-pad{grid-template-columns:46px 48px 46px;grid-template-rows:46px 46px 46px}.cloud-control-row{gap:9px}.cloud-tools{min-width:115px}.cloud-tools button{font-size:13px}}@media(prefers-reduced-motion:reduce){.cloud-heart{animation:none}}
+.cloud-route .unit-head{padding:17px 22px}.cloud-route .unit-head h1{font-size:clamp(25px,4vw,34px);margin:0}.cloud-route .unit-head .kicker,.cloud-route .unit-head p:last-child{display:none}
+@media(max-width:620px){.cloud-route .unit-head{padding:13px;gap:9px}.cloud-route .unit-head h1{font-size:25px}.cloud-top label{flex-basis:130px;min-width:0}.cloud-top select{font-size:14px}.cloud-top{margin-bottom:12px}.cloud-top button{font-size:12px;padding:8px}.cloud-top>span{font-size:13px}}
+
 </style>
 </head>
 <body>
@@ -908,6 +912,11 @@ function setupLessonDemo(unit){
 }
 </script>
 <script>const miniGames = {
+  wolkenwege: {
+    title:'Wolkenwege · Maja & Bärli', tone:'sky', art:'wolkenwege',
+    intro:'Bringe die beiden in zwölf Rätselleveln zusammen. Wechsle zwischen Maja und Bärli und öffne ihnen die Brücken.',
+    play:playCloudGame
+  },
   woerterfang: {
     title:'Fujis Wörterfang', tone:'mint', art:'paw',
     intro:'Finde die drei Wörter, die zur gesuchten Wortart gehören.',
@@ -925,6 +934,149 @@ function setupLessonDemo(unit){
   }
 };
 
+// Wolkenwege: original cooperative puzzle; level data and transition rules are shared with verification.
+const cloudLevels = [{"title": "Hallo auf der Wolke!", "map": ["M...B"], "intro": "Wähle Maja und gehe zu Bärli. Tippe auf ein leuchtendes Nachbarfeld oder benutze die Pfeile.", "tip": "Maja kann auf dem geraden Weg nach rechts gehen."}, {"title": "Ein Weg um die Ecke", "map": ["M..##", "##.##", "##..B"], "intro": "Der Weg knickt ab. Über die Wolkenlücken kann niemand springen.", "tip": "Gehe zuerst rechts, dann nach unten und zuletzt wieder rechts."}, {"title": "Zwei Wege, ein Treffen", "map": ["M...#", ".##.#", "....B"], "intro": "Du kannst beide Figuren bewegen. Wähle Maja oder Bärli mit den großen Figurenknöpfen.", "tip": "Es gibt zwei Wege. Lass auch Bärli ein Stück entgegenkommen."}, {"title": "Die Sternenbrücke", "map": ["M.s=B"], "intro": "Tritt auf den gelben Stern: Er schaltet die gelbe Brücke ein. Beim nächsten Betreten schaltet er sie wieder aus.", "tip": "Gehe mit Maja auf den Stern und dann über die gelbe Brücke."}, {"title": "Ein kleiner Umweg", "map": ["##s###", "##.###", "M..==B"], "intro": "Der Stern liegt abseits des Weges. Ist die Brücke an, bleibt sie an, bis jemand wieder auf den Stern tritt.", "tip": "Maja besucht zuerst den Stern oben und kehrt dann zur Abzweigung zurück."}, {"title": "Am Wolkenteich", "map": ["M.s###", "##.###", "...==B", ".#####", "...###"], "intro": "Suche erst den Stern. Die beiden gelben Brückenfelder gehören zusammen.", "tip": "Nach dem Stern gehst du nach unten zur langen Brücke. Bärli wartet auf der anderen Seite."}, {"title": "Bärli hilft mit", "map": ["M==...B", "####.##", "####s##"], "intro": "Maja wartet an der geschlossenen Brücke. Diesmal ist Bärli näher am Stern.", "tip": "Wechsle zu Bärli. Er geht nach links bis zur Abzweigung und dann nach unten zum Stern."}, {"title": "Der Freundschaftsknopf", "map": ["##M##", "##p##", "B.+.."], "intro": "Auf dem grünen Knopf muss eine Figur stehen bleiben. Nur dann ist die grüne Brücke offen. Lass die andere Figur darübergehen.", "tip": "Maja geht auf den grünen Knopf und wartet. Wechsle zu Bärli und führe ihn über die Brücke zu Maja."}, {"title": "Bärli hält die Brücke", "map": ["B.p##", "##.##", "M++.."], "intro": "Wer auf dem grünen Knopf steht, hält die Brücke für den anderen offen.", "tip": "Bärli geht auf den grünen Knopf oben. Maja überquert die zwei grünen Brückenfelder und geht nach oben zu ihm."}, {"title": "Stern und Knopf", "map": ["###M###", "###p###", "B.s=+.."], "intro": "Hier brauchst du beide Hilfen: den gelben Stern und den grünen Knopf.", "tip": "Maja bleibt auf dem grünen Knopf. Bärli besucht den Stern und geht über beide Brücken zu ihr."}, {"title": "Die lange Wolkenreise", "map": ["###M###", "###.###", "###p###", "B.s=+..", "######.", "####..."], "intro": "Manche Wege führen weg vom Ziel. Schau, wo sich die beiden wirklich treffen können.", "tip": "Maja geht zwei Felder nach unten auf den Knopf. Bärli schaltet den Stern ein und läuft auf der Brücke zu ihr."}, {"title": "Das große Wiedersehen", "map": ["M..###B", "##s###.", "##.###p", "..==++."], "intro": "Zum Schluss arbeiten beide zusammen: Maja schaltet die gelbe Brücke ein. Bärli hält die grüne Brücke offen.", "tip": "Maja geht zum Stern und dann unten nach rechts. Bärli geht auf den Knopf rechts und wartet, bis Maja bei ihm ist."}];
+const cloudKey='majas-wortwerkstatt-wolkenwege-v1';
+const cloudDirs=[[-1,0],[0,1],[1,0],[0,-1]];
+const cloudDirNames=['nach oben','nach rechts','nach unten','nach links'];
+let cloudAudio=null;
+function cloudTile(level,pos){return level.map[pos[0]]?.[pos[1]];}
+function cloudInitial(level){
+ const s={m:[0,0],b:[0,0],on:false};
+ level.map.forEach((row,r)=>[...row].forEach((v,c)=>{if(v==='M')s.m=[r,c];if(v==='B')s.b=[r,c];}));return s;
+}
+function cloudTogether(s){return s.m[0]===s.b[0]&&s.m[1]===s.b[1];}
+function cloudPressed(level,s){return [s.m,s.b].some(p=>cloudTile(level,p)==='p');}
+function cloudStep(level,s,who,d){
+ if(!['m','b'].includes(who)||!Number.isInteger(d)||d<0||d>3||cloudTogether(s))return null;
+ const [dr,dc]=cloudDirs[d],pos=s[who],next=[pos[0]+dr,pos[1]+dc],tile=cloudTile(level,next);
+ if(!tile||tile==='#'||tile==='='&&!s.on||tile==='+'&&!cloudPressed(level,s))return null;
+ const n={m:[...s.m],b:[...s.b],on:s.on};n[who]=next;
+ if(tile==='s')n.on=!n.on;
+ // A bridge cannot disappear while either friend is still standing on it.
+ if(!n.on&&[n.m,n.b].some(p=>cloudTile(level,p)==='='))return null;
+ if(!cloudPressed(level,n)&&[n.m,n.b].some(p=>cloudTile(level,p)==='+'))return null;
+ return n;
+}
+function cloudSolve(level,start){
+ const key=s=>[...s.m,...s.b,+s.on].join(',');
+ const queue=[{s:start,first:null}],seen=new Set([key(start)]);let i=0;
+ while(i<queue.length&&i<18000){
+  const {s,first}=queue[i++];if(cloudTogether(s))return first;
+  for(const who of ['m','b'])for(let d=0;d<4;d++){
+   const next=cloudStep(level,s,who,d);if(!next)continue;
+   const k=key(next);if(seen.has(k))continue;seen.add(k);queue.push({s:next,first:first||{who,d}});
+  }
+ }
+ return null;
+}
+function cloudRead(){
+ try{const v=JSON.parse(localStorage.getItem(cloudKey)||'{}');if(v&&typeof v==='object'&&!Array.isArray(v))return v;}catch{}return {};
+}
+function cloudAvatar(who,joined=false){
+ if(who==='m')return `<g stroke="#53434b" stroke-width="1.4" stroke-linejoin="round"><ellipse cy="24" rx="14" ry="4" fill="#355964" opacity=".16" stroke="none"/><path d="M-10 8Q0 0 10 8L14 23H-14Z" fill="#538fa3"/><path d="M-6 22v5m12-5v5" stroke="#6a4860" stroke-width="5" stroke-linecap="round"/><path d="M-12 9l-4 8m28-8 4 8" stroke="#f7cba4" stroke-width="5" stroke-linecap="round"/><path d="M-13-12q0-18 15-16 16 0 14 19l6 5-6 8-7-6" fill="#d99d49"/><circle cy="-7" r="13" fill="#ffdbb7"/><path d="M-13-10q1-17 16-16 9 0 10 13Q3-11 2-19q-5 8-15 9" fill="#e7b35e"/><path d="M-5-7v1m10-1v1" stroke="#344b53" stroke-width="2.4" stroke-linecap="round"/><path d="M-4 0q4 4 8 0" fill="none"/><path d="M-8-2h1m14 0h1" stroke="#c6816e" stroke-width="2"/><path d="M-2 5v4h4V5" fill="#ffdbb7"/></g>`;
+ return `<g stroke="#654955" stroke-width="1.4" stroke-linejoin="round"><ellipse cy="24" rx="15" ry="4" fill="#355964" opacity=".16" stroke="none"/><circle cx="-11" cy="-19" r="7" fill="#b9855b"/><circle cx="11" cy="-19" r="7" fill="#b9855b"/><path d="M-12 7q12-9 24 0l3 17H-15Z" fill="#ad86bb"/><path d="M-7 22v4m14-4v4" stroke="#9970ab" stroke-width="6" stroke-linecap="round"/><path d="M-12 10l-5 7m29-7 5 7" stroke="#bd8c62" stroke-width="5" stroke-linecap="round"/><circle cy="-7" r="15" fill="#c99a6b"/><ellipse cy="-2" rx="9" ry="7" fill="#f0cda0"/><path d="M-5-10v1m10-1v1" stroke="#3c3b44" stroke-width="2.7" stroke-linecap="round"/><path d="M-3-4q3-3 6 0L0-1Z" fill="#654955"/><path d="M0-1v3m-4 0q4 4 8 0" fill="none"/><path d="m14-20 8 1-2 7-6-2Z" fill="#f5d56c"/><path d="M-7 10h14m-14 5h14" stroke="#c2a0cd"/></g>`;
+}
+function cloudBoard(level,s,who){
+ const cols=Math.max(...level.map.map(r=>r.length)),rows=level.map.length;
+ const width=cols*70+55,height=rows*64+86;
+ let svg=`<svg class="cloud-svg" viewBox="0 0 ${width} ${height}" role="group" aria-label="Wolkenweg. Maja: Reihe ${s.m[0]+1}, Spalte ${s.m[1]+1}. Bärli: Reihe ${s.b[0]+1}, Spalte ${s.b[1]+1}."><defs><linearGradient id="cloudsky" x2="0" y2="1"><stop stop-color="#d5edf2"/><stop offset="1" stop-color="#f9e9d3"/></linearGradient><filter id="cloudshadow"><feDropShadow dx="0" dy="5" stdDeviation="3" flood-color="#53687a" flood-opacity=".14"/></filter></defs><rect width="${width}" height="${height}" rx="22" fill="url(#cloudsky)"/>`;
+ for(const [x,y]of [[30,38],[width-35,height-30],[width-40,38]])svg+=`<g fill="#fff" opacity=".6"><ellipse cx="${x}" cy="${y}" rx="35" ry="12"/><circle cx="${x-12}" cy="${y-6}" r="14"/><circle cx="${x+10}" cy="${y-9}" r="18"/></g>`;
+ const pressed=cloudPressed(level,s),joined=cloudTogether(s),neighbors=new Map();
+ if(!joined)cloudDirs.forEach(([dr,dc],d)=>{if(cloudStep(level,s,who,d))neighbors.set([s[who][0]+dr,s[who][1]+dc].join(','),d);});
+ level.map.forEach((row,r)=>[...row].forEach((tile,c)=>{
+  if(tile==='#')return;
+  const x=25+c*70,y=49+r*64,bridge=tile==='='||tile==='+',open=tile==='='?s.on:tile==='+'?pressed:true;
+  const color=tile==='s'||tile==='='?'#f2cd77':tile==='p'||tile==='+'?'#a2d2ba':'#fcf8e9';
+  const neighbor=neighbors.get([r,c].join(','));
+  const attr=neighbor!==undefined?`role="button" tabindex="0" data-cloud-step="${neighbor}" aria-label="${who==='m'?'Maja':'Bärli'} ${cloudDirNames[neighbor]} bewegen"`:`aria-hidden="true"`;
+  svg+=`<g class="cloud-tile ${neighbor!==undefined?'cloud-neighbor':''}" ${attr}>`;
+  if(bridge&&!open){svg+=`<path d="M${x} ${y+6}l54 0 10 8-54 0Z" fill="none" stroke="${color}" stroke-width="3" stroke-dasharray="5 4"/><text x="${x+28}" y="${y+4}" text-anchor="middle" font-size="22" fill="#596b72">${tile==='='?'☆':'◇'}</text>`;}
+  else{
+   svg+=`<g filter="url(#cloudshadow)"><path d="M${x} ${y+41}l54 0 10 9-54 0Z" fill="#c3b9a1"/><path d="M${x+54} ${y}l10 9v41l-10-9Z" fill="#c6b491"/><path d="M${x} ${y}h54v41H${x}Z" fill="${color}" stroke="${neighbor!==undefined?'#347d74':'#dfd8bf'}" stroke-width="${neighbor!==undefined?'3':'1.5'}" rx="8"/></g>`;
+   if(bridge)svg+=`<path d="M${x+8} ${y+10}h38m-38 10h38m-38 10h38" stroke="#917c51" stroke-width="2" opacity=".5"/>`;
+   if(tile==='s')svg+=`<text x="${x+27}" y="${y+28}" text-anchor="middle" font-size="29" fill="#80580f">${s.on?'★':'☆'}</text>`;
+   if(tile==='p')svg+=`<ellipse cx="${x+27}" cy="${y+21}" rx="15" ry="11" fill="${pressed?'#40886c':'#d8f0e4'}" stroke="#46745f" stroke-width="2"/><path d="m${x+21} ${y+21} 5 4 9-9" fill="none" stroke="${pressed?'white':'#46745f'}" stroke-width="2"/>`;
+   if(neighbor!==undefined)svg+=`<circle cx="${x+27}" cy="${y+20}" r="5" fill="#247468" opacity=".8"/>`;
+  }
+  svg+='</g>';
+  const here=['m','b'].filter(k=>s[k][0]===r&&s[k][1]===c);
+  for(const k of here){const offset=joined?(k==='m'?-12:12):0;
+   svg+=`<g class="cloud-person ${k===who&&!joined?'cloud-active':''}" transform="translate(${x+27+offset} ${y+12})">${!joined&&k===who?'<ellipse cy="28" rx="19" ry="5" fill="none" stroke="#247468" stroke-width="2.5"/>':''}${cloudAvatar(k)}</g>`;
+  }
+  if(joined&&here.length)svg+=`<text x="${x+27}" y="${y-27}" text-anchor="middle" font-size="27" fill="#b95773" class="cloud-heart">♥</text>`;
+ }));
+ return svg+'</svg>';
+}
+function playCloudGame(root){
+ const saved=cloudRead();let levelIndex=Math.max(0,Math.min(cloudLevels.length-1,Number(location.hash.split('/')[2]||saved.current||1)-1));
+ if(!Number.isInteger(levelIndex))levelIndex=0;
+ const level=cloudLevels[levelIndex],completed=(saved.completed&&typeof saved.completed==='object')?saved.completed:{};
+ let s=cloudInitial(level),who='m',history=[],moves=0,sound=false;
+ const resumed=saved.sessions?.[levelIndex];
+ const validState=x=>x&&typeof x.on==='boolean'&&['m','b'].every(k=>Array.isArray(x[k])&&x[k].length===2&&x[k].every(Number.isInteger)&&cloudTile(level,x[k])&&cloudTile(level,x[k])!=='#')&&(x.on||![x.m,x.b].some(p=>cloudTile(level,p)==='='))&&(cloudPressed(level,x)||![x.m,x.b].some(p=>cloudTile(level,p)==='+'));
+ if(validState(resumed?.s)){s=resumed.s;who=resumed.who==='b'?'b':'m';history=Array.isArray(resumed.history)?resumed.history.filter(validState).slice(-250):[];moves=Number.isInteger(resumed.moves)&&resumed.moves>=0?resumed.moves:history.length;}
+ root.classList.add('cloud-game');
+ root.innerHTML=`<div class="cloud-top"><label for="cloud-level">Dein Level<select id="cloud-level">${cloudLevels.map((l,i)=>`<option value="${i+1}" ${i===levelIndex?'selected':''}>${i+1}. ${escapeHtml(l.title)}${completed[i]?' · ♥':''}</option>`).join('')}</select></label><span id="cloud-hearts"></span><button class="secondary" id="cloud-sound" type="button" aria-pressed="false">Ton aus</button></div>
+ <h2 id="cloud-level-title">${levelIndex+1}. ${escapeHtml(level.title)}</h2><p class="cloud-instruction">${escapeHtml(level.intro)}</p>
+ <div class="cloud-players" role="group" aria-label="Figur auswählen"><button type="button" data-cloud-who="m"><svg viewBox="-26 -33 52 66" aria-hidden="true">${cloudAvatar('m')}</svg><span>Maja<small>Taste 1</small></span></button><button type="button" data-cloud-who="b"><svg viewBox="-26 -33 52 66" aria-hidden="true">${cloudAvatar('b')}</svg><span>Bärli<small>Taste 2</small></span></button></div>
+ <div id="cloud-map"></div><p id="cloud-status" class="cloud-status" role="status" aria-live="polite"></p>
+ <div class="cloud-control-row"><div class="cloud-pad" role="group" aria-label="Ausgewählte Figur bewegen"><button type="button" data-cloud-dir="0" aria-label="Nach oben">↑</button><button type="button" data-cloud-dir="3" aria-label="Nach links">←</button><span id="cloud-active-name"></span><button type="button" data-cloud-dir="1" aria-label="Nach rechts">→</button><button type="button" data-cloud-dir="2" aria-label="Nach unten">↓</button></div><div class="cloud-tools"><button class="secondary" id="cloud-undo" type="button">Schritt zurück</button><button class="secondary" id="cloud-tip" type="button">Tipp zeigen</button><button class="plain" id="cloud-reset" type="button">Level neu starten</button></div></div>
+ <p id="cloud-hint" class="tip" hidden role="status"></p><div id="cloud-win" class="cloud-win" hidden aria-labelledby="cloud-win-title"></div>
+ <details class="cloud-help"><summary>Spielregeln und Steuerung</summary><p>Bringe Maja und Bärli auf dasselbe Feld. Wähle eine Figur, dann tippe auf ein markiertes Nachbarfeld oder auf die Pfeile. Am PC gehen auch die Pfeiltasten und W, A, S, D. Mit 1 und 2 wechselst du die Figur.</p><p><strong>☆ Gelber Stern:</strong> Betreten schaltet alle gelben Brücken um. <strong>◇ Grüner Knopf:</strong> Eine Figur bleibt darauf stehen, während die andere die grünen Brücken überquert. Eine benutzte Brücke lässt sich erst schließen, wenn niemand mehr darauf steht.</p><p>Kein Zeitlimit. Du kannst jederzeit einen Schritt zurückgehen oder das Level neu starten. Alle Level sind frei wählbar. Herzen und Spielstand werden auf diesem Gerät gespeichert.</p></details><p id="cloud-save" class="subtle"></p>`;
+ const $=selector=>root.querySelector(selector);
+ function save(){
+  saved.current=levelIndex+1;saved.completed=completed;if(!saved.sessions||typeof saved.sessions!=='object')saved.sessions={};
+  saved.sessions[levelIndex]={s,who,history,moves};
+  try{localStorage.setItem(cloudKey,JSON.stringify(saved));$('#cloud-save').textContent='Dein Spielstand wird auf diesem Gerät gespeichert.';}catch{$('#cloud-save').textContent='Speichern ist hier gerade nicht möglich. Du kannst trotzdem spielen.';}
+ }
+ function tone(win=false){if(!sound)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;cloudAudio=cloudAudio||new C();cloudAudio.resume().catch(()=>{});const t=cloudAudio.currentTime;for(const [i,f]of (win?[523,659,784]:[who==='m'?440:330]).entries()){const o=cloudAudio.createOscillator(),g=cloudAudio.createGain();o.type='sine';o.frequency.value=f;o.connect(g);g.connect(cloudAudio.destination);const start=t+i*.12;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(.045,start+.015);g.gain.exponentialRampToValueAtTime(.001,start+.16);o.start(start);o.stop(start+.18);}}catch{}}
+ function draw(message){
+  const won=cloudTogether(s);$('#cloud-map').innerHTML=cloudBoard(level,s,who);
+  root.querySelectorAll('[data-cloud-who]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cloudWho===who)));
+  $('#cloud-active-name').textContent=who==='m'?'Maja':'Bärli';$('#cloud-undo').disabled=!history.length;
+  root.querySelectorAll('[data-cloud-dir]').forEach(b=>b.disabled=won);
+  $('#cloud-status').textContent=message||(won?'Geschafft! Maja und Bärli haben sich gefunden.':`${who==='m'?'Maja':'Bärli'} ist dran. ${moves} ${moves===1?'Schritt':'Schritte'}.`);
+  $('#cloud-hearts').textContent=`♥ ${cloudLevels.filter((_,i)=>completed[i]).length} / ${cloudLevels.length}`;
+  $('#cloud-win').hidden=!won;
+  if(won){
+   $('#cloud-win').innerHTML=`<h3 id="cloud-win-title">Wieder zusammen! ♥</h3><p>Maja und Bärli haben sich in Level ${levelIndex+1} gefunden. Gut mitgedacht!</p><div class="actions">${levelIndex<cloudLevels.length-1?`<a class="primary" id="cloud-next" href="#spiele/wolkenwege/${levelIndex+2}">Nächstes Level ${icon('arrow')}</a>`:'<strong>Alle zwölf Wolkenwege sind offen. Wähle oben ein Level, das du noch spielen möchtest.</strong>'}<a class="secondary" href="#spiele">Zur Spielwiese</a></div>`;
+  }
+  save();
+ }
+ function select(k){who=k;draw();}
+ function move(d){
+  if(cloudTogether(s))return;
+  const next=cloudStep(level,s,who,d);
+  if(!next){draw('Hier geht es gerade nicht weiter. Schau nach einem anderen Weg oder wechsle die Figur.');return;}
+  history.push(s);if(history.length>250)history.shift();s=next;moves++;$('#cloud-hint').hidden=true;
+  if(cloudTogether(s)){completed[levelIndex]=true;const opt=$('#cloud-level').options[levelIndex];if(!opt.textContent.includes('♥'))opt.textContent+=' · ♥';}
+  draw();tone(cloudTogether(s));
+  if(cloudTogether(s)){const title=$('#cloud-win-title');title.tabIndex=-1;title.focus();}
+ }
+ root.querySelectorAll('[data-cloud-who]').forEach(b=>b.onclick=()=>select(b.dataset.cloudWho));
+ root.querySelectorAll('[data-cloud-dir]').forEach(b=>b.onclick=()=>move(+b.dataset.cloudDir));
+ $('#cloud-map').onclick=e=>{const tile=e.target.closest('[data-cloud-step]');if(tile)move(+tile.dataset.cloudStep);};
+ $('#cloud-undo').onclick=()=>{if(history.length){s=history.pop();moves=Math.max(0,moves-1);$('#cloud-hint').hidden=true;draw('Ein Schritt zurück. Probiere einen anderen Weg.');}};
+ $('#cloud-reset').onclick=()=>{s=cloudInitial(level);history=[];moves=0;who='m';$('#cloud-hint').hidden=true;draw('Der Wolkenweg beginnt von vorn. Deine gesammelten Herzen bleiben erhalten.');};
+ $('#cloud-tip').onclick=()=>{const step=cloudSolve(level,s);$('#cloud-hint').hidden=false;$('#cloud-hint').textContent=cloudTogether(s)?'Die beiden sind schon zusammen. Du kannst das nächste Level wählen.':step?`${level.tip} Nächster möglicher Schritt: ${step.who==='m'?'Maja':'Bärli'} ${cloudDirNames[step.d]}.`:'Von hier führt gerade kein Weg zum Treffen. Gehe einen Schritt zurück oder starte dieses Level neu.';};
+ $('#cloud-sound').onclick=()=>{sound=!sound;$('#cloud-sound').textContent=sound?'Ton an':'Ton aus';$('#cloud-sound').setAttribute('aria-pressed',String(sound));if(sound)tone();};
+ $('#cloud-level').onchange=e=>moveRoute(+e.target.value);
+ function moveRoute(n){location.hash='#spiele/wolkenwege/'+n;}
+ root.onkeydown=e=>{
+  if(e.target.matches('select,input,textarea'))return;
+  if((e.key==='Enter'||e.key===' ')&&e.target.closest('[data-cloud-step]')){e.preventDefault();move(+e.target.closest('[data-cloud-step]').dataset.cloudStep);return;}
+  const map={ArrowUp:0,w:0,W:0,ArrowRight:1,d:1,D:1,ArrowDown:2,s:2,S:2,ArrowLeft:3,a:3,A:3};
+  if(e.altKey||e.ctrlKey||e.metaKey)return;
+  if(Object.hasOwn(map,e.key)){e.preventDefault();if(!e.repeat)move(map[e.key]);}
+  else if(e.key==='1'||e.key==='2'){e.preventDefault();select(e.key==='1'?'m':'b');}
+ };
+ draw();
+}
+
+demoArt.wolkenwege = `<path d="M6 43h52v12H6Z" fill="#c9ddce"/><path d="M6 39h52v10H6Z" fill="#f3e2b3"/><g transform="translate(20 28) scale(.5)">${cloudAvatar('m')}</g><g transform="translate(46 28) scale(.5)">${cloudAvatar('b')}</g><path d="M29 13q4-6 8 0-4 7-8 0Z" fill="#b95773" stroke="none"/>`;
+
+
 function gameShuffle(items){
   const result=[...items];
   for(let i=result.length-1;i>0;i--){
@@ -938,13 +1090,13 @@ function showGames(id){
   const game=Object.hasOwn(miniGames,id)?miniGames[id]:null;
   if(!game){
     app.innerHTML=`<div class="route">${homeLink()}
-      <div class="unit-head sand"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese</p><h1 tabindex="-1">Kleine Wortspiele</h1><p>Such dir ein Spiel aus. Du hast so viel Zeit, wie du brauchst.</p></div></div>
+      <div class="unit-head sand"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese</p><h1 tabindex="-1">Majas Spielwiese</h1><p>Such dir ein Spiel aus. Du hast so viel Zeit, wie du brauchst.</p></div></div>
       <div class="games-grid">${Object.entries(miniGames).map(([key,item])=>`<a class="station game-card ${item.tone}" href="#spiele/${key}">
         <span class="game-illustration">${demoPictogram(item.art)}</span>
         <h2>${item.title}</h2><p>${item.intro}</p><span class="card-foot">Spielen ${icon('arrow')}</span></a>`).join('')}</div></div>`;
     return;
   }
-  app.innerHTML=`<div class="route">
+  app.innerHTML=`<div class="route ${id==='wolkenwege'?'cloud-route':''}">
     <a class="crumb" href="#spiele">${icon('back')} Zur Spielwiese</a>
     <div class="unit-head ${game.tone}"><span class="icon-box">${icon('game')}</span><div><p class="kicker">Majas Spielwiese</p><h1 tabindex="-1">${game.title}</h1><p>${game.intro}</p></div></div>
     <section class="panel game-panel" id="game-board" aria-label="Spielfeld"></section></div>`;
@@ -2786,7 +2938,7 @@ function showHome(){
     <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
     <h2>Mehr <em>entdecken</em></h2>
     <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a></div></div>
+    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#spiele/wolkenwege">Maja &amp; Bärli: Wolkenwege</a></div></div>
     <div class="hero-art">${bearPicture('leseecke',true)}</div>
   </section>
   ${learningHome()}
@@ -4167,4 +4319,5 @@ render(true);
 </script>
 </body>
 </html>
+
 
