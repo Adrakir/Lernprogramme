@@ -25,3 +25,20 @@ body:not(.lc-theme-dark) .c6-root textarea,
 body:not(.lc-theme-dark) .c6-root input[type=number],
 body:not(.lc-theme-dark) #lcModal select,
 body:not(.lc-theme-dark) #lcModal input[type=file]{background:var(--paper);color:var(--ink)}
+.chem-theme{display:flex;align-items:center;gap:7px;font-size:14px}
+.chem-theme select{min-height:44px;background:var(--paper);color:var(--ink);border:1px solid var(--muted);border-radius:9px;padding:6px 9px;font:inherit}
+body.lc-theme-dark{--bg:#161b22;--paper:#242c36;--ink:#e8edf2;--muted:#bdc8d4;--soft:#293645;--line:#536170;--teal:#70d4ca;--teal2:#224c48}
+body.lc-theme-dark .panel,
+body.lc-theme-dark .card,
+body.lc-theme-dark .vg-readout,
+body.lc-theme-dark .c6-card,
+body.lc-theme-dark .boil-read{background:var(--paper);color:var(--ink)}
+body.lc-theme-dark .page-head h2,
+body.lc-theme-dark .section-head h2,
+body.lc-theme-dark .panel h3,
+body.lc-theme-dark .card h3{color:var(--ink)}
+body.lc-theme-dark input:not([type=checkbox]):not([type=radio]):not([type=range]),
+body.lc-theme-dark select,
+body.lc-theme-dark textarea{background:var(--paper);color:var(--ink)}
+@media print{.chem-theme{display:none!important}}
+@media print{body.lc-theme-dark{--bg:#fff;--paper:#fff;--ink:#193440;--muted:#53717b;--soft:#eff7f5;--line:#d9e7e8;--teal:#117c80;--teal2:#d7f2ec}}

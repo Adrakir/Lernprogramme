@@ -41,3 +41,14 @@
     try { localStorage.setItem(key, String(size)); } catch {}
   });
 })();
+
+(() => {
+  'use strict';
+  const select = document.getElementById('chemTheme');
+  const sync = () => {
+    select.value = document.body.classList.contains('lc-theme-dark') ? 'dark' : 'light';
+  };
+  select.addEventListener('change', () => window.LernCockpit.setTheme(select.value));
+  document.addEventListener('chemistry:theme', sync);
+  sync();
+})();

@@ -204,6 +204,23 @@ body:not(.lc-theme-dark) .c6-root textarea,
 body:not(.lc-theme-dark) .c6-root input[type=number],
 body:not(.lc-theme-dark) #lcModal select,
 body:not(.lc-theme-dark) #lcModal input[type=file]{background:var(--paper);color:var(--ink)}
+.chem-theme{display:flex;align-items:center;gap:7px;font-size:14px}
+.chem-theme select{min-height:44px;background:var(--paper);color:var(--ink);border:1px solid var(--muted);border-radius:9px;padding:6px 9px;font:inherit}
+body.lc-theme-dark{--bg:#161b22;--paper:#242c36;--ink:#e8edf2;--muted:#bdc8d4;--soft:#293645;--line:#536170;--teal:#70d4ca;--teal2:#224c48}
+body.lc-theme-dark .panel,
+body.lc-theme-dark .card,
+body.lc-theme-dark .vg-readout,
+body.lc-theme-dark .c6-card,
+body.lc-theme-dark .boil-read{background:var(--paper);color:var(--ink)}
+body.lc-theme-dark .page-head h2,
+body.lc-theme-dark .section-head h2,
+body.lc-theme-dark .panel h3,
+body.lc-theme-dark .card h3{color:var(--ink)}
+body.lc-theme-dark input:not([type=checkbox]):not([type=radio]):not([type=range]),
+body.lc-theme-dark select,
+body.lc-theme-dark textarea{background:var(--paper);color:var(--ink)}
+@media print{.chem-theme{display:none!important}}
+@media print{body.lc-theme-dark{--bg:#fff;--paper:#fff;--ink:#193440;--muted:#53717b;--soft:#eff7f5;--line:#d9e7e8;--teal:#117c80;--teal2:#d7f2ec}}
 </style>
 </head>
 <body>
@@ -230,7 +247,7 @@ body:not(.lc-theme-dark) #lcModal input[type=file]{background:var(--paper);color
 <div class="side-bottom"><b>Fortschritt in den Werkstätten</b><div class="mini-progress"><i id="sideProgress" style="width:0%"></i></div><small id="sideProgressText">0 von 17 Bereichen geschafft</small></div>
 </aside>
 <main>
-<header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><label class="chem-brightness" for="chemSize">Größe <input id="chemSize" type="range" min="85" max="150" step="5" value="100"><output id="chemSizeValue" for="chemSize">100 %</output></label><label class="chem-brightness" for="chemBrightness">Helligkeit <input id="chemBrightness" type="range" min="60" max="100" step="1" value="100"><output id="chemBrightnessValue" for="chemBrightness">100 %</output></label><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
+<header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><label class="chem-theme" for="chemTheme">Ansicht <select id="chemTheme" aria-label="Hell oder Dunkel"><option value="light">Hell</option><option value="dark">Dunkel · Nachtmodus</option></select></label><label class="chem-brightness" for="chemSize">Größe <input id="chemSize" type="range" min="85" max="150" step="5" value="100"><output id="chemSizeValue" for="chemSize">100 %</output></label><label class="chem-brightness" for="chemBrightness">Helligkeit <input id="chemBrightness" type="range" min="60" max="100" step="1" value="100"><output id="chemBrightnessValue" for="chemBrightness">100 %</output></label><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
 <section class="stage" hidden="" id="page-chem6"><div id="c6Root"></div></section>
 <section class="stage" hidden id="page-probearbeit" aria-labelledby="cpTitle">
 <div class="page-head"><div class="tag">Probearbeit zum Lernheft</div>
@@ -1547,7 +1564,7 @@ function record(x){if(!x||typeof x.correct!=='boolean')return;
  const key='r:'+ev.id+':'+today();if(ev.correct&&!ev.assisted&&!p.rewardKeys.includes(key)){p.rewardKeys.push(key)};
  updateBadges();save(); if(document.getElementById('lcModal')?.hidden===false)draw();
 }
-window.LernCockpit={record,open:()=>open('lernstand'),settings:()=>profile().settings,debug:()=>({store,metrics:metrics()})};
+window.LernCockpit={record,open:()=>open('lernstand'),settings:()=>profile().settings,setTheme:(theme)=>{if(!['light','dark'].includes(theme))return;profile().settings.theme=theme;save();apply();if(document.getElementById('lcModal')?.hidden===false)draw();},debug:()=>({store,metrics:metrics()})};
 const days=(ev)=>new Set(ev.map(e=>e.at?.slice(0,10))).size;
 const evidence=()=>profile().events.filter(e=>e&&typeof e.correct==='boolean'&&typeof e.id==='string');
 function byTask(id){return evidence().filter(e=>e.id===id).sort((a,b)=>Date.parse(a.at||'')-Date.parse(b.at||''))}
@@ -1600,7 +1617,7 @@ function sessionHTML(){if(!session)return `<p class="lc-muted">Trainiere in klei
 function settingsPage(){const s=profile().settings,sel=(id,v,opts)=>`<label>${id}<select data-set="${v}">${opts.map(([a,b])=>`<option value="${a}" ${String(s[v])===String(a)?'selected':''}>${b}</option>`).join('')}</select></label>`;return `<p class="lc-muted">Alle Änderungen werden für dieses lokale Lernprofil gespeichert.</p><div class="lc-settings">${sel('Darstellung','theme',[['system','Geräteeinstellung'],['light','Hell'],['dark','Dunkel'],['contrast','Hoher Kontrast']])}${sel('Schriftgröße','font',[['normal','Normal'],['large','Groß'],['xl','Sehr groß']])}${sel('Animationen','motion',[['system','Geräteeinstellung'],['normal','Normal'],['slow','Langsam'],['off','Aus']])}${sel('Bevorzugtes Lernniveau','level',[[1,'Grundlagen'],[2,'Verstehen'],[3,'Anwenden']])}${sel('Aufgaben pro Einheit','count',[[5,'5 Fragen'],[10,'10 Fragen'],[15,'15 Fragen'],[20,'20 Fragen']])}${sel('Wiederholungen','review',[['adaptive','Nach Lernbedarf (7 Tage)'],['daily','Jeden Tag'],['3days','Alle drei Tage']])}${sel('Sprachtempo','rate',[[0.7,'Langsam'],[0.85,'Etwas langsamer'],[1,'Normal'],[1.2,'Schneller']])}<label>Vorlesestimme<select id="lcVoice" data-set="voice"><option value="">Gerätestimme</option></select></label><label class="lc-check"><input type="checkbox" data-check="focus" ${s.focus?'checked':''}> Konzentrationsmodus: weniger Ablenkung</label><label class="lc-check"><input type="checkbox" data-check="help" ${s.help?'checked':''}> Hinweise im Cockpit-Training anbieten</label><label class="lc-check"><input type="checkbox" data-check="timer" ${s.timer?'checked':''}> Zeit im Ergebnis anzeigen (ohne Zeitlimit)</label><label class="lc-check"><input type="checkbox" data-check="rewards" ${s.rewards?'checked':''}> Abzeichenanzeige aktivieren</label></div><div class="lc-actions"><button data-lc="speak">Vorlesen testen</button><button data-lc="stopVoice">Vorlesen stoppen</button></div><p class="lc-muted">Die Einstellung für Aufgabenanzahl und Niveau steuert das neue Cockpit-Training. In älteren Übungsmodulen bleiben die ursprünglichen Fragen erhalten. Die Sprachausgabe hängt von den auf deinem Gerät vorhandenen Stimmen ab.</p>`}
 function profilePage(){return `<h3>Lokale Lernprofile und Datensicherung</h3><p class="lc-muted">Profile bleiben nur in diesem Browser. Ein Wechsel lädt die App neu und trennt auch die bisherigen Ergebnisse der Lernwelten. Maximal sechs Profile pro Fach.</p><label>Aktives Profil<select id="lcProfile">${Object.keys(store.profiles).map(k=>`<option ${k===store.active?'selected':''} value="${esc(k)}">${esc(k)}</option>`).join('')}</select></label><div class="lc-actions"><button data-lc="switch">Profil wechseln</button><button data-lc="create">Neues Profil anlegen</button></div><h3>Sichern und wiederherstellen</h3><div class="lc-actions"><button data-lc="export">Sicherung als JSON</button><button data-lc="csv">Lernbericht als CSV</button><button data-lc="print">Bericht drucken</button></div><label>Sicherungsdatei auswählen<input type="file" id="lcImportFile" accept="application/json,.json"></label><div class="lc-actions"><button data-lc="import">Sicherung überprüfen und importieren</button><button data-lc="reset">Aktives Profil zurücksetzen</button></div><p class="lc-muted">Ein Import überschreibt nach Bestätigung die Profile dieses Fachs. Biologie- und Chemie-Dateien können nicht miteinander verwechselt werden. Vor einem Wechsel auf ein anderes Gerät die JSON-Sicherung exportieren.</p>`}
 function draw(){document.getElementById('lcTabs').innerHTML=tabs.map(([id,l])=>`<button class="${tab===id?'active':''}" data-tab="${id}" aria-current="${tab===id?'page':'false'}">${l}</button>`).join('');document.getElementById('lcBody').innerHTML=({lernstand:summary,lehrkraft:teacherPage,abzeichen:badgePage,training:sessionHTML,einstellungen:settingsPage,profile:profilePage})[tab]();const notice=document.getElementById('lcNotice');notice.hidden=true;if(tab==='einstellungen'){toggleVoice()}}
-function apply(){let s=profile().settings;document.body.classList.toggle('lc-theme-dark',s.theme==='dark');document.body.classList.toggle('lc-theme-light',s.theme==='light');document.body.classList.toggle('lc-theme-contrast',s.theme==='contrast');document.body.classList.toggle('lc-font-large',s.font==='large');document.body.classList.toggle('lc-font-xl',s.font==='xl');document.body.classList.toggle('lc-focus',!!s.focus);document.body.classList.toggle('lc-reduced',s.motion==='off'||(s.motion==='system'&&matchMedia('(prefers-reduced-motion: reduce)').matches));document.body.classList.toggle('lc-slow',s.motion==='slow');document.body.classList.toggle('lc-hide-rewards',!s.rewards);document.body.classList.toggle('lc-no-timer',!s.timer);}
+function apply(){let s=profile().settings;document.body.classList.toggle('lc-theme-dark',s.theme==='dark');document.body.classList.toggle('lc-theme-light',s.theme==='light');document.body.classList.toggle('lc-theme-contrast',s.theme==='contrast');document.body.classList.toggle('lc-font-large',s.font==='large');document.body.classList.toggle('lc-font-xl',s.font==='xl');document.body.classList.toggle('lc-focus',!!s.focus);document.body.classList.toggle('lc-reduced',s.motion==='off'||(s.motion==='system'&&matchMedia('(prefers-reduced-motion: reduce)').matches));document.body.classList.toggle('lc-slow',s.motion==='slow');document.body.classList.toggle('lc-hide-rewards',!s.rewards);document.body.classList.toggle('lc-no-timer',!s.timer);document.dispatchEvent(new CustomEvent('chemistry:theme'));}
 function fileSave(name,content,type){let b=new Blob([content],{type}),a=document.createElement('a'),url=URL.createObjectURL(b);a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function printReport(cert=false){const m=metrics();const p=profile();const markup=cert?`<h1>Urkunde – ${esc(SUBJECT)}</h1><h2>${esc(store.active)}</h2><p>Diese Abzeichen wurden durch gespeicherte Übungen erreicht:</p>${BADGES.filter(b=>p.badges.includes(b.id)).map(b=>`<p>${b.icon} ${esc(b.name)}: ${esc(b.desc)}</p>`).join('')}`:`<h1>Lernstand – ${esc(SUBJECT)}</h1><p>Profil: ${esc(store.active)} · erstellt: ${new Date().toLocaleDateString('de-DE')}</p><p>Ohne Hilfe richtig: ${m.clean} · mit Hilfe: ${m.assisted} · zu wiederholen: ${m.wrong}</p>${m.by.map(t=>`<p><b>${esc(t.title)}:</b> ${t.low?'Noch zu wenig Ergebnisse':t.secure+' sicher von '+t.count} · ${t.correct} selbstständig · ${t.helped} mit Hilfe · ${t.wrong} falsch</p>`).join('')}`;
  const w=window.open('','_blank');if(!w){notify('Pop-ups blockiert. Bitte Druckfenster im Browser erlauben.');return}w.document.write('<!doctype html><html lang="de"><meta charset="utf-8"><title>Lernbericht</title><style>body{font-family:Arial,sans-serif;padding:28px;line-height:1.6;max-width:750px}h1{color:#18465e}@media print{body{padding:0}}</style>'+markup+'<p><small>Auswertung der im Browser gespeicherten Übungsergebnisse. Keine Schulnote.</small></p></html>');w.document.close();w.focus();setTimeout(()=>w.print(),350)}
@@ -3197,6 +3214,17 @@ select.value=String(data.level);show();
     const size = apply(input.value);
     try { localStorage.setItem(key, String(size)); } catch {}
   });
+})();
+
+(() => {
+  'use strict';
+  const select = document.getElementById('chemTheme');
+  const sync = () => {
+    select.value = document.body.classList.contains('lc-theme-dark') ? 'dark' : 'light';
+  };
+  select.addEventListener('change', () => window.LernCockpit.setTheme(select.value));
+  document.addEventListener('chemistry:theme', sync);
+  sync();
 })();
 </script>
 </body>
