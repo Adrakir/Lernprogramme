@@ -12,3 +12,4 @@ body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
 @media print{#chemDisplayShade,.chem-brightness{display:none!important}}
 .app{zoom:var(--chem-app-size,1)}
 @media print{.app{zoom:1}}
+@media screen and (min-width:761px){main{max-width:none;padding-left:clamp(18px,2vw,36px);padding-right:clamp(18px,2vw,36px)}}
