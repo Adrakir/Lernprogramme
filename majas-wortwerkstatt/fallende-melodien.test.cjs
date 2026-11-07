@@ -10,17 +10,18 @@ class Audio{constructor(){context=this;this.currentTime=10;this.state='suspended
 const c={assert,console,Math,Set,Map,Number,JSON,Array,String,window:{AudioContext:Audio,addEventListener(k,f){listeners.set(k,f);},removeEventListener(k){listeners.delete(k);}},document:{hidden:false,createElement(){return new Element();},addEventListener(k,f){listeners.set(k,f);},removeEventListener(k){listeners.delete(k);}},localStorage:{getItem(){return null;},setItem(){}},requestAnimationFrame(f){nextFrame=f;return 1;},cancelAnimationFrame(){},setTimeout,clearTimeout,escapeHtml:s=>s,starGameReward:()=>({message:'2 Sterne'}),prepFireworks:()=>()=>{}};
 vm.createContext(c);vm.runInContext(html.slice(a,b),c);c.board=board;
 vm.runInContext(`
+assert.equal(melodyTimbre('bear','A4').freq,220);assert.equal(melodyTimbre('piano','A4').freq,440);assert.equal(melodyTimbre('bear','A4').wave,'sawtooth');assert(melodyTimbre('bear','A4').cutoff<melodyTimbre('piano','A4').cutoff);assert.equal(melodySoundLabel('bear'),'Bärlis Brummen');
 for(const song of melodySongs){const chart=melodyChart(song);assert.equal(chart.length,melodyNotes(song).length);assert.equal(chart[0].at,3);for(let i=0;i<chart.length;i++){const n=chart[i];assert(n.lane>=0&&n.lane<4);assert(n.duration>0);assert.equal(melodyBar(n,n.at).bottom,350);assert(Math.abs(melodyBar(n,n.at+n.duration).top-350)<1e-9);if(i)assert(n.at>chart[i-1].at+chart[i-1].duration);assert.equal(melodyHit(chart,n.lane,n.at),n);assert(melodyHoldOK(n,n.at,n.at+n.duration));assert(!melodyHoldOK(n,n.at,n.at+.01));}assert.equal(melodyHit(chart,0,-100),null);}
 const chart=melodyChart(melodySongs[0]);chart[0].state='hit';assert.equal(melodyHit(chart,chart[0].lane,chart[0].at),null);
 playMelody(board);
 `,c);
 (async()=>{
- node('#fall-sound').value='piano';node('#fall-speed').value='.65';node('#fall-guide').checked=true;
+ node('#fall-sound').value='bear';node('#fall-speed').value='.65';node('#fall-guide').checked=true;
  assert.equal(oscillators.length,0,'No sound before an explicit action');
- await node('#fall-start').onclick();assert.equal(context.state,'running');assert.equal(oscillators.length,32,'The entire guide melody must be audible without hitting any notes');assert.equal(oscillators[0].started,13);assert(oscillators.every(o=>o.stopped>o.started));
+ await node('#fall-start').onclick();assert.equal(context.state,'running');assert.equal(oscillators.length,32,'The entire guide melody must be audible without hitting any notes');assert.equal(oscillators[0].started,13);assert.equal(oscillators[0].type,'sawtooth');assert(oscillators.every(o=>o.stopped>o.started));
  context.currentTime=13;nextFrame();pads[1].onpointerdown({preventDefault(){},pointerId:1});assert.equal(oscillators.length,33,'A hit must play its own tone');context.currentTime=13.65;nextFrame();assert.match(node('#fall-status').textContent,/Gut getroffen/);
  node('#fall-pause').onclick();assert.equal(node('#fall-pause').textContent,'Weiter mit Ton');assert(oscillators.slice(1,32).every(o=>o.stopped<=context.currentTime+.13),'Pause must cancel future guide sounds');
  await node('#fall-pause').onclick();assert.equal(node('#fall-pause').textContent,'Pause');assert(oscillators.length>33,'Resume must reschedule the audible melody');
  vm.runInContext('extraCleanup()',c);assert.equal(context.state,'closed');assert.equal(listeners.size,0);
- console.log('PASS: four-lane chart, falling geometry, onset windows, sustained holds, audible guide schedule, played hit sound, pause/resume audio cancellation, cleanup.');
+ console.log('PASS: Bärli bass timbre and label, four-lane chart, falling geometry, onset windows, sustained holds, audible guide schedule, played hit sound, pause/resume audio cancellation, cleanup.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
