@@ -378,6 +378,16 @@ details ol{margin-bottom:0}
 fieldset{border:1px solid #d4d9ce;border-radius:10px;padding:12px;min-width:0;margin:16px 0}
 legend{font-weight:700;padding:0 7px}
 @media print{.topbar,.crumb,.hero,.actions{display:none!important}.shell{width:100%}.learning-table{font-size:11pt}.panel{break-inside:avoid}}
+
+.home-heading{margin:22px 0 16px}.home-heading h1{font-size:clamp(27px,5vw,42px);margin-bottom:8px}.home-heading p:last-child{margin:0;color:var(--muted)}
+.home-heading .kicker{margin-bottom:7px}
+.home-priorities{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.home-priorities .panel{margin:0;background:#edf5ee;border-color:#bfd8cb}
+.home-priorities .panel+ .panel{background:#fff4dc;border-color:#e6d19d}
+.home-priorities h2{font-size:clamp(23px,3.5vw,29px)}
+.home-priorities .actions{align-items:stretch}.home-priorities .actions a{flex:1 1 150px;text-align:center}
+.hero h2{font-size:clamp(32px,5vw,52px);margin-bottom:14px}.hero h2 em{font-style:normal;color:var(--forest)}
+@media(max-width:720px){.home-priorities{grid-template-columns:1fr;gap:12px}.home-priorities .panel{padding:16px}.home-priorities h2{margin-bottom:8px}.home-priorities p{margin-bottom:10px}.home-priorities .actions{gap:8px;margin-top:10px}.home-priorities .actions a{font-size:15px;padding:10px;flex-basis:140px}}
 </style>
 </head>
 <body>
@@ -2761,19 +2771,26 @@ function showHome(){
     'Wörter verbinden und den Artikel finden','Von ich bis sie in der Gegenwart','Die drei Vergleichsstufen üben','Großschreibung und Hörsätze üben',
     ...newUnits.map(unit=>unit.description)
   ];
-  app.innerHTML=`<section class="hero">
-    <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
-    <h1>Majas<br><em>Wortwerkstatt</em></h1>
-    <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#tagescomic/tom-und-der-schulhund/1">Tom und der Schulhund</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#anna">${icon('book')} Annas Geschichten</a><a class="secondary" href="#tagescomic">Tagescomics</a></div></div>
-    <div class="hero-art">${bearPicture('leseecke',true)}</div>
-  </section>
-  ${learningHome()}
-  ${featuredComics.map(featuredComicIntro).join('')}
+  app.innerHTML=`<div class="home-heading"><p class="kicker">${icon('leaf')} Deutsch · Klasse 3</p><h1>Majas Wortwerkstatt</h1><p>Womit möchtest du heute beginnen?</p></div>
+  <div class="home-priorities">
   <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
     <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung, -nis und -schaft und prüfe letzte Buchstaben durch Verlängern.</p>
     <div class="actions"><a class="primary" href="#hoeren">${icon('audio')} Hörverstehen</a><a class="secondary" href="#endungen">Nomenendungen</a><a class="secondary" href="#verlaengern">Wörter verlängern</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
   </section>
+  <section class="panel" aria-labelledby="daily-stories"><h2 id="daily-stories">Tagesgeschichten</h2>
+    <p>Entdecke die heutige Geschichte mit Maja und Bärli oder höre ein Abenteuer mit Anna.</p>
+    <div class="actions"><a class="primary" href="#baerli">${icon('book')} Geschichte des Tages</a><a class="secondary" href="#schulgeschichten">Schulgeschichten</a><a class="secondary" href="#anna">Annas Geschichten</a><a class="secondary" href="#tagescomic">Comic des Tages</a></div>
+  </section>
+  </div>
+  <section class="hero">
+    <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
+    <h2>Mehr <em>entdecken</em></h2>
+    <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
+    <div class="actions hero-actions"><a class="primary" href="#lernweg">Mein Tagesplan ${icon('arrow')}</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a></div></div>
+    <div class="hero-art">${bearPicture('leseecke',true)}</div>
+  </section>
+  ${learningHome()}
+  ${featuredComics.map(featuredComicIntro).join('')}
   ${bearIntro()}
   ${detectiveIntro()}
   <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
@@ -4150,3 +4167,4 @@ render(true);
 </script>
 </body>
 </html>
+
