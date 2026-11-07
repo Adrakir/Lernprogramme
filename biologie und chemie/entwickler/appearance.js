@@ -19,3 +19,25 @@
     try { localStorage.setItem(key, String(brightness)); } catch {}
   });
 })();
+
+(() => {
+  'use strict';
+  const key = 'chemie-display-size-v1';
+  const input = document.getElementById('chemSize');
+  const output = document.getElementById('chemSizeValue');
+  function apply(value) {
+    const parsed = Number(value);
+    const size = Number.isFinite(parsed) ? Math.min(150, Math.max(85, parsed)) : 100;
+    input.value = String(size);
+    output.value = size + ' %';
+    document.documentElement.style.setProperty('--chem-app-size', String(size / 100));
+    return size;
+  }
+  let saved = null;
+  try { saved = localStorage.getItem(key); } catch {}
+  apply(saved === null ? 100 : saved);
+  input.addEventListener('input', () => {
+    const size = apply(input.value);
+    try { localStorage.setItem(key, String(size)); } catch {}
+  });
+})();

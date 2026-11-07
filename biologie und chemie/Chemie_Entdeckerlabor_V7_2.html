@@ -189,6 +189,8 @@ body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
 #chemDisplayShade{position:fixed;inset:0;z-index:2147483647;background:#000;opacity:var(--chem-display-dim,0);pointer-events:none}
 @media(max-width:620px){.topbar{flex-wrap:wrap}.controls{width:100%}.chem-brightness{flex:1}.chem-brightness input{flex:1;min-width:80px}}
 @media print{#chemDisplayShade,.chem-brightness{display:none!important}}
+.app{zoom:var(--chem-app-size,1)}
+@media print{.app{zoom:1}}
 </style>
 </head>
 <body>
@@ -215,7 +217,7 @@ body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
 <div class="side-bottom"><b>Fortschritt in den Werkstätten</b><div class="mini-progress"><i id="sideProgress" style="width:0%"></i></div><small id="sideProgressText">0 von 17 Bereichen geschafft</small></div>
 </aside>
 <main>
-<header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><label class="chem-brightness" for="chemBrightness">Helligkeit <input id="chemBrightness" type="range" min="60" max="100" step="1" value="100"><output id="chemBrightnessValue" for="chemBrightness">100 %</output></label><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
+<header class="topbar"><span class="crumb" id="crumb">DEIN LERNLABOR · KLASSE 5</span><div class="controls"><label class="chem-brightness" for="chemSize">Größe <input id="chemSize" type="range" min="85" max="150" step="5" value="100"><output id="chemSizeValue" for="chemSize">100 %</output></label><label class="chem-brightness" for="chemBrightness">Helligkeit <input id="chemBrightness" type="range" min="60" max="100" step="1" value="100"><output id="chemBrightnessValue" for="chemBrightness">100 %</output></label><button aria-label="Kontrast umschalten" class="btn iconbtn" id="contrastToggle" title="Kontrast">◐</button><button aria-label="Schrift vergrößern" class="btn iconbtn" id="sizeToggle" title="Größere Schrift">A+</button><button class="btn" id="speakToggle" title="Vorlesen / stoppen">🔊 Vorlesen</button></div></header>
 <section class="stage" hidden="" id="page-chem6"><div id="c6Root"></div></section>
 <section class="stage" hidden id="page-probearbeit" aria-labelledby="cpTitle">
 <div class="page-head"><div class="tag">Probearbeit zum Lernheft</div>
@@ -3159,6 +3161,28 @@ select.value=String(data.level);show();
   input.addEventListener('input', () => {
     const brightness = apply(input.value);
     try { localStorage.setItem(key, String(brightness)); } catch {}
+  });
+})();
+
+(() => {
+  'use strict';
+  const key = 'chemie-display-size-v1';
+  const input = document.getElementById('chemSize');
+  const output = document.getElementById('chemSizeValue');
+  function apply(value) {
+    const parsed = Number(value);
+    const size = Number.isFinite(parsed) ? Math.min(150, Math.max(85, parsed)) : 100;
+    input.value = String(size);
+    output.value = size + ' %';
+    document.documentElement.style.setProperty('--chem-app-size', String(size / 100));
+    return size;
+  }
+  let saved = null;
+  try { saved = localStorage.getItem(key); } catch {}
+  apply(saved === null ? 100 : saved);
+  input.addEventListener('input', () => {
+    const size = apply(input.value);
+    try { localStorage.setItem(key, String(size)); } catch {}
   });
 })();
 </script>

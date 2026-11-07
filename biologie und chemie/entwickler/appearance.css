@@ -10,3 +10,5 @@ body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
 #chemDisplayShade{position:fixed;inset:0;z-index:2147483647;background:#000;opacity:var(--chem-display-dim,0);pointer-events:none}
 @media(max-width:620px){.topbar{flex-wrap:wrap}.controls{width:100%}.chem-brightness{flex:1}.chem-brightness input{flex:1;min-width:80px}}
 @media print{#chemDisplayShade,.chem-brightness{display:none!important}}
+.app{zoom:var(--chem-app-size,1)}
+@media print{.app{zoom:1}}
