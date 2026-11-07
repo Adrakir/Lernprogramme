@@ -13,3 +13,15 @@ body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
 .app{zoom:var(--chem-app-size,1)}
 @media print{.app{zoom:1}}
 @media screen and (min-width:761px){main{max-width:none;padding-left:clamp(18px,2vw,36px);padding-right:clamp(18px,2vw,36px)}}
+/* Match reading panels and form fields across the learning workshops. */
+body:not(.lc-theme-dark) .vg-readout,
+body:not(.lc-theme-dark) .c6-card,
+body:not(.lc-theme-dark) .boil-read,
+body:not(.lc-theme-dark) .deep-select,
+body:not(.lc-theme-dark) .v4mocktask input,
+body:not(.lc-theme-dark) .v4mocktask select,
+body:not(.lc-theme-dark) .c6-root select,
+body:not(.lc-theme-dark) .c6-root textarea,
+body:not(.lc-theme-dark) .c6-root input[type=number],
+body:not(.lc-theme-dark) #lcModal select,
+body:not(.lc-theme-dark) #lcModal input[type=file]{background:var(--paper);color:var(--ink)}
