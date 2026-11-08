@@ -58,8 +58,9 @@
     `<section class="panel"><h2>Noch mehr Hörübungen</h2><p>Die kurzen Figurenstimmen helfen beim Einstieg. Für die Klassenarbeit übst du anschließend mit den längeren Hörgeschichten.</p><div class="actions"><a class="primary" href="#pruefung/hoeren/gefuehrt/1">Zum Hörverständnis</a><a class="secondary" href="#comicstudio">Zur Comic-Regie</a><a class="secondary" href="#start">Zur Startseite</a></div></section></div>`;
   wire(app,true);
  }
- function mount(page,index){
+ function mount(page,index,part){
   if(!["start","comicstudio","pruefung","tagescomic"].includes(page))return;
+  if(page==="pruefung"&&part==="test")return;
   if(page==="comicstudio" && index && !["toncheck"].includes(index))return;
   if(page==="pruefung" && index!=="hoeren")return;
   if(page==="tagescomic"&&index!=="melody-und-die-hausaufgaben")return;
