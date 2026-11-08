@@ -16,7 +16,7 @@ assert(!html.includes('Beispiel für diese Aufgabe: ${q.answer}.'),'Guided mode 
 assert(!html.includes('Bei -nis lernst du den Artikel mit: das Erlebnis, aber die Kenntnis.'),'No target solution in guidance');
 assert(css.includes('data-maja-contrast'),'Accessible high-contrast option exists');
 
-const scripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(m=>m[1]).filter(x=>x.trim());
+const scripts=html.split('<script>').slice(1).map(part=>part.split('</script>')[0]).filter(x=>x.trim());
 assert(scripts.length>=8,'Expected the existing app scripts');
 for(const script of scripts)new vm.Script(script);
 new vm.Script(js);
