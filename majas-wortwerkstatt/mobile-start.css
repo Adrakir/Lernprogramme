@@ -1,0 +1,96 @@
+
+/* Maja: ruhige, mobile Startseite und bewusst ausgelagerte Zusatzangebote */
+.maja-mobile-home{max-width:960px;margin:0 auto;padding:12px 0 20px}
+.maja-quick-heading{margin:10px 0 15px}
+.maja-quick-heading .kicker{margin-bottom:7px}
+.maja-quick-heading h1{font-size:clamp(1.85rem,4.7vw,2.5rem);line-height:1.1;margin:0 0 7px}
+.maja-quick-heading p{margin:0;color:var(--muted);font-size:1rem}
+.maja-quick-topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:13px}
+.maja-quick-topic{border:1.5px solid #cad8d0;border-radius:18px;background:#fffefa;color:#183c35;display:flex;flex-direction:column;gap:8px;align-items:flex-start;text-decoration:none;padding:14px;min-width:0;min-height:127px;justify-content:space-between;transition:background .15s,border-color .15s}
+.maja-quick-topic .maja-topic-symbol{display:grid;place-items:center;border-radius:12px;background:#deeee9;width:38px;height:38px}
+.maja-quick-topic:nth-child(2) .maja-topic-symbol{background:#ede1f7}
+.maja-quick-topic:nth-child(3) .maja-topic-symbol{background:#f8e9bb}
+.maja-quick-topic strong{font-size:clamp(.89rem,2.1vw,1.13rem);font-weight:900;overflow-wrap:anywhere;line-height:1.15}
+.maja-quick-topic small{font-size:.78rem;color:var(--muted);line-height:1.25;display:block}
+.maja-quick-topic:hover,.maja-quick-topic:focus-visible{border-color:#226954;background:#eef9f2}
+.maja-quick-test{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#185b4a;color:white;text-decoration:none;font-size:1.23rem;font-weight:900;padding:16px 21px;border-radius:16px;min-height:62px;box-shadow:0 3px 0 #0d3d30}
+.maja-quick-test span{display:block}
+.maja-quick-test small{display:block;font-size:.84rem;color:#e7faec;font-weight:550;line-height:1.25;margin-top:3px}
+.maja-quick-test:focus-visible{outline:3px solid #ddb94e;outline-offset:4px}
+.maja-quick-choices{margin:23px 0 0}
+.maja-quick-choices h2{font-size:1.12rem;margin:0 0 12px}
+.maja-quick-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.maja-quick-option{display:flex;align-items:center;gap:12px;min-width:0;min-height:95px;border:1px solid #cbd7cd;border-radius:16px;padding:15px;text-decoration:none;color:#183a35;background:#fffefa}
+.maja-quick-option .maja-option-icon{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:13px;background:#edf2e8}
+.maja-quick-option:nth-child(2) .maja-option-icon{background:#e2edf7}
+.maja-quick-option:nth-child(3) .maja-option-icon{background:#f9ebd4}
+.maja-quick-option:nth-child(4) .maja-option-icon{background:#f2e3f4}
+.maja-quick-option strong{display:block;font-size:1.02rem;line-height:1.2}
+.maja-quick-option small{display:block;font-size:.8rem;color:#4f6364;line-height:1.25;margin-top:4px}
+.maja-quick-option:hover,.maja-quick-option:focus-visible{border-color:#276b59;background:#f2f9f4}
+.maja-quick-all{display:flex;justify-content:space-between;align-items:center;padding:14px 2px 4px;gap:10px;font-weight:750;color:var(--forest)}
+.maja-advisor,.maja-page-hub{max-width:990px;margin:0 auto}
+.maja-advisor-hero{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 20px;background:#eaf5ee;border:1px solid #bfdacc;border-radius:20px;margin:15px 0 18px}
+.maja-advisor-hero h1{font-size:clamp(1.75rem,4vw,2.35rem);margin:0 0 8px}
+.maja-advisor-hero p{margin:0;font-size:1rem;line-height:1.45}
+.maja-advisor-hero img{width:105px;height:105px;object-fit:cover;border-radius:22px;flex:none}
+.maja-advisor-hero .kicker{font-size:.7rem;margin-bottom:7px}
+.maja-advisor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.maja-advisor-card{border:1px solid #d6dfd5;border-radius:19px;background:#fffefa;padding:18px;min-width:0}
+.maja-advisor-card h2{font-size:1.2rem;margin:0 0 8px}
+.maja-advisor-card p{font-size:.95rem;color:var(--muted);margin:0 0 13px}
+.maja-advisor-links{display:grid;gap:8px}
+.maja-advisor-links a{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;border:1px solid #d1dbd2;border-radius:11px;padding:9px 13px;text-decoration:none;color:#154f3e;font-weight:750;background:#f9fcf8}
+.maja-advisor-links a:hover,.maja-advisor-links a:focus-visible{background:#e8f5ea;border-color:#42866f}
+.maja-advisor-extras{margin-top:19px;border:1px solid #d7dbce;background:#f8f8f2;border-radius:16px;padding:13px 18px}
+.maja-advisor-extras summary{font-weight:850;cursor:pointer;padding:5px 0}
+.maja-advisor-extras .actions{margin:12px 0 5px}
+.maja-hub-header{margin:14px 0 20px}
+.maja-hub-header h1{margin:0 0 7px;font-size:clamp(1.8rem,4.5vw,2.5rem)}
+.maja-hub-header p{color:var(--muted);margin:0}
+.maja-hub-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.maja-hub-link{display:flex;flex-direction:column;justify-content:space-between;gap:8px;text-decoration:none;color:var(--ink);border:1px solid #d7e0d8;background:#fffefa;border-radius:15px;padding:15px;min-width:0;min-height:105px}
+.maja-hub-link strong{font-size:1rem;line-height:1.25}
+.maja-hub-link span{font-size:.83rem;line-height:1.35;color:var(--muted)}
+.maja-hub-link:focus-visible,.maja-hub-link:hover{border-color:#19654c;background:#f1faf3}
+.maja-hub-section{margin:22px 0}
+.maja-hub-section h2{font-size:1.25rem;margin-bottom:12px}
+.maja-quick-topic:focus-visible,.maja-quick-option:focus-visible,.maja-hub-link:focus-visible,.maja-advisor-links a:focus-visible{outline:3px solid #e0a727;outline-offset:2px}
+@media(max-width:720px){
+ .maja-advisor-grid{grid-template-columns:1fr}
+ .maja-mobile-home{padding-top:5px}
+ .maja-hub-list{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+ .top-inner{min-height:64px}
+ .top .brand strong{font-size:15px}
+ .top .brand small{font-size:11px}
+ .top .brand-symbol{width:36px;height:36px}
+ .top .star-button{padding:6px 9px;font-size:.83rem}
+ .maja-quick-heading{margin:7px 0 12px}
+ .maja-quick-heading h1{font-size:1.8rem}
+ .maja-quick-heading p{font-size:.88rem}
+ .maja-quick-topic-grid{gap:7px}
+ .maja-quick-topic{min-height:113px;padding:10px 9px;gap:6px;border-radius:13px}
+ .maja-quick-topic .maja-topic-symbol{height:32px;width:32px;border-radius:9px}
+ .maja-quick-topic strong{font-size:.88rem}
+ .maja-quick-topic small{font-size:.7rem}
+ .maja-quick-test{min-height:58px;font-size:1.13rem;padding:12px 16px}
+ .maja-quick-choices{margin-top:19px}
+ .maja-quick-options{gap:9px}
+ .maja-quick-option{min-height:82px;padding:11px;gap:9px;border-radius:13px}
+ .maja-quick-option .maja-option-icon{width:31px;height:31px;border-radius:9px}
+ .maja-quick-option strong{font-size:.94rem}
+ .maja-quick-option small{font-size:.74rem}
+ .maja-advisor-hero{padding:13px}
+ .maja-advisor-hero img{width:72px;height:72px;border-radius:13px}
+ .maja-advisor-card{padding:15px}
+}
+@media(max-width:350px){
+ .maja-quick-topic strong{font-size:.79rem}
+ .maja-quick-option{gap:7px;padding:9px}
+ .maja-quick-option strong{font-size:.85rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .maja-quick-topic{transition:none}
+}
