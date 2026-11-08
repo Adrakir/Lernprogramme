@@ -1,0 +1,64 @@
+
+/* Comic-Kino 2: Bild, Text und Vorlesen auch auf schmalen Displays */
+.kino-controls{background:#f2f0fa;border-color:#d6cbe6;margin:0 0 16px}
+.kino-title{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.kino-title h3{margin:0}
+.kino-title p{margin:4px 0 10px}
+.kino-tech{font-size:.8rem;padding:5px 10px;border-radius:99px;background:#e6e0ef;color:#403b55}
+.kino-settings{display:flex;align-items:center;flex-wrap:wrap;gap:12px 24px;margin:10px 0}
+.kino-settings label{font-weight:700}
+.kino-settings select,.kino-voices select{display:block;min-height:44px;max-width:100%;background:#fff;color:#173c38;border:1px solid #7c8984;border-radius:9px;padding:8px}
+.kino-checkbox{display:flex;align-items:center;gap:10px;min-height:44px}
+.kino-checkbox input{width:23px;height:23px;accent-color:#196453}
+.kino-voices{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px}
+.kino-role{display:block;max-width:100%;font-weight:700}
+.kino-role select{width:100%;font-weight:400}
+.kino-status{min-height:24px;font-weight:700}
+.kino-panel-wrap{min-width:0;border:2px solid transparent;border-radius:12px}
+.kino-panel-wrap.kino-current{border-color:#154f9e;background:#e5f0ff}
+.kino-panel-wrap>figure{margin:0}
+.kino-panel-actions{display:flex;flex-wrap:wrap;gap:7px;padding:9px 4px}
+.kino-panel-actions button{font-size:.9rem;min-height:42px;flex:1 1 auto}
+.detective-panels.kino-separated .detective-panel figcaption{
+position:static!important;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important;
+transform:none!important;max-width:none!important;width:auto!important;margin:0!important;
+border-radius:0!important;box-shadow:none!important;border:0!important;
+padding:12px 15px!important;background:#fffdf7!important;color:#172d2b!important;
+}
+.detective-panels.kino-separated .detective-panel figcaption::after{display:none!important}
+.detective-panels.kino-separated .detective-art{border-bottom:1px solid #756f63}
+.kino-dialog{width:min(92vw,790px);max-height:90dvh;overflow:auto;border-radius:16px;border:2px solid #173d38;padding:16px;background:#fffcf6;color:#173d38}
+.kino-dialog::backdrop{background:rgba(0,0,0,.82)}
+.kino-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.kino-zoom-art>*{max-width:100%;margin:0}
+.kino-zoom-art .comic-art{width:100%;aspect-ratio:3/2}
+.kino-zoom-art .detective-art{width:100%;aspect-ratio:1}
+.kino-zoom-description{margin-bottom:0;font-size:.96rem}
+@media(max-width:650px){
+.detective-panels:has(.kino-panel-wrap){grid-template-columns:1fr}
+.kino-title{align-items:flex-start}
+.kino-panel-actions button{font-size:1rem;min-height:46px}
+}
+@media print{.kino-controls,.kino-panel-actions,.kino-dialog{display:none!important}}
+
+/* Mobile touch controls: the play surface handles horizontal swipes, pads handle holds. */
+.kart-stage{touch-action:pan-y;overscroll-behavior:contain}
+.kart-word{touch-action:manipulation}
+.kart-steering button{touch-action:manipulation;min-height:52px;min-width:88px}
+.falling-pads,.falling-pad{touch-action:none;overscroll-behavior:contain}
+.falling-pad{min-height:72px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.kino-actions button{min-height:46px}
+@media(max-width:480px){
+ .kart-steering{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .kart-steering button{min-width:0;padding:8px 5px;font-size:clamp(.76rem,3.2vw,.95rem)}
+ .falling-pad{min-height:80px}
+ .kino-settings{display:block}
+ .kino-checkbox{margin-top:12px}
+}
+
+.prep-cue-coach{margin:16px 0 4px;padding:16px;border:1px solid #bfd2ce;border-radius:14px;background:#eef5f1}
+.prep-cue-coach h3{margin:0 0 8px;color:#174c43}
+.prep-cue-coach .actions{margin:12px 0}
+.prep-cue-coach [data-cue-index]{min-height:46px}
+.prep-cue-coach #prep-hearing-notes{display:block;width:100%;max-width:680px;min-height:80px}
+@media(max-width:540px){.prep-cue-coach{padding:12px}.prep-cue-coach .actions button{flex:1 1 45%}}
