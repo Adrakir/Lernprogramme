@@ -40,3 +40,18 @@ padding:12px 15px!important;background:#fffdf7!important;color:#172d2b!important
 .kino-panel-actions button{font-size:1rem;min-height:46px}
 }
 @media print{.kino-controls,.kino-panel-actions,.kino-dialog{display:none!important}}
+
+/* Mobile touch controls: the play surface handles horizontal swipes, pads handle holds. */
+.kart-stage{touch-action:pan-y;overscroll-behavior:contain}
+.kart-word{touch-action:manipulation}
+.kart-steering button{touch-action:manipulation;min-height:52px;min-width:88px}
+.falling-pads,.falling-pad{touch-action:none;overscroll-behavior:contain}
+.falling-pad{min-height:72px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.kino-actions button{min-height:46px}
+@media(max-width:480px){
+ .kart-steering{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .kart-steering button{min-width:0;padding:8px 5px;font-size:clamp(.76rem,3.2vw,.95rem)}
+ .falling-pad{min-height:80px}
+ .kino-settings{display:block}
+ .kino-checkbox{margin-top:12px}
+}
