@@ -1,0 +1,25 @@
+
+/* Maja Figurenstimmen · browserfreundliche echte MP3-Aufnahmen */
+.fs-mini{background:#eaf4f6;border-color:#c0dade;margin:12px 0 22px}
+.fs-mini-copy{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.fs-mini-copy h2{margin:0 0 6px}
+.fs-mini-copy p{margin:0}
+.fs-mini-copy a{flex-shrink:0}
+.fs-card{border-color:#c4d8de}
+.fs-heading{display:flex;align-items:center;gap:16px}
+.fs-heading h2{margin:0}
+.fs-avatar{display:grid;place-items:center;width:60px;height:60px;font-size:2rem;background:#dceeed;border-radius:16px}
+.fs-card .fs-player{display:block;width:min(100%,650px);margin:16px 0 8px}
+.fs-card .fs-status{font-weight:700;min-height:25px;margin:6px 0}
+.fs-controls{display:flex;align-items:center;margin:12px 0}
+.fs-controls label{display:flex;align-items:center;gap:10px;font-weight:700}
+.fs-controls select{min-height:44px;padding:8px;border-radius:10px;border:1px solid #697f86;background:#fff;color:#193b40}
+.fs-script{margin:16px 0}
+.fs-task{border-top:1px solid #bfcfd3;padding-top:12px;margin-top:18px}
+.fs-options{display:grid;gap:9px;max-width:750px}
+.fs-options button{text-align:left;min-height:48px;white-space:normal}
+.fs-options button.fs-right{background:#dff4e6;border:2px solid #237448;color:#16442a}
+.fs-options button.fs-wrong{background:#f9e3dc;border:2px solid #ba5543;color:#6b2822}
+.fs-feedback{font-weight:700}
+.fs-guide{background:#f4f8ed}
+@media(max-width:540px){.fs-mini-copy{display:block}.fs-mini-copy a{display:inline-flex;margin-top:14px}.fs-heading{gap:10px}.fs-avatar{height:52px;width:52px}}
