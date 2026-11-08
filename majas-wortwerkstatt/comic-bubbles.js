@@ -38,8 +38,8 @@ function render(){
   <section class="panel"><h2>So funktioniert's</h2><p>Schau dir jedes Bild an. Wähle, wer spricht, und schreibe einen passenden Satz. Die Figuren dürfen Gefühle zeigen, Fragen stellen und Witze machen. Du kannst deine Seite drucken.</p>
   <p class="subtle">Die Comiczeichnungen bleiben erhalten. Die neuen Sprechblasen stehen lesbar darunter. Deine Einträge bleiben auf diesem Gerät gespeichert.</p>
   <div class="maja-bubble-audio-grid">
-  <div><strong>🐻 Bärlis Begrüßung</strong><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärlis echte Begrüßungsaufnahme"></audio></div>
-  <div><strong>👧 Majas Mutmacher für Melody</strong><audio controls preload="none" src="./audio/maja-melody.mp3" aria-label="Majas echte Aufnahme für Melody"></audio></div></div></section>
+  <div><strong>🐻 Bärlis Begrüßung</strong><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärlis feste KI-Sprechstimme"></audio></div>
+  <div><strong>👧 Majas Mutmacher für Melody</strong><audio controls preload="none" src="./audio/maja-melody.mp3" aria-label="Majas feste KI-Sprechstimme für Melody"></audio></div></div></section>
   <div class="maja-bubble-grid">${body}</div>
   <section class="panel"><h2>Dein fertiger Comic</h2>
    <p id="maja-bubble-status" role="status">Deine Sprechblasen werden automatisch gespeichert.</p>
