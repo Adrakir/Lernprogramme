@@ -421,6 +421,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-studio.css?v=20261108c">
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
+<link rel="stylesheet" href="./mobile-start.css?v=20261108a">
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt</a>
@@ -2522,7 +2523,7 @@ function annaDetective(story){
     <div class="anna-detective-answers">${choices.map(choice=>`<button type="button" class="choice" data-answer="${choice===story.answer}">${choice}</button>`).join('')}</div>
     <div class="anna-evidence" hidden>
       <p><b>2. Wo im Text steht der Hinweis?</b></p>
-      <div class="anna-detective-answers">${story.paragraphs.map((paragraph,i)=>`<button type="button" class="choice" data-evidence="${indices.includes(i)}"><b>Absatz ${i+1}</b> ${paragraph}</button>`).join('')}</div>
+      <div class="anna-detective-answers">${story.paragraphs.map((paragraph,i)=>`<button type="button" class="choice" data-evidence="${indices.includes(i)}">${paragraph}</button>`).join('')}</div>
     </div>
     <p class="game-message anna-clue-message" role="status" hidden></p>
   </details>`;
@@ -2570,7 +2571,7 @@ function annaListenControls(story){
       <button type="button" class="secondary" id="anna-pause" disabled>Pause</button>
       <label class="anna-speed">Tempo <select id="anna-speed"><option value="0.93">Normal</option><option value="0.78">Langsam</option></select></label>
     </div>
-    <div class="anna-paragraph-controls" aria-label="Absatz zum Anhören auswählen">${story.paragraphs.map((_,i)=>`<button type="button" class="secondary" data-listen-paragraph="${i}">Absatz ${i+1}</button>`).join('')}</div>
+    <details class="anna-replay"><summary>Eine Stelle erneut anhören</summary><div class="anna-paragraph-controls" aria-label="Stelle zum Anhören auswählen">${story.paragraphs.map((_,i)=>`<button type="button" class="secondary" data-listen-paragraph="${i}">${['Anfang','Danach','Weiter','Schluss'][i]||'Weitere Stelle'}</button>`).join('')}</div></details>
     <p class="anna-audio-status" role="status"></p>
   </section>`;
 }
@@ -3278,57 +3279,126 @@ const syncStars = ()=>{const amount=starBalance();document.querySelector('#star-
 const unitById = id=>units.find(unit=>unit.id===id);
 const doneFor = id=>questions[id].filter(q=>progress.has(q.id)).length;
 const unitLink = (id,number)=>'#'+id+(number ? '/'+number:'');
-const homeLink = () => `<a class="crumb" href="#start">${icon('back')} Zur Stationenkarte</a>`;
+const homeLink = () => `<a class="crumb" href="#start">${icon('back')} Zur Startseite</a>`;
 const move = hash=>{
   if(location.hash===hash) render();
   else location.hash=hash;
 };
 function showHome(){
-  const descriptions = [
-    'Nomen, Verben und Adjektive entdecken','Mit -heit, -keit, -ung, -nis und -schaft bauen','ver-, be- und er- vorne einsetzen',
-    'Wörter verbinden und den Artikel finden','Von ich bis sie in der Gegenwart','Die drei Vergleichsstufen üben','Großschreibung und Hörsätze üben',
-    ...newUnits.map(unit=>unit.description)
-  ];
-  app.innerHTML=`<div class="home-heading"><p class="kicker">${icon('leaf')} Deutsch · Klasse 3</p><h1>Majas Wortwerkstatt</h1><p>Womit möchtest du heute beginnen?</p></div>
-  <div class="home-priorities">
-  <section class="panel" aria-labelledby="test-prep"><h2 id="test-prep">Fit für den Kombitest</h2>
-    <p>Übe das genaue Zuhören, bilde Nomen mit -heit, -keit, -ung, -nis und -schaft und prüfe letzte Buchstaben durch Verlängern.</p>
-    <div class="actions"><a class="primary" href="#pruefung/hoeren">${icon('audio')} 16.11. · Hörverständnis</a><a class="primary" href="#pruefung/nomen">19.11. · Nomen und Verlängern</a><a class="secondary" href="#pruefung">Geführt üben &amp; 10 Abschlusstests</a><a class="secondary" href="#fehlertraining">Mein Fehlertrainer</a><a class="secondary" href="#kombitest">Kombitest üben</a></div>
-  </section>
-  <section class="panel maja-voice-panel" aria-labelledby="maja-voice-title">
-    <h2 id="maja-voice-title">Neu: Maja und Bärli sprechen mit dir</h2>
-    <p>Zwei kurze, fest aufgenommene Stimmen. Starte sie selbst, wenn du zuhören möchtest.</p>
-    <div class="maja-voice-grid">
-      <div><strong>🐻 Bärlis Mutmacher</strong><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärlis Mutmacher anhören"></audio></div>
-      <div><strong>👧 Maja hilft Melody</strong><audio controls preload="none" src="./audio/maja-melody.mp3" aria-label="Maja hilft Melody anhören"></audio></div>
+  // The first screen is purposefully short: only the three main subjects and four destinations.
+  // Full exercise catalogues, audio extras and stories remain available via separate pages.
+  app.innerHTML=`<div class="maja-mobile-home">
+    <div class="maja-quick-heading">
+      <p class="kicker">${icon('leaf')} Deutsch · Klasse 3</p>
+      <h1 tabindex="-1">Fit für den Kombitest</h1>
+      <p>Wähle ein Thema. Du darfst selbst entscheiden, womit du beginnst.</p>
     </div>
-    <div class="actions"><a class="secondary" href="#comicstudio">Mit dem Comic lernen</a><a class="secondary" href="#comicstudio/toncheck">Ton testen</a></div>
-  </section>
-  <section class="panel" aria-labelledby="daily-stories"><h2 id="daily-stories">Tagesgeschichten</h2>
-    <p>Entdecke die heutige Geschichte mit Maja und Bärli oder höre ein Abenteuer mit Anna.</p>
-    <div class="actions"><a class="primary" href="#baerli">${icon('book')} Geschichte des Tages</a><a class="secondary" href="#schulgeschichten">Schulgeschichten</a><a class="secondary" href="#anna">Annas Geschichten</a><a class="secondary" href="#tagescomic">Comic des Tages</a><a class="primary" href="#comicstudio">Neu: Comic-Regie mit Maja</a></div>
-  </section>
-  </div>
-  <section class="hero">
-    <div><p class="kicker">${icon('leaf')} Deutschabenteuer für Klasse 3</p>
-    <h2>Mehr <em>entdecken</em></h2>
-    <p>Im Herbstpark warten Wortschätze auf dich. Entdecke sie mit Maja, Bärli, Fuji und Minka und sammle Sterne.</p>
-    <div class="actions hero-actions"><a class="primary" href="#tagesplan">Meine 10-Minuten-Mission ${icon('arrow')}</a><a class="secondary" href="#lernweg">Mein Lernweg</a><a class="secondary" href="#stationen">Station aussuchen</a><a class="secondary" href="#spiele">${icon('game')} Kleine Spiele</a><a class="secondary" href="#spiele/wolkenwege">Maja &amp; Bärli: Wolkenwege</a><a class="secondary" href="#spiele/hexenpfad">Wegpuzzle zur Hexe</a><a class="secondary" href="#spiele/melodie">Miau &amp; Klavier</a><a class="secondary" href="#spiele/kart">Bärlis Nomen-Rallye</a><a class="secondary" href="#baerli/schrank">Bärlis Laden</a></div></div>
-    <div class="hero-art">${bearPicture('leseecke',true)}</div>
-  </section>
-  ${learningHome()}
-  ${featuredComics.map(featuredComicIntro).join('')}
-  ${bearIntro()}
-  ${detectiveIntro()}
-  <section aria-labelledby="stationen"><div class="section-top"><div><h2 id="stationen" tabindex="-1">Deine Stationen</h2><p>Du kannst mit jeder Station beginnen. Dort findest du eine Bild-Erklärung und passende Übungen.</p></div></div>
-  <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
-  <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">${String(i+1).padStart(2,'0')}</span></div>
-  <h3>${u.title}</h3><p>${u.description||descriptions[i]}</p><div class="card-foot"><span>${doneFor(u.id)} / ${questions[u.id].length} geschafft</span>${icon('arrow')}</div>
-  </a>`).join('')}
-  <a class="station quiz sand" href="#quiz"><div class="station-top"><span class="icon-box">${icon('trophy')}</span><span class="number">FINALE</span></div><h3>Werkstatt-Quiz</h3><p>14 gemischte Aufgaben ohne Zeitdruck</p><div class="card-foot"><span>${best===null?'Zum Quiz':'Rekord '+best+' / '+mixed.length}</span>${icon('arrow')}</div></a></div></section>`;
-  app.querySelector('.hero-art img').addEventListener('error',()=>{
-    app.querySelector('.hero-art').innerHTML=document.querySelector('#scene-source').innerHTML;
-  },{once:true});
+    <nav class="maja-quick-topic-grid" aria-label="Drei Themen zum Üben">
+      <a class="maja-quick-topic" href="#pruefung/hoeren" aria-label="Hörverständnis üben, Klassenarbeit 16. November">
+        <span class="maja-topic-symbol">${icon('audio')}</span>
+        <strong>Hören</strong><small>16. November</small>
+      </a>
+      <a class="maja-quick-topic" href="#endungen" aria-label="Nomen-Endungen mit ung, heit, keit, schaft und nis üben">
+        <span class="maja-topic-symbol">${icon('puzzle')}</span>
+        <strong>Endungen</strong><small>-ung, -heit …</small>
+      </a>
+      <a class="maja-quick-topic" href="#verlaengern" aria-label="Wörter verlängern üben">
+        <span class="maja-topic-symbol">${icon('book')}</span>
+        <strong>Verlängern</strong><small>Wörter prüfen</small>
+      </a>
+    </nav>
+    <a class="maja-quick-test" href="#kombitest"><span>Teste dich<small>Prüfungsaufgaben ausprobieren</small></span>${icon('arrow')}</a>
+    <section class="maja-quick-choices" aria-labelledby="maja-quick-more">
+      <h2 id="maja-quick-more">Was möchtest du danach machen?</h2>
+      <nav class="maja-quick-options" aria-label="Weitere Bereiche">
+        <a href="#comics" class="maja-quick-option"><span class="maja-option-icon">${icon('book')}</span><span><strong>Comics</strong><small>Alle im Paket</small></span></a>
+        <a href="#spiele" class="maja-quick-option"><span class="maja-option-icon">${icon('game')}</span><span><strong>Spiele</strong><small>Mit Sternen</small></span></a>
+        <a href="#lernberater" class="maja-quick-option"><span class="maja-option-icon">${icon('paw')}</span><span><strong>Bärli hilft dir</strong><small>Dein Lernberater</small></span></a>
+        <a href="#baerli/schrank" class="maja-quick-option"><span class="maja-option-icon">${icon('star')}</span><span><strong>Bärlis Kleidung</strong><small>${starBalance()} ★ im Beutel</small></span></a>
+      </nav>
+    </section>
+    <a href="#stationen" class="maja-quick-all">Alle weiteren Lernthemen ${icon('arrow')}</a>
+  </div>`;
+}
+
+function showLearningAdvisor(){
+  app.innerHTML=`<div class="maja-advisor">
+    ${homeLink()}
+    <section class="maja-advisor-hero" aria-labelledby="advisor-title">
+      <div><p class="kicker">Dein persönlicher Lernberater</p>
+        <h1 id="advisor-title" tabindex="-1">Bärli hilft dir!</h1>
+        <p>Hallo! Such aus, wobei ich dir helfen soll. Wir machen einen Schritt nach dem anderen.</p>
+      </div><img src="./baerli/baerli.webp" alt="Bärli im lila Strickanzug und mit gelbem Ohrfähnchen" loading="lazy" width="110" height="110">
+    </section>
+    <div class="maja-advisor-grid">
+      <section class="maja-advisor-card"><h2>Ich übe für den Test</h2>
+        <p>Wir beginnen einfach und werden Schritt für Schritt sicherer.</p>
+        <div class="maja-advisor-links">
+          <a href="#pruefung">Geführte Klassenarbeitsübungen ${icon('arrow')}</a>
+          <a href="#fehlertraining">Meine Fehler üben ${icon('arrow')}</a>
+          <a href="#lernweg">Was soll ich zuerst lernen? ${icon('arrow')}</a>
+        </div></section>
+      <section class="maja-advisor-card"><h2>Ich möchte zuhören</h2>
+        <p>Höre Bärli und Maja oder prüfe den Ton vor einer Hörübung.</p>
+        <div class="maja-advisor-links">
+          <a href="#figurenstimmen">Bärli und Majas echte Stimmen ${icon('arrow')}</a>
+          <a href="#comicstudio/toncheck">Ton ausprobieren ${icon('arrow')}</a>
+          <a href="#anna">Annas Hörgeschichten ${icon('arrow')}</a>
+        </div></section>
+      <section class="maja-advisor-card"><h2>Ich möchte Comics</h2>
+        <p>Sieh dir Bilder an und lerne, Geschichten zu verstehen oder selbst zu schreiben.</p>
+        <div class="maja-advisor-links">
+          <a href="#comics">Alle Comics ansehen ${icon('arrow')}</a>
+          <a href="#comicstudio">Comic-Regie mit Maja ${icon('arrow')}</a>
+          <a href="#schreibwerkstatt">Eigene Geschichte schreiben ${icon('arrow')}</a>
+        </div></section>
+      <section class="maja-advisor-card"><h2>Ich habe wenig Zeit</h2>
+        <p>Kurze Lernschritte ohne Zeitdruck – oder ein Spiel als Pause.</p>
+        <div class="maja-advisor-links">
+          <a href="#tagesplan">Meine 10-Minuten-Mission ${icon('arrow')}</a>
+          <a href="#lesetraining">Kurz lesen ${icon('arrow')}</a>
+          <a href="#spiele">Ein Spiel aussuchen ${icon('arrow')}</a>
+        </div></section>
+    </div>
+    <details class="maja-advisor-extras"><summary>Noch mehr Hilfe und Einstellungen</summary>
+      <p>Hier findest du die Dinge, die du nicht jeden Tag brauchst.</p>
+      <div class="actions"><a class="secondary" href="#lernuebersicht">Mein Lernstand</a><a class="secondary" href="#stationen">Alle Lernthemen</a><a class="secondary" href="#einstellungen">Schrift, Kontrast und Sicherung</a><a class="secondary" href="#baerli/schrank">Bärlis Kleidung</a></div>
+    </details>
+  </div>`;
+}
+
+function showComicHub(){
+  const list=(episodes,base)=>episodes.map(item=>`<a class="maja-hub-link" href="#${base}/${item.id}/1"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.summary||'Geschichte lesen und entdecken')}</span></a>`).join('');
+  app.innerHTML=`<div class="maja-page-hub">
+    ${homeLink()}
+    <div class="maja-hub-header"><p class="kicker">${icon('book')} Geschichten und Bilder</p><h1 tabindex="-1">Alle Comics</h1>
+    <p>Alle Comics bleiben erhalten. Du kannst sie in Ruhe auswählen.</p></div>
+    <section class="maja-hub-section"><h2>Maja, Bärli und ihre Freunde</h2><div class="maja-hub-list">${list(detectiveEpisodes,'tagescomic')}</div></section>
+    <section class="maja-hub-section"><h2>Schulgeschichten</h2><div class="maja-hub-list">${list(schoolComics,'schulgeschichten')}</div></section>
+    <section class="maja-hub-section"><h2>Mit Comics üben</h2><div class="maja-hub-list">
+      <a class="maja-hub-link" href="#comicstudio"><strong>Comic-Regie</strong><span>Verstehen, nachdenken und selbst schreiben</span></a>
+      <a class="maja-hub-link" href="#baerli"><strong>Bärlis Geschichte des Tages</strong><span>Ein kurzes Abenteuer zum Lesen</span></a>
+    </div></section>
+  </div>`;
+}
+
+function showStationHub(){
+  const descriptions=[
+    'Nomen, Verben und Adjektive entdecken','Mit Endungen neue Nomen bilden',
+    'Wortbausteine ergänzen','Nomen zusammensetzen',
+    'Verben verändern','Adjektive vergleichen','Großschreibung üben'
+  ];
+  app.innerHTML=`<div class="maja-page-hub">${homeLink()}
+    <div class="maja-hub-header"><p class="kicker">${icon('book')} Deine Lernstationen</p><h1 tabindex="-1">Alle Themen</h1>
+    <p>Such dir genau ein Thema aus. Du kannst später jederzeit zurückkommen.</p></div>
+    <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
+      <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">${String(i+1).padStart(2,'0')}</span></div>
+      <h3>${escapeHtml(u.title)}</h3><p>${escapeHtml(u.description||descriptions[i]||'Deutsch lernen und üben')}</p>
+      <div class="card-foot"><span>${doneFor(u.id)} / ${(questions[u.id]||[]).length} geschafft</span>${icon('arrow')}</div></a>`).join('')}
+    <a class="station quiz sand" href="#quiz"><div class="station-top"><span class="icon-box">${icon('trophy')}</span><span class="number">QUIZ</span></div>
+      <h3>Werkstatt-Quiz</h3><p>14 gemischte Aufgaben ohne Zeitdruck</p><div class="card-foot"><span>${best===null?'Los geht es':'Rekord '+best+' / '+mixed.length}</span>${icon('arrow')}</div></a>
+    </div>
+  </div>`;
 }
 function showUnit(unit){
   const items=questions[unit.id];
@@ -5019,7 +5089,10 @@ function render(initial=false){
   const number=Number(index);
   const oldRoute=route;
   route=page||'start';
-  if(page==='figurenstimmen')window.MajaRealAudio.show();
+  if(page==='lernberater')showLearningAdvisor();
+  else if(page==='comics')showComicHub();
+  else if(page==='stationen')showStationHub();
+  else if(page==='figurenstimmen')window.MajaRealAudio.show();
   else if(page==='comicstudio')window.MajaComicStudio.render(index);
   else if(page==='tagesplan')window.MajaPlus.showDaily();
   else if(page==='fehlertraining')window.MajaPlus.showErrors(index);
@@ -5054,15 +5127,8 @@ function render(initial=false){
     else if(Number.isInteger(number)&&number>0&&number<=questions[unit.id].length)showExercise(unit,number,false);
     else showUnit(unit);
   } else {
-    if(oldRoute!=='start'&&oldRoute!=='stationen'||!app.querySelector('.hero'))showHome();
-    if(page==='stationen'){
-      const target=document.querySelector('#stationen');
-      target.focus({preventScroll:true});
-      target.scrollIntoView({block:'start'});
-      return;
-    }
+    showHome();
   }
-  window.MajaRealAudio?.mount(page||'start',index,part);
   if(!initial){
     window.scrollTo(0,0);
     const heading=app.querySelector('h1');
