@@ -1,0 +1,25 @@
+
+/* Kindgerechte Comic-Werkstatt für Bilder, direkte Rede und Erzähltext */
+.maja-bubble-audio-grid,.maja-voice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.maja-bubble-audio-grid>div,.maja-voice-grid>div{background:#f2f7f3;padding:12px;border:1px solid #c6d7ce;border-radius:14px;min-width:0}
+.maja-bubble-audio-grid audio,.maja-voice-grid audio,.cs-real-audio audio,.maja-voice-intro audio{display:block;width:100%;max-width:500px;margin:10px 0}
+.cs-real-audio{background:#e6f2f3;border:1px solid #c1d4d6;border-radius:14px;padding:14px;margin:12px 0}
+.maja-bubble-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:20px 0}
+.maja-bubble-card{min-width:0;background:#fffcf6;border:2px solid #cecbc0;border-radius:18px;overflow:hidden;padding:14px 16px}
+.maja-bubble-card h3{margin:5px 0 14px}
+.maja-bubble-art{width:100%;aspect-ratio:1;background-repeat:no-repeat;background-color:#e8e0ce;border-radius:12px;border:2px solid #657064}
+.maja-bubble-preview{margin:14px 0;padding:12px 15px;background:#fff;border:2px solid #6a625a;border-radius:23px;min-height:86px;overflow-wrap:anywhere}
+.maja-bubble-preview strong{display:block;color:#2b5e56}
+.maja-bubble-preview p{margin:4px 0 0}
+.maja-bubble-card label{display:block;margin:12px 0 6px;font-weight:700}
+.maja-bubble-card select,.maja-bubble-card textarea,.maja-bubble-card input{width:100%;max-width:100%;color:#213d3a;background:#fff;border:2px solid #9caaa5;border-radius:10px;padding:10px;min-height:46px;font:inherit}
+.maja-bubble-card details{margin-top:14px}
+.maja-bubble-card details summary{font-weight:800;cursor:pointer}
+@media(max-width:700px){.maja-bubble-grid,.maja-bubble-audio-grid,.maja-voice-grid{grid-template-columns:1fr}.maja-bubble-card{padding:12px}}
+@media print{
+ header,.top,.nav,.maja-bubble-audio-grid,.maja-bubble-card label,.maja-bubble-card select,.maja-bubble-card textarea,.maja-bubble-card input,.maja-bubble-card details,.maja-bubble-card .kicker,.route>.panel:last-child,.maja-voice-panel{display:none!important}
+ .maja-bubble-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8mm}
+ .maja-bubble-card{break-inside:avoid;padding:5mm;border:1px solid #777}
+ .maja-bubble-preview{border:1px solid #333;min-height:0;padding:4mm}
+ .maja-bubble-art{break-inside:avoid}
+}
