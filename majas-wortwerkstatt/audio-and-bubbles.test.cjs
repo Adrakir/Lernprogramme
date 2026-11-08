@@ -1,0 +1,33 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const base=__dirname;
+const html=fs.readFileSync(path.join(base,'index.html'),'utf8');
+const studio=fs.readFileSync(path.join(base,'comic-studio.js'),'utf8');
+const bubble=fs.readFileSync(path.join(base,'comic-bubbles.js'),'utf8');
+const style=fs.readFileSync(path.join(base,'comic-bubbles.css'),'utf8');
+const bearAudio=fs.readFileSync(path.join(base,'audio/baerli-intro.mp3'));
+const majaAudio=fs.readFileSync(path.join(base,'audio/maja-melody.mp3'));
+assert(bearAudio.length>15000,'Bärli MP3 is not empty');
+assert(majaAudio.length>15000,'Maja MP3 is not empty');
+assert.equal(bearAudio.subarray(0,3).toString(),'ID3','Bärli audio has MP3 ID3 header');
+assert.equal(majaAudio.subarray(0,3).toString(),'ID3','Maja audio has MP3 ID3 header');
+assert(html.includes('src="./audio/baerli-intro.mp3"'),'Home and lessons contain Bärli voice');
+assert(html.includes('src="./audio/maja-melody.mp3"'),'Home contains Maja voice');
+assert(html.includes('comic-bubbles.js?v=20261108d'),'Comic bubble module loaded');
+assert(html.includes('comic-bubbles.css?v=20261108d'),'Comic bubble CSS loaded');
+assert(studio.includes('page==="sprechblasen"'),'Comic studio routes to speech bubble workshop');
+assert(studio.includes('neue KI-Sprachaufnahme'),'Synthesis attribution not misleading');
+assert(style.includes('@media(max-width:700px)'),'Accessible mobile layout');
+for(const inline of html.split('<script>').slice(1).map(x=>x.split('</script>')[0]).filter(Boolean))new vm.Script(inline);
+new vm.Script(studio);new vm.Script(bubble);
+const sandbox={window:{},document:{},localStorage:{getItem(){return null},setItem(){}}};
+vm.runInNewContext(bubble,sandbox);
+const api=sandbox.window.MajaSpeechBubbles;
+assert(api&&typeof api.render==='function','Bubble workshop renders');
+assert.equal(api.entries.length,6,'Six illustrated comic scenes');
+for(const scene of api.entries){
+ assert(scene.panel>=0&&scene.panel<24,'Comic panel index within episode');
+ assert(scene.prompt.length>=12&&scene.example.length>=8,'Children get meaningful writing prompts');
+}
+console.log('Maja: 2 MP3 files, comic speech bubbles, links, six scenes and syntax OK.');
