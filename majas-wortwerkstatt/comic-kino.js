@@ -72,7 +72,7 @@ function mount({frames,mode="detective"}){
  figures.forEach((fig,i)=>{
   const wrap=document.createElement("div");wrap.className="kino-panel-wrap";
   fig.parentNode.insertBefore(wrap,fig);wrap.appendChild(fig);
-  wrap.innerHTML+=`<div class="kino-panel-actions"><button type="button" class="secondary" data-kino-read="${i}" ${canSpeak?"":"disabled"}>▶ Bild ${i+1} anhören</button><button type="button" class="secondary" data-kino-zoom="${i}">Bild vergrößern</button></div>`;
+  wrap.insertAdjacentHTML("beforeend",`<div class="kino-panel-actions"><button type="button" class="secondary" data-kino-read="${i}" ${canSpeak?"":"disabled"}>▶ Bild ${i+1} anhören</button><button type="button" class="secondary" data-kino-zoom="${i}">Bild vergrößern</button></div>`);
   wraps.push(wrap);
  });
  state.wrappers=wraps;
@@ -84,11 +84,11 @@ function mount({frames,mode="detective"}){
   }
  }
  function finish(){if(active!==state)return;state.playing=false;current(-1);get('[data-kino="pause"]').textContent="Pause";status.textContent="Diese Comicseite ist zu Ende vorgelesen.";}
- function speakFrom(start){
+ function speakFrom(start,single=false){
   if(!canSpeak)return;
   state.token++;const token=state.token;
   speech().cancel();
-  const queue=spoken.slice(start).flatMap((sentences,i)=>sentences.map(line=>({...line,frame:start+i})));
+  const queue=(single?[spoken[start]]:spoken.slice(start)).flatMap((sentences,i)=>sentences.map(line=>({...line,frame:start+i})));
   state.playing=true;state.paused=false;get('[data-kino="pause"]').textContent="Pause";
   function next(){
    if(active!==state||state.token!==token)return;
@@ -126,7 +126,7 @@ function mount({frames,mode="detective"}){
   try{speech()?.cancel();}catch{}
   current(-1);get('[data-kino="pause"]').textContent="Pause";status.textContent="Vorlesen gestoppt.";
  };
- for(const btn of area.querySelectorAll("[data-kino-read]"))btn.onclick=()=>speakFrom(Number(btn.dataset.kinoRead));
+ for(const btn of area.querySelectorAll("[data-kino-read]"))btn.onclick=()=>speakFrom(Number(btn.dataset.kinoRead),true);
  for(const btn of area.querySelectorAll("[data-kino-zoom]"))btn.onclick=()=>{
   const i=Number(btn.dataset.kinoZoom),figure=figures[i],art=figure.querySelector(".comic-art,.detective-art");
   if(!art)return;
