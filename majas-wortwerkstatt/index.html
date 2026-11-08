@@ -5062,7 +5062,7 @@ function render(initial=false){
       return;
     }
   }
-  window.MajaRealAudio?.mount(page,index);
+  window.MajaRealAudio?.mount(page||'start',index,part);
   if(!initial){
     window.scrollTo(0,0);
     const heading=app.querySelector('h1');
