@@ -420,6 +420,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-kino.css?v=20261108b">
 <link rel="stylesheet" href="./comic-studio.css?v=20261108c">
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
+<link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt</a>
@@ -3085,6 +3086,7 @@ function showAnnaWriting(part){
 <script src="./comic-kino.js?v=20261108b"></script>
 <script src="./comic-studio.js?v=20261108c"></script>
 <script src="./comic-bubbles.js?v=20261108d"></script>
+<script src="./figurenstimmen.js?v=20261108e"></script>
 <script>const iconPaths = {
  book:'<path d="M12 6c-2.5-2-6-2.7-9-1.5v14c3-1.2 6.5-.5 9 1.5 2.5-2 6-2.7 9-1.5v-14C18 3.3 14.5 4 12 6Zm0 0v14"/>',
  puzzle:'<path d="M4 4h6a2.5 2.5 0 1 1 4 0h6v6a2.5 2.5 0 1 0 0 4v6h-6a2.5 2.5 0 1 0-4 0H4v-6a2.5 2.5 0 1 0 0-4Z"/>',
@@ -5002,6 +5004,7 @@ function playKart(board){
 }
 
 function render(initial=false){
+  window.MajaRealAudio?.stop();
   window.MajaComicStudio?.stop();
   window.MajaComicKino?.stop();
   if(extraCleanup){extraCleanup();extraCleanup=null;}
@@ -5016,7 +5019,8 @@ function render(initial=false){
   const number=Number(index);
   const oldRoute=route;
   route=page||'start';
-  if(page==='comicstudio')window.MajaComicStudio.render(index);
+  if(page==='figurenstimmen')window.MajaRealAudio.show();
+  else if(page==='comicstudio')window.MajaComicStudio.render(index);
   else if(page==='tagesplan')window.MajaPlus.showDaily();
   else if(page==='fehlertraining')window.MajaPlus.showErrors(index);
   else if(page==='einstellungen')window.MajaPlus.showSettings();
@@ -5058,6 +5062,7 @@ function render(initial=false){
       return;
     }
   }
+  window.MajaRealAudio?.mount(page||'start',index,part);
   if(!initial){
     window.scrollTo(0,0);
     const heading=app.querySelector('h1');
