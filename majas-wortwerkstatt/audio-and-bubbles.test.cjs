@@ -17,7 +17,7 @@ assert(html.includes('src="./audio/maja-melody.mp3"'),'Home contains Maja voice'
 assert(html.includes('comic-bubbles.js?v=20261108d'),'Comic bubble module loaded');
 assert(html.includes('comic-bubbles.css?v=20261108d'),'Comic bubble CSS loaded');
 assert(studio.includes('page==="sprechblasen"'),'Comic studio routes to speech bubble workshop');
-assert(studio.includes('Neue KI-Sprachaufnahme'),'Synthesis attribution not misleading');
+assert(studio.includes('neue KI-Sprachaufnahme'),'Synthesis attribution not misleading');
 assert(style.includes('@media(max-width:700px)'),'Accessible mobile layout');
 for(const inline of html.split('<script>').slice(1).map(x=>x.split('</script>')[0]).filter(Boolean))new vm.Script(inline);
 new vm.Script(studio);new vm.Script(bubble);
