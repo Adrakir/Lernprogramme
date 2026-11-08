@@ -55,3 +55,10 @@ padding:12px 15px!important;background:#fffdf7!important;color:#172d2b!important
  .kino-settings{display:block}
  .kino-checkbox{margin-top:12px}
 }
+
+.prep-cue-coach{margin:16px 0 4px;padding:16px;border:1px solid #bfd2ce;border-radius:14px;background:#eef5f1}
+.prep-cue-coach h3{margin:0 0 8px;color:#174c43}
+.prep-cue-coach .actions{margin:12px 0}
+.prep-cue-coach [data-cue-index]{min-height:46px}
+.prep-cue-coach #prep-hearing-notes{display:block;width:100%;max-width:680px;min-height:80px}
+@media(max-width:540px){.prep-cue-coach{padding:12px}.prep-cue-coach .actions button{flex:1 1 45%}}
