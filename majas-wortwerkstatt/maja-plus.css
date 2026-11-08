@@ -1,0 +1,24 @@
+
+/* Majas Wortwerkstatt: zusätzliche, barrierearme Lernwege */
+.plus-progress{height:16px;border:1px solid #8b9b9b;border-radius:99px;overflow:hidden;background:#f0f2ed}
+.plus-progress>span{display:block;height:100%;background:#1d7868;transition:width .15s ease}
+.plus-step{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.plus-step>div:first-child{flex:1;min-width:220px}
+.plus-check{display:inline-flex;align-items:center;gap:10px;font-weight:800;min-height:44px}
+.plus-check input{width:24px;height:24px;accent-color:#146047}
+.plus-error audio{display:block;width:min(100%,540px);margin:12px 0}
+.plus-fieldset{border:1px solid var(--line);border-radius:12px;margin:14px 0;padding:12px}
+.plus-fieldset label{display:block;margin:10px 0;cursor:pointer}
+.plus-fieldset input{width:19px;height:19px}
+.plus-try>label{display:block;font-weight:800;margin:12px 0 6px}
+.plus-try input[type=text]{width:100%;padding:12px;border:2px solid #667e7a;border-radius:12px;max-width:500px}
+.plus-feedback{font-weight:700;margin:12px 0}
+.plus-hint-text{padding:12px;border-left:4px solid #146047;background:#e3f1ea;border-radius:8px}
+.plus-setting{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin:16px 0;padding:10px 0;border-bottom:1px solid var(--line)}
+#plus-import{display:block;max-width:100%;margin:8px 0 12px}
+html[data-maja-font="gross"] #app :is(p,li,button,label,input,select,textarea,summary){font-size:1.1rem!important;line-height:1.65}
+html[data-maja-font="gross"] #app :is(button,a.primary,a.secondary){min-height:48px}
+html[data-maja-contrast="hoch"]{--ink:#091f24;--muted:#22343a;--forest:#063d30;--deep:#063c32;--line:#5c737b;--paper:#eef0ec}
+html[data-maja-contrast="hoch"] .panel{border-width:2px}
+html[data-maja-motion="weniger"] *,html[data-maja-motion="weniger"] *::before,html[data-maja-motion="weniger"] *::after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+@media(max-width:540px){.plus-step{display:block}.plus-step .actions{margin-top:12px}.plus-setting .actions{width:100%}.plus-setting button{flex:1}}
