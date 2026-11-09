@@ -214,7 +214,7 @@ function showRoom(){
  const room=s.room,objects=roomObjects(s,room),wall=wallpaperStyle(s,room),current=objects.find(x=>x.id===selected);
  const html=htmlHead('Bärlis Baumhaus','Richte dein Zimmer nach deinen Wünschen ein. Der blaue Sitzsack und der Laptop waren von Anfang an dabei.')
   +statHeader(s)
-  +'<nav class="bh-nav"><a href="#baumhaus/shop" class="bh-yellow">🛒 Bärli AG Osnabrück</a><a href="#baerli/schrank" class="bh-secondary">👕 Bärlis Kleidung</a><a href="#pruefung" class="bh-secondary">🏆 Prüfungen</a></nav>'
+  +'<nav class="bh-nav"><a href="#baumhaus/shop" class="bh-yellow">🛒 Bärli AG Osnabrück</a><a href="#baerli/schrank" class="bh-secondary">👕 Bärlis Kleidung</a><a href="#pruefung" class="bh-secondary">🏆 Prüfungen</a><a href="#advent" class="bh-secondary">🎄 Adventskalender</a></nav>'
   +(bought(s,'zimmer2')?'<div class="bh-rooms"><button type="button" data-bh-room="1" aria-pressed="'+(room===1)+'">🌳 Mein erstes Zimmer</button><button type="button" data-bh-room="2" aria-pressed="'+(room===2)+'">⭐ Zweites Zimmer</button></div>':'')
   +'<div class="bh-room-info"><strong>'+ (room===1?'Mein Baumhauszimmer':'Mein zweites Zimmer') +'</strong><small>Wand: '+esc(wall.name)+'</small></div>'
   +'<div class="bh-room-stage" style="--bh-wall:'+wall.color+';" role="group" aria-label="Einrichtbares Baumhauszimmer">'
