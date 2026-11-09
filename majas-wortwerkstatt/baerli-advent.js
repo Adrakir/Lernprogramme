@@ -9,8 +9,8 @@ const STORIES=[
   {
     "day": 1,
     "title": "Die geheimnisvolle Sternenpost",
-    "story": "✉️",
-    "icon": "Als Bärli morgens die Baumhaustreppe hinaufstieg, hörte er ein leises Klingeln. Zwischen zwei Zweigen klemmte ein Brief mit einem goldenen Stern. „Für Bärli und Maja“, stand darauf. Die Wichtel Tomke und Tumetott schrieben, dass im Dezember vierundzwanzig kleine Überraschungen auf sie warteten. Bärli setzte sich auf seinen blauen Sitzsack und grinste. „Dann fangen wir heute an!“, sagte er. Draußen glitzerte der erste Frost.",
+    "story": "Als Bärli morgens die Baumhaustreppe hinaufstieg, hörte er ein leises Klingeln. Zwischen zwei Zweigen klemmte ein Brief mit einem goldenen Stern. „Für Bärli und Maja“, stand darauf. Die Wichtel Tomke und Tumetott schrieben, dass im Dezember vierundzwanzig kleine Überraschungen auf sie warteten. Bärli setzte sich auf seinen blauen Sitzsack und grinste. „Dann fangen wir heute an!“, sagte er. Draußen glitzerte der erste Frost.",
+    "icon": "✉️",
     "reward": {
       "type": "wardrobe",
       "id": "saison-weihnachtsmuetze"
@@ -29,8 +29,8 @@ const STORIES=[
   {
     "day": 2,
     "title": "Ein weiches Wolkenkissen",
-    "story": "☁️",
-    "icon": "Maja wollte im Baumhaus eine gemütliche Leseecke bauen. Bärli holte eine Decke, doch irgendetwas fehlte. Minka sprang auf den Sitzsack, drehte sich dreimal und miaute: „Miau!“ „Du hast recht“, lachte Maja. „Ein Kissen macht es erst richtig bequem.“ Bärli stellte sich vor, wie alle gemeinsam Geschichten lesen würden. Als die Sonne hinter den Bäumen verschwand, fühlte sich das Baumhaus plötzlich wie ein kleines Zuhause an.",
+    "story": "Maja wollte im Baumhaus eine gemütliche Leseecke bauen. Bärli holte eine Decke, doch irgendetwas fehlte. Minka sprang auf den Sitzsack, drehte sich dreimal und miaute: „Miau!“ „Du hast recht“, lachte Maja. „Ein Kissen macht es erst richtig bequem.“ Bärli stellte sich vor, wie alle gemeinsam Geschichten lesen würden. Als die Sonne hinter den Bäumen verschwand, fühlte sich das Baumhaus plötzlich wie ein kleines Zuhause an.",
+    "icon": "☁️",
     "reward": {
       "type": "house",
       "id": "kissen"
@@ -49,8 +49,8 @@ const STORIES=[
   {
     "day": 3,
     "title": "Ein Regentag voller Spuren",
-    "story": "🌧️",
-    "icon": "Auf dem Weg zum Baumhaus klatschten dicke Regentropfen in die Pfützen. Fuji blieb vor einem winzigen Fußabdruck stehen. „Vielleicht war hier ein Wichtel unterwegs!“, flüsterte Maja. Bärli zog seine Kapuze tief ins Gesicht und folgte der Spur bis zu einem Baumstumpf. Dort lag eine rote Schleife. „Die gehört bestimmt Tomke“, vermutete er. Dann mussten alle lachen: Auf der Schleife saß eine winzige Schnecke, die ebenfalls vor dem Regen Schutz suchte.",
+    "story": "Auf dem Weg zum Baumhaus klatschten dicke Regentropfen in die Pfützen. Fuji blieb vor einem winzigen Fußabdruck stehen. „Vielleicht war hier ein Wichtel unterwegs!“, flüsterte Maja. Bärli zog seine Kapuze tief ins Gesicht und folgte der Spur bis zu einem Baumstumpf. Dort lag eine rote Schleife. „Die gehört bestimmt Tomke“, vermutete er. Dann mussten alle lachen: Auf der Schleife saß eine winzige Schnecke, die ebenfalls vor dem Regen Schutz suchte.",
+    "icon": "🌧️",
     "reward": {
       "type": "wardrobe",
       "id": "saison-gelbmantel"
@@ -69,8 +69,8 @@ const STORIES=[
   {
     "day": 4,
     "title": "Das Buch mit dem Knisterstern",
-    "story": "📖",
-    "icon": "Bärli entdeckte hinter einem Brett im Baumhaus ein dünnes Buch. Auf dem Einband funkelte ein Stern, und beim Aufschlagen knisterten die Seiten wie trockenes Laub. Maja las vor: „Wer freundlich teilt, findet doppelt so viel Freude.“ Fuji legte seine Pfote auf das Buch, als wollte er zustimmen. „Das behalten wir“, entschied Bärli. Am Abend erzählte er Minka die Geschichte noch einmal, ganz langsam und mit lustigen Stimmen.",
+    "story": "Bärli entdeckte hinter einem Brett im Baumhaus ein dünnes Buch. Auf dem Einband funkelte ein Stern, und beim Aufschlagen knisterten die Seiten wie trockenes Laub. Maja las vor: „Wer freundlich teilt, findet doppelt so viel Freude.“ Fuji legte seine Pfote auf das Buch, als wollte er zustimmen. „Das behalten wir“, entschied Bärli. Am Abend erzählte er Minka die Geschichte noch einmal, ganz langsam und mit lustigen Stimmen.",
+    "icon": "📖",
     "reward": {
       "type": "house",
       "id": "buch-weihnachten"
@@ -89,8 +89,8 @@ const STORIES=[
   {
     "day": 5,
     "title": "Die Wichtelweste",
-    "story": "🧝",
-    "icon": "Unter dem Fenster lag ein winziges Paket mit grünem Papier. Bärli öffnete es vorsichtig. Heraus fiel eine Weste mit goldenen Knöpfen. „Ob die mir passt?“, fragte er. Maja hielt sie an seinen Bauch. Tatsächlich! Als Bärli sich darin drehte, klimperten die Knöpfe leise wie Glöckchen. „Tomke hat gut gemessen“, sagte Maja. Bärli verbeugte sich feierlich und erklärte: „Ich bin heute der freundlichste Wichtel des ganzen Waldes!“",
+    "story": "Unter dem Fenster lag ein winziges Paket mit grünem Papier. Bärli öffnete es vorsichtig. Heraus fiel eine Weste mit goldenen Knöpfen. „Ob die mir passt?“, fragte er. Maja hielt sie an seinen Bauch. Tatsächlich! Als Bärli sich darin drehte, klimperten die Knöpfe leise wie Glöckchen. „Tomke hat gut gemessen“, sagte Maja. Bärli verbeugte sich feierlich und erklärte: „Ich bin heute der freundlichste Wichtel des ganzen Waldes!“",
+    "icon": "🧝",
     "reward": {
       "type": "wardrobe",
       "id": "saison-elfenweste"
@@ -109,8 +109,8 @@ const STORIES=[
   {
     "day": 6,
     "title": "Ein Baum zum Nikolaustag",
-    "story": "🎅",
-    "icon": "Am Nikolausmorgen stand ein kleiner Tannenbaum vor der Baumhaustür. Niemand wusste, wer ihn hingestellt hatte. Bärli schnupperte an den Zweigen. „Er riecht nach Wald und Winter“, sagte er. Maja stellte den Baum sorgfältig in eine Ecke. Fuji schob aus Versehen eine Zapfenkugel davor, und Minka betrachtete den neuen Gast misstrauisch. Dann entschieden alle: Der Baum durfte bleiben. Aber die Lichter sollten sie erst zusammen anbringen.",
+    "story": "Am Nikolausmorgen stand ein kleiner Tannenbaum vor der Baumhaustür. Niemand wusste, wer ihn hingestellt hatte. Bärli schnupperte an den Zweigen. „Er riecht nach Wald und Winter“, sagte er. Maja stellte den Baum sorgfältig in eine Ecke. Fuji schob aus Versehen eine Zapfenkugel davor, und Minka betrachtete den neuen Gast misstrauisch. Dann entschieden alle: Der Baum durfte bleiben. Aber die Lichter sollten sie erst zusammen anbringen.",
+    "icon": "🎅",
     "reward": {
       "type": "house",
       "id": "weihnachtsbaum"
@@ -129,8 +129,8 @@ const STORIES=[
   {
     "day": 7,
     "title": "Das Geheimnis der Schneekugel",
-    "story": "❄️",
-    "icon": "Bärli schüttelte eine Schneekugel. Tausend silberne Punkte wirbelten durch das Glas. „Wie ein richtiger Schneesturm!“, rief er. Maja sah genauer hin und entdeckte ein winziges Haus unter einer weißen Schneedecke. „Vielleicht wohnen dort die Wichtel“, überlegte sie. Bärli stellte die Kugel ans Fenster. Immer wenn er vorbeiging, schüttelte er sie ein kleines bisschen. Und jedes Mal schien die Welt im Glas noch geheimnisvoller zu werden.",
+    "story": "Bärli schüttelte eine Schneekugel. Tausend silberne Punkte wirbelten durch das Glas. „Wie ein richtiger Schneesturm!“, rief er. Maja sah genauer hin und entdeckte ein winziges Haus unter einer weißen Schneedecke. „Vielleicht wohnen dort die Wichtel“, überlegte sie. Bärli stellte die Kugel ans Fenster. Immer wenn er vorbeiging, schüttelte er sie ein kleines bisschen. Und jedes Mal schien die Welt im Glas noch geheimnisvoller zu werden.",
+    "icon": "❄️",
     "reward": {
       "type": "wardrobe",
       "id": "saison-schneekugel"
@@ -149,8 +149,8 @@ const STORIES=[
   {
     "day": 8,
     "title": "Bärlis rasante Nomenfahrt",
-    "story": "🏎️",
-    "icon": "Im Schnee hinter dem Baumhaus hatte Fuji einen kleinen Parcours markiert. Auf jedem Schild stand ein Wort: „Schlitten“, „rennen“, „warm“, „Stern“. Bärli setzte sich in sein Go-Kart. „Ich sammle nur Nomen!“, verkündete er. Bei „Schlitten“ griff er zu, bei „rennen“ fuhr er geschickt vorbei. Maja applaudierte. Am Ende des Parcours lag ein Brief: „Eine neue Runde gehört jetzt dir!“ Bärli strahlte. Lernen konnte wirklich ein Abenteuer sein.",
+    "story": "Im Schnee hinter dem Baumhaus hatte Fuji einen kleinen Parcours markiert. Auf jedem Schild stand ein Wort: „Schlitten“, „rennen“, „warm“, „Stern“. Bärli setzte sich in sein Go-Kart. „Ich sammle nur Nomen!“, verkündete er. Bei „Schlitten“ griff er zu, bei „rennen“ fuhr er geschickt vorbei. Maja applaudierte. Am Ende des Parcours lag ein Brief: „Eine neue Runde gehört jetzt dir!“ Bärli strahlte. Lernen konnte wirklich ein Abenteuer sein.",
+    "icon": "🏎️",
     "reward": {
       "type": "game",
       "id": "kart:4"
@@ -169,8 +169,8 @@ const STORIES=[
   {
     "day": 9,
     "title": "Pfützenspringen im Dezember",
-    "story": "🥾",
-    "icon": "Über Nacht war der Schnee geschmolzen. Auf dem Waldweg lagen riesige Pfützen. Bärli wollte trotzdem zur Wichtelpost. Er sprang über die erste Pfütze, landete in der zweiten und spritzte Fuji nass. „Oh!“, rief Bärli erschrocken. Doch Fuji schüttelte sein Fell und wedelte fröhlich mit dem Schwanz. Maja half Bärli, die nassen Pfoten abzutrocknen. „Für solche Wege brauche ich richtige Gummistiefel“, beschloss er. Jetzt konnte das nächste Abenteuer beginnen.",
+    "story": "Über Nacht war der Schnee geschmolzen. Auf dem Waldweg lagen riesige Pfützen. Bärli wollte trotzdem zur Wichtelpost. Er sprang über die erste Pfütze, landete in der zweiten und spritzte Fuji nass. „Oh!“, rief Bärli erschrocken. Doch Fuji schüttelte sein Fell und wedelte fröhlich mit dem Schwanz. Maja half Bärli, die nassen Pfoten abzutrocknen. „Für solche Wege brauche ich richtige Gummistiefel“, beschloss er. Jetzt konnte das nächste Abenteuer beginnen.",
+    "icon": "🥾",
     "reward": {
       "type": "wardrobe",
       "id": "saison-gummistiefel"
@@ -189,8 +189,8 @@ const STORIES=[
   {
     "day": 10,
     "title": "Die erste Lichterkette",
-    "story": "💡",
-    "icon": "Maja brachte eine Lichterkette ins Baumhaus. „Nicht zu hoch“, mahnte Bärli, der auf seinem Sitzsack saß und die Leiter beobachtete. Fuji reichte die Schnur an, Minka hielt sie für ein Spielzeug. Als endlich alles hing, zählten die Freunde gemeinsam bis drei. Ein warmes Licht leuchtete an der Wand. „Jetzt sieht unser Baumhaus aus wie ein Sternenhimmel“, flüsterte Bärli. Sogar die Wichtelpost glänzte plötzlich golden.",
+    "story": "Maja brachte eine Lichterkette ins Baumhaus. „Nicht zu hoch“, mahnte Bärli, der auf seinem Sitzsack saß und die Leiter beobachtete. Fuji reichte die Schnur an, Minka hielt sie für ein Spielzeug. Als endlich alles hing, zählten die Freunde gemeinsam bis drei. Ein warmes Licht leuchtete an der Wand. „Jetzt sieht unser Baumhaus aus wie ein Sternenhimmel“, flüsterte Bärli. Sogar die Wichtelpost glänzte plötzlich golden.",
+    "icon": "💡",
     "reward": {
       "type": "house",
       "id": "lichterkette"
@@ -209,8 +209,8 @@ const STORIES=[
   {
     "day": 11,
     "title": "Der festliche Schneetanz",
-    "story": "💃",
-    "icon": "Maja fand eine rote Festkleidung in der Wichtelkiste und hielt sie vor Bärli. „Ein Weihnachtskleid!“, sagte sie. „Damit können wir heute eine kleine Theateraufführung machen.“ Bärli zog es vorsichtig an und drehte sich auf dem Teppich. Fuji spielte den Winterwind, Minka den Schneesturm und Maja erzählte die Geschichte. Am Ende verbeugten sie sich alle. Niemand hatte Zuschauer gebraucht, denn zusammen spielen machte schon genug Spaß.",
+    "story": "Maja fand eine rote Festkleidung in der Wichtelkiste und hielt sie vor Bärli. „Ein Weihnachtskleid!“, sagte sie. „Damit können wir heute eine kleine Theateraufführung machen.“ Bärli zog es vorsichtig an und drehte sich auf dem Teppich. Fuji spielte den Winterwind, Minka den Schneesturm und Maja erzählte die Geschichte. Am Ende verbeugten sie sich alle. Niemand hatte Zuschauer gebraucht, denn zusammen spielen machte schon genug Spaß.",
+    "icon": "💃",
     "reward": {
       "type": "wardrobe",
       "id": "saison-weihnachtskleid"
@@ -229,8 +229,8 @@ const STORIES=[
   {
     "day": 12,
     "title": "Das Nachttisch-Rätsel",
-    "story": "🛏️",
-    "icon": "Auf dem Fußboden lag ein Zettel: „Ich bin klein, stehe neben dem Bett und passe auf dein Buch auf.“ Bärli las die Zeilen zweimal. „Ein Bücherregal?“, fragte er. Maja schüttelte den Kopf. „Das steht meistens an der Wand.“ Dann hatte Bärli die Idee. „Ein Nachttisch!“ Genau in diesem Moment klopfte es an der Tür. Vor dem Baumhaus stand ein kleines Paket. Bärli konnte kaum erwarten, es auszupacken und einzurichten.",
+    "story": "Auf dem Fußboden lag ein Zettel: „Ich bin klein, stehe neben dem Bett und passe auf dein Buch auf.“ Bärli las die Zeilen zweimal. „Ein Bücherregal?“, fragte er. Maja schüttelte den Kopf. „Das steht meistens an der Wand.“ Dann hatte Bärli die Idee. „Ein Nachttisch!“ Genau in diesem Moment klopfte es an der Tür. Vor dem Baumhaus stand ein kleines Paket. Bärli konnte kaum erwarten, es auszupacken und einzurichten.",
+    "icon": "🛏️",
     "reward": {
       "type": "house",
       "id": "nachttisch"
@@ -249,8 +249,8 @@ const STORIES=[
   {
     "day": 13,
     "title": "Das Rentier mit der roten Nase",
-    "story": "🦌",
-    "icon": "Im Wald entdeckte Bärli eine Zeichnung von einem Rentier. Es hatte eine leuchtend rote Nase und ein lustiges Geweih. „Das male ich auf meinen Pullover“, sagte er. Maja half beim Zeichnen. Fuji legte seinen Kopf schief und sah zu, wie aus zwei runden Augen und einem Nasenpunkt ein freundliches Tier wurde. „Du siehst darin aus wie ein richtiges Weihnachtsrentier!“, lachte Maja. Bärli war so stolz, dass er sofort ein Foto für die Wichtelpost machen wollte.",
+    "story": "Im Wald entdeckte Bärli eine Zeichnung von einem Rentier. Es hatte eine leuchtend rote Nase und ein lustiges Geweih. „Das male ich auf meinen Pullover“, sagte er. Maja half beim Zeichnen. Fuji legte seinen Kopf schief und sah zu, wie aus zwei runden Augen und einem Nasenpunkt ein freundliches Tier wurde. „Du siehst darin aus wie ein richtiges Weihnachtsrentier!“, lachte Maja. Bärli war so stolz, dass er sofort ein Foto für die Wichtelpost machen wollte.",
+    "icon": "🦌",
     "reward": {
       "type": "wardrobe",
       "id": "saison-rentierpullover"
@@ -269,8 +269,8 @@ const STORIES=[
   {
     "day": 14,
     "title": "Die Decke mit den Sternen",
-    "story": "🌟",
-    "icon": "Am Abend wurde es im Baumhaus kühl. Bärli zog die blaue Decke über die Pfoten und schaute aus dem Fenster. „Heute würde ich am liebsten hier schlafen“, sagte er. Maja entdeckte in der Wichtelkiste eine festliche Bettwäsche. „Damit wird es noch gemütlicher.“ Gemeinsam falteten sie die Decke glatt und legten das Kissen zurecht. Draußen funkelten die ersten Sterne. Bärli gähnte zufrieden. Das Baumhaus fühlte sich immer mehr wie ein echter Lieblingsort an.",
+    "story": "Am Abend wurde es im Baumhaus kühl. Bärli zog die blaue Decke über die Pfoten und schaute aus dem Fenster. „Heute würde ich am liebsten hier schlafen“, sagte er. Maja entdeckte in der Wichtelkiste eine festliche Bettwäsche. „Damit wird es noch gemütlicher.“ Gemeinsam falteten sie die Decke glatt und legten das Kissen zurecht. Draußen funkelten die ersten Sterne. Bärli gähnte zufrieden. Das Baumhaus fühlte sich immer mehr wie ein echter Lieblingsort an.",
+    "icon": "🌟",
     "reward": {
       "type": "house",
       "id": "bettwaesche-weihnachten"
@@ -289,8 +289,8 @@ const STORIES=[
   {
     "day": 15,
     "title": "Die kugelrunde Überraschung",
-    "story": "🔴",
-    "icon": "Minka schlich heimlich um den Tannenbaum. An einem Zweig hing plötzlich etwas Rundes. „Wer hat denn schon geschmückt?“, wunderte sich Bärli. Hinter dem Baum kicherte Maja. Sie hatte eine bunte Christbaumkugel aufgehängt. Die zweite Kugel durfte Bärli aussuchen, die dritte befestigte er ganz unten, damit auch Minka sie sehen konnte. „Jetzt bekommt unser Baum ein richtiges Weihnachtsgesicht“, sagte er. Alle betrachteten die funkelnden Farben.",
+    "story": "Minka schlich heimlich um den Tannenbaum. An einem Zweig hing plötzlich etwas Rundes. „Wer hat denn schon geschmückt?“, wunderte sich Bärli. Hinter dem Baum kicherte Maja. Sie hatte eine bunte Christbaumkugel aufgehängt. Die zweite Kugel durfte Bärli aussuchen, die dritte befestigte er ganz unten, damit auch Minka sie sehen konnte. „Jetzt bekommt unser Baum ein richtiges Weihnachtsgesicht“, sagte er. Alle betrachteten die funkelnden Farben.",
+    "icon": "🔴",
     "reward": {
       "type": "wardrobe",
       "id": "saison-weihnachtskugeln"
@@ -309,8 +309,8 @@ const STORIES=[
   {
     "day": 16,
     "title": "Das Lied der vier Glöckchen",
-    "story": "🎼",
-    "icon": "Aus dem Wald klangen vier helle Glöckchentöne. Bärli lauschte ganz genau: ding, ding, dong, ding. „Ich kann das nachspielen!“, rief er und lief zum Musikspiel. Maja klatschte den Rhythmus, Fuji wippte mit der Pfote und Minka schlug mit dem Schwanz den Takt. Zuerst traf Bärli nur drei Töne. Dann versuchte er es erneut – diesmal langsam. Am Ende erklang die ganze Melodie. „Übung macht den Meister!“, jubelte er.",
+    "story": "Aus dem Wald klangen vier helle Glöckchentöne. Bärli lauschte ganz genau: ding, ding, dong, ding. „Ich kann das nachspielen!“, rief er und lief zum Musikspiel. Maja klatschte den Rhythmus, Fuji wippte mit der Pfote und Minka schlug mit dem Schwanz den Takt. Zuerst traf Bärli nur drei Töne. Dann versuchte er es erneut – diesmal langsam. Am Ende erklang die ganze Melodie. „Übung macht den Meister!“, jubelte er.",
+    "icon": "🎼",
     "reward": {
       "type": "game",
       "id": "melodie:4"
@@ -329,8 +329,8 @@ const STORIES=[
   {
     "day": 17,
     "title": "Das Zimmer voller Sterne",
-    "story": "🎨",
-    "icon": "„Unsere Wand sieht noch ziemlich leer aus“, bemerkte Maja. Bärli wollte zuerst ein riesiges Bild aufhängen. Dann entdeckten die beiden eine Tapete mit kleinen Sternen. „Damit sieht es aus, als würden wir nachts unter dem Himmel schlafen“, sagte Bärli. Sie hielten ein Muster an die Wand und stellten sich das fertige Zimmer vor. Minka sprang auf den Sitzsack, als wollte sie sagen: „Mir gefällt es!“ Schon planten die Freunde ihre nächste Einrichtungsidee.",
+    "story": "„Unsere Wand sieht noch ziemlich leer aus“, bemerkte Maja. Bärli wollte zuerst ein riesiges Bild aufhängen. Dann entdeckten die beiden eine Tapete mit kleinen Sternen. „Damit sieht es aus, als würden wir nachts unter dem Himmel schlafen“, sagte Bärli. Sie hielten ein Muster an die Wand und stellten sich das fertige Zimmer vor. Minka sprang auf den Sitzsack, als wollte sie sagen: „Mir gefällt es!“ Schon planten die Freunde ihre nächste Einrichtungsidee.",
+    "icon": "🎨",
     "reward": {
       "type": "house",
       "id": "waende-sterne"
@@ -349,8 +349,8 @@ const STORIES=[
   {
     "day": 18,
     "title": "Der Schal für den Schneemann",
-    "story": "🧣",
-    "icon": "Im Garten hatte Fuji einen kleinen Schneemann entdeckt. Ihm fehlte ein Schal. Bärli holte seinen grünen Winterschal und wickelte ihn vorsichtig um den Schnee. „Nun frierst du nicht mehr“, sagte er. Maja musste lachen. „Ein Schneemann friert vielleicht nicht wie wir, aber freundlich ist es trotzdem.“ Als die Sonne am Nachmittag herauskam, hängte Bärli den Schal zum Trocknen auf. „Morgen kann ich ihn wieder tragen“, entschied er.",
+    "story": "Im Garten hatte Fuji einen kleinen Schneemann entdeckt. Ihm fehlte ein Schal. Bärli holte seinen grünen Winterschal und wickelte ihn vorsichtig um den Schnee. „Nun frierst du nicht mehr“, sagte er. Maja musste lachen. „Ein Schneemann friert vielleicht nicht wie wir, aber freundlich ist es trotzdem.“ Als die Sonne am Nachmittag herauskam, hängte Bärli den Schal zum Trocknen auf. „Morgen kann ich ihn wieder tragen“, entschied er.",
+    "icon": "🧣",
     "reward": {
       "type": "wardrobe",
       "id": "saison-gruenschal"
@@ -369,8 +369,8 @@ const STORIES=[
   {
     "day": 19,
     "title": "Bärlis Bücherregal",
-    "story": "📚",
-    "icon": "Im Baumhaus stapelten sich inzwischen viele Bücher. Eines lag auf dem Tisch, drei auf dem Boden und ein weiteres neben dem Sitzsack. „Wir brauchen Ordnung“, stellte Bärli fest. Maja zeichnete ein kleines Regal auf Papier. Sie überlegte, wo es stehen könnte, ohne das Fenster zu verdecken. Fuji brachte einen Bleistift, obwohl niemand ihn darum gebeten hatte. Gemeinsam fanden sie einen Platz. „Dann können wir unsere Lieblingsgeschichten schneller wiederfinden“, freute sich Bärli.",
+    "story": "Im Baumhaus stapelten sich inzwischen viele Bücher. Eines lag auf dem Tisch, drei auf dem Boden und ein weiteres neben dem Sitzsack. „Wir brauchen Ordnung“, stellte Bärli fest. Maja zeichnete ein kleines Regal auf Papier. Sie überlegte, wo es stehen könnte, ohne das Fenster zu verdecken. Fuji brachte einen Bleistift, obwohl niemand ihn darum gebeten hatte. Gemeinsam fanden sie einen Platz. „Dann können wir unsere Lieblingsgeschichten schneller wiederfinden“, freute sich Bärli.",
+    "icon": "📚",
     "reward": {
       "type": "house",
       "id": "buecherregal"
@@ -389,8 +389,8 @@ const STORIES=[
   {
     "day": 20,
     "title": "Die verschwundenen Plätzchen",
-    "story": "🍪",
-    "icon": "Auf dem Baumhaustisch stand ein Teller mit Plätzchen. Als Bärli zurückkam, fehlten plötzlich zwei Stück. „Ein Plätzchendieb!“, rief er. Er entdeckte Krümel auf dem Boden und folgte ihnen bis zum Sitzsack. Dort saß Minka – völlig unschuldig natürlich – und spielte mit einem Papierstern. Hinter dem Kissen fand Bärli die zwei Plätzchen wieder. Fuji hatte sie offenbar vor dem herunterfallenden Teller gerettet. Alle teilten sich die Kekse gerecht.",
+    "story": "Auf dem Baumhaustisch stand ein Teller mit Plätzchen. Als Bärli zurückkam, fehlten plötzlich zwei Stück. „Ein Plätzchendieb!“, rief er. Er entdeckte Krümel auf dem Boden und folgte ihnen bis zum Sitzsack. Dort saß Minka – völlig unschuldig natürlich – und spielte mit einem Papierstern. Hinter dem Kissen fand Bärli die zwei Plätzchen wieder. Fuji hatte sie offenbar vor dem herunterfallenden Teller gerettet. Alle teilten sich die Kekse gerecht.",
+    "icon": "🍪",
     "reward": {
       "type": "wardrobe",
       "id": "saison-plaetzchen"
@@ -409,8 +409,8 @@ const STORIES=[
   {
     "day": 21,
     "title": "Weihnachtsgrüße im Radio",
-    "story": "📻",
-    "icon": "Bärli stellte ein kleines Radio auf den Tisch. „Vielleicht hören wir heute Weihnachtsmusik“, hoffte er. Zuerst knisterte es, dann erklang eine fröhliche Stimme. Jemand erzählte von einem Winterfest im Nachbardorf. Maja lauschte gespannt und notierte, wann das Fest beginnen sollte. Fuji wedelte im Takt der Musik, während Minka das Radio neugierig beschnupperte. „So erfahren wir ganz neue Geschichten“, sagte Bärli. Am liebsten hätte er sofort einen eigenen Radiosender gegründet.",
+    "story": "Bärli stellte ein kleines Radio auf den Tisch. „Vielleicht hören wir heute Weihnachtsmusik“, hoffte er. Zuerst knisterte es, dann erklang eine fröhliche Stimme. Jemand erzählte von einem Winterfest im Nachbardorf. Maja lauschte gespannt und notierte, wann das Fest beginnen sollte. Fuji wedelte im Takt der Musik, während Minka das Radio neugierig beschnupperte. „So erfahren wir ganz neue Geschichten“, sagte Bärli. Am liebsten hätte er sofort einen eigenen Radiosender gegründet.",
+    "icon": "📻",
     "reward": {
       "type": "house",
       "id": "radio"
@@ -429,8 +429,8 @@ const STORIES=[
   {
     "day": 22,
     "title": "Der Weg zur Sternenwolke",
-    "story": "☁️",
-    "icon": "Am Morgen lag ein Brief auf Bärlis Laptop. Darin stand: „Finde den Weg zu unserer Sternenwolke.“ Bärli entdeckte ein neues Wolkenwege-Level. Zuerst versuchte er, direkt zur anderen Seite zu laufen. Doch der Weg führte um eine Ecke und über eine kleine Brücke. „Ich muss vorher nachdenken“, sagte er. Maja zeigte auf einen sicheren Pfad. Gemeinsam fanden sie die Lösung. Als Belohnung schimmerte über dem Baumhaus ein heller Stern.",
+    "story": "Am Morgen lag ein Brief auf Bärlis Laptop. Darin stand: „Finde den Weg zu unserer Sternenwolke.“ Bärli entdeckte ein neues Wolkenwege-Level. Zuerst versuchte er, direkt zur anderen Seite zu laufen. Doch der Weg führte um eine Ecke und über eine kleine Brücke. „Ich muss vorher nachdenken“, sagte er. Maja zeigte auf einen sicheren Pfad. Gemeinsam fanden sie die Lösung. Als Belohnung schimmerte über dem Baumhaus ein heller Stern.",
+    "icon": "☁️",
     "reward": {
       "type": "game",
       "id": "wolkenwege:4"
@@ -449,8 +449,8 @@ const STORIES=[
   {
     "day": 23,
     "title": "Die geheimnisvolle Geschenkbox",
-    "story": "🎁",
-    "icon": "Vor dem Baumhaus lag ein Paket, das mit einem roten Band verschnürt war. „Für morgen“, stand auf dem Anhänger. Bärli schüttelte es vorsichtig. Nichts klapperte. Maja lächelte und meinte: „Manche Überraschungen sind besonders schön, wenn man wartet.“ Gemeinsam stellten sie die Box in eine sichere Ecke. Dann malten sie ein kleines Dankeschön für Tomke und Tumetott. „Nur noch eine Nacht“, flüsterte Bärli und schaute sehnsüchtig zum Fenster hinaus.",
+    "story": "Vor dem Baumhaus lag ein Paket, das mit einem roten Band verschnürt war. „Für morgen“, stand auf dem Anhänger. Bärli schüttelte es vorsichtig. Nichts klapperte. Maja lächelte und meinte: „Manche Überraschungen sind besonders schön, wenn man wartet.“ Gemeinsam stellten sie die Box in eine sichere Ecke. Dann malten sie ein kleines Dankeschön für Tomke und Tumetott. „Nur noch eine Nacht“, flüsterte Bärli und schaute sehnsüchtig zum Fenster hinaus.",
+    "icon": "🎁",
     "reward": {
       "type": "house",
       "id": "geschenk"
@@ -469,8 +469,8 @@ const STORIES=[
   {
     "day": 24,
     "title": "Das Licht im Baumhaus",
-    "story": "🕯️",
-    "icon": "Am Weihnachtsabend öffnete Bärli das letzte Türchen. Darin lag ein Brief der beiden Wichtel: „Das schönste Licht entsteht, wenn man Freude teilt.“ Maja, Fuji und Minka kamen ins Baumhaus. Sie setzten sich zusammen, erzählten ihre liebsten Dezembergeschichten und erinnerten sich an den ersten geheimnisvollen Brief. Bärli schaute auf den blauen Sitzsack, den Laptop, den Baum und all die kleinen Schätze. „Das Beste daran“, sagte er, „ist nicht das Einrichten. Das Beste seid ihr.“ Draußen leuchtete ein Stern besonders hell.",
+    "story": "Am Weihnachtsabend öffnete Bärli das letzte Türchen. Darin lag ein Brief der beiden Wichtel: „Das schönste Licht entsteht, wenn man Freude teilt.“ Maja, Fuji und Minka kamen ins Baumhaus. Sie setzten sich zusammen, erzählten ihre liebsten Dezembergeschichten und erinnerten sich an den ersten geheimnisvollen Brief. Bärli schaute auf den blauen Sitzsack, den Laptop, den Baum und all die kleinen Schätze. „Das Beste daran“, sagte er, „ist nicht das Einrichten. Das Beste seid ihr.“ Draußen leuchtete ein Stern besonders hell.",
+    "icon": "🕯️",
     "reward": {
       "type": "house",
       "id": "kamin"
