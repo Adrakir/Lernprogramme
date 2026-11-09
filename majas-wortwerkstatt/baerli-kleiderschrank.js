@@ -29,15 +29,19 @@ const sectionDefs=[
  ['schule','Schulsachen','🎒','Sachen für die Schule.']
 ];
 const clothing=sectionDefs.slice(0,6),extra=sectionDefs.slice(6);
-const slotOf=item=>item.slot||(item.id==='hut'||item.id==='krone'?'huete':item.id==='schal'?'schals':item.group==='spielzeug'?'spielzeug':item.group==='schule'?'schule':'pullover');
+const slotOf=item=>item.slot||({hut:'huete',oberteil:'pullover',hose:'hosen',brille:'brillen',hals:'schals',schuhe:'schuhe',spielzeug:'spielzeug',schule:'schule'}[item.group])||(item.id==='hut'||item.id==='krone'?'huete':item.id==='schal'?'schals':'pullover');
 const descriptor=key=>sectionDefs.find(x=>x[0]===key);
 const htmlEsc=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-if(bearOutfit.kleidung){
- const old=bearItems.find(x=>x.id===bearOutfit.kleidung);
- if(old&&!bearOutfit[slotOf(old)])bearOutfit[slotOf(old)]=old.id;
- delete bearOutfit.kleidung;
- try{localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));}catch{}
+// Preserve equipped items from both older wardrobe implementations.
+let migrationChanged=false;
+for(const legacy of ['kleidung','hut','oberteil','hose','brille','hals','schuhe']){
+ const id=bearOutfit[legacy],old=bearItems.find(x=>x.id===id);
+ if(!old)continue;
+ const target=slotOf(old);
+ if(!bearOutfit[target])bearOutfit[target]=old.id;
+ if(legacy!==target){delete bearOutfit[legacy];migrationChanged=true;}
 }
+if(migrationChanged){try{localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));}catch{}}
 let wardrobeIndex=0;
 function ownedAndWorn(){return bearItems.filter(x=>starOwned('item:'+x.id)&&bearOutfit[slotOf(x)]===x.id);}
 function bearFigure(compact=false){
@@ -100,23 +104,11 @@ showBearWardrobe=function(category='kleidung',message='',index=0){
 };
 const previousShowBear=showBear;
 showBear=function(page){
- if(page==='schrank'){const parts=location.hash.slice(1).split('/');showBearWardrobe(parts[2]||'kleidung');return;}
+ if(page==='schrank'){const parts=location.hash.slice(1).split('/');const aliases={hut:'huete',oberteil:'pullover',hose:'hosen',brille:'brillen',hals:'schals',schuhe:'schuhe',uebersicht:'kleidung',seite2:'extras'};showBearWardrobe(aliases[parts[2]]||parts[2]||'kleidung');return;}
  previousShowBear(page);
 };
-const previousShowHome=showHome;
-showHome=function(){
- previousShowHome();
- const extend=app.querySelector('.maja-quick-topic[href="#verlaengern"] .maja-topic-symbol');
- if(extend){extend.innerHTML='<span class="bw-word-icon" aria-hidden="true"><b>Hund</b><span>↓</span><b>Hunde</b></span>';extend.closest('a')?.querySelector('small')?.replaceChildren('Hund → Hunde');}
- const comic=app.querySelector('.maja-quick-option[href="#comics"] .maja-option-icon');
- if(comic)comic.innerHTML='<svg viewBox="0 0 42 42" class="bw-comic-icon" aria-hidden="true"><rect x="3" y="4" width="36" height="34" rx="4" fill="#fff7ef" stroke="#284d45" stroke-width="2"/><path d="M21 4v34M3 23h36" stroke="#284d45" stroke-width="2"/><circle cx="11" cy="15" r="4" fill="#ebb574"/><circle cx="29" cy="29" r="4" fill="#c68672"/><path d="M24 9h12v8H24l3 4v-4" fill="white" stroke="#284d45" stroke-width="1.5"/></svg>';
- const wardrobe=app.querySelector('.maja-quick-option[href="#baerli/schrank"] .maja-option-icon');
- if(wardrobe)wardrobe.innerHTML='<img class="bw-tile-bear" src="'+imagePath+'" alt="" loading="lazy">';
- const menu=app.querySelector('.maja-quick-options');
- if(menu&&!menu.querySelector('[href="./bilderbuecher/"]')){
-   menu.insertAdjacentHTML('beforeend','<a href="./bilderbuecher/" class="maja-quick-option bw-books-tile"><span class="maja-option-icon" aria-hidden="true">📚</span><span><strong>Bärlibuch</strong><small>Bilderbücher anschauen</small></span></a>');
- }
-};
+// The home page is now rendered directly in index.html; do not overwrite its picture cards.
+// The Bilderbuch route is linked there. Only the separate comic hub gets its existing banner.
 const previousShowComicHub=showComicHub;
 showComicHub=function(){
  previousShowComicHub();
