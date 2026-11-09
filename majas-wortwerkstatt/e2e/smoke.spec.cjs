@@ -5,11 +5,15 @@ async function load(page,hash){
   await page.goto(route(hash),{waitUntil:'domcontentloaded'});
   await expect(page.locator('#app h1').first()).toBeVisible();
 }
-test('Start → Lernen und Abenteuer: getrennte, sichtbare Modi',async ({page})=>{
+test('Vertraute Übersicht mit drei Lernthemen und vier bebilderten Angeboten',async ({page})=>{
   await load(page);
-  await expect(page.getByRole('link',{name:/Deutsch lernen/i}).first()).toBeVisible();
-  await expect(page.getByRole('link',{name:/Abenteuer erleben/i}).first()).toBeVisible();
-  await page.getByRole('link',{name:/Deutsch lernen/i}).first().click();
+  await expect(page.getByRole('heading',{name:'Fit für den Kombitest'})).toBeVisible();
+  await expect(page.locator('.maja-classic-home .maja-quick-topic')).toHaveCount(3);
+  await expect(page.locator('.maja-classic-home .maja-quick-option')).toHaveCount(4);
+  await expect(page.locator('.maja-classic-home .maja-option-photo img')).toHaveCount(4);
+  await expect(page.getByRole('link',{name:/Teste dich/})).toBeVisible();
+  await expect(page.getByRole('link',{name:/Alle weiteren Lernthemen/})).toBeVisible();
+  await page.getByRole('link',{name:/Mein Lernmodus/}).click();
   await expect(page).toHaveURL(/#lernen$/);
   await expect(page.getByRole('heading',{name:'Was möchtest du üben?'})).toBeVisible();
   await expect(page.locator('.maja-journey-card')).toHaveCount(4);
