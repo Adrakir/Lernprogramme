@@ -35,6 +35,12 @@
 - Die verbindlichen manuellen Prüfschritte stehen in [QA_CHECKLIST.md](./QA_CHECKLIST.md).
 - Bei mehreren bearbeitenden KI-Assistenten immer Dateiversion/SHA unmittelbar vor dem Schreiben erneut lesen und bei Konflikt nicht ungeprüft überschreiben.
 
+## Adventskalender – zusätzliche Runtime (November 2026)
+- Adventmodul `baerli-advent.js` wird **nach** `baerli-kleiderschrank.js` geladen, weil es die fertig ergänzten Artikel per `bearItems` referenziert. `baerli-baumhaus.js` wird zuvor geladen und exportiert `window.MajaTreehouse.gift(id)`. Reihenfolge und `#advent`-Route im Haupt-`render()` bewahren; bei Direktstart vor Laden des letzten Scripts rendert das Adventmodul die eigene Initialseite.
+- Adventdatum nach lokaler Gerätezeit in Dezember; kein vorzeitiges Ausgeben über reine URL. Geschenke als kostenlose Einträge in **vorhandenem** Sternenbeutel/Baumhauskatalog, keine neue zusätzliche Preiswährung. Baumhaus-Levelbedingung und gespeicherte Lernstände nicht umgehen.
+- Neue Speicherkennung `majas-wortwerkstatt-advent-v1`, wird vom bestehenden Präfix-Backup erfasst. Bei Änderungen an Datums-/Geschenkschema `ADVENT_KONZEPT.md`, `advent.test.cjs`, `e2e/advent.spec.cjs` aktualisieren; echte Safari-/Audioabnahme separat dokumentieren.
+- Die vier 2×3-Handy-Kalenderseiten sind Absicht: **kein 24er-Raster auf einer Scrollseite** und **keine Änderung der vertrauten 3+4-Startübersicht**.
+
 ## Neues Baumhaus und Saison-Schrank (November 2026)
 - **Routen:** `#baumhaus`, `#baumhaus/shop`, `#baumhaus/shop/<kategorie>`; `#baerli/schrank/saison`, `#baerli/schrank/regen`, `#baerli/schrank/weihnachten`. Kein zweites Hash-Routing aufbauen. `window.MajaTreehouse.render` gehört zur Haupt-`render()`-Route und muss vor dem großen Inline-Skript geladen werden.
 - **Dateien:** `baerli-baumhaus.js/.css` für Zimmer, Shop, Prüfungs-Taler und Ausstattung, `baerli-saison.js` für 39 Saisonartikel, `baerli-kleiderschrank.js` für die bisherigen und saisonalen Anproben. Neue Artikel nie durch Änderung alter IDs ersetzen.
