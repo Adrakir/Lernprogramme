@@ -30,7 +30,7 @@ assert(html.includes('<script src="./baerli-neue-sachen.js?v=20261109a"></script
 assert(html.indexOf('src="./baerli-neue-sachen.js')<html.indexOf('src="./baerli-kleiderschrank.js'),'Inventar vor UI laden');
 assert(css.includes('.bw-set-try'),'Outfit-Layout');
 assert(cache.includes("  './baerli-neue-sachen.js',"),'Offline-Cache enthält Inventar');
-assert(wardrobe.includes("additions.push(...newWardrobePieces,...(window.MajaBaerliNeueSachen||[]))"),'Inventar ist eingebunden');
+assert(wardrobe.includes('...(window.MajaBaerliNeueSachen||[])')&&wardrobe.includes('...(window.MajaBaerliSaison||[])'),'Altes und saisonales Inventar sind eingebunden');
 assert(wardrobe.includes("const previewSlots=new Set(previews.map(slotOf))"),'Anprobe ersetzt genau einen Platz');
 assert(wardrobe.includes("const outfitIdeas=["),'Outfit-Vorschläge');
 assert(wardrobe.includes("bearOutfit[slotOf(item)]=item.id"),'gespeicherte Ausrüstung je Fach');
@@ -43,4 +43,18 @@ const allSets=[...wardrobe.matchAll(/ids:\[([^\]]+)\]/g)].flatMap(m=>[...m[1].ma
 const earlier=[...wardrobe.matchAll(/id:'([^']+)',title:/g)].map(x=>x[1]);
 for(const item of earlier)itemNames.add(item);
 for(const id of allSets)assert(itemNames.has(id),'Outfit verweist auf vorhandenen Artikel: '+id);
-console.log('PASS: 38 neue Artikel, 9 Fächer, Inventar/Ladefolge, freie Anprobe, Sets und Bestandsdaten.');
+const saison=fs.readFileSync(path.join(root,'baerli-saison.js'),'utf8');
+new vm.Script(saison);
+const seasonal={window:{}};
+vm.runInNewContext(saison,seasonal);
+const holiday=seasonal.window.MajaBaerliSaison;
+assert.equal(holiday.length,32,'32 saisonale Kleidungsstücke und Utensilien');
+assert.equal(holiday.filter(x=>x.season==='regen').length,8);
+assert.equal(holiday.filter(x=>x.season==='weihnachten').length,24);
+assert.equal(new Set(holiday.map(x=>x.id)).size,32);
+assert(holiday.some(x=>x.id==='saison-weihnachtsmuetze'));
+assert(holiday.some(x=>x.id==='saison-tannenbaum'));
+assert(wardrobe.includes('const inSection='),'Regensachen und Weihnachten als eigene Bereiche');
+assert(html.includes('src="./baerli-saison.js'),'Saisonkatalog lädt vor Schrank');
+assert(html.indexOf('src="./baerli-saison.js')<html.indexOf('src="./baerli-kleiderschrank.js'));
+console.log('PASS: 38 alte und 32 saisonale Artikel, 11 Fächer, Regen- und Weihnachtsgruppen, Bestandsdaten.');
