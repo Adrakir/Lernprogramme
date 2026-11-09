@@ -2,60 +2,188 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#174b43">
-<meta name="description" content="Zwei illustrierte Bilderbücher: Maja und Bärli finden einen Schatz im Zoo und Maja und Bärli machen Fernsehen. Bärliverlag Osnabrück.">
-<title>Majas Bilderbücher · Bärliverlag Osnabrück</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f8f1df">
+<meta name="description" content="Bärlis Bilderbuch-Regal: Maja und Bärli erleben bebilderte Abenteuer. Seite für Seite blättern, ohne endloses Scrollen.">
+<title>Bärlibuch – Maja und Bärlis Bilderbuch-Regal</title>
 <style>
-:root{color-scheme:light;--ink:#193b37;--muted:#506861;--forest:#165c4b;--paper:#fffcf5;--line:#d5dfd6}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(165deg,#e9f5ee,#fdf7eb 48%,#f4eaf3);font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
-main{max-width:980px;padding:22px 18px 48px;margin:auto}
-.back{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--forest);font-weight:750;text-decoration:none}
-.hero{text-align:center;max-width:740px;margin:20px auto 27px}.eyebrow{font-size:.81rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#446d63}
-h1{font-size:clamp(2rem,6vw,3.3rem);line-height:1.08;margin:10px 0 14px}h1 span{color:#206a58}.hero p{max-width:640px;margin:0 auto;color:var(--muted)}
-.books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.book{min-width:0;border:1px solid var(--line);border-radius:22px;background:var(--paper);overflow:hidden;box-shadow:0 9px 25px #25443316}
-.cover{min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding:23px;text-align:center;isolation:isolate;gap:8px}
-.cover.zoo{background:linear-gradient(140deg,#245d49,#568d63 58%,#c9dbaa);color:white}
-.cover.tv{background:linear-gradient(145deg,#57366f,#9975ad 57%,#e2cde7);color:white}
-.cover::before{content:"";position:absolute;inset:12px;border:2px solid #ffffff55;border-radius:14px;z-index:-1}
-.cover img{width:100px;height:100px;object-fit:contain;filter:drop-shadow(0 9px 7px #0003)}
-.cover .emoji{font-size:2.8rem;line-height:1}
-.cover strong{font-size:clamp(1.15rem,2.5vw,1.55rem);line-height:1.2;max-width:310px}
-.cover small{font-size:.82rem;opacity:.93}
-.details{padding:20px 22px 23px;display:flex;flex-direction:column;gap:10px}
-.details p{margin:0;color:var(--muted);min-height:72px}
-.meta{font-size:.87rem;font-weight:750;color:#445e58}
-.button{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--forest);color:white;padding:13px 18px;min-height:50px;border-radius:12px;font-weight:800;text-decoration:none}
-.button:hover,.button:focus-visible{background:#0b4939}.button:focus-visible,.back:focus-visible{outline:3px solid #ebae43;outline-offset:3px}
-.note{margin:22px auto 0;max-width:780px;border:1px solid #c5d8cd;background:#ffffffb5;border-radius:15px;padding:17px 18px}.note p{margin:0 0 7px}.note p:last-child{margin-bottom:0}
-footer{text-align:center;color:#537067;margin-top:32px;font-size:.86rem}
-@media(max-width:680px){main{padding:12px 14px 34px}.hero{margin:14px auto 22px}.books{grid-template-columns:1fr;gap:16px}.cover{min-height:195px;padding:20px}.cover img{width:85px;height:85px}.details{padding:17px}.details p{min-height:0}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+:root{color-scheme:light;--ink:#25423a;--green:#185b4a;--cream:#fff8e9;--line:#cfd8cb;--muted:#536961;--gold:#edc76c}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:16px/1.45 "Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:#fcf8ee}
+button,a{font:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid #bd6b29;outline-offset:3px}
+a{color:var(--green)}[hidden]{display:none!important}
+main{max-width:930px;margin:auto;padding:16px 15px 40px}
+.top{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.back{display:inline-flex;align-items:center;gap:7px;min-height:44px;text-decoration:none;font-weight:800}
+.brand{font-size:.83rem;font-weight:850;letter-spacing:.07em;color:#6a5530;text-transform:uppercase}
+.hero{text-align:center;margin:15px 0 21px}
+.hero img{height:138px;width:138px;border-radius:25px;object-fit:cover;object-position:center 22%;box-shadow:0 7px 16px #584a281f}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.08;margin:12px 0 6px}
+.hero p{color:var(--muted);margin:0 auto;max-width:630px}
+.shelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.book{border:1px solid var(--line);background:white;min-width:0;overflow:hidden;border-radius:22px;box-shadow:0 8px 22px #1d352012;display:flex;flex-direction:column}
+.book-cover{padding:16px 16px 20px;min-height:178px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+.book-cover::before{content:"";position:absolute;inset:10px;border:2px solid #ffffff9f;border-radius:13px}
+.book-cover.zoo{background:linear-gradient(135deg,#bbdac3,#4c8d69);color:#193d32}
+.book-cover.tv{background:linear-gradient(135deg,#d8c7e4,#ae87ce);color:#493262}
+.book-cover.christmas{background:linear-gradient(135deg,#e8edcd,#a8bd8c);color:#354c2e}
+.book-cover.nikolaus{background:linear-gradient(135deg,#f2d8d1,#c88479);color:#713f37}
+.book-cover .cover-art{font-size:3.2rem;line-height:1.1;z-index:1}
+.book-cover strong{font-size:1.2rem;max-width:290px;z-index:1;line-height:1.2}
+.book-bottom{display:flex;flex:1;flex-direction:column;padding:15px 16px;gap:9px}
+.book-bottom p{margin:0;color:var(--muted);font-size:.93rem;flex:1}
+.book-bottom .meta{font-weight:800;color:#52665e;font-size:.81rem}
+.open-book,.disabled-book{display:flex;align-items:center;justify-content:center;border:0;border-radius:14px;text-decoration:none;min-height:47px;background:var(--green);color:#fff;font-weight:850;width:100%;padding:9px 12px}
+.disabled-book{background:#eee9dc;color:#5f675d}
+.hint{color:var(--muted);font-size:.83rem;text-align:center;margin:18px auto;max-width:650px}
+.reader-shell{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+.reader-shell main{width:100%;flex:1;min-height:0;max-width:none;padding:6px 12px 10px;display:flex;flex-direction:column}
+.reader-bar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;min-height:47px}
+.reader-bar h1{text-align:center;font-size:clamp(1.05rem,3vw,1.4rem);line-height:1.15;margin:0}
+.reader-bar .back{font-size:.89rem}
+.reader-stage{flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f0eadd;border:1px solid #e0d2bb;border-radius:14px;padding:7px;position:relative}
+.reader-stage canvas{display:block;max-width:100%;max-height:100%;box-shadow:0 5px 20px #0002}
+.reader-stage .loading{font-weight:700;text-align:center;padding:12px}
+.reader-controls{padding:10px 0 5px;display:grid;align-items:center;grid-template-columns:1fr auto 1fr;gap:7px}
+.reader-controls button{min-height:49px;padding:10px 12px;background:#e2efe6;border:2px solid #8ab1a1;border-radius:13px;font-weight:850;color:#174b3c}
+.reader-controls button:disabled{opacity:.36;cursor:default}
+.reader-controls span{font-weight:850;text-align:center;white-space:nowrap}
+.reader-actions{display:flex;gap:10px;align-items:center;justify-content:center;font-size:.78rem;min-height:32px}
+.reader-actions button{border:none;background:transparent;text-decoration:underline;color:var(--green);padding:6px;font-weight:700}
+.reader-error{padding:16px;background:#fff7ed;border:1px solid #e6c5b2;border-radius:12px;max-width:430px;text-align:center}
+@media(min-width:800px){.hero img{height:160px;width:160px}.book-cover{min-height:220px}}
+@media(max-width:580px){
+ main{padding:8px 12px 30px}.top{gap:6px}
+ .shelf{grid-template-columns:1fr;gap:12px}.book{display:grid;grid-template-columns:40% 60%;min-height:180px}
+ .book-cover{min-height:183px;padding:12px 10px}.book-cover .cover-art{font-size:2.8rem}
+ .book-cover strong{font-size:.96rem}.book-bottom{padding:12px;gap:6px}
+ .book-bottom p{font-size:.82rem}.book-bottom .meta{font-size:.75rem}
+ .open-book,.disabled-book{min-height:44px;font-size:.9rem}
+ .hero{margin:4px 0 13px}.hero img{height:94px;width:94px}.hero h1{font-size:1.95rem;margin:5px 0}
+ .hero p{font-size:.91rem}
+ .reader-bar{grid-template-columns:auto minmax(0,1fr) auto}
+ .reader-bar h1{font-size:1rem}.reader-bar .back{font-size:.79rem}
+ .reader-controls{padding-top:6px}.reader-controls button{padding:6px;min-height:46px;font-size:.85rem}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<main>
-<a class="back" href="../#comics" aria-label="Zurück zu Majas Comics">‹ Zurück zu Majas Comics</a>
-<header class="hero"><div class="eyebrow">Bärliverlag Osnabrück</div><h1>Majas <span>Bilderbücher</span></h1>
-<p>Zwei Abenteuer mit Maja und Bärli. Wähle ein Buch aus, öffne die PDF und blättere Seite für Seite – auch auf dem Handy oder iPad.</p></header>
-<section class="books" aria-label="Zwei Kinderbücher">
-<article class="book">
-<div class="cover zoo"><span class="emoji" aria-hidden="true">🐘🗺️</span><img src="../baerli/baerli.webp" alt="Bärli, der braune Teddybär" loading="lazy">
-<strong>Maja und Bärli finden einen Schatz im Zoo</strong><small>Ein geheimnisvolles Zoo-Abenteuer</small></div>
-<div class="details"><span class="meta">11 Seiten · illustriertes Bilderbuch · PDF</span>
-<p>Eine alte Eintrittskarte enthält eine rätselhafte Zeichnung. Maja und Bärli folgen den Hinweisen durch den Zoo.</p>
-<a class="button" href="./maja-baerli-schatz-im-zoo.pdf" target="_blank" rel="noopener noreferrer" aria-label="Maja und Bärli finden einen Schatz im Zoo als PDF öffnen">Bilderbuch öffnen <span aria-hidden="true">↗</span></a></div>
-</article>
-<article class="book">
-<div class="cover tv"><span class="emoji" aria-hidden="true">📺⭐</span><img src="../baerli/baerli.webp" alt="Bärli, der braune Teddybär" loading="lazy">
-<strong>Maja und Bärli machen Fernsehen</strong><small>Eine selbst erfundene Fernsehshow</small></div>
-<div class="details"><span class="meta">18 Seiten · illustriertes Bilderbuch · PDF</span>
-<p>Die Medienzeit ist abgelaufen. Maja und Bärli bauen einen Kartonfernseher und sind selbst die Stars ihres Programms.</p>
-<a class="button" href="./maja-baerli-machen-fernsehen.pdf" target="_blank" rel="noopener noreferrer" aria-label="Maja und Bärli machen Fernsehen als PDF öffnen">Bilderbuch öffnen <span aria-hidden="true">↗</span></a></div>
-</article>
-</section>
-<aside class="note"><p><strong>Auf dem iPhone:</strong> Tippe auf „Bilderbuch öffnen“. In der PDF-Ansicht kannst du über <em>Teilen</em> die Datei in „Dateien“ oder „Bücher“ sichern.</p>
-<p>Beide Bücher sind öffentlich zugänglich; eine ChatGPT-Anmeldung ist nicht nötig.</p></aside>
-<footer>© Bärliverlag Osnabrück · Maja und Bärli</footer>
-</main></body></html>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+<script defer>
+(function(){
+'use strict';
+const books=[
+ {id:'zoo',title:'Maja und Bärli finden einen Schatz im Zoo',description:'Eine alte Eintrittskarte mit einer geheimnisvollen Zeichnung führt die beiden auf eine Schatzsuche durch den Zoo.',meta:'11 Seiten · Bilderbuch',art:'🦒🗺️',pdf:'./maja-baerli-schatz-im-zoo.pdf',klass:'zoo'},
+ {id:'fernsehen',title:'Maja und Bärli machen Fernsehen',description:'Die Medienzeit ist vorbei. Maja und Bärli erfinden eine eigene Fernsehshow und werden selbst zu Stars.',meta:'18 Seiten · Bilderbuch',art:'📺⭐',pdf:'./maja-baerli-machen-fernsehen.pdf',klass:'tv'}
+];
+const upcoming=[
+ {title:'Maja und Bärli backen Weihnachtskekse',description:'Für die Wichtel Tomke und Tumetott.',art:'🍪🎄',klass:'christmas'},
+ {title:'Maja und Bärli helfen dem Nikolaus',description:'Ein winterliches Abenteuer und Geschenke für Majas Geschwister.',art:'🎅🎁',klass:'nikolaus'}
+];
+const root=document.querySelector('#root');
+let book=null,pdf=null,current=1,renderTicket=0,voice=null;
+const speakStop=()=>{if('speechSynthesis' in window)window.speechSynthesis.cancel();voice=null;};
+const esc=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+function getBook(){return books.find(x=>x.id===new URLSearchParams(location.search).get('buch'))||null;}
+function openBook(id){
+ const u=new URL(location.href);u.searchParams.set('buch',id);
+ history.pushState({},'',u);draw();
+}
+function goHome(){
+ const u=new URL(location.href);u.searchParams.delete('buch');
+ history.pushState({},'',u);draw();
+}
+function shelf(){
+ document.body.className='';
+ root.innerHTML='<main><div class="top"><a class="back" href="../#comics">← Majas Deutschapp</a><span class="brand">Bärliverlag Osnabrück</span></div>'
+ +'<header class="hero"><img src="../baerli/baerli.webp" alt="Bärli, der braune Teddybär mit gelbem Ohrfähnchen"><h1>📚 Bärlibuch</h1><p>Wähle ein Bilderbuch aus. Du kannst dann <strong>Seite für Seite</strong> blättern – ganz ohne langes Scrollen.</p></header>'
+ +'<section class="shelf" aria-label="Bärlis Bücherregal">'
+ +books.map(b=>'<article class="book"><div class="book-cover '+b.klass+'"><span class="cover-art" aria-hidden="true">'+b.art+'</span><strong>'+esc(b.title)+'</strong></div><div class="book-bottom"><span class="meta">'+esc(b.meta)+'</span><p>'+esc(b.description)+'</p><button class="open-book" data-book="'+b.id+'">📖 Buch lesen →</button></div></article>').join('')
+ +upcoming.map(b=>'<article class="book"><div class="book-cover '+b.klass+'"><span class="cover-art" aria-hidden="true">'+b.art+'</span><strong>'+esc(b.title)+'</strong></div><div class="book-bottom"><span class="meta">Originalbuch noch nicht online</span><p>'+esc(b.description)+'</p><span class="disabled-book">Wird noch eingepflegt</span></div></article>').join('')
+ +'</section><p class="hint">Bei den beiden ersten Büchern ist das Original-PDF eingebunden. Weitere bereits erstellte Bilderbücher werden erst als lesbar angezeigt, sobald ihre Originaldateien online liegen.</p></main>';
+ root.querySelectorAll('[data-book]').forEach(button=>button.onclick=()=>openBook(button.dataset.book));
+}
+function reader(b){
+ document.body.className='reader-shell';
+ root.innerHTML='<main><header class="reader-bar"><a class="back" href="./" id="shelf-back">← Regal</a><h1>'+esc(b.title)+'</h1><a href="'+b.pdf+'" target="_blank" rel="noopener" aria-label="Original-PDF öffnen">PDF</a></header>'
+ +'<section class="reader-stage" id="page-stage" aria-live="polite"><div class="loading" id="page-loading">Bilderbuch wird geöffnet …</div><canvas id="page-canvas" hidden role="img" aria-label="Buchseite"></canvas></section>'
+ +'<nav class="reader-controls" aria-label="Buchseiten"><button id="prev-page" disabled>← Zurück</button><span id="page-number">Seite 1</span><button id="next-page" disabled>Weiter →</button></nav>'
+ +'<footer class="reader-actions"><button type="button" id="speak-page">🔊 Vorlesen</button><button type="button" id="stop-reading">◼ Ton stoppen</button><a href="'+b.pdf+'" target="_blank" rel="noopener">Original-PDF</a></footer></main>';
+ root.querySelector('#shelf-back').onclick=e=>{e.preventDefault();goHome();};
+ root.querySelector('#prev-page').onclick=()=>setPage(current-1);
+ root.querySelector('#next-page').onclick=()=>setPage(current+1);
+ root.querySelector('#speak-page').onclick=readPage;
+ root.querySelector('#stop-reading').onclick=speakStop;
+ startPDF(b);
+}
+async function startPDF(b){
+ const token=++renderTicket;
+ if(!window.pdfjsLib){showError(b,'Die Buchansicht konnte nicht geladen werden.');return;}
+ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ try{
+  pdf=await window.pdfjsLib.getDocument({url:b.pdf,withCredentials:false}).promise;
+  if(token!==renderTicket)return;
+  current=1;await drawPage(token);
+ }catch(e){if(token===renderTicket)showError(b,'Das Buch konnte nicht geladen werden.');}
+}
+function showError(b,message){
+ const stage=root.querySelector('#page-stage');if(!stage)return;
+ stage.innerHTML='<div class="reader-error"><p>'+esc(message)+'</p><p><a class="open-book" href="'+b.pdf+'" target="_blank" rel="noopener">Original-PDF öffnen</a></p></div>';
+ root.querySelector('#page-number').textContent='PDF öffnen';
+}
+function setPage(n){
+ if(!pdf||n<1||n>pdf.numPages)return;
+ speakStop();current=n;drawPage(renderTicket);
+}
+async function drawPage(token){
+ if(!pdf||token!==renderTicket)return;
+ const number=current;
+ const stage=root.querySelector('#page-stage'),canvas=root.querySelector('#page-canvas'),loading=root.querySelector('#page-loading');
+ if(!stage||!canvas)return;
+ loading.hidden=false;loading.textContent='Seite '+number+' wird geladen …';
+ canvas.hidden=true;
+ try{
+  const page=await pdf.getPage(number);
+  if(token!==renderTicket||current!==number)return;
+  const natural=page.getViewport({scale:1});
+  const sizeWidth=Math.max(150,stage.clientWidth-18),sizeHeight=Math.max(170,stage.clientHeight-18);
+  const scale=Math.min(sizeWidth/natural.width,sizeHeight/natural.height,2.5);
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const view=page.getViewport({scale:scale*dpr});
+  canvas.width=Math.round(view.width);canvas.height=Math.round(view.height);
+  canvas.style.width=Math.round(view.width/dpr)+'px';canvas.style.height=Math.round(view.height/dpr)+'px';
+  const task=page.render({canvasContext:canvas.getContext('2d'),viewport:view});
+  await task.promise;
+  if(token!==renderTicket||current!==number)return;
+  canvas.hidden=false;loading.hidden=true;canvas.setAttribute('aria-label','Seite '+number+' von '+pdf.numPages);
+  root.querySelector('#page-number').textContent='Seite '+number+' / '+pdf.numPages;
+  root.querySelector('#prev-page').disabled=number===1;
+  root.querySelector('#next-page').disabled=number===pdf.numPages;
+ }catch(err){if(token===renderTicket)showError(book,'Diese Seite konnte nicht dargestellt werden.');}
+}
+async function readPage(){
+ speakStop();
+ if(!pdf||!('speechSynthesis' in window))return;
+ try{
+  const page=await pdf.getPage(current),content=await page.getTextContent();
+  const text=content.items.map(x=>x.str||'').join(' ').replace(/\s+/g,' ').trim();
+  if(!text){root.querySelector('#page-number').textContent='Hier ist kein Vorlesetext vorhanden.';return;}
+  voice=new SpeechSynthesisUtterance(text);
+  voice.lang='de-DE';voice.rate=.84;voice.pitch=1.1;
+  window.speechSynthesis.speak(voice);
+ }catch(e){}
+}
+function draw(){
+ speakStop();renderTicket++;pdf=null;current=1;
+ book=getBook();
+ if(book)reader(book);else shelf();
+}
+window.addEventListener('popstate',draw);
+window.addEventListener('resize',()=>{if(book&&pdf)drawPage(renderTicket);});
+draw();
+})();
+</script>
+</body>
+</html>
