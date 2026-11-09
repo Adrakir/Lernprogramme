@@ -1,0 +1,46 @@
+
+/* Chemie 8.1 – die vollständige Werkstatt wieder sichtbar machen. */
+#page-home .lu-hub{margin:8px 0 15px;padding:18px 21px}
+#page-home .lu-hub h1{font-size:clamp(26px,3vw,36px)}
+#page-home .lu-entry{margin-top:12px;gap:10px}
+#page-home .lu-entry button{min-height:91px;padding:14px}
+#page-home .lu-entry strong{font-size:18px}
+#page-home .lu-entry small{margin-top:5px;font-size:13px}
+#page-home .lu-recommend{padding:11px 14px;margin-top:12px}
+#page-home .chem-directory{padding:16px 18px;margin-top:14px}
+#page-home .chem-directory>h2{font-size:clamp(22px,2.6vw,30px);margin:4px 0 5px}
+#page-home .chem-directory-lead{margin:0 0 14px;line-height:1.5;color:var(--muted)}
+#page-home .chem-directory .hero{padding:18px 20px;min-height:unset;border-radius:17px}
+#page-home .chem-directory .hero h1{font-size:clamp(22px,3vw,31px);margin:3px 0}
+#page-home .chem-directory .hero p{font-size:14px;line-height:1.45;margin:5px 0}
+#page-home .chem-directory .hero-art{width:112px}
+#page-home .chem-directory .hero-actions{margin-top:10px}
+#page-home .chem-directory .hero-actions .btn{padding:7px 10px}
+#page-home .chem-directory-heading{margin:15px 0 10px;align-items:center}
+#page-home .chem-directory-heading h3{font-size:20px;margin:0}
+#page-home .chem-dir-filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+#page-home .chem-dir-filter{display:flex;align-items:center;gap:9px;min-width:0;min-height:64px;padding:10px 11px;border:2px solid var(--line);border-radius:15px;background:var(--paper);color:var(--ink);text-align:left;font:inherit;cursor:pointer}
+#page-home .chem-dir-filter .chem-filter-emoji{font-size:26px;flex:none}
+#page-home .chem-dir-filter strong{display:block;font-size:14px;line-height:1.3}
+#page-home .chem-dir-filter small{display:block;font-size:11px;color:var(--muted);line-height:1.3;margin-top:3px}
+#page-home .chem-dir-filter[aria-pressed="true"]{background:var(--teal2);border-color:var(--teal);color:var(--ink);box-shadow:0 0 0 1px var(--teal)}
+#page-home .chem-dir-filter:focus-visible,.chem-card:focus-visible{outline:3px solid #d38b24;outline-offset:3px}
+#page-home .chem-dir-status{color:var(--muted);font-size:13px;font-weight:700;margin:4px 0 12px}
+#page-home .chem-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+#page-home .chem-card{--chem-illustration-bg:#e3f5f1;--chem-illustration-ink:#086c75;display:flex;flex-direction:column;align-items:stretch;gap:0;min-height:247px;text-align:left;padding:13px;border:1px solid var(--line);border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 3px 12px #153d4810;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+#page-home .chem-card[data-chem-category="experiments"]{--chem-illustration-bg:#e7efff;--chem-illustration-ink:#305eb2}
+#page-home .chem-card[data-chem-category="games"]{--chem-illustration-bg:#fef0db;--chem-illustration-ink:#a95d1b}
+#page-home .chem-card[data-chem-category="tests"]{--chem-illustration-bg:#ede7ff;--chem-illustration-ink:#7655b0}
+#page-home .chem-card:hover{transform:translateY(-2px);border-color:var(--teal);box-shadow:0 9px 18px #153d4820}
+#page-home .chem-card-art{height:93px;border-radius:13px;background:var(--chem-illustration-bg);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-bottom:10px}
+#page-home .chem-card-art:before{content:"";position:absolute;width:100px;height:100px;border:1px solid #ffffffc0;border-radius:50%;top:-45px;right:-20px;box-shadow:0 0 0 20px #ffffff3a,0 0 0 45px #ffffff1e}
+#page-home .chem-card-art svg{position:relative;width:133px;height:86px;max-width:90%}
+#page-home .chem-card-label{font-size:10px;font-weight:850;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+#page-home .chem-card-title{display:block;font-size:17px;line-height:1.2;margin:5px 0 6px;letter-spacing:-.01em}
+#page-home .chem-card-desc{display:block;color:var(--muted);font-size:13px;line-height:1.42;flex:1}
+#page-home .chem-card-action{display:block;margin-top:10px;color:var(--teal);font-size:13px;font-weight:800}
+#page-home .chem-card-check{font-weight:900;color:var(--good);margin-left:6px}
+#page-home .chem-dir-footer{font-size:13px;margin-top:12px;color:var(--muted)}
+@media(max-width:1080px){#page-home .chem-dir-filters{grid-template-columns:repeat(2,minmax(0,1fr))}#page-home .chem-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){#page-home .chem-directory{padding:12px}#page-home .chem-dir-filters{gap:7px}#page-home .chem-dir-filter{padding:8px;min-height:61px;gap:6px}#page-home .chem-dir-filter .chem-filter-emoji{font-size:23px}#page-home .chem-dir-filter strong{font-size:12px}#page-home .chem-card-grid{gap:8px}#page-home .chem-card{padding:9px;min-height:221px}#page-home .chem-card-art{height:74px}#page-home .chem-card-art svg{height:72px}#page-home .chem-card-title{font-size:15px}#page-home .chem-card-desc{font-size:11.5px;line-height:1.35}#page-home .chem-directory .hero-art{display:none}#page-home .chem-directory .hero{padding:15px}#page-home .lu-entry{grid-template-columns:1fr}#page-home .lu-entry button{min-height:56px;padding:10px}}
+@media print{#page-home .chem-dir-filters,.chem-card-action{display:none}#page-home .chem-card{break-inside:avoid;box-shadow:none;min-height:0}}

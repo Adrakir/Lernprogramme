@@ -142,5 +142,15 @@
     "file": "appearance.js",
     "tag": "script",
     "attrs": {}
+  },
+  {
+    "file": "dashboard-access.css",
+    "tag": "style",
+    "attrs": {}
+  },
+  {
+    "file": "dashboard-access.js",
+    "tag": "script",
+    "attrs": {}
   }
 ]
