@@ -426,6 +426,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./mobile-start.css?v=20261109f">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109d">
 <link rel="stylesheet" href="./baerli-baumhaus.css?v=20261109a">
+<link rel="stylesheet" href="./baerli-advent.css?v=20261109a">
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt</a>
@@ -3305,6 +3306,7 @@ function showHome(){
       <a href="./bilderbuecher/">Bärlibuch</a>
       <a href="#einstellungen">Einstellungen</a>
       <a href="#baumhaus">🌳 Bärlis Baumhaus</a>
+      <a href="#advent">🎄 Bärlis Adventskalender</a>
     </nav>
   </div>`;
 }
@@ -5338,6 +5340,7 @@ function render(initial=false){
   else if(page==='sterne')showStarWallet();
   else if(page==='pruefung')showPrep(index,part);
   else if(page==='baumhaus')window.MajaTreehouse.render(index,part);
+  else if(page==='advent')window.MajaAdvent?.render(index,part);
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
   else if(page==='baerli')showBear(index);
@@ -5378,6 +5381,7 @@ render(true);
 <script src="./baerli-neue-sachen.js?v=20261109a"></script>
 <script src="./baerli-saison.js?v=20261109b"></script>
 <script src="./baerli-kleiderschrank.js?v=20261109d"></script>
+<script src="./baerli-advent.js?v=20261109a"></script>
 <script>
 // PWA: offline nutzbar und auf Tablets installierbar. HTML kommt immer zuerst aus dem Netz (siehe sw.js).
 if('serviceWorker' in navigator&&(location.protocol==='https:'||['localhost','127.0.0.1'].includes(location.hostname))){
