@@ -5,7 +5,7 @@ Dieses Repository enthält **mehrere voneinander unabhängige Lernprogramme**. B
 ## Wenn der Auftrag Majas Deutschapp (Klasse 3) betrifft
 
 1. Vor jeder Änderung `majas-wortwerkstatt/AGENTS.md` lesen (verbindliche Arbeitsregeln).
-2. Danach `majas-wortwerkstatt/PROJECT_STATE.md` lesen (erledigter Stand, nächste Aufgabe, Prüfstatus).
+2. Danach `majas-wortwerkstatt/PROJECT_STATE.md` und `majas-wortwerkstatt/HOME_LAYOUT.md` lesen. Die Kombitest-Startseite mit 3 Themenpiktogrammen und 4 Bildkacheln ist verbindlich; Lern- und Abenteuermodus bleiben zusätzliche Unterseiten.
 3. `majas-wortwerkstatt/QA_CHECKLIST.md` für die Abnahme verwenden.
 4. Offene GitHub-Issues #22–#26 und die letzten Commits prüfen; **keinen zweiten App-Entwurf** anlegen.
 5. Änderungen auf die bestehenden Dateien unter `majas-wortwerkstatt/` begrenzen; bestehende Spiele, Comics, Inhalte, Audiodateien, Speicher-Keys, Sterne und Käufe erhalten.
