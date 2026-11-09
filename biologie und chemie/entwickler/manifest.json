@@ -152,5 +152,15 @@
     "file": "dashboard-access.js",
     "tag": "script",
     "attrs": {}
+  },
+  {
+    "file": "desktop-studio.css",
+    "tag": "style",
+    "attrs": {}
+  },
+  {
+    "file": "desktop-studio.js",
+    "tag": "script",
+    "attrs": {}
   }
 ]

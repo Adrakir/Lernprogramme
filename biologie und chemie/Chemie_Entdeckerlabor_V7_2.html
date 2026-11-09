@@ -277,6 +277,126 @@ body.lc-theme-dark .device,body.lc-theme-dark .chip{color:var(--ink)}
 @media(max-width:520px){#page-home .chem-directory{padding:12px}#page-home .chem-dir-filters{gap:7px}#page-home .chem-dir-filter{padding:8px;min-height:61px;gap:6px}#page-home .chem-dir-filter .chem-filter-emoji{font-size:23px}#page-home .chem-dir-filter strong{font-size:12px}#page-home .chem-card-grid{gap:8px}#page-home .chem-card{padding:9px;min-height:221px}#page-home .chem-card-art{height:74px}#page-home .chem-card-art svg{height:72px}#page-home .chem-card-title{font-size:15px}#page-home .chem-card-desc{font-size:11.5px;line-height:1.35}#page-home .chem-directory .hero-art{display:none}#page-home .chem-directory .hero{padding:15px}#page-home .lu-entry{grid-template-columns:1fr}#page-home .lu-entry button{min-height:56px;padding:10px}}
 @media print{#page-home .chem-dir-filters,.chem-card-action{display:none}#page-home .chem-card{break-inside:avoid;box-shadow:none;min-height:0}}
 </style>
+<style data-chemie-source="desktop-studio.css">
+/* Chemie Erlebniswelt – Desktop first, crafted scientific illustrations and working preview. */
+@media screen and (min-width:1100px){
+ .app{grid-template-columns:242px minmax(0,1fr)}
+ .side{background:#142f3d;padding:20px 12px 24px}
+ .side .logo{margin-bottom:20px}
+ .side .nav{gap:3px}
+ .side .nav button{font-size:13px;padding:10px 9px;border-radius:10px}
+ .side .nav button:hover,.side .nav button.active{background:#245263}
+ main{max-width:1720px;padding:0 clamp(20px,2.3vw,44px) 85px}
+ .topbar{padding:18px 0 16px}
+ .page-head{margin:20px 0 24px}
+ .page-head h2{font-size:clamp(32px,2.8vw,43px)}
+ .device-gallery{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .device svg{height:122px;width:160px}
+ .safety-illustration{max-width:none}
+ .sim-layout{grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr)}
+}
+#page-home .chem-home-top{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(285px,.85fr);gap:18px;align-items:stretch}
+#page-home .chem-studio-hero{position:relative;background:linear-gradient(130deg,#102e3e 0%,#174e5e 58%,#1a5861 100%);border:1px solid #457a85;border-radius:22px;min-height:324px;overflow:hidden;color:#f3fcfc;display:flex;box-shadow:0 14px 30px #122c3c26}
+#page-home .chem-studio-hero:after{content:"";position:absolute;width:420px;height:420px;right:-170px;top:-185px;border-radius:50%;background:radial-gradient(circle,#50b9b12e,transparent 68%);pointer-events:none}
+#page-home .chem-studio-copy{position:relative;z-index:2;width:58%;padding:clamp(22px,2.3vw,38px) 0 clamp(22px,2.3vw,34px) clamp(22px,2.3vw,38px);display:flex;flex-direction:column;justify-content:center}
+#page-home .chem-kicker{font-size:11px;font-weight:850;letter-spacing:.15em;color:#80e0d0}
+#page-home .chem-studio-hero h1{font-size:clamp(30px,3.05vw,48px);letter-spacing:-.045em;line-height:1.04;margin:15px 0;color:#fff}
+#page-home .chem-studio-hero p{font-size:clamp(13px,1.02vw,16px);line-height:1.57;color:#d2e5eb;margin:0}
+#page-home .chem-studio-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}
+#page-home .chem-studio-primary,#page-home .chem-studio-secondary,#page-home .chem-studio-textbutton{font:inherit;cursor:pointer;border-radius:10px;min-height:43px;padding:9px 14px;font-size:13px;font-weight:800;transition:background .14s,transform .14s,border-color .14s}
+#page-home .chem-studio-primary{color:#102f37;background:#80e1cc;border:1px solid #80e1cc}
+#page-home .chem-studio-primary:hover:not(:disabled){background:#b9f2e3;transform:translateY(-1px)}
+#page-home .chem-studio-primary:disabled{opacity:.55;cursor:default}
+#page-home .chem-studio-secondary{color:white;border:1px solid #bddcde8c;background:#ffffff15}
+#page-home .chem-studio-secondary:hover{background:#ffffff25}
+#page-home .chem-studio-textbutton{border:1px solid var(--line);color:var(--ink);background:transparent}
+#page-home .chem-studio-textbutton:hover{background:var(--soft)}
+#page-home .chem-studio-facts{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px;font-size:11px;color:#d8efee}
+#page-home .chem-studio-facts span{border-top:1px solid #a4cfc85b;padding-top:7px}
+#page-home .chem-studio-facts strong{font-size:16px;color:#fff;margin-right:3px}
+#page-home .chem-hero-visual{position:absolute;z-index:1;right:-1%;bottom:-1%;width:51%;height:99%;display:flex;align-items:end;justify-content:center;pointer-events:none}
+#page-home .chem-hero-visual svg{height:100%;width:100%;filter:drop-shadow(0 13px 12px #0719236e)}
+#page-home .chem-hero-bubble{animation:chemHeroFloat 2.8s ease-in-out infinite alternate}
+#page-home .chem-hero-bubble.b2{animation-delay:.8s;animation-duration:3.6s}
+#page-home .chem-hero-bubble.b3{animation-delay:1.4s;animation-duration:3.2s}
+@keyframes chemHeroFloat{from{transform:translateY(8px);opacity:.48}to{transform:translateY(-8px);opacity:1}}
+#page-home .chem-home-top>.lu-hub{display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:22px;margin:0;padding:22px;box-shadow:0 10px 25px #12334216;color:var(--ink)}
+#page-home .chem-home-top>.lu-hub .eyebrow{color:var(--teal)!important}
+#page-home .chem-home-top>.lu-hub h1{font-size:clamp(23px,2.1vw,30px);line-height:1.13;margin:7px 0 9px;color:var(--ink)}
+#page-home .chem-home-top>.lu-hub p{color:var(--muted);font-size:14px;line-height:1.4;margin:0 0 7px}
+#page-home .chem-home-top .lu-entry{display:grid;grid-template-columns:1fr;gap:7px;margin:12px 0 0}
+#page-home .chem-home-top .lu-entry button{min-height:54px;padding:10px 13px;display:flex;align-items:center;gap:13px;background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:12px}
+#page-home .chem-home-top .lu-entry button:hover{border-color:var(--teal);background:var(--teal2)}
+#page-home .chem-home-top .lu-entry strong{display:block;font-size:16px;white-space:nowrap;min-width:95px}
+#page-home .chem-home-top .lu-entry small{display:block;font-size:12px;line-height:1.35;margin:0;color:var(--muted)}
+#page-home .chem-home-top .lu-recommend{padding:11px 12px;margin-top:auto;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
+#page-home .chem-home-top .lu-recommend p{font-size:12px;margin:0 0 5px}
+#page-home .chem-home-top .lu-recommend .btn{font-size:12px;padding:7px 10px}
+#page-home .chem-studio-workbench{display:grid;grid-template-columns:minmax(0,1.22fr) minmax(325px,.9fr);gap:18px;margin:18px 0 20px;align-items:stretch}
+#page-home .chem-studio-model,#page-home .chem-studio-quiz{padding:22px 24px;border-radius:20px;border:1px solid var(--line);background:var(--paper);min-width:0;box-shadow:0 7px 21px #162f4014}
+#page-home .chem-studio-panel-head .chem-panel-overline{font-size:11px;letter-spacing:.13em;font-weight:850;color:var(--teal)}
+#page-home .chem-studio-panel-head h2{font-size:clamp(21px,2.1vw,28px);margin:7px 0}
+#page-home .chem-studio-panel-head p{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 12px}
+#page-home .chem-studio-modes{display:flex;gap:6px;flex-wrap:wrap;margin:13px 0}
+#page-home .chem-studio-modes button{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:99px;padding:8px 13px;font:inherit;font-size:12px;font-weight:780;cursor:pointer}
+#page-home .chem-studio-modes button[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+#page-home .chem-studio-scene{background:linear-gradient(180deg,#e7f0f1,#d5e6e5);border:1px solid #b5d1d4;border-radius:15px;min-height:205px;overflow:hidden}
+#page-home .chem-studio-scene svg{width:100%;height:210px;display:block}
+#page-home .chem-studio-scene .chem-swirl{transition:opacity .5s,transform 1.7s ease}
+#page-home .chem-studio-scene.is-running .chem-swirl{opacity:1;transform:translate(var(--dx),var(--dy))}
+#page-home .chem-studio-scene .chem-crystal{transition:opacity 1.4s ease}
+#page-home .chem-studio-scene.is-running .chem-crystal{opacity:0}
+#page-home .chem-studio-scene .chem-heated{transition:opacity .5s}
+#page-home .chem-studio-scene.is-running .chem-heated{opacity:1}
+#page-home .chem-studio-scene .chem-bubble{opacity:0}
+#page-home .chem-studio-scene.is-running .chem-bubble{animation:chemBubbleRise 1.9s ease-in infinite}
+#page-home .chem-studio-scene .chem-bubble:nth-of-type(2n){animation-delay:.5s}
+#page-home .chem-studio-scene .chem-bubble:nth-of-type(3n){animation-delay:1s}
+@keyframes chemBubbleRise{0%{opacity:0;transform:translateY(6px) scale(.65)}25%{opacity:.8}100%{opacity:0;transform:translateY(-70px) scale(1.1)}}
+#page-home .chem-studio-observation{margin:10px 0;font-size:13px;min-height:39px;font-weight:680;color:var(--ink);line-height:1.45}
+#page-home .chem-studio-model-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#page-home .chem-studio-disclaimer{font-size:10px;color:var(--muted);margin:12px 0 0;line-height:1.5}
+#page-home .chem-quick-score{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:13px;font-weight:750;margin:11px 0 8px}
+#page-home .chem-quick-track{height:8px;border-radius:99px;overflow:hidden;background:var(--line)}
+#page-home .chem-quick-track>span{display:block;height:100%;width:0;background:var(--teal);transition:width .2s}
+#page-home #chemQuickQuestion{margin:15px 0 12px;font-size:18px;line-height:1.33}
+#page-home .chem-quick-options{display:grid;grid-template-columns:1fr;gap:7px}
+#page-home .chem-quick-options button{font:inherit;font-size:13px;font-weight:650;text-align:left;padding:10px 12px;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;cursor:pointer;min-height:43px}
+#page-home .chem-quick-options button:hover:not(:disabled){border-color:var(--teal)}
+#page-home .chem-quick-options button.is-correct{background:#def5e5;color:#134b32;border-color:#57a876}
+#page-home .chem-quick-options button.is-wrong{background:#ffece9;color:#842e2e;border-color:#cc7979}
+#page-home .chem-quick-feedback{font-size:12px;line-height:1.45;color:var(--ink);min-height:32px;margin:10px 0}
+#page-home .chem-quick-feedback:not(:empty){padding:9px 11px;background:var(--soft);border-left:3px solid var(--teal);border-radius:0 10px 10px 0}
+#page-home .chem-quick-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#page-home .chem-directory{padding:22px;margin:0;background:var(--paper);border-radius:20px}
+#page-home .chem-directory>h2{font-size:clamp(27px,2.6vw,37px)}
+#page-home .chem-directory-lead{font-size:14px}
+#page-home .chem-dir-filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#page-home .chem-dir-filter{min-height:76px;border:1px solid var(--line);border-radius:14px;padding:14px}
+#page-home .chem-dir-filter[aria-pressed=true]{border-color:var(--teal);background:var(--teal2)}
+#page-home .chem-dir-filter strong{font-size:16px}
+#page-home .chem-dir-filter small{font-size:12px;margin-top:4px}
+#page-home .chem-card-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+#page-home .chem-card{padding:12px;min-height:313px;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 12px #17334410}
+#page-home .chem-card-art{height:151px;border-radius:12px;background:linear-gradient(135deg,#d6edea,#e0eff6);border:1px solid #c8dee1;margin-bottom:13px}
+#page-home .chem-card-art:before{display:none}
+#page-home .chem-card-art svg{width:100%;height:150px;max-width:100%}
+#page-home .chem-card-title{font-size:18px;margin:7px 0}
+#page-home .chem-card-desc{font-size:13px;line-height:1.45}
+#page-home .chem-card-label{font-size:11px}
+#page-home .chem-card-action{margin-top:14px}
+body.lc-theme-dark #page-home .chem-studio-scene{background:linear-gradient(180deg,#163b46,#224e56);border-color:#436b7a}
+body.lc-theme-dark #page-home .chem-card-art{background:linear-gradient(135deg,#234953,#3b5264);border-color:#4b7481}
+body.lc-theme-dark #page-home .chem-quick-options button.is-correct{color:#0b3e28}
+body.lc-theme-dark #page-home .chem-quick-options button.is-wrong{color:#732929}
+@media(min-width:1700px){#page-home .chem-studio-hero{min-height:350px}#page-home .chem-studio-copy{width:56%}#page-home .chem-hero-visual{width:49%}}
+@media(max-width:1450px) and (min-width:1000px){#page-home .chem-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#page-home .chem-studio-copy{width:63%}#page-home .chem-hero-visual{width:45%}#page-home .chem-studio-hero h1{font-size:clamp(29px,3vw,40px)}#page-home .chem-studio-facts{gap:7px}#page-home .chem-studio-workbench{grid-template-columns:minmax(0,1fr) minmax(300px,.85fr)}}
+@media(max-width:1120px){#page-home .chem-home-top{grid-template-columns:1fr}#page-home .chem-studio-hero{min-height:290px}#page-home .chem-home-top>.lu-hub{min-height:unset}#page-home .chem-home-top .lu-entry{grid-template-columns:repeat(3,minmax(0,1fr))}#page-home .chem-home-top .lu-entry button{display:block}#page-home .chem-home-top .lu-entry small{margin-top:5px}#page-home .chem-home-top .lu-recommend{margin-top:12px}}
+@media(max-width:900px){#page-home .chem-studio-workbench{grid-template-columns:1fr}#page-home .chem-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#page-home .chem-dir-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){#page-home .chem-studio-hero{min-height:310px}#page-home .chem-studio-copy{width:80%;padding:19px;justify-content:start}#page-home .chem-studio-hero h1{font-size:29px}#page-home .chem-hero-visual{opacity:.3;width:66%;right:-12%}#page-home .chem-studio-facts{margin-top:12px;font-size:10px}#page-home .chem-home-top .lu-entry{grid-template-columns:1fr}#page-home .chem-studio-model,#page-home .chem-studio-quiz{padding:16px}#page-home .chem-dir-filter strong{font-size:12px}#page-home .chem-dir-filter{padding:8px;min-height:62px}#page-home .chem-directory{padding:12px}#page-home .chem-card-grid{gap:10px}#page-home .chem-card{min-height:250px;padding:9px}#page-home .chem-card-art,#page-home .chem-card-art svg{height:91px}#page-home .chem-card-title{font-size:15px}#page-home .chem-card-desc{font-size:11.5px}#page-home .chem-card-label{font-size:10px}}
+@media(prefers-reduced-motion:reduce){#page-home .chem-hero-bubble,#page-home .chem-studio-scene.is-running .chem-bubble{animation:none;opacity:.8}}
+@media print{#page-home .chem-studio-workbench{display:none}#page-home .chem-studio-hero{box-shadow:none;min-height:0}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -350,16 +470,48 @@ body.lc-theme-dark .device,body.lc-theme-dark .chip{color:var(--ink)}
 
 <section class="stage" hidden id="page-protocoltrainer" aria-labelledby="peTitle"><div class="page-head"><div class="tag">Üben · Protokoll-Fehlertrainer</div><h2 id="peTitle">Finde den Fehler – verbessere das Protokoll</h2><p>Sechs fiktive Übungsprotokolle enthalten jeweils <b>drei Fehler</b>. Die übrigen Aussagen sind richtig. Lies genau, markiere die fehlerhaften Sätze und wähle anschließend passende Verbesserungen.</p></div><div class="notebox warm"><strong>Fehlertexte zum Prüfen</strong>Einige Aussagen sind absichtlich fachlich falsch oder beschreiben unsicheres Verhalten. Beurteile sie am Bildschirm; reale Versuche nur nach Anleitung und unter Aufsicht der Lehrkraft.</div><section class="panel"><label for="peCase"><b>Übungsprotokoll auswählen</b></label><select id="peCase"></select><p id="peTotal" class="small" role="status" aria-live="polite"></p><h3 id="peCaseTitle" tabindex="-1"></h3><p class="muted">Schritt 1: Markiere genau die drei fehlerhaften Aussagen. Tippe erneut, um eine Markierung zurückzunehmen.</p><div id="peSentences"></div><div class="btn-row"><button type="button" class="btn primary" id="peCheck">Markierte Fehler prüfen</button><button type="button" class="btn" id="peHint">Hinweis anzeigen</button><button type="button" class="btn" id="peReset">Dieses Protokoll neu üben</button></div><p id="peFeedback" class="feedback" role="status" aria-live="polite">Markiere die fehlerhaften Sätze.</p><p id="peHintText" class="notebox" hidden></p><section id="peRepairs" hidden aria-labelledby="peRepairTitle"><h4 id="peRepairTitle">Schritt 2: Verbessere die Fehler</h4><div id="peRepairInputs"></div><button type="button" class="btn primary" id="peRepairCheck">Verbesserungen prüfen</button><p id="peRepairFeedback" class="feedback" role="status" aria-live="polite"></p></section><details class="hint" id="peSolution" hidden><summary>Korrigiertes Musterprotokoll und Erklärungen</summary><div id="peSolutionBody"></div></details><div class="btn-row"><button type="button" class="btn" id="peNext">Nächstes Protokoll →</button><button type="button" class="btn" id="pePrint">Fehlerprotokolle drucken</button><button type="button" class="btn" id="pePrintSolutions">Lösungsblätter drucken</button><button type="button" class="btn primary" data-go="finaltest">Zur Klassenarbeit →</button></div></section></section>
 
-<section class="stage" hidden id="page-learningpath"><div class="page-head"><div class="tag">Geführter Lernpfad</div><h2 id="luLessonTitle" tabindex="-1"></h2><p id="luStepLabel"></p></div><details class="lu-extra" id="luTopicOverview"><summary>Thema wechseln · Die acht Stationen ansehen</summary><div id="luList" class="lu-grid"></div></details><div id="luStages" class="lu-steps"></div><section class="panel lu-stage" id="luStage"></section><div class="btn-row"><button type="button" class="btn" id="luPrev">← Zurück</button><button type="button" class="btn primary" id="luNext">Weiter →</button></div></section><section class="stage" hidden id="page-practicehub"><div class="page-head"><div class="tag">Üben</div><h2>Was möchtest du festigen?</h2><p>Wähle eine kurze Übung passend zu deinem Lernstand.</p></div><div id="luPracticeCards" class="lu-grid"></div></section><section class="stage" hidden id="page-reviewpractice"><div class="page-head"><div class="tag">Persönlich nachüben</div><h2>Deine Fehler verstehen und verbessern</h2><p id="luReviewPosition"></p></div><section class="panel" id="luReviewTask"></section></section><section class="stage" id="page-home"><div class="lu-hub"><span class="eyebrow" style="color:#d4f8ed">Dein Weg zur Klassenarbeit</span><h1>Chemie verstehen – Schritt für Schritt</h1><p>Wähle deinen Einstieg. Der Lernpfad führt genau durch deine Klassenarbeitsthemen.</p><div class="lu-entry"><button type="button" id="luLearn"><strong>1 · Lernen</strong><small>Kurze Schritte: anschauen, vermuten, verstehen und erklären.</small></button><button type="button" id="luPractice"><strong>2 · Üben</strong><small>Fehlerprotokolle, eigene Erklärungen und persönliches Nachtraining.</small></button><button type="button" id="luExam"><strong>3 · Klassenarbeit</strong><small>Grundlagenteil und eigener Schreibteil; Auswertung nach der Abgabe.</small></button></div><div class="lu-recommend"><p id="luRecommendation"></p><p id="luHomeProgress" class="small"></p><button type="button" class="btn primary" id="luContinue">Hier weitermachen →</button></div></div><section class="lu-extra chem-directory" id="luAllAreas" aria-labelledby="chemDirectoryTitle"><h2 id="chemDirectoryTitle">Alle Chemie-Bereiche entdecken</h2><p class="chem-directory-lead">Hier findest du sämtliche Lernstationen, virtuellen Experimente, Spiele und Tests der früheren App sowie die neuen Übungen.</p>
-<div class="hero"><div class="hero-content"><span class="eyebrow">Dein interaktives Lernlabor</span><h1>Chemie ist überall!</h1><p>Warum löst sich Zucker anders als Salz? Wo ist eine Gasflamme besonders heiß? Und woran erkennst du einen Stoff? Entdecke die Antworten selbst.</p><div class="hero-actions"><button class="btn" data-go="matter">🚀 Lernreise starten</button><button class="btn transparent" data-go="quiz">🎯 Zum Wissenscheck</button></div></div>
-<div aria-hidden="true" class="hero-art"><svg viewbox="0 0 220 260"><defs><lineargradient id="flaskG" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a8ffca"></stop><stop offset="1" stop-color="#32c5d7"></stop></lineargradient></defs><path d="M90 20h42v19h-8v75l60 102q10 18-10 18H46q-20 0-10-18l62-102V39h-8Z" fill="#ffffff25" stroke="#e9ffff" stroke-linejoin="round" stroke-width="8"></path><path d="M65 164h88l32 56q4 8-9 8H44q-13 0-7-10Z" fill="url(#flaskG)"></path><path d="M75 160q30-28 73 4" fill="none" stroke="#e7fff8" stroke-width="3"></path><circle cx="86" cy="190" fill="#e7fff8" opacity=".6" r="11"></circle><circle cx="135" cy="207" fill="#e7fff8" opacity=".7" r="7"></circle><circle cx="123" cy="179" fill="#e7fff8" r="4"></circle><circle cx="39" cy="104" fill="#ffc56e" r="12"></circle><circle cx="184" cy="92" fill="#afffeb" r="8"></circle></svg></div></div>
+<section class="stage" hidden id="page-learningpath"><div class="page-head"><div class="tag">Geführter Lernpfad</div><h2 id="luLessonTitle" tabindex="-1"></h2><p id="luStepLabel"></p></div><details class="lu-extra" id="luTopicOverview"><summary>Thema wechseln · Die acht Stationen ansehen</summary><div id="luList" class="lu-grid"></div></details><div id="luStages" class="lu-steps"></div><section class="panel lu-stage" id="luStage"></section><div class="btn-row"><button type="button" class="btn" id="luPrev">← Zurück</button><button type="button" class="btn primary" id="luNext">Weiter →</button></div></section><section class="stage" hidden id="page-practicehub"><div class="page-head"><div class="tag">Üben</div><h2>Was möchtest du festigen?</h2><p>Wähle eine kurze Übung passend zu deinem Lernstand.</p></div><div id="luPracticeCards" class="lu-grid"></div></section><section class="stage" hidden id="page-reviewpractice"><div class="page-head"><div class="tag">Persönlich nachüben</div><h2>Deine Fehler verstehen und verbessern</h2><p id="luReviewPosition"></p></div><section class="panel" id="luReviewTask"></section></section><section class="stage" id="page-home">
+<div class="chem-home-top">
+  <section class="chem-studio-hero" aria-labelledby="chemStudioTitle">
+    <div class="chem-studio-copy">
+      <span class="chem-kicker">DEIN CHEMIE-ENTDECKERLABOR · KLASSE 5</span>
+      <h1 id="chemStudioTitle">Entdecken. Experimentieren. Verstehen.</h1>
+      <p>Mach Unsichtbares sichtbar: Erforsche Teilchen, verändere virtuelle Versuche und löse spannende Laborrätsel.</p>
+      <div class="chem-studio-actions">
+        <button type="button" class="chem-studio-primary" data-go="deep">Animationen entdecken <span aria-hidden="true">→</span></button>
+        <button type="button" class="chem-studio-secondary" data-go="v4play">Zur Chemie-Spielwelt</button>
+      </div>
+      <div class="chem-studio-facts"><span><strong>22</strong> Lernbereiche</span><span><strong>4</strong> Forscherstationen</span><span><strong>3</strong> Detektiv-Szenen</span></div>
+    </div>
+    <div class="chem-hero-visual" id="chemHeroImage" aria-hidden="true"></div>
+  </section>
+  <div class="lu-hub"><span class="eyebrow" style="color:#d4f8ed">Dein Weg zur Klassenarbeit</span><h1>Chemie verstehen – Schritt für Schritt</h1><p>Wähle deinen Einstieg. Der Lernpfad führt genau durch deine Klassenarbeitsthemen.</p><div class="lu-entry"><button type="button" id="luLearn"><strong>1 · Lernen</strong><small>Kurze Schritte: anschauen, vermuten, verstehen und erklären.</small></button><button type="button" id="luPractice"><strong>2 · Üben</strong><small>Fehlerprotokolle, eigene Erklärungen und persönliches Nachtraining.</small></button><button type="button" id="luExam"><strong>3 · Klassenarbeit</strong><small>Grundlagenteil und eigener Schreibteil; Auswertung nach der Abgabe.</small></button></div><div class="lu-recommend"><p id="luRecommendation"></p><p id="luHomeProgress" class="small"></p><button type="button" class="btn primary" id="luContinue">Hier weitermachen →</button></div></div>
+</div>
+<div class="chem-studio-workbench" aria-label="Interaktives Chemie-Erlebnis">
+ <section class="chem-studio-model" aria-labelledby="chemModelHeading">
+  <div class="chem-studio-panel-head"><span class="chem-panel-overline">VIRTUELLES EXPERIMENT · VORSCHAU</span><h2 id="chemModelHeading">Probier es selbst aus</h2><p>Starte eine Animation, beobachte und öffne anschließend den vollständigen Versuch.</p></div>
+  <div class="chem-studio-modes" id="chemDemoModes" role="group" aria-label="Versuch auswählen">
+   <button type="button" data-mode="solute" aria-pressed="true">Löslichkeit</button>
+   <button type="button" data-mode="boil" aria-pressed="false">Siedetemperatur</button>
+   <button type="button" data-mode="flame" aria-pressed="false">Brennerflamme</button>
+  </div>
+  <div class="chem-studio-scene" id="chemDemoStage" role="img" aria-label="Vereinfachtes, interaktives Chemie-Modell"></div>
+  <p class="chem-studio-observation" id="chemDemoHint" aria-live="polite">Was passiert, wenn ein löslicher Stoff in Wasser gegeben wird?</p>
+  <div class="chem-studio-model-actions"><button type="button" id="chemDemoRun" class="chem-studio-primary">Animation starten</button><button type="button" id="chemDemoGo" class="chem-studio-textbutton">Vollständiges Experiment öffnen →</button></div>
+  <p class="chem-studio-disclaimer">Vereinfachte Bildschirmmodelle – keine Messwerte und keine Anleitung für unbeaufsichtigte Versuche.</p>
+ </section>
+ <section class="chem-studio-quiz" aria-labelledby="chemQuizTitle">
+  <div class="chem-studio-panel-head"><span class="chem-panel-overline">KLEINER WISSENSCHECK</span><h2 id="chemQuizTitle">Labor-Challenge</h2><p>Vier Fragen zum Mitdenken – mit einer Erklärung nach jeder Antwort.</p></div>
+  <div class="chem-quick-score"><span id="chemQuickPosition">Frage 1 von 4</span><span id="chemQuickScore">0 richtig</span></div>
+  <div class="chem-quick-track"><span id="chemQuickProgress"></span></div>
+  <h3 id="chemQuickQuestion" tabindex="-1"></h3>
+  <div class="chem-quick-options" id="chemQuickOptions" role="group" aria-label="Antwortmöglichkeiten"></div>
+  <p id="chemQuickFeedback" class="chem-quick-feedback" role="status" aria-live="polite"></p>
+  <div class="chem-quick-actions"><button type="button" id="chemQuickNext" class="chem-studio-primary" disabled>Nächste Frage →</button><button type="button" id="chemFullQuiz" class="chem-studio-textbutton">Großen Wissenscheck öffnen →</button></div>
+ </section>
+</div>
+<section class="lu-extra chem-directory" id="luAllAreas" aria-labelledby="chemDirectoryTitle"><h2 id="chemDirectoryTitle">Alle Chemie-Bereiche entdecken</h2><p class="chem-directory-lead">Hier findest du sämtliche Lernstationen, virtuellen Experimente, Spiele und Tests der früheren App sowie die neuen Übungen.</p>
 <div class="section-head chem-directory-heading"><h3>Wähle deinen Bereich</h3><span class="small muted">Alle Themen direkt erreichbar</span></div>
-<section class="panel cp-entry" aria-label="Probearbeit zum Lernheft">
-<strong>Probearbeit zum Lernheft</strong>
-<p>9 Aufgaben mit Lückentext · 37 Punkte · etwa 30 Minuten</p>
-<div class="btn-row"><button class="btn primary" type="button" data-go="probearbeit">Probearbeit öffnen</button>
-<a class="btn" href="Chemie_Probearbeit.pdf" download>Probearbeit als PDF</a></div>
-</section>
 <div id="chemDirFilters" class="chem-dir-filters" role="group" aria-label="Chemie-Bereiche auswählen"></div><p id="chemDirStatus" class="chem-dir-status" role="status" aria-live="polite"></p><div class="cards chem-card-grid" id="homeCards" aria-label="Chemie-Lernbereiche"></div>
 <div class="notebox warm" style="margin-top:22px"><strong>🛡️ Sicherheit zuerst</strong>Die Experimente mit Gasbrenner werden hier nur virtuell durchgeführt. Im echten Chemieraum experimentierst du ausschließlich nach Anweisung der Lehrkraft.</div>
 </section></section>
@@ -3363,6 +3515,118 @@ select.value=String(data.level);show();
  });
  render();
  window.ChemistryDirectory={routes:()=>areas.map(a=>a[0]),count:()=>ready.length};
+})();
+</script>
+<script data-chemie-source="desktop-studio.js">
+/* Chemie-Erlebniswelt – Vorschau, Quiz und inhaltlich passende Lernbilder. */
+(() => {
+ 'use strict';
+ const get=id=>document.getElementById(id);
+ const go=route=>{if(typeof navigate==='function')navigate(route);else document.querySelector('#nav [data-page="'+route+'"]')?.click()};
+ const hero=get('chemHeroImage');
+ if(!hero)return;
+ hero.innerHTML='<svg viewBox="0 0 520 380" focusable="false" aria-hidden="true"><defs><linearGradient id="chemGlass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset=".5" stop-color="#d2faff" stop-opacity=".15"/><stop offset="1" stop-color="#a9e8ef" stop-opacity=".55"/></linearGradient><linearGradient id="chemLiquid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#68e7c9"/><stop offset="1" stop-color="#078f9c"/></linearGradient><radialGradient id="chemGold"><stop stop-color="#ffecb6"/><stop offset="1" stop-color="#f1a74a"/></radialGradient></defs><ellipse cx="277" cy="332" rx="218" ry="29" fill="#091f29" opacity=".38"/><path d="M32 290H510v17H32z" fill="#315867" stroke="#80b3bb" stroke-width="3"/><path d="M66 307v50m408-50v50" stroke="#779ca8" stroke-width="12"/><path d="M50 153h148v10H50" fill="#52818a"/><path d="M74 163v122m99-122v122" stroke="#80b2bc" stroke-width="7"/><rect x="60" y="192" width="105" height="5" fill="#aad8dc"/><g fill="url(#chemGlass)" stroke="#bcf2f4" stroke-width="4"><path d="M246 40h43v16h-7v70l71 129q10 23-12 23H194q-22 0-11-23l71-129V56h-8z"/><path d="M91 162h57v86q0 15-16 15h-24q-17 0-17-15z"/></g><path d="M201 220q35-19 67-3t67 1l22 39q6 13-10 13H197q-14 0-8-13z" fill="url(#chemLiquid)" opacity=".95"/><path d="M96 215h47v32q0 9-14 9h-21q-12 0-12-9z" fill="#ffc977" opacity=".84"/><path d="M97 215h45" stroke="#f5f4d5" stroke-width="3"/><path d="M247 57h41M213 225q48-16 117 0" fill="none" stroke="#e9ffff" stroke-width="4" opacity=".65"/><circle class="chem-hero-bubble" cx="236" cy="236" r="8" fill="#d8fff1" opacity=".7"/><circle class="chem-hero-bubble b2" cx="295" cy="247" r="6" fill="#d8fff1"/><circle class="chem-hero-bubble b3" cx="269" cy="209" r="11" fill="#f7eab0" opacity=".8"/><circle class="chem-hero-bubble b2" cx="308" cy="189" r="5" fill="#e4fff4"/><path d="M394 106v162" stroke="#95bec6" stroke-width="13"/><path d="M370 101h48M374 264h48" stroke="#b7dbe0" stroke-width="8" stroke-linecap="round"/><rect x="386" y="80" width="19" height="50" rx="9" fill="#bacbd3"/><path d="M397 93v27" stroke="#f1fdff" stroke-width="5" stroke-linecap="round"/><path d="M372 285h91" stroke="#294a5e" stroke-width="13" stroke-linecap="round"/><path d="M405 164h48l15 15-15 16h-48" fill="#b3e4ec" stroke="#e4f9fd" stroke-width="3"/><circle cx="447" cy="179" r="10" fill="url(#chemGold)"/><path d="M405 181h-28" stroke="#b9e4eb" stroke-width="8"/><circle cx="413" cy="53" r="24" fill="#70dab9" opacity=".2"/><circle cx="413" cy="53" r="8" fill="#99e6d9"/><circle cx="448" cy="62" r="5" fill="#ffd98f"/><path d="M193 119h30M177 137h46" stroke="#88c3cc" stroke-width="3"/><text x="229" y="352" fill="#b2d3db" font-family="system-ui,sans-serif" font-size="13" letter-spacing="3">CHEMIE · VIRTUELLES LABOR</text></svg>';
+ const modes={solute:{route:'solubility',ask:'Was passiert mit den Teilchen, wenn ein löslicher Stoff ins Wasser gelangt?',answer:'In diesem vereinfachten Modell verteilen sich die gelösten Teilchen im Wasser. Im vollständigen Versuch kannst du die Bedingungen selbst verändern.'},boil:{route:'heating',ask:'Was beobachtest du beim Erhitzen von Wasser?',answer:'Im Modell entstehen beim Sieden im Wasser Dampfblasen. Bei normalem Luftdruck liegt die Siedetemperatur von reinem Wasser ungefähr bei 100 °C.'},flame:{route:'burner',ask:'Wie verändert die Luftzufuhr das Bild der Brennerflamme?',answer:'Das Modell wechselt von einer leuchtenden gelben zu einer rauschenden blauen Flamme. Echte Gasbrenner verwendest du nur unter Aufsicht.'}};
+ let mode='solute',running=false;
+ const choices=get('chemDemoModes'),stage=get('chemDemoStage'),hint=get('chemDemoHint'),run=get('chemDemoRun');
+ const water='<defs><linearGradient id="chemDemoWater" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8edff3"/><stop offset="1" stop-color="#4bafc8"/></linearGradient></defs><path d="M150 43v133q0 23 26 23h166q26 0 26-23V43" fill="#e9fcff" fill-opacity=".45" stroke="#3c8098" stroke-width="7"/><path d="M160 111q40-8 78 0t79 0q24-6 43 0v69q0 12-20 12H177q-17 0-17-12Z" fill="url(#chemDemoWater)"/><path d="M153 45h211" stroke="#96c8d5" stroke-width="5"/>';
+ function stageSvg(type) {
+  if(type==='solute'){
+   let dots='';
+   for(let i=0;i<26;i++){
+    const x=190+(i%6)*10,y=175+Math.floor(i/6)*3,dx=(i*47%140)-65,dy=-(i*29%82)-5;
+    dots+='<circle class="chem-crystal" cx="'+x+'" cy="'+y+'" r="4" fill="#f3f2ee" stroke="#b8a48b" stroke-width=".9"/>';
+    dots+='<circle class="chem-swirl" cx="'+x+'" cy="'+y+'" r="3" fill="'+(i%2?'#fdf8db':'#e1b076')+'" style="opacity:0;--dx:'+dx+'px;--dy:'+dy+'px"/>';
+   }
+   return '<svg viewBox="0 0 520 230" aria-hidden="true"><path d="M90 206H435" stroke="#95adb0" stroke-width="8" stroke-linecap="round"/>'+water+dots+'<path d="M160 110q54-8 97 0t104 0" fill="none" stroke="#dfffff" stroke-width="3"/><text x="24" y="51" font-size="15" font-weight="750" fill="#23546b">Salz</text><path d="m86 54 60 45" stroke="#5b96a4" stroke-width="2"/><text x="399" y="130" font-size="13" fill="#23546b">Wasser</text></svg>';
+  }
+  if(type==='boil'){
+   let bubbles='';
+   for(let i=0;i<12;i++){const x=186+(i*41%145),y=169+(i%3)*11;bubbles+='<circle class="chem-bubble" cx="'+x+'" cy="'+y+'" r="'+(3+i%4)+'" fill="#d8faff" stroke="#ffffff" stroke-width="1.6"/>'}
+   return '<svg viewBox="0 0 520 230" aria-hidden="true"><path d="M75 204H435" stroke="#95adb0" stroke-width="8" stroke-linecap="round"/>'+water+bubbles+'<path class="chem-heated" d="M210 30q-15-19 0-30m38 30q-15-19 0-30m38 30q-15-19 0-30" stroke="#77b2c6" stroke-width="4" fill="none" style="opacity:0"/><rect x="157" y="201" width="218" height="17" rx="5" fill="#527485"/><path d="M175 218h185" stroke="#263e4c" stroke-width="6"/><rect x="410" y="45" width="19" height="151" rx="9" fill="#d5f0f1" stroke="#5e919f" stroke-width="3"/><rect class="chem-heated" x="415" y="86" width="9" height="104" rx="4" fill="#dd6649" style="opacity:.28"/><circle cx="419" cy="190" r="14" fill="#dd6649"/><text x="391" y="27" font-size="13" fill="#27586d">°C</text></svg>';
+  }
+  return '<svg viewBox="0 0 520 230" aria-hidden="true"><defs><linearGradient id="chemBlueFlame" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#2771cb"/><stop offset=".65" stop-color="#71dbfc"/><stop offset="1" stop-color="#d0fcff"/></linearGradient><linearGradient id="chemYellowFlame" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#e97a2b"/><stop offset=".6" stop-color="#ffd25f"/><stop offset="1" stop-color="#fff5c5"/></linearGradient></defs><path d="M95 209H429" stroke="#91acb5" stroke-width="8" stroke-linecap="round"/><path d="M238 191v-65h45v65" fill="#a9b8bf" stroke="#375c6e" stroke-width="4"/><rect x="222" y="184" width="77" height="12" rx="4" fill="#5c7a8d"/><path d="M244 126h33" stroke="#183f52" stroke-width="5"/><path d="M240 125Q194 78 255 16Q232 79 284 118Q298 150 262 157Q230 156 240 125Z" fill="url(#chemYellowFlame)" class="chem-crystal"/><path d="M235 154Q211 104 260 24Q309 104 285 154Z" fill="url(#chemBlueFlame)" class="chem-heated" style="opacity:0"/><path d="M247 150Q242 120 261 92Q276 124 274 151Z" fill="#d5faff" class="chem-heated" style="opacity:0"/><text x="53" y="74" font-size="15" font-weight="750" fill="#2a5f72">Flammenmodell</text><path d="m177 77 35 32" stroke="#6b98a5" stroke-width="2"/></svg>';
+ }
+ function renderMode(){
+  running=false;stage.classList.remove('is-running');stage.innerHTML=stageSvg(mode);
+  stage.setAttribute('aria-label',{solute:'Modell: Salzteilchen im Wasser',boil:'Modell: Wasser beim Erhitzen',flame:'Modell: leuchtende und rauschende Brennerflamme'}[mode]);
+  hint.textContent=modes[mode].ask;run.textContent=mode==='flame'?'Flamme wechseln':'Animation starten';
+  for(const b of choices.querySelectorAll('[data-mode]'))b.setAttribute('aria-pressed',String(b.dataset.mode===mode));
+ }
+ choices.addEventListener('click',event=>{const b=event.target.closest('[data-mode]');if(!b)return;mode=b.dataset.mode;renderMode()});
+ run.addEventListener('click',()=>{
+  running=!running;stage.classList.toggle('is-running',running);
+  hint.textContent=running?modes[mode].answer:modes[mode].ask;
+  run.textContent=mode==='flame'?(running?'Gelbe Flamme zeigen':'Blaue Flamme zeigen'):(running?'Modell zurücksetzen':'Animation starten');
+ });
+ get('chemDemoGo').addEventListener('click',()=>go(modes[mode].route));renderMode();
+ const questions=[
+  {q:'Eine unbekannte Flüssigkeit wurde im Labor verschüttet. Was machst du?',options:['Selbst aufwischen.','Abstand halten und die Lehrkraft informieren.','An der Flüssigkeit riechen.'],ok:1,why:'Unbekannte Stoffe nicht berühren: Abstand halten und die Lehrkraft informieren.'},
+  {q:'Welches Gerät eignet sich besonders zum Abmessen eines Flüssigkeitsvolumens?',options:['Messzylinder','Reagenzglasständer','Tiegelzange'],ok:0,why:'Der Messzylinder hat eine Skala zum Abmessen des Volumens.'},
+  {q:'Welche Aussage ist eine Beobachtung und keine Erklärung?',options:['Der Stoff reagiert wegen seiner Zusammensetzung.','Im Gefäß steigen Blasen auf.','Die Temperatur stieg, weil Energie übertragen wurde.'],ok:1,why:'„Blasen steigen auf“ beschreibt etwas unmittelbar Wahrnehmbares – ohne die Ursache zu deuten.'},
+  {q:'Was passiert mit den Teilchen eines Stoffes, wenn er sich in Wasser löst?',options:['Alle Teilchen werden zerstört.','Der Stoff verschwindet vollständig.','Seine Teilchen verteilen sich im Wasser.'],ok:2,why:'Gelöste Teilchen sind weiterhin vorhanden und im Wasser verteilt.'}
+ ];
+ let index=0,score=0,answered=false;
+ const pos=get('chemQuickPosition'),points=get('chemQuickScore'),progress=get('chemQuickProgress'),qTitle=get('chemQuickQuestion'),options=get('chemQuickOptions'),feedback=get('chemQuickFeedback'),next=get('chemQuickNext');
+ function showQuestion(){
+  answered=false;next.disabled=true;feedback.textContent='';
+  if(index>=questions.length){
+   pos.textContent='Challenge beendet';points.textContent=score+' von '+questions.length+' richtig';progress.style.width='100%';
+   qTitle.textContent='Geschafft! '+(score===questions.length?'Alle Antworten stimmen.':'Du kannst die Fragen gleich noch einmal üben.');
+   options.replaceChildren();next.textContent='Noch einmal spielen';next.disabled=false;return;
+  }
+  const q=questions[index];pos.textContent='Frage '+(index+1)+' von '+questions.length;points.textContent=score+' richtig';progress.style.width=(index/questions.length*100)+'%';qTitle.textContent=q.q;next.textContent='Nächste Frage →';
+  options.innerHTML=q.options.map((o,i)=>'<button type="button" data-answer="'+i+'">'+o+'</button>').join('');
+ }
+ options.addEventListener('click',event=>{
+  const b=event.target.closest('[data-answer]');if(!b||answered||index>=questions.length)return;
+  answered=true;const picked=Number(b.dataset.answer),q=questions[index];
+  if(picked===q.ok)score++;
+  for(const v of options.querySelectorAll('[data-answer]')){
+   const id=Number(v.dataset.answer);v.disabled=true;
+   if(id===q.ok)v.classList.add('is-correct');else if(id===picked)v.classList.add('is-wrong');
+  }
+  feedback.textContent=(picked===q.ok?'Richtig! ':'Noch nicht richtig. ')+q.why;
+  points.textContent=score+' richtig';progress.style.width=((index+1)/questions.length*100)+'%';
+  next.disabled=false;next.textContent=index===questions.length-1?'Ergebnis ansehen →':'Nächste Frage →';
+ });
+ next.addEventListener('click',()=>{if(index>=questions.length){index=0;score=0}else if(answered)index++;showQuestion();qTitle.focus({preventScroll:true})});
+ get('chemFullQuiz').addEventListener('click',()=>go('quiz'));showQuestion();
+ const tileMap={
+  matter:'matter',devices:'equipment',safety:'safety',solubility:'solubility',thermal:'thermal',heating:'heating',burner:'burner',method:'notebook',
+  missions:'flasks',deep:'particles',v4lab:'equipment',v5academy:'particles',chem6:'flasks',v4study:'notebook',v4play:'detective',
+  quiz:'quiz',learningpath:'path',practicehub:'quiz',protocoltrainer:'notebook',probearbeit:'paper',finaltest:'paper',sheet:'notebook'
+ };
+ function tileSvg(route){
+  const variant=tileMap[route]||'flasks',g='g-'+route;
+  const parts={
+   matter:'<path d="M70 34h46v70q0 20-20 20h-6q-20 0-20-20Z" fill="#e5f8ff" stroke="#5598b0" stroke-width="4"/><path d="M70 81h46v25q0 16-18 16H88q-18 0-18-16Z" fill="#70c9dd"/><path d="M182 95 225 71l43 24v47l-43 24-43-24Z" fill="#edc99c" stroke="#a9824c" stroke-width="4"/><path d="m182 95 43 25 43-25m-43 25v46" fill="none" stroke="#a9824c" stroke-width="3"/><text x="71" y="154" font-size="14" fill="#35657b">Glas</text><text x="195" y="184" font-size="14" fill="#75532a">Holz</text>',
+   equipment:'<path d="M50 50h70v88q0 12-13 12H64q-14 0-14-12Z" fill="#d9faff" stroke="#5c9ca8" stroke-width="5"/><path d="M53 99h64v35q0 13-13 13H66q-13 0-13-13Z" fill="#6ec3dc"/><path d="M179 39h51m-40 0v40l-35 61q-7 14 8 14h84q13 0 6-14l-34-61V39" fill="#e9faff" stroke="#5c9ca8" stroke-width="5"/><path d="M173 126h62l15 25h-92Z" fill="#75d3bc"/><path d="M280 55h28v90q0 16-14 16t-14-16Z" fill="#ffefdc" stroke="#92aebb" stroke-width="4"/>',
+   safety:'<path d="M54 60q12-11 38-11t38 11v43q-5 18-38 18t-38-18Z" fill="#ecffff" stroke="#3b8599" stroke-width="6"/><path d="M133 60q12-11 38-11t38 11v43q-5 18-38 18t-38-18Z" fill="#ecffff" stroke="#3b8599" stroke-width="6"/><path d="M129 80h6M43 71h11m155 0h20" stroke="#3b8599" stroke-width="7"/><path d="m272 41 42 76h-84Z" fill="#ffcc6b" stroke="#b37b1e" stroke-width="5"/><text x="265" y="105" font-size="38" fill="#72481d" font-weight="800">!</text>',
+   solubility:'<path d="M41 48v95q0 17 18 17h63q18 0 18-17V48M37 48h107" fill="#e9fcff" stroke="#4b98aa" stroke-width="5"/><path d="M47 92h87v53q0 9-14 9H59q-12 0-12-9Z" fill="#6ecce3"/><path d="M199 48v95q0 17 18 17h63q18 0 18-17V48M195 48h107" fill="#e9fcff" stroke="#4b98aa" stroke-width="5"/><path d="M205 92h87v53q0 9-14 9h-62q-11 0-11-9Z" fill="#6ecce3"/><g fill="#fff9df"><circle cx="75" cy="128" r="5"/><circle cx="99" cy="112" r="5"/><circle cx="244" cy="115" r="5"/><circle cx="268" cy="130" r="5"/></g>',
+   thermal:'<path d="M40 103h269M72 103V66h198v37" stroke="#8eabb4" stroke-width="5" fill="none"/><path d="M63 67h102v15H63Z" fill="#bd8853"/><path d="M177 67h102v15H177Z" fill="#9cb8c1"/><rect x="137" y="115" width="70" height="48" rx="9" fill="#3c6a7e"/><path d="M171 145q-25-25 0-42 23 25 0 42Z" fill="#ffb65c"/><path d="M177 105v-23" stroke="#fbce7f" stroke-width="4"/>',
+   heating:'<path d="M91 52v94q0 17 17 17h105q17 0 17-17V52M85 52h151" fill="#d9f4fb" stroke="#6095a4" stroke-width="5"/><path d="M97 108h127v42q0 8-13 8H109q-12 0-12-8Z" fill="#6bc7e5"/><g fill="#e5ffff"><circle cx="126" cy="133" r="8"/><circle cx="173" cy="126" r="6"/><circle cx="191" cy="143" r="8"/></g><rect x="81" y="171" width="163" height="11" rx="4" fill="#647c87"/><path d="M271 55v114" stroke="#dcebea" stroke-width="16" stroke-linecap="round"/><path d="M271 105v64" stroke="#db6750" stroke-width="7"/><circle cx="271" cy="170" r="13" fill="#db6750"/>',
+   burner:'<rect x="151" y="147" width="45" height="41" rx="5" fill="#a7b7c0" stroke="#4b697e" stroke-width="4"/><path d="M159 146V112h29v34" fill="#90a8b8" stroke="#4b697e" stroke-width="4"/><path d="M173 125Q126 82 172 29Q172 71 203 101Q220 133 173 145Z" fill="#ffbd51" stroke="#d17f38" stroke-width="4"/><path d="M168 132q-12-25 6-45 23 32 8 49" fill="#fff3bb"/><rect x="127" y="182" width="92" height="9" rx="4" fill="#526f7e"/>',
+   notebook:'<rect x="84" y="30" width="189" height="152" rx="10" fill="#f8f7e9" stroke="#91a4ab" stroke-width="5"/><path d="M114 30v153M131 73h114m-114 23h114m-114 23h89m-89 24h111" stroke="#a6c8d3" stroke-width="4"/><path d="m217 47 11 10 16-20" fill="none" stroke="#3ab39c" stroke-width="7" stroke-linecap="round"/>',
+   flasks:'<path d="M103 35h54m-11 0v58l49 73q7 12-7 12H72q-15 0-8-12l49-73V35" fill="#e8fbff" stroke="#74a6b1" stroke-width="5"/><path d="M86 139h81l19 32H68Z" fill="#6ec9af"/><path d="M241 60h37m-27 0v60l23 41q5 9-7 9h-62q-12 0-7-9l25-41V60" fill="#e8fbff" stroke="#74a6b1" stroke-width="5"/><path d="M219 143h49l11 25h-71Z" fill="#8ed7ee"/>',
+   particles:'<g fill="#59b8c1" stroke="#377b92" stroke-width="3"><circle cx="95" cy="73" r="24"/><circle cx="144" cy="79" r="22"/><circle cx="99" cy="121" r="22"/><circle cx="147" cy="126" r="23"/></g><g fill="#eeaa60" stroke="#bb8455" stroke-width="3"><circle cx="235" cy="48" r="15"/><circle cx="293" cy="90" r="15"/><circle cx="241" cy="142" r="15"/><circle cx="300" cy="156" r="15"/></g><path d="M188 106h27m-11-11 11 11-11 11" stroke="#628c9a" stroke-width="5" fill="none"/>',
+   detective:'<rect x="50" y="58" width="179" height="100" rx="10" fill="#e8f4f0" stroke="#729fa9" stroke-width="5"/><path d="M62 85h150m-135 21h90m-90 22h65" stroke="#b0cbd0" stroke-width="6"/><circle cx="234" cy="95" r="39" fill="#d5eef2" fill-opacity=".8" stroke="#376f84" stroke-width="9"/><path d="m263 123 42 40" stroke="#376f84" stroke-width="15" stroke-linecap="round"/><path d="m224 85 10 10 14-18" stroke="#28a68d" stroke-width="6" fill="none"/>',
+   quiz:'<rect x="60" y="43" width="235" height="126" rx="14" fill="#fffefa" stroke="#88a5ae" stroke-width="5"/><path d="M85 75h163m-163 30h163m-163 30h110" stroke="#bed5d7" stroke-width="7"/><circle cx="277" cy="75" r="12" fill="#55bba3"/><circle cx="277" cy="105" r="12" fill="#ffcc6b"/><path d="m269 73 6 6 8-12" stroke="#fff" stroke-width="3" fill="none"/>',
+   paper:'<rect x="101" y="28" width="154" height="157" rx="8" fill="#fffdf2" stroke="#849ca5" stroke-width="5"/><path d="M126 61h104m-104 20h104m-104 20h90m-90 20h104m-104 20h70" stroke="#aac6ce" stroke-width="5"/><path d="m210 148 10 10 18-21" stroke="#2bac97" fill="none" stroke-width="6" stroke-linecap="round"/>',
+   path:'<path d="M57 146Q144 175 163 99T294 42" fill="none" stroke="#6fabb6" stroke-width="11" stroke-linecap="round" stroke-dasharray="12 16"/><circle cx="57" cy="146" r="21" fill="#f8e4b7" stroke="#bd9861" stroke-width="4"/><circle cx="294" cy="42" r="21" fill="#76d4b6" stroke="#43a087" stroke-width="4"/><path d="m282 43 10 10 15-20" fill="none" stroke="#f1fff8" stroke-width="5"/>'
+  };
+  return '<svg viewBox="0 0 360 190" role="img" aria-label="Illustration zum Lernbereich" focusable="false"><defs><linearGradient id="'+g+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d4edf0"/><stop offset="1" stop-color="#b9d4dd"/></linearGradient></defs><rect width="360" height="190" fill="url(#'+g+')"/><path d="M0 153h360v37H0Z" fill="#adcdd1"/><path d="M30 153h302" stroke="#729fa8" stroke-width="5" stroke-linecap="round"/>'+parts[variant]+'</svg>';
+ }
+ function upgradeCards(){
+  const grid=get('homeCards');if(!grid)return;
+  for(const card of grid.querySelectorAll('.chem-card[data-chem-route]')){
+   const art=card.querySelector('.chem-card-art');if(art)art.innerHTML=tileSvg(card.dataset.chemRoute);
+  }
+ }
+ get('chemDirFilters')?.addEventListener('click',upgradeCards);
+ document.addEventListener('chemistry:navigate',event=>{if(event.detail?.to==='home')upgradeCards()});
+ upgradeCards();
+ window.ChemistryStudio={previewMode:()=>mode,previewRunning:()=>running,quiz:()=>({index,score,answered}),refreshCards:upgradeCards};
 })();
 </script>
 </body>

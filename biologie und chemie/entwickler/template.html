@@ -29,6 +29,7 @@
 </style>
 <!-- CHEMIE_SOURCE:appearance.css -->
 <!-- CHEMIE_SOURCE:dashboard-access.css -->
+<!-- CHEMIE_SOURCE:desktop-studio.css -->
 </head>
 <body>
 <div class="app">
@@ -102,16 +103,48 @@
 
 <section class="stage" hidden id="page-protocoltrainer" aria-labelledby="peTitle"><div class="page-head"><div class="tag">Üben · Protokoll-Fehlertrainer</div><h2 id="peTitle">Finde den Fehler – verbessere das Protokoll</h2><p>Sechs fiktive Übungsprotokolle enthalten jeweils <b>drei Fehler</b>. Die übrigen Aussagen sind richtig. Lies genau, markiere die fehlerhaften Sätze und wähle anschließend passende Verbesserungen.</p></div><div class="notebox warm"><strong>Fehlertexte zum Prüfen</strong>Einige Aussagen sind absichtlich fachlich falsch oder beschreiben unsicheres Verhalten. Beurteile sie am Bildschirm; reale Versuche nur nach Anleitung und unter Aufsicht der Lehrkraft.</div><section class="panel"><label for="peCase"><b>Übungsprotokoll auswählen</b></label><select id="peCase"></select><p id="peTotal" class="small" role="status" aria-live="polite"></p><h3 id="peCaseTitle" tabindex="-1"></h3><p class="muted">Schritt 1: Markiere genau die drei fehlerhaften Aussagen. Tippe erneut, um eine Markierung zurückzunehmen.</p><div id="peSentences"></div><div class="btn-row"><button type="button" class="btn primary" id="peCheck">Markierte Fehler prüfen</button><button type="button" class="btn" id="peHint">Hinweis anzeigen</button><button type="button" class="btn" id="peReset">Dieses Protokoll neu üben</button></div><p id="peFeedback" class="feedback" role="status" aria-live="polite">Markiere die fehlerhaften Sätze.</p><p id="peHintText" class="notebox" hidden></p><section id="peRepairs" hidden aria-labelledby="peRepairTitle"><h4 id="peRepairTitle">Schritt 2: Verbessere die Fehler</h4><div id="peRepairInputs"></div><button type="button" class="btn primary" id="peRepairCheck">Verbesserungen prüfen</button><p id="peRepairFeedback" class="feedback" role="status" aria-live="polite"></p></section><details class="hint" id="peSolution" hidden><summary>Korrigiertes Musterprotokoll und Erklärungen</summary><div id="peSolutionBody"></div></details><div class="btn-row"><button type="button" class="btn" id="peNext">Nächstes Protokoll →</button><button type="button" class="btn" id="pePrint">Fehlerprotokolle drucken</button><button type="button" class="btn" id="pePrintSolutions">Lösungsblätter drucken</button><button type="button" class="btn primary" data-go="finaltest">Zur Klassenarbeit →</button></div></section></section>
 
-<section class="stage" hidden id="page-learningpath"><div class="page-head"><div class="tag">Geführter Lernpfad</div><h2 id="luLessonTitle" tabindex="-1"></h2><p id="luStepLabel"></p></div><details class="lu-extra" id="luTopicOverview"><summary>Thema wechseln · Die acht Stationen ansehen</summary><div id="luList" class="lu-grid"></div></details><div id="luStages" class="lu-steps"></div><section class="panel lu-stage" id="luStage"></section><div class="btn-row"><button type="button" class="btn" id="luPrev">← Zurück</button><button type="button" class="btn primary" id="luNext">Weiter →</button></div></section><section class="stage" hidden id="page-practicehub"><div class="page-head"><div class="tag">Üben</div><h2>Was möchtest du festigen?</h2><p>Wähle eine kurze Übung passend zu deinem Lernstand.</p></div><div id="luPracticeCards" class="lu-grid"></div></section><section class="stage" hidden id="page-reviewpractice"><div class="page-head"><div class="tag">Persönlich nachüben</div><h2>Deine Fehler verstehen und verbessern</h2><p id="luReviewPosition"></p></div><section class="panel" id="luReviewTask"></section></section><section class="stage" id="page-home"><div class="lu-hub"><span class="eyebrow" style="color:#d4f8ed">Dein Weg zur Klassenarbeit</span><h1>Chemie verstehen – Schritt für Schritt</h1><p>Wähle deinen Einstieg. Der Lernpfad führt genau durch deine Klassenarbeitsthemen.</p><div class="lu-entry"><button type="button" id="luLearn"><strong>1 · Lernen</strong><small>Kurze Schritte: anschauen, vermuten, verstehen und erklären.</small></button><button type="button" id="luPractice"><strong>2 · Üben</strong><small>Fehlerprotokolle, eigene Erklärungen und persönliches Nachtraining.</small></button><button type="button" id="luExam"><strong>3 · Klassenarbeit</strong><small>Grundlagenteil und eigener Schreibteil; Auswertung nach der Abgabe.</small></button></div><div class="lu-recommend"><p id="luRecommendation"></p><p id="luHomeProgress" class="small"></p><button type="button" class="btn primary" id="luContinue">Hier weitermachen →</button></div></div><section class="lu-extra chem-directory" id="luAllAreas" aria-labelledby="chemDirectoryTitle"><h2 id="chemDirectoryTitle">Alle Chemie-Bereiche entdecken</h2><p class="chem-directory-lead">Hier findest du sämtliche Lernstationen, virtuellen Experimente, Spiele und Tests der früheren App sowie die neuen Übungen.</p>
-<div class="hero"><div class="hero-content"><span class="eyebrow">Dein interaktives Lernlabor</span><h1>Chemie ist überall!</h1><p>Warum löst sich Zucker anders als Salz? Wo ist eine Gasflamme besonders heiß? Und woran erkennst du einen Stoff? Entdecke die Antworten selbst.</p><div class="hero-actions"><button class="btn" data-go="matter">🚀 Lernreise starten</button><button class="btn transparent" data-go="quiz">🎯 Zum Wissenscheck</button></div></div>
-<div aria-hidden="true" class="hero-art"><svg viewbox="0 0 220 260"><defs><lineargradient id="flaskG" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a8ffca"></stop><stop offset="1" stop-color="#32c5d7"></stop></lineargradient></defs><path d="M90 20h42v19h-8v75l60 102q10 18-10 18H46q-20 0-10-18l62-102V39h-8Z" fill="#ffffff25" stroke="#e9ffff" stroke-linejoin="round" stroke-width="8"></path><path d="M65 164h88l32 56q4 8-9 8H44q-13 0-7-10Z" fill="url(#flaskG)"></path><path d="M75 160q30-28 73 4" fill="none" stroke="#e7fff8" stroke-width="3"></path><circle cx="86" cy="190" fill="#e7fff8" opacity=".6" r="11"></circle><circle cx="135" cy="207" fill="#e7fff8" opacity=".7" r="7"></circle><circle cx="123" cy="179" fill="#e7fff8" r="4"></circle><circle cx="39" cy="104" fill="#ffc56e" r="12"></circle><circle cx="184" cy="92" fill="#afffeb" r="8"></circle></svg></div></div>
+<section class="stage" hidden id="page-learningpath"><div class="page-head"><div class="tag">Geführter Lernpfad</div><h2 id="luLessonTitle" tabindex="-1"></h2><p id="luStepLabel"></p></div><details class="lu-extra" id="luTopicOverview"><summary>Thema wechseln · Die acht Stationen ansehen</summary><div id="luList" class="lu-grid"></div></details><div id="luStages" class="lu-steps"></div><section class="panel lu-stage" id="luStage"></section><div class="btn-row"><button type="button" class="btn" id="luPrev">← Zurück</button><button type="button" class="btn primary" id="luNext">Weiter →</button></div></section><section class="stage" hidden id="page-practicehub"><div class="page-head"><div class="tag">Üben</div><h2>Was möchtest du festigen?</h2><p>Wähle eine kurze Übung passend zu deinem Lernstand.</p></div><div id="luPracticeCards" class="lu-grid"></div></section><section class="stage" hidden id="page-reviewpractice"><div class="page-head"><div class="tag">Persönlich nachüben</div><h2>Deine Fehler verstehen und verbessern</h2><p id="luReviewPosition"></p></div><section class="panel" id="luReviewTask"></section></section><section class="stage" id="page-home">
+<div class="chem-home-top">
+  <section class="chem-studio-hero" aria-labelledby="chemStudioTitle">
+    <div class="chem-studio-copy">
+      <span class="chem-kicker">DEIN CHEMIE-ENTDECKERLABOR · KLASSE 5</span>
+      <h1 id="chemStudioTitle">Entdecken. Experimentieren. Verstehen.</h1>
+      <p>Mach Unsichtbares sichtbar: Erforsche Teilchen, verändere virtuelle Versuche und löse spannende Laborrätsel.</p>
+      <div class="chem-studio-actions">
+        <button type="button" class="chem-studio-primary" data-go="deep">Animationen entdecken <span aria-hidden="true">→</span></button>
+        <button type="button" class="chem-studio-secondary" data-go="v4play">Zur Chemie-Spielwelt</button>
+      </div>
+      <div class="chem-studio-facts"><span><strong>22</strong> Lernbereiche</span><span><strong>4</strong> Forscherstationen</span><span><strong>3</strong> Detektiv-Szenen</span></div>
+    </div>
+    <div class="chem-hero-visual" id="chemHeroImage" aria-hidden="true"></div>
+  </section>
+  <div class="lu-hub"><span class="eyebrow" style="color:#d4f8ed">Dein Weg zur Klassenarbeit</span><h1>Chemie verstehen – Schritt für Schritt</h1><p>Wähle deinen Einstieg. Der Lernpfad führt genau durch deine Klassenarbeitsthemen.</p><div class="lu-entry"><button type="button" id="luLearn"><strong>1 · Lernen</strong><small>Kurze Schritte: anschauen, vermuten, verstehen und erklären.</small></button><button type="button" id="luPractice"><strong>2 · Üben</strong><small>Fehlerprotokolle, eigene Erklärungen und persönliches Nachtraining.</small></button><button type="button" id="luExam"><strong>3 · Klassenarbeit</strong><small>Grundlagenteil und eigener Schreibteil; Auswertung nach der Abgabe.</small></button></div><div class="lu-recommend"><p id="luRecommendation"></p><p id="luHomeProgress" class="small"></p><button type="button" class="btn primary" id="luContinue">Hier weitermachen →</button></div></div>
+</div>
+<div class="chem-studio-workbench" aria-label="Interaktives Chemie-Erlebnis">
+ <section class="chem-studio-model" aria-labelledby="chemModelHeading">
+  <div class="chem-studio-panel-head"><span class="chem-panel-overline">VIRTUELLES EXPERIMENT · VORSCHAU</span><h2 id="chemModelHeading">Probier es selbst aus</h2><p>Starte eine Animation, beobachte und öffne anschließend den vollständigen Versuch.</p></div>
+  <div class="chem-studio-modes" id="chemDemoModes" role="group" aria-label="Versuch auswählen">
+   <button type="button" data-mode="solute" aria-pressed="true">Löslichkeit</button>
+   <button type="button" data-mode="boil" aria-pressed="false">Siedetemperatur</button>
+   <button type="button" data-mode="flame" aria-pressed="false">Brennerflamme</button>
+  </div>
+  <div class="chem-studio-scene" id="chemDemoStage" role="img" aria-label="Vereinfachtes, interaktives Chemie-Modell"></div>
+  <p class="chem-studio-observation" id="chemDemoHint" aria-live="polite">Was passiert, wenn ein löslicher Stoff in Wasser gegeben wird?</p>
+  <div class="chem-studio-model-actions"><button type="button" id="chemDemoRun" class="chem-studio-primary">Animation starten</button><button type="button" id="chemDemoGo" class="chem-studio-textbutton">Vollständiges Experiment öffnen →</button></div>
+  <p class="chem-studio-disclaimer">Vereinfachte Bildschirmmodelle – keine Messwerte und keine Anleitung für unbeaufsichtigte Versuche.</p>
+ </section>
+ <section class="chem-studio-quiz" aria-labelledby="chemQuizTitle">
+  <div class="chem-studio-panel-head"><span class="chem-panel-overline">KLEINER WISSENSCHECK</span><h2 id="chemQuizTitle">Labor-Challenge</h2><p>Vier Fragen zum Mitdenken – mit einer Erklärung nach jeder Antwort.</p></div>
+  <div class="chem-quick-score"><span id="chemQuickPosition">Frage 1 von 4</span><span id="chemQuickScore">0 richtig</span></div>
+  <div class="chem-quick-track"><span id="chemQuickProgress"></span></div>
+  <h3 id="chemQuickQuestion" tabindex="-1"></h3>
+  <div class="chem-quick-options" id="chemQuickOptions" role="group" aria-label="Antwortmöglichkeiten"></div>
+  <p id="chemQuickFeedback" class="chem-quick-feedback" role="status" aria-live="polite"></p>
+  <div class="chem-quick-actions"><button type="button" id="chemQuickNext" class="chem-studio-primary" disabled>Nächste Frage →</button><button type="button" id="chemFullQuiz" class="chem-studio-textbutton">Großen Wissenscheck öffnen →</button></div>
+ </section>
+</div>
+<section class="lu-extra chem-directory" id="luAllAreas" aria-labelledby="chemDirectoryTitle"><h2 id="chemDirectoryTitle">Alle Chemie-Bereiche entdecken</h2><p class="chem-directory-lead">Hier findest du sämtliche Lernstationen, virtuellen Experimente, Spiele und Tests der früheren App sowie die neuen Übungen.</p>
 <div class="section-head chem-directory-heading"><h3>Wähle deinen Bereich</h3><span class="small muted">Alle Themen direkt erreichbar</span></div>
-<section class="panel cp-entry" aria-label="Probearbeit zum Lernheft">
-<strong>Probearbeit zum Lernheft</strong>
-<p>9 Aufgaben mit Lückentext · 37 Punkte · etwa 30 Minuten</p>
-<div class="btn-row"><button class="btn primary" type="button" data-go="probearbeit">Probearbeit öffnen</button>
-<a class="btn" href="Chemie_Probearbeit.pdf" download>Probearbeit als PDF</a></div>
-</section>
 <div id="chemDirFilters" class="chem-dir-filters" role="group" aria-label="Chemie-Bereiche auswählen"></div><p id="chemDirStatus" class="chem-dir-status" role="status" aria-live="polite"></p><div class="cards chem-card-grid" id="homeCards" aria-label="Chemie-Lernbereiche"></div>
 <div class="notebox warm" style="margin-top:22px"><strong>🛡️ Sicherheit zuerst</strong>Die Experimente mit Gasbrenner werden hier nur virtuell durchgeführt. Im echten Chemieraum experimentierst du ausschließlich nach Anweisung der Lehrkraft.</div>
 </section></section>
@@ -442,6 +475,7 @@
 <div id="chemDisplayShade" aria-hidden="true"></div>
 <!-- CHEMIE_SOURCE:appearance.js -->
 <!-- CHEMIE_SOURCE:dashboard-access.js -->
+<!-- CHEMIE_SOURCE:desktop-studio.js -->
 </body>
 </html>
 

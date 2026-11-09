@@ -24,3 +24,9 @@ Die drei Einstiege Lernen / Üben / Klassenarbeit bleiben als Schnellzugang steh
 
 ## Noch gesondert zu prüfen
 Reale Bedienung auf iPhone/iPad, alle Unteranimationen einzeln, Audioqualität und inhaltliche Korrektheit einzelner Experimente; ein Browser-Smoke-Test allein beweist diese Punkte nicht.
+
+## PC-first Erlebniswelt (November 2026)
+
+Die Startseite wird zusätzlich durch `entwickler/desktop-studio.css` und `entwickler/desktop-studio.js` gestaltet. Große Laborillustration, drei **steuerbare Bildschirmmodelle** (Löslichkeit/Siedepunkt/Flammenbild), ein direkt spielbarer Vier-Fragen-Wissenscheck und fachbezogene Illustrationen für alle 22 Navigationskarten. Die vorhandenen vollständigen Experimente, Spiele und Tests bleiben unverändert.
+
+Die Vorschau dient dem intuitiven Einstieg und ersetzt **nicht** die ausführlichen Animationen in `deep`, `v4lab`, `v5academy` und `chem6`. Keine Leistungsdaten werden durch das Kurzquiz überschrieben. Fokus: großzügige PC-Ansicht; Tablet und Smartphone bleiben benutzbar. Für jede Veränderung: `node entwickler/build-offline.cjs`, `node tests/run-suite.cjs`; die automatische Testmatrix prüft Chromium, Firefox und WebKit.
