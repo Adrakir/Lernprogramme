@@ -16,6 +16,12 @@ Eine eigenständige, interaktive Deutschlernapp mit Maja, Bärli, Fuji und Minka
 
 Die Auswahl der Computerstimmen hängt von den Stimmen ab, die auf dem jeweiligen Gerät und im Browser vorhanden sind. Die App kann nicht garantieren, dass jede gewünschte Stimme überall verfügbar ist.
 
+## Bärlis Kleiderschrank (Erweiterung 09.11.2026)
+
+Im Bereich **Bärlis Kleidung** gibt es jetzt zwölf weitere Sachen in den sechs Kategorien Hüte, Brillen, Pullover/Jacken, Hosen, Schals und Schuhe. Die Kategorien haben Beispielbilder mit Artikelzahl. Beim Blättern wird die gewählte Kleidung **probeweise direkt auf Bärli gezeigt**, ohne sie zu kaufen oder Sterne abzuziehen. Erst **Für … Sterne kaufen** erwirbt ein Stück; bereits gekaufte Artikel lassen sich weiter an- und ausziehen. Bestehende Kleidung und gespeicherte Sterne bleiben erhalten. Die visuelle Abnahme auf realen Geräten ist noch offen.
+
+Die aktuelle Prüfung der 10 Klassenarbeits-Tests und der Comic-Originalbilder steht in [QA_BEFUNDE_2026-11-09.md](./QA_BEFUNDE_2026-11-09.md).
+
 ## Für Eltern und Lehrkräfte
 
 - `#erwachsene`: Übersicht mit tatsächlich vorhandenen Bearbeitungen; ein fehlender Wert wird **nicht** als Leistungsurteil interpretiert.
