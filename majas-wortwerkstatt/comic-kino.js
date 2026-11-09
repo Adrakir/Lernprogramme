@@ -95,12 +95,16 @@ function mount({frames,mode="detective"}){
    area.insertAdjacentElement("afterend",stepper);
    const previous=stepper.querySelector("[data-kino-prev]"),next=stepper.querySelector("[data-kino-next]");
    const count=stepper.querySelector(".kino-step-count");
+   // Den vorhandenen Seiten-Link wiederverwenden; keine zweite Routing-Logik.
+   const nextPage=area.parentElement?.querySelector("nav.actions a.primary[href]");
    let index=0;
    choosePanel=(n,moveFocus=true)=>{
      index=Math.min(wraps.length-1,Math.max(0,n));
      wraps.forEach((w,i)=>{w.hidden=i!==index;});
+     const last=index===wraps.length-1;
      previous.disabled=index===0;
-     next.disabled=index===wraps.length-1;
+     next.disabled=last&&!nextPage;
+     next.textContent=last&&nextPage?"Nächste Comicseite →":"Nächstes Bild →";
      count.textContent="Bild "+(index+1)+" von "+wraps.length;
      if(moveFocus){
        wraps[index].scrollIntoView({behavior:"auto",block:"nearest"});
@@ -108,7 +112,10 @@ function mount({frames,mode="detective"}){
      }
    };
    previous.onclick=()=>choosePanel(index-1);
-   next.onclick=()=>choosePanel(index+1);
+   next.onclick=()=>{
+     if(index===wraps.length-1){nextPage?.click();return;}
+     choosePanel(index+1);
+   };
    choosePanel(0,false);
  }
  function current(i){
