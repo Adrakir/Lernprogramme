@@ -9,7 +9,7 @@ const app=path.resolve(__dirname,'../Chemie_Entdeckerlabor_V7_2.html');
  p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href);
  assert.equal(await p.locator('#luAllAreas').isVisible(),true,'Old area must be visible without hidden details');
- assert.equal(await p.locator('#chemDirFilters button').count(),4);
+ assert.equal(await p.locator('#chemDirFilters button').count(),5);
  assert.equal(await p.locator('#homeCards .chem-card').count(),8,'Basics are visible on arrival');
  for(const [category,count,route] of [
   ['experiments',6,'v4lab'],['games',2,'v4play'],['tests',6,'finaltest'],['basics',8,'solubility']

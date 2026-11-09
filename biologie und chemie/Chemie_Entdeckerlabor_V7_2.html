@@ -178,7 +178,7 @@ html,body{max-width:100%;overflow-x:clip}.app{max-width:100%;overflow-x:clip}#ce
 #page-probearbeit .cp-check input{flex:none}
 </style>
 <style data-chemie-source="appearance.css">/* Grey reading surfaces and adjustable display dimming. */
-body:not(.lc-theme-dark){--bg:#d1d5db;--paper:#e7e9ec}
+body:not(.lc-theme-dark){--bg:#e0e6e9;--paper:#f6f9fa}
 body:not(.lc-theme-dark) .panel,
 body:not(.lc-theme-dark) .card,
 body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}
@@ -407,6 +407,63 @@ body.lc-theme-dark #page-home .chem-quick-options button.is-wrong{color:#732929}
  #page-home .chem-home-top .lu-entry strong{display:block;white-space:normal;min-width:0;font-size:15px}
  #page-home .chem-home-top .lu-entry small{display:block;margin-top:3px;font-size:12px}
 }
+
+/* PC-first Galerie der bestehenden virtuellen Experimente und Spiele. */
+#page-home .chem-home-top{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+#page-home .chem-studio-hero{min-height:290px;height:290px;flex:none}
+#page-home .chem-studio-copy{width:57%;padding:24px 0 22px 33px}
+#page-home .chem-studio-hero h1{font-size:clamp(34px,3.35vw,50px);margin:10px 0}
+#page-home .chem-hero-visual{height:100%;width:42%}
+#page-home .chem-studio-facts{margin-top:12px}
+#page-home .chem-featured{background:var(--paper);padding:15px 19px 18px;border:1px solid var(--line);border-radius:18px;box-shadow:0 5px 19px #153b4816}
+#page-home .chem-featured-header{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:0 0 11px}
+#page-home .chem-featured-kicker{color:var(--teal);font-size:10px;letter-spacing:.13em;font-weight:850}
+#page-home .chem-featured-header h2{font-size:clamp(21px,2.1vw,28px);margin:3px 0 0}
+#page-home .chem-featured-header p{font-size:12px;line-height:1.43;color:var(--muted);margin:0;max-width:370px}
+#page-home .chem-featured-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#page-home .chem-feature-card{display:flex;flex-direction:column;min-width:0;padding:0;text-align:left;background:var(--paper);color:var(--ink);font:inherit;cursor:pointer;border:1px solid #bfd1d3;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px #19344016;transition:transform .18s,border-color .18s,box-shadow .18s}
+#page-home .chem-feature-card:hover{transform:translateY(-3px);border-color:var(--teal);box-shadow:0 9px 19px #19344030}
+#page-home .chem-feature-card:focus-visible{outline:3px solid #d19242;outline-offset:3px}
+#page-home .chem-feature-image{display:block;height:136px;overflow:hidden}
+#page-home .chem-feature-image svg{display:block;width:100%;height:100%;transition:transform .23s}
+#page-home .chem-feature-card:hover .chem-feature-image svg{transform:scale(1.045)}
+#page-home .chem-feature-copy{display:flex;flex-direction:column;gap:4px;padding:10px 12px 12px;flex:1}
+#page-home .chem-feature-kicker{font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--teal)}
+#page-home .chem-feature-copy strong{font-size:18px;line-height:1.18}
+#page-home .chem-feature-copy>span:not(.chem-feature-kicker){font-size:12px;line-height:1.39;color:var(--muted);flex:1}
+#page-home .chem-feature-copy em{font-style:normal;font-size:12px;font-weight:800;color:var(--teal);margin-top:7px}
+#page-home .chem-feature-molecule{animation:chemFeatureMolecule 2.7s ease-in-out infinite alternate}
+#page-home .chem-feature-molecule.b{animation-duration:3.3s;animation-delay:-1.1s}
+@keyframes chemFeatureMolecule{from{transform:translate(-3px,4px)}to{transform:translate(5px,-5px)}}
+#page-home .chem-feature-magnifier{animation:chemFeatureDetect 3.8s ease-in-out infinite alternate}
+@keyframes chemFeatureDetect{from{transform:translate(-6px,-4px)}to{transform:translate(7px,4px)}}
+#page-home .chem-feature-lights{animation:chemFeatureBlink 1.5s ease-in-out infinite alternate}
+@keyframes chemFeatureBlink{from{opacity:.3}to{opacity:1}}
+#page-home .chem-home-top>.lu-hub{display:grid;grid-template-columns:minmax(170px,.7fr) minmax(340px,1.6fr) minmax(220px,.84fr);grid-template-rows:auto auto 1fr;gap:5px 13px;align-items:start;min-height:140px;padding:15px 19px;margin:0;border:1px solid var(--line);border-radius:17px;background:var(--paper)}
+#page-home .chem-home-top>.lu-hub>.eyebrow{grid-column:1;grid-row:1}
+#page-home .chem-home-top>.lu-hub>h1{grid-column:1;grid-row:2;font-size:20px;margin:0}
+#page-home .chem-home-top>.lu-hub>p{grid-column:1;grid-row:3;font-size:11px;margin:0}
+#page-home .chem-home-top .lu-entry{grid-column:2;grid-row:1/span 3;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0;align-self:stretch}
+#page-home .chem-home-top .lu-entry button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:113px;padding:10px}
+#page-home .chem-home-top .lu-entry strong{font-size:15px;line-height:1.2}
+#page-home .chem-home-top .lu-entry small{font-size:11px;line-height:1.35;color:var(--muted);margin:0}
+#page-home .chem-home-top .lu-recommend{grid-column:3;grid-row:1/span 3;margin:0;align-self:stretch;padding:11px;display:flex;flex-direction:column;justify-content:center}
+#page-home .chem-home-top .lu-recommend p{font-size:11px;line-height:1.32}
+#page-home .chem-home-top .lu-recommend .btn{font-size:12px;padding:6px 9px;align-self:start;min-height:36px}
+#page-home .chem-studio-workbench{margin-top:14px}
+#page-home .chem-dir-filters{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+#page-home .chem-dir-filter{min-width:0;padding:10px 8px;gap:6px}
+#page-home .chem-dir-filter strong{font-size:13px}
+#page-home .chem-card-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+#page-home .chem-card{min-height:287px}
+#page-home .chem-card-art,#page-home .chem-card-art svg{height:125px}
+body:not(.lc-theme-dark) #page-home .chem-featured,body:not(.lc-theme-dark) #page-home .chem-directory,body:not(.lc-theme-dark) #page-home .chem-home-top>.lu-hub{background:#f7faf9}
+body:not(.lc-theme-dark) #page-home .chem-feature-card,body:not(.lc-theme-dark) #page-home .chem-card{background:#fff}
+@media(max-width:1280px){#page-home .chem-feature-copy strong{font-size:16px}#page-home .chem-home-top>.lu-hub{grid-template-columns:minmax(160px,.65fr) minmax(330px,1.55fr) minmax(210px,.8fr)}}
+@media(max-width:1099px){#page-home .chem-studio-hero{height:auto;min-height:290px}#page-home .chem-featured-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#page-home .chem-home-top>.lu-hub{display:flex;flex-direction:column;gap:9px}#page-home .chem-home-top .lu-entry{width:100%;grid-template-columns:repeat(3,minmax(0,1fr))}#page-home .chem-home-top .lu-recommend{display:block;width:100%}#page-home .chem-dir-filters{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){#page-home .chem-studio-hero{min-height:300px;height:auto}#page-home .chem-featured{padding:12px}#page-home .chem-featured-header{display:block}#page-home .chem-featured-header p{margin:6px 0 0}#page-home .chem-featured-grid{gap:8px}#page-home .chem-feature-image{height:100px}#page-home .chem-feature-copy{padding:9px}#page-home .chem-feature-copy strong{font-size:15px}#page-home .chem-feature-copy>span:not(.chem-feature-kicker){font-size:11px}#page-home .chem-home-top .lu-entry{grid-template-columns:1fr}#page-home .chem-home-top .lu-entry button{min-height:53px;padding:9px}#page-home .chem-dir-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){#page-home .chem-feature-molecule,#page-home .chem-feature-magnifier,#page-home .chem-feature-lights{animation:none!important}}
+@media print{#page-home .chem-featured,#page-home .chem-home-top>.lu-hub{display:none}#page-home .chem-studio-hero{height:auto;min-height:0}}
 </style>
 </head>
 <body>
@@ -496,6 +553,7 @@ body.lc-theme-dark #page-home .chem-quick-options button.is-wrong{color:#732929}
     </div>
     <div class="chem-hero-visual" id="chemHeroImage" aria-hidden="true"></div>
   </section>
+  <section class="chem-featured" aria-labelledby="chemFeaturedHeading"><div class="chem-featured-header"><div><span class="chem-featured-kicker">DIE ORIGINAL-WERKSTÄTTEN DIREKT STARTEN</span><h2 id="chemFeaturedHeading">Animationen, Experimente & Spiele</h2></div><p>Hier geht es direkt zu den aufwendigen Lernstationen der früheren App.</p></div><div class="chem-featured-grid"><button type="button" class="chem-feature-card" data-go="deep" data-feature-route="deep" data-feature-tab="particles" aria-label="Teilchenkino starten"><span class="chem-feature-image" style="background:#b3dfe7" aria-hidden="true"><svg viewBox="0 0 300 160" focusable="false"><ellipse cx="150" cy="147" rx="122" ry="10" fill="#4e7986" opacity=".13"/><path d="M40 19v107q0 14 17 14h190q17 0 17-14V19M40 19h224" fill="#dff9ff" stroke="#3f8196" stroke-width="5"/><path d="M46 66q56-8 111 0t101 0v60q0 8-12 8H57q-11 0-11-8Z" fill="#81cee1"/><g fill="#e8fdff" stroke="#4886a1" stroke-width="2"><circle class="chem-feature-molecule" cx="82" cy="91" r="11"/><circle class="chem-feature-molecule b" cx="116" cy="113" r="9"/><circle class="chem-feature-molecule" cx="158" cy="85" r="9"/><circle class="chem-feature-molecule b" cx="201" cy="111" r="10"/></g><g fill="#f1b568"><circle class="chem-feature-molecule" cx="92" cy="124" r="6"/><circle class="chem-feature-molecule b" cx="165" cy="121" r="6"/><circle class="chem-feature-molecule" cx="219" cy="88" r="6"/></g></svg></span><span class="chem-feature-copy"><span class="chem-feature-kicker">Animation · Mitmachen</span><strong>Teilchenkino</strong><span>Erkunde die Bewegung der Stoffteilchen.</span><em>Jetzt starten →</em></span></button><button type="button" class="chem-feature-card" data-go="v4lab" data-feature-route="v4lab" data-feature-tab="lab" aria-label="Virtuelles Labor starten"><span class="chem-feature-image" style="background:#c1e4d9" aria-hidden="true"><svg viewBox="0 0 300 160" focusable="false"><ellipse cx="150" cy="147" rx="122" ry="10" fill="#4e7986" opacity=".13"/><path d="M20 140h264" stroke="#6c97a0" stroke-width="7"/><path d="M32 27h108m-94 0v112m79-112v112" stroke="#5e8390" stroke-width="6"/><path d="M61 51h55v66q0 12-13 12H74q-13 0-13-12Z" fill="#e1faff" stroke="#41879b" stroke-width="4"/><path d="M67 83h43v33q0 7-10 7H77q-10 0-10-7Z" fill="#58ccb0"/><path d="M186 19h48m-13 0v46l43 59q8 13-7 13h-91q-15 0-7-13l44-59V19" fill="#e6fbff" stroke="#478c9d" stroke-width="5"/><path d="M174 108h74l16 23h-107Z" fill="#55bfd0"/><g fill="#fae1a1"><circle class="chem-feature-molecule" cx="198" cy="113" r="6"/><circle class="chem-feature-molecule b" cx="225" cy="124" r="7"/></g></svg></span><span class="chem-feature-copy"><span class="chem-feature-kicker">Simulation · Experiment</span><strong>Virtuelles Labor</strong><span>Baue Versuche auf und teste Geräte.</span><em>Jetzt starten →</em></span></button><button type="button" class="chem-feature-card" data-go="v4play" data-feature-route="v4play" data-feature-tab="detective" aria-label="Sicherheitsdetektiv starten"><span class="chem-feature-image" style="background:#ecdbbd" aria-hidden="true"><svg viewBox="0 0 300 160" focusable="false"><ellipse cx="150" cy="147" rx="122" ry="10" fill="#4e7986" opacity=".13"/><path d="M18 142h267" stroke="#a58e70" stroke-width="8"/><rect x="30" y="36" width="205" height="106" rx="5" fill="#f8ebd9" stroke="#b9a58a" stroke-width="4"/><path d="M38 58h191" stroke="#8aadb4" stroke-width="6"/><rect x="59" y="76" width="43" height="52" rx="3" fill="#c5e4e8" stroke="#7da7b0" stroke-width="3"/><path d="m146 78 18 32h-36Z" fill="#ffca70" stroke="#966a2e" stroke-width="3"/><text x="142" y="107" font-size="24" font-weight="bold" fill="#7c5120">!</text><g class="chem-feature-magnifier"><circle cx="230" cy="79" r="28" fill="#f0fdff" fill-opacity=".8" stroke="#24677d" stroke-width="9"/><path d="m251 99 31 31" stroke="#24677d" stroke-width="13" stroke-linecap="round"/><path d="m218 75 9 9 16-20" fill="none" stroke="#35ad98" stroke-width="5"/></g></svg></span><span class="chem-feature-copy"><span class="chem-feature-kicker">Spiel · Fehler finden</span><strong>Sicherheitsdetektiv</strong><span>Entdecke Gefahren in drei Laborszenen.</span><em>Jetzt starten →</em></span></button><button type="button" class="chem-feature-card" data-go="v4play" data-feature-route="v4play" data-feature-tab="escape" aria-label="Escape-Room starten"><span class="chem-feature-image" style="background:#c1d2df" aria-hidden="true"><svg viewBox="0 0 300 160" focusable="false"><ellipse cx="150" cy="147" rx="122" ry="10" fill="#4e7986" opacity=".13"/><rect x="50" y="46" width="200" height="97" rx="11" fill="#d5b97e" stroke="#7e6363" stroke-width="6"/><rect x="91" y="23" width="113" height="37" rx="9" fill="#5c8297" stroke="#395f72" stroke-width="6"/><path d="M108 23v23m80-23v23" stroke="#b2cdd5" stroke-width="6"/><rect x="106" y="82" width="85" height="41" rx="7" fill="#314b5e" stroke="#e1ae66" stroke-width="4"/><g class="chem-feature-lights" fill="#ffe3a0"><circle cx="124" cy="94" r="5"/><circle cx="147" cy="94" r="5"/><circle cx="169" cy="94" r="5"/></g><path d="M133 110h33" stroke="#a7c5d0" stroke-width="4"/><circle cx="223" cy="104" r="12" fill="#426d81" stroke="#dba45e" stroke-width="4"/></svg></span><span class="chem-feature-copy"><span class="chem-feature-kicker">Spiel · Rätsel</span><strong>Escape-Room</strong><span>Löse das Rätsel der Forschungskiste.</span><em>Jetzt starten →</em></span></button></div></section>
   <div class="lu-hub"><span class="eyebrow" style="color:#d4f8ed">Dein Weg zur Klassenarbeit</span><h1>Chemie verstehen – Schritt für Schritt</h1><p>Wähle deinen Einstieg. Der Lernpfad führt genau durch deine Klassenarbeitsthemen.</p><div class="lu-entry"><button type="button" id="luLearn"><strong>1 · Lernen</strong><small>Kurze Schritte: anschauen, vermuten, verstehen und erklären.</small></button><button type="button" id="luPractice"><strong>2 · Üben</strong><small>Fehlerprotokolle, eigene Erklärungen und persönliches Nachtraining.</small></button><button type="button" id="luExam"><strong>3 · Klassenarbeit</strong><small>Grundlagenteil und eigener Schreibteil; Auswertung nach der Abgabe.</small></button></div><div class="lu-recommend"><p id="luRecommendation"></p><p id="luHomeProgress" class="small"></p><button type="button" class="btn primary" id="luContinue">Hier weitermachen →</button></div></div>
 </div>
 <div class="chem-studio-workbench" aria-label="Interaktives Chemie-Erlebnis">
@@ -3452,6 +3510,7 @@ select.value=String(data.level);show();
  const grid=document.getElementById('homeCards'),filters=document.getElementById('chemDirFilters'),status=document.getElementById('chemDirStatus');
  if(!grid||!filters||!status)return;
  const groups=[
+  {id:'all',symbol:'🧭',name:'Alle Bereiche'},
   {id:'basics',symbol:'📘',name:'Grundlagen'},
   {id:'experiments',symbol:'🧪',name:'Experimentieren'},
   {id:'games',symbol:'🎮',name:'Spielen'},
@@ -3501,12 +3560,12 @@ select.value=String(data.level);show();
  };
  const icon=k=>'<svg viewBox="0 0 128 90" aria-hidden="true" focusable="false"><circle cx="64" cy="45" r="37" fill="#ffffff45"/><g stroke="var(--chem-illustration-ink)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">'+(paths[k]||paths.flask)+'</g></svg>';
  const ready=areas.filter(a=>document.getElementById('page-'+a[0]));
- const counts=Object.fromEntries(groups.map(g=>[g.id,ready.filter(a=>a[1]===g.id).length]));
- let category='basics';
+ const counts=Object.fromEntries(groups.map(g=>[g.id,g.id==='all'?ready.length:ready.filter(a=>a[1]===g.id).length]));
+ let category=matchMedia('(min-width:701px)').matches?'all':'basics';
  filters.innerHTML=groups.map(g=>'<button type="button" class="chem-dir-filter" data-chem-group="'+g.id+'" aria-pressed="false"><span class="chem-filter-emoji" aria-hidden="true">'+g.symbol+'</span><span><strong>'+g.name+'</strong><small>'+counts[g.id]+' Bereiche</small></span></button>').join('');
  function render(){
   for(const b of filters.querySelectorAll('[data-chem-group]'))b.setAttribute('aria-pressed',String(b.dataset.chemGroup===category));
-  const list=ready.filter(a=>a[1]===category);
+  const list=ready.filter(a=>category==='all'||a[1]===category);
   status.textContent=list.length+' Bereiche · Tippe auf ein Bild, um direkt zu starten.';
   const done=window.ChemistryLearning?.snapshot()?.done||{};
   grid.innerHTML=list.map(a=>'<button type="button" class="chem-card" data-chem-route="'+a[0]+'" data-chem-category="'+a[1]+'" aria-label="'+a[2]+' öffnen"><span class="chem-card-art">'+icon(a[4])+'</span><span class="chem-card-label">'+groups.find(g=>g.id===a[1]).name+'</span><strong class="chem-card-title">'+a[2]+(done[a[0]]?'<span class="chem-card-check" aria-label="Abgeschlossen">✓</span>':'')+'</strong><span class="chem-card-desc">'+a[3]+'</span><span class="chem-card-action">Öffnen →</span></button>').join('');
@@ -3639,6 +3698,9 @@ select.value=String(data.level);show();
  upgradeCards();
  window.ChemistryStudio={previewMode:()=>mode,previewRunning:()=>running,quiz:()=>({index,score,answered}),refreshCards:upgradeCards};
 })();
+
+/* Spielkarten verbinden den Original-Escape-Room mit seinem Untermodus. */
+document.querySelector('[data-feature-tab="escape"]')?.addEventListener('click',()=>document.querySelector('[data-v4tab="escape"]')?.click());
 </script>
 </body>
 </html>

@@ -5,6 +5,7 @@
  const grid=document.getElementById('homeCards'),filters=document.getElementById('chemDirFilters'),status=document.getElementById('chemDirStatus');
  if(!grid||!filters||!status)return;
  const groups=[
+  {id:'all',symbol:'🧭',name:'Alle Bereiche'},
   {id:'basics',symbol:'📘',name:'Grundlagen'},
   {id:'experiments',symbol:'🧪',name:'Experimentieren'},
   {id:'games',symbol:'🎮',name:'Spielen'},
@@ -54,12 +55,12 @@
  };
  const icon=k=>'<svg viewBox="0 0 128 90" aria-hidden="true" focusable="false"><circle cx="64" cy="45" r="37" fill="#ffffff45"/><g stroke="var(--chem-illustration-ink)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">'+(paths[k]||paths.flask)+'</g></svg>';
  const ready=areas.filter(a=>document.getElementById('page-'+a[0]));
- const counts=Object.fromEntries(groups.map(g=>[g.id,ready.filter(a=>a[1]===g.id).length]));
- let category='basics';
+ const counts=Object.fromEntries(groups.map(g=>[g.id,g.id==='all'?ready.length:ready.filter(a=>a[1]===g.id).length]));
+ let category=matchMedia('(min-width:701px)').matches?'all':'basics';
  filters.innerHTML=groups.map(g=>'<button type="button" class="chem-dir-filter" data-chem-group="'+g.id+'" aria-pressed="false"><span class="chem-filter-emoji" aria-hidden="true">'+g.symbol+'</span><span><strong>'+g.name+'</strong><small>'+counts[g.id]+' Bereiche</small></span></button>').join('');
  function render(){
   for(const b of filters.querySelectorAll('[data-chem-group]'))b.setAttribute('aria-pressed',String(b.dataset.chemGroup===category));
-  const list=ready.filter(a=>a[1]===category);
+  const list=ready.filter(a=>category==='all'||a[1]===category);
   status.textContent=list.length+' Bereiche · Tippe auf ein Bild, um direkt zu starten.';
   const done=window.ChemistryLearning?.snapshot()?.done||{};
   grid.innerHTML=list.map(a=>'<button type="button" class="chem-card" data-chem-route="'+a[0]+'" data-chem-category="'+a[1]+'" aria-label="'+a[2]+' öffnen"><span class="chem-card-art">'+icon(a[4])+'</span><span class="chem-card-label">'+groups.find(g=>g.id===a[1]).name+'</span><strong class="chem-card-title">'+a[2]+(done[a[0]]?'<span class="chem-card-check" aria-label="Abgeschlossen">✓</span>':'')+'</strong><span class="chem-card-desc">'+a[3]+'</span><span class="chem-card-action">Öffnen →</span></button>').join('');

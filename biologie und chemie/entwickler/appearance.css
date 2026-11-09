@@ -1,5 +1,5 @@
 /* Grey reading surfaces and adjustable display dimming. */
-body:not(.lc-theme-dark){--bg:#d1d5db;--paper:#e7e9ec}
+body:not(.lc-theme-dark){--bg:#e0e6e9;--paper:#f6f9fa}
 body:not(.lc-theme-dark) .panel,
 body:not(.lc-theme-dark) .card,
 body:not(.lc-theme-dark) #lcModal .lc-shell{background:var(--paper)}

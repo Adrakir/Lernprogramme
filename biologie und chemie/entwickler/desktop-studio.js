@@ -109,3 +109,6 @@
  upgradeCards();
  window.ChemistryStudio={previewMode:()=>mode,previewRunning:()=>running,quiz:()=>({index,score,answered}),refreshCards:upgradeCards};
 })();
+
+/* Spielkarten verbinden den Original-Escape-Room mit seinem Untermodus. */
+document.querySelector('[data-feature-tab="escape"]')?.addEventListener('click',()=>document.querySelector('[data-v4tab="escape"]')?.click());

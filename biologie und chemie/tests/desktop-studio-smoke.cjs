@@ -9,10 +9,20 @@ const app=path.resolve(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'),browserTy
  assert(await p.locator('#chemHeroImage svg').isVisible());
  assert(await p.locator('#chemDemoStage svg').isVisible());
  assert(await p.locator('#chemQuickQuestion').isVisible());
- assert.equal(await p.locator('#chemDirFilters button').count(),4);
- assert.equal(await p.locator('#homeCards .chem-card-art svg').count(),8);
+ assert.equal(await p.locator('#chemDirFilters button').count(),5);
+ assert.equal(await p.locator('#homeCards .chem-card-art svg').count(),22);
  assert.equal(await p.locator('#chemQuickOptions button').count(),3);
  assert(await p.locator('#luLearn').isVisible());
+ assert.equal(await p.locator('.chem-feature-card').count(),4);
+ assert.equal(await p.locator('.chem-feature-image svg').count(),4);
+ await p.locator('[data-feature-tab=escape]').click();
+ assert.equal(await p.locator('#page-v4play').isVisible(),true);
+ assert.equal(await p.locator('[data-v4tab=escape]').getAttribute('aria-selected'),'true');
+ await p.locator('#nav [data-page=home]').click();
+ await p.locator('[data-feature-route=deep]').click();
+ assert.equal(await p.locator('#page-deep').isVisible(),true);
+ await p.locator('#nav [data-page=home]').click();
+
  await p.locator('#chemDemoRun').click();
  assert.equal(await p.evaluate(()=>ChemistryStudio.previewRunning()),true);
  assert.match(await p.locator('#chemDemoHint').innerText(),/Teilchen/);
