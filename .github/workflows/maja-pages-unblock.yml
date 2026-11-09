@@ -1,0 +1,41 @@
+name: Maja Pages - einmalige Entsperrung
+
+on:
+  push:
+    paths:
+      - ".github/workflows/maja-pages-unblock.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+
+jobs:
+  unblock-stale-pages:
+    if: github.repository == 'Adrakir/Lernprogramme' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Festhängende Pages-Bereitstellung gezielt prüfen und abbrechen
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STALE_PAGES_SHA: 15879a9846036f2fef7a377b16751d49f4ca8faa
+        run: |
+          set -euo pipefail
+          endpoint="repos/${GITHUB_REPOSITORY}/pages/deployments/${STALE_PAGES_SHA}"
+          echo "Prüfe festhängendes Pages-Deployment: ${STALE_PAGES_SHA}"
+          status="$(gh api "$endpoint" --jq '.status')"
+          echo "Status vor Reparatur: ${status}"
+          case "${status}" in
+            succeed|failed|deployment_cancelled)
+              echo "Pages-Deployment ist bereits beendet; keine Änderung."
+              ;;
+            *)
+              echo "Abbruch nur des festhängenden Pages-Deployments wird angefordert."
+              gh api -X POST "${endpoint}/cancel"
+              echo "Abbruch angefordert."
+              ;;
+          esac
+          echo "Status nach Reparatur:"
+          gh api "$endpoint" --jq '.status'
