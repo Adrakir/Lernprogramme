@@ -89,7 +89,7 @@ test('Detektivcomic: Sprechblasenstellung bleibt manuell wählbar',async ({page}
   const setting=page.locator('#kino-separate');
   await expect(setting).toBeVisible();
   await expect(setting).toBeChecked({checked:mobile(testInfo)});
-  await setting.setChecked(!mobile(testInfo));
+  await setting.setChecked(true);
   await expect(page.locator('.detective-panels')).toHaveClass(/kino-separated/);
   await setting.setChecked(false);
   await expect(page.locator('.detective-panels')).not.toHaveClass(/kino-separated/);
