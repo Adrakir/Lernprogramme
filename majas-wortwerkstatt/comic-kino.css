@@ -62,3 +62,26 @@ padding:12px 15px!important;background:#fffdf7!important;color:#172d2b!important
 .prep-cue-coach [data-cue-index]{min-height:46px}
 .prep-cue-coach #prep-hearing-notes{display:block;width:100%;max-width:680px;min-height:80px}
 @media(max-width:540px){.prep-cue-coach{padding:12px}.prep-cue-coach .actions button{flex:1 1 45%}}
+
+/* Schulcomics: sichtbare, eindeutig zuordenbare Sprechblasen, ohne Bilder zu verdecken. */
+.kino-layout-note{margin:4px 0 8px;font-size:.88rem;color:#3d4f59}
+.comic-panel figcaption{display:grid;gap:9px}
+.comic-panel figcaption .comic-caption{margin:0 0 5px}
+.comic-panel figcaption .comic-dialogue{
+ position:relative;justify-self:start;width:fit-content;max-width:95%;
+ margin:4px 0 0;padding:10px 14px 11px;border:2px solid #aac9be;border-radius:20px 20px 20px 6px;
+ background:#fff;box-shadow:0 2px 0 #d6e4dd;line-height:1.45;overflow-wrap:anywhere;
+}
+.comic-panel figcaption .comic-dialogue:nth-of-type(3){justify-self:end;border-radius:20px 20px 6px 20px}
+.comic-panel figcaption .comic-dialogue::before{
+ content:"";position:absolute;left:17px;top:-7px;width:12px;height:12px;
+ background:inherit;transform:rotate(45deg);border-top:2px solid #aac9be;border-left:2px solid #aac9be;
+}
+.comic-panel figcaption .comic-dialogue:nth-of-type(3)::before{left:auto;right:17px}
+.comic-panel figcaption .comic-dialogue.bear-line{background:#f1e9f6;border-color:#cdb2dd}
+.comic-panel figcaption .comic-dialogue.bear-line::before{border-color:#cdb2dd}
+.comic-panel figcaption .comic-dialogue b{font-size:.91rem;margin-bottom:4px}
+@media(max-width:420px){
+ .comic-panel figcaption{padding:12px;gap:7px}
+ .comic-panel figcaption .comic-dialogue{font-size:.94rem;max-width:100%;padding:9px 11px}
+}
