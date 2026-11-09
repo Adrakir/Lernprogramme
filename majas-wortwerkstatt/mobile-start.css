@@ -146,3 +146,31 @@
  .bear-wardrobe-v2 .bear-category-grid{grid-template-columns:1fr}
  .bear-wardrobe-v2 .bear-category-card{min-height:70px}
 }
+
+/* Hörverständnis: klare Frage, große Antworten, kleine Vorleseleiste. */
+.prep-audio-compact{padding:15px;margin-bottom:12px}
+.prep-audio-compact h2{font-size:1.2rem;margin-bottom:10px}
+.prep-listen-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.prep-listen-toolbar label{font-size:.83rem;font-weight:800;color:#23473d;display:flex;flex-direction:column;gap:5px;line-height:1.3}
+.prep-listen-toolbar select{width:100%;min-height:44px;padding:9px;border:1.5px solid #729384;border-radius:10px;background:#fffdf8;color:#203741;font-size:.96rem}
+.prep-play-buttons{margin:10px 0 4px;gap:9px}
+.prep-play-buttons button{min-height:44px}
+.prep-audio-compact .prep-reading-extra{margin-top:9px;font-size:.83rem}
+.prep-audio-compact .prep-reading-extra summary{cursor:pointer;color:#55665f;text-decoration:underline}
+#prep-question .prep-question-highlight{background:#fff2ee;border:2px solid #c43c38;border-left:7px solid #c43c38;border-radius:13px;padding:12px 14px;margin:9px 0 15px}
+#prep-question .prep-question-highlight span{font-size:.78rem;letter-spacing:.05em;font-weight:900;color:#9b2828;text-transform:uppercase}
+#prep-question .prep-question-highlight h2{font-size:clamp(1.1rem,3vw,1.38rem);line-height:1.35;margin:3px 0 0;color:#842427}
+#prep-question .options{display:grid;gap:8px}
+#prep-question .options button{min-height:48px;text-align:left;font-size:1.03rem;border-radius:12px}
+@media(max-width:600px){
+ .prep-audio-compact{padding:12px}
+ .prep-listen-toolbar{grid-template-columns:1fr 1fr;gap:8px}
+ .prep-listen-toolbar #prep-voice-row{grid-column:1/-1}
+ .prep-listen-toolbar label{font-size:.75rem}
+ .prep-listen-toolbar select{padding:8px 5px;font-size:.82rem}
+ #prep-question{padding:13px}
+ #prep-question .prep-question-highlight{padding:10px 12px}
+ #prep-question .options button{font-size:.96rem;padding:10px 12px}
+ .prep-audio-compact .prep-play-buttons{flex-wrap:nowrap}
+ .prep-audio-compact .prep-play-buttons button{flex:1;white-space:nowrap;padding-inline:11px}
+}
