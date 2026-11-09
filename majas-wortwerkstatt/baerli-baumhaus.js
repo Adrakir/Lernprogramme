@@ -102,7 +102,7 @@ function clean(){
  }
  const orders={};
  if(raw.orders&&typeof raw.orders==='object')for(const [key,amount] of Object.entries(raw.orders)){
-  const p=known.get(key);if(p&&amount===p.price)orders[key]=p.price;
+  const p=known.get(key);if(p&&(amount===p.price||amount===0))orders[key]=amount;
  }
  const placed=[];
  if(Array.isArray(raw.placed))for(const p of raw.placed){
@@ -111,7 +111,7 @@ function clean(){
  }
  let wallpaper={1:'',2:''};
  if(raw.wallpaper&&typeof raw.wallpaper==='object')for(const i of [1,2]){
-  const id=raw.wallpaper[i];if(orders[id]&&known.get(id)?.kind==='wallpaper')wallpaper[i]=id;
+  const id=raw.wallpaper[i];if(Object.hasOwn(orders,id)&&known.get(id)?.kind==='wallpaper')wallpaper[i]=id;
  }
  const positions={};
  for(const id of ['start-sitzsack','start-laptop']){
@@ -309,5 +309,16 @@ function render(segment='',section=''){
  if(segment==='shop')showShop(section);
  else showRoom();
 }
-window.MajaTreehouse={render,examScores,stateRead,stats,products,categories};
+function gift(id){
+ const p=known.get(id);
+ if(!p||p.kind==='room')return {ok:false,message:'Dieser Artikel ist kein Adventsgeschenk.'};
+ const state=stateRead();
+ if(bought(state,id))return {ok:true,already:true,message:p.name+' ist bereits in Bärlis Möbelkiste.'};
+ // Geschenke landen absichtlich in der Möbelkiste. Das Baumhaus beginnt leer
+ // und wird erst mit der ersten bestandenen Prüfung freigeschaltet.
+ state.orders[id]=0;
+ if(!store(state))return {ok:false,message:'Geschenk nicht gespeichert. Bitte noch einmal öffnen.'};
+ return {ok:true,message:p.name+' liegt jetzt in Bärlis Möbelkiste. Nach der ersten bestandenen Prüfung kannst du es aufstellen.'};
+}
+window.MajaTreehouse={render,examScores,stateRead,stats,products,categories,gift};
 })();
