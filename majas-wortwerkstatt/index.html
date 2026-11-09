@@ -3089,6 +3089,8 @@ function showAnnaWriting(part){
 <script src="./comic-bubbles.js?v=20261108d"></script>
 <script src="./figurenstimmen.js?v=20261108e"></script>
 <script>const iconPaths = {
+ comic:'<rect x="2.5" y="3.5" width="19" height="17" rx="2"/><path d="M12 3.5v17M3 12h9M15 7h4m-4 4h3m-3 4h4m-13-8h3v2H6l-1 2Z"/>',
+ hanger:'<path d="M9 5a3 3 0 1 1 5 2.3c-.8.6-2 1-2 2.1v1.2M12 10.6 3 16a2 2 0 0 0 1.1 3.7h15.8A2 2 0 0 0 21 16l-9-5.4Z"/>',
  book:'<path d="M12 6c-2.5-2-6-2.7-9-1.5v14c3-1.2 6.5-.5 9 1.5 2.5-2 6-2.7 9-1.5v-14C18 3.3 14.5 4 12 6Zm0 0v14"/>',
  puzzle:'<path d="M4 4h6a2.5 2.5 0 1 1 4 0h6v6a2.5 2.5 0 1 0 0 4v6h-6a2.5 2.5 0 1 0-4 0H4v-6a2.5 2.5 0 1 0 0-4Z"/>',
  flag:'<path d="M5 21V4m0 1c5-5 9 4 15 0v10c-6 4-10-5-15 0"/>',
@@ -3303,18 +3305,18 @@ function showHome(){
         <strong>Endungen</strong><small>-ung, -heit …</small>
       </a>
       <a class="maja-quick-topic" href="#verlaengern" aria-label="Wörter verlängern üben">
-        <span class="maja-topic-symbol">${icon('book')}</span>
-        <strong>Verlängern</strong><small>Wörter prüfen</small>
+        <span class="maja-topic-symbol maja-word-symbol"><span class="maja-word-small" aria-hidden="true">d→de</span></span>
+        <strong>Verlängern</strong><small>Hund → Hunde</small>
       </a>
     </nav>
     <a class="maja-quick-test" href="#kombitest"><span>Teste dich<small>Prüfungsaufgaben ausprobieren</small></span>${icon('arrow')}</a>
     <section class="maja-quick-choices" aria-labelledby="maja-quick-more">
       <h2 id="maja-quick-more">Was möchtest du danach machen?</h2>
       <nav class="maja-quick-options" aria-label="Weitere Bereiche">
-        <a href="#comics" class="maja-quick-option"><span class="maja-option-icon">${icon('book')}</span><span><strong>Comics</strong><small>Alle im Paket</small></span></a>
+        <a href="#comics" class="maja-quick-option"><span class="maja-option-icon">${icon('comic')}</span><span><strong>Comics</strong><small>Alle im Paket</small></span></a>
         <a href="#spiele" class="maja-quick-option"><span class="maja-option-icon">${icon('game')}</span><span><strong>Spiele</strong><small>Mit Sternen</small></span></a>
         <a href="#lernberater" class="maja-quick-option"><span class="maja-option-icon">${icon('paw')}</span><span><strong>Bärli hilft dir</strong><small>Dein Lernberater</small></span></a>
-        <a href="#baerli/schrank" class="maja-quick-option"><span class="maja-option-icon">${icon('star')}</span><span><strong>Bärlis Kleidung</strong><small>${starBalance()} ★ im Beutel</small></span></a>
+        <a href="#baerli/schrank" class="maja-quick-option"><span class="maja-option-icon">${icon('hanger')}</span><span><strong>Bärlis Kleidung</strong><small>${starBalance()} ★ im Beutel</small></span></a>
       </nav>
     </section>
     <a href="#stationen" class="maja-quick-all">Alle weiteren Lernthemen ${icon('arrow')}</a>
@@ -3796,23 +3798,40 @@ const bearStories = [
   ['werkstatt','Die Ausstellung der Mannschaft','Majas Gruppe stellte Papierboote auf den Tisch. Bärli wollte seines ganz nach vorne schieben. Dann merkte er, dass die Boote zusammen wie eine Flotte aussahen. „Eine ganze Mannschaft“, sagte er und rückte sein Boot zu den anderen.','Markiere in Mannschaft die Nachsilbe -schaft.']
 ];
 
-const bearGroups={kleidung:'Kleidung',spielzeug:'Spielzeug',schule:'Schulsachen'};
+const bearGroups={hut:'Hüte & Mützen',oberteil:'Pullover & Jacken',hose:'Hosen',brille:'Brillen',hals:'Schals',schuhe:'Schuhe',spielzeug:'Spielzeug',schule:'Schulsachen'};
 const bearItems=[
-  {id:'hut',group:'kleidung',title:'Detektivhut',stars:3,art:'<path fill="#405a54" d="M119 80q-13-11 30-19l16-34q55-23 98 2l11 31q43 7 35 18-73 23-190 2Z"/><path d="M150 62q61 13 124-2" stroke="#d6ab58" stroke-width="10" fill="none"/>'},
+  {id:'hut',group:'hut',title:'Detektivhut',stars:3,art:'<path fill="#405a54" d="M119 80q-13-11 30-19l16-34q55-23 98 2l11 31q43 7 35 18-73 23-190 2Z"/><path d="M150 62q61 13 124-2" stroke="#d6ab58" stroke-width="10" fill="none"/>'},
   {id:'ball',group:'spielzeug',title:'Streifenball',stars:6,art:'<circle cx="350" cy="378" r="39" fill="#df9b55"/><path d="M317 360q31 40 70 29m-57-42q-9 40 19 69" fill="none" stroke="#fff1cf" stroke-width="8"/>'},
   {id:'heft',group:'schule',title:'Sternenheft',stars:9,art:'<path fill="#80afa9" d="M43 330h66v77H43q-10 0-10-10v-57q0-10 10-10Z"/><path d="M45 332v74m15-56h35m-35 12h35" fill="none" stroke="#f9e7ab" stroke-width="4"/>'},
-  {id:'schal',group:'kleidung',title:'Regenbogenschal',stars:13,art:'<path fill="#bf594c" d="M150 177q50 15 133-1l7 19q-18 7-38 10l9 49-25 5-10-52q-50 4-77-11Z"/><path d="m157 186q47 13 122-2m-43 58 20-4" fill="none" stroke="#f3c67a" stroke-width="6"/>'},
+  {id:'schal',group:'hals',title:'Regenbogenschal',stars:13,art:'<path fill="#bf594c" d="M150 177q50 15 133-1l7 19q-18 7-38 10l9 49-25 5-10-52q-50 4-77-11Z"/><path d="m157 186q47 13 122-2m-43 58 20-4" fill="none" stroke="#f3c67a" stroke-width="6"/>'},
   {id:'boot',group:'spielzeug',title:'Papierboot',stars:17,art:'<path fill="#d58989" d="M305 378h93l-16 29h-56Z"/><path fill="#f8e5ad" d="m324 377 28-34 28 34Z"/><path d="M352 346v30" fill="none"/>'},
   {id:'stift',group:'schule',title:'Riesenbuntstift',stars:21,art:'<path fill="#d99059" d="m29 393 52-66 16 12-52 66-22 9Z"/><path fill="#f2d3a0" d="m23 414 6-21 16 12Z"/><path d="m25 407 5 4m9-11 51-65" fill="none"/>'},
-  {id:'krone',group:'kleidung',title:'Papierkrone',stars:25,art:'<path fill="#ebbf59" d="m149 36 35 18 34-36 31 34 37-18-13 44q-57-13-112 2Z"/><circle cx="218" cy="53" r="7" fill="#b65865"/>'},
+  {id:'krone',group:'hut',title:'Papierkrone',stars:25,art:'<path fill="#ebbf59" d="m149 36 35 18 34-36 31 34 37-18-13 44q-57-13-112 2Z"/><circle cx="218" cy="53" r="7" fill="#b65865"/>'},
   {id:'drachen',group:'spielzeug',title:'Mini-Drachen',stars:30,art:'<path fill="#e0a34f" d="m350 293 36 36-36 42-34-42Z"/><path fill="#a57cb0" d="m350 293 36 36-36 42Z"/><path d="M316 329h70m-36 42q-22 19 12 42" fill="none"/>'},
+  {id:'muetze',group:'hut',title:'Blaue Bommelmütze',stars:2,art:'<path fill="#588bc1" d="M145 89q-6-53 74-65 74 11 75 65l-10 8q-62-17-128 0Z"/><path fill="#426e9d" d="M146 86q72-18 146 0l-4 16q-67-13-139 0Z"/><circle cx="221" cy="22" r="13" fill="#ffe6aa"/>'},
+ {id:'sonnenhut',group:'hut',title:'Gelber Sonnenhut',stars:4,art:'<path fill="#e7b952" d="M146 87q-5-67 74-67t75 67Z"/><ellipse cx="220" cy="90" rx="112" ry="17" fill="#f1cb69"/><path d="M157 74q60-14 126 0" stroke="#ac765b" stroke-width="9" fill="none"/>'},
+ {id:'brille',group:'brille',title:'Runde Brille',stars:3,art:'<g fill="none" stroke="#48586d" stroke-width="7"><circle cx="181" cy="135" r="25"/><circle cx="259" cy="135" r="25"/><path d="M206 133q14-8 28 0m-79-4-20-6m150 6 20-6"/></g>'},
+ {id:'sonnenbrille',group:'brille',title:'Coole Sonnenbrille',stars:5,art:'<path fill="#40424d" d="M150 117q31-12 61 0l-5 31q-23 20-48-2Zm77 0q31-12 61 0l-8 29q-27 22-47 0Z"/><path d="M209 126q12-8 20 0m-75 0-17-6m149 7 17-7" fill="none" stroke="#383943" stroke-width="6"/>'},
+ {id:'winterpullover',group:'oberteil',title:'Blauer Winterpullover',stars:5,art:'<path fill="#5186b0" d="M159 183q59-9 121 0l35 28 19 52-34 14-20-36-1 53q-56 17-120 0l-1-53-20 36-34-14 18-52Z"/><path d="M154 280q63 15 131 0M182 217l12 12 11-12 13 12 13-12 13 12 12-12" fill="none" stroke="#e1f0f6" stroke-width="8"/>'},
+ {id:'regenjacke',group:'oberteil',title:'Grüne Regenjacke',stars:7,art:'<path fill="#7cae86" d="M155 184q60-10 127 0l31 26 22 55-35 12-20-43v61q-59 10-120 0v-61l-20 43-35-12 22-55Z"/><path d="M222 185v111M168 258h38m36 0h35" stroke="#dfe9ca" stroke-width="6" fill="none"/>'},
+ {id:'jeans',group:'hose',title:'Blaue Jeans',stars:4,art:'<path fill="#557da8" d="M157 288q63 13 125 0l20 104-43 7-31-68-8 0-29 68-43-7Z"/><path d="M163 301h109m-42 0v27m-65-11h24m62 0h24" fill="none" stroke="#c6d7e5" stroke-width="5"/>'},
+ {id:'rotehose',group:'hose',title:'Rote Spielhose',stars:5,art:'<path fill="#c66e70" d="M154 288q64 14 132 0l17 104-44 6-30-69h-9l-31 69-42-6Z"/><path d="M159 304q62 12 120 0" stroke="#f8d3c1" stroke-width="6" fill="none"/>'},
+ {id:'sneaker',group:'schuhe',title:'Türkise Turnschuhe',stars:3,art:'<path fill="#56adb0" d="M151 399q20-10 44 0l18 23q4 14-23 14h-63q-12-12 4-22Zm111 0q20-10 42 0l22 17q12 20-10 20h-65q-16-3-5-17Z"/><path d="M132 426h74m51 0h66" stroke="#e8f6e8" stroke-width="8"/>'},
+ {id:'stiefel',group:'schuhe',title:'Gelbe Gummistiefel',stars:6,art:'<path fill="#e1b859" d="M159 381h44v35q12 1 16 19h-83q-5-17 23-21Zm95 0h44v35q12 1 16 19h-83q-4-17 23-21Z"/><path d="M160 398h42m53 0h42" stroke="#fff0bd" stroke-width="6"/>'},
   {id:'ranzen',group:'schule',title:'Bärenranzen',stars:36,art:'<path fill="none" d="M49 349v-10q0-9 11-9t11 9v10"/><rect fill="#ad745d" x="28" y="346" width="75" height="65" rx="17"/><path fill="#d8a475" d="M29 361q31 20 73 0l-3 18q-43 19-67 0Z"/><rect x="57" y="371" width="15" height="13" rx="3" fill="#eec472"/>'}
 ];
 const bearOutfitKey='majas-wortwerkstatt-baerli-auswahl-v1';
 let bearOutfit={};
 try {
   const saved=JSON.parse(localStorage.getItem(bearOutfitKey)||'{}');
-  if(saved&&typeof saved==='object')bearOutfit=saved;
+  if(saved&&typeof saved==='object'){
+    bearOutfit=saved;
+    if(saved.kleidung){
+      const oldItem=bearItems.find(item=>item.id===saved.kleidung);
+      if(oldItem&&!bearOutfit[oldItem.group])bearOutfit[oldItem.group]=oldItem.id;
+      delete bearOutfit.kleidung;
+    }
+  }
 } catch {}
 
 // Persistent star wallet: learning achievements are never spent or deleted.
