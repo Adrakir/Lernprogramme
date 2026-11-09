@@ -83,7 +83,36 @@ function mount({frames,mode="detective"}){
   wraps.push(wrap);
  });
  state.wrappers=wraps;
+ // Auf Handys ein Bild nach dem anderen: große Motive ohne lange Scrollstrecken.
+ // Die bisherigen Seiten-URLs, Audiozeilen und Bild-Zooms bleiben unverändert.
+ let choosePanel=null;
+ if(window.matchMedia?.("(max-width: 650px)")?.matches&&wraps.length>1){
+   area.classList.add("kino-step-mode");
+   const stepper=document.createElement("nav");
+   stepper.className="kino-step-controls";
+   stepper.setAttribute("aria-label","Comicbild wechseln");
+   stepper.innerHTML='<button type="button" class="secondary" data-kino-prev>← Vorheriges Bild</button><span class="kino-step-count" aria-live="polite"></span><button type="button" class="primary" data-kino-next>Nächstes Bild →</button>';
+   area.insertAdjacentElement("afterend",stepper);
+   const previous=stepper.querySelector("[data-kino-prev]"),next=stepper.querySelector("[data-kino-next]");
+   const count=stepper.querySelector(".kino-step-count");
+   let index=0;
+   choosePanel=(n,moveFocus=true)=>{
+     index=Math.min(wraps.length-1,Math.max(0,n));
+     wraps.forEach((w,i)=>{w.hidden=i!==index;});
+     previous.disabled=index===0;
+     next.disabled=index===wraps.length-1;
+     count.textContent="Bild "+(index+1)+" von "+wraps.length;
+     if(moveFocus){
+       wraps[index].scrollIntoView({behavior:"auto",block:"nearest"});
+       wraps[index].querySelector("[data-kino-read]")?.focus({preventScroll:true});
+     }
+   };
+   previous.onclick=()=>choosePanel(index-1);
+   next.onclick=()=>choosePanel(index+1);
+   choosePanel(0,false);
+ }
  function current(i){
+   if(i>=0&&choosePanel)choosePanel(i,false);
   wraps.forEach((w,index)=>w.classList.toggle("kino-current",index===i));
   if(i>=0&&wraps[i]){
    const w=wraps[i],r=w.getBoundingClientRect();
