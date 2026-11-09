@@ -17,6 +17,24 @@ const additions=[
  {id:'turnschuhe',title:'Türkise Turnschuhe',stars:4,slot:'schuhe',art:'<path d="M133 386q19-6 56 0l29 20q6 14-10 18h-81q-21-3-14-20Z" fill="#49a6a2" stroke="#2d6264" stroke-width="4"/><path d="M247 386q35-9 59 0l26 22q4 15-10 17h-78q-17-1-17-15Z" fill="#49a6a2" stroke="#2d6264" stroke-width="4"/><path d="M118 411h97m15 0h101" stroke="#fff4db" stroke-width="7"/>'},
  {id:'stiefel',title:'Rote Winterstiefel',stars:6,slot:'schuhe',art:'<path d="M139 374h59v26l31 11q8 17-13 20h-94q-15-5-7-18l24-14Z" fill="#bc5b56" stroke="#834345" stroke-width="5"/><path d="M250 374h58v28l28 11q7 17-13 18h-91q-16-3-8-18l26-14Z" fill="#bc5b56" stroke="#834345" stroke-width="5"/><path d="M140 378h58m52 0h58" stroke="#fff4df" stroke-width="9"/>'}
 ];
+
+// Erweiterungen: unveränderliche IDs, damit Käufe und alte Outfits gültig bleiben.
+const newWardrobePieces=[
+ {id:'abenteuercap',title:'Grüne Abenteuercap',stars:4,slot:'huete',art:'<path d="M145 79Q144 17 226 22Q307 17 309 82L293 97Q227 74 154 98Z" fill="#509b79" stroke="#2b6d57" stroke-width="5"/><path d="M153 88Q227 60 302 88Q259 115 185 106Z" fill="#32765d" stroke="#235b48" stroke-width="4"/><path d="m213 48 13 7 13-7-4 16h-18Z" fill="#f7d878"/>'},
+ {id:'partyhut',title:'Bunter Partyhut',stars:5,slot:'huete',art:'<path d="M225 4L145 87Q225 106 307 87Z" fill="#ef98ab" stroke="#985a74" stroke-width="5"/><path d="M186 52l61 12M167 73l116 16" stroke="#ffe7a1" stroke-width="13"/><circle cx="225" cy="5" r="15" fill="#65c4bb"/>'},
+ {id:'forscherbrille',title:'Blaue Forscherbrille',stars:4,slot:'brillen',art:'<g fill="#8ecadf" fill-opacity=".27" stroke="#377192" stroke-width="6"><rect x="153" y="95" width="66" height="43" rx="12"/><rect x="237" y="95" width="66" height="43" rx="12"/></g><path d="M220 109q8-6 17 0m-84-5-16-5m167 5 15-5" stroke="#377192" stroke-width="6" fill="none"/>'},
+ {id:'herzbrille',title:'Rosa Herzbrille',stars:5,slot:'brillen',art:'<g fill="#f2a0be" fill-opacity=".37" stroke="#ab4a7b" stroke-width="6"><path d="M182 101Q164 83 151 102Q138 119 182 148Q225 118 212 101Q199 84 182 101Z"/><path d="M270 101Q253 83 240 102Q227 119 270 148Q313 118 300 101Q287 84 270 101Z"/></g><path d="M216 111q11-6 22 0" stroke="#ab4a7b" stroke-width="5" fill="none"/>'},
+ {id:'ringelpullover',title:'Rot-weißer Ringelpullover',stars:5,slot:'pullover',art:'<path d="M154 181L120 214L138 275L168 266L178 241V284H280V241L307 266L337 275L344 214L292 181L271 166Q227 187 182 166Z" fill="#fae6dc" stroke="#b65d59" stroke-width="5"/><path d="M175 220h104m-104 24h104m-104 24h104M130 241l37-10m139 0 33 10" stroke="#c05e63" stroke-width="12"/>'},
+ {id:'blauejacke',title:'Blaue Abenteuerjacke',stars:6,slot:'pullover',art:'<path d="M157 180L124 214L139 277L169 265L179 242V288H279V242L305 265L337 276L344 214L293 181L269 166Q226 186 184 166Z" fill="#528cbc" stroke="#2a5d83" stroke-width="5"/><path d="M226 177V288M186 233h28m27 0h29M181 280h98" stroke="#f6e0af" stroke-width="6"/><path d="m209 188 17 22 18-22" fill="none" stroke="#ebf6f5" stroke-width="8"/>'},
+ {id:'schlaghose',title:'Türkise Schlaghose',stars:5,slot:'hosen',art:'<path d="M167 276H282L278 331L312 396Q281 406 247 395L225 327L205 395Q174 405 141 395L176 331Z" fill="#51ada6" stroke="#2d7376" stroke-width="5"/><path d="M168 289h114m-57 0v39M146 387q30 10 60 0m41 0q31 10 61 0" stroke="#c5e9d9" stroke-width="5" fill="none"/>'},
+ {id:'kordhose',title:'Braune Kordhose',stars:5,slot:'hosen',art:'<path d="M166 275H283L301 390L248 397L225 328L205 397L151 390Z" fill="#ab7756" stroke="#714b38" stroke-width="5"/><path d="M176 304l-9 76m30-77-7 79m65-80 9 81m18-80 8 76" stroke="#d6ae85" stroke-width="5"/><path d="M167 289h116m-58 0v38" stroke="#714b38" stroke-width="5"/>'},
+ {id:'punkteschal',title:'Blauer Punkteschal',stars:4,slot:'schals',art:'<path d="M149 177Q225 195 287 174L295 198Q256 216 223 211L235 268L202 274L197 211Q166 207 146 191Z" fill="#5f96c2" stroke="#315f90" stroke-width="5"/><g fill="#f7dfa4"><circle cx="172" cy="190" r="5"/><circle cx="215" cy="198" r="5"/><circle cx="261" cy="189" r="5"/><circle cx="212" cy="231" r="5"/><circle cx="218" cy="252" r="5"/></g>'},
+ {id:'winterschal',title:'Roter Kuschelschal',stars:5,slot:'schals',art:'<path d="M147 176Q224 198 292 174L300 195Q270 215 238 211L253 276L224 283L207 214Q169 211 143 194Z" fill="#ce6171" stroke="#8e4051" stroke-width="5"/><path d="M159 188q62 24 129-2m-74 56 31-9m-28 25 33-10" fill="none" stroke="#f4cac8" stroke-width="7"/>'},
+ {id:'lilasneaker',title:'Lila Sternensneaker',stars:5,slot:'schuhe',art:'<path d="M138 386Q168 374 195 391L220 406Q229 427 210 427H128Q106 420 120 401Z" fill="#ac93cf" stroke="#645392" stroke-width="5"/><path d="M247 386Q277 374 304 391L332 407Q342 427 320 427H240Q222 420 235 402Z" fill="#ac93cf" stroke="#645392" stroke-width="5"/><path d="M127 418h89m20 0h94" stroke="#fff2d6" stroke-width="8"/><path d="m165 393 5 10 11 1-8 7 2 10-10-5-10 5 2-10-8-7 11-1Zm114 0 5 10 11 1-8 7 2 10-10-5-10 5 2-10-8-7 11-1Z" fill="#ffdf8f"/>'},
+ {id:'streifenstiefel',title:'Blaue Regenstiefel',stars:5,slot:'schuhe',art:'<path d="M140 372H199V400L229 413Q237 431 215 431H121Q108 423 120 408L140 398Z" fill="#519abb" stroke="#2b6681" stroke-width="5"/><path d="M250 372H309V400L339 413Q346 431 324 431H231Q217 423 232 408L250 398Z" fill="#519abb" stroke="#2b6681" stroke-width="5"/><path d="M141 381h58m51 0h59M122 421h103m8 0h101" stroke="#f7d88d" stroke-width="8"/>'}
+];
+additions.push(...newWardrobePieces);
+
 for(const item of additions){if(!bearItems.some(existing=>existing.id===item.id))bearItems.push({...item,group:'kleidung'});}
 const sectionDefs=[
  ['huete','Hüte','🎩','Was bekommt Bärli auf den Kopf?'],
@@ -44,9 +62,11 @@ for(const legacy of ['kleidung','hut','oberteil','hose','brille','hals','schuhe'
 if(migrationChanged){try{localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));}catch{}}
 let wardrobeIndex=0;
 function ownedAndWorn(){return bearItems.filter(x=>starOwned('item:'+x.id)&&bearOutfit[slotOf(x)]===x.id);}
-function bearFigure(compact=false){
- const equipped=ownedAndWorn();
- return '<div class="bw-figure'+(compact?' bw-small':'')+'"><img src="'+imagePath+'" alt="Bärli mit seinem gelben Ohrfähnchen. Ausgewählte Kleidung wird darüber angezeigt." width="600" height="600">'
+function bearFigure(compact=false,previewItem=null){
+ // Anprobe verändert weder Käufe noch Sterne noch die gespeicherte Auswahl.
+ const equipped=ownedAndWorn().filter(item=>!previewItem||slotOf(item)!==slotOf(previewItem));
+ if(previewItem)equipped.push(previewItem);
+ return '<div class="bw-figure'+(compact?' bw-small':'')+'" data-preview-id="'+htmlEsc(previewItem?.id||'')+'"><img src="'+imagePath+'" alt="Bärli mit seinem gelben Ohrfähnchen. Ausgewählte Kleidung wird darüber angezeigt." width="600" height="600">'
  +'<svg viewBox="0 0 450 450" aria-hidden="true"><g stroke="#574951" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
  +equipped.sort((a,b)=>['hosen','pullover','schuhe','schals','huete','brillen','schule','spielzeug'].indexOf(slotOf(a))-['hosen','pullover','schuhe','schals','huete','brillen','schule','spielzeug'].indexOf(slotOf(b))).map(x=>x.art).join('')+'</g></svg>'
  +'</div>';
@@ -63,7 +83,7 @@ function wardrobeMain(mode='kleidung'){
  +'<header class="bw-header"><p class="kicker">Bärlis Laden und Anziehzimmer</p><h1 tabindex="-1">Zieh Bärli an!</h1><p>Tippe auf ein Bild. Jede Sache hat ihre eigene Seite.</p></header>'
  +'<section class="bw-intro">'+bearFigure()+'<div><p class="bw-balance">⭐ '+starCount(starBalance())+' im Beutel</p><p>Du kannst Bärli mehrere Sachen gleichzeitig anziehen. Was du gekauft hast, bleibt dir erhalten.</p><div class="bw-worn">'+(ownedAndWorn().map(x=>'<span>'+htmlEsc(x.title)+'</span>').join('')||'<span>Bärli trägt sein Lieblingsoutfit</span>')+'</div></div></section>'
  +'<nav class="bw-tabs" aria-label="Bereiche"><a href="#baerli/schrank/kleidung" '+(current==='kleidung'?'aria-current="page"':'')+'>👕 Kleidung</a><a href="#baerli/schrank/extras" '+(current==='extras'?'aria-current="page"':'')+'>🧸 Extras</a></nav>'
- +'<div class="bw-category-grid">'+options.map(([id,label,emoji])=>'<a href="#baerli/schrank/'+id+'" class="bw-category"><span class="bw-emoji" aria-hidden="true">'+emoji+'</span><strong>'+label+'</strong><span class="bw-chevron">›</span></a>').join('')+'</div></div>';
+ +'<div class="bw-category-grid">'+options.map(([id,label,emoji])=>{const sample=bearItems.find(item=>slotOf(item)===id);const count=bearItems.filter(item=>slotOf(item)===id).length;return '<a href="#baerli/schrank/'+id+'" class="bw-category"><span class="bw-category-sample" aria-hidden="true">'+(sample?subPreview(sample):'<span class="bw-emoji">'+emoji+'</span>')+'</span><strong>'+label+'</strong><small>'+count+' Sachen</small></a>';}).join('')+'</div></div>';
 }
 function wardrobeSection(category,message='',i=0){
  const desc=descriptor(category);
@@ -74,7 +94,7 @@ function wardrobeSection(category,message='',i=0){
  const groupNames=sectionDefs.map(x=>x[0]),pos=groupNames.indexOf(category);
  return '<div class="bw-page bw-single"><a class="bw-back" href="#baerli/schrank/'+(pos<6?'kleidung':'extras')+'">← Alle '+(pos<6?'Kleidungsstücke':'Extras')+'</a>'
  +'<header class="bw-header"><p class="kicker">'+desc[2]+' Bärlis Kleiderschrank</p><h1 tabindex="-1">'+desc[1]+'</h1><p>'+desc[3]+'</p></header>'
- +'<section class="bw-focus">'+bearFigure(true)+'<div class="bw-product">'+subPreview(item)
+ +'<section class="bw-focus"><div class="bw-dress-preview">'+bearFigure(true,item)+'<p class="bw-try-label">'+(worn?'✓ Bärli trägt das schon':has?'Anprobe – gehört dir':'Anprobe – noch nicht gekauft')+'</p></div><div class="bw-product">'+subPreview(item)
  +'<div class="bw-product-copy"><strong>'+htmlEsc(item.title)+'</strong><span>'+(has?'✓ Gehört dir':item.stars+' ⭐ Sterne')+'</span></div>'
  +'<div class="bw-action">'+(has?'<button type="button" class="primary" data-bw-equip="'+htmlEsc(item.id)+'" aria-pressed="'+worn+'">'+(worn?'Ausziehen':'Bärli anziehen')+'</button>':'<button type="button" class="primary" data-bw-buy="'+htmlEsc(item.id)+'" '+(starBalance()<item.stars?'disabled':'')+'>Für '+item.stars+' Sterne kaufen</button>')+'</div>'
  +'<p class="bw-wallet">⭐ '+starBalance()+' Sterne verfügbar</p><p class="bw-message" id="bw-status" role="status">'+htmlEsc(message)+'</p></div></section>'
