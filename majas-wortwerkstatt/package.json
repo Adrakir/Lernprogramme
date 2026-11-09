@@ -5,9 +5,12 @@
   "description": "Regression tests for Majas Deutschapp, no user data",
   "scripts": {
     "test:static": "node mobile-start.test.cjs && node experience.test.cjs",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "lint": "eslint ."
   },
   "devDependencies": {
-    "@playwright/test": "1.56.1"
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "1.56.1",
+    "eslint": "^10.14.0"
   }
 }

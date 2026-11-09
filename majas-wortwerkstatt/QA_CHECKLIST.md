@@ -90,7 +90,16 @@ node majas-wortwerkstatt/experience.test.cjs
 - [ ] WCAG-nahe Basisprüfung: Fokus sichtbar, Beschriftungen, Alternativtexte, ausreichend Kontrast und vergrößerte Schrift.
 - [ ] Nach jedem Update der Prüfprotokolle und Issues offene Punkte korrekt stehen lassen.
 
-## H. Protokollvorlage zum Kopieren
+## H. PWA, Sicherungs-Erinnerung und Lernserie (neu, 09.11.2026)
+
+- [ ] PWA auf echtem iPhone/iPad/Android installieren („Zum Home-Bildschirm“); Start im Vollbild, korrektes Bärli-Icon.
+- [ ] Flugmodus: bereits besuchte Seiten laden offline; nach erneuter Verbindung kommen neue Versionen an (Seite neu laden).
+- [ ] Nach 5 Lerntagen ohne Export erscheint die Sicherungs-Erinnerung unter `#einstellungen` und `#erwachsene`; nach erfolgtem Export verschwindet sie.
+- [ ] Lernserie: an drei aufeinanderfolgenden Lerntagen gibt es genau einen Bonus-Stern (Sternenbeutel kontrollieren, kein Doppelbonus am selben Tag).
+- [ ] Fehlertrainer: richtig nachgeübte Aufgabe erscheint nach 1 Tag erneut als „Wiederholung fällig“ (Gerätedatum prüfen, nicht manipulieren).
+- [ ] „🔊 Auswahl vorlesen“ in `#lernen`/`#abenteuer` ist auf dem Gerät hörbar und stoppt beim Seitenwechsel.
+
+## I. Protokollvorlage zum Kopieren
 
 | Datum | Commit | Gerät / OS | Browser | Route / Test | Ergebnis | Fehler / Folge-Issue |
 |---|---|---|---|---|---|---|

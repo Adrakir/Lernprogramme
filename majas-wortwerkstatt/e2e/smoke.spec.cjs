@@ -39,7 +39,7 @@ test('Hörverstehen: rote Frage, Computerstimme und Tempo bleiben gespeichert',a
 });
 test('Comics, Kleiderschrank und Elternansicht bleiben erreichbar',async ({page})=>{
   await load(page,'comics');
-  await expect(page.getByRole('heading',{name:'Alle Comics'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:/Comics und Bilderbücher|Alle Comics/})).toBeVisible();
   await load(page,'baerli/schrank');
   await expect(page.getByRole('heading',{name:/Zieh Bärli an|Bärlis Kleiderschrank/})).toBeVisible();
   await load(page,'erwachsene');

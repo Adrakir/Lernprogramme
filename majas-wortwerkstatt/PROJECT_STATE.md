@@ -38,6 +38,20 @@
 - [ ] **Browsertests und Live-Pages nicht bestätigt:** die öffentliche Seite konnte in dieser Sitzung nicht geöffnet werden. Weder tatsächliche iPhone-Darstellung noch Ton-/Spielablauf oder Playwright-Lauf als erfolgreich behaupten.
 - [ ] **Weitere Funktionen prüfen:** Issues #22, #23, #24, #25 und #26 weiterführen. Besonders Spielwege, Bilderbuch, Hören, Sternenbeutel und Comics auf Geräten testen.
 
+### Verbesserungsrunde (09.11.2026, GitHub Copilot)
+- [x] **CI repariert:** Browser-Job auf `ubuntu-24.04` gepinnt (Playwright 1.56 unterstützt `ubuntu-latest`=26.04 nicht). Drei beim Startseiten-Restore verlorene Integrationen wiederhergestellt: Link `#erwachsene` (Lernübersicht), Aufruf `window.MajaRealAudio?.mount(...)` in `render()`, Maja-Stimme (`maja-melody.mp3`) im Lernberater. `comic-kino.test.cjs` an die gewollte Abschnitts-Anhörung (`Hörtraining in Abschnitten`) angepasst.
+- [x] **Playwright lokal erstmals erfolgreich:** 16 Smoke- und 8 axe-Tests bestanden (Chromium-Emulation Desktop/Tablet/Mobil). Veraltete Erwartung „Alle Comics“ → „Comics und Bilderbücher“ korrigiert. **Kein echter Geräte-/Safari-Test.**
+- [x] **Kleiderschrank konsolidiert (Issue #24, Teil 1):** Die tote Inline-UI (`bear-category-grid`, 86 Zeilen) aus `index.html` entfernt; `baerli-kleiderschrank.js` ist die einzige Implementierung. Daten (`bearItems`, `bearGroups`), Speicher-Keys, Käufe und Slot-Migration unverändert.
+- [x] **Modularisierung begonnen (Issue #24, Teil 2):** 319 KB Base64-Diktataudio nach `diktat-audio.js` ausgelagert; `index.html` von 803 KB auf 484 KB reduziert. Im Browser verifiziert (6 Einträge, keine Fehler).
+- [x] **Barrierefreiheits-Audit (Issue #26):** `e2e/a11y.spec.cjs` mit `@axe-core/playwright` prüft 8 Seiten auf WCAG-2A/-AA-Verstöße (serious/critical). Aktuell 0 Befunde. Ersetzt keine manuelle Prüfung mit Screenreader/Geräten.
+- [x] **PWA:** `manifest.webmanifest`, `sw.js` (HTML immer netz-zuerst, statische Dateien cache-zuerst) und Icons aus dem Bärli-Foto. App ist offline nutzbar und auf Tablets installierbar. Lernstände bleiben ausschließlich in `localStorage`.
+- [x] **Export-Erinnerung:** Nach 5 Lerntagen ohne Sicherung erscheint in `#einstellungen` und `#erwachsene` ein Hinweis auf den JSON-Export (`maja-plus.js`, Schlüssel unverändert `majas-wortwerkstatt-plus-2026-11`).
+- [x] **Wiederholen mit Abstand + Lernserie:** Richtig nachgeübte Fehler werden nach 1/3/7 Tagen erneut fällig (Fehlertrainer und Tagesplan zeigen fällige Wiederholungen). Lernserie: an jedem dritten Lerntag in Folge gibt es 1 Bonus-Stern (`rewards`-Eintrag `streak:<Datum>`, bestehende Sternenbeutel-Validierung).
+- [x] **Vorlesehilfe:** Knopf „🔊 Auswahl vorlesen“ in `#lernen` und `#abenteuer` liest die Menüpunkte mit der Gerätestimme vor; bricht beim Seitenwechsel ab; deaktiviert sich ohne Sprachausgabe.
+- [x] **ESLint:** `eslint.config.cjs` + `npm run lint` (0 Befunde); Lint-Schritt im CI-Browser-Job ergänzt.
+- [ ] **GitHub-Actions-Ergebnis nach diesem Push kontrollieren** (vorher schlugen alle Läufe fehl).
+- [ ] **Echte Geräte weiterhin offen:** TTS-Hörbarkeit, PWA-Installation auf iOS/Android, Bonus-Stern und Diktat auf iPhone/iPad/Android sind **nicht geprüft** (Issue #22). Chromium-Emulation ersetzt keine Gerätekontrolle.
+
 ## 2. Bereits überprüft
 
 - [x] GitHub-Updates über den verbundenen Connector erfolgreich geschrieben.
@@ -46,6 +60,7 @@
 - [ ] **Noch auszuführen:** Node-Regressionstests auf einer vollständigen Arbeitskopie ausführen; GitHub-Actions-Workflow `.github/workflows/maja-regression.yml` wurde erstellt, sein Erfolg ist noch **nicht** bestätigt.
 - [x] **Nach den letzten Änderungen:** Acht eingebettete JavaScript-Abschnitte erneut geparst; 14 von 14 zusätzlichen statischen Quellcodekontrollen bestanden (kein Browser-End-to-End-Test).
 - [ ] **Nicht geprüft:** tatsächliche GitHub-Pages-Auslieferung und Laufzeit auf echten Geräten.
+- [x] **09.11.2026 (Copilot):** Alle 13 statischen Node-Tests, `npm run lint` und 24 lokale Playwright-Tests (Smoke + axe) erfolgreich ausgeführt; Diktataudio, PWA, Erinnerung, Lernserie und Vorlesehilfe zusätzlich einzeln im Chromium geprüft.
 
 ## 3. Offene Aufgaben – in dieser Reihenfolge
 
@@ -55,7 +70,8 @@
 | P0 | Kleidung pixelgenau am Bärli-Bild, Comic-Sprechblasen, Köpfe und Proportionen prüfen und ggf. korrigieren | [#23](https://github.com/Adrakir/Lernprogramme/issues/23) |
 | P0 | Alle Hör-/Rechtschreibtests und Vorschläge der Fehlerdiagnose fachlich gegen Aufgaben und Texte validieren | [#25](https://github.com/Adrakir/Lernprogramme/issues/25) |
 | P1 | Alle übrigen großen Unterseiten in kindgerechte Schritte aufteilen; Touch-/Fokus-/Kontrast-Audit | [#26](https://github.com/Adrakir/Lernprogramme/issues/26) |
-| P1 | Großes HTML schrittweise modularisieren, Browsertests und CI ergänzen; keinen unbeprüften Totalrewrite | [#24](https://github.com/Adrakir/Lernprogramme/issues/24) |
+| P1 | Großes HTML weiter modularisieren (Kleiderschrank-Duplikat entfernt, Diktataudio ausgelagert); keinen unbeprüften Totalrewrite | [#24](https://github.com/Adrakir/Lernprogramme/issues/24) |
+| P1 | PWA-Installation und Offline-Betrieb auf echten iOS-/Android-Geräten prüfen | [#22](https://github.com/Adrakir/Lernprogramme/issues/22) |
 
 **Nächste einzelne Arbeit:** Issue #22 beginnen. Wenn kein Gerät/Browsertest möglich ist, die Grenzen klar notieren und mit #25 (inhaltliche Prüfung) fortfahren. Keine QA als erledigt markieren, wenn sie nicht tatsächlich stattgefunden hat.
 
@@ -91,5 +107,6 @@ Diese Befehle sind nicht gleichbedeutend mit visuellem Browser-QA. Audioausgabe 
 |---|---|---|---|
 | 09.11.2026 / ChatGPT | Kindgerechte Hubs, paginierte Archive, Audio, Feedback, Elternsicht, Kleidung; Tests, Copilot-Regeln, GitHub-Issues und CI-Workflow angelegt | GitHub-Commits bestätigt; 8/8 Inline-Scripts geparst und 14/14 statische Prüfungen bestanden. Node und echte Browser noch nicht ausgeführt | Issues #22–#26; Node-/Actions-Lauf, Browser-/Audio- und Bildprüfung |
 | 09.11.2026 / ChatGPT – Fortsetzung | Router-Fix [aab4096](https://github.com/Adrakir/Lernprogramme/commit/aab409612dc9a598579f17535bc351c6a3bc92b5); neue QA-Checkliste, Copilot-Hinweise, Playwright-Smoke-Tests, CI-Browserjob, Issues #22/#24/#26 ergänzt | Neue JS-Test- und Konfigurationsdateien syntaktisch geprüft, Router-Kette und zentrale UI-Schlüssel statisch kontrolliert; GitHub-Dateien erfolgreich geschrieben. **Kein erfolgreicher Node-, Playwright-, Actions- oder echter Gerätetest nachgewiesen.** | GitHub-Actions-Ergebnis prüfen, Fehler falls vorhanden beheben; danach Audio auf echten Geräten und Sichtkontrolle an Bärli/Comics (Issues #22–#26) |
+| 09.11.2026 / GitHub Copilot | CI-Fix (ubuntu-24.04, drei Regressionen des Startseiten-Restores behoben), Kleiderschrank konsolidiert, Diktataudio nach `diktat-audio.js` (index 803→484 KB), axe-Audit `e2e/a11y.spec.cjs`, PWA (`manifest.webmanifest`, `sw.js`, Icons), Export-Erinnerung, Wiederholen 1/3/7 Tage, Lernserien-Bonus-Stern, Vorlesen-Knopf in den Hubs, ESLint | 13/13 statische Node-Tests, ESLint 0 Befunde, 24/24 lokale Playwright-Tests (Chromium-Emulation); SW/Manifest/Erinnerung/Streak/Vorlesen einzeln im Chromium verifiziert. **Nicht geprüft: echte iOS-/Android-Geräte, hörbare Tonausgabe, GitHub-Actions-Lauf nach diesem Push, Live-Pages.** | Actions-Ergebnis kontrollieren; Issues #22 (Geräte inkl. PWA), #23 (Optik), #25 (Didaktik) weiterführen |
 
 **Regel:** Nach jeder relevanten Änderung mindestens diese Tabelle und die Checkboxen aktualisieren. Anfragen anderer KI-Systeme sollen sich auf diese Datei, die Issues und die Git-Historie stützen, nicht auf frühere Chats.

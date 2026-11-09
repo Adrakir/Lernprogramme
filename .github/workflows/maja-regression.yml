@@ -28,7 +28,8 @@ jobs:
 
   browser:
     name: Chromium browser smoke checks (emulated viewports)
-    runs-on: ubuntu-latest
+    # Pinned: Playwright unterstützt "ubuntu-latest" (26.04) noch nicht.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -40,6 +41,9 @@ jobs:
         run: |
           npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
+      - name: Lint JavaScript sources
+        working-directory: majas-wortwerkstatt
+        run: npm run lint
       - name: Test Maja routes and listening settings
         working-directory: majas-wortwerkstatt
         run: npm run test:browser

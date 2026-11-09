@@ -2,11 +2,11 @@
   "use strict";
   const STORE="majas-wortwerkstatt-plus-2026-11";
   const SAFE_PREFIX="majas-wortwerkstatt";
-  const defaults={font:"normal",contrast:"normal",motion:"normal",days:{},repaired:{}};
+  const defaults={font:"normal",contrast:"normal",motion:"normal",days:{},repaired:{},visits:[],lastExport:null,review:{}};
   function read(){
     try{
       const data=JSON.parse(localStorage.getItem(STORE)||"{}");
-      return data && typeof data==="object" && !Array.isArray(data) ? {...defaults,...data,days:data.days||{},repaired:data.repaired||{}} : {...defaults};
+      return data && typeof data==="object" && !Array.isArray(data) ? {...defaults,...data,days:data.days||{},repaired:data.repaired||{},review:data.review||{}} : {...defaults};
     }catch{return {...defaults};}
   }
   function save(data){try{localStorage.setItem(STORE,JSON.stringify(data));return true;}catch{return false;}}
@@ -15,6 +15,59 @@
     return `<div class="route">${homeLink()}<div class="unit-head mint"><span class="icon-box">★</span><div><p class="kicker">Majas Wortwerkstatt · Neues Lernstudio</p><h1 tabindex="-1">${esc(title)}</h1><p>${esc(description)}</p></div></div>`;
   }
   function dayKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
+  // Wiederholen mit wachsendem Abstand: nach dem Nachüben in 1, dann 3, dann 7 Tagen erneut fällig.
+  const REVIEW_GAPS=[1,3,7];
+  function addDays(key,days){
+    const d=new Date(key+"T12:00:00");d.setDate(d.getDate()+days);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+  }
+  function reviewDue(data,id){
+    const r=(data.review||{})[id];
+    return Boolean(r&&r.due&&r.due<=dayKey());
+  }
+  function scheduleReview(id){
+    const data=read();
+    const prev=(data.review||{})[id]||{stage:0};
+    const stage=Math.min((prev.stage||0)+1,REVIEW_GAPS.length+1);
+    data.review={...(data.review||{}),[id]:stage<=REVIEW_GAPS.length
+      ?{stage,due:addDays(dayKey(),REVIEW_GAPS[stage-1]),last:dayKey()}
+      :{stage,due:null,last:dayKey()}};
+    data.repaired[id]=true;
+    save(data);
+  }
+  function dueReviews(){
+    const data=read();
+    return mistakes().filter(entry=>data.repaired[entry.id]&&reviewDue(data,entry.id));
+  }
+  function streakDays(){
+    const visits=new Set(read().visits||[]);
+    let streak=0;const d=new Date();
+    while(visits.has(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`)){streak++;d.setDate(d.getDate()-1);}
+    return streak;
+  }
+  function awardStreakStar(){
+    // 1 Bonus-Stern an jedem dritten Lerntag in Folge; nutzt die bestehende Sternenbeutel-Logik.
+    const streak=streakDays();
+    if(streak<3||streak%3!==0)return;
+    if(typeof starRefresh!=="function"||typeof starCommit!=="function")return;
+    const current=starRefresh(),key="streak:"+dayKey();
+    if(Object.hasOwn(current.rewards,key))return;
+    const next=structuredClone(current);
+    next.rewards[key]={amount:1,day:dayKey()};
+    starCommit(next);
+  }
+  function trackVisit(){
+    const data=read(),today=dayKey();
+    if(!Array.isArray(data.visits))data.visits=[];
+    if(!data.visits.includes(today)){data.visits.push(today);if(data.visits.length>60)data.visits=data.visits.slice(-60);save(data);}
+  }
+  function backupReminder(){
+    const data=read(),visits=Array.isArray(data.visits)?data.visits:[];
+    const sinceExport=data.lastExport?visits.filter(day=>day>data.lastExport).length:visits.length;
+    if(sinceExport<5)return "";
+    const last=data.lastExport?("Letzte Sicherung: "+data.lastExport+".") : "Es wurde noch nie eine Sicherung erstellt.";
+    return last+" Seit "+sinceExport+" Lerntagen gibt es keine neue Sicherungsdatei. Der Lernstand liegt nur in diesem Browser – bitte unter Einstellungen exportieren.";
+  }
   function mistakes(){
     const sessions=prepRead(),all=new Map();
     for(const [key,session] of Object.entries(sessions)){
@@ -52,15 +105,16 @@
   function showDaily(){
     const data=read(),today=dayKey(),marked=data.days[today]||{};
     const trouble=mistakes().filter(x=>!data.repaired[x.id]);
+    const due=dueReviews(),streak=streakDays();
     const emphasis=trouble.length ? skillText(trouble[0].q.skill) : "Nomen und Hörverständnis";
     const steps=[
       {id:"listen",minutes:3,title:"Hördetektivin",desc:"Höre eine kurze Geschichte und beantworte fünf Fragen.",href:"#pruefung/hoeren/ueben/1"},
       {id:"words",minutes:3,title:"Nomen-Entdeckerin",desc:"Übe Endungen und verlängere Wörter. Nutze bei Bedarf die drei Hilfen.",href:"#pruefung/nomen/ueben/1"},
-      {id:"retry",minutes:2,title:"Fehler-Forscherin",desc:"Wiederhole genau die Aufgaben, die früher schwierig waren.",href:"#fehlertraining"},
+      {id:"retry",minutes:2,title:"Fehler-Forscherin",desc:due.length?`Heute sind ${due.length===1?"eine Wiederholung":due.length+" Wiederholungen"} fällig. Übe sie zuerst – so bleibt das Gelernte im Kopf.`:"Wiederhole genau die Aufgaben, die früher schwierig waren.",href:"#fehlertraining"},
       {id:"game",minutes:2,title:"Spielpause mit Bärli",desc:"Sammle Nomen beim Go-Kart oder spiele das Wörterabenteuer.",href:"#spiele/kart"}
     ];
     app.innerHTML=cardTitle("Deine 10-Minuten-Mission","Vier kurze Stationen – ohne Zeitdruck und mit deinem eigenen Tempo.")+
-      `<section class="panel"><p class="kicker">Heute · ${esc(new Date().toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"}))}</p><h2>Mein heutiger Schwerpunkt: ${esc(emphasis)}</h2><p>Du entscheidest selbst, wann eine Station geschafft ist. Pausen sind erlaubt.</p><div class="plus-progress" role="progressbar" aria-label="Heutige Stationen" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${steps.filter(s=>marked[s.id]).length}"><span style="width:${25*steps.filter(s=>marked[s.id]).length}%"></span></div><p id="plus-daily-counter">${steps.filter(s=>marked[s.id]).length} von 4 Stationen geschafft</p></section>`+
+      `<section class="panel"><p class="kicker">Heute · ${esc(new Date().toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"}))}</p><h2>Mein heutiger Schwerpunkt: ${esc(emphasis)}</h2>${streak>=2?`<p>🔥 Du lernst heute den ${streak}. Tag in Folge${streak>=3&&streak%3===0?" – dafür gab es einen Bonus-Stern!":". An jedem dritten Tag in Folge wartet ein Bonus-Stern."}</p>`:""}${due.length?`<p>📅 <a href="#fehlertraining">${due.length===1?"Eine frühere Aufgabe ist":due.length+" frühere Aufgaben sind"} heute zum Wiederholen fällig.</a></p>`:""}<p>Du entscheidest selbst, wann eine Station geschafft ist. Pausen sind erlaubt.</p><div class="plus-progress" role="progressbar" aria-label="Heutige Stationen" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${steps.filter(s=>marked[s.id]).length}"><span style="width:${25*steps.filter(s=>marked[s.id]).length}%"></span></div><p id="plus-daily-counter">${steps.filter(s=>marked[s.id]).length} von 4 Stationen geschafft</p></section>`+
       steps.map((s,i)=>`<section class="panel plus-step"><div><p class="kicker">Station ${i+1} · ungefähr ${s.minutes} Minuten</p><h2>${esc(s.title)}</h2><p>${esc(s.desc)}</p></div><div class="actions"><a class="primary" href="${s.href}">Üben</a><label class="plus-check"><input type="checkbox" data-plus-step="${s.id}" ${marked[s.id]?"checked":""}> Erledigt</label></div></section>`).join("")+
       `<section class="panel"><h2>Morgen geht es weiter</h2><p>Du kannst jeden Tag neu starten. Deine abgeschlossenen Aufgaben und Sterne bleiben gespeichert.</p><div class="actions"><a class="secondary" href="#pruefung">Klassenarbeiten</a><a class="secondary" href="#einstellungen">Lernstand sichern</a></div></section></div>`;
     for(const cb of app.querySelectorAll("[data-plus-step]"))cb.addEventListener("change",()=>{
@@ -71,10 +125,11 @@
     });
   }
   function showErrors(filter){
-    const data=read(),errors=mistakes(),topic=["nomen","hoeren"].includes(filter)?filter:null,items=errors.filter(x=>!topic||x.topic===topic);
+    const data=read(),errors=mistakes(),topic=["nomen","hoeren"].includes(filter)?filter:null;
+    const items=errors.filter(x=>!topic||x.topic===topic).filter(x=>!data.repaired[x.id]||reviewDue(data,x.id));
     app.innerHTML=cardTitle("Mein Fehlertrainer","Falsche Antworten aus abgeschlossenen Übungen und Tests werden zu neuen Lernchancen.")+
       `<section class="panel"><h2>Deine Fehlerlupe</h2><p>Gefundene unterschiedliche Übungsaufgaben: <strong>${items.length}</strong>. Bereits erfolgreich nachgeübt: <strong>${items.filter(x=>data.repaired[x.id]).length}</strong>.</p><div class="actions"><a class="secondary" href="#fehlertraining">Alle</a><a class="secondary" href="#fehlertraining/hoeren">Hörverständnis</a><a class="secondary" href="#fehlertraining/nomen">Nomen und Verlängern</a></div></section>`+
-      (items.length?items.map((entry,i)=>`<section class="panel plus-error" data-error-id="${esc(entry.id)}"><p class="kicker">Übung ${i+1} · ${esc(skillText(entry.q.skill))} ${data.repaired[entry.id]?"· schon einmal nachgeübt":""}</p><h2>${esc(entry.q.prompt)}</h2>${entry.q.context?`<p class="prep-word">${esc(entry.q.context)}</p>`:""}${entry.topic==="hoeren"?`<audio controls preload="none" src="./anna-audio/${encodeURIComponent(entry.q.track)}.mp3" aria-label="Geschichte erneut anhören"></audio>`:""}<form class="plus-try" data-plus-id="${esc(entry.id)}">${entry.q.type==="choice"?`<fieldset class="plus-fieldset"><legend>Wähle die beste Antwort</legend>${entry.q.options.map((option,j)=>`<label><input type="radio" name="antwort-${i}" value="${esc(option)}"> ${esc(option)}</label>`).join("")}</fieldset>`:`<label for="plus-ans-${i}">Deine neue Antwort</label><input type="text" id="plus-ans-${i}" autocomplete="off" spellcheck="false" required>`}<div class="actions"><button class="primary" type="submit">Prüfen</button><button type="button" class="secondary plus-hint">Tipp anzeigen</button></div></form><div class="plus-hint-text" hidden>${esc(skillHelp(entry.q))}</div><p class="plus-feedback" role="status" aria-live="polite"></p></section>`).join(""):`<section class="panel"><h2>Sehr gut!</h2><p>Zu diesem Bereich sind noch keine falschen Antworten aus abgeschlossenen Übungen oder Tests gespeichert. Du kannst trotzdem weitertrainieren.</p><div class="actions"><a class="primary" href="#pruefung/nomen/ueben/1">Nomen trainieren</a><a class="secondary" href="#pruefung/hoeren/ueben/1">Hören trainieren</a></div></section>`)+`<div class="actions"><a class="secondary" href="#tagesplan">Zur Tagesmission</a><a class="secondary" href="#pruefung">Zu den Abschlusstests</a></div></div>`;
+      (items.length?items.map((entry,i)=>`<section class="panel plus-error" data-error-id="${esc(entry.id)}"><p class="kicker">Übung ${i+1} · ${esc(skillText(entry.q.skill))} ${reviewDue(data,entry.id)?"· 📅 Wiederholung fällig":data.repaired[entry.id]?"· schon einmal nachgeübt":""}</p><h2>${esc(entry.q.prompt)}</h2>${entry.q.context?`<p class="prep-word">${esc(entry.q.context)}</p>`:""}${entry.topic==="hoeren"?`<audio controls preload="none" src="./anna-audio/${encodeURIComponent(entry.q.track)}.mp3" aria-label="Geschichte erneut anhören"></audio>`:""}<form class="plus-try" data-plus-id="${esc(entry.id)}">${entry.q.type==="choice"?`<fieldset class="plus-fieldset"><legend>Wähle die beste Antwort</legend>${entry.q.options.map((option,j)=>`<label><input type="radio" name="antwort-${i}" value="${esc(option)}"> ${esc(option)}</label>`).join("")}</fieldset>`:`<label for="plus-ans-${i}">Deine neue Antwort</label><input type="text" id="plus-ans-${i}" autocomplete="off" spellcheck="false" required>`}<div class="actions"><button class="primary" type="submit">Prüfen</button><button type="button" class="secondary plus-hint">Tipp anzeigen</button></div></form><div class="plus-hint-text" hidden>${esc(skillHelp(entry.q))}</div><p class="plus-feedback" role="status" aria-live="polite"></p></section>`).join(""):`<section class="panel"><h2>Sehr gut!</h2><p>Zu diesem Bereich sind noch keine falschen Antworten aus abgeschlossenen Übungen oder Tests gespeichert. Du kannst trotzdem weitertrainieren.</p><div class="actions"><a class="primary" href="#pruefung/nomen/ueben/1">Nomen trainieren</a><a class="secondary" href="#pruefung/hoeren/ueben/1">Hören trainieren</a></div></section>`)+`<div class="actions"><a class="secondary" href="#tagesplan">Zur Tagesmission</a><a class="secondary" href="#pruefung">Zu den Abschlusstests</a></div></div>`;
     const lookup=new Map(items.map(x=>[x.id,x]));
     for(const form of app.querySelectorAll("form[data-plus-id]")){
       const item=lookup.get(form.dataset.plusId),panel=form.closest(".plus-error");
@@ -85,7 +140,7 @@
         const status=panel.querySelector(".plus-feedback");
         if(!chosen?.trim()){status.textContent="Trage zuerst deine Antwort ein.";return;}
         if(prepCorrect(item.q,chosen)){
-          const current=read();current.repaired[item.id]=true;save(current);
+          scheduleReview(item.id);
           status.textContent="Richtig! "+item.q.why+" Du kannst den nächsten Fehler bearbeiten.";
           form.querySelectorAll("input,button").forEach(x=>x.disabled=true);
         }else{
@@ -105,7 +160,7 @@
     const data=read();
     app.innerHTML=cardTitle("Einstellungen & Datensicherung","Lesbarkeit anpassen und den Lernstand sicher auf ein anderes Gerät übertragen.")+
       `<section class="panel"><h2>Darstellung</h2><p>Die Einstellungen gelten für dieses Gerät.</p><div class="plus-setting"><strong>Schriftgröße</strong><div class="actions"><button class="secondary" data-set="font:normal">Normal</button><button class="secondary" data-set="font:gross">Groß</button></div></div><div class="plus-setting"><strong>Kontrast</strong><div class="actions"><button class="secondary" data-set="contrast:normal">Standard</button><button class="secondary" data-set="contrast:hoch">Hoch</button></div></div><div class="plus-setting"><strong>Animationen</strong><div class="actions"><button class="secondary" data-set="motion:normal">Normal</button><button class="secondary" data-set="motion:weniger">Weniger Bewegung</button></div></div><p id="plus-appearance" class="inline-status" role="status">Aktuell: ${data.font==="gross"?"große":"normale"} Schrift, ${data.contrast==="hoch"?"hoher":"normaler"} Kontrast.</p></section>`+
-      `<section class="panel"><h2>Lernstand mitnehmen</h2><p>Die App speichert Ergebnisse lokal im Browser. Mit dieser Datei lassen sich Lernstände und Sterne auf ein anderes Gerät übertragen. Die Datei bleibt bei dir; es findet kein automatischer Upload statt.</p><div class="actions"><button class="primary" id="plus-export" type="button">Lernstand exportieren</button></div><label class="field" for="plus-import">Sicherung auswählen (JSON-Datei)</label><input id="plus-import" type="file" accept=".json,application/json"><button class="secondary" id="plus-restore" type="button">Sicherung einlesen</button><p class="inline-status" id="plus-backup-status" role="status"></p><p class="subtle">Achtung: Beim Einlesen werden vorhandene lokale Lernstände mit gleichen Schlüsseln ersetzt. Vorher wird um Bestätigung gebeten. Audioaufnahmen gehören nicht zur Sicherung.</p></section><div class="actions"><a class="secondary" href="#erwachsene">Zur Lernübersicht</a><a class="secondary" href="#tagesplan">Zum Tagesplan</a></div></div>`;
+      `<section class="panel"><h2>Lernstand mitnehmen</h2>${backupReminder()?`<p class="inline-status" role="status">⚠ ${esc(backupReminder())}</p>`:""}<p>Die App speichert Ergebnisse lokal im Browser. Mit dieser Datei lassen sich Lernstände und Sterne auf ein anderes Gerät übertragen. Die Datei bleibt bei dir; es findet kein automatischer Upload statt.</p><div class="actions"><button class="primary" id="plus-export" type="button">Lernstand exportieren</button></div><label class="field" for="plus-import">Sicherung auswählen (JSON-Datei)</label><input id="plus-import" type="file" accept=".json,application/json"><button class="secondary" id="plus-restore" type="button">Sicherung einlesen</button><p class="inline-status" id="plus-backup-status" role="status"></p><p class="subtle">Achtung: Beim Einlesen werden vorhandene lokale Lernstände mit gleichen Schlüsseln ersetzt. Vorher wird um Bestätigung gebeten. Audioaufnahmen gehören nicht zur Sicherung.</p></section><div class="actions"><a class="secondary" href="#erwachsene">Zur Lernübersicht</a><a class="secondary" href="#tagesplan">Zum Tagesplan</a></div></div>`;
     for(const button of app.querySelectorAll("[data-set]"))button.onclick=()=>{
       const [key,value]=button.dataset.set.split(":"),next=read();
       next[key]=value;save(next);apply();app.querySelector("#plus-appearance").textContent="Einstellung gespeichert.";
@@ -117,6 +172,7 @@
       const blob=new Blob([JSON.stringify(file,null,2)],{type:"application/json"});
       const url=URL.createObjectURL(blob),a=document.createElement("a");
       a.href=url;a.download="majas-wortwerkstatt-lernstand-"+dayKey()+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      const next=read();next.lastExport=dayKey();save(next);
       app.querySelector("#plus-backup-status").textContent="Die Sicherungsdatei wurde zum Download bereitgestellt.";
     };
     app.querySelector("#plus-restore").onclick=async()=>{
@@ -135,6 +191,9 @@
       }catch(e){status.textContent="Einlesen nicht möglich: "+(e.message||"ungültige Datei");}
     };
   }
-  window.MajaPlus={showDaily,showErrors,showSettings,mistakes,skillHelp,apply};
+  window.MajaPlus={showDaily,showErrors,showSettings,mistakes,skillHelp,apply,backupReminder,dueReviews,streakDays};
   apply();
+  trackVisit();
+  // Sternenbeutel-Funktionen stehen erst nach dem Haupt-Skript bereit.
+  if(typeof document.addEventListener==="function")document.addEventListener("DOMContentLoaded",awardStreakStar);
 })();

@@ -25,9 +25,10 @@ Die Auswahl der Computerstimmen hängt von den Stimmen ab, die auf dem jeweilige
 
 ## Kurzer technischer Einstieg
 
-- `index.html` enthält die Hauptlogik, Hash-Navigation, Klassenarbeitsfragen, Bärlis Kleiderschrank und verschiedene bestehende Spiele.
+- `index.html` enthält die Hauptlogik, Hash-Navigation, Klassenarbeitsfragen und verschiedene bestehende Spiele. Das Diktataudio liegt ausgelagert in `diktat-audio.js`; der Kleiderschrank vollständig in `baerli-kleiderschrank.js`.
 - `mobile-start.css` enthält die kompakten Kindermenüs und Stilergänzungen für Hörverstehen und Kleiderschrank.
-- `maja-plus.js` enthält ergänzende Lernfunktionen und die lokale Datensicherung.
+- `maja-plus.js` enthält ergänzende Lernfunktionen, die lokale Datensicherung, die Export-Erinnerung sowie Wiederholungs- und Lernserienlogik.
+- `manifest.webmanifest`, `sw.js` und `icons/` machen die App offline nutzbar und installierbar (PWA). Lernstände bleiben ausschließlich in `localStorage`.
 - Andere JavaScript-, CSS-, Medien- und Comicdateien im Ordner gehören zur bestehenden App und dürfen nicht ungeprüft gelöscht werden.
 
 ### Qualitätssicherung und andere KI-Assistenten
@@ -46,7 +47,9 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-Die Datei `e2e/smoke.spec.cjs` prüft aktuell die beiden Einstiege, Hörverstehen samt Einstellungen, Hauptbereiche und horizontalen Überlauf. GitHub Actions ist eingerichtet, ein erfolgreich abgeschlossener Browserlauf ist **noch nicht nachgewiesen**. Das Ersetzen echter iOS/Android-Tests durch Chromium-Emulation ist nicht zulässig.
+Die Datei `e2e/smoke.spec.cjs` prüft die beiden Einstiege, Hörverstehen samt Einstellungen, Hauptbereiche und horizontalen Überlauf; `e2e/a11y.spec.cjs` führt zusätzlich ein axe-Audit (WCAG 2A/AA) auf acht Seiten aus. Am 09.11.2026 liefen alle Tests lokal in der Chromium-Emulation erfolgreich. Das Ersetzen echter iOS/Android-Tests durch Chromium-Emulation ist nicht zulässig.
+
+Zusätzlich steht `npm run lint` (ESLint) zur Verfügung und läuft auch im CI-Workflow.
 
 ### Statische Prüfungen
 

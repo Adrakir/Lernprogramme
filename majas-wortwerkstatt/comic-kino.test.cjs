@@ -11,7 +11,7 @@ assert(html.includes('comic-kino.css?v=20261108b'),'Comic styles loaded');
 assert(html.includes('window.MajaComicKino?.stop()'),'Speech cleaned up on navigation');
 assert(html.includes("mode:'school'"),'School comics use new audio player');
 assert(html.includes("mode:'detective'"),'Detective comics use new audio player');
-assert(html.includes('Hörtraining mit Bärli'),'Guided audio section exists');
+assert(html.includes('Hörtraining in Abschnitten'),'Guided audio section exists');
 assert(html.includes('data-cue-index'),'Audio passage replay implemented');
 assert(style.includes('touch-action:none'),'Music buttons have pointer touch handling');
 assert(style.includes('touch-action:pan-y'),'Kart swipe handling configured');

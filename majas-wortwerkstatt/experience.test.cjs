@@ -11,6 +11,7 @@ const base=__dirname;
 const html=fs.readFileSync(path.join(base,'index.html'),'utf8');
 const css=fs.readFileSync(path.join(base,'mobile-start.css'),'utf8');
 const plus=fs.readFileSync(path.join(base,'maja-plus.js'),'utf8');
+const wardrobeJs=fs.readFileSync(path.join(base,'baerli-kleiderschrank.js'),'utf8');
 const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(Boolean);
 assert(scripts.length>=1,'embedded scripts found');
 for(const script of scripts)new vm.Script(script);
@@ -40,7 +41,8 @@ for(const key of ['hut','oberteil','hose','brille','hals','schuhe','spielzeug','
 for(const id of ['muetze','sonnenhut','brille','sonnenbrille','winterpullover','regenjacke','jeans','rotehose','sneaker','stiefel']){
  assert(html.includes("id:'"+id+"'"),'wardrobe item: '+id);
 }
-assert(html.includes('bear-category-grid')&&html.includes('currentPage'), 'wardrobe pagination');
+assert(wardrobeJs.includes('bw-category-grid')&&wardrobeJs.includes('bw-pagination'),'wardrobe pagination');
+assert(!html.includes('bear-category-grid'),'inline duplicate wardrobe UI stays removed');
 assert(html.includes("bearOutfitKey='majas-wortwerkstatt-baerli-auswahl-v1'"),'existing outfit save key preserved');
 assert(html.includes("starWalletKey='majas-wortwerkstatt-sternenbeutel-v1'"),'existing star save key preserved');
 assert(css.includes('@media(max-width:620px)'), 'mobile layout');
