@@ -30,6 +30,24 @@ Die Auswahl der Computerstimmen hängt von den Stimmen ab, die auf dem jeweilige
 - `maja-plus.js` enthält ergänzende Lernfunktionen und die lokale Datensicherung.
 - Andere JavaScript-, CSS-, Medien- und Comicdateien im Ordner gehören zur bestehenden App und dürfen nicht ungeprüft gelöscht werden.
 
+### Qualitätssicherung und andere KI-Assistenten
+
+- [QA_CHECKLIST.md](./QA_CHECKLIST.md) ist die gemeinsame, reproduzierbare manuelle Abnahme für Audio, Navigation, Rechtschreibung, Comics, Kleidung und Lernstand.
+- [PROJECT_STATE.md](./PROJECT_STATE.md) enthält den **aktuellen Umsetzungs- und Prüfstand**; er muss nach jeder Änderung fortgeschrieben werden.
+- [AGENTS.md](./AGENTS.md) erklärt auch, welche spätere JS-Datei zur Laufzeit bestehende Funktionen überschreibt.
+- GitHub Copilot erhält zusätzlich zentrale Hinweise über [`.github/copilot-instructions.md`](../.github/copilot-instructions.md).
+
+**Automatische Chromium-Browsertests (simulierte Bildschirmgrößen):**
+
+```bash
+cd majas-wortwerkstatt
+npm install
+npx playwright install chromium
+npm run test:browser
+```
+
+Die Datei `e2e/smoke.spec.cjs` prüft aktuell die beiden Einstiege, Hörverstehen samt Einstellungen, Hauptbereiche und horizontalen Überlauf. GitHub Actions ist eingerichtet, ein erfolgreich abgeschlossener Browserlauf ist **noch nicht nachgewiesen**. Das Ersetzen echter iOS/Android-Tests durch Chromium-Emulation ist nicht zulässig.
+
 ### Statische Prüfungen
 
 Vom Repository-Hauptverzeichnis aus:
