@@ -1,0 +1,141 @@
+/* Majas Wortwerkstatt – Bärlis Baumhaus. Eigenständiges, kontrastreiches Kinder-UI. */
+.bh-shell{max-width:1040px;margin:0 auto;padding:6px 8px 35px;color:#26443f}
+.bh-shell *, .bh-shell *::before,.bh-shell *::after{box-sizing:border-box}
+.bh-shell a:focus-visible,.bh-shell button:focus-visible{outline:4px solid #be502f;outline-offset:3px}
+.bh-shell button,.bh-shell a{touch-action:manipulation}
+.bh-back{display:inline-flex;align-items:center;min-height:44px;font-weight:800;color:#1b534c;text-decoration:none}
+.bh-title{display:flex;gap:14px;align-items:center;margin:6px 0 15px}
+.bh-title-icon{display:grid;place-items:center;flex:none;width:76px;height:76px;background:#dbe6c5;border:2px solid #96ad87;border-radius:19px;font-size:2.4rem}
+.bh-title h1{font-size:clamp(1.65rem,4vw,2.5rem);line-height:1.14;margin:0 0 5px;color:#214e46}
+.bh-title p{margin:0;color:#405f5b}
+.bh-kicker{font-size:.73rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#3c6a60!important}
+.bh-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.bh-stats>span{background:#fffaf0;border:1px solid #d3c5ab;border-radius:999px;padding:8px 13px;color:#40544b;font-size:.86rem}
+.bh-nav{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 17px}
+.bh-nav a,.bh-shell .bh-yellow,.bh-secondary{display:inline-flex;justify-content:center;align-items:center;min-height:47px;padding:10px 16px;text-align:center;text-decoration:none;border-radius:13px;font-weight:850;line-height:1.3}
+.bh-nav .bh-yellow,.bh-shell .bh-yellow{background:#f4d15a;color:#183b68;border:2px solid #ba9a40;box-shadow:0 3px 0 #9d8445}
+.bh-secondary{color:#234d6c;background:#e7eff9;border:1.5px solid #8eabc2}
+.bh-locked{background:linear-gradient(145deg,#eff3db,#d5e7d8);border:2px solid #b0c69e;border-radius:23px;text-align:center;padding:25px 20px;margin:12px auto;max-width:710px;box-shadow:0 7px 0 #d6ddcc}
+.bh-lock-picture{font-size:clamp(4rem,13vw,7rem);line-height:1.6}
+.bh-locked h2{margin:0 0 9px;font-size:clamp(1.3rem,4vw,1.9rem)}
+.bh-locked p{max-width:610px;margin:11px auto;line-height:1.55}
+.bh-subtle{color:#49605b;font-size:.88rem;line-height:1.45}
+.bh-room-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;padding:0 4px;gap:9px}
+.bh-room-info strong{font-size:1.13rem}
+.bh-room-info small{color:#426c63}
+.bh-rooms{display:flex;gap:8px;margin:8px 0 12px}
+.bh-rooms button{min-height:47px;flex:1;border:2px solid #9ab4a3;border-radius:12px;background:#fff6e7;color:#245749;font-weight:850}
+.bh-rooms button[aria-pressed=true]{background:#3e7868;color:#fff;border-color:#295a50}
+.bh-room-stage{position:relative;isolation:isolate;width:100%;aspect-ratio:1.75;min-height:260px;overflow:hidden;border:10px solid #9c6f50;outline:3px solid #4e6e54;outline-offset:-7px;border-radius:22px;background:#9cc4be;box-shadow:inset 0 0 0 3px #d9a776,0 12px 24px #49645e33;cursor:crosshair}
+.bh-wall{position:absolute;inset:0 0 30%;background:linear-gradient(155deg,#fff9df77,var(--bh-wall,#f4e0bb) 38%,#f4daae);z-index:1}
+.bh-ceiling{position:absolute;inset:0 0 auto;height:12%;background:repeating-linear-gradient(90deg,#a37550 0 55px,#936846 56px 60px);box-shadow:0 8px 13px #4b302433;z-index:3}
+.bh-wall:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 105px,#c7a68750 106px 109px)}
+.bh-floor{position:absolute;z-index:2;left:0;right:0;bottom:0;height:33%;background:repeating-linear-gradient(165deg,#cc9867 0 30px,#b47e55 31px 34px,#d5aa79 35px 62px);border-top:9px solid #9d6948;box-shadow:inset 0 11px 20px #62432a44}
+.bh-tree-outside{position:absolute;z-index:0;inset:0;background:linear-gradient(#b5d7d9,#d4dfc8);font-size:7rem;padding:10px 0;line-height:1.1;text-align:right;color:#4c7752}
+.bh-tree-outside span{position:absolute;left:10%;top:20%;font-size:3rem}
+.bh-window{position:absolute;z-index:4;left:4%;top:15%;height:32%;width:19%;border:10px solid #bd9164;border-radius:9px;background:linear-gradient(#80b6cb 0 62%,#87be98 62%);box-shadow:inset 0 0 0 3px #f6ddab,0 5px 10px #765a4930;text-align:center;font-size:2rem}
+.bh-window:before,.bh-window:after{content:"";position:absolute;background:#b17d56;z-index:1}
+.bh-window:before{width:7px;height:100%;left:48%;top:0}
+.bh-window:after{width:100%;height:7px;top:50%;left:0}
+.bh-wall-pattern{position:absolute;z-index:2;inset:8% 0 33%;pointer-events:none;opacity:.36}
+.bh-waende-sterne,.bh-waende-weihnachten{background-image:radial-gradient(circle,#fef5cd 2px,transparent 4px);background-size:40px 40px}
+.bh-waende-wolken{background:radial-gradient(ellipse at 10% 20%,#fff9f5 0 25px,transparent 27px),radial-gradient(ellipse at 70% 60%,#fff9f5 0 32px,transparent 34px)}
+.bh-waende-regen{background:repeating-linear-gradient(120deg,transparent 0 16px,#7597b9aa 17px 20px,transparent 21px 48px)}
+.bh-waende-wald{background:radial-gradient(circle at 30% 60%,#568e6688 0 33px,transparent 34px),radial-gradient(circle at 76% 44%,#568e6688 0 39px,transparent 40px)}
+.bh-waende-regenbogen{background:repeating-linear-gradient(125deg,#eab9a6 0 19px,#eacc9b 20px 39px,#b7ceaa 40px 59px,#b3cadd 60px 79px)}
+.bh-bear{position:absolute;z-index:30;left:7%;bottom:22%;display:flex;align-items:center;flex-direction:column;width:10%;min-width:60px;max-width:90px;pointer-events:none}
+.bh-bear img{display:block;width:100%;aspect-ratio:1;object-fit:cover;object-position:center;border-radius:50%;border:2px solid #ad855f;box-shadow:0 3px 9px #4c473c55}
+.bh-bear span{font-size:.74rem;font-weight:850;color:#2e4c43;background:#fff8d9e8;padding:2px 8px;border-radius:99px}
+.bh-object{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0;border:2px solid transparent;background:transparent;color:#23493f;transform:translate(-50%,-50%);min-width:65px;max-width:125px;width:clamp(65px,13%,112px);padding:3px 1px;cursor:pointer}
+.bh-object .bh-art{width:100%;max-height:94px;height:auto;filter:drop-shadow(0 4px 3px #43372877)}
+.bh-object span{display:block;max-width:100%;font-size:clamp(.53rem,1vw,.69rem);font-weight:800;line-height:1.18;background:#fff8e9dd;border-radius:6px;padding:2px 3px;text-align:center;overflow-wrap:anywhere}
+.bh-object:hover,.bh-object:focus-visible,.bh-object.bh-selected{border:2px dashed #2e6888;border-radius:12px;background:#fff9eb88}
+.bh-object.bh-bed,.bh-object.bh-sofa,.bh-object.bh-bookshelf,.bh-object.bh-wardrobe,.bh-object.bh-tree{width:clamp(85px,17%,140px);max-width:150px}
+.bh-object.bh-rug{width:clamp(98px,20%,180px);z-index:5!important}
+.bh-tiny-status{position:absolute;z-index:99;right:10px;top:10px;background:#fffaf0dd;border-radius:9px;padding:5px 8px;font-size:.72rem;font-weight:750;pointer-events:none}
+.bh-editor,.bh-owned{background:#fffdf7;border:1.5px solid #d2cfc0;border-radius:20px;padding:15px;margin:14px 0}
+.bh-editor h2,.bh-owned h2{margin:0 0 7px;color:#265c52;font-size:1.22rem}
+.bh-editor p{margin:0 0 12px;line-height:1.45}
+.bh-object-list{display:flex;gap:7px;overflow-x:auto;padding:3px 1px 10px;scrollbar-width:thin}
+.bh-object-list button{flex:none;min-height:46px;max-width:220px;border:1.5px solid #b4b8ae;border-radius:12px;background:#f5f2e5;padding:9px 12px;font-weight:800;color:#33544e}
+.bh-object-list button[aria-pressed=true]{background:#d9edee;border-color:#296e8c}
+.bh-editor-controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:5px}
+.bh-selection{flex:1 1 160px;font-size:.9rem}
+.bh-arrows{display:flex;gap:6px}
+.bh-arrows button{min-width:49px;height:48px;border:2px solid #8ca9b6;background:#e1eef6;color:#27536d;border-radius:11px;font-size:1.35rem;font-weight:900}
+.bh-editor-controls>.bh-secondary{border-radius:11px;min-height:48px;font-size:.84rem}
+.bh-owned-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:275px;overflow:auto}
+.bh-owned-list button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:130px;border:1.5px solid #ddd3b9;border-radius:12px;background:#f9f4e8;color:#24504a;padding:7px}
+.bh-owned-list button span{font-weight:800;font-size:.8rem}
+.bh-owned-list button small{font-size:.72rem;color:#45655e}
+.bh-art{width:85px;height:75px;max-width:100%;flex:none}
+.bh-message{font-weight:800;color:#275a54;background:#e4f3ea;border-left:5px solid #518d71;padding:12px;border-radius:9px;margin:12px 0}
+.bh-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin:16px 0}
+.bh-bottom a{font-weight:800;color:#245c63;min-height:44px}
+.bh-shop-brand{display:flex;align-items:center;gap:14px;margin:6px 0 15px;padding:15px 19px;background:linear-gradient(125deg,#f9d54f 0 56%,#346da9 56%);border:3px solid #d6ac3f;border-radius:19px;color:#193f6f;box-shadow:0 5px 0 #bdc5d0}
+.bh-shop-brand>span:first-child{font-size:2.6rem}
+.bh-shop-brand strong{display:block;font-size:clamp(1.18rem,4vw,1.8rem)}
+.bh-shop-brand small{display:block;font-size:.86rem;color:#294c65}
+.bh-shop-star{margin-left:auto;font-size:3rem;color:#fff0a9}
+.bh-shop-cats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}
+.bh-shop-cat{display:flex;align-items:center;flex-direction:column;gap:6px;text-align:center;min-height:158px;border:2px solid #a8bcd1;border-radius:19px;background:#f7faff;padding:13px 11px;text-decoration:none;color:#194971;box-shadow:0 4px 0 #ccd4dd}
+.bh-shop-cat:hover{background:#ebf3ff}
+.bh-cat-icon{font-size:2.2rem;line-height:1}
+.bh-shop-cat strong{font-size:1.06rem}
+.bh-shop-cat small{font-size:.81rem;color:#4a6174}
+.bh-cat-status{display:block;margin-top:auto;font-weight:850;font-size:.77rem;color:#43685d;background:#eaf4eb;border-radius:99px;padding:5px 9px}
+.bh-cat-heading{display:flex;gap:12px;align-items:center;margin:8px 0 13px}
+.bh-cat-heading h2{font-size:1.35rem;margin:0}
+.bh-cat-heading p{margin:2px 0;color:#536878}
+.bh-shop-lock{background:#ffedcc;border-left:5px solid #ba8942;padding:13px;border-radius:11px;color:#594c32;font-weight:650}
+.bh-shop-products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.bh-product{display:grid;grid-template-rows:auto 1fr auto;gap:9px;background:#fffefa;border:2px solid #c2cfde;border-radius:19px;padding:13px;text-align:center;min-height:265px}
+.bh-product-art{background:#eaf2fa;border-radius:13px;display:grid;place-items:center;min-height:105px}
+.bh-product-art .bh-art{width:132px;height:111px}
+.bh-product h3{margin:0 0 6px;color:#1c4a73;font-size:1.07rem}
+.bh-product p{margin:0 0 5px;font-size:.86rem;color:#455d70;line-height:1.32}
+.bh-product strong{color:#715923}
+.bh-product button{min-height:46px;padding:8px 12px;font-weight:900;color:#173e71;background:#ffdc68;border:2px solid #c9a74c;border-radius:12px}
+.bh-product button:disabled{background:#e7e6de;color:#53635e;border-color:#b2b5b8}
+.bh-shop-pages{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:16px 0}
+.bh-shop-pages button{min-width:92px;min-height:46px;background:#dfeefa;color:#234e76;border:1px solid #9cb2cd;border-radius:11px;font-weight:850}
+.bh-shop-pages button:disabled{opacity:.45}
+.bh-shop-pages span{font-weight:850;font-size:.9rem;text-align:center}
+.bh-safe-note{font-size:.81rem;line-height:1.4;color:#506477;margin-top:16px}
+@media(max-width:640px){
+ .bh-shell{padding:4px 3px 22px}
+ .bh-title-icon{width:57px;height:57px;font-size:1.7rem}
+ .bh-title{gap:9px}
+ .bh-title h1{font-size:1.52rem}
+ .bh-title p{font-size:.85rem}
+ .bh-stats>span{font-size:.79rem;padding:7px 10px}
+ .bh-nav{gap:7px}
+ .bh-nav a{flex:1 1 135px;font-size:.86rem;padding:9px 6px}
+ .bh-room-stage{aspect-ratio:1.15;min-height:315px;border-width:7px;border-radius:16px}
+ .bh-bear{min-width:45px;width:14%;left:5%;bottom:24%}
+ .bh-object{width:65px;min-width:52px}
+ .bh-object .bh-art{max-height:73px}
+ .bh-object.bh-bed,.bh-object.bh-sofa,.bh-object.bh-bookshelf,.bh-object.bh-wardrobe,.bh-object.bh-tree{width:86px}
+ .bh-object.bh-rug{width:94px}
+ .bh-tiny-status{font-size:.63rem;top:5px;right:5px;max-width:49%}
+ .bh-editor{padding:11px}
+ .bh-arrows{flex-wrap:wrap}
+ .bh-arrows button{min-width:48px}
+ .bh-owned-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .bh-shop-brand{padding:10px 12px;gap:8px}
+ .bh-shop-brand>span:first-child{font-size:1.8rem}
+ .bh-shop-star{font-size:2rem}
+ .bh-shop-cats{gap:8px}
+ .bh-shop-cat{padding:12px 6px;min-height:158px}
+ .bh-shop-cat strong{font-size:.94rem}
+ .bh-shop-cat small{font-size:.73rem}
+ .bh-product{min-height:252px;padding:8px}
+ .bh-product-art{min-height:87px}
+ .bh-product-art .bh-art{height:85px;width:96px}
+ .bh-product h3{font-size:.96rem}
+ .bh-product p{font-size:.76rem}
+ .bh-product button{font-size:.8rem;padding:7px 4px}
+}
+@media(max-width:360px){.bh-shop-products{gap:6px}.bh-product{padding:6px}.bh-product h3{font-size:.85rem}.bh-shop-star{display:none}.bh-editor-controls{gap:7px}.bh-arrows{width:100%;justify-content:center}}
+@media(prefers-reduced-motion:reduce){.bh-shell *{scroll-behavior:auto!important;transition:none!important}}
+@media print{.bh-nav,.bh-editor,.bh-owned,.bh-shop-pages{display:none}}
