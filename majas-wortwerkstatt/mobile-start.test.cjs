@@ -5,10 +5,10 @@ const path=require('node:path');
 const vm=require('node:vm');
 const html=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 const css=fs.readFileSync(path.join(__dirname,'mobile-start.css'),'utf8');
-for(const snippet of [...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(m=>m[1]).filter(Boolean)){
+for(const snippet of [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(Boolean)){
  new vm.Script(snippet);
 }
-assert.match(html,/mobile-start\\.css\\?v=20261109d/,'versioned mobile stylesheet included');
+assert.match(html,/mobile-start\.css\?v=20261109d/,'versioned mobile stylesheet included');
 for(const route of ["if(page==='lernen'||page==='abenteuer')showJourneyHub(page)","if(page==='lernberater')showLearningAdvisor()","else if(page==='comics')showComicHub()","else if(page==='stationen')showStationHub()"]){
  assert(html.includes(route),'preserve route: '+route);
 }
