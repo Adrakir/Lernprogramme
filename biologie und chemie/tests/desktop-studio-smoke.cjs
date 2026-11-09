@@ -40,7 +40,7 @@ const app=path.resolve(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'),browserTy
  await p.locator('#chemFullQuiz').click();
  assert.equal(await p.locator('#page-quiz').isVisible(),true);
  await p.locator('#nav [data-page=home]').click();
- await p.screenshot({path:'chemie-test-artifacts/desktop-studio-'+browserType+'.png',fullPage:false});
+ await p.waitForTimeout(350);await p.screenshot({path:'chemie-test-artifacts/desktop-studio-'+browserType+'.png',fullPage:false});
  assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1,'Desktop overflow');
  await p.setViewportSize({width:390,height:844});
  assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1,'Phone overflow');

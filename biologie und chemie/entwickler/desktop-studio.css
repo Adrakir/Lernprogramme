@@ -117,3 +117,14 @@ body.lc-theme-dark #page-home .chem-quick-options button.is-wrong{color:#732929}
 @media(max-width:540px){#page-home .chem-studio-hero{min-height:310px}#page-home .chem-studio-copy{width:80%;padding:19px;justify-content:start}#page-home .chem-studio-hero h1{font-size:29px}#page-home .chem-hero-visual{opacity:.3;width:66%;right:-12%}#page-home .chem-studio-facts{margin-top:12px;font-size:10px}#page-home .chem-home-top .lu-entry{grid-template-columns:1fr}#page-home .chem-studio-model,#page-home .chem-studio-quiz{padding:16px}#page-home .chem-dir-filter strong{font-size:12px}#page-home .chem-dir-filter{padding:8px;min-height:62px}#page-home .chem-directory{padding:12px}#page-home .chem-card-grid{gap:10px}#page-home .chem-card{min-height:250px;padding:9px}#page-home .chem-card-art,#page-home .chem-card-art svg{height:91px}#page-home .chem-card-title{font-size:15px}#page-home .chem-card-desc{font-size:11.5px}#page-home .chem-card-label{font-size:10px}}
 @media(prefers-reduced-motion:reduce){#page-home .chem-hero-bubble,#page-home .chem-studio-scene.is-running .chem-bubble{animation:none;opacity:.8}}
 @media print{#page-home .chem-studio-workbench{display:none}#page-home .chem-studio-hero{box-shadow:none;min-height:0}}
+
+/* Desktop-Finish: kompakte Werkzeugleiste und nicht überlappende Lernweg-Karten. */
+@media screen and (min-width:1100px){
+ body .chemistry-update-banner{display:none!important}
+ .topbar .crumb{display:none}
+ .topbar{justify-content:flex-end;min-height:60px;padding:10px 0 14px}
+ .topbar .controls{margin-left:auto;justify-content:flex-end}
+ #page-home .chem-home-top .lu-entry button{display:block;min-height:61px;padding:9px 13px}
+ #page-home .chem-home-top .lu-entry strong{display:block;white-space:normal;min-width:0;font-size:15px}
+ #page-home .chem-home-top .lu-entry small{display:block;margin-top:3px;font-size:12px}
+}
