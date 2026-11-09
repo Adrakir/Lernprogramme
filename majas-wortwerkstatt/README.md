@@ -4,11 +4,11 @@ Eine eigenständige, interaktive Deutschlernapp mit Maja, Bärli, Fuji und Minka
 
 - **Öffentlicher Einstieg:** https://adrakir.github.io/Lernprogramme/majas-wortwerkstatt/
 - **Quellcode:** https://github.com/Adrakir/Lernprogramme/tree/main/majas-wortwerkstatt
-- **Für KI-/Entwicklungs-Fortsetzung:** [AGENTS.md](./AGENTS.md) und [PROJECT_STATE.md](./PROJECT_STATE.md) **zuerst lesen**.
+- **Für KI-/Entwicklungs-Fortsetzung:** [AGENTS.md](./AGENTS.md), [PROJECT_STATE.md](./PROJECT_STATE.md) und [HOME_LAYOUT.md](./HOME_LAYOUT.md) **zuerst lesen**.
 
 ## So benutzt ein Kind die App
 
-1. Auf der Startseite **Deutsch lernen** oder **Abenteuer erleben** wählen.
+1. Auf der Startseite direkt **Hören**, **Endungen**, **Verlängern**, **Teste dich**, **Comics**, **Spiele**, **Bärli hilft dir** oder **Bärlis Kleidung** auswählen. Die zusätzlichen Wege **Deutsch lernen** / **Abenteuer erleben** sind über kleine Zusatzlinks erreichbar.
 2. Im Lernbereich ein Thema auswählen. Bei den Klassenarbeiten zuerst **geführt lernen**, dann **üben**, dann den **Abschlusstest** bearbeiten.
 3. Beim Hören zwischen **Aufnahme** und **Computerstimme** wählen. Das Tempo lässt sich auf **Normal**, **Langsam** oder **Sehr langsam** stellen. Eine Frage wird rot hervorgehoben; Antworten werden darunter ausgewählt.
 4. Wenn nötig **Bärli, hilf mir!** für Hinweise benutzen. In Abschlusstests werden die Hinweise nicht angeboten.
@@ -66,3 +66,5 @@ Zum Start eines neuen Chats diese Anweisung nutzen:
 > Bearbeite die bestehende App `Adrakir/Lernprogramme/majas-wortwerkstatt`. Lies zuerst `AGENTS.md` und `PROJECT_STATE.md` im App-Ordner und die dort verlinkten GitHub-Issues. Setze die nächste offene Aufgabe im bestehenden Projekt um, überprüfe die betroffenen Funktionen und schreibe danach Fortschritt und offene Punkte zurück in `PROJECT_STATE.md`. Erhalte bestehende Inhalte und Speicherstände.
 
 Das ist die verlässliche, gemeinsame Grundlage – nicht der private Verlauf einer bestimmten KI-Unterhaltung.
+
+> **Startseitenentscheidung:** Die vertraute Kombitest-Übersicht mit drei großen Lernpiktogrammen und vier bebilderten Kacheln ist verbindlich. Bitte [HOME_LAYOUT.md](./HOME_LAYOUT.md) vor UI-Änderungen lesen.
