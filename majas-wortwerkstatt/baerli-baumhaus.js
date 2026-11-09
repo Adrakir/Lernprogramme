@@ -118,7 +118,7 @@ function clean(){
   const p=raw.positions?.[id],fallback=id==='start-sitzsack'?{x:25,y:77}:{x:78,y:76};
   positions[id]={x:clamp(Number(p?.x)||fallback.x,8,92),y:clamp(Number(p?.y)||fallback.y,34,86)};
  }
- return {best,orders,placed,wallpaper,positions,room:raw.room===2&&orders.zimmer2?2:1};
+ return {best,orders,placed,wallpaper,positions,room:raw.room===2&&orders.zimmer2?2:1,decorated:!!raw.decorated};
 }
 function store(state){try{localStorage.setItem(KEY,JSON.stringify(state));return true;}catch{return false;}}
 function stateRead(){
@@ -161,7 +161,7 @@ function iconArt(kind,fill){
  pillow:'<rect x="21" y="24" width="88" height="75" rx="26" fill="'+f+'"/><path d="m65 39 6 17 17 4-13 12 3 17-13-9-13 9 2-17-13-12 18-4Z" fill="#ffe2a3"/>',
  globe:'<circle cx="65" cy="53" r="43" fill="#d8e6ed" stroke="'+dark+'" stroke-width="7"/><path d="m65 18 10 21 24 3-17 15 4 24-21-12-21 12 3-24-17-15 24-3Z" fill="'+f+'"/><path d="M26 98h78v14H26Z" fill="'+wood+'"/>',
  gift:'<rect x="24" y="31" width="83" height="74" rx="7" fill="'+f+'"/><path d="M65 31v74M24 57h83" stroke="#f7e5a4" stroke-width="11"/><path d="M65 29Q22-6 40 8q13-6 25 21Q78-2 94 8q9 12-29 21" stroke="#f7e5a4" stroke-width="6" fill="none"/>',
- tree:'<path d="M65 4 25 54h19L14 86h101L86 54h20Z" fill="'+f+'" stroke="'+dark+'" stroke-width="6"/><path d="M60 86v24h13V86" fill="'+wood+'"/><circle cx="65" cy="25" r="7" fill="#ffdb87"/><circle cx="43" cy="67" r="7" fill="#d77a87"/><circle cx="85" cy="80" r="7" fill="#e6ca82"/>',
+ tree:'<path d="M65 4 25 54h19L14 86h101L86 54h20Z" fill="'+f+'" stroke="'+dark+'" stroke-width="6"/><path d="M60 86v24h13V86" fill="'+wood+'"/><path d="m65 1 6 13 13 2-10 9 3 13-12-7-12 7 3-13-10-9 13-2Z" fill="#ffe2a6"/>',
  ornaments:'<path d="M45 9v32m44-27v29" stroke="'+dark+'" stroke-width="7"/><circle cx="45" cy="66" r="29" fill="'+f+'"/><circle cx="91" cy="74" r="23" fill="#e9cb82"/>',
  garland:'<path d="M9 29Q34 84 65 31T121 29" fill="none" stroke="'+dark+'" stroke-width="8"/><g fill="'+f+'"><circle cx="27" cy="48" r="11"/><circle cx="64" cy="39" r="11"/><circle cx="103" cy="47" r="11"/></g>',
  stocking:'<path d="M34 10h54v60q5 10 26 13 10 21-13 24H36Q17 94 34 76Z" fill="'+f+'"/><path d="M34 18h54" stroke="'+white+'" stroke-width="17"/>',
@@ -195,7 +195,10 @@ function sceneObject(id,x,y,s,t){
  const fill=id==='start-sitzsack'?'#649ace':id==='start-laptop'?'#e9c96e':p.color;
  const title=id==='start-sitzsack'?'Blauer Sitzsack':id==='start-laptop'?'Bärlis Laptop · Shop öffnen':p.name;
  const cls='bh-object bh-'+kind+(selected===id?' bh-selected':'');
- return '<button class="'+cls+'" type="button" data-bh-select="'+esc(id)+'" title="'+esc(title)+'" aria-label="'+esc(title)+'" aria-pressed="'+(selected===id)+'" style="left:'+x+'%;top:'+y+'%;z-index:'+Math.floor(y)+'">'+iconArt(kind,fill)+'<span>'+esc(id==='start-laptop'?'Shop öffnen':title)+'</span></button>';
+ const art=iconArt(kind,fill);
+ const decoratedTree=id==='weihnachtsbaum'&&s.decorated&&bought(s,'kugeln');
+ const ornamentArt=decoratedTree?art.replace('</svg>','<g fill="#d86e82"><circle cx="37" cy="70" r="7"/><circle cx="88" cy="82" r="7"/><circle cx="62" cy="53" r="6"/></g><g fill="#f3dc81"><circle cx="78" cy="63" r="5"/><circle cx="54" cy="79" r="5"/></g></svg>'):art;
+ return '<button class="'+cls+'" type="button" data-bh-select="'+esc(id)+'" title="'+esc(title)+'" aria-label="'+esc(title)+'" aria-pressed="'+(selected===id)+'" style="left:'+x+'%;top:'+y+'%;z-index:'+Math.floor(y)+'">'+ornamentArt+'<span>'+esc(id==='start-laptop'?'Shop öffnen':title)+'</span></button>';
 }
 function wallpaperStyle(s,room){
  const id=s.wallpaper[room],p=known.get(id);
@@ -225,6 +228,7 @@ function showRoom(){
   +(current?'<div class="bh-editor-controls"><span class="bh-selection">Ausgewählt: <strong>'+esc(current.id==='start-sitzsack'?'Blauer Sitzsack':current.id==='start-laptop'?'Bärlis Laptop':known.get(current.id)?.name||current.id)+'</strong></span><div class="bh-arrows"><button data-bh-move="left" aria-label="Nach links schieben">←</button><button data-bh-move="up" aria-label="Nach oben schieben">↑</button><button data-bh-move="down" aria-label="Nach unten schieben">↓</button><button data-bh-move="right" aria-label="Nach rechts schieben">→</button></div>'
    +(current.id.startsWith('start-')?'': '<button type="button" data-bh-pack class="bh-secondary">In die Kiste legen</button>')
    +(bought(s,'zimmer2')&&!current.id.startsWith('start-')?'<button type="button" data-bh-transfer class="bh-secondary">In das andere Zimmer bringen</button>':'')
+   +(current.id==='weihnachtsbaum'?(bought(s,'kugeln')?'<button type="button" data-bh-decorate class="bh-secondary">'+(s.decorated?'Baumschmuck abnehmen':'🎄 Weihnachtsbaum schmücken')+'</button>':'<a class="bh-secondary" href="#baumhaus/shop/weihnachten">Kugeln zum Schmücken bestellen</a>'):'')
    +'</div>':'<p>Du hast noch keine Möbel in diesem Zimmer.</p>')
   +'</section>'
   +(s.placed.filter(x=>!objects.some(o=>o.id===x.id)).length?'<p class="bh-subtle">Weitere Möbel stehen im anderen Zimmer.</p>':'')
@@ -243,6 +247,7 @@ function showRoom(){
  stage.onclick=e=>{if(!selected||!roomObjects(s,room).some(x=>x.id===selected)||e.target.closest('button'))return;const rect=stage.getBoundingClientRect();const x=clamp(Math.round((e.clientX-rect.left)/rect.width*100),8,92),y=clamp(Math.round((e.clientY-rect.top)/rect.height*100),34,86);place(s,selected,x,y);message='Bärli hat die Sache an den neuen Platz gestellt.';showRoom();};
  app.querySelector('[data-bh-pack]')?.addEventListener('click',()=>{s.placed=s.placed.filter(o=>o.id!==selected);store(s);selected=null;message='Das Möbelstück steht jetzt sicher in der Kiste. Du kannst es erneut aufstellen.';showRoom();});
  app.querySelector('[data-bh-transfer]')?.addEventListener('click',()=>{const object=s.placed.find(o=>o.id===selected);if(object){object.room=room===1?2:1;store(s);selected=null;message='Das Möbelstück wurde in das andere Zimmer gebracht.';showRoom();}});
+ app.querySelector('[data-bh-decorate]')?.addEventListener('click',()=>{if(!bought(s,'kugeln'))return;s.decorated=!s.decorated;store(s);message=s.decorated?'Bärli hat den Weihnachtsbaum mit Kugeln geschmückt.':'Der Baumschmuck wurde abgenommen.';showRoom();});
  app.querySelectorAll('[data-bh-add]').forEach(b=>b.onclick=()=>{
   const p=known.get(b.dataset.bhAdd);if(!p)return;
   if(p.kind==='wallpaper'){s.wallpaper[room]=p.id;store(s);message=p.name+' ist jetzt an der Wand.';showRoom();return;}
@@ -289,7 +294,10 @@ function showShop(category='',page=0){
   else if(p.kind==='room')s.room=2;
   else{
    const n=s.placed.length,positions=[[45,77],[65,76],[55,60],[33,62],[78,61],[22,77],[63,55],[82,78]];
-   const [x,y]=positions[n%positions.length];s.placed.push({id:p.id,x,y,room:s.room});
+   let [x,y]=positions[n%positions.length];
+   // Neue Bettwäsche landet direkt bei einem bereits aufgestellten Bett.
+   if(p.kind==='bedding'){const bed=s.placed.find(x=>x.id==='bett'&&x.room===s.room);if(bed){x=bed.x;y=clamp(bed.y+2,34,86);}}
+   s.placed.push({id:p.id,x,y,room:s.room});
   }
   if(!store(s)){message='Die Bestellung konnte nicht gespeichert werden. Bitte erneut versuchen.';showShop(cat.id,shopPage);return;}
   message=p.name+' bestellt! Es wurden '+p.price+' Bärli-Taler abgezogen. Bärli hat die Lieferung ins Baumhaus gebracht.';
