@@ -258,3 +258,57 @@
  .maja-paged-list .maja-hub-link span{font-size:.76rem}
 }
 @media(max-width:365px){.maja-paged-list .station-grid,.maja-paged-list .maja-hub-list{grid-template-columns:1fr}}
+
+
+/* 09.11.2026: vertraute Kombitest-Startseite mit großen, echten Bilderkacheln. */
+.maja-classic-home{max-width:960px;margin-inline:auto}
+.maja-classic-home .maja-quick-topic{min-height:166px;padding:15px 14px;gap:9px}
+.maja-classic-home .maja-quick-topic .maja-topic-symbol{
+ width:68px;height:68px;min-width:68px;min-height:68px;border-radius:15px;
+ display:grid;place-items:center;position:relative;overflow:hidden;
+}
+.maja-classic-home .maja-quick-topic .maja-topic-symbol svg{width:36px;height:36px}
+.maja-classic-home .maja-quick-topic strong{font-size:clamp(1rem,2.2vw,1.22rem)}
+.maja-classic-home .maja-topic-hearing{background:#dcefea}
+.maja-classic-home .maja-topic-spark{position:absolute;right:7px;top:4px;color:#295c6c;font-size:19px}
+.maja-classic-home .maja-topic-ending{background:#eee2f5}
+.maja-classic-home .maja-ending-tiles{display:grid;gap:4px;transform:rotate(-5deg)}
+.maja-classic-home .maja-ending-tiles b{background:#fffaff;border:1px solid #aa85c1;color:#4d3063;padding:0 5px;border-radius:5px;font-size:13px;line-height:20px}
+.maja-classic-home .maja-topic-lengthen{background:#f8e9bb}
+.maja-classic-home .maja-lengthen-picture{display:flex;align-items:center;flex-direction:column;font-size:12px;color:#4b432b;line-height:1.1}
+.maja-classic-home .maja-lengthen-picture b{background:#fff9e5;border-radius:5px;padding:2px 5px;border:1px solid #e8c779}
+.maja-classic-home .maja-lengthen-picture span{font-size:17px;line-height:1}
+.maja-classic-home .maja-quick-options{gap:12px}
+.maja-classic-home .maja-quick-option{min-height:121px;gap:12px;padding:12px}
+.maja-classic-home .maja-quick-option .maja-option-icon.maja-option-photo{
+ width:81px;height:81px;min-width:81px;border-radius:13px;overflow:hidden;
+ background:#e9e9e2;border:1px solid #d6d7ce;display:block;
+}
+.maja-classic-home .maja-option-photo img{height:100%;width:100%;display:block;object-fit:cover}
+.maja-classic-home .maja-quick-option strong{font-size:1.08rem;overflow-wrap:normal;hyphens:auto}
+.maja-classic-home .maja-quick-option small{font-size:.8rem}
+.maja-classic-home .maja-home-extras{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;padding:12px 0 0}
+.maja-classic-home .maja-home-extras a{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border:1px solid #d3ddd5;border-radius:12px;background:#fffdf7;color:#174b3d;font-weight:700;font-size:.85rem;text-decoration:none}
+.maja-classic-home .maja-home-extras a:focus-visible,.maja-classic-home .maja-home-extras a:hover{outline:2px solid #2a6b59;background:#eaf6ec}
+@media(max-width:600px){
+ .maja-classic-home .maja-quick-topic-grid{gap:8px}
+ .maja-classic-home .maja-quick-topic{min-height:145px;padding:11px 9px;gap:6px}
+ .maja-classic-home .maja-quick-topic .maja-topic-symbol{width:61px;height:61px;min-width:61px;min-height:61px}
+ .maja-classic-home .maja-quick-topic .maja-topic-symbol svg{width:34px;height:34px}
+ .maja-classic-home .maja-quick-topic strong{font-size:.95rem}
+ .maja-classic-home .maja-quick-topic small{font-size:.73rem}
+ .maja-classic-home .maja-quick-option{min-height:105px;padding:10px;gap:8px}
+ .maja-classic-home .maja-quick-option .maja-option-icon.maja-option-photo{width:62px;height:62px;min-width:62px}
+ .maja-classic-home .maja-quick-option strong{font-size:.94rem;line-height:1.17}
+ .maja-classic-home .maja-quick-option small{font-size:.72rem}
+ .maja-classic-home .maja-home-extras{gap:6px}
+ .maja-classic-home .maja-home-extras a{font-size:.78rem;padding:6px 9px}
+}
+@media(max-width:355px){
+ .maja-classic-home .maja-quick-topic-grid{gap:5px}
+ .maja-classic-home .maja-quick-topic{min-height:142px;padding:9px 6px}
+ .maja-classic-home .maja-quick-topic strong{font-size:.82rem}
+ .maja-classic-home .maja-quick-option{padding:8px 7px;gap:5px}
+ .maja-classic-home .maja-quick-option .maja-option-icon.maja-option-photo{width:53px;height:53px;min-width:53px}
+ .maja-classic-home .maja-quick-option strong{font-size:.84rem}
+}
