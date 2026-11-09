@@ -4890,8 +4890,36 @@ function showLearningPlan(){
 function showLearningOverview(adult=false){
  const summary=learningSummary();
  const title=adult?'Für Erwachsene':'Meine Lernübersicht';
+ // Parent snapshot reports *only* completed test first-attempt scores; no fake mastery estimates.
+ const storedTests=prepRead();
+ const testAreas=[['hoeren','Hörverständnis','16. November'],['nomen','Nomen und Verlängern','19. November']];
+ const parentRows=testAreas.map(([id,label,date])=>{
+  const results=[1,2,3,4,5].map(n=>storedTests[id+':test:'+n]).filter(session=>session?.done&&Array.isArray(session.answers));
+  const scores=results.map(session=>prepPercent(session.answers));
+  const highest=scores.length?Math.max(...scores):null;
+  return {id,label,date,done:results.length,highest,
+   tip:highest===null?'Erst geführt üben, danach einen Abschlusstest ausprobieren.':
+       highest>=80?'Sicherer Stand in wenigstens einem Test. Jetzt mit einem neuen Hörtext oder neuen Wörtern wiederholen.':
+       'Geführte Übungen wiederholen und anschließend einen neuen Test bearbeiten.'};
+ });
+ const snapshot=adult?`<section class="panel maja-parent-snapshot">
+   <h2>Auf einen Blick</h2>
+   <p>Die Werte stammen nur aus abgeschlossenen Tests in diesem Browser. Sie sind keine Schulnote und ersetzen keine Beobachtung.</p>
+   <div class="maja-parent-progress">
+    ${parentRows.map(row=>`<div class="maja-parent-skill">
+      <h3>${escapeHtml(row.label)}</h3>
+      <p>${escapeHtml(row.date)} · ${row.done} von 5 Abschlusstests bearbeitet</p>
+      ${row.highest!==null?`<div class="maja-parent-bar" role="img" aria-label="Höchstes Ergebnis von ${row.highest} Prozent"><span style="width:${row.highest}%"></span></div><strong>Höchstes Ergebnis: ${row.highest} %</strong>`:`<p class="maja-parent-pending">Noch kein Testergebnis vorhanden</p>`}
+      <p>${escapeHtml(row.tip)}</p>
+      <a class="secondary" href="#pruefung/${row.id}">Lernweg öffnen</a>
+    </div>`).join('')}
+   </div>
+   <p><strong>Kurze Lernzeit genügt:</strong> Beginnt mit 10 Minuten. Erst eine Erklärung, dann wenige Übungen und bei Bedarf eine Pause.</p>
+   <div class="actions"><a class="secondary" href="#einstellungen">Lernstand sichern</a><a class="secondary" href="#tagesplan">10-Minuten-Mission ansehen</a></div>
+ </section>`:'';
+
  app.innerHTML=learningHeader(title,adult?'Lernwege und Beobachtungen auf diesem Gerät.':'Hier siehst du deine Übungen und deine eigenen Einschätzungen.')+
-  `<section class="panel"><h2>Geprüfte Stationsaufgaben</h2><p>Die Rückmeldung bezieht sich auf die letzte Bearbeitung. „Mit Hilfe“ umfasst aufgerufene Tipps, Lösungen oder eine Korrektur nach einem Fehler.</p>
+  `${snapshot}<section class="panel"><h2>Geprüfte Stationsaufgaben</h2><p>Die Rückmeldung bezieht sich auf die letzte Bearbeitung. „Mit Hilfe“ umfasst aufgerufene Tipps, Lösungen oder eine Korrektur nach einem Fehler.</p>
   <div class="learning-table-wrap"><table class="learning-table"><thead><tr><th>Bereich</th><th>Selbstständig</th><th>Mit Hilfe</th><th>Noch üben</th><th>Früher gelöst</th></tr></thead><tbody>${Object.entries(skillLabels).filter(([id])=>id!=='sprechen').map(([id,label])=>`<tr><th>${label}</th><td data-label="Selbstständig">${summary[id].independent}</td><td data-label="Mit Hilfe">${summary[id].supported}</td><td data-label="Noch üben">${summary[id].retry}</td><td data-label="Früher gelöst">${summary[id].legacy}</td></tr>`).join('')}</tbody></table></div>
   <p>Bei früher gelösten Aufgaben wurde die Art der Unterstützung noch nicht erfasst.</p>
   <h3>Eigene und gemeinsame Einschätzungen</h3><ul><li>Lesetraining · ${Object.values(learning.reading).filter(x=>x.checked).length} Lesezeiten festgehalten</li><li>Schreibwerkstatt · ${Object.values(learning.writing).filter(x=>x.reviewed).length} Texte mit Checkliste geprüft</li><li>Sprechen · ${Object.values(learning.speaking).filter(x=>x.checked).length} Sprechaufträge eingeschätzt</li></ul>
