@@ -10,7 +10,7 @@
 
 ## Majas Wortwerkstatt – KI-Übergabe
 
-- **Wenn Majas Deutschapp (Klasse 3) betroffen ist:** Zuerst [`majas-wortwerkstatt/AGENTS.md`](./majas-wortwerkstatt/AGENTS.md) und [`majas-wortwerkstatt/PROJECT_STATE.md`](./majas-wortwerkstatt/PROJECT_STATE.md) lesen.
+- **Wenn Majas Deutschapp (Klasse 3) betroffen ist:** Zuerst [`majas-wortwerkstatt/AGENTS.md`](./majas-wortwerkstatt/AGENTS.md), [`majas-wortwerkstatt/PROJECT_STATE.md`](./majas-wortwerkstatt/PROJECT_STATE.md) und [`majas-wortwerkstatt/HOME_LAYOUT.md`](./majas-wortwerkstatt/HOME_LAYOUT.md) lesen. Die vertraute Kombitest-Übersicht mit drei großen Piktogrammen und vier Bildkacheln nicht erneut verstecken.
 - Die offenen GitHub-Issues #22–#26 und die letzten Commits prüfen, dann **die nächste offene Aufgabe** in der bestehenden App lösen.
 - Bestehende Comics, Spiele, Audios, Sterne, Lernstände und öffentliche URL erhalten. Statische Tests und tatsächliche Audio-/Browser-Tests getrennt dokumentieren.
 - Nach jeder Änderung die Projektstand-Datei mit erledigtem Punkt, Teststatus, Commit und weiter offenem Schritt aktualisieren. Andere Fachapps nicht durch diese Anweisung verändern.
