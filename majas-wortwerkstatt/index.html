@@ -4928,7 +4928,7 @@ const prepPluralSets=[
  [['Hund','Hunde','Hunt'],['Korb','Körbe','Korp'],['Berg','Berge','Berk'],['Hut','Hüte','Hud'],['Werk','Werke','Werg']],
  [['Rad','Räder','Rat'],['Sieb','Siebe','Siep'],['Zug','Züge','Zuk'],['Zelt','Zelte','Zeld'],['Geschenk','Geschenke','Gescheng']],
  [['Kind','Kinder','Kint'],['Dieb','Diebe','Diep'],['Tag','Tage','Tak'],['Heft','Hefte','Hefd'],['Schrank','Schränke','Schrang']],
- [['Bild','Bilder','Bilt'],['Kalb','Kälber','Kalp'],['Krug','Krüge','Kruk'],['Brot','Brote','Brod'],['Stock','Stöcke','Stogg']],
+ [['Bild','Bilder','Bilt'],['Kalb','Kälber','Kalp'],['Krug','Krüge','Kruk'],['Brot','Brote','Brod'],['Stock','Stöcke','Stok']],
  [['Wald','Wälder','Walt'],['Stab','Stäbe','Stap'],['Zweig','Zweige','Zweik'],['Boot','Boote','Bood'],['Weg','Wege','Wek']]
 ];
 // Keep distractors as single, plausible misspellings.
@@ -4938,7 +4938,7 @@ function prepListeningRows(track,rows,prefix){return rows.map(([prompt,right,a,b
 function prepWords(n){
  const nouns=prepNounSets[n-1].map(([base,answer,suffix],i)=>({id:'n'+n+'-s'+i,type:'write',prompt:'Bilde das Nomen mit -'+suffix+' und schreibe den Artikel dazu.',context:base,answer,skill:suffix,why:'Zu „'+base+'“ gehört „'+answer+'“. Die Nachsilbe ist -'+suffix+'. Das Nomen beginnt groß.',hints:['Das Nomen endet auf -'+suffix+'. Schreibe es groß.','Schreibe den Artikel '+answer.split(' ')[0]+' davor.','Die Lösung lautet: '+answer+'.']}));
  const plural=prepPluralSets[n-1].map(([word,long],i)=>({id:'n'+n+'-p'+i,type:'write',prompt:'Verlängere das Nomen: Schreibe seine Mehrzahl.',context:word,answer:long,skill:'verlaengern',why:word+' → '+long+'. In der längeren Form hörst du den fraglichen Laut vor einem Vokal.',hints:['Sage: ein '+word+' – viele …','Lies das Wort langsam und bilde die Mehrzahl.','Die Mehrzahl lautet: '+long+'.']}));
- const spelling=prepPluralSets[n-1].map(([word,long,wrong],i)=>({id:'n'+n+'-b'+i,type:'choice',prompt:'Welche Schreibweise ist richtig? Verlängere zuerst im Kopf.',context:word.slice(0,-1)+'_',answer:word,options:[word,wrong],skill:'verlaengern',why:word+' ist richtig: '+word+' → '+long+'.',hints:['Bilde zuerst die Mehrzahl.','Die Mehrzahl ist '+long+'. Höre auf den letzten Laut des kurzen Wortes.','Richtig ist '+word+'.']}));
+ const spelling=prepPluralSets[n-1].map(([word,long,wrong],i)=>({id:'n'+n+'-b'+i,type:'choice',prompt:'Welche Schreibweise ist richtig? Verlängere zuerst im Kopf.',context:word==='Stock'?'Sto…':word.slice(0,-1)+'_',answer:word,options:[word,wrong],skill:'verlaengern',why:word+' ist richtig: '+word+' → '+long+'.',hints:['Bilde zuerst die Mehrzahl.','Die Mehrzahl ist '+long+'. Höre auf den letzten Laut des kurzen Wortes.','Richtig ist '+word+'.']}));
  return [...nouns,...plural,...spelling];
 }
 function prepNormalize(s){return String(s).trim().normalize('NFC').replace(/\s+/g,' ').replace(/[.!]$/,'').replace(/^(Der|Die|Das) /,v=>v.toLowerCase());}
