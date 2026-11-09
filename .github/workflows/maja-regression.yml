@@ -1,0 +1,27 @@
+name: Maja – regression checks
+
+on:
+  push:
+    paths:
+      - 'majas-wortwerkstatt/**'
+      - '.github/workflows/maja-regression.yml'
+  pull_request:
+    paths:
+      - 'majas-wortwerkstatt/**'
+      - '.github/workflows/maja-regression.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Node.js static smoke checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Maja mobile navigation
+        run: node majas-wortwerkstatt/mobile-start.test.cjs
+      - name: Check Maja learning experience & handoff
+        run: node majas-wortwerkstatt/experience.test.cjs
