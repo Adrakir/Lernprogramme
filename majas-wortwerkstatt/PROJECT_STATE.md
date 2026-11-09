@@ -4,6 +4,14 @@
 
 > **Wichtig:** Diese Datei ist die Übergabestelle zwischen ChatGPT, GitHub Copilot und anderen KI-Assistenten. Aussagen über "fertig" beziehen sich auf gespeicherten Code, **nicht automatisch** auf browsergetestete oder öffentlich ausgerollte Funktion. Ein neuer Bearbeiter überprüft immer den aktuellen HEAD.
 
+### Qualitätsprüfung und Schrank-Erweiterung (09.11.2026)
+- [x] **Zehn Klassenarbeitstest-Sets quellcodeseitig geprüft:** 5 Hörtests mit je 5 Fragen und zugeordneten MP3-Dateien; 5 Rechtschreibtests mit je 15 Aufgaben. Die Lösungen wurden gegen Texte/Wortformen kontrolliert. Prüfbericht: [QA_BEFUNDE_2026-11-09.md](./QA_BEFUNDE_2026-11-09.md).
+- [x] **Spelling-Korrektur:** In Test 4 bei `Stock` unplausibles `Stogg` durch `Stok` ersetzt und verräterischen Hinweis `Stoc_` neutralisiert.
+- [x] **Comic-Originaltafeln gesichtet:** drei achtteilige Schulcomic-Sheets, fünf 24-teilige Detektiv-Sheets und Toms separate Duschgrafik; unterschiedliche Sprechblasenlösungen dokumentiert. **Keine komplette Live-Pixelabnahme.**
+- [x] **Bärlis Kleiderschrank erweitert:** zwölf neue Teile (je zwei pro Kleidungskategorie), bebilderte Kategorien mit Stückzahl und unverbindliche Anprobe auf Bärli. Alte IDs, Speicherstände, Käufe und Sternenbeutel unverändert; PWA-Cache für neuen Stand auf v2 erhöht.
+- [x] **Statische Integration der Anprobe überprüft:** JavaScript syntaktisch valide; zwölf eindeutige neue IDs, sechs Bildkategorien, Legacy-Migration `hose` → `hosen`, keine Änderung der gespeicherten Auswahl durch reine Anprobe. Node-/Playwright-Regressionstests ergänzt.
+- [ ] **Offen:** Playwright-/GitHub-Actions-Lauf nach diesen Commits sowie reale iOS-/Android-/Windows-Browser- und Audioabnahme (Issues #22, #23, #25, #26). Bild- und Sprechblasenpositionen, neue SVG-Kombinationen, Kauf und Export/Import visuell prüfen.
+
 ## 1. Bereits im GitHub-Code umgesetzt
 
 - [x] **Vertraute Startseite wiederhergestellt:** `Fit für den Kombitest`, drei größere Themenpiktogramme, „Teste dich“, vier bebilderte Auswahlkacheln und „Alle weiteren Lernthemen“. [HOME_LAYOUT.md](./HOME_LAYOUT.md) dokumentiert die verbindliche Nutzerentscheidung; `#lernen` und `#abenteuer` bleiben als zusätzliche Links bestehen.
