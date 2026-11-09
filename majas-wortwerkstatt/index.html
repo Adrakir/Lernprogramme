@@ -5022,11 +5022,11 @@ function runPrep(topic,mode,n){
    </div>
    <audio id="prep-audio" preload="metadata" src="./anna-audio/${audioTrack}.mp3" aria-label="Aufgenommene Geschichte"></audio>
    <p id="prep-audio-message" class="inline-status" role="status" aria-live="polite"></p>
-   <details id="prep-reading" class="prep-reading-extra">
+   ${test?'<p class="prep-exam-note">Im Abschlusstest ist der Hörtext nicht sichtbar. Höre die Geschichte so oft an, wie du möchtest. Die Lösungen erscheinen erst nach Abgabe.</p>':`<details id="prep-reading" class="prep-reading-extra">
       <summary>Ich brauche eine Lesehilfe</summary>
       <p class="subtle">Mit geöffnetem Text wird das Ergebnis als „mit Lesehilfe“ gespeichert.</p>
       ${story.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}
-   </details>
+   </details>`}
   </section>`:''}
   <section class="panel" id="prep-question"></section><section id="prep-result" hidden></section></div>`;
  const root=document.querySelector('#prep-question'),result=document.querySelector('#prep-result'),audio=document.querySelector('#prep-audio');let stopFireworks=()=>{};
@@ -5125,13 +5125,16 @@ function runPrep(topic,mode,n){
   playButton.onclick=()=>{
    if(modeSelect.value==='computer'){playComputer();return;}
    stopComputer();
+   // Tippt das Kind während der Wiedergabe erneut auf „Anhören“, beginnt die Aufnahme neu.
+   if(!audio.paused||audio.ended){audio.pause();try{audio.currentTime=0;}catch{}}
    audio.playbackRate=Number(speedSelect.value);
    audio.play().then(()=>{status.textContent='Die Aufnahme läuft.';}).catch(()=>{status.textContent='Audio konnte nicht gestartet werden. Bitte Computerstimme auswählen.';});
   };
   stopButton.onclick=()=>{audio.pause();stopComputer();status.textContent='Gestoppt.';};
   audio.onended=()=>{status.textContent='Die Geschichte ist zu Ende.';};
   audio.onerror=()=>{if(modeSelect.value==='recorded')status.textContent='Die Aufnahme konnte nicht geladen werden. Wähle Computerstimme.';};
-  document.querySelector('#prep-reading').ontoggle=e=>{if(e.target.open){readingUsed=true;session.assisted=true;save();}};
+  const readingPanel=document.querySelector('#prep-reading');
+  if(readingPanel)readingPanel.ontoggle=e=>{if(e.target.open){readingUsed=true;session.assisted=true;save();}};
  }
 
  function finish(){
