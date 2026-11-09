@@ -16,15 +16,15 @@
 - [x] **Elternübersicht:** Zeigt die tatsächlich absolvierten Abschlusstests mit höchstem gemessenen Testergebnis, ohne aus fehlenden Daten einen Lernstand zu erfinden.
 - [x] **Kleiderschrank:** Hüte, Pullover/Jacken, Hosen, Brillen, Schals und Schuhe als zusätzliche Kaufoptionen; kombinierbare Kategorien und kleine, bebilderte Seiten.
 - [x] **Speicherkompatibilität:** vorhandener Sternenbeutel, Outfitauswahl und lokale Lernstände nicht umbenannt; die bereits bestehende JSON-Export-/Importfunktion aus `maja-plus.js` bleibt verfügbar.
-- [x] **Übergabe-Grundlage:** `AGENTS.md`, diese Statusdatei, `README.md` sowie Node-Testfälle und GitHub-Issues.
+- [x] **Übergabe-Grundlage:** `AGENTS.md`, diese Statusdatei, `README.md`, Root-Pointer `MAJA_WEITERMACHEN.md`, Copilot-Instruktionen, Node-Tests, GitHub-Issues und CI-Workflow angelegt.
 
 ## 2. Bereits überprüft
 
 - [x] GitHub-Updates über den verbundenen Connector erfolgreich geschrieben.
 - [x] Nach den ersten Audio-/Kleiderschrankänderungen ließen sich alle acht Inline-JavaScript-Abschnitte als JavaScript parsen.
 - [x] Statische Quellcode-Kontrollen für vorhandene Routen, Audioelemente, Speicher-Keys, Fehlerklassifikation und CSS durchgeführt.
-- [ ] **Nach den letzten Änderungen:** Node-Regressionstests auf einer vollständigen Arbeitskopie ausführen.
-- [ ] **Nach den letzten Änderungen:** Alle eingebetteten Scripts noch einmal als Syntax-Smoke-Test parsen.
+- [ ] **Noch auszuführen:** Node-Regressionstests auf einer vollständigen Arbeitskopie ausführen; GitHub-Actions-Workflow `.github/workflows/maja-regression.yml` wurde erstellt, sein Erfolg ist noch **nicht** bestätigt.
+- [x] **Nach den letzten Änderungen:** Acht eingebettete JavaScript-Abschnitte erneut geparst; 14 von 14 zusätzlichen statischen Quellcodekontrollen bestanden (kein Browser-End-to-End-Test).
 - [ ] **Nicht geprüft:** tatsächliche GitHub-Pages-Auslieferung und Laufzeit auf echten Geräten.
 
 ## 3. Offene Aufgaben – in dieser Reihenfolge
@@ -69,6 +69,6 @@ Diese Befehle sind nicht gleichbedeutend mit visuellem Browser-QA. Audioausgabe 
 
 | Datum / Bearbeiter | Änderung / Commit | Verifiziert (wie?) | Weiter offen |
 |---|---|---|---|
-| 09.11.2026 / ChatGPT | Kindgerechte Hubs, paginierte Archive, Audio, Feedback, Elternsicht, Kleidung; mehrere Commits auf `main` | Connector-Schreibbestätigung, initiale Syntax-/Quellcodekontrollen | Issue #22–#26; Browser- und End-to-End-Prüfung |
+| 09.11.2026 / ChatGPT | Kindgerechte Hubs, paginierte Archive, Audio, Feedback, Elternsicht, Kleidung; Tests, Copilot-Regeln, GitHub-Issues und CI-Workflow angelegt | GitHub-Commits bestätigt; 8/8 Inline-Scripts geparst und 14/14 statische Prüfungen bestanden. Node und echte Browser noch nicht ausgeführt | Issues #22–#26; Node-/Actions-Lauf, Browser-/Audio- und Bildprüfung |
 
 **Regel:** Nach jeder relevanten Änderung mindestens diese Tabelle und die Checkboxen aktualisieren. Anfragen anderer KI-Systeme sollen sich auf diese Datei, die Issues und die Git-Historie stützen, nicht auf frühere Chats.
