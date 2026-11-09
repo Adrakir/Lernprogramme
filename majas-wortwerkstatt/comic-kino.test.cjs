@@ -6,7 +6,7 @@ const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const kino=fs.readFileSync(path.join(root,'comic-kino.js'),'utf8');
 const style=fs.readFileSync(path.join(root,'comic-kino.css'),'utf8');
 
-assert(html.includes('comic-kino.js?v=20261109d'),'Comic module loaded');
+assert(html.includes('comic-kino.js?v=20261109e'),'Comic module loaded');
 assert(html.includes('comic-kino.css?v=20261109d'),'Comic styles loaded');
 assert(html.includes('window.MajaComicKino?.stop()'),'Speech cleaned up on navigation');
 assert(html.includes("mode:'school'"),'School comics use new audio player');
