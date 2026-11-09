@@ -1,0 +1,74 @@
+# Projektstand – Majas Wortwerkstatt
+
+**Zuletzt aktualisiert:** 09.11.2026 · **Branch:** `main` · **Repository:** [Adrakir/Lernprogramme](https://github.com/Adrakir/Lernprogramme) · **App-Ordner:** `majas-wortwerkstatt/`
+
+> **Wichtig:** Diese Datei ist die Übergabestelle zwischen ChatGPT, GitHub Copilot und anderen KI-Assistenten. Aussagen über "fertig" beziehen sich auf gespeicherten Code, **nicht automatisch** auf browsergetestete oder öffentlich ausgerollte Funktion. Ein neuer Bearbeiter überprüft immer den aktuellen HEAD.
+
+## 1. Bereits im GitHub-Code umgesetzt
+
+- [x] **Einstieg vereinfacht:** Startseite mit `#lernen` und `#abenteuer`; zwei gut erkennbare Auswahlfelder, Bärli-Bild.
+- [x] **Vier Ziele pro Modus:** Lernweg Hören, Nomen-Endungen, Verlängern, Klassenarbeit; Abenteuer Comics, Spiele, Bärli hilft, Kleiderschrank.
+- [x] **Lange Archive verkürzt:** `#stationen` und `#comics` seitenweise mit höchstens vier Einträgen; Links zu allen bisherigen Inhalten erhalten.
+- [x] **Hörverständnis-Bedienung:** Aufnahme oder Gerät-Computerstimme; deutsche Stimmen aus dem Browser auswählbar; Tempo 1, 0.85 und 0.7; Anhören/Stopp; roter Frageblock; Antworten einzeln.
+- [x] **Vorlese-Einstellungen portierbar:** Neue Einstellungen unter `majas-wortwerkstatt-hoer-*`, alte `maja-prep-voice-*` werden weiterhin eingelesen.
+- [x] **Geführtes Üben und Testen:** Vorhandene Lernwege mit Hinweisen und fünf Tests je Thema beibehalten; Bärlis Hilfe deutlicher benannt.
+- [x] **Fehlerdiagnose:** Nach einem Test werden Fehler nach Hör-Fragetyp bzw. Verlängern/Nomen-Endungen gruppiert und passende Übungsschritte angezeigt.
+- [x] **Elternübersicht:** Zeigt die tatsächlich absolvierten Abschlusstests mit höchstem gemessenen Testergebnis, ohne aus fehlenden Daten einen Lernstand zu erfinden.
+- [x] **Kleiderschrank:** Hüte, Pullover/Jacken, Hosen, Brillen, Schals und Schuhe als zusätzliche Kaufoptionen; kombinierbare Kategorien und kleine, bebilderte Seiten.
+- [x] **Speicherkompatibilität:** vorhandener Sternenbeutel, Outfitauswahl und lokale Lernstände nicht umbenannt; die bereits bestehende JSON-Export-/Importfunktion aus `maja-plus.js` bleibt verfügbar.
+- [x] **Übergabe-Grundlage:** `AGENTS.md`, diese Statusdatei, `README.md` sowie Node-Testfälle und GitHub-Issues.
+
+## 2. Bereits überprüft
+
+- [x] GitHub-Updates über den verbundenen Connector erfolgreich geschrieben.
+- [x] Nach den ersten Audio-/Kleiderschrankänderungen ließen sich alle acht Inline-JavaScript-Abschnitte als JavaScript parsen.
+- [x] Statische Quellcode-Kontrollen für vorhandene Routen, Audioelemente, Speicher-Keys, Fehlerklassifikation und CSS durchgeführt.
+- [ ] **Nach den letzten Änderungen:** Node-Regressionstests auf einer vollständigen Arbeitskopie ausführen.
+- [ ] **Nach den letzten Änderungen:** Alle eingebetteten Scripts noch einmal als Syntax-Smoke-Test parsen.
+- [ ] **Nicht geprüft:** tatsächliche GitHub-Pages-Auslieferung und Laufzeit auf echten Geräten.
+
+## 3. Offene Aufgaben – in dieser Reihenfolge
+
+| Priorität | Aufgabe | GitHub |
+|---|---|---|
+| P0 | Manuelle Audio- und Bedienungstests auf iPhone/iPad/Android/Windows inklusive Sicherungsimport, Stimmenliste und langsamer Wiedergabe | [#22](https://github.com/Adrakir/Lernprogramme/issues/22) |
+| P0 | Kleidung pixelgenau am Bärli-Bild, Comic-Sprechblasen, Köpfe und Proportionen prüfen und ggf. korrigieren | [#23](https://github.com/Adrakir/Lernprogramme/issues/23) |
+| P0 | Alle Hör-/Rechtschreibtests und Vorschläge der Fehlerdiagnose fachlich gegen Aufgaben und Texte validieren | [#25](https://github.com/Adrakir/Lernprogramme/issues/25) |
+| P1 | Alle übrigen großen Unterseiten in kindgerechte Schritte aufteilen; Touch-/Fokus-/Kontrast-Audit | [#26](https://github.com/Adrakir/Lernprogramme/issues/26) |
+| P1 | Großes HTML schrittweise modularisieren, Browsertests und CI ergänzen; keinen unbeprüften Totalrewrite | [#24](https://github.com/Adrakir/Lernprogramme/issues/24) |
+
+**Nächste einzelne Arbeit:** Issue #22 beginnen. Wenn kein Gerät/Browsertest möglich ist, die Grenzen klar notieren und mit #25 (inhaltliche Prüfung) fortfahren. Keine QA als erledigt markieren, wenn sie nicht tatsächlich stattgefunden hat.
+
+## 4. Wichtige Routen
+
+- Start: `#` oder ohne Hash
+- Lernmodus: `#lernen`
+- Abenteuermodus: `#abenteuer`
+- Hörkurs: `#pruefung/hoeren`
+- Hörtraining: `#pruefung/hoeren/gefuehrt/1`, `#pruefung/hoeren/ueben/1`, `#pruefung/hoeren/test/1`
+- Nomen/Verlängern: `#pruefung/nomen`
+- Stationen: `#stationen/1` bis `#stationen/2` (abhängig von der Anzahl)
+- Comics: `#comics/1` ff. (dynamisch, abhängig von vorhandenen Comics)
+- Bärlis Kleiderschrank: `#baerli/schrank` und z. B. `#baerli/schrank/hose`
+- Elternübersicht: `#erwachsene`
+- Lernstand sichern: `#einstellungen`
+
+## 5. Speicherschutz und Tests
+
+Keine alten `localStorage`-Keys ändern oder beim Initialisieren löschen. Beim Testen immer auch eine Sicherung **vor** dem Update verwenden; mit bestehendem Sternenstand und gekaufter Kleidung.
+
+```bash
+node majas-wortwerkstatt/mobile-start.test.cjs
+node majas-wortwerkstatt/experience.test.cjs
+# Danach die weiteren vorhandenen majas-wortwerkstatt/*.test.cjs
+```
+
+Diese Befehle sind nicht gleichbedeutend mit visuellem Browser-QA. Audioausgabe hängt u. a. von Browser, Betriebssystem, deutschen Gerätestimmen und den lokalen Benutzerrechten ab.
+
+## 6. Übergabeprotokoll (bei jeder KI-Fortsetzung ausfüllen)
+
+| Datum / Bearbeiter | Änderung / Commit | Verifiziert (wie?) | Weiter offen |
+|---|---|---|---|
+| 09.11.2026 / ChatGPT | Kindgerechte Hubs, paginierte Archive, Audio, Feedback, Elternsicht, Kleidung; mehrere Commits auf `main` | Connector-Schreibbestätigung, initiale Syntax-/Quellcodekontrollen | Issue #22–#26; Browser- und End-to-End-Prüfung |
+
+**Regel:** Nach jeder relevanten Änderung mindestens diese Tabelle und die Checkboxen aktualisieren. Anfragen anderer KI-Systeme sollen sich auf diese Datei, die Issues und die Git-Historie stützen, nicht auf frühere Chats.
