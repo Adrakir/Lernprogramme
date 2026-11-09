@@ -72,3 +72,24 @@ test('Kleiderschrank trennt Hosen, Brillen und Hüte',async ({page})=>{
   await page.goto(route('baerli/schrank/huete'),{waitUntil:'domcontentloaded'});
   await expect(page.locator('.bw-header h1')).toHaveText('Hüte');
 });
+
+test('Kleiderschrank: Bildkacheln und Anprobe verändern weder Sterne noch Käufe',async ({page})=>{
+  await load(page,'baerli/schrank');
+  await expect(page.locator('.bw-category-sample')).toHaveCount(6);
+  const before=await page.evaluate(()=>({
+    outfit:localStorage.getItem('majas-wortwerkstatt-baerli-auswahl-v1'),
+    stars:localStorage.getItem('majas-wortwerkstatt-sternenbeutel-v1')
+  }));
+  await page.locator('a[href="#baerli/schrank/hosen"]').first().click();
+  await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id','jeans');
+  // Alte Hosen unverändert vor den neuen: Jeans, Spielhose, Regenhose, Sternhose, Schlaghose.
+  for(let i=0;i<4;i++)await page.locator('[data-bw-move="1"]').click();
+  await expect(page.locator('.bw-product-copy strong')).toHaveText('Türkise Schlaghose');
+  await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id','schlaghose');
+  await expect(page.locator('.bw-try-label')).toContainText('Anprobe');
+  const after=await page.evaluate(()=>({
+    outfit:localStorage.getItem('majas-wortwerkstatt-baerli-auswahl-v1'),
+    stars:localStorage.getItem('majas-wortwerkstatt-sternenbeutel-v1')
+  }));
+  expect(after).toEqual(before);
+});
