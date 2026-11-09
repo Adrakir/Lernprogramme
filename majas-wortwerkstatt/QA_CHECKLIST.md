@@ -12,6 +12,21 @@ Diese Datei enthält **Prüfschritte, keine Behauptung, dass sie bereits erfolgr
 - [ ] Aktuellen Git-Commit, URL, Gerät, Betriebssystemversion und Browser erfassen.
 - [ ] Live-Bereitstellung separat verifizieren: Die öffentliche URL muss die zuletzt aktualisierten Inhalte tatsächlich ausliefern.
 
+## Baumhaus-/Shop-Abnahme (nach der November-Erweiterung)
+
+Automatischer Basisablauf in `baumhaus.test.cjs` und `e2e/treehouse-and-shop.spec.cjs`; alle folgenden Punkte auf echten Geräten getrennt nachweisen:
+
+- [ ] Start ohne bestandene Prüfung: Baumhaus bleibt gesperrt, Verweis auf vorhandene Abschlussprüfungen; keine Taler, keine Shop-Bestellungen.
+- [ ] Einmal `hoeren:test:1` oder `nomen:test:1` zu mindestens 80 % bestehen: Baumhaus wird freigeschaltet, **nur blauer Sitzsack und Laptop** sind kostenlos da; Bärli ist sichtbar.
+- [ ] Derselbe Test erneut bestanden: weiterhin nur **10 Taler** (Bestwert bleibt auch nach einem schlechteren Wiederholungsversuch). Anderer Test bestanden: weitere 10 Taler.
+- [ ] Laptop im Zimmer antippen: Gelb-blauer `Bärli AG Osnabrück`-Shop öffnet sich. Dort sind keine echten Bestellungen oder Zahlungen möglich.
+- [ ] Möbel, Nachttisch, Bettwäsche bestellen: jeder Kauf nur einmal möglich, Taler sinken korrekt, bestelltes Möbelstück kann über Pfeile und Tippen platziert werden, Position bleibt nach Neuladen erhalten.
+- [ ] Vor 3/4/5/6/8/10 Prüfungen bleiben jeweils Tapeten/Bücher/Elektro/Weihnachten/Premium/zweites Zimmer gesperrt; nach Freischaltung bestellen und sinnvoll einrichten.
+- [ ] Weihnachtsbaum und Kugeln bestellen, Baum schmücken und Schmuck abnehmen. Tapete wählen; zweites Zimmer einrichten und Möbel hinübertragen.
+- [ ] Im Kleiderschrank saisonale Abteilungen `Regensachen` und `Weihnachten`, 39 passende neue Artikel sowie die alten Kleidungsstücke prüfen. Sternenkäufe und vorhandene Outfits müssen nach erneutem Öffnen unverändert bleiben.
+- [ ] Auf Handy, Tablet und PC kein horizontales Scrollen, vollständige Möbelgrafiken, gut erkennbare Bedienelemente und kontrastreiche gelb-blaue Shop-Karten.
+- [ ] Unter Einstellungen **alle** Lernstände inklusive `majas-wortwerkstatt-baumhaus-v1` sichern und in einem zweiten Browserprofil importieren; keine Kinder-Daten in GitHub hochladen.
+
 ## B. Mobilnavigation / Übersicht (Issue #26)
 
 Für **iPhone Safari**, **iPad Safari**, **Android Chrome oder Edge** und **Windows Chrome/Edge**:
