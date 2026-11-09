@@ -44,5 +44,7 @@ const items=[
  item('saison-regenwolke','Regenwolke zum Spielen','handrechts',4,right('<path d="M15 53Q5 26 36 25Q42-7 69 15Q105 10 111 39Q132 58 104 69H31Q12 68 15 53Z" fill="#9fbfd0" stroke="#64859c" stroke-width="5"/><path d="m37 84-8 20m42-20-8 20m35-20-8 20" stroke="#538db9" stroke-width="7" stroke-linecap="round"/>'))
 ];
 if(new Set(items.map(x=>x.id)).size!==items.length)throw Error('Duplicate seasonal item IDs');
+const rainy=new Set(['saison-regenponcho','saison-regenjacke','saison-regenhose','saison-gummistiefel','saison-gummistiefelblau','saison-regenhut','saison-regenkappe','saison-regenwolke']);
+for(const article of items)article.season=rainy.has(article.id)?'regen':'weihnachten';
 window.MajaBaerliSaison=items;
 })();
