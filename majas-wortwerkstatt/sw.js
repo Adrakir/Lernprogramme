@@ -3,7 +3,7 @@
  * übrige Dateien aus dem Cache mit Nachladen. Keine Lerndaten im Cache –
  * Lernstände bleiben ausschließlich in localStorage. */
 'use strict';
-const CACHE='majas-wortwerkstatt-v6';
+const CACHE='majas-wortwerkstatt-v7';
 const CORE=[
   './',
   './index.html',
@@ -19,6 +19,9 @@ const CORE=[
   './figurenstimmen.js',
   './figurenstimmen.css',
   './baerli-neue-sachen.js',
+  './baerli-saison.js',
+  './baerli-baumhaus.js',
+  './baerli-baumhaus.css',
   './baerli-kleiderschrank.js',
   './baerli-kleiderschrank.css',
   './diktat-audio.js',
