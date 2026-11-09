@@ -27,6 +27,8 @@ jobs:
         run: node majas-wortwerkstatt/experience.test.cjs
       - name: Validate all hearing tests, spelling tests and comics
         run: node majas-wortwerkstatt/pruefungen-comics.test.cjs
+      - name: Validate wardrobe inventory and saved-outfit compatibility
+        run: node majas-wortwerkstatt/baerli-inventar.test.cjs
 
   browser:
     name: Chromium browser smoke checks (emulated viewports)
@@ -55,6 +57,13 @@ jobs:
         with:
           name: maja-comic-visual-review
           path: majas-wortwerkstatt/qa-comic-shots/*.png
+          if-no-files-found: ignore
+      - name: Upload Bärli wardrobe screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-baerli-wardrobe-review
+          path: majas-wortwerkstatt/qa-wardrobe-shots/*.png
           if-no-files-found: ignore
       - name: Upload failed-run browser diagnostics
         if: failure()
