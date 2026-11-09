@@ -27,6 +27,13 @@
 - Keine personenbezogenen Kinder-Lerndaten, privaten Exportdateien oder Geheimnisse in GitHub hochladen.
 - Das bisher große `index.html` schrittweise modularisieren, nicht ungeprüft vollständig überschreiben.
 
+## Wichtige Laufzeit-Überlagerung (Stand 09.11.2026)
+- `baerli-kleiderschrank.js` wird **nach** der Inline-Logik geladen und überschreibt `showBearWardrobe`, `showBear`, `showHome` und `showComicHub`. Vor Änderungen am Kleiderschrank beide Implementierungen ansehen; die **zuletzt geladene** Version ist im Browser wirksam.
+- Neue Navigationsmodi in `render()` gehören zur **gleichen `if/else if`-Kette**. Ein zweites alleinstehendes `if` kann die Seite direkt wieder durch `showHome()` ersetzen (behoben in Commit `aab4096`).
+- Browser-Smoke-Tests liegen in `e2e/smoke.spec.cjs` und werden mit `playwright.config.cjs` ausgeführt. Desktop-/Mobil-/Tablet-Emulation ist **kein echter Safari-/Android-Gerätetest**.
+- Die verbindlichen manuellen Prüfschritte stehen in [QA_CHECKLIST.md](./QA_CHECKLIST.md).
+- Bei mehreren bearbeitenden KI-Assistenten immer Dateiversion/SHA unmittelbar vor dem Schreiben erneut lesen und bei Konflikt nicht ungeprüft überschreiben.
+
 ## Prüfungen vor einem Commit
 ```bash
 node majas-wortwerkstatt/mobile-start.test.cjs
