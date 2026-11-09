@@ -7,3 +7,10 @@
 - **Vor Veröffentlichung testen:** `node entwickler/atlas-schulung.test.cjs` und `node entwickler/atlaswerkstatt.test.cjs`, außerdem bestehende Fachtests. Aktuelle `main`-SHA vor dem Commit prüfen und keine fremden zwischenzeitlichen Änderungen überschreiben.
 - **Nach Veröffentlichung:** GitHub-Pages-Status prüfen und öffentliches Startdokument, Atlas-Schulung, Bildmaterial und PDF-Verlinkungen testen. GitHub-Pages-Erfolg allein beweist nicht, dass alle Übungen funktionieren.
 - **Lernstände:** Vorhandene Storage-Schlüssel und Schülerantworten bei Änderungen erhalten. Dateinamen der publizierten Einstiegsseiten nicht ändern.
+
+## Majas Wortwerkstatt – KI-Übergabe
+
+- **Wenn Majas Deutschapp (Klasse 3) betroffen ist:** Zuerst [`majas-wortwerkstatt/AGENTS.md`](./majas-wortwerkstatt/AGENTS.md) und [`majas-wortwerkstatt/PROJECT_STATE.md`](./majas-wortwerkstatt/PROJECT_STATE.md) lesen.
+- Die offenen GitHub-Issues #22–#26 und die letzten Commits prüfen, dann **die nächste offene Aufgabe** in der bestehenden App lösen.
+- Bestehende Comics, Spiele, Audios, Sterne, Lernstände und öffentliche URL erhalten. Statische Tests und tatsächliche Audio-/Browser-Tests getrennt dokumentieren.
+- Nach jeder Änderung die Projektstand-Datei mit erledigtem Punkt, Teststatus, Commit und weiter offenem Schritt aktualisieren. Andere Fachapps nicht durch diese Anweisung verändern.
