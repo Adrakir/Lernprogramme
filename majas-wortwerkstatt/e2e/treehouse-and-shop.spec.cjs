@@ -66,6 +66,8 @@ test('Bettwäsche und Nachttisch im Shop, Bestellung kostet Taler und lässt Zim
  await page.goto(url('baumhaus/shop/moebel'));
  await expect(page.locator('[data-bh-buy="bettwaesche-blau"]')).toBeEnabled();
  await page.locator('[data-bh-buy="bettwaesche-blau"]').click();
+ const positions=await page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-baumhaus-v1')).placed);
+ expect(positions.find(x=>x.id==='bettwaesche-blau').x).toBe(positions.find(x=>x.id==='bett').x);
  await page.goto(url('baumhaus'));
  await expect(page.locator('[data-bh-select="bettwaesche-blau"]')).toBeVisible();
 });
@@ -78,8 +80,14 @@ test('Weihnachtsabteilung erst nach sechs unterschiedlichen Prüfungen erreichba
  await page.goto(url('baumhaus/shop/weihnachten'));
  await expect(page.locator('.bh-shop-lock')).toHaveCount(0);
  await page.locator('[data-bh-buy="weihnachtsbaum"]').click();
+ await page.locator('[data-bh-buy="kugeln"]').click();
  await page.goto(url('baumhaus'));
  await expect(page.locator('[data-bh-select="weihnachtsbaum"]')).toBeVisible();
+ await page.locator('[data-bh-choose="weihnachtsbaum"]').click();
+ await expect(page.locator('[data-bh-decorate]')).toBeVisible();
+ await page.locator('[data-bh-decorate]').click();
+ const decorated=await page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-baumhaus-v1')).decorated);
+ expect(decorated).toBe(true);
 });
 test('Erst nach zehn unterschiedlichen Prüfungen ist das zweite Zimmer kaufbar und leer',async ({page})=>{
  await seed(page,10);
