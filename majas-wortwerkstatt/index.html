@@ -5120,9 +5120,9 @@ function runPrep(topic,mode,n){
   let voiceRun=0;
   let savedMode='recorded',savedRate='1',savedVoice='';
   try{
-   savedMode=localStorage.getItem('maja-prep-voice-mode-v1')||'recorded';
-   savedRate=localStorage.getItem('maja-prep-voice-rate-v1')||'1';
-   savedVoice=localStorage.getItem('maja-prep-voice-name-v1')||'';
+   savedMode=localStorage.getItem('majas-wortwerkstatt-hoer-modus-v1')||localStorage.getItem('maja-prep-voice-mode-v1')||'recorded';
+   savedRate=localStorage.getItem('majas-wortwerkstatt-hoer-tempo-v1')||localStorage.getItem('maja-prep-voice-rate-v1')||'1';
+   savedVoice=localStorage.getItem('majas-wortwerkstatt-hoer-stimme-v1')||localStorage.getItem('maja-prep-voice-name-v1')||'';
   }catch{}
   modeSelect.value=savedMode==='computer'?'computer':'recorded';
   speedSelect.value=['1','0.85','0.7'].includes(savedRate)?savedRate:'1';
@@ -5143,10 +5143,10 @@ function runPrep(topic,mode,n){
   speechAPI?.addEventListener?.('voiceschanged',refreshVoiceList);
   detachVoices=()=>speechAPI?.removeEventListener?.('voiceschanged',refreshVoiceList);
   stopComputer=()=>{voiceRun++;speechAPI?.cancel();};
-  const setMode=()=>{voiceRow.hidden=modeSelect.value!=='computer';audio.pause();stopComputer();status.textContent='';try{localStorage.setItem('maja-prep-voice-mode-v1',modeSelect.value);}catch{}};
+  const setMode=()=>{voiceRow.hidden=modeSelect.value!=='computer';audio.pause();stopComputer();status.textContent='';try{localStorage.setItem('majas-wortwerkstatt-hoer-modus-v1',modeSelect.value);}catch{}};
   setMode();
-  speedSelect.onchange=()=>{audio.playbackRate=Number(speedSelect.value);stopComputer();try{localStorage.setItem('maja-prep-voice-rate-v1',speedSelect.value);}catch{}};
-  voiceSelect.onchange=()=>{stopComputer();try{localStorage.setItem('maja-prep-voice-name-v1',voiceSelect.value);}catch{}};
+  speedSelect.onchange=()=>{audio.playbackRate=Number(speedSelect.value);stopComputer();try{localStorage.setItem('majas-wortwerkstatt-hoer-tempo-v1',speedSelect.value);}catch{}};
+  voiceSelect.onchange=()=>{stopComputer();try{localStorage.setItem('majas-wortwerkstatt-hoer-stimme-v1',voiceSelect.value);}catch{}};
   modeSelect.onchange=setMode;
   const playComputer=()=>{
    if(!speechAPI?.speak||!window.SpeechSynthesisUtterance){status.textContent='Auf diesem Gerät ist keine Computerstimme verfügbar. Bitte die Aufnahme auswählen.';return;}
