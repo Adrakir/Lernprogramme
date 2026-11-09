@@ -143,7 +143,7 @@
     };
     renderParts();
     $('burnerPartsRestart').addEventListener('click',()=>{partIndex=0;partScore=0;renderParts()});
-    if($('virtualOff'))$('virtualOff').textContent='4 · Gas schließen & ausschalten';
+    if($('virtualOff'))$('virtualOff').textContent='5 · Gas schließen & ausschalten';
     const connect=$('virtualConnect');
     if(connect)connect.addEventListener('click',()=>{const hose=$('virtualSupplyHose');if(hose)hose.setAttribute('d','M285 190 C267 181 266 157 224 147')});
   }
