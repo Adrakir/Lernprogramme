@@ -104,7 +104,7 @@ function mount({frames,mode="detective"}){
      const last=index===wraps.length-1;
      previous.disabled=index===0;
      next.disabled=last&&!nextPage;
-     next.textContent=last&&nextPage?"Nächste Comicseite →":"Nächstes Bild →";
+     next.textContent=last&&nextPage?nextPage.textContent.trim().replace(/\s+/g," "):"Nächstes Bild →";
      count.textContent="Bild "+(index+1)+" von "+wraps.length;
      if(moveFocus){
        wraps[index].scrollIntoView({behavior:"auto",block:"nearest"});
