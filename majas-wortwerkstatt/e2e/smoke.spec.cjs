@@ -51,3 +51,24 @@ test('Mobile Einstieg ohne horizontalen Überlauf',async ({page},testInfo)=>{
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
   expect(overflow,'start page should not need horizontal scrolling').toBeLessThanOrEqual(2);
 });
+
+test('Startseiten-Bilder laden und direkte Ziele bleiben verlinkt',async ({page})=>{
+  await load(page);
+  const pics=page.locator('.maja-classic-home .maja-option-photo img');
+  await expect(pics).toHaveCount(4);
+  for(let i=0;i<4;i++){
+    await expect.poll(()=>pics.nth(i).evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+  }
+  for(const hash of ['pruefung/hoeren','endungen','verlaengern','kombitest','comics','spiele','lernberater','baerli/schrank','stationen']){
+    await expect(page.locator('.maja-classic-home a[href="#'+hash+'"]')).toHaveCount(1);
+  }
+});
+test('Kleiderschrank trennt Hosen, Brillen und Hüte',async ({page})=>{
+  await load(page,'baerli/schrank');
+  await page.locator('a[href="#baerli/schrank/hosen"]').first().click();
+  await expect(page.locator('.bw-header h1')).toHaveText('Hosen');
+  await page.goto(route('baerli/schrank/brillen'),{waitUntil:'domcontentloaded'});
+  await expect(page.locator('.bw-header h1')).toHaveText('Brillen');
+  await page.goto(route('baerli/schrank/huete'),{waitUntil:'domcontentloaded'});
+  await expect(page.locator('.bw-header h1')).toHaveText('Hüte');
+});
