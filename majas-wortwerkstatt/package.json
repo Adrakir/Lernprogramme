@@ -1,0 +1,13 @@
+{
+  "name": "majas-wortwerkstatt-quality-checks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Regression tests for Majas Deutschapp, no user data",
+  "scripts": {
+    "test:static": "node mobile-start.test.cjs && node experience.test.cjs",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}
