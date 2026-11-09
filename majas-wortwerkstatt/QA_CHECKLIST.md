@@ -16,13 +16,19 @@ Diese Datei enthält **Prüfschritte, keine Behauptung, dass sie bereits erfolgr
 
 Für **iPhone Safari**, **iPad Safari**, **Android Chrome oder Edge** und **Windows Chrome/Edge**:
 
-- [ ] Startseite zeigt zwei verständliche Einstiege: „Deutsch lernen“ und „Abenteuer erleben“.
-- [ ] Klicks führen zu `#lernen` und `#abenteuer`. Jede Übersichtsseite hat höchstens vier große Auswahlkarten.
+- [ ] Startseite zeigt **„Fit für den Kombitest“**, drei große Lernpiktogramme, den Knopf „Teste dich“, vier bebilderte Kacheln und „Alle weiteren Lernthemen“.
+- [ ] Die drei Hauptkacheln führen zu `#pruefung/hoeren`, `#endungen`, `#verlaengern`; die vier Bildkacheln zu `#comics`, `#spiele`, `#lernberater`, `#baerli/schrank`. Sekundäre Links zu `#lernen` und `#abenteuer` bleiben erreichbar.
 - [ ] Zurück, Weiter und Start funktionieren ohne verlorene Aufgabenstände.
 - [ ] Kein horizontales Scrollen, keine abgeschnittenen Überschriften, keine verdeckten Buttons, Touchflächen ca. 44×44 px oder größer.
 - [ ] `#stationen`, `#comics`, `#baerli/schrank` blättern in übersichtlichen Schritten.
 - [ ] Schriftvergrößerung, hoher Kontrast, weniger Animationen und Tastaturfokus prüfen.
-- [ ] Bilder und Beschriftungen müssen zum Thema passen; keine leeren oder doppelten Symbole.
+- [ ] Große Piktogramme und Bilder müssen zum Thema passen: Comics (Maja & Bärli lesen), Spiele (Bastelszene), Lernberater (Bärli), Kleidung (Kostümkiste); keine leeren oder doppelten Symbole. Vorgabe: [HOME_LAYOUT.md](./HOME_LAYOUT.md).
+
+
+### Regression nach Rückkehr zur vertrauten Übersicht
+- [ ] Alte direkte Links und Bilderbuch-Einstieg `./bilderbuecher/` nach Klick testen.
+- [ ] Kleiderschrank-Kategorien auf alte Käufe und korrekte Zuordnung prüfen; besonders früher gespeicherte Hosen, Brillen und Schuhe.
+- [ ] Am iPhone kontrollieren, ob Bild und Text in allen sieben Kacheln ohne Abschneiden erscheinen.
 
 ## C. Hörverstehen / Ton (Issue #22)
 
