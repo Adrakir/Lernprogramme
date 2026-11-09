@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   pages: write
+  actions: write
 
 jobs:
   unblock-stale-pages:
@@ -16,6 +17,24 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
+      - name: Veralteten noch laufenden Pages-Build von Commit 182fa4f57 gezielt abbrechen
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OLD_RUN: "42717570628"
+          EXPECTED_SHA: "182fa4f57d"
+        run: |
+          set -euo pipefail
+          endpoint="repos/${GITHUB_REPOSITORY}/actions/runs/${OLD_RUN}"
+          current_sha="$(gh api "$endpoint" --jq '.head_sha')"
+          state="$(gh api "$endpoint" --jq '.status')"
+          echo "Alter Lauf: $OLD_RUN | Commit: $current_sha | Status: $state"
+          if [[ "$current_sha" == "$EXPECTED_SHA"* && "$state" != "completed" ]]; then
+            echo "Veralteten Lauf stoppen, damit die neuere Advent-Version veröffentlichen kann."
+            gh api -X POST "$endpoint/cancel"
+          else
+            echo "Kein Abbruch nötig (oder Commits stimmen nicht überein)."
+          fi
       - name: Festhängende Pages-Bereitstellung gezielt prüfen und abbrechen
         shell: bash
         env:
