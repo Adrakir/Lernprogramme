@@ -424,7 +424,8 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
 <link rel="stylesheet" href="./mobile-start.css?v=20261109f">
-<link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109b">
+<link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109c">
+<link rel="stylesheet" href="./baerli-baumhaus.css?v=20261109a">
 </head>
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt</a>
@@ -3064,6 +3065,7 @@ function showAnnaWriting(part){
 <script src="./comic-studio.js?v=20261108c"></script>
 <script src="./comic-bubbles.js?v=20261108d"></script>
 <script src="./figurenstimmen.js?v=20261108e"></script>
+<script src="./baerli-baumhaus.js?v=20261109a"></script>
 <script>const iconPaths = {
  comic:'<rect x="2.5" y="3.5" width="19" height="17" rx="2"/><path d="M12 3.5v17M3 12h9M15 7h4m-4 4h3m-3 4h4m-13-8h3v2H6l-1 2Z"/>',
  hanger:'<path d="M9 5a3 3 0 1 1 5 2.3c-.8.6-2 1-2 2.1v1.2M12 10.6 3 16a2 2 0 0 0 1.1 3.7h15.8A2 2 0 0 0 21 16l-9-5.4Z"/>',
@@ -3302,6 +3304,7 @@ function showHome(){
       <a href="#abenteuer">Meine Abenteuer</a>
       <a href="./bilderbuecher/">Bärlibuch</a>
       <a href="#einstellungen">Einstellungen</a>
+      <a href="#baumhaus">🌳 Bärlis Baumhaus</a>
     </nav>
   </div>`;
 }
@@ -5140,6 +5143,8 @@ function runPrep(topic,mode,n){
  function finish(){
   session.done=true;session.assisted=readingUsed;save();root.hidden=true;audio?.pause();stopComputer();result.hidden=false;
   const score=prepPercent(session.answers),good=score>=80,reward=prepReward(topic,mode,n,score);
+  // Eine bestandene Prüfung wird sofort dauerhaft für das Baumhaus verbucht.
+  if(test&&good)window.MajaTreehouse?.stateRead();
   const mistakes=session.answers.map((answer,i)=>({answer,q:questions[i]})).filter(item=>!item.answer.correct);
   const errorTypes=[];
   if(topic==='hoeren'){
@@ -5166,7 +5171,7 @@ function runPrep(topic,mode,n){
    <ul>${errorTypes.map(type=>`<li><strong>${escapeHtml(type.title)} (${type.count}):</strong> ${escapeHtml(type.advice)}</li>`).join('')}</ul>
    <a class="secondary" href="#${topic==='hoeren'?'pruefung/hoeren/ueben/'+n:'pruefung/nomen/ueben/'+n}">Diese Stellen noch einmal üben</a>
   </section>`:`<p class="prep-success-message">Die ersten Antworten waren alle richtig! Du kannst jetzt weitere Aufgaben ausprobieren.</p>`;
-  result.innerHTML=`<div class="panel"><h2 tabindex="-1">${test?'Dein Testergebnis':'Dein Übungsergebnis'}</h2><p class="prep-score">${session.answers.filter(x=>x.correct).length} / ${questions.length} richtig · ${score} %</p><p>${test?'Gewertet wird deine erste abgegebene Antwort.':'Hier siehst du, was schon beim ersten Prüfen richtig war. Mit Hilfen hast du anschließend weitergeübt.'}${readingUsed?' Dieser Durchgang wurde mit Lesehilfe bearbeitet.':''}</p><p>${reward}</p><div id="prep-celebration"></div>${guidance}<h3>Dein nächster Schritt</h3><p>${good?'Gut gemacht! Wiederhole die wenigen Stellen, bei denen du noch unsicher warst.':'Ein Test zeigt dir, was du als Nächstes üben kannst. Starte mit den Erklärungen und probiere später eine weitere Variante.'}</p><div class="actions"><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Geführt wiederholen</a><a class="secondary" href="#pruefung/${topic}/ueben/${n}">Passende Übung</a><a class="secondary" href="#pruefung/${topic}">Weitere Tests</a><a class="secondary" href="#fehlertraining/${topic}">Meine Fehler gezielt üben</a><button class="plain" type="button" id="prep-retry">Diesen Durchgang neu starten</button></div><h3>Aufgaben und Erklärungen</h3><ol class="prep-review">${questions.map((q,i)=>{const a=session.answers[i];return `<li class="${a.correct?'prep-right':'prep-wrong'}"><strong>${escapeHtml(q.prompt)} ${escapeHtml(q.context||'')}</strong><p>${a.correct?'✓ Richtig':'Noch üben'} · Deine erste Antwort: ${escapeHtml(a.given||'keine Antwort')}</p><p>Richtig: <strong>${escapeHtml(q.answer)}</strong></p><p>${escapeHtml(q.why)}</p>${!a.correct?`<a href="#${q.skill==='hoeren'?'pruefung/hoeren/ueben/'+n:q.skill==='verlaengern'?'verlaengern':'endungen'}">Diesen Bereich üben</a>`:''}</li>`;}).join('')}</ol></div>`;
+  result.innerHTML=`<div class="panel"><h2 tabindex="-1">${test?'Dein Testergebnis':'Dein Übungsergebnis'}</h2><p class="prep-score">${session.answers.filter(x=>x.correct).length} / ${questions.length} richtig · ${score} %</p><p>${test?'Gewertet wird deine erste abgegebene Antwort.':'Hier siehst du, was schon beim ersten Prüfen richtig war. Mit Hilfen hast du anschließend weitergeübt.'}${readingUsed?' Dieser Durchgang wurde mit Lesehilfe bearbeitet.':''}</p><p>${reward}</p><div id="prep-celebration"></div>${guidance}<h3>Dein nächster Schritt</h3><p>${good?'Gut gemacht! Wiederhole die wenigen Stellen, bei denen du noch unsicher warst.':'Ein Test zeigt dir, was du als Nächstes üben kannst. Starte mit den Erklärungen und probiere später eine weitere Variante.'}</p><div class="actions"><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Geführt wiederholen</a><a class="secondary" href="#pruefung/${topic}/ueben/${n}">Passende Übung</a><a class="secondary" href="#pruefung/${topic}">Weitere Tests</a><a class="secondary" href="#baumhaus">🌳 Bärlis Baumhaus</a><a class="secondary" href="#fehlertraining/${topic}">Meine Fehler gezielt üben</a><button class="plain" type="button" id="prep-retry">Diesen Durchgang neu starten</button></div><h3>Aufgaben und Erklärungen</h3><ol class="prep-review">${questions.map((q,i)=>{const a=session.answers[i];return `<li class="${a.correct?'prep-right':'prep-wrong'}"><strong>${escapeHtml(q.prompt)} ${escapeHtml(q.context||'')}</strong><p>${a.correct?'✓ Richtig':'Noch üben'} · Deine erste Antwort: ${escapeHtml(a.given||'keine Antwort')}</p><p>Richtig: <strong>${escapeHtml(q.answer)}</strong></p><p>${escapeHtml(q.why)}</p>${!a.correct?`<a href="#${q.skill==='hoeren'?'pruefung/hoeren/ueben/'+n:q.skill==='verlaengern'?'verlaengern':'endungen'}">Diesen Bereich üben</a>`:''}</li>`;}).join('')}</ol></div>`;
   if(test&&good)stopFireworks=prepFireworks(document.querySelector('#prep-celebration'));
   document.querySelector('#prep-retry').onclick=()=>{extraCleanup?.();delete data[key];prepWrite(data);runPrep(topic,mode,n);};result.querySelector('h2').focus();
  }
@@ -5332,6 +5337,7 @@ function render(initial=false){
   else if(page==='fortschritt')showProgress();
   else if(page==='sterne')showStarWallet();
   else if(page==='pruefung')showPrep(index,part);
+  else if(page==='baumhaus')window.MajaTreehouse.render(index,part);
   else if(page==='spiele')showGames(index);
   else if(page==='anna')showAnna(index,part);
   else if(page==='baerli')showBear(index);
@@ -5370,7 +5376,8 @@ window.addEventListener('hashchange',()=>{if(location.hash!=='#inhalt')render();
 render(true);
 </script>
 <script src="./baerli-neue-sachen.js?v=20261109a"></script>
-<script src="./baerli-kleiderschrank.js?v=20261109b"></script>
+<script src="./baerli-saison.js?v=20261109a"></script>
+<script src="./baerli-kleiderschrank.js?v=20261109c"></script>
 <script>
 // PWA: offline nutzbar und auf Tablets installierbar. HTML kommt immer zuerst aus dem Netz (siehe sw.js).
 if('serviceWorker' in navigator&&(location.protocol==='https:'||['localhost','127.0.0.1'].includes(location.hostname))){
