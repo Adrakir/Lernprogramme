@@ -60,6 +60,11 @@ const setInput=(p,sel,v)=>p.locator(sel).evaluate((e,v)=>{e.value=v;e.dispatchEv
  // Neue Funktionen: Lernheft-Laborbild, Skizzenlabor, Materialliste, Lerntrainer-Bank, Führerschein-Begründungen
  await go(p,'safety');assert.equal(await p.locator('#page-safety .safety-photo').count(),1,'Lernheft-Bild in Finde 6 Gefahren');
  await p.locator('[data-safety="3"]').click();assert.match(await p.locator('#safetyFeedback').innerText(),/Brennbares|Buch/);
+ // GHS-Lernkartei: 9 Symbole, Erklär-Detail, Zuordnungsspiel mit Begründung
+ assert.equal(await p.locator('.ghs-card').count(),9,'9 GHS-Piktogramme');
+ await p.locator('[data-ghs="ghs06"]').click();assert.match(await p.locator('#ghsDetail').innerText(),/giftig/);
+ await p.locator('[data-chip="ghs07"]').click();await p.locator('[data-bottle="0"]').click();assert.match(await p.locator('#ghsGameFeedback').innerText(),/Noch nicht/);
+ await p.locator('[data-chip="ghs02"]').click();await p.locator('[data-bottle="0"]').click();assert.match(await p.locator('#ghsGameFeedback').innerText(),/Richtig/);
  assert((await p.evaluate(()=>window.LernCockpitBankChem.length))>=64,'Lerntrainer-Fragenbank erweitert');
  await go(p,'v4study');await p.locator('[data-v4tab="journal"]').click();
  assert.equal(await p.locator('#v4SketchStage').count(),1,'Skizzenlabor vorhanden');

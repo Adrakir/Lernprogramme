@@ -1,166 +1,205 @@
 [
-  {
-    "file": "base.css",
-    "tag": "style",
-    "attrs": {}
-  },
-  {
-    "file": "lcStyles.css",
-    "tag": "style",
-    "attrs": {
-      "id": "lcStyles"
+    {
+        "file":  "base.css",
+        "tag":  "style",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "lcStyles.css",
+        "tag":  "style",
+        "attrs":  {
+                      "id":  "lcStyles"
+                  }
+    },
+    {
+        "file":  "core.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "campus.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "workshop-entry.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "workshop.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "research-campus.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "learning-cockpit.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "content-corrections.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "legacy-selfcheck.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "chemistry-quality-update.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemistry-quality-update"
+                  }
+    },
+    {
+        "file":  "chemistry-visual-learning-update.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemistry-visual-learning-update"
+                  }
+    },
+    {
+        "file":  "chemistry-guided-journey-update.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemistry-guided-journey-update"
+                  }
+    },
+    {
+        "file":  "thermalModule.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "thermalModule"
+                  }
+    },
+    {
+        "file":  "chemistryExamVisuals.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemistryExamVisuals"
+                  }
+    },
+    {
+        "file":  "chemistryFinalExam.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemistryFinalExam"
+                  }
+    },
+    {
+        "file":  "protocolErrorTrainer.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "protocolErrorTrainer"
+                  }
+    },
+    {
+        "file":  "woodIronExperiment.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "woodIronExperiment"
+                  }
+    },
+    {
+        "file":  "learning-upgrade.css",
+        "tag":  "style",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "learning-upgrade.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemistryLearningUpgrade"
+                  }
+    },
+    {
+        "file":  "protocol-levels.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemistryProtocolLevels"
+                  }
+    },
+    {
+        "file":  "chemie-probearbeit.js",
+        "tag":  "script",
+        "attrs":  {
+                      "id":  "chemieProbearbeit"
+                  }
+    },
+    {
+        "file":  "ghs-lernkartei.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "appearance.css",
+        "tag":  "style",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "appearance.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "dashboard-access.css",
+        "tag":  "style",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "dashboard-access.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "desktop-studio.css",
+        "tag":  "style",
+        "attrs":  {
+
+                  }
+    },
+    {
+        "file":  "desktop-studio.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
     }
-  },
-  {
-    "file": "core.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "campus.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "workshop-entry.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "workshop.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "research-campus.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "learning-cockpit.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "content-corrections.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "legacy-selfcheck.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "chemistry-quality-update.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemistry-quality-update"
-    }
-  },
-  {
-    "file": "chemistry-visual-learning-update.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemistry-visual-learning-update"
-    }
-  },
-  {
-    "file": "chemistry-guided-journey-update.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemistry-guided-journey-update"
-    }
-  },
-  {
-    "file": "thermalModule.js",
-    "tag": "script",
-    "attrs": {
-      "id": "thermalModule"
-    }
-  },
-  {
-    "file": "chemistryExamVisuals.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemistryExamVisuals"
-    }
-  },
-  {
-    "file": "chemistryFinalExam.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemistryFinalExam"
-    }
-  },
-  {
-    "file": "protocolErrorTrainer.js",
-    "tag": "script",
-    "attrs": {
-      "id": "protocolErrorTrainer"
-    }
-  },
-  {
-    "file": "woodIronExperiment.js",
-    "tag": "script",
-    "attrs": {
-      "id": "woodIronExperiment"
-    }
-  },
-  {
-    "file": "learning-upgrade.css",
-    "tag": "style",
-    "attrs": {}
-  },
-  {
-    "file": "learning-upgrade.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemistryLearningUpgrade"
-    }
-  },
-  {
-    "file": "protocol-levels.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemistryProtocolLevels"
-    }
-  },
-  {
-    "file": "chemie-probearbeit.js",
-    "tag": "script",
-    "attrs": {
-      "id": "chemieProbearbeit"
-    }
-  },
-  {
-    "file": "appearance.css",
-    "tag": "style",
-    "attrs": {}
-  },
-  {
-    "file": "appearance.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "dashboard-access.css",
-    "tag": "style",
-    "attrs": {}
-  },
-  {
-    "file": "dashboard-access.js",
-    "tag": "script",
-    "attrs": {}
-  },
-  {
-    "file": "desktop-studio.css",
-    "tag": "style",
-    "attrs": {}
-  },
-  {
-    "file": "desktop-studio.js",
-    "tag": "script",
-    "attrs": {}
-  }
 ]

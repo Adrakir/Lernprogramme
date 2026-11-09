@@ -335,3 +335,37 @@ body.high-contrast .mission-scene{background:#eef4f3}
 /* Lerncockpit-Knopf soll keine Inhalte überdecken */
 main{padding-bottom:96px}
 @media print{main{padding-bottom:0}}
+
+/* GHS-Lernkartei */
+.ghs-panel{margin-top:18px}
+.ghs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;margin:12px 0}
+.ghs-card{display:grid;justify-items:center;gap:6px;padding:10px 6px;border:2px solid #d6dee8;border-radius:14px;background:#fff;cursor:pointer}
+.ghs-card:hover,.ghs-card:focus-visible{border-color:#d0021b;transform:translateY(-2px)}
+.ghs-card small{font-size:12px;font-weight:700;text-align:center;line-height:1.2;color:#30505c}
+.ghs-svg{width:72px;height:72px}
+@media(max-width:760px){.ghs-grid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}.ghs-svg{width:56px;height:56px}}
+.ghs-detail{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;background:#fff6f6;border:2px solid #d0021b33;border-radius:16px;padding:16px;margin:12px 0}
+.ghs-detail .ghs-big .ghs-svg{width:140px;height:140px;animation:ghsPop .35s ease}
+@keyframes ghsPop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.ghs-detail .ghs-text{flex:1;min-width:230px}
+.ghs-detail h4{margin:0 0 6px;font-size:1.2rem}
+.ghs-act{background:#e8f7ee;border-radius:10px;padding:8px 12px}
+.ghs-game{margin-top:18px;border-top:1px dashed #b8c8d2;padding-top:12px}
+.ghs-bottles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:10px 0}
+.ghs-bottle{position:relative;display:grid;justify-items:center;gap:4px;padding:10px 8px;border:2px solid #c6d4e2;border-radius:14px;background:#fbfdfe;cursor:pointer}
+.ghs-bottle svg{width:52px;height:78px}
+.ghs-bottle .ghs-slot{position:absolute;top:34px;width:40px;height:40px;display:grid;place-items:center;font-size:22px;font-weight:900;color:#8aa3ad;background:#ffffffd9;border:2px dashed #8aa3ad;border-radius:8px}
+.ghs-bottle.done .ghs-slot{border-style:solid;border-color:#2e9d5b}
+.ghs-bottle .ghs-slot .ghs-svg{width:34px;height:34px}
+.ghs-bottle small{font-weight:800;color:#184653}
+.ghs-bottle em{font-size:11.5px;font-style:normal;color:#52717a;text-align:center;line-height:1.25}
+.ghs-bottle.done{border-color:#2e9d5b;background:#f2faf6}
+.ghs-tray{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.ghs-chip{display:grid;justify-items:center;gap:3px;padding:7px;border:2px solid #c6d4e2;border-radius:12px;background:#fff;cursor:pointer}
+.ghs-chip .ghs-svg{width:46px;height:46px}
+.ghs-chip small{font-size:10.5px;font-weight:700;color:#30505c;max-width:92px;text-align:center;line-height:1.15}
+.ghs-chip.picked{border-color:#1d8a5f;background:#e8f7ee;box-shadow:0 0 0 3px #1d8a5f33}
+.ghs-chip.used{opacity:.35}
+/* Probearbeit: Piktogramme groesser und kontrastreicher */
+.cp-field img{width:96px;height:96px;border:2px solid #d0021b55;border-radius:10px;background:#fff;padding:4px}
+@media(prefers-reduced-motion:reduce){.ghs-detail .ghs-big .ghs-svg{animation:none}}
