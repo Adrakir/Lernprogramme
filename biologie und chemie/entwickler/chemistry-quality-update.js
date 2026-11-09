@@ -39,8 +39,6 @@
     const scene=$('safetyScene');
     if(scene){
       scene.insertAdjacentHTML('beforebegin',`<div class="benno-card">${benno}<div><h3>Benno Brenner: Erst sicher handeln, dann forschen!</h3><p>Im Labor wird nichts probiert oder eigenmächtig bedient. Wenn etwas passiert, informierst du sofort die Lehrkraft.</p><ul class="benno-rules"><li>🥽 Schutzbrille aufsetzen und Kittel schließen.</li><li>💇 Lange Haare zusammenbinden.</li><li>🚫 Nicht essen, trinken oder Chemikalien berühren.</li><li>🔥 Brenner nie allein lassen; nur mit Erlaubnis bedienen.</li><li>🎒 Taschen aus den Laufwegen räumen.</li><li>🧪 Verschüttetes nicht selbst anfassen, sondern melden.</li></ul></div></div>`);
-      const hair=scene.querySelector('svg path[d="M380 45q22 10 11 36"]');
-      if(hair)hair.setAttribute('d','M380 45q-9-10-24-3');
     }
     const columns=safety.querySelector('.columns');
     if(columns)columns.insertAdjacentHTML('afterend',`<section class="panel safety-quiz" aria-labelledby="safetyQuizTitle"><h3 id="safetyQuizTitle">🎯 Benno fragt nach: Laborregeln üben</h3><p id="safetyQuizStep" aria-live="polite"></p><p id="safetyQuizQuestion"></p><div class="quiz-answers" id="safetyQuizAnswers"></div><div class="feedback" id="safetyQuizFeedback" role="status" aria-live="polite">Wähle die sicherste Handlung.</div><div class="btn-row"><button class="btn" id="safetyQuizRestart" type="button">Quiz neu starten</button></div></section>`);

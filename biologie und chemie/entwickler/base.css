@@ -306,7 +306,8 @@ body.high-contrast .mission-scene{background:#eef4f3}
 
 /* Wärmeleitfähigkeit: Material-Optik */
 .th-rod-head svg{width:26px;height:16px;border-radius:4px;flex:none;margin-right:6px;vertical-align:-2px}
-#page-thermal .th-rod.matlook-0{border-left:14px solid #c46a35}#page-thermal .th-rod.matlook-1{border-left:14px solid #8a949a}#page-thermal .th-rod.matlook-2{border-left:14px solid #a77b4b}#page-thermal .th-rod.matlook-3{border-left:14px solid #e36a8a}
+#page-thermal .th-rod.matlook-0{border-left:14px solid #c46a35;background:linear-gradient(180deg,#e2925c,#c46a35 45%,#9c4f22)}#page-thermal .th-rod.matlook-1{border-left:14px solid #8a949a;background:linear-gradient(180deg,#d3dade,#8a949a 45%,#6f7a81)}#page-thermal .th-rod.matlook-2{border-left:14px solid #a77b4b;background:repeating-linear-gradient(96deg,#b98a54 0 18px,#a77b4b 18px 26px,#8f6336 26px 30px)}#page-thermal .th-rod.matlook-3{border-left:14px solid #e36a8a;background:linear-gradient(180deg,#f0a1b7,#e36a8a 45%,#c74e6f)}
+.sheet-art-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:10px;margin:12px 0}.sheet-art-row figure{margin:0;text-align:center;background:#f6fafa;border:1px solid var(--line);border-radius:10px;padding:8px 4px}.sheet-art-row svg{width:74px;height:62px}.sheet-art-row figcaption{font-size:12px;color:var(--muted)}.sheet-illustration{margin:12px 0}.sheet-illustration img,.sheet-illustration svg{display:block;width:100%;max-width:560px;height:auto;border-radius:12px;border:1px solid var(--line)}
 
 /* Forscherprotokoll: Material & Skizzenlabor */
 .v4material{border:1px solid var(--line,#d6dee8);border-radius:14px;padding:10px 14px 14px;margin:6px 0}

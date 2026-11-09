@@ -21,8 +21,8 @@ function render(){
  materials.forEach((m,i)=>el('thRod'+i).querySelectorAll('span').forEach((cell,j)=>{
   // Deliberately qualitative: no temperatures, elapsed seconds or conductivity values.
   const warmth=step===0?0:Math.min(1,(step/10)*Math.exp(-j/(1+m[2]*9)));
-  const cold=[162,215,234],hot=[237,137,63];
-  cell.style.backgroundColor=`rgb(${cold.map((v,k)=>Math.round(v+(hot[k]-v)*warmth)).join(',')})`;
+  // Orange overlay over the material texture: cool cells stay transparent and show the material.
+  cell.style.backgroundColor=`rgba(234,112,43,${(warmth*.88).toFixed(3)})`;
  }));
  el('thObservation').textContent=step===0?'Noch nicht erwärmt: Alle Stäbe haben dieselbe Anfangstemperatur. Vermute und starte den Vergleich oder bewege den Regler.':step<5?'Die linken Enden werden erwärmt. Beobachte, wie unterschiedlich sich die Wärme im Modell nach rechts verteilt.':'Die Metallstäbe geben Wärme gut weiter. Bei trockenem Holz und dem gezeigten Kunststoff bleibt die Erwärmung am rechten Ende im Modell deutlich geringer.';
  const choice=document.querySelector('input[name="thPrediction"]:checked');

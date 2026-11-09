@@ -37,6 +37,12 @@ Direkt unter der Überschrift der Seite **Siedetemperatur** steht ein interaktiv
 - **Teilchenlupe:** Sie hat die Stufen ×1, ×2, ×4 und ×8 und wird DPR-gerecht und unverzerrt gezeichnet. Bei ×4 und ×8 sind Wassermoleküle (O/H), Ionen mit Hydrathülle, Zuckermoleküle und das Ionengitter zu sehen.
 - **Finde die Laborfehler:** Es gibt sieben gezeichnete Laborszenen mit je vier versteckten Gefahren und harmlosen Ablenkstellen. Lösungskarten erscheinen erst, wenn eine Gefahr gefunden ist.
 
+## Lernheft: Übersicht mit Bildern und Nachüben
+
+Die Lernheft-Seite zeigt Bilder direkt in den Kapiteln: acht Gerätezeichnungen (aus `art` in `core.js`, befüllt über `content-corrections.js`), das Laborszenen-Bild aus dem gedruckten Lernheft (zur Laufzeit vom Sicherheitskapitel geklont, keine doppelte Einbettung), ein Flammenvergleich und die Topf-Grafik. Bei **Labor-Missionen** führt ein eigener Knopf zurück zur Lernübersicht.
+
+Beim persönlichen Nachüben (**Deine Fehler verstehen und verbessern**) werden eigene Fehler aus der Klassenarbeit um weitere Fragen aus dem `quizBank` zu denselben Themen ergänzt, bis mindestens sechs Aufgaben bereitstehen. Die vier Materialstäbe im Wärmeleitfähigkeits-Vergleich zeigen echte Materialoberflächen (Kupfer, Stahl, Holzmaserung, Kunststoff); die Erwärmung liegt als oranger Schleier darüber.
+
 ## Lernpfad: Schritt „Erklären“
 
 Jedes Kapitel hat zuerst einen Satzbaukasten mit Lückenauswahl, Prüfung und Übernahme ins Textfeld. Danach folgt eine automatische Schlüsselwort-Rückmeldung zu jedem Kriterium mit Tipps. Erkannte Kriterien werden in der Selbsteinschätzung vorab angehakt.

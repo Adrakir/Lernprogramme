@@ -72,11 +72,15 @@ if(methodPage){
 
 const safetyPage=document.getElementById('page-safety');
 if(safetyPage){
- const prompt=safetyPage.querySelector('.page-head p');if(prompt)prompt.innerHTML='Sechs Gefahren sind im Bild mit einem <b>?</b> markiert. Tippe jede markierte Stelle an und lies rechts nach, wie du dich richtig verhältst.';
- const hair=safetyPage.querySelector('[data-safety="1"]');if(hair){hair.style.left='48%';hair.style.top='21%';hair.setAttribute('aria-label','Lose Haare untersuchen')}
- const svg=safetyPage.querySelector('#safetyScene svg');
- if(svg)svg.insertAdjacentHTML('beforeend',`<g aria-hidden="true" pointer-events="none"><path d="M320 78Q304 92 309 119Q314 137 306 153M332 82Q319 98 323 123Q327 140 319 157M346 82Q337 99 342 120Q348 137 338 151" fill="none" stroke="#342b28" stroke-width="7" stroke-linecap="round"/><path d="M314 150q8 7 15 1" fill="none" stroke="#c07a47" stroke-width="3"/><rect x="178" y="328" width="103" height="45" rx="12" fill="#e8a34f" stroke="#6e5878" stroke-width="4"/><path d="M201 327q6-23 26-19q20 4 25 19M191 346q37 14 77 0" fill="none" stroke="#604a6d" stroke-width="7" stroke-linecap="round"/><rect x="205" y="345" width="52" height="23" rx="6" fill="#f6d89c" stroke="#805d4a" stroke-width="3"/><path d="M209 349h44M211 366l-10 10M252 366l12 10" stroke="#805d4a" stroke-width="3"/><text x="231" y="361" text-anchor="middle" font-size="9" font-weight="800" fill="#5b4a55">TASCHE</text></g>`);
+ const prompt=safetyPage.querySelector('.page-head p');if(prompt)prompt.innerHTML='Das Bild stammt aus deinem Lernheft: Sechs Gefahren sind mit einem <b>?</b> markiert. Tippe jede markierte Stelle an und lies rechts nach, wie du dich richtig verhältst.';
 }
+
+// Lernheft-Übersicht: Bilder zu Geräten, Laborregeln bereitstellen
+const sheetDeviceArt=document.getElementById('sheetDeviceArt');
+if(sheetDeviceArt&&typeof art!=='undefined'&&typeof makeSvg==='function')sheetDeviceArt.innerHTML=['Reagenzglas','Becherglas','Messzylinder','Trichter','Glasstab','Dreifuß','Drahtnetz','Gasbrenner'].map(n=>`<figure class="sheet-device">${makeSvg(art[n])}<figcaption>${n}</figcaption></figure>`).join('');
+const sheetSafetyArt=document.getElementById('sheetSafetyArt');
+const safetySceneImg=document.querySelector('#safetyScene img');
+if(sheetSafetyArt&&safetySceneImg)sheetSafetyArt.appendChild(safetySceneImg.cloneNode());
 
 // Neues Spiel in der Chemie-Spielwelt: Geräte-Duo (Paare finden)
 const playPage=document.getElementById('page-v4play');
