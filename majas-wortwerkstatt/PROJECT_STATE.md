@@ -18,6 +18,16 @@
 - [x] **Speicherkompatibilität:** vorhandener Sternenbeutel, Outfitauswahl und lokale Lernstände nicht umbenannt; die bereits bestehende JSON-Export-/Importfunktion aus `maja-plus.js` bleibt verfügbar.
 - [x] **Übergabe-Grundlage:** `AGENTS.md`, diese Statusdatei, `README.md`, Root-Pointer `MAJA_WEITERMACHEN.md`, Copilot-Instruktionen, Node-Tests, GitHub-Issues und CI-Workflow angelegt.
 
+### Neu ergänzt (09.11.2026, Fortsetzung)
+- [x] **Navigationsfehler behoben:** `render()` nutzt für `#lernen` / `#abenteuer` nun eine zusammenhängende `if/else if`-Kette, sodass die Startseite das gewählte Menü nicht unmittelbar überschreibt. [Commit aab4096](https://github.com/Adrakir/Lernprogramme/commit/aab409612dc9a598579f17535bc351c6a3bc92b5).
+- [x] **Regressionstest ergänzt:** `mobile-start.test.cjs` kontrolliert die korrekte Route-Verzweigung. [Commit b156a88](https://github.com/Adrakir/Lernprogramme/commit/b156a88c0077a630d3b3e765f8e9210b90b864c7).
+- [x] **Menschliche Abnahme als Markdown gesichert:** [QA_CHECKLIST.md](./QA_CHECKLIST.md); Audio, Geräte, Wortbildung, Kleidung, Speicherstand und Berichtsformat.
+- [x] **GitHub Copilot angebunden:** [`.github/copilot-instructions.md`](../.github/copilot-instructions.md) verweist auf die bestehende Arbeitsdokumentation.
+- [x] **Playwright-Smoke-Tests angelegt:** `package.json`, `playwright.config.cjs`, `e2e/smoke.spec.cjs`; CI-Workflow `.github/workflows/maja-regression.yml` enthält einen Chromium-Job.
+- [ ] **Browser-Smoke-Tests tatsächlich erfolgreich ausgeführt:** noch nicht bestätigt. `npm install` und Playwright-Browser konnten in dieser Sitzung nicht lokal heruntergeladen werden; GitHub-Action-Status separat kontrollieren.
+- [ ] **Manuelle echte Gerätetests:** weiterhin offen, Issue #22.
+- [ ] **Zweite Kleiderschrank-Implementierung konsolidieren:** `baerli-kleiderschrank.js` wird nach `index.html` geladen und überschreibt dessen Funktionen. Bis zur Konsolidierung beide Stellen berücksichtigen, [Issue #24](https://github.com/Adrakir/Lernprogramme/issues/24).
+
 ## 2. Bereits überprüft
 
 - [x] GitHub-Updates über den verbundenen Connector erfolgreich geschrieben.
