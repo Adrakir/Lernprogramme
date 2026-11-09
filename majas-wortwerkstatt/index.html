@@ -421,7 +421,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-studio.css?v=20261108c">
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
-<link rel="stylesheet" href="./mobile-start.css?v=20261109d">
+<link rel="stylesheet" href="./mobile-start.css?v=20261109e">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109a">
 </head>
 <body>
@@ -3394,46 +3394,67 @@ function showLearningAdvisor(){
 }
 
 function showComicHub(){
-  const list=(episodes,base)=>episodes.map(item=>`<a class="maja-hub-link" href="#${base}/${item.id}/1"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.summary||'Geschichte lesen und entdecken')}</span></a>`).join('');
-  app.innerHTML=`<div class="maja-page-hub">
-    ${homeLink()}
-    <div class="maja-hub-header"><p class="kicker">${icon('book')} Geschichten und Bilder</p><h1 tabindex="-1">Alle Comics</h1>
-    <p>Alle Comics bleiben erhalten. Du kannst sie in Ruhe auswählen.</p></div>
-    <section class="maja-hub-section"><h2>Neue Bilderbücher · Bärliverlag Osnabrück</h2>
-      <div class="maja-hub-list">
-        <a class="maja-hub-link" href="./bilderbuecher/maja-baerli-schatz-im-zoo.pdf" target="_blank" rel="noopener noreferrer">
-          <strong>Maja und Bärli finden einen Schatz im Zoo</strong><span>11 illustrierte Seiten · PDF zum Lesen und Speichern</span>
-        </a>
-        <a class="maja-hub-link" href="./bilderbuecher/maja-baerli-machen-fernsehen.pdf" target="_blank" rel="noopener noreferrer">
-          <strong>Maja und Bärli machen Fernsehen</strong><span>18 illustrierte Seiten · PDF zum Lesen und Speichern</span>
-        </a>
-      </div><div class="actions"><a class="secondary" href="./bilderbuecher/">Zur Bilderbuch-Bibliothek</a></div>
-    </section>
-    <section class="maja-hub-section"><h2>Maja, Bärli und ihre Freunde</h2><div class="maja-hub-list">${list(detectiveEpisodes,'tagescomic')}</div></section>
-    <section class="maja-hub-section"><h2>Schulgeschichten</h2><div class="maja-hub-list">${list(schoolComics,'schulgeschichten')}</div></section>
-    <section class="maja-hub-section"><h2>Mit Comics üben</h2><div class="maja-hub-list">
-      <a class="maja-hub-link" href="#comicstudio"><strong>Comic-Regie</strong><span>Verstehen, nachdenken und selbst schreiben</span></a>
-      <a class="maja-hub-link" href="#baerli"><strong>Bärlis Geschichte des Tages</strong><span>Ein kurzes Abenteuer zum Lesen</span></a>
-    </div></section>
+ const entries=[
+  {title:'Maja und Bärli finden einen Schatz im Zoo',sub:'11 bebilderte Seiten · PDF',href:'./bilderbuecher/maja-baerli-schatz-im-zoo.pdf',external:true},
+  {title:'Maja und Bärli machen Fernsehen',sub:'18 bebilderte Seiten · PDF',href:'./bilderbuecher/maja-baerli-machen-fernsehen.pdf',external:true},
+  ...detectiveEpisodes.map(item=>({title:item.title,sub:item.summary||'Detektiv-Comic',href:'#tagescomic/'+item.id+'/1'})),
+  ...schoolComics.map(item=>({title:item.title,sub:item.summary||'Schulgeschichte',href:'#schulgeschichten/'+item.id+'/1'})),
+  {title:'Comic-Regie',sub:'Eigene Sprechblasen und Dialoge schreiben',href:'#comicstudio'},
+  {title:'Bärlis Geschichte des Tages',sub:'Ein kleines Abenteuer lesen',href:'#baerli'}
+ ];
+ const pageParam=Number(location.hash.slice(1).split('/')[1]),perPage=4,total=Math.max(1,Math.ceil(entries.length/perPage));
+ const page=Number.isInteger(pageParam)&&pageParam>0?Math.min(total,pageParam):1;
+ const visible=entries.slice((page-1)*perPage,page*perPage);
+ app.innerHTML=`<div class="maja-page-hub maja-paged-list">
+   ${homeLink()}
+   <div class="maja-hub-header"><p class="kicker">${icon('comic')} Geschichten und Bilder</p>
+    <h1 tabindex="-1">Comics und Bilderbücher</h1>
+    <p>Such dir eine Geschichte aus. Es sind immer nur vier Angebote gleichzeitig zu sehen.</p></div>
+   <nav class="maja-hub-list" aria-label="Vier Comics auf Seite ${page}">
+     ${visible.map(entry=>`<a class="maja-hub-link" href="${entry.href}" ${entry.external?'target="_blank" rel="noopener noreferrer"':''}>
+       <strong>💬 ${escapeHtml(entry.title)}</strong>
+       <span>${escapeHtml(entry.sub)}</span>
+     </a>`).join('')}
+   </nav>
+   <nav class="maja-hub-pagination" aria-label="Comic-Seiten wechseln">
+     ${page>1?`<a class="secondary" href="#comics/${page-1}">← Zurück</a>`:''}
+     <span>Seite ${page} von ${total}</span>
+     ${page<total?`<a class="primary" href="#comics/${page+1}">Weiter →</a>`:''}
+   </nav>
+   <div class="actions"><a class="secondary" href="./bilderbuecher/">Bilderbuch-Bibliothek</a><a class="secondary" href="#abenteuer">Alle Abenteuer</a></div>
   </div>`;
 }
-
 function showStationHub(){
-  const descriptions=[
-    'Nomen, Verben und Adjektive entdecken','Mit Endungen neue Nomen bilden',
-    'Wortbausteine ergänzen','Nomen zusammensetzen',
-    'Verben verändern','Adjektive vergleichen','Großschreibung üben'
-  ];
-  app.innerHTML=`<div class="maja-page-hub">${homeLink()}
-    <div class="maja-hub-header"><p class="kicker">${icon('book')} Deine Lernstationen</p><h1 tabindex="-1">Alle Themen</h1>
-    <p>Such dir genau ein Thema aus. Du kannst später jederzeit zurückkommen.</p></div>
-    <div class="station-grid">${units.map((u,i)=>`<a class="station ${u.tone}" href="#${u.id}">
-      <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">${String(i+1).padStart(2,'0')}</span></div>
-      <h3>${escapeHtml(u.title)}</h3><p>${escapeHtml(u.description||descriptions[i]||'Deutsch lernen und üben')}</p>
-      <div class="card-foot"><span>${doneFor(u.id)} / ${(questions[u.id]||[]).length} geschafft</span>${icon('arrow')}</div></a>`).join('')}
-    <a class="station quiz sand" href="#quiz"><div class="station-top"><span class="icon-box">${icon('trophy')}</span><span class="number">QUIZ</span></div>
-      <h3>Werkstatt-Quiz</h3><p>14 gemischte Aufgaben ohne Zeitdruck</p><div class="card-foot"><span>${best===null?'Los geht es':'Rekord '+best+' / '+mixed.length}</span>${icon('arrow')}</div></a>
-    </div>
+ const descriptions=[
+  'Nomen, Verben und Adjektive entdecken','Mit Endungen neue Nomen bilden',
+  'Wortbausteine ergänzen','Nomen zusammensetzen',
+  'Verben verändern','Adjektive vergleichen','Großschreibung üben'
+ ];
+ const all=[
+   ...units.map((unit,i)=>({unit,i})),
+   {unit:null,i:units.length}
+ ];
+ const pageParam=Number(location.hash.slice(1).split('/')[1]),perPage=4,total=Math.max(1,Math.ceil(all.length/perPage));
+ const page=Number.isInteger(pageParam)&&pageParam>0?Math.min(total,pageParam):1;
+ const selected=all.slice((page-1)*perPage,page*perPage);
+ app.innerHTML=`<div class="maja-page-hub maja-paged-list">${homeLink()}
+   <div class="maja-hub-header"><p class="kicker">${icon('book')} Deine Lernstationen</p>
+     <h1 tabindex="-1">Alle Deutschthemen</h1>
+     <p>Vier Themen zur Auswahl. Weitere findest du auf der nächsten Seite.</p></div>
+   <nav class="station-grid" aria-label="Lernstationen Seite ${page}">
+     ${selected.map(({unit:u,i})=>u?`<a class="station ${u.tone}" href="#${u.id}">
+       <div class="station-top"><span class="icon-box">${icon(u.icon)}</span><span class="number">${String(i+1).padStart(2,'0')}</span></div>
+       <h3>${escapeHtml(u.title)}</h3><p>${escapeHtml(u.description||descriptions[i]||'Deutsch lernen und üben')}</p>
+       <div class="card-foot"><span>${doneFor(u.id)} / ${(questions[u.id]||[]).length} geschafft</span>${icon('arrow')}</div>
+      </a>`:
+      `<a class="station quiz sand" href="#quiz"><div class="station-top"><span class="icon-box">${icon('trophy')}</span><span class="number">QUIZ</span></div>
+       <h3>Werkstatt-Quiz</h3><p>14 gemischte Aufgaben ohne Zeitdruck</p><div class="card-foot"><span>${best===null?'Los geht es':'Rekord '+best+' / '+mixed.length}</span>${icon('arrow')}</div></a>`).join('')}
+   </nav>
+   <nav class="maja-hub-pagination" aria-label="Deutschstationen-Seiten wechseln">
+     ${page>1?`<a class="secondary" href="#stationen/${page-1}">← Zurück</a>`:''}
+     <span>Seite ${page} von ${total}</span>
+     ${page<total?`<a class="primary" href="#stationen/${page+1}">Weiter →</a>`:''}
+   </nav>
   </div>`;
 }
 function showUnit(unit){
