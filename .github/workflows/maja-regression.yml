@@ -103,6 +103,13 @@ jobs:
           name: maja-baerli-wardrobe-review
           path: majas-wortwerkstatt/qa-wardrobe-shots/*.png
           if-no-files-found: ignore
+      - name: Upload aller 39 Regen-/Weihnachtsartikel und vier Outfit-Sets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-alle-saison-outfits
+          path: majas-wortwerkstatt/qa-all-season-outfits/*.png
+          if-no-files-found: ignore
       - name: Upload Regen- und Weihnachts-Schrank-Bilder
         if: always()
         uses: actions/upload-artifact@v4
