@@ -12,6 +12,21 @@ Diese Datei enthält **Prüfschritte, keine Behauptung, dass sie bereits erfolgr
 - [ ] Aktuellen Git-Commit, URL, Gerät, Betriebssystemversion und Browser erfassen.
 - [ ] Live-Bereitstellung separat verifizieren: Die öffentliche URL muss die zuletzt aktualisierten Inhalte tatsächlich ausliefern.
 
+## Adventskalender – manuelle Abnahme (2026)
+
+**Automatisierte Tests liegen in `advent.test.cjs` und `e2e/advent.spec.cjs`.** Diese Kästchen erst nach echter Durchführung auf einem Gerät abhaken.
+
+- [ ] November: Die 24 Türen sind verschlossen, die erste Geschichte ist über die Vorschau lesbar, weder Geschenke noch Sterne werden vorzeitig gutgeschrieben.
+- [ ] 1. Dezember: Nur Türchen 1 darf geöffnet werden; die Weihnachtsmütze steht kostenlos im Kleiderschrank. Nach Seiten-Neuladen bleibt die Tür geöffnet; keine zweite Belohnung.
+- [ ] 2.–24. Dezember: Frühere Tage dürfen nachgeholt werden, zukünftige Tage bleiben verschlossen; alle 24 kurzen Geschichten in Schrift, Audio und Motiv einzeln prüfen.
+- [ ] Erste richtige Mini-Frage gibt genau einen Stern; wiederholtes Antippen, Navigieren und Neuladen geben keinen zweiten. Bei falscher Antwort gibt es eine kindgerechte Rückmeldung ohne Verlust.
+- [ ] Türchen 6/12/14: kostenlose Baumhausgegenstände bleiben auch bei noch gesperrtem Baumhaus sicher in der Möbelkiste. Möbel lassen sich nach einer bestandenen Prüfung aufstellen und nach Export/Import wiederfinden.
+- [ ] Türchen 8/16/22: geschenkte Level 4 der **bereits vorhandenen** Spiele gehen ohne Sternenkauf auf, haben Ton, Touch-Steuerung und Rückweg.
+- [ ] Bereits gekauftes Teil: statt doppeltem Gegenstand nur einmal Ersatzsterne; vorhandene Sterne und Käufe bleiben erhalten.
+- [ ] Echte iOS Safari-/iPad-/Android-Chrome-/Windows-Chrome-Tests: deutsche Vorlesestimme, Start/Stopp/Geschwindigkeit, Seitenwechsel, große Touchflächen, kein horizontales Scrollen, ausreichender Kontrast.
+- [ ] Ohne Netzwerk: nach vollständigem Laden/Installation mindestens Kalender und bereits geladene Geschichten öffnen; Medienfallback und aktualisierter PWA-Cache prüfen.
+- [ ] Öffentliche GitHub-Pages-Seite prüfen, nicht nur Quellcode und Desktop-Emulation. Keine personenbezogenen Kinder- oder Testdaten in GitHub hochladen.
+
 ## Baumhaus-/Shop-Abnahme (nach der November-Erweiterung)
 
 Automatischer Basisablauf in `baumhaus.test.cjs` und `e2e/treehouse-and-shop.spec.cjs`; alle folgenden Punkte auf echten Geräten getrennt nachweisen:
