@@ -1,0 +1,46 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const root=__dirname;
+const catalog=fs.readFileSync(path.join(root,'baerli-neue-sachen.js'),'utf8');
+const wardrobe=fs.readFileSync(path.join(root,'baerli-kleiderschrank.js'),'utf8');
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const css=fs.readFileSync(path.join(root,'baerli-kleiderschrank.css'),'utf8');
+const cache=fs.readFileSync(path.join(root,'sw.js'),'utf8');
+new vm.Script(catalog);new vm.Script(wardrobe);
+const data={window:{}};
+vm.runInNewContext(catalog,data);
+const things=data.window.MajaBaerliNeueSachen;
+assert.equal(things.length,38,'18 Kleidungsstücke und 20 Utensilien');
+const expected={huete:3,brillen:2,pullover:4,hosen:4,schals:2,schuhe:3,taschen:5,handlinks:8,handrechts:7};
+for(const [slot,total] of Object.entries(expected))assert.equal(things.filter(item=>item.slot===slot).length,total,slot);
+const ids=things.map(item=>item.id);
+assert.equal(new Set(ids).size,things.length,'jede neue Artikel-ID ist eindeutig');
+for(const item of things){
+ assert.match(item.id,/^bw26-[a-z]+$/,'feste Artikelkennung');
+ assert(item.title.length>=5,'klarer Name: '+item.id);
+ assert(Number.isInteger(item.stars)&&item.stars>=3&&item.stars<=7,'kindgerechter Sternpreis');
+ assert(item.art.length>40,'eigenes SVG-Motiv: '+item.id);
+ assert(!/<script|onload=|javascript:/i.test(item.art),'keine aktiven SVG-Inhalte');
+ assert(['huete','brillen','pullover','hosen','schals','schuhe','taschen','handlinks','handrechts'].includes(item.slot),'bekannter Platz');
+}
+assert(html.includes('<script src="./baerli-neue-sachen.js?v=20261109a"></script>'));
+assert(html.indexOf('src="./baerli-neue-sachen.js')<html.indexOf('src="./baerli-kleiderschrank.js'),'Inventar vor UI laden');
+assert(css.includes('.bw-set-try'),'Outfit-Layout');
+assert(cache.includes("  './baerli-neue-sachen.js',"),'Offline-Cache enthält Inventar');
+assert(wardrobe.includes("additions.push(...newWardrobePieces,...(window.MajaBaerliNeueSachen||[]))"),'Inventar ist eingebunden');
+assert(wardrobe.includes("const previewSlots=new Set(previews.map(slotOf))"),'Anprobe ersetzt genau einen Platz');
+assert(wardrobe.includes("const outfitIdeas=["),'Outfit-Vorschläge');
+assert(wardrobe.includes("bearOutfit[slotOf(item)]=item.id"),'gespeicherte Ausrüstung je Fach');
+const pos=html.indexOf('const bearItems=['),end=html.indexOf('];',pos)+2;
+assert(pos>=0&&end>pos,'ursprüngliches Inventar auffindbar');
+const original=vm.runInNewContext(html.slice(pos,end)+';bearItems');
+const itemNames=new Set([...original.map(item=>item.id),...things.map(item=>item.id)]);
+const allSets=[...wardrobe.matchAll(/ids:\[([^\]]+)\]/g)].flatMap(m=>[...m[1].matchAll(/'([^']+)'/g)].map(x=>x[1]));
+// Vorherige Inventare in derselben JS-Datei einbeziehen.
+const earlier=[...wardrobe.matchAll(/id:'([^']+)',title:/g)].map(x=>x[1]);
+for(const item of earlier)itemNames.add(item);
+for(const id of allSets)assert(itemNames.has(id),'Outfit verweist auf vorhandenen Artikel: '+id);
+console.log('PASS: 38 neue Artikel, 9 Fächer, Inventar/Ladefolge, freie Anprobe, Sets und Bestandsdaten.');
