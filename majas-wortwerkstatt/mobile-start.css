@@ -222,3 +222,20 @@
  .maja-door-card small{font-size:.7rem}
  .maja-journey-grid{grid-template-columns:1fr}
 }
+
+/* Testauswertung und verständliche Elternansicht */
+.prep-error-guide{margin:16px 0;padding:14px;border-left:5px solid #bb725b;border-radius:13px;background:#fff5eb}
+.prep-error-guide h3{margin:0 0 8px}
+.prep-error-guide li{margin-bottom:7px}
+.prep-error-guide .secondary{display:inline-block;margin-top:8px}
+.prep-success-message{padding:12px;background:#ebf7ec;border-left:5px solid #46856b;border-radius:10px}
+.maja-parent-snapshot{margin-top:14px}
+.maja-parent-progress{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.maja-parent-skill{padding:15px;border:1px solid #c7d9cb;background:#fafdf8;border-radius:15px}
+.maja-parent-skill h3{margin:0 0 5px;font-size:1.12rem}
+.maja-parent-skill p{font-size:.92rem;line-height:1.45;margin-bottom:9px}
+.maja-parent-skill strong{font-size:.9rem}
+.maja-parent-bar{height:13px;background:#e5ece8;border-radius:20px;overflow:hidden;margin:8px 0}
+.maja-parent-bar span{display:block;background:#4e9576;height:100%;border-radius:20px}
+.maja-parent-pending{font-style:italic;color:var(--muted)}
+@media(max-width:620px){.maja-parent-progress{grid-template-columns:1fr}.maja-parent-skill{padding:11px}}
