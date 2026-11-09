@@ -30,6 +30,10 @@ Die Schulcomics haben deutlich erkennbare Sprechblasen unter den Zeichnungen. Be
 
 Neue automatische Tests: `e2e/learning-and-comics.spec.cjs` und `pruefungen-comics.test.cjs`. Ergebnisse und offene echte Gerätetests stehen in [QA_BEFUNDE_2026-11-09.md](./QA_BEFUNDE_2026-11-09.md).
 
+### Comics ohne lange Scrollseiten auf Smartphones
+
+Auf schmalen Displays ist pro Comicseite jetzt zunächst **nur ein Bild sichtbar**. Über „Vorheriges Bild“ und „Nächstes Bild“ blättert das Kind durch die Szenen; nach der letzten Szene führt der Weiter-Knopf direkt zur nächsten Comicseite oder zur passenden Übersicht. Die Anzeige „Bild x von y“ zeigt den Fortschritt. Bildvergrößerung und Comic-Kino-Vorlesen bleiben erhalten. Auf Desktop bleiben mehrere Panels pro Seite sichtbar. Die Originalbildtafeln wurden dabei nicht neu generiert oder ersetzt.
+
 ## Für Eltern und Lehrkräfte
 
 - `#erwachsene`: Übersicht mit tatsächlich vorhandenen Bearbeitungen; ein fehlender Wert wird **nicht** als Leistungsurteil interpretiert.
