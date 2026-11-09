@@ -102,3 +102,13 @@
 @media(max-width:350px){.adv-door{min-height:148px}.adv-door-number{font-size:1.7rem}.adv-door-icon{height:48px;font-size:2rem}.adv-page-link{font-size:.74rem}}
 @media(prefers-reduced-motion:reduce){.adv-door{transition:none}}
 @media print{.adv-reader,.adv-pages,.adv-actions,.adv-bottom,.adv-claim{display:none}}
+
+/* Startseiten-Hinweis ergänzt die vertraute 3+4-Kachelübersicht, ohne sie zu ersetzen. */
+.maja-advent-highlight{display:flex;align-items:center;gap:13px;min-height:96px;margin:15px 0 7px;padding:9px 15px;border:2px solid #c8a86a;border-radius:19px;background:linear-gradient(110deg,#e6f0e0,#fff4cf);color:#265046;text-decoration:none;box-shadow:0 4px 0 #e6dbbf}
+.maja-advent-highlight img{display:block;flex:none;width:75px;height:75px;object-fit:cover;border:3px solid #cba86e;border-radius:15px}
+.maja-advent-highlight>span:nth-child(2){display:flex;flex:1;min-width:0;flex-direction:column;gap:5px}
+.maja-advent-highlight strong{font-size:clamp(1.06rem,2.7vw,1.4rem);line-height:1.2}
+.maja-advent-highlight small{font-size:.85rem;line-height:1.32;color:#47635b}
+.maja-advent-arrow{font-size:2.1rem;flex:none}
+.maja-advent-highlight:focus-visible{outline:4px solid #bd7e41;outline-offset:3px}
+@media(max-width:450px){.maja-advent-highlight{padding:8px;gap:9px;min-height:82px}.maja-advent-highlight img{width:65px;height:65px}.maja-advent-highlight strong{font-size:1rem}.maja-advent-highlight small{font-size:.75rem}.maja-advent-arrow{font-size:1.4rem}}
