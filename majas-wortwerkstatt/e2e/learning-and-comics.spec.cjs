@@ -4,6 +4,8 @@
  * Emulated mobile viewport is NOT a real iOS/Android/audio test.
  */
 const {test,expect}=require('@playwright/test');
+const fs=require('node:fs');
+const path=require('node:path');
 const route=hash=>'/majas-wortwerkstatt/#'+hash;
 const desktop=testInfo=>testInfo.project.name.includes('desktop');
 const mobile=testInfo=>testInfo.project.name.includes('mobile');
@@ -74,6 +76,16 @@ test('Acht Comic-Einstiege – Bilder, Vergrößern, keine Querscroller',async (
     await expect(artwork).toBeVisible();
     await expect(page.locator('.kino-panel-wrap')).toHaveCount(school?2:4);
     await expect(page.locator('.kino-dialog')).toHaveCount(1);
+    // Reproduzierbare Bildprüfung: je drei Comicseiten in Desktop und Mobile.
+    if(['schulgeschichten/lesezeichen/1','tagescomic/melody-und-die-hausaufgaben/1','tagescomic/tom-und-der-schulhund/1'].includes(hash)){
+      const folder=path.join(__dirname,'..','qa-comic-shots');
+      fs.mkdirSync(folder,{recursive:true});
+      const safe=hash.split('/')[1];
+      await page.locator(school?'.comic-panels':'.detective-panels').screenshot({
+        path:path.join(folder,testInfo.project.name+'-'+safe+'.png'),
+        animations:'disabled'
+      });
+    }
     await page.locator('[data-kino-zoom="0"]').click();
     await expect(page.locator('.kino-dialog')).toHaveAttribute('open','');
     await expect(page.locator('.kino-zoom-art .comic-art,.kino-zoom-art .detective-art')).toHaveCount(1);
