@@ -16,6 +16,16 @@ Eine eigenständige, interaktive Deutschlernapp mit Maja, Bärli, Fuji und Minka
 
 Die Auswahl der Computerstimmen hängt von den Stimmen ab, die auf dem jeweiligen Gerät und im Browser vorhanden sind. Die App kann nicht garantieren, dass jede gewünschte Stimme überall verfügbar ist.
 
+## Bärlis Adventskalender – 24 Türchen
+
+**Direktlink ohne ChatGPT-Anmeldung:** https://adrakir.github.io/Lernprogramme/majas-wortwerkstatt/#advent
+
+Bärli hat im Advent **24 eigene kleine Dezembergeschichten**. Hinter jedem Türchen wartet eine virtuelle Überraschung: Kleidung für den Schrank, Möbel/Dekoration für das Baumhaus oder ein freies Level eines bestehenden Minispiels. Die Geschichte kann mit einer deutschen Computerstimme in verschiedenen Tempi vorgelesen werden. Eine freiwillige Deutschfrage bringt nach richtiger Antwort einen zusätzlichen Stern.
+
+Die Türchen öffnen sich **vom 1. bis 24. Dezember** jeweils ab ihrem Tag; verpasste Türchen bleiben später im Dezember öffnbar. Bis dahin zeigt der Kalender eine **Geschichten-Vorschau ohne Geschenk**. Die Übersicht hat auf dem Handy nur sechs große Türen je Seite, auf vier Seiten. Ein bebilderter Adventhinweis ergänzt die bekannte Startseite; die bekannten drei Themen und vier Bildkacheln bleiben unverändert.
+
+Adventgeschenke werden ohne Kosten und ohne echte Bestellungen dauerhaft gespeichert. Geschenkte Baumhausmöbel stehen zunächst in der Möbelkiste. Das Baumhaus öffnet sich unverändert erst nach mindestens einer Prüfung mit 80 Prozent. Der Shop „Bärli AG Osnabrück“ ist **fiktiv**, ohne Login, Zahlungsdaten oder Versand. Weitere Details und die 24 Tag-Geschenke stehen in [ADVENT_KONZEPT.md](./ADVENT_KONZEPT.md).
+
 ## Bärlis Baumhaus und fiktive Bärli AG Osnabrück (November 2026)
 
 Die öffentliche App hat nun den zusätzlichen, freiwilligen Bereich **[Bärlis Baumhaus](https://adrakir.github.io/Lernprogramme/majas-wortwerkstatt/#baumhaus)**. Die bisherige Startseite mit den drei Lernpiktogrammen und vier bebilderten Angeboten bleibt unverändert; „Bärlis Baumhaus“ ist ein weiterer Link.
