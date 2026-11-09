@@ -9,9 +9,11 @@ for(const snippet of [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>
  new vm.Script(snippet);
 }
 assert.match(html,/mobile-start\.css\?v=20261109e/,'versioned mobile stylesheet included');
-for(const route of ["if(page==='lernen'||page==='abenteuer')showJourneyHub(page)","if(page==='lernberater')showLearningAdvisor()","else if(page==='comics')showComicHub()","else if(page==='stationen')showStationHub()"]){
+for(const route of ["if(page==='lernen'||page==='abenteuer')showJourneyHub(page)","else if(page==='lernberater')showLearningAdvisor()","else if(page==='comics')showComicHub()","else if(page==='stationen')showStationHub()"]){
  assert(html.includes(route),'preserve route: '+route);
 }
+const renderBranch=html.slice(html.lastIndexOf('function render('));
+assert.match(renderBranch,/if\(page==='lernen'\|\|page==='abenteuer'\)showJourneyHub\(page\);\s*else if\(page==='lernberater'\)showLearningAdvisor\(\)/,'learning/adventure cannot be overwritten by home');
 const home=html.slice(html.indexOf('function showHome(){'),html.indexOf('function showLearningAdvisor(){'));
 assert(home.includes('Deutsch lernen')&&home.includes('Abenteuer erleben'),'two separate entry doors');
 assert(home.includes('href="#lernen"')&&home.includes('href="#abenteuer"'),'two modes linked');
