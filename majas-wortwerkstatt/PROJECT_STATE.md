@@ -4,6 +4,13 @@
 
 > **Wichtig:** Diese Datei ist die Übergabestelle zwischen ChatGPT, GitHub Copilot und anderen KI-Assistenten. Aussagen über "fertig" beziehen sich auf gespeicherten Code, **nicht automatisch** auf browsergetestete oder öffentlich ausgerollte Funktion. Ein neuer Bearbeiter überprüft immer den aktuellen HEAD.
 
+### Anschließende Hörtest- und Comicverbesserung (09.11.2026)
+- [x] **Prüfungsgerechter Hörtest:** Volltext im Abschlusstest verborgen; Lesehilfe in Übung/Anleitung erhalten; erneut auf „Anhören“ startet die Aufnahme neu. Keine Änderungen an alten Lernständen.
+- [x] **Comicbläschen besser lesbar:** Schulcomic-Dialoge als Sprechblasen unter Bildern; Detektivcomics mit umschaltbarer Darstellung, auf Desktop standardmäßig im Bild und auf schmalen Geräten lesefreundlich darunter; wirkungslosen Umschalter bei Schulcomics verborgen.
+- [x] **Neue vollständige Chromium-Tests:** `e2e/learning-and-comics.spec.cjs` für 5 Hörtests, 5 Rechtschreibtests, mobile Beispiele, 8 Comiceinstiege, Bildvergrößerung und Sprechblasenmodus. Node-Test `pruefungen-comics.test.cjs` prüft Testdaten/Comicdateien; GitHub-Actions-Workflow erweitert. Mindestens ein CI-Lauf nach Testintegration erfolgreich: [Run 42698714838](https://github.com/Adrakir/Lernprogramme/actions/runs/42698714838).
+- [x] **Offline-Aktualisierung:** Comic-JS/CSS-Dateiversionen erhöht und PWA-Cache auf v3 aktualisiert.
+- [ ] **Bleibt offen:** Auf echten Geräten Comic-Sprechblasenpositionen, Bilder/Zoom und tatsächlichen Ton hören; abschließende menschliche Bildqualitätskontrolle. CI-Emulation ersetzt keine Geräteabnahme.
+
 ### Qualitätsprüfung und Schrank-Erweiterung (09.11.2026)
 - [x] **Zehn Klassenarbeitstest-Sets quellcodeseitig geprüft:** 5 Hörtests mit je 5 Fragen und zugeordneten MP3-Dateien; 5 Rechtschreibtests mit je 15 Aufgaben. Die Lösungen wurden gegen Texte/Wortformen kontrolliert. Prüfbericht: [QA_BEFUNDE_2026-11-09.md](./QA_BEFUNDE_2026-11-09.md).
 - [x] **Spelling-Korrektur:** In Test 4 bei `Stock` unplausibles `Stogg` durch `Stok` ersetzt und verräterischen Hinweis `Stoc_` neutralisiert.
