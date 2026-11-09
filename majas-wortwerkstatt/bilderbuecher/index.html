@@ -35,7 +35,7 @@ main{max-width:930px;margin:auto;padding:16px 15px 40px}
 .book-bottom .meta{font-weight:800;color:#52665e;font-size:.81rem}
 .open-book,.disabled-book{display:flex;align-items:center;justify-content:center;border:0;border-radius:14px;text-decoration:none;min-height:47px;background:var(--green);color:#fff;font-weight:850;width:100%;padding:9px 12px}
 .disabled-book{background:#eee9dc;color:#5f675d}
-.hint{color:var(--muted);font-size:.83rem;text-align:center;margin:18px auto;max-width:650px}
+.shelf-pages{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}.shelf-pages button{min-height:44px;border:1px solid #7da391;border-radius:12px;background:#e6f2e7;color:#164d3e;font-weight:850;padding:9px 14px}.shelf-pages button:disabled{opacity:.35}.shelf-pages span{font-size:.86rem;font-weight:800}.hint{color:var(--muted);font-size:.83rem;text-align:center;margin:18px auto;max-width:650px}
 .reader-shell{height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column}
 .reader-shell main{width:100%;flex:1;min-height:0;max-width:none;padding:6px 12px 10px;display:flex;flex-direction:column}
 .reader-bar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;min-height:47px}
@@ -83,6 +83,7 @@ const upcoming=[
  {title:'Maja und Bärli helfen dem Nikolaus',description:'Ein winterliches Abenteuer und Geschenke für Majas Geschwister.',art:'🎅🎁',klass:'nikolaus'}
 ];
 const root=document.querySelector('#root');
+let shelfPage=0;
 let book=null,pdf=null,current=1,renderTicket=0,voice=null;
 const speakStop=()=>{if('speechSynthesis' in window)window.speechSynthesis.cancel();voice=null;};
 const esc=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -96,14 +97,18 @@ function goHome(){
  history.pushState({},'',u);draw();
 }
 function shelf(){
+ const entries=[...books.map(b=>({...b,online:true})),...upcoming.map(b=>({...b,online:false}))];
+ const shown=entries.slice(shelfPage*2,shelfPage*2+2);
  document.body.className='';
  root.innerHTML='<main><div class="top"><a class="back" href="../#comics">← Majas Deutschapp</a><span class="brand">Bärliverlag Osnabrück</span></div>'
  +'<header class="hero"><img src="../baerli/baerli.webp" alt="Bärli, der braune Teddybär mit gelbem Ohrfähnchen"><h1>📚 Bärlibuch</h1><p>Wähle ein Bilderbuch aus. Du kannst dann <strong>Seite für Seite</strong> blättern – ganz ohne langes Scrollen.</p></header>'
  +'<section class="shelf" aria-label="Bärlis Bücherregal">'
  +books.map(b=>'<article class="book"><div class="book-cover '+b.klass+'"><span class="cover-art" aria-hidden="true">'+b.art+'</span><strong>'+esc(b.title)+'</strong></div><div class="book-bottom"><span class="meta">'+esc(b.meta)+'</span><p>'+esc(b.description)+'</p><button class="open-book" data-book="'+b.id+'">📖 Buch lesen →</button></div></article>').join('')
  +upcoming.map(b=>'<article class="book"><div class="book-cover '+b.klass+'"><span class="cover-art" aria-hidden="true">'+b.art+'</span><strong>'+esc(b.title)+'</strong></div><div class="book-bottom"><span class="meta">Originalbuch noch nicht online</span><p>'+esc(b.description)+'</p><span class="disabled-book">Wird noch eingepflegt</span></div></article>').join('')
- +'</section><p class="hint">Bei den beiden ersten Büchern ist das Original-PDF eingebunden. Weitere bereits erstellte Bilderbücher werden erst als lesbar angezeigt, sobald ihre Originaldateien online liegen.</p></main>';
+ +'</section><nav class="shelf-pages" aria-label="Bücherregal-Seiten"><button type="button" id="shelf-prev" '+(shelfPage===0?'disabled':'')+'>← Zurück</button><span>Regalseite '+(shelfPage+1)+' von 2</span><button type="button" id="shelf-next" '+(shelfPage===1?'disabled':'')+'>Weiter →</button></nav><p class="hint">Bei den beiden ersten Büchern ist das Original-PDF eingebunden. Weitere bereits erstellte Bilderbücher werden erst als lesbar angezeigt, sobald ihre Originaldateien online liegen.</p></main>';
  root.querySelectorAll('[data-book]').forEach(button=>button.onclick=()=>openBook(button.dataset.book));
+ root.querySelector('#shelf-prev').onclick=()=>{shelfPage=0;shelf();};
+ root.querySelector('#shelf-next').onclick=()=>{shelfPage=1;shelf();};
 }
 function reader(b){
  document.body.className='reader-shell';
