@@ -118,3 +118,18 @@ test('Detektivcomic: Sprechblasenstellung bleibt manuell wählbar',async ({page}
   await setting.setChecked(false);
   await expect(page.locator('.detective-panels')).not.toHaveClass(/kino-separated/);
 });
+
+test('Mobil: Einzelschritte führen direkt zur nächsten Comicseite',async ({page},testInfo)=>{
+  test.skip(!mobile(testInfo),'Handy-Navigation');
+  await page.goto(route('tagescomic/melody-und-die-hausaufgaben/1'),{waitUntil:'domcontentloaded'});
+  for(let i=0;i<3;i++)await page.locator('[data-kino-next]').click();
+  await expect(page.locator('.kino-step-count')).toContainText('Bild 4 von 4');
+  await page.locator('[data-kino-next]').click();
+  await expect(page).toHaveURL(/#tagescomic\/melody-und-die-hausaufgaben\/2$/);
+  await expect(page.locator('.kino-step-count')).toContainText('Bild 1 von 4');
+  await page.goto(route('schulgeschichten/lesezeichen/1'),{waitUntil:'domcontentloaded'});
+  await page.locator('[data-kino-next]').click();
+  await expect(page.locator('.kino-step-count')).toContainText('Bild 2 von 2');
+  await page.locator('[data-kino-next]').click();
+  await expect(page).toHaveURL(/#schulgeschichten\/lesezeichen\/2$/);
+});
