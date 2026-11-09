@@ -67,6 +67,13 @@ jobs:
           name: maja-baerli-wardrobe-review
           path: majas-wortwerkstatt/qa-wardrobe-shots/*.png
           if-no-files-found: ignore
+      - name: Upload Regen- und Weihnachts-Schrank-Bilder
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-saison-schrank-review
+          path: majas-wortwerkstatt/qa-season-shots/*.png
+          if-no-files-found: ignore
       - name: Upload Baumhaus and Bärli AG shop preview
         if: always()
         uses: actions/upload-artifact@v4
