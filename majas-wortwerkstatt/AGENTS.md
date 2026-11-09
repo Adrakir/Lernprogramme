@@ -4,7 +4,7 @@
 
 ## Immer in dieser Reihenfolge anfangen
 1. Den aktuellen Default-Branch `main` und die letzten Commits lesen.
-2. `majas-wortwerkstatt/PROJECT_STATE.md` und diese Datei lesen.
+2. `majas-wortwerkstatt/PROJECT_STATE.md`, [HOME_LAYOUT.md](./HOME_LAYOUT.md) und diese Datei lesen.
 3. Die GitHub-Issues [#22](https://github.com/Adrakir/Lernprogramme/issues/22) bis [#26](https://github.com/Adrakir/Lernprogramme/issues/26) prüfen. Aktualisierten Stand mit der tatsächlichen Implementierung abgleichen.
 4. `majas-wortwerkstatt/README.md`, `index.html`, `mobile-start.css`, `maja-plus.js` und vorhandene Tests prüfen.
 5. **Die erste noch offene Aufgabe** aus `PROJECT_STATE.md` oder den Issues übernehmen, nicht eine neue App oder einen Parallel-Entwurf erstellen.
@@ -13,7 +13,8 @@
 - Interaktive, kindgerechte Deutschapp Klasse 3 mit Maja, Bärli, Fuji und Minka.
 - Mobile first; iPhone, iPad, Android, Windows; große Touchflächen, gute Kontraste, klarer Fokus, Bilder und Audio.
 - Für Kinder kurze Seiten, höchstens vier Entscheidungen pro Überblicksseite, klare Zurück-/Weiter-Navigation.
-- Lernmodus: Erklären → gemeinsam üben → selbstständig üben → Tests → Fehler gezielt verbessern.
+- **Startseite:** Die vertraute Übersicht „Fit für den Kombitest“ mit 3 großen Themenpiktogrammen, „Teste dich“ und 4 bebilderten Kacheln **nicht wieder durch nur zwei Moduskarten ersetzen**. [HOME_LAYOUT.md](./HOME_LAYOUT.md) zuerst lesen.
+- Lernmodus (sekundärer Link): Erklären → gemeinsam üben → selbstständig üben → Tests → Fehler gezielt verbessern.
 - Abenteuermodus: Comics, Spiele und Bärlis Kleidung; pädagogischer Inhalt bleibt erkennbar.
 - Keine unnötigen langen Scrollseiten; Bilder und Beschriftungen passen zusammen.
 - Öffentlicher Einstieg: https://adrakir.github.io/Lernprogramme/majas-wortwerkstatt/ (nicht ohne echten Aufruf als live verifiziert melden).
@@ -50,3 +51,5 @@ Außerdem relevante bestehende `*.test.cjs` ausführen. Die Node-Tests sind nur 
 
 ## Prompt für einen neuen Chat / anderen KI-Assistenten
 > Setze die Arbeit an `Adrakir/Lernprogramme/majas-wortwerkstatt` fort. Lies zuerst `AGENTS.md` und `PROJECT_STATE.md`, dann die offenen GitHub-Issues #22–#26 und die jüngsten Commits. Prüfe den tatsächlichen Zustand; erledige die nächste offene Aufgabe in der bestehenden App und aktualisiere danach Tests, `PROJECT_STATE.md` und das Issue. Erhalte alle vorhandenen Spiele, Comics, Audios, Sterne und Lernstände. Nichts erfinden oder als live behaupten, ohne es zu prüfen.
+
+- **Kompatibilität:** Die Datei `baerli-kleiderschrank.js` darf die bekannte Startseite nicht erneut mit einem veralteten `showHome`-Wrapper verändern. Kleidungsslot-Aliase und alte lokale Käufe erhalten.
