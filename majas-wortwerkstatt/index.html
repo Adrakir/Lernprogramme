@@ -5386,7 +5386,7 @@ function render(initial=false){
   const oldRoute=route;
   route=page||'start';
   if(page==='lernen'||page==='abenteuer')showJourneyHub(page);
-  if(page==='lernberater')showLearningAdvisor();
+  else if(page==='lernberater')showLearningAdvisor();
   else if(page==='comics')showComicHub();
   else if(page==='stationen')showStationHub();
   else if(page==='figurenstimmen')window.MajaRealAudio.show();
