@@ -4,7 +4,7 @@
   "private": true,
   "description": "Regression tests for Majas Deutschapp, no user data",
   "scripts": {
-    "test:static": "node mobile-start.test.cjs && node experience.test.cjs && node pruefungen-comics.test.cjs",
+    "test:static": "node mobile-start.test.cjs && node experience.test.cjs && node pruefungen-comics.test.cjs && node baerli-inventar.test.cjs",
     "test:browser": "playwright test",
     "lint": "eslint ."
   },
