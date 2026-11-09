@@ -4994,16 +4994,51 @@ function runPrep(topic,mode,n){
  const audioTrack=questions[0].track,story=annaStories.find(s=>s.id===audioTrack);let hintCount=0,tries=0,firstCorrect=null,given='',checked=false,readingUsed=!!session.assisted;
  function save(){data[key]=session;return prepWrite(data);}
  const title=(guided?'Mit Bärli lernen':test?'Abschlusstest '+n:'Übung '+n)+' · '+prepTopics[topic].title;
- app.innerHTML=prepHeader(topic,title)+`<a class="crumb" href="#pruefung/${topic}">${icon('back')} Zum Lernweg</a>${guided?'<section class="panel maja-voice-intro"><h2>Bärli begrüßt dich</h2><p>Ein kurzer Mutmacher vor dem Lernen. Danach erklärst du den Lösungsweg selbst.</p><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärli begrüßt Maja"></audio></section>':''}${topic==='hoeren'?`<section class="panel prep-audio"><h2>${escapeHtml(story.title)}</h2><p>${guided?'Höre zuerst, wer vorkommt und wo die Geschichte spielt. Höre danach noch einmal auf die Einzelheiten.':'Du darfst den Hörtext anhalten und noch einmal hören.'}</p><audio id="prep-audio" controls preload="metadata" src="./anna-audio/${audioTrack}.mp3" aria-label="Hörtext für den Lernweg"></audio><button class="secondary" type="button" id="prep-slow">Langsamer hören</button><p id="prep-audio-message" class="inline-status" role="status"></p><details id="prep-reading"><summary>Hörtext als Lesehilfe öffnen</summary><p class="subtle">Wenn du mitliest, wird das Ergebnis als „mit Lesehilfe“ gespeichert.</p>${story.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</details></section>`:''}<section class="panel" id="prep-question"></section><section id="prep-result" hidden></section></div>`;
+ app.innerHTML=prepHeader(topic,title)+`<a class="crumb" href="#pruefung/${topic}">${icon('back')} Zum Lernweg</a>
+ ${guided?'<section class="panel maja-voice-intro"><h2>Bärli begrüßt dich</h2><p>Ein kurzer Mutmacher vor dem Lernen.</p><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärli begrüßt Maja"></audio></section>':''}
+ ${topic==='hoeren'?`<section class="panel prep-audio prep-audio-compact">
+   <h2>🎧 ${escapeHtml(story.title)}</h2>
+   <div class="prep-listen-toolbar" aria-label="Hörtext und Vorlesestimme">
+      <label for="prep-playback-mode">Vorlesen mit
+        <select id="prep-playback-mode">
+          <option value="recorded">Geschichte (Aufnahme)</option>
+          <option value="computer">Computerstimme</option>
+        </select>
+      </label>
+      <label for="prep-playback-speed">Geschwindigkeit
+        <select id="prep-playback-speed">
+          <option value="1">Normal</option>
+          <option value="0.85">Langsam</option>
+          <option value="0.7">Sehr langsam</option>
+        </select>
+      </label>
+      <label for="prep-voice-list" id="prep-voice-row" hidden>Welche Computerstimme?
+        <select id="prep-voice-list"><option value="">Automatisch auf Deutsch</option></select>
+      </label>
+   </div>
+   <div class="actions prep-play-buttons">
+     <button class="primary" type="button" id="prep-play">▶ Anhören</button>
+     <button class="secondary" type="button" id="prep-stop">■ Stopp</button>
+   </div>
+   <audio id="prep-audio" preload="metadata" src="./anna-audio/${audioTrack}.mp3" aria-label="Aufgenommene Geschichte"></audio>
+   <p id="prep-audio-message" class="inline-status" role="status" aria-live="polite"></p>
+   <details id="prep-reading" class="prep-reading-extra">
+      <summary>Ich brauche eine Lesehilfe</summary>
+      <p class="subtle">Mit geöffnetem Text wird das Ergebnis als „mit Lesehilfe“ gespeichert.</p>
+      ${story.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}
+   </details>
+  </section>`:''}
+  <section class="panel" id="prep-question"></section><section id="prep-result" hidden></section></div>`;
  const root=document.querySelector('#prep-question'),result=document.querySelector('#prep-result'),audio=document.querySelector('#prep-audio');let stopFireworks=()=>{};
- extraCleanup=()=>{audio?.pause();stopFireworks();};
- if(audio&&!test&&topic==='hoeren'){
+ let stopComputer=()=>{},detachVoices=()=>{};
+ extraCleanup=()=>{audio?.pause();stopComputer();detachVoices();stopFireworks();};
+ if(audio&&guided&&topic==='hoeren'){
   const cues=annaAudioCues[audioTrack]||[];
   if(cues.length){
    const coach=document.createElement('section');
    coach.className='prep-cue-coach';
    coach.setAttribute('aria-label','Hörtraining in Abschnitten');
-   coach.innerHTML=`<h3>Hörtraining mit Bärli</h3><p>Höre zuerst die ganze Geschichte. Höre dann einen einzelnen Abschnitt noch einmal. Was ist wichtig: Wer? Wo? Was? Warum?</p><div class="actions">${cues.map((cue,i)=>`<button type="button" class="secondary" data-cue-index="${i}">▶ Abschnitt ${i+1}</button>`).join('')}</div><label class="field" for="prep-hearing-notes">Meine Hörnotizen (freiwillig)</label><textarea id="prep-hearing-notes" class="answer" rows="2" placeholder="Wer handelt? Was geschieht?"></textarea><p class="subtle">Notizen werden nur auf diesem Gerät gespeichert.</p>`;
+   coach.innerHTML=`<details><summary>🎧 Noch einmal einen Abschnitt anhören</summary><p>Höre die Geschichte abschnittsweise und achte auf Wer? Wo? Was? Warum?</p><div class="actions">${cues.map((cue,i)=>`<button type="button" class="secondary" data-cue-index="${i}">▶ Abschnitt ${i+1}</button>`).join('')}</div><label class="field" for="prep-hearing-notes">Meine Hörnotizen (freiwillig)</label><textarea id="prep-hearing-notes" class="answer" rows="2" placeholder="Wer? Wo? Was?"></textarea></details>`;
    audio.parentElement.appendChild(coach);
    const notes=coach.querySelector('#prep-hearing-notes');notes.value=String(session.hearingNotes||'');
    notes.oninput=()=>{session.hearingNotes=notes.value;save();};
@@ -5021,9 +5056,80 @@ function runPrep(topic,mode,n){
    });
   }
  }
- if(audio){audio.onerror=()=>document.querySelector('#prep-audio-message').textContent='Der Ton lässt sich gerade nicht abspielen. Prüfe die Lautstärke oder nutze die gekennzeichnete Lesehilfe.';document.querySelector('#prep-slow').onclick=e=>{audio.playbackRate=audio.playbackRate<1?1:.8;e.target.textContent=audio.playbackRate<1?'Normale Geschwindigkeit':'Langsamer hören';};document.querySelector('#prep-reading').ontoggle=e=>{if(e.target.open){readingUsed=true;session.assisted=true;save();}};}
+
+ if(audio){
+  const modeSelect=document.querySelector('#prep-playback-mode');
+  const speedSelect=document.querySelector('#prep-playback-speed');
+  const voiceSelect=document.querySelector('#prep-voice-list');
+  const voiceRow=document.querySelector('#prep-voice-row');
+  const playButton=document.querySelector('#prep-play'),stopButton=document.querySelector('#prep-stop');
+  const status=document.querySelector('#prep-audio-message');
+  const speechAPI=window.speechSynthesis;
+  let voiceRun=0;
+  let savedMode='recorded',savedRate='1',savedVoice='';
+  try{
+   savedMode=localStorage.getItem('maja-prep-voice-mode-v1')||'recorded';
+   savedRate=localStorage.getItem('maja-prep-voice-rate-v1')||'1';
+   savedVoice=localStorage.getItem('maja-prep-voice-name-v1')||'';
+  }catch{}
+  modeSelect.value=savedMode==='computer'?'computer':'recorded';
+  speedSelect.value=['1','0.85','0.7'].includes(savedRate)?savedRate:'1';
+  function refreshVoiceList(){
+   if(!voiceSelect.isConnected)return;
+   const voices=(speechAPI?.getVoices?.()||[]).filter(v=>/^de([-_]|$)/i.test(v.lang));
+   const chosen=voiceSelect.value||savedVoice;
+   voiceSelect.innerHTML='<option value="">Automatisch auf Deutsch</option>';
+   voices.forEach(voice=>{
+     const option=document.createElement('option');
+     option.value=voice.voiceURI;
+     option.textContent=voice.name+(voice.localService?' (Gerät)':'');
+     voiceSelect.append(option);
+   });
+   if(voices.some(v=>v.voiceURI===chosen))voiceSelect.value=chosen;
+  }
+  refreshVoiceList();
+  speechAPI?.addEventListener?.('voiceschanged',refreshVoiceList);
+  detachVoices=()=>speechAPI?.removeEventListener?.('voiceschanged',refreshVoiceList);
+  stopComputer=()=>{voiceRun++;speechAPI?.cancel();};
+  const setMode=()=>{voiceRow.hidden=modeSelect.value!=='computer';audio.pause();stopComputer();status.textContent='';try{localStorage.setItem('maja-prep-voice-mode-v1',modeSelect.value);}catch{}};
+  setMode();
+  speedSelect.onchange=()=>{audio.playbackRate=Number(speedSelect.value);stopComputer();try{localStorage.setItem('maja-prep-voice-rate-v1',speedSelect.value);}catch{}};
+  voiceSelect.onchange=()=>{stopComputer();try{localStorage.setItem('maja-prep-voice-name-v1',voiceSelect.value);}catch{}};
+  modeSelect.onchange=setMode;
+  const playComputer=()=>{
+   if(!speechAPI?.speak||!window.SpeechSynthesisUtterance){status.textContent='Auf diesem Gerät ist keine Computerstimme verfügbar. Bitte die Aufnahme auswählen.';return;}
+   audio.pause();stopComputer();refreshVoiceList();
+   const voice=speechAPI.getVoices().find(v=>v.voiceURI===voiceSelect.value)
+    ||speechAPI.getVoices().find(v=>/^de([-_]|$)/i.test(v.lang));
+   const sentences=story.paragraphs.flatMap(p=>p.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[p]).map(x=>x.trim()).filter(Boolean);
+   let cursor=0;const token=voiceRun;
+   const next=()=>{
+    if(token!==voiceRun||!document.contains(playButton))return;
+    if(cursor>=sentences.length){status.textContent='Die Geschichte ist zu Ende.';return;}
+    const utterance=new SpeechSynthesisUtterance(sentences[cursor++]);
+    utterance.lang='de-DE';utterance.rate=Number(speedSelect.value);
+    if(voice)utterance.voice=voice;
+    utterance.onend=next;
+    utterance.onerror=()=>{if(token===voiceRun)status.textContent='Die Computerstimme wurde unterbrochen. Tippe erneut auf Anhören.';};
+    speechAPI.speak(utterance);
+   };
+   status.textContent='Die Computerstimme liest vor.';
+   next();
+  };
+  playButton.onclick=()=>{
+   if(modeSelect.value==='computer'){playComputer();return;}
+   stopComputer();
+   audio.playbackRate=Number(speedSelect.value);
+   audio.play().then(()=>{status.textContent='Die Aufnahme läuft.';}).catch(()=>{status.textContent='Audio konnte nicht gestartet werden. Bitte Computerstimme auswählen.';});
+  };
+  stopButton.onclick=()=>{audio.pause();stopComputer();status.textContent='Gestoppt.';};
+  audio.onended=()=>{status.textContent='Die Geschichte ist zu Ende.';};
+  audio.onerror=()=>{if(modeSelect.value==='recorded')status.textContent='Die Aufnahme konnte nicht geladen werden. Wähle Computerstimme.';};
+  document.querySelector('#prep-reading').ontoggle=e=>{if(e.target.open){readingUsed=true;session.assisted=true;save();}};
+ }
+
  function finish(){
-  session.done=true;session.assisted=readingUsed;save();root.hidden=true;audio?.pause();result.hidden=false;
+  session.done=true;session.assisted=readingUsed;save();root.hidden=true;audio?.pause();stopComputer();result.hidden=false;
   const score=prepPercent(session.answers),good=score>=80,reward=prepReward(topic,mode,n,score);
   result.innerHTML=`<div class="panel"><h2 tabindex="-1">${test?'Dein Testergebnis':'Dein Übungsergebnis'}</h2><p class="prep-score">${session.answers.filter(x=>x.correct).length} / ${questions.length} richtig · ${score} %</p><p>${test?'Gewertet wird deine erste abgegebene Antwort.':'Hier siehst du, was schon beim ersten Prüfen richtig war. Mit Hilfen hast du anschließend weitergeübt.'}${readingUsed?' Dieser Durchgang wurde mit Lesehilfe bearbeitet.':''}</p><p>${reward}</p><div id="prep-celebration"></div><h3>Dein nächster Schritt</h3><p>${good?'Gut gemacht! Wiederhole die wenigen Stellen, bei denen du noch unsicher warst.':'Ein Test zeigt dir, was du als Nächstes üben kannst. Starte mit den Erklärungen und probiere später eine weitere Variante.'}</p><div class="actions"><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Geführt wiederholen</a><a class="secondary" href="#pruefung/${topic}/ueben/${n}">Passende Übung</a><a class="secondary" href="#pruefung/${topic}">Weitere Tests</a><a class="secondary" href="#fehlertraining/${topic}">Meine Fehler gezielt üben</a><button class="plain" type="button" id="prep-retry">Diesen Durchgang neu starten</button></div><h3>Aufgaben und Erklärungen</h3><ol class="prep-review">${questions.map((q,i)=>{const a=session.answers[i];return `<li class="${a.correct?'prep-right':'prep-wrong'}"><strong>${escapeHtml(q.prompt)} ${escapeHtml(q.context||'')}</strong><p>${a.correct?'✓ Richtig':'Noch üben'} · Deine erste Antwort: ${escapeHtml(a.given||'keine Antwort')}</p><p>Richtig: <strong>${escapeHtml(q.answer)}</strong></p><p>${escapeHtml(q.why)}</p>${!a.correct?`<a href="#${q.skill==='hoeren'?'pruefung/hoeren/ueben/'+n:q.skill==='verlaengern'?'verlaengern':'endungen'}">Diesen Bereich üben</a>`:''}</li>`;}).join('')}</ol></div>`;
   if(test&&good)stopFireworks=prepFireworks(document.querySelector('#prep-celebration'));
@@ -5034,7 +5140,7 @@ function runPrep(topic,mode,n){
   const q=questions[session.answers.length];hintCount=0;tries=0;firstCorrect=typeof session.firstCorrect==='boolean'?session.firstCorrect:null;checked=false;given=typeof session.draft==='string'?session.draft:'';
   const options=q.options?gameShuffle(q.options):[];
   const coach=topic==='hoeren'?'Bärlis Hörplan: 1. Wer und wo? 2. Wichtige Einzelheiten. 3. Was geschieht zuerst? 4. Warum? Höre die passende Stelle noch einmal.':q.skill==='verlaengern'?`Bärli macht es vor: Hund → Hunde. Nach dem d hörst du ein e. Deshalb endet Hund auf d. Versuche das jetzt mit „${q.context}“.`:`Bärli erklärt: Nomen schreibt man groß. -ung, -heit, -keit und -schaft haben hier den Artikel die. Bei -nis kann der Artikel das oder die sein. Schau deshalb genau auf das einzelne Wort. Schau auf die Wortart, die Endung -${q.skill} und den passenden Artikel. Denke selbst nach, bevor du prüfst.`;
-  root.innerHTML=`<p class="kicker">Aufgabe ${session.answers.length+1} von ${questions.length}</p><div class="bar"><span style="width:${session.answers.length/questions.length*100}%"></span></div>${guided?`<div class="prep-coach"><strong>Bärli begleitet dich</strong><p>${escapeHtml(coach)}</p></div>`:''}<h2>${escapeHtml(q.prompt)}</h2>${q.context?`<div class="prep-word">${escapeHtml(q.context)}</div>`:''}<form id="prep-form">${q.type==='choice'?`<div class="options">${options.map(v=>`<button class="choice" type="button" data-prep-option="${escapeHtml(v)}" aria-pressed="false">${escapeHtml(v)}</button>`).join('')}</div>`:'<label class="field" for="prep-answer">Deine Antwort</label><input class="answer" id="prep-answer" autocomplete="off" autocapitalize="off" spellcheck="false">'}<div class="actions"><button class="primary" type="submit" id="prep-check">${test?'Antwort abgeben':'Prüfen'}</button>${test?'':'<button class="secondary" type="button" id="prep-help">Hilfe 1 von 3</button>'}</div></form><div id="prep-help-text" class="tip" hidden></div><p id="prep-feedback" class="inline-status" role="status"></p><button class="primary" type="button" id="prep-next" hidden>Weiter</button>`;
+  root.innerHTML=`<p class="kicker">Aufgabe ${session.answers.length+1} von ${questions.length}</p><div class="bar"><span style="width:${session.answers.length/questions.length*100}%"></span></div>${guided&&topic!=='hoeren'?`<div class="prep-coach"><strong>Bärli begleitet dich</strong><p>${escapeHtml(coach)}</p></div>`:''}${topic==='hoeren'?`<div class="prep-question-highlight"><span>❓ Die Frage</span><h2>${escapeHtml(q.prompt)}</h2></div>`:`<h2>${escapeHtml(q.prompt)}</h2>`}${q.context?`<div class="prep-word">${escapeHtml(q.context)}</div>`:''}<form id="prep-form">${q.type==='choice'?`<div class="options">${options.map(v=>`<button class="choice" type="button" data-prep-option="${escapeHtml(v)}" aria-pressed="false">${escapeHtml(v)}</button>`).join('')}</div>`:'<label class="field" for="prep-answer">Deine Antwort</label><input class="answer" id="prep-answer" autocomplete="off" autocapitalize="off" spellcheck="false">'}<div class="actions"><button class="primary" type="submit" id="prep-check">${test?'Antwort abgeben':'Prüfen'}</button>${test?'':'<button class="secondary" type="button" id="prep-help">Hilfe 1 von 3</button>'}</div></form><div id="prep-help-text" class="tip" hidden></div><p id="prep-feedback" class="inline-status" role="status"></p><button class="primary" type="button" id="prep-next" hidden>Weiter</button>`;
   if(q.type==='write'){const input=document.querySelector('#prep-answer');input.value=given;input.oninput=()=>{given=input.value;session.draft=given;save();};}
   else root.querySelectorAll('[data-prep-option]').forEach(b=>b.onclick=()=>{if(checked)return;given=b.dataset.prepOption;session.draft=given;root.querySelectorAll('[data-prep-option]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));save();});
   if(!test)document.querySelector('#prep-help').onclick=()=>{hintCount=Math.min(3,hintCount+1);document.querySelector('#prep-help-text').hidden=false;document.querySelector('#prep-help-text').textContent=q.hints[hintCount-1];document.querySelector('#prep-help').textContent=hintCount===3?'Alle Hilfen geöffnet':'Hilfe '+(hintCount+1)+' von 3';};
