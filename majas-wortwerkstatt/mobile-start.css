@@ -94,3 +94,55 @@
 @media(prefers-reduced-motion:reduce){
  .maja-quick-topic{transition:none}
 }
+
+
+/* Bilder statt identischer Symbole; kurze Kategorienblätter für Grundschulkinder. */
+.maja-word-symbol .maja-word-small{font-weight:900;font-size:13px;line-height:1;letter-spacing:-.06em;white-space:nowrap}
+.maja-quick-topic .maja-word-symbol{background:#f8e9bb;color:#443c20}
+.bear-wardrobe-v2 .bear-wardrobe-compact{grid-template-columns:minmax(140px,260px) minmax(0,1fr);gap:16px;padding:15px;align-items:center}
+.bear-wardrobe-v2 .bear-dress-stage{max-width:240px}
+.bear-wardrobe-v2 .bear-wardrobe-status h2{margin:0 0 7px;font-size:1.2rem}
+.bear-wardrobe-v2 .bear-wardrobe-status p{margin:0 0 9px}
+.bear-wardrobe-v2 .bear-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:12px 0}
+.bear-wardrobe-v2 .bear-category-card{display:flex;align-items:center;gap:11px;min-height:94px;padding:11px 13px;border:1px solid #cbd6d0;border-radius:16px;text-decoration:none;background:#fffdf7;color:var(--ink)}
+.bear-wardrobe-v2 .bear-category-card strong{display:block;line-height:1.22;font-size:1.05rem}
+.bear-wardrobe-v2 .bear-category-card small{display:block;font-size:.82rem;color:var(--muted)}
+.bear-wardrobe-v2 .bear-category-arrow{margin-left:auto;font-size:1.5rem;color:var(--forest)}
+.bear-wardrobe-v2 .shop-item-preview{flex:none;display:flex;align-items:center;justify-content:center;overflow:hidden;width:78px;height:78px;background:#f2e9dc;border-radius:12px}
+.bear-wardrobe-v2 .shop-item-preview svg{height:100%;width:100%;max-width:100%}
+.bear-wardrobe-v2 .bear-item-list.bear-item-pages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.bear-wardrobe-v2 .bear-item-pages .bear-item{display:flex;flex-wrap:wrap;min-height:115px;gap:10px;padding:10px;align-items:center}
+.bear-wardrobe-v2 .bear-item-pages .shop-item-copy{flex:1;min-width:90px}
+.bear-wardrobe-v2 .bear-item-pages button{margin-left:auto;min-height:44px}
+.bear-wardrobe-v2 .bear-category-heading{display:flex;flex-wrap:wrap;align-items:center;gap:11px;margin:12px 0}
+.bear-wardrobe-v2 .bear-category-heading h2{margin:0;font-size:1.25rem}
+.bear-wardrobe-v2 .bear-category-heading span{color:var(--muted);font-size:.85rem;margin-left:auto}
+.bear-wardrobe-v2 .bear-pages{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:12px auto}
+.bear-wardrobe-v2 .bear-pages a{text-align:center;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.bear-wardrobe-v2 .bear-back-links{justify-content:center;margin-top:12px}
+.bear-wardrobe-v2 #shop-status:empty{display:none}
+.bear-wardrobe-v2 .bear-category-card:hover,.bear-wardrobe-v2 .bear-category-card:focus-visible{border-color:#276b59;background:#ecf5ed}
+@media(max-width:600px){
+ .bear-wardrobe-v2 .bear-wardrobe-compact{display:flex;align-items:center;gap:10px;padding:10px}
+ .bear-wardrobe-v2 .bear-dress-stage{width:35%;max-width:140px;flex:none}
+ .bear-wardrobe-v2 .bear-wardrobe-status{flex:1;min-width:0}
+ .bear-wardrobe-v2 .bear-wardrobe-status h2{font-size:1rem}
+ .bear-wardrobe-v2 .bear-wardrobe-status p{font-size:.76rem;line-height:1.3}
+ .bear-wardrobe-v2 .bear-wardrobe-status .subtle{display:none}
+ .bear-wardrobe-v2 .bear-category-grid{gap:8px}
+ .bear-wardrobe-v2 .bear-category-card{padding:8px;min-height:90px;gap:7px}
+ .bear-wardrobe-v2 .bear-category-card strong{font-size:.88rem}
+ .bear-wardrobe-v2 .bear-category-card small{font-size:.7rem}
+ .bear-wardrobe-v2 .bear-category-card .shop-item-preview{width:56px;height:56px}
+ .bear-wardrobe-v2 .bear-item-pages .shop-item-preview{width:56px;height:56px}
+ .bear-wardrobe-v2 .bear-item-pages .bear-item{min-height:130px;justify-content:center;gap:6px}
+ .bear-wardrobe-v2 .bear-item-pages .shop-item-copy{flex-basis:calc(100% - 70px);min-width:0}
+ .bear-wardrobe-v2 .bear-item-pages .shop-item-copy strong{font-size:.82rem}
+ .bear-wardrobe-v2 .bear-item-pages button{margin:0;width:100%;font-size:.83rem}
+ .bear-wardrobe-v2 .bear-category-heading h2{font-size:1.05rem}
+ .bear-wardrobe-v2 .unit-head{margin-bottom:9px}
+}
+@media(max-width:355px){
+ .bear-wardrobe-v2 .bear-category-grid{grid-template-columns:1fr}
+ .bear-wardrobe-v2 .bear-category-card{min-height:70px}
+}
