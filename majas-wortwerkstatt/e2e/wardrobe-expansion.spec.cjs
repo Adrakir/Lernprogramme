@@ -73,3 +73,36 @@ test('Kauf und Outfit-Anziehen erhält andere Käufe und kostet nur beim Kauf St
   await page.reload({waitUntil:'domcontentloaded'});
   await expect(page.locator('.bw-figure')).toBeVisible();
 });
+
+test('Regensachen und Weihnachtskleidung: bebilderte Saisonfächer, 39 neue Artikel',async ({page},testInfo)=>{
+ await page.goto(route('baerli/schrank/saison'),{waitUntil:'domcontentloaded'});
+ await expect(page.locator('.bw-category-grid .bw-category')).toHaveCount(2);
+ await expect(page.locator('a[href="#baerli/schrank/regen"]')).toContainText('10 Sachen');
+ await expect(page.locator('a[href="#baerli/schrank/weihnachten"]')).toContainText('29 Sachen');
+ const sections=[['regen','saison-regenponcho'],['weihnachten','saison-weihnachtsmuetze']];
+ const before=await page.evaluate(()=>({
+   wallet:localStorage.getItem('majas-wortwerkstatt-sternenbeutel-v1'),
+   outfit:localStorage.getItem('majas-wortwerkstatt-baerli-auswahl-v1')
+ }));
+ for(const [section,first] of sections){
+   await page.goto(route('baerli/schrank/'+section),{waitUntil:'domcontentloaded'});
+   await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id',/^saison-/);
+   await expect(page.locator('.bw-figure img')).toBeVisible();
+   await page.goto(route('baerli/schrank/'+section+'/'+first),{waitUntil:'domcontentloaded'});
+   await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id',first);
+   await expect(page.locator('.bw-item-picture svg')).toBeVisible();
+   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
+   expect(overflow).toBeLessThanOrEqual(2);
+   const folder=path.join(__dirname,'..','qa-season-shots');
+   fs.mkdirSync(folder,{recursive:true});
+   await page.locator('.bw-focus').screenshot({
+     path:path.join(folder,testInfo.project.name+'-'+section+'.png'),
+     animations:'disabled'
+   });
+ }
+ const after=await page.evaluate(()=>({
+   wallet:localStorage.getItem('majas-wortwerkstatt-sternenbeutel-v1'),
+   outfit:localStorage.getItem('majas-wortwerkstatt-baerli-auswahl-v1')
+ }));
+ expect(after).toEqual(before);
+});
