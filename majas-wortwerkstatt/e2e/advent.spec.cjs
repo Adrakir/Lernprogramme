@@ -12,6 +12,10 @@ async function capture(page,name,project){
 }
 test('November: 24 verschlossene Türchen auf vier kurzen Seiten und Geschichten-Vorschau ohne Geschenk',async({page},info)=>{
  await date(page,'2026-11-09T12:00:00+01:00');
+ await page.goto(url(''),{waitUntil:'domcontentloaded'});
+ await expect(page.locator('.maja-quick-topic')).toHaveCount(3);
+ await expect(page.locator('.maja-quick-option')).toHaveCount(4);
+ await expect(page.locator('.maja-advent-highlight')).toBeVisible();
  await page.goto(url('advent'),{waitUntil:'domcontentloaded'});
  await expect(page.locator('h1')).toHaveText('Bärlis Adventskalender');
  await expect(page.locator('.adv-door')).toHaveCount(6);
@@ -21,6 +25,7 @@ test('November: 24 verschlossene Türchen auf vier kurzen Seiten und Geschichten
  await capture(page,'november-tueren',info.project.name);
  await page.locator('.adv-preview-link').click();
  await expect(page.locator('.adv-story-content')).toContainText('Die geheimnisvolle Sternenpost');
+ await capture(page,'november-geschichte',info.project.name);
  await expect(page.locator('.adv-claim')).toHaveCount(0);
  expect(await page.evaluate(()=>localStorage.getItem('majas-wortwerkstatt-advent-v1'))).toBeNull();
  await page.goto(url('advent/seite/4'));
@@ -30,7 +35,7 @@ test('November: 24 verschlossene Türchen auf vier kurzen Seiten und Geschichten
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
  expect(overflow).toBeLessThanOrEqual(2);
 });
-test('1. Dezember: Weihnachtsmütze wird kostenlos und einmalig verschenkt, freiwillige Frage bringt Stern',async({page})=>{
+test('1. Dezember: Weihnachtsmütze wird kostenlos und einmalig verschenkt, freiwillige Frage bringt Stern',async({page},info)=>{
  await date(page,'2026-12-01T12:00:00+01:00');
  await page.goto(url('advent'),{waitUntil:'domcontentloaded'});
  await expect(page.locator('.adv-ready')).toHaveCount(1);
@@ -39,6 +44,7 @@ test('1. Dezember: Weihnachtsmütze wird kostenlos und einmalig verschenkt, frei
  await expect(page.locator('.adv-story-content')).toContainText('Bärli');
  await page.locator('.adv-claim').click();
  await expect(page.locator('.adv-collected')).toContainText('Rote Weihnachtsmütze');
+ await capture(page,'dezember-tuer1-geschenk',info.project.name);
  const getWallet=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-sternenbeutel-v1')));
  let wallet=await getWallet();
  expect(wallet.purchases['item:saison-weihnachtsmuetze'].cost).toBe(0);
