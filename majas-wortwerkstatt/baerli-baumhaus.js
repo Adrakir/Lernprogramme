@@ -77,7 +77,7 @@ const products=[
 ];
 const known=new Map(products.map(p=>[p.id,p]));
 if(known.size!==products.length)throw Error('Doppelte Baumhaus-Artikel-ID');
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','"':'&#39;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clamp=(n,low,high)=>Math.max(low,Math.min(high,n));
 const getCat=id=>categories.find(c=>c.id===id);
 const day=()=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Berlin'}).format(new Date());
