@@ -22,6 +22,14 @@ Im Bereich **Bärlis Kleidung** gibt es jetzt zwölf weitere Sachen in den sechs
 
 Die aktuelle Prüfung der 10 Klassenarbeits-Tests und der Comic-Originalbilder steht in [QA_BEFUNDE_2026-11-09.md](./QA_BEFUNDE_2026-11-09.md).
 
+## Hörprüfungen und Comic-Kino (aktualisiert 09.11.2026)
+
+In den fünf Hörverständnis-Abschlusstests ist die vollständige Lesevorlage verborgen; die Fragen werden einzeln rot hervorgehoben. Während geführter Übungen ist eine Lesehilfe weiterhin verfügbar. Erneutes Tippen auf „Anhören“ startet die laufende Aufnahme erneut. Die Wahl zwischen Aufnahme, deutschen Gerätestimmen und drei Geschwindigkeiten bleibt erhalten.
+
+Die Schulcomics haben deutlich erkennbare Sprechblasen unter den Zeichnungen. Bei Detektivcomics können Sprechblasen **am Bild** oder **darunter** angezeigt werden: auf großen Bildschirmen ist die Bildvariante voreingestellt, auf Handys die lesefreundliche Darstellung darunter. Beide Comicarten unterstützen Vorlesen pro Bild und Vergrößern. Die Stimmen selbst sind abhängig von Browser und Gerät.
+
+Neue automatische Tests: `e2e/learning-and-comics.spec.cjs` und `pruefungen-comics.test.cjs`. Ergebnisse und offene echte Gerätetests stehen in [QA_BEFUNDE_2026-11-09.md](./QA_BEFUNDE_2026-11-09.md).
+
 ## Für Eltern und Lehrkräfte
 
 - `#erwachsene`: Übersicht mit tatsächlich vorhandenen Bearbeitungen; ein fehlender Wert wird **nicht** als Leistungsurteil interpretiert.
