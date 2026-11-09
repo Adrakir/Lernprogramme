@@ -75,6 +75,18 @@ test('Acht Comic-Einstiege – Bilder, Vergrößern, keine Querscroller',async (
     const artwork=page.locator(school?'.comic-art':'.detective-art').first();
     await expect(artwork).toBeVisible();
     await expect(page.locator('.kino-panel-wrap')).toHaveCount(school?2:4);
+    if(mobile(testInfo)){
+      await expect(page.locator('.kino-step-controls')).toBeVisible();
+      await expect(page.locator('.kino-panel-wrap:visible')).toHaveCount(1);
+      await expect(page.locator('.kino-step-count')).toContainText('Bild 1 von '+(school?2:4));
+      await page.locator('[data-kino-next]').click();
+      await expect(page.locator('.kino-step-count')).toContainText('Bild 2 von '+(school?2:4));
+      await expect(page.locator('.kino-panel-wrap:visible')).toHaveCount(1);
+      await page.locator('[data-kino-prev]').click();
+      await expect(page.locator('.kino-step-count')).toContainText('Bild 1 von '+(school?2:4));
+    }else{
+      await expect(page.locator('.kino-step-controls')).toHaveCount(0);
+    }
     await expect(page.locator('.kino-dialog')).toHaveCount(1);
     // Reproduzierbare Bildprüfung: je drei Comicseiten in Desktop und Mobile.
     if(['schulgeschichten/lesezeichen/1','tagescomic/melody-und-die-hausaufgaben/1','tagescomic/tom-und-der-schulhund/1'].includes(hash)){
