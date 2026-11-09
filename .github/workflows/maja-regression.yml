@@ -25,3 +25,30 @@ jobs:
         run: node majas-wortwerkstatt/mobile-start.test.cjs
       - name: Check Maja learning experience & handoff
         run: node majas-wortwerkstatt/experience.test.cjs
+
+  browser:
+    name: Chromium browser smoke checks (emulated viewports)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        working-directory: majas-wortwerkstatt
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Test Maja routes and listening settings
+        working-directory: majas-wortwerkstatt
+        run: npm run test:browser
+      - name: Upload failed-run browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-playwright-report
+          path: |
+            majas-wortwerkstatt/playwright-report/
+            majas-wortwerkstatt/test-results/
+          if-no-files-found: ignore
