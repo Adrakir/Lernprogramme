@@ -51,4 +51,6 @@ tree.render('shop','weihnachten');
 assert(app.innerHTML.includes('Noch')||app.innerHTML.includes('fehlen'),'Weihnachtsabteilung bleibt gesperrt');
 assert(index.includes('href="#baumhaus"'),'Baumhaus auf Startseite');
 assert(index.includes('window.MajaTreehouse?.stateRead()'),'Prüfungs-Abschluss sichert neue Freischaltung');
+assert(source.includes('data-bh-decorate'),'Weihnachtsbaum ist interaktiv schmückbar');
+assert(source.includes("if(p.kind==='bedding')"),'Bettwäsche wird am Bett platziert');
 console.log('PASS Baumhaus: 54 Shopartikel, leeres Zimmer mit Sitzsack und Laptop, 80-Prozent-Grenze, 10 Taler pro eindeutig bestandenem Test, gesperrte Kategorien, Sicherung.');
