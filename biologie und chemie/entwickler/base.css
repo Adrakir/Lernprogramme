@@ -369,3 +369,53 @@ main{padding-bottom:96px}
 /* Probearbeit: Piktogramme groesser und kontrastreicher */
 .cp-field img{width:96px;height:96px;border:2px solid #d0021b55;border-radius:10px;background:#fff;padding:4px}
 @media(prefers-reduced-motion:reduce){.ghs-detail .ghs-big .ghs-svg{animation:none}}
+/* Eis-Heizkurve */
+.ice-panel{margin-top:18px}
+.ice-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(170px,1fr);gap:12px;align-items:start}
+.ice-svg{width:100%;height:auto;background:#fff;border:1px solid var(--line,#d6dee8);border-radius:14px}
+.ice-ticks text{font:600 12px system-ui;fill:#37474f}
+.ice-guide{stroke:#b9cdd6;stroke-dasharray:5 5;stroke-width:1.5;fill:none}
+.ice-curve{stroke:#178b90;stroke-width:4.5;fill:none;stroke-linejoin:round}
+.ice-marker{fill:#cb6a39;stroke:#fff;stroke-width:2.5}
+.ice-lab{font:800 14px system-ui;fill:#0c615e;cursor:pointer}
+.ice-zone{cursor:pointer}
+.ice-zone:hover .ice-lab,.ice-zone:focus-visible .ice-lab{fill:#cb6a39;text-decoration:underline}
+.ice-side{display:grid;gap:8px}
+.ice-part svg{width:100%;height:auto}
+.ice-read{display:grid;gap:4px;font-size:14px}
+.ice-read b{font-size:20px}
+.ice-dot{fill:#3d9caa;stroke:#217281;stroke-width:1.5}
+.ice-dot.vib{animation:iceVib .5s ease-in-out infinite alternate}
+.ice-dot.slide{animation:iceSlide 2.2s ease-in-out infinite alternate}
+.ice-dot.fly{animation:iceFly 1.1s linear infinite alternate}
+.ice-bub{fill:#fff;stroke:#9db7c0;animation:iceSlide 1.4s ease-in-out infinite alternate}
+@keyframes iceVib{from{transform:translate(0,0)}to{transform:translate(2px,-2px)}}
+@keyframes iceSlide{from{transform:translate(-5px,2px)}to{transform:translate(6px,-3px)}}
+@keyframes iceFly{from{transform:translate(-9px,6px)}to{transform:translate(9px,-7px)}}
+@media(max-width:760px){.ice-grid{grid-template-columns:1fr}}
+
+/* Aggregatzustands-Sortierspiel */
+.st-panel{margin-top:18px}
+.st-tray{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.st-item{padding:9px 13px;border:2px solid #c6d4e2;border-radius:999px;background:#fff;font-weight:700;cursor:pointer}
+.st-item.picked{border-color:#1d8a5f;background:#e8f7ee;box-shadow:0 0 0 3px #1d8a5f33}
+.st-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.st-col{display:grid;justify-items:center;gap:6px;padding:12px 8px;border:2px dashed #9db7c0;border-radius:14px;background:#fbfdfe;cursor:pointer;font:inherit}
+.st-col:hover{border-color:#1d8a5f}
+.st-col b{font-size:17px}
+.st-col small{color:#52717a;line-height:1.3;text-align:center}
+.st-part{width:88px;height:62px}
+.st-got{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;min-height:26px}
+.st-chip{background:#e8f7ee;border:1px solid #9fd3b4;border-radius:999px;padding:2px 8px;font-size:12.5px;font-weight:700}
+@media(max-width:700px){.st-cols{grid-template-columns:1fr}}
+
+/* Löslichkeit-Extras */
+.sol-extra{margin-top:17px}
+.sol-glass-wrap{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:14px;align-items:start;margin:10px 0}
+.sol-glass{width:100%;height:auto}
+.solx-dot{animation:iceSlide 2.6s ease-in-out infinite alternate}
+.sol-mini{display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-top:1px dashed #b8c8d2;padding-top:12px}
+.sol-mini .answer{min-height:40px;padding:8px 14px}
+.sol-mini .feedback{flex:1 1 100%;min-height:0}
+@media(max-width:700px){.sol-glass-wrap{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.ice-dot,.ice-bub,.solx-dot{animation:none}}

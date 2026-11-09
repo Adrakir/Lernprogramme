@@ -74,5 +74,17 @@ const setInput=(p,sel,v)=>p.locator(sel).evaluate((e,v)=>{e.value=v;e.dispatchEv
  await go(p,'heating');assert.equal(await p.locator('#page-heating a[href="Lernheft_Chemiearbeit.pdf"]').count(),0);
  await go(p,'sheet');assert.equal(await p.locator('#page-sheet a[href="Lernheft_Chemiearbeit.pdf"]').count(),1,'Lernheft-PDF verlinkt');
 
+ // Interaktiv-Extras: Eiskurve, Zustands-Sortierspiel, Sand/Öl
+ await go(p,'heating');assert.equal(await p.locator('.ice-panel').count(),1,'Eiskurve vorhanden');
+ await p.locator('[data-icezone="1"]').click();assert.match(await p.locator('#iceText').innerText(),/Schmelzen/);
+ assert.match(await p.locator('#iceState').innerText(),/schmilzt/);
+ await go(p,'matter');
+ await p.locator('[data-stitem="0"]').click();await p.locator('[data-stcol="solid"]').click();
+ assert.match(await p.locator('#stFeedback').innerText(),/Richtig/);
+ await go(p,'solubility');
+ await p.locator('[data-solx="sand"]').click();assert.match(await p.locator('#solxText').innerText(),/löst sich nicht/);
+ await p.locator('[data-solx="oil"]').click();assert.match(await p.locator('#solxText').innerText(),/schwimmt/);
+ await p.locator('[data-solxq="1"]').click();assert.match(await p.locator('#solxQF').innerText(),/gelöst/);
+
  assert.deepEqual(errors,[]);await browser.close();console.log(`PASS ${engine}: ethanol comparison, custom heating curve, micro zoom, drawn lab scenes and interactive explanation step`);
 })().catch(e=>{console.error(e);process.exit(1)});
