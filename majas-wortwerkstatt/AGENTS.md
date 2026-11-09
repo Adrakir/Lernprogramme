@@ -12,7 +12,7 @@
 ## Projekt und Ziele
 - Interaktive, kindgerechte Deutschapp Klasse 3 mit Maja, Bärli, Fuji und Minka.
 - Mobile first; iPhone, iPad, Android, Windows; große Touchflächen, gute Kontraste, klarer Fokus, Bilder und Audio.
-- Für Kinder kurze Seiten, höchstens vier Entscheidungen pro Überblicksseite, klare Zurück-/Weiter-Navigation.
+- Für Kinder kurze Seiten und klare Zurück-/Weiter-Navigation. **Ausnahme: Die ausdrücklich gewünschte Startseite hat drei Lernkarten und darunter vier bebilderte Angebotskarten (3+4), wie in HOME_LAYOUT.md festgelegt.** Andere Überblicksseiten möglichst auf vier Einträge begrenzen.
 - **Startseite:** Die vertraute Übersicht „Fit für den Kombitest“ mit 3 großen Themenpiktogrammen, „Teste dich“ und 4 bebilderten Kacheln **nicht wieder durch nur zwei Moduskarten ersetzen**. [HOME_LAYOUT.md](./HOME_LAYOUT.md) zuerst lesen.
 - Lernmodus (sekundärer Link): Erklären → gemeinsam üben → selbstständig üben → Tests → Fehler gezielt verbessern.
 - Abenteuermodus: Comics, Spiele und Bärlis Kleidung; pädagogischer Inhalt bleibt erkennbar.
