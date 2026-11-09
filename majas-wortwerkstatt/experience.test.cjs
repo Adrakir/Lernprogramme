@@ -52,7 +52,7 @@ const newWardrobeIds=['abenteuercap','partyhut','forscherbrille','herzbrille','r
 for(const id of newWardrobeIds)assert(wardrobeJs.includes("id:'"+id+"'"),'new clothing remains available: '+id);
 new vm.Script(wardrobeJs);
 assert(wardrobeJs.includes('bearFigure(true,item)'),'new clothes can be previewed on Bärli');
-assert(wardrobeJs.includes('if(previewItem)equipped.push(previewItem)'),'preview overlay replaces worn slot');
+assert(wardrobeJs.includes('const previewSlots=new Set(previews.map(slotOf))')&&wardrobeJs.includes('equipped.push(...previews)'),'single and combined previews replace only matching worn slots');
 assert(wardrobeJs.includes('bw-category-sample'),'wardrobe categories have images');
 assert(wardrobeJs.includes('Anprobe – noch nicht gekauft'),'preview distinguished from purchase');
 assert(!wardrobeJs.includes('localStorage.clear('),'wardrobe does not erase saved child data');
