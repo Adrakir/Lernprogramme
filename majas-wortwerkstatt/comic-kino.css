@@ -85,3 +85,10 @@ padding:12px 15px!important;background:#fffdf7!important;color:#172d2b!important
  .comic-panel figcaption{padding:12px;gap:7px}
  .comic-panel figcaption .comic-dialogue{font-size:.94rem;max-width:100%;padding:9px 11px}
 }
+
+/* Ein Bild je Lernschritt auf schmalen Geräten statt vertikalem Comic-Marathon. */
+.kino-step-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:center;margin:12px 0 19px}
+.kino-step-controls .kino-step-count{grid-column:1/-1;grid-row:1;text-align:center;font-weight:900;color:#264e44}
+.kino-step-controls button{grid-row:2;min-height:49px;padding:9px 8px}
+.kino-step-controls button:disabled{opacity:.45}
+@media(max-width:360px){.kino-step-controls button{font-size:.82rem}}
