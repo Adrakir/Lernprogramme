@@ -41,6 +41,22 @@ const app=path.resolve(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'),browserTy
  assert.equal(await p.locator('#page-quiz').isVisible(),true);
  await p.locator('#nav [data-page=home]').click();
  await p.waitForTimeout(350);await p.screenshot({path:'chemie-test-artifacts/desktop-studio-'+browserType+'.png',fullPage:false});
+ if(browserType==='chromium'){
+   const legacy=await browser.newPage({viewport:{width:1440,height:980}});
+   await legacy.goto(pathToFileURL(path.join(__dirname,'../Chemie_Entdeckerlabor_V7_1_Geprueft.html')).href);
+   await legacy.screenshot({path:'chemie-test-artifacts/old-chemie-home.png',fullPage:false});
+   await legacy.locator('#nav [data-page=deep]').click();
+   await legacy.screenshot({path:'chemie-test-artifacts/old-chemie-animations.png',fullPage:false});
+   await legacy.locator('#nav [data-page=v4play]').click();
+   await legacy.screenshot({path:'chemie-test-artifacts/old-chemie-games.png',fullPage:false});
+   await legacy.close();
+   for(const [route,file] of [['deep','chemie-animations-now.png'],['v4play','chemie-games-now.png'],['v4lab','chemie-virtual-lab-now.png'],['safety','chemie-safety-now.png']]){
+     await p.locator('#nav [data-page='+route+']').click();
+     await p.screenshot({path:'chemie-test-artifacts/'+file,fullPage:false});
+   }
+   await p.locator('#nav [data-page=home]').click();
+ }
+
  assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1,'Desktop overflow');
  await p.setViewportSize({width:390,height:844});
  assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1,'Phone overflow');
