@@ -25,6 +25,8 @@ jobs:
         run: node majas-wortwerkstatt/mobile-start.test.cjs
       - name: Check Maja learning experience & handoff
         run: node majas-wortwerkstatt/experience.test.cjs
+      - name: Validate all hearing tests, spelling tests and comics
+        run: node majas-wortwerkstatt/pruefungen-comics.test.cjs
 
   browser:
     name: Chromium browser smoke checks (emulated viewports)
