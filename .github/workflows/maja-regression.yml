@@ -31,6 +31,8 @@ jobs:
         run: node majas-wortwerkstatt/baerli-inventar.test.cjs
       - name: Validate treehouse exam gating and virtual shop
         run: node majas-wortwerkstatt/baumhaus.test.cjs
+      - name: Validate Adventsgeschichten, Geschenke und die zeitgesteuerte Freischaltung
+        run: node majas-wortwerkstatt/advent.test.cjs
 
   browser:
     name: Chromium browser smoke checks (emulated viewports)
@@ -80,6 +82,13 @@ jobs:
         with:
           name: maja-baumhaus-shop-review
           path: majas-wortwerkstatt/qa-treehouse-shots/*.png
+          if-no-files-found: ignore
+      - name: Upload Adventskalender screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-advent-calendar-review
+          path: majas-wortwerkstatt/qa-advent-shots/*.png
           if-no-files-found: ignore
       - name: Upload failed-run browser diagnostics
         if: failure()
