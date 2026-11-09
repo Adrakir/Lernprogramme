@@ -4,6 +4,13 @@
 
 > **Wichtig:** Diese Datei ist die Übergabestelle zwischen ChatGPT, GitHub Copilot und anderen KI-Assistenten. Aussagen über "fertig" beziehen sich auf gespeicherten Code, **nicht automatisch** auf browsergetestete oder öffentlich ausgerollte Funktion. Ein neuer Bearbeiter überprüft immer den aktuellen HEAD.
 
+### Mobile Comic-Bildkontrolle und Einzelschritte (09.11.2026)
+- [x] **Echte Chromium-Screenshots geprüft:** GitHub-Actions-Bilder für `lesezeichen`, `melody-und-die-hausaufgaben` und `tom-und-der-schulhund` in Desktop-/Handy-Emulation gesichtet. Die beispielhaften Panels und Sprechblasen waren lesbar, ohne offensichtliche horizontale Abschnitte. Die bisherige Handydarstellung war zu lang.
+- [x] **Mobil jeweils ein Bild statt Bildstapel:** Das Comic-Kino blendet auf schmalen Ansichten die übrigen Bilder einer Seite aus und zeigt Vorheriges/Nächstes Bild + Fortschritt. Nach dem letzten Bild führt Weiter direkt zum bereits bestehenden Link für die nächste Comicseite. Vorlesen synchronisiert das sichtbare Bild; Zoom bleibt erhalten. Desktop behält seine Panels.
+- [x] **Browser-Regression für Mobilnavigation:** `e2e/learning-and-comics.spec.cjs` prüft Bildwechsel, keine horizontale Überbreite und Weiterleitung über Comicseiten hinweg. Die CI-Screenshots werden über `maja-comic-visual-review` bereitgestellt.
+- [x] **Offline-PWA-Update:** Comic-JS-Version `20261109e`, Cache `v5`.
+- [ ] **Noch offen:** Ergebnis des neuesten GitHub-Actions-Laufs zur Endfassung kontrollieren; alle Comics und sämtliche realen iPhone-/iPad-/Android-Geräte optisch und akustisch abnehmen. Einzelne Stichproben sind kein vollständiger Bild-Review.
+
 ### Anschließende Hörtest- und Comicverbesserung (09.11.2026)
 - [x] **Prüfungsgerechter Hörtest:** Volltext im Abschlusstest verborgen; Lesehilfe in Übung/Anleitung erhalten; erneut auf „Anhören“ startet die Aufnahme neu. Keine Änderungen an alten Lernständen.
 - [x] **Comicbläschen besser lesbar:** Schulcomic-Dialoge als Sprechblasen unter Bildern; Detektivcomics mit umschaltbarer Darstellung, auf Desktop standardmäßig im Bild und auf schmalen Geräten lesefreundlich darunter; wirkungslosen Umschalter bei Schulcomics verborgen.
