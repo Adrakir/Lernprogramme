@@ -86,5 +86,14 @@ const setInput=(p,sel,v)=>p.locator(sel).evaluate((e,v)=>{e.value=v;e.dispatchEv
  await p.locator('[data-solx="oil"]').click();assert.match(await p.locator('#solxText').innerText(),/schwimmt/);
  await p.locator('[data-solxq="1"]').click();assert.match(await p.locator('#solxQF').innerText(),/gelöst/);
 
+ // Brenner-Bedienfolge mit Fehlerfolgen, Geräte-Handhabung
+ await go(p,'burner');
+ await p.locator('[data-bseq="gas"]').click();assert.match(await p.locator('#bseqFb').innerText(),/Gefahr/);
+ for(const k of ['prep','airclose','spark','gas','airopen'])await p.locator('[data-bseq="'+k+'"]').click();
+ assert.match(await p.locator('#bseqFb').innerText(),/Perfekt gestartet/);
+ await go(p,'devices');
+ await p.locator('[data-device="Pipette"]').click();await p.waitForTimeout(100);
+ assert.match(await p.locator('#deviceInfo .dev-handling').innerText(),/Pipettierhilfe/);
+
  assert.deepEqual(errors,[]);await browser.close();console.log(`PASS ${engine}: ethanol comparison, custom heating curve, micro zoom, drawn lab scenes and interactive explanation step`);
 })().catch(e=>{console.error(e);process.exit(1)});

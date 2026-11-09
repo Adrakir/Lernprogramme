@@ -419,3 +419,17 @@ main{padding-bottom:96px}
 .sol-mini .feedback{flex:1 1 100%;min-height:0}
 @media(max-width:700px){.sol-glass-wrap{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.ice-dot,.ice-bub,.solx-dot{animation:none}}
+/* Brenner-Bedienfolge */
+.bseq-panel{margin-top:17px}
+.bseq-flame{float:right;width:110px;margin:0 0 8px 12px}
+.bseq-flame svg{width:100%;height:auto}
+#bseqFlame path{transition:fill .4s}
+.bseq-steps{display:grid;gap:8px;clear:none}
+.bseq-step{text-align:left;padding:11px 14px;border:2px solid #c6d4e2;border-radius:12px;background:#fff;font:inherit;font-weight:600;cursor:pointer}
+.bseq-step:hover:not(:disabled){border-color:#1d8a5f}
+.bseq-step.done{border-color:#2e9d5b;background:#e8f7ee;opacity:.9}
+/* Geräte-Handhabung */
+.dev-handling{border-top:1px dashed #b8c8d2;margin-top:10px;padding-top:8px;font-size:14px;flex-basis:100%}
+.dev-handling p{margin:4px 0}
+/* Wissenscheck-Hinweis */
+.quiz-weakest{background:#fff4e0;border-radius:12px;padding:10px 14px;font-size:15px}

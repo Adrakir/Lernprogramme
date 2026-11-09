@@ -428,7 +428,21 @@ main{padding-bottom:96px}
 .sol-mini .answer{min-height:40px;padding:8px 14px}
 .sol-mini .feedback{flex:1 1 100%;min-height:0}
 @media(max-width:700px){.sol-glass-wrap{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){.ice-dot,.ice-bub,.solx-dot{animation:none}}</style>
+@media(prefers-reduced-motion:reduce){.ice-dot,.ice-bub,.solx-dot{animation:none}}
+/* Brenner-Bedienfolge */
+.bseq-panel{margin-top:17px}
+.bseq-flame{float:right;width:110px;margin:0 0 8px 12px}
+.bseq-flame svg{width:100%;height:auto}
+#bseqFlame path{transition:fill .4s}
+.bseq-steps{display:grid;gap:8px;clear:none}
+.bseq-step{text-align:left;padding:11px 14px;border:2px solid #c6d4e2;border-radius:12px;background:#fff;font:inherit;font-weight:600;cursor:pointer}
+.bseq-step:hover:not(:disabled){border-color:#1d8a5f}
+.bseq-step.done{border-color:#2e9d5b;background:#e8f7ee;opacity:.9}
+/* Geräte-Handhabung */
+.dev-handling{border-top:1px dashed #b8c8d2;margin-top:10px;padding-top:8px;font-size:14px;flex-basis:100%}
+.dev-handling p{margin:4px 0}
+/* Wissenscheck-Hinweis */
+.quiz-weakest{background:#fff4e0;border-radius:12px;padding:10px 14px;font-size:15px}</style>
 <style id="lcStyles" data-chemie-source="lcStyles.css">
 #lcOpen{position:fixed;z-index:10001;right:14px;bottom:16px;border:2px solid #1b657c;border-radius:100px;color:#fff;background:#145a70;padding:12px 18px;min-height:48px;font:700 15px system-ui;cursor:pointer;box-shadow:0 3px 15px #0003}
 #lcModal[hidden]{display:none!important}#lcModal{position:fixed;z-index:10002;inset:0;background:rgba(4,27,37,.76);overflow:auto;padding:12px;display:flex;align-items:flex-start;justify-content:center;font:16px/1.5 system-ui;color:#183643}
@@ -4326,6 +4340,92 @@ page.querySelectorAll('[data-solxq]').forEach(b=>b.addEventListener('click',()=>
  el('solxQF').textContent=ok?'Richtig! Der Zucker ist gelöst – die Teewärme hat nur das Lösen beschleunigt. Geschmolzen wäre er erst bei ≈ 185 °C ganz ohne Wasser.':'Nicht ganz: Schmelzen passiert durch Hitze ohne Wasser. Im Tee wird der Zucker von Wasserteilchen umhüllt und verteilt – er ist gelöst.';
  el('solxQF').className='feedback '+(ok?'good':'bad')}));
 })();
+/* ---------- 4) Gasbrenner: Bedienfolge mit Fehler-Folgen ---------- */
+(function(){
+const page=el('page-burner');if(!page)return;
+const steps=[
+ {k:'prep',t:'🥽 Schutzbrille auf, Arbeitsplatz frei, Haare zusammenbinden'},
+ {k:'airclose',t:'🌀 Luftzufuhr schließen'},
+ {k:'spark',t:'✨ Zündquelle bereithalten'},
+ {k:'gas',t:'🔥 Gashahn öffnen und sofort zünden'},
+ {k:'airopen',t:'🔵 Luftzufuhr langsam öffnen (blaue Flamme)'}];
+const order=['prep','airclose','spark','gas','airopen'];
+const warn={
+ airclose:{before:['prep'],msg:'⚠️ Halt! Erst Schutzbrille auf und den Platz frei räumen – Sicherheit kommt immer zuerst.'},
+ spark:{before:['prep'],msg:'⚠️ Halt! Ohne Schutzbrille wird gar nicht erst hantiert.'},
+ gas:{before:['spark'],msg:'💥 Gefahr! Du hast das Gas geöffnet, ohne die Zündquelle bereitzuhalten. Ausströmendes Gas bildet ein zündfähiges Gemisch – genau so passieren Unfälle. Der virtuelle Gashahn wurde wieder geschlossen.'},
+ gas2:{before:['airclose'],msg:'⚠️ Vorsicht! Mit offener Luftzufuhr kann die Flamme beim Zünden zurückschlagen. Erst die Luftzufuhr schließen, dann mit gelber Sicherheitsflamme starten.'},
+ airopen:{before:['gas'],msg:'🤔 Noch brennt nichts: Ohne gezündete Flamme bewirkt der Luftregler nichts. Zünde zuerst die gelbe Flamme.'}};
+const html='<section class="panel bseq-panel" aria-labelledby="bseqTitle"><span class="pill">Bedienfolge · Fehler erlaubt!</span><h3 id="bseqTitle">🔥 Brenner starten – in der richtigen Reihenfolge?</h3>'+
+'<p>Hier darfst du Fehler machen: Tippe die Schritte in der Reihenfolge an, die du für richtig hältst. Bei einer falschen Reihenfolge siehst du, <b>was dann passieren würde</b>. Alles nur virtuell – am echten Brenner gilt die Anweisung der Lehrkraft.</p>'+
+'<div class="bseq-flame" aria-hidden="true"><svg viewBox="0 0 120 150"><rect x="48" y="78" width="24" height="52" fill="#6b8189"/><path d="M30 130h60l6 14H24Z" fill="#556b71"/><rect x="72" y="92" width="16" height="8" fill="#8a949a"/><g id="bseqFlame" opacity="0"><path id="bseqOuter" d="M60 76C44 50 48 30 60 10C72 30 76 50 60 76Z" fill="#f1a536"/><path id="bseqInner" d="M60 72C53 56 55 44 60 32C65 44 67 56 60 72Z" fill="#fff2a3"/></g></svg></div>'+
+'<div class="bseq-steps" id="bseqSteps" role="group" aria-label="Bedienschritte in selbst gewählter Reihenfolge antippen"></div>'+
+'<p class="feedback" id="bseqFb" aria-live="polite">Welchen Schritt machst du zuerst?</p>'+
+'<div class="btn-row"><button type="button" class="btn" id="bseqReset">↺ Von vorn</button></div></section>';
+const anchor=page.querySelector('.virtual-burner');
+if(anchor)anchor.insertAdjacentHTML('beforebegin',html);else page.insertAdjacentHTML('beforeend',html);
+let done=[],mistakes=0;
+function flame(state){const g=el('bseqFlame'),o=el('bseqOuter'),i=el('bseqInner');if(!g)return;
+ if(state==='off')g.setAttribute('opacity','0');
+ else{g.setAttribute('opacity','1');if(state==='yellow'){o.setAttribute('fill','#f1a536');i.setAttribute('fill','#fff2a3')}else{o.setAttribute('fill','#3f9fd8');i.setAttribute('fill','#cdefff')}}}
+function bRender(){el('bseqSteps').innerHTML=steps.map(st=>{const idx=done.indexOf(st.k);
+ return '<button type="button" class="bseq-step'+(idx>=0?' done':'')+'" data-bseq="'+st.k+'" '+(idx>=0?'disabled':'')+'>'+(idx>=0?'<b>'+(idx+1)+'.</b> ':'')+st.t+'</button>'}).join('');
+ page.querySelectorAll('[data-bseq]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.bseq;
+  const checks=k==='gas'?[warn.gas,warn.gas2]:warn[k]?[warn[k]]:[];
+  for(const w of checks){if(!w.before.every(x=>done.includes(x))){mistakes++;bFb(w.msg,false);return}}
+  done.push(k);
+  if(k==='gas')flame('yellow');if(k==='airopen')flame('blue');
+  if(done.length===order.length){bFb('🏆 Perfekt gestartet'+(mistakes?' – nach '+mistakes+' lehrreichen Fehlversuchen':' – ganz ohne Fehlversuch')+'! Die blaue, rauschende Flamme ist bereit zum Erhitzen. Und nach dem Versuch? Gashahn schließen und abkühlen lassen.',true);window.LernCockpit?.record({id:'chem-burner-seq',topic:'burner',correct:mistakes===0,assisted:mistakes>0,mode:'spiel',skill:'anwenden'})}
+  else bFb('✓ Richtig, Schritt '+done.length+' von 5. '+({prep:'Jetzt bist du geschützt.',airclose:'Mit geschlossener Luftzufuhr startest du gleich mit der gut sichtbaren gelben Flamme.',spark:'Die Zündquelle ist bereit – jetzt strömt kein Gas unverbrannt aus.',gas:'Die gelbe Sicherheitsflamme brennt!',airopen:''})[k],true);
+  bRender()}))}
+function bFb(t,ok){const f=el('bseqFb');f.textContent=t;f.className='feedback '+(ok?'good':'bad')}
+el('bseqReset').addEventListener('click',()=>{done=[];mistakes=0;flame('off');bRender();const f=el('bseqFb');f.textContent='Welchen Schritt machst du zuerst?';f.className='feedback'});
+bRender();
+})();
+
+/* ---------- 5) Laborgeräte: Handhabung und häufiger Fehler beim Antippen ---------- */
+(function(){
+const list=el('deviceList'),info=el('deviceInfo');if(!list||!info)return;
+const H={
+ 'Reagenzglas':['Nur zu einem Drittel füllen; beim Erhitzen ständig bewegen.','Die Öffnung zeigt auf eine Person – immer von allen weg richten!'],
+ 'Reagenzglashalter':['Das Reagenzglas im oberen Drittel einklemmen.','Zu nah an der Flamme gegriffen – der Halter kann ankohlen.'],
+ 'Reagenzglasständer':['Gläser direkt nach dem Benutzen hineinstellen.','Reagenzgläser auf den Tisch gelegt – sie rollen und zerbrechen.'],
+ 'Becherglas':['Auf trockener, ebener Fläche abstellen; zum Mischen Glasstab nutzen.','Volumen an den groben Strichen „gemessen“ – dafür ist der Messzylinder da.'],
+ 'Erlenmeyerkolben':['Zum Mischen vorsichtig schwenken, nicht schütteln.','Mit Daumen zuhalten und schütteln – Spritzgefahr!'],
+ 'Messzylinder':['Auf Augenhöhe am tiefsten Punkt der Wasserwölbung (Meniskus) ablesen.','Von schräg oben abgelesen – der Wert stimmt dann nicht.'],
+ 'Trichter':['Filterpapier falten, anfeuchten und einlegen; Flüssigkeit am Glasstab entlang gießen.','Zu schnell eingegossen – es läuft über den Rand des Papiers.'],
+ 'Glasstab':['Langsam rühren, ohne an die Glaswand zu schlagen.','Als Hebel benutzt – er bricht leicht.'],
+ 'Reibschale mit Pistill':['Mit kreisenden Bewegungen drücken und reiben.','Wie mit einem Hammer gestampft – die Schale kann springen.'],
+ 'Spatel':['Für jeden Stoff einen sauberen Spatel verwenden.','Mit demselben Spatel in mehrere Gefäße – die Stoffe verunreinigen sich.'],
+ 'Uhrglas':['Proben darauf legen oder ein Becherglas damit abdecken.','Als „Teller“ zum Erhitzen benutzt – dafür ist es nicht gedacht.'],
+ 'Abdampfschale':['Nur unter Aufsicht langsam eindampfen lassen.','Zu stark erhitzt – gegen Ende spritzen heiße Tropfen heraus.'],
+ 'Tiegelzange':['Heiße Gegenstände sicher greifen und auf feuerfester Unterlage abstellen.','Heißes mit der Hand „kurz“ angefasst – Verbrennungsgefahr!'],
+ 'Dreifuß':['Stabil aufstellen, Drahtnetz auflegen, erst dann das Gefäß.','Gefäß ohne Drahtnetz direkt aufgelegt – es steht wackelig und wird ungleichmäßig heiß.'],
+ 'Drahtnetz':['Mittig auf den Dreifuß legen.','Nach dem Versuch sofort angefasst – es bleibt lange heiß!'],
+ 'Stativ':['Klemmen mit Muffen fest anziehen; schwere Teile nach unten.','Klemme nur locker gedreht – das Gerät rutscht heraus.'],
+ 'Pipette':['Immer mit Pipettierhilfe aufziehen.','Mit dem Mund angesaugt – streng verboten!'],
+ 'Thermometer':['Fühler ganz in die Flüssigkeit, nicht an Boden oder Wand.','Zum Umrühren benutzt – es kann zerbrechen.'],
+ 'Gasbrenner':['Nur nach Einweisung und Freigabe; übe die Reihenfolge im Brenner-Kapitel.','Brennend unbeaufsichtigt gelassen – größte Brandgefahr im Labor.']};
+list.addEventListener('click',ev=>{const b=ev.target.closest('[data-device]');if(!b)return;
+ const h=H[b.dataset.device];if(!h)return;
+ setTimeout(()=>{if(info.querySelector('.dev-handling'))return;
+  info.insertAdjacentHTML('beforeend','<div class="dev-handling"><p>👍 <b>So geht’s richtig:</b> '+h[0]+'</p><p>⚠️ <b>Häufiger Fehler:</b> '+h[1]+'</p></div>')},0)});
+})();
+
+/* ---------- 6) Wissenscheck: schwierigste Themen benennen ---------- */
+(function(){
+const end=el('quizEnd');if(!end)return;
+new MutationObserver(()=>{
+ if(end.hidden||end.querySelector('.quiz-weakest'))return;
+ try{const recs=state.quiz.records||[];if(!recs.length)return;
+  const per={};recs.forEach(r=>{const t=r.q.topic;per[t]=per[t]||{n:0,ok:0};per[t].n++;if(r.ok)per[t].ok++});
+  const weak=Object.entries(per).filter(([t,v])=>v.ok/v.n<0.75).sort((a,b)=>a[1].ok/a[1].n-b[1].ok/b[1].n).slice(0,2).map(([t])=>t);
+  const h3=end.querySelector('h3');if(!h3)return;
+  const msg=weak.length?('💡 Deine schwierigsten Themen: <b>'+weak.join('</b> und <b>')+'</b>. Öffne sie unten direkt zum Nachüben.'):'💪 Kein Thema lag unter 75 % – stark!';
+  h3.insertAdjacentHTML('beforebegin','<p class="quiz-weakest">'+msg+'</p>')}catch(e){}
+}).observe(end,{attributes:true,attributeFilter:['hidden'],childList:true});
+})();
+
 })();
 </script>
 <div id="chemDisplayShade" aria-hidden="true"></div>

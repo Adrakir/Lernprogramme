@@ -67,3 +67,10 @@ Im Forscherprotokoll (Lernzentrale) ist das Material von der Durchführung getre
 - Stoffeigenschaften im Alltag: Schritt-für-Schritt-Anleitung und animierte Magnet-, Stromkreis- und Schwimmtests.
 - Wärmeleitfähigkeit: Die vier Vergleichsstäbe tragen Material-Markierungen; in der Heftskizze ist der Metallstab (Metallverlauf) klar vom Glasstab (transparent) unterschieden.
 - `tests/protocol-wood-smoke.cjs` wartet nach der Hash-Navigation auf die Seite (behebt WebKit-Flakiness).
+## Interaktiv-Paket (Etappen 1–4)
+
+- **GHS-Lernkartei** (Modul `ghs-lernkartei.js`, Seite Sicherheit): alle 9 Piktogramme als große SVGs mit Erklär-Großansicht und Zuordnungsspiel Symbol→Flasche inkl. Begründungen; Probearbeits-Piktogramme auf 96 px vergrößert.
+- **Interaktiv-Extras** (Modul `interaktiv-extras.js`): Eiswürfel-Heizkurve (−20…110 °C, antippbare Zustandsabschnitte mit Teilchenbildern) auf der Siedetemperatur-Seite; Aggregatzustands-Sortierspiel (9 Beispiele) bei Stoffe & Körper; Sand/Öl-Test mit „gelöst vs. geschmolzen“-Merkkasten bei Löslichkeit; Brenner-Bedienfolge-Spiel mit Fehlerfolgen (falsche Reihenfolge zeigt die Gefahr) auf der Gasbrenner-Seite; Geräte-Galerie zeigt beim Antippen Handhabung + häufigen Fehler; der Wissenscheck nennt am Ende die schwierigsten Themen.
+- **Skizzenlabor**: Beschriften über Eingabefeld (Enter fügt ein), ausgewählte Teile per Pfeiltasten verschiebbar (Shift = große Schritte), Entf löscht.
+- **Firefox-Testfixes**: `scroll-behavior:smooth` gilt nur noch bei `prefers-reduced-motion:no-preference`; Tests erzwingen per `addInitScript` auto-Scrolling, weil sanftes Scrollen Playwright-Klicks in Firefox verfehlen ließ.
+- Das eingebettete Laborbild ist auf 900 px/67 KB verkleinert.
