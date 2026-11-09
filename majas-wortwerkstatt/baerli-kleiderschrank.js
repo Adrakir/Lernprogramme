@@ -33,7 +33,7 @@ const newWardrobePieces=[
  {id:'lilasneaker',title:'Lila Sternensneaker',stars:5,slot:'schuhe',art:'<path d="M138 386Q168 374 195 391L220 406Q229 427 210 427H128Q106 420 120 401Z" fill="#ac93cf" stroke="#645392" stroke-width="5"/><path d="M247 386Q277 374 304 391L332 407Q342 427 320 427H240Q222 420 235 402Z" fill="#ac93cf" stroke="#645392" stroke-width="5"/><path d="M127 418h89m20 0h94" stroke="#fff2d6" stroke-width="8"/><path d="m165 393 5 10 11 1-8 7 2 10-10-5-10 5 2-10-8-7 11-1Zm114 0 5 10 11 1-8 7 2 10-10-5-10 5 2-10-8-7 11-1Z" fill="#ffdf8f"/>'},
  {id:'streifenstiefel',title:'Blaue Regenstiefel',stars:5,slot:'schuhe',art:'<path d="M140 372H199V400L229 413Q237 431 215 431H121Q108 423 120 408L140 398Z" fill="#519abb" stroke="#2b6681" stroke-width="5"/><path d="M250 372H309V400L339 413Q346 431 324 431H231Q217 423 232 408L250 398Z" fill="#519abb" stroke="#2b6681" stroke-width="5"/><path d="M141 381h58m51 0h59M122 421h103m8 0h101" stroke="#f7d88d" stroke-width="8"/>'}
 ];
-additions.push(...newWardrobePieces,...(window.MajaBaerliNeueSachen||[]));
+additions.push(...newWardrobePieces,...(window.MajaBaerliNeueSachen||[]),...(window.MajaBaerliSaison||[]));
 
 for(const item of additions){if(!bearItems.some(existing=>existing.id===item.id))bearItems.push({...item,group:'kleidung'});}
 const sectionDefs=[
@@ -47,9 +47,12 @@ const sectionDefs=[
  ['schule','Schulsachen','🎒','Sachen für die Schule.'],
  ['taschen','Taschen & Körbe','🎒','Eine Tasche für Bärlis Ausflüge.'],
  ['handlinks','Linke Pfote','🔎','Bärli hält etwas links im Bild.'],
- ['handrechts','Rechte Pfote','☂️','Bärli hält etwas rechts im Bild.']
+ ['handrechts','Rechte Pfote','☂️','Bärli hält etwas rechts im Bild.'],
+ ['regen','Regensachen','☔','Alles für einen Regentag.'],
+ ['weihnachten','Weihnachten','🎄','Mütze, Pullover und Weihnachtssachen.']
 ];
-const clothing=sectionDefs.slice(0,6),extra=sectionDefs.slice(6);
+const clothing=sectionDefs.slice(0,6),extra=sectionDefs.slice(6,11),season=sectionDefs.slice(11);
+const inSection=(item,category)=>['regen','weihnachten'].includes(category)?item.season===category:slotOf(item)===category;
 const slotOf=item=>item.slot||({hut:'huete',oberteil:'pullover',hose:'hosen',brille:'brillen',hals:'schals',schuhe:'schuhe',spielzeug:'spielzeug',schule:'schule'}[item.group])||(item.id==='hut'||item.id==='krone'?'huete':item.id==='schal'?'schals':'pullover');
 const descriptor=key=>sectionDefs.find(x=>x[0]===key);
 const htmlEsc=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -104,22 +107,23 @@ function wardrobeOutfits(id='',message=''){
 }
 
 function wardrobeMain(mode='kleidung'){
- const current=mode==='extras'?'extras':'kleidung';
- const options=current==='extras'?extra:clothing;
+ const current=mode==='extras'?'extras':mode==='saison'?'saison':'kleidung';
+ const options=current==='extras'?extra:current==='saison'?season:clothing;
  return '<div class="bw-page"><a class="bw-back" href="#">← Zur Startseite</a>'
  +'<header class="bw-header"><p class="kicker">Bärlis Laden und Anziehzimmer</p><h1 tabindex="-1">Zieh Bärli an!</h1><p>Tippe auf ein Bild. Jede Sache hat ihre eigene Seite.</p></header>'
  +'<section class="bw-intro">'+bearFigure()+'<div><p class="bw-balance">⭐ '+starCount(starBalance())+' im Beutel</p><p>Kombiniere Kleidung, Taschen und Utensilien. Alles Gekaufte bleibt erhalten.</p><div class="bw-worn">'+(ownedAndWorn().map(x=>'<span>'+htmlEsc(x.title)+'</span>').join('')||'<span>Bärli trägt sein Lieblingsoutfit</span>')+'</div></div></section>'
- +'<nav class="bw-tabs" aria-label="Bereiche"><a href="#baerli/schrank/kleidung" '+(current==='kleidung'?'aria-current="page"':'')+'>👕 Kleidung</a><a href="#baerli/schrank/extras" '+(current==='extras'?'aria-current="page"':'')+'>🧸 Extras</a></nav>'
- +'<div class="bw-category-grid">'+options.map(([id,label,emoji])=>{const sample=bearItems.find(item=>slotOf(item)===id);const count=bearItems.filter(item=>slotOf(item)===id).length;return '<a href="#baerli/schrank/'+id+'" class="bw-category"><span class="bw-category-sample" aria-hidden="true">'+(sample?subPreview(sample):'<span class="bw-emoji">'+emoji+'</span>')+'</span><strong>'+label+'</strong><small>'+count+' Sachen</small></a>';}).join('')+'</div>'+(current==='kleidung'?'<a href="#baerli/schrank/outfits" class="bw-set-link">🎭 Outfit-Ideen mit Bärli entdecken →</a>':'')+'</div>';
+  +'<nav class="bw-tabs" aria-label="Bereiche"><a href="#baerli/schrank/kleidung" '+(current==='kleidung'?'aria-current="page"':'')+'>👕 Kleidung</a><a href="#baerli/schrank/extras" '+(current==='extras'?'aria-current="page"':'')+'>🧸 Extras</a><a href="#baerli/schrank/saison" '+(current==='saison'?'aria-current="page"':'')+'>☔🎄 Saison</a></nav>'
+ +'<a href="#baumhaus" class="bw-set-link">🌳 Bärlis Baumhaus einrichten →</a>'
+ +'<div class="bw-category-grid">'+options.map(([id,label,emoji])=>{const sample=bearItems.find(item=>inSection(item,id));const count=bearItems.filter(item=>inSection(item,id)).length;return '<a href="#baerli/schrank/'+id+'" class="bw-category"><span class="bw-category-sample" aria-hidden="true">'+(sample?subPreview(sample):'<span class="bw-emoji">'+emoji+'</span>')+'</span><strong>'+label+'</strong><small>'+count+' Sachen</small></a>';}).join('')+'</div>'+(current==='kleidung'?'<a href="#baerli/schrank/outfits" class="bw-set-link">🎭 Outfit-Ideen mit Bärli entdecken →</a>':'')+'</div>';
 }
 function wardrobeSection(category,message='',i=0){
  const desc=descriptor(category);
- const things=bearItems.filter(x=>slotOf(x)===category);
+ const things=bearItems.filter(x=>inSection(x,category));
  if(!desc||!things.length)return wardrobeMain();
  wardrobeIndex=Math.max(0,Math.min(i,things.length-1));
- const item=things[wardrobeIndex],has=starOwned('item:'+item.id),worn=bearOutfit[category]===item.id&&has;
- const groupNames=sectionDefs.map(x=>x[0]),pos=groupNames.indexOf(category);
- return '<div class="bw-page bw-single"><a class="bw-back" href="#baerli/schrank/'+(pos<6?'kleidung':'extras')+'">← Alle '+(pos<6?'Kleidungsstücke':'Extras')+'</a>'
+ const item=things[wardrobeIndex],has=starOwned('item:'+item.id),worn=bearOutfit[slotOf(item)]===item.id&&has;
+ const groupNames=sectionDefs.map(x=>x[0]),pos=groupNames.indexOf(category),back=pos<6?'kleidung':pos<11?'extras':'saison';
+ return '<div class="bw-page bw-single"><a class="bw-back" href="#baerli/schrank/'+back+'">← Alle '+(back==='kleidung'?'Kleidungsstücke':back==='extras'?'Extras':'Saisonsachen')+'</a>'
  +'<header class="bw-header"><p class="kicker">'+desc[2]+' Bärlis Kleiderschrank</p><h1 tabindex="-1">'+desc[1]+'</h1><p>'+desc[3]+'</p></header>'
  +'<section class="bw-focus"><div class="bw-dress-preview">'+bearFigure(true,item)+'<p class="bw-try-label">'+(worn?'✓ Bärli trägt das schon':has?'Anprobe – gehört dir':'Anprobe – noch nicht gekauft')+'</p></div><div class="bw-product">'+subPreview(item)
  +'<div class="bw-product-copy"><strong>'+htmlEsc(item.title)+'</strong><span>'+(has?'✓ Gehört dir':item.stars+' ⭐ Sterne')+'</span></div>'
@@ -130,7 +134,7 @@ function wardrobeSection(category,message='',i=0){
 }
 showBearWardrobe=function(category='kleidung',message='',index=0){
  const isSet=category==='outfits'||outfitIdeas.some(idea=>'set-'+idea.id===category);
- const key=isSet?category:descriptor(category)?category:category==='extras'?'extras':'kleidung';
+ const key=isSet?category:descriptor(category)?category:['extras','saison'].includes(category)?category:'kleidung';
  const isItem=Boolean(descriptor(key));
  app.innerHTML=isSet?wardrobeOutfits(key.startsWith('set-')?key.slice(4):'',message):isItem?wardrobeSection(key,message,index):wardrobeMain(key);
  app.querySelectorAll('[data-bw-set]').forEach(button=>button.onclick=()=>{
@@ -154,7 +158,8 @@ showBearWardrobe=function(category='kleidung',message='',index=0){
  app.querySelectorAll('[data-bw-equip]').forEach(button=>button.onclick=()=>{
    const id=button.dataset.bwEquip,item=bearItems.find(x=>x.id===id);
    if(!item||!starOwned('item:'+id))return;
-   if(bearOutfit[key]===id)delete bearOutfit[key];else bearOutfit[key]=id;
+   const slot=slotOf(item);
+   if(bearOutfit[slot]===id)delete bearOutfit[slot];else bearOutfit[slot]=id;
    try{localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));}catch{}
    showBearWardrobe(key,'Bärlis Outfit wurde gespeichert.',wardrobeIndex);
  });
@@ -162,7 +167,7 @@ showBearWardrobe=function(category='kleidung',message='',index=0){
 const previousShowBear=showBear;
 showBear=function(page){
  if(page==='schrank'){const parts=location.hash.slice(1).split('/');const aliases={hut:'huete',oberteil:'pullover',hose:'hosen',brille:'brillen',hals:'schals',schuhe:'schuhe',uebersicht:'kleidung',seite2:'extras'};const category=aliases[parts[2]]||parts[2]||'kleidung';
- const id=parts[3],pieces=bearItems.filter(item=>slotOf(item)===category);
+ const id=parts[3],pieces=bearItems.filter(item=>inSection(item,category));
  const selected=id?Math.max(0,pieces.findIndex(item=>item.id===id)):0;
  showBearWardrobe(category,'',selected);return;}
  previousShowBear(page);
