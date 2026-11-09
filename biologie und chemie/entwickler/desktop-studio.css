@@ -185,3 +185,11 @@ body:not(.lc-theme-dark) #page-home .chem-feature-card,body:not(.lc-theme-dark) 
 @media(max-width:650px){#page-home .chem-studio-hero{min-height:300px;height:auto}#page-home .chem-featured{padding:12px}#page-home .chem-featured-header{display:block}#page-home .chem-featured-header p{margin:6px 0 0}#page-home .chem-featured-grid{gap:8px}#page-home .chem-feature-image{height:100px}#page-home .chem-feature-copy{padding:9px}#page-home .chem-feature-copy strong{font-size:15px}#page-home .chem-feature-copy>span:not(.chem-feature-kicker){font-size:11px}#page-home .chem-home-top .lu-entry{grid-template-columns:1fr}#page-home .chem-home-top .lu-entry button{min-height:53px;padding:9px}#page-home .chem-dir-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){#page-home .chem-feature-molecule,#page-home .chem-feature-magnifier,#page-home .chem-feature-lights{animation:none!important}}
 @media print{#page-home .chem-featured,#page-home .chem-home-top>.lu-hub{display:none}#page-home .chem-studio-hero{height:auto;min-height:0}}
+
+/* Qualitätsprüfung des PC-Titelbildes: Überschrift, Einleitung und Buttons nie anschneiden. */
+@media screen and (min-width:1100px){
+ #page-home .chem-studio-hero{height:355px;min-height:355px}
+ #page-home .chem-studio-copy{padding:23px 0 21px 34px}
+ #page-home .chem-studio-hero h1{font-size:clamp(35px,2.78vw,44px);line-height:1.06;margin:12px 0}
+ #page-home .chem-studio-hero .chem-studio-facts{margin-top:14px}
+}

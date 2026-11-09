@@ -7,6 +7,13 @@ const app=path.resolve(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'),browserTy
  p.on('pageerror',e=>errors.push(e.message));
  await p.goto(pathToFileURL(app).href);
  assert(await p.locator('#chemHeroImage svg').isVisible());
+
+ const hero=await p.locator('.chem-studio-hero').boundingBox();
+ for(const sel of ['.chem-kicker','#chemStudioTitle','.chem-studio-actions','.chem-studio-facts']){
+  const elem=await p.locator(sel).boundingBox();
+  assert(elem && elem.y>=hero.y+4 && elem.y+elem.height<=hero.y+hero.height-4,'PC hero content clipped: '+sel);
+ }
+
  assert(await p.locator('#chemDemoStage svg').isVisible());
  assert(await p.locator('#chemQuickQuestion').isVisible());
  assert.equal(await p.locator('#chemDirFilters button').count(),5);
