@@ -35,7 +35,7 @@ function mount({frames,mode="detective"}){
  controls.setAttribute("aria-label","Comic-Kino und Vorlesefunktion");
  controls.innerHTML=`<div class="kino-title"><div><h3>Comic-Kino</h3><p>Bilder in Ruhe ansehen und Sprechtexte einzeln oder nacheinander hören.</p></div><span class="kino-tech">Stimmen des Geräts</span></div>
  <div class="actions kino-actions"><button type="button" class="primary" data-kino="all" ${canSpeak?"":"disabled"}>▶ Ganze Seite vorlesen</button><button type="button" class="secondary" data-kino="pause" ${canSpeak?"":"disabled"}>Pause</button><button type="button" class="secondary" data-kino="stop" ${canSpeak?"":"disabled"}>Stopp</button></div>
- <p class="kino-layout-note">Bei Detektivcomics kannst du die Sprechblasen im Bild oder gut lesbar darunter anzeigen.</p><div class="kino-settings"><label for="kino-speed">Vorlesetempo <select id="kino-speed"><option value="0.8">Langsam</option><option value="1">Normal</option><option value="1.15">Etwas schneller</option></select></label><label class="kino-checkbox"><input type="checkbox" id="kino-separate"> Sprechblasen unter dem Bild</label></div>
+ ${mode==="detective"?"<p class=\"kino-layout-note\">Du kannst die Sprechblasen im Bild oder zum leichteren Lesen darunter anzeigen.</p>":"<p class=\"kino-layout-note\">Die Schulcomic-Sprechblasen stehen unter den Bildern, damit die Zeichnungen vollständig sichtbar bleiben.</p>"}<div class="kino-settings"><label for="kino-speed">Vorlesetempo <select id="kino-speed"><option value="0.8">Langsam</option><option value="1">Normal</option><option value="1.15">Etwas schneller</option></select></label><label class="kino-checkbox"><input type="checkbox" id="kino-separate"> Sprechblasen unter dem Bild</label></div>
  <details class="kino-voice-settings"><summary>Stimmen für die Figuren auswählen</summary><p>Die verfügbaren deutschen Stimmen hängen vom Gerät und Browser ab. Wenn nur eine Stimme vorhanden ist, verändern sich stattdessen Tonhöhe und Sprechtempo etwas.</p><div class="kino-voices"></div></details>
  <p class="kino-status" role="status" aria-live="polite">${canSpeak?"Tippe auf „Ganze Seite vorlesen“ oder auf eine einzelne Szene.":"Auf diesem Gerät ist die Vorlesefunktion nicht verfügbar; die Texte können weiterhin gelesen werden."}</p>`;
  area.parentElement.insertBefore(controls,area);
@@ -43,6 +43,9 @@ function mount({frames,mode="detective"}){
  const setting= get("#kino-speed");setting.value=["0.8","1","1.15"].includes(String(config.speed))?String(config.speed):"1";
  setting.onchange=()=>{const d=read();d.speed=Number(setting.value);write(d);};
  const separate=get("#kino-separate");
+ // Schulcomics haben feste Sprechblasen direkt unter den Bildern.
+ // Eine Umschaltung wäre hier wirkungslos, deshalb nicht anzeigen.
+ if(mode==="school")separate.closest(".kino-checkbox")?.setAttribute("hidden","");
  // Klassische Comicblasen am Bild auf großen Displays; auf Handys standardmäßig
  // unter dem Bild, damit Gesichter und wichtige Details lesbar bleiben.
  // Eine gespeicherte Eltern-/Kinderauswahl geht immer vor.
