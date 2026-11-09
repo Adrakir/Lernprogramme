@@ -29,7 +29,21 @@ const extraQuiz=[
 ];
 quizBank.push(...extraQuiz);
 const heatingPage=document.getElementById('page-heating');
-if(heatingPage)heatingPage.insertAdjacentHTML('beforeend',`<section class="panel alcohol-boiling" aria-labelledby="alcoholBoilingTitle"><span class="pill">Stoffvergleich · Normaldruck</span><h3 id="alcoholBoilingTitle">Wasser und Ethanol: unterschiedliche Siedetemperaturen</h3><p>Reines <b>Ethanol</b> (der Alkohol in alkoholischen Getränken) siedet bei etwa <b>78 °C</b>. Reines Wasser siedet bei etwa <b>100 °C</b>. Der Siedepunkt gehört zu einem bestimmten Stoff und hängt auch vom Luftdruck ab.</p><div class="boiling-comparison" role="img" aria-label="Vergleich der Siedetemperaturen: Ethanol ungefähr 78 Grad Celsius, Wasser ungefähr 100 Grad Celsius"><div><b>Ethanol</b><span class="boiling-bar ethanol-bar"></span><strong>ca. 78 °C</strong></div><div><b>Wasser</b><span class="boiling-bar water-bar"></span><strong>ca. 100 °C</strong></div></div><div class="notebox alert"><strong>Sicherheit:</strong> Ethanol ist leicht entzündlich. Die App zeigt nur Fachwissen; im Unterricht niemals ohne Anweisung der Lehrkraft erhitzen.</div></section>`);
+(function(){const box=document.getElementById('boilCompare');if(!box)return;const $=id=>document.getElementById(id);
+const thermo=(id,t)=>{const y=212-(t/110)*186;const r=$(id);r.setAttribute('y',y.toFixed(1));r.setAttribute('height',(214-y).toFixed(1))};
+const upd=()=>{const t=Number($('bcTemp').value),tE=Math.min(t,78),tW=Math.min(t,100),bE=t>=78,bW=t>=100;
+$('bcTempVal').textContent=t+' °C';thermo('bcFluE',tE);thermo('bcFluW',tW);
+$('bcReadE').textContent=(bE?'≈ 78':tE)+' °C';$('bcReadW').textContent=(bW?'≈ 100':tW)+' °C';
+$('bcStE').textContent=bE?'siedet!':'flüssig';$('bcStW').textContent=bW?'siedet!':'flüssig';
+$('bcBubE').classList.toggle('on',bE);$('bcBubW').classList.toggle('on',bW);
+$('bcVapE').style.opacity=bE?1:(0.15+0.5*(tE-20)/58).toFixed(2);$('bcVapW').style.opacity=bW?1:(0.08+0.4*(tW-20)/80).toFixed(2);
+$('bcHeat').style.opacity=t>20?1:.25;$('bcCursor').setAttribute('d','M50 '+(200-t*1.4).toFixed(1)+'h395');
+$('bcText').className='feedback'+(bE?' good':'');
+$('bcText').innerHTML=!bE?`Bei <b>${t} °C</b> siedet noch keine der beiden Flüssigkeiten. Beide <b>verdunsten</b> aber schon an der Oberfläche – Ethanol schneller als Wasser (man riecht es).`:!bW?`<b>Ethanol siedet</b>: Im Inneren entstehen Dampfblasen. Sein Thermometer bleibt bei <b>≈ 78 °C</b>, auch wenn weiter geheizt wird. Das <b>Wasser</b> ist mit ${t} °C noch flüssig und verdunstet nur.`:`Jetzt <b>sieden beide</b>: Ethanol bei ≈ 78 °C, Wasser bei ≈ 100 °C. Beide Temperaturen steigen beim Sieden nicht weiter – die Energie wird für den Übergang zum Gas gebraucht.${t>100?' Mehr Hitze ändert daran nichts.':''}`};
+$('bcTemp').addEventListener('input',upd);upd();
+$('bcShowCurve').addEventListener('click',()=>{const s=$('heatSubstance');if(s){s.value='ethanol';s.dispatchEvent(new Event('change',{bubbles:true}))}const c=$('heatChart');if(c)c.scrollIntoView({behavior:'smooth',block:'center'});const play=$('heatPlay');if(play)setTimeout(()=>{const r=$('heatReset');if(r)r.click();play.click()},350)});
+$('bcCampus').addEventListener('click',()=>{if(typeof navigate==='function')navigate('v4lab');setTimeout(()=>{const tb=document.querySelector('[data-v4tab="graph"]');if(tb)tb.click();const s=$('v4HeatSubst');if(s){s.value='ethanol';s.dispatchEvent(new Event('change',{bubbles:true}))}},80)});
+})();
 
 const burnerStage=document.getElementById('page-burner');
 if(burnerStage){

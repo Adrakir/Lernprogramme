@@ -152,11 +152,11 @@
 
   const heating=$('page-heating');
   if(heating){
-    const heading=heating.querySelector('.page-head');
+    const heading=heating.querySelector('#boilCompare')||heating.querySelector('.page-head');
     if(heading)heading.insertAdjacentHTML('afterend',`<div class="panel heat-selector"><label for="heatSubstance"><b>Stoff für die virtuelle Modellkurve:</b></label> <select id="heatSubstance"><option value="water">Wasser</option><option value="ethanol">Ethanol</option></select><p class="muted" id="heatSafetyNote">Die Kurve ist eine Simulation. Ethanol ist leicht entzündlich und wird nicht praktisch erhitzt.</p></div>`);
     const selector=$('heatSubstance');
     const chartTitle=heating.querySelector('.sim-layout .panel h3');
-    const rule=heating.querySelector('.notebox');
+    const rule=heating.querySelector('.sim-layout ~ .notebox')||heating.querySelector('.notebox:not(.alert)');
     const questionButtons=heating.querySelectorAll('#heatQuestion button');
     questionButtons.forEach(button=>button.textContent=button.dataset.heatanswer==='1'?'Nein. Auch unterhalb der Siedetemperatur verdunstet Flüssigkeit an ihrer Oberfläche.':'Ja. Eine Flüssigkeit verdunstet erst beim Sieden.');
     const updateCurve=()=>{

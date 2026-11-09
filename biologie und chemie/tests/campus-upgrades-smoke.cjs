@@ -1,0 +1,61 @@
+const assert=require('node:assert/strict'),path=require('node:path');
+const {pathToFileURL}=require('node:url'),browsers=require('playwright');
+const engine=process.env.CHEMIE_BROWSER||'chromium';
+const app=path.resolve(__dirname,'../Chemie_Entdeckerlabor_V7_2.html');
+const go=(p,page)=>p.evaluate(pg=>navigate(pg),page);
+const setInput=(p,sel,v)=>p.locator(sel).evaluate((e,v)=>{e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}))},v);
+(async()=>{
+ const browser=await browsers[engine].launch({headless:true});const p=await browser.newPage({viewport:{width:1280,height:900}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto(pathToFileURL(app).href);await p.waitForTimeout(500);
+
+ // Siedetemperatur: Ethanol/Wasser-Vergleich steht direkt unter der Überschrift.
+ await go(p,'heating');
+ assert.equal(await p.evaluate(()=>document.querySelector('#page-heating .page-head').nextElementSibling.id),'boilCompare');
+ assert.match(await p.locator('#boilCompare').innerText(),/78 °C[\s\S]*100 °C/);
+ await setInput(p,'#bcTemp','90');
+ assert.match(await p.locator('#bcText').innerText(),/Ethanol siedet/);
+ assert.equal(await p.locator('#bcStW').textContent(),'flüssig');
+ await setInput(p,'#bcTemp','105');
+ assert.match(await p.locator('#bcText').innerText(),/sieden beide/);
+ assert.match(await p.locator('#page-heating .sim-layout ~ .notebox').first().innerText(),/Merksatz/);
+ await p.locator('#bcShowCurve').click();assert.equal(await p.inputValue('#heatSubstance'),'ethanol');
+
+ // Forscher-Campus Messlabor: Ethanol, eigene Leistung/Druck und eigene Messwerte.
+ await p.locator('#bcCampus').click();await p.waitForTimeout(250);
+ assert.equal(await p.inputValue('#v4HeatSubst'),'ethanol');assert.match(await p.textContent('#v4BPVal'),/78/);
+ await p.selectOption('#v4HeatSubst','water');
+ await p.selectOption('#v4Pressure','custom');await setInput(p,'#v4PressureNum','700');
+ const bp=parseFloat((await p.textContent('#v4BPVal')).replace(',','.'));assert(bp>88&&bp<92,'Siedepunkt bei 700 hPa: '+bp);
+ await p.selectOption('#v4Power','custom');await setInput(p,'#v4PowerNum','300');
+ await p.locator('#v4GraphNext').click();await p.locator('#v4GraphSave').click();
+ await p.fill('#v4OwnTime','2');await p.fill('#v4OwnTemp','47');await p.locator('#v4OwnAdd').click();
+ assert.match(await p.locator('#v4OwnList').innerText(),/2 min: 47 °C/);
+ assert.deepEqual(await p.evaluate(()=>[...document.getElementById('v4Substance').options].map(o=>o.value)),['salt','sugar'],'Löse-Experiment behält Salz/Zucker');
+
+ // Teilchenlupe: vier Zoomstufen, unverzerrte Canvas.
+ await p.locator('[data-v4tab="micro"]').click();
+ for(const z of ['1','2','4','8']){await p.locator(`[data-micro-zoom="${z}"]`).click();assert.equal(await p.locator(`[data-micro-zoom="${z}"]`).getAttribute('aria-pressed'),'true')}
+ const ratio=await p.locator('#v4MicroCanvas').evaluate(c=>{const r=c.getBoundingClientRect();return Math.abs(c.width/c.height-r.width/r.height)});assert(ratio<0.02,'Canvas nicht verzerrt: '+ratio);
+ assert.match(await p.locator('#v4MicroResult').innerText(),/rot = Sauerstoff/);
+
+ // Laborfehler: 7 gezeichnete Szenen, Lösung erst nach dem Finden.
+ const detStage=await p.evaluate(()=>document.querySelector('[data-v4tab="detect"]').closest('.stage').id.replace('page-',''));await go(p,detStage);
+ await p.locator('[data-v4tab="detect"]').click();
+ assert.equal(await p.locator('#v4SceneSelect option').count(),7);
+ assert.equal(await p.locator('#v4SceneBoard .det-card').count(),0);
+ for(let i=0;i<4;i++)await p.locator(`#v4SceneBoard [data-hazard="${i}"]`).evaluate(e=>e.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+ assert.equal(await p.locator('#v4SceneBoard .det-card').count(),4);assert.match(await p.textContent('#v4SceneCount'),/4 von 4/);
+
+ // Lernpfad Schritt 5: Satzbaukasten und automatische Rückmeldung.
+ await p.evaluate(()=>{const k='chemie8-learning-v1',d=JSON.parse(localStorage.getItem(k)||'{}');d.lesson=0;d.step=4;localStorage.setItem(k,JSON.stringify(d))});
+ await p.reload();await p.waitForTimeout(400);await go(p,'learningpath');
+ const gaps=p.locator('.lu-gap select');assert.equal(await gaps.count(),3);
+ await gaps.nth(0).selectOption('1');await p.getByRole('button',{name:'Sätze prüfen'}).click();
+ assert.match(await p.locator('.lu-kit-feedback').innerText(),/von 3 Bausteinen/);
+ for(let i=0;i<3;i++)await gaps.nth(i).selectOption('0');await p.getByRole('button',{name:'Sätze prüfen'}).click();
+ await p.getByRole('button',{name:'Sätze in mein Textfeld übernehmen'}).click();
+ assert.equal(await p.locator('.lu-auto li.hit').count(),2);
+ assert.equal(await p.locator('#luStage .lu-check input:checked').count(),2);
+
+ assert.deepEqual(errors,[]);await browser.close();console.log(`PASS ${engine}: ethanol comparison, custom heating curve, micro zoom, drawn lab scenes and interactive explanation step`);
+})().catch(e=>{console.error(e);process.exit(1)});
