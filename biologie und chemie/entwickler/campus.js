@@ -288,7 +288,14 @@ if(skStage){
  const skUp=()=>{if(sk.cur&&sk.cur.includes('L')){sk.strokes.push(sk.cur)}sk.cur=null;if(sk.drag){sk.drag=null;skSave()}else if(sk.pen)skSave();skRender()};
  skStage.addEventListener('pointerup',skUp);skStage.addEventListener('pointercancel',skUp);
  el('v4SketchPen').addEventListener('click',()=>{sk.pen=!sk.pen;sk.sel=-1;el('v4SketchPen').setAttribute('aria-pressed',String(sk.pen));skStage.classList.toggle('pen',sk.pen);skRender()});
- el('v4SketchLabel').addEventListener('click',()=>{const txt=(prompt('Beschriftung für die Skizze:')||'').trim().slice(0,40);if(!txt)return;sk.items.push({k:'_t',t:txt,x:340,y:60+(sk.items.length%4)*24});sk.sel=sk.items.length-1;skRender();skSave()});
+ el('v4SketchLabel').addEventListener('click',()=>{const row=el('v4SketchLabelRow'),open=row.hidden;row.hidden=!open;el('v4SketchLabel').setAttribute('aria-expanded',String(open));if(open)el('v4SketchLabelText').focus()});
+ const skAddLabel=()=>{const txt=el('v4SketchLabelText').value.trim().slice(0,40);if(!txt)return;sk.items.push({k:'_t',t:txt,x:340,y:60+(sk.items.length%4)*24});sk.sel=sk.items.length-1;el('v4SketchLabelText').value='';skRender();skSave();skStage.focus()};
+ el('v4SketchLabelAdd').addEventListener('click',skAddLabel);
+ el('v4SketchLabelText').addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();skAddLabel()}});
+ skStage.addEventListener('keydown',ev=>{if(sk.sel<0)return;const it=sk.items[sk.sel],step=ev.shiftKey?20:5;let moved=true;
+  if(ev.key==='ArrowLeft')it.x-=step;else if(ev.key==='ArrowRight')it.x+=step;else if(ev.key==='ArrowUp')it.y-=step;else if(ev.key==='ArrowDown')it.y+=step;
+  else if(ev.key==='Delete'||ev.key==='Backspace'){sk.items.splice(sk.sel,1);sk.sel=-1}else moved=false;
+  if(moved){ev.preventDefault();it&&(it.x=Math.max(0,Math.min(750,it.x)),it.y=Math.max(0,Math.min(414,it.y)));skRender();skSave()}});
  el('v4SketchDelete').addEventListener('click',()=>{if(sk.sel<0)return;sk.items.splice(sk.sel,1);sk.sel=-1;skRender();skSave()});
  el('v4SketchUndo').addEventListener('click',()=>{sk.strokes.pop();skRender();skSave()});
  el('v4SketchClear').addEventListener('click',()=>{sk.items=[];sk.strokes=[];sk.sel=-1;skRender();skSave('Skizze geleert. Baue eine neue Anordnung auf.')});

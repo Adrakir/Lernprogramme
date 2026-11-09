@@ -4,7 +4,7 @@ const {pathToFileURL}=require('node:url'),{chromium}=require('playwright');
 const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdeckerlabor_V7_2.html'));
 (async()=>{
  const browser=await __browserTypes[process.env.CHEMIE_BROWSER||'chromium'].launch({headless:true});const p=await browser.newPage({viewport:{width:1280,height:960}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
- await p.goto(pathToFileURL(app).href+'#abschlusstest');assert.match(await p.title(),/Version 8\.0/);
+ await p.addInitScript(()=>{const fix=()=>document.documentElement.style.setProperty('scroll-behavior','auto','important');if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix);else fix()}); await p.goto(pathToFileURL(app).href+'#abschlusstest');assert.match(await p.title(),/Version 8\.0/);
  // Print sheet includes all tasks and diagrams, without answers; no test submission.
  await p.evaluate(()=>window.print=()=>{});await p.locator('#cePrintTasks').click();
  assert.equal(await p.locator('#cePrintDocument article').count(),24);assert((await p.locator('#cePrintDocument svg').count())>=18);
