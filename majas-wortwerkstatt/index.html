@@ -421,7 +421,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-studio.css?v=20261108c">
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
-<link rel="stylesheet" href="./mobile-start.css?v=20261108a">
+<link rel="stylesheet" href="./mobile-start.css?v=20261109b">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109a">
 </head>
 <body>
@@ -4996,7 +4996,7 @@ function runPrep(topic,mode,n){
  function save(){data[key]=session;return prepWrite(data);}
  const title=(guided?'Mit Bärli lernen':test?'Abschlusstest '+n:'Übung '+n)+' · '+prepTopics[topic].title;
  app.innerHTML=prepHeader(topic,title)+`<a class="crumb" href="#pruefung/${topic}">${icon('back')} Zum Lernweg</a>
- ${guided?'<section class="panel maja-voice-intro"><h2>Bärli begrüßt dich</h2><p>Ein kurzer Mutmacher vor dem Lernen.</p><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärli begrüßt Maja"></audio></section>':''}
+ ${guided&&topic!=='hoeren'?'<section class="panel maja-voice-intro"><h2>Bärli begrüßt dich</h2><p>Ein kurzer Mutmacher vor dem Lernen.</p><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärli begrüßt Maja"></audio></section>':''}
  ${topic==='hoeren'?`<section class="panel prep-audio prep-audio-compact">
    <h2>🎧 ${escapeHtml(story.title)}</h2>
    <div class="prep-listen-toolbar" aria-label="Hörtext und Vorlesestimme">
@@ -5031,7 +5031,7 @@ function runPrep(topic,mode,n){
   </section>`:''}
   <section class="panel" id="prep-question"></section><section id="prep-result" hidden></section></div>`;
  const root=document.querySelector('#prep-question'),result=document.querySelector('#prep-result'),audio=document.querySelector('#prep-audio');let stopFireworks=()=>{};
- let stopComputer=()=>{},detachVoices=()=>{};
+ let stopComputer=()=>{},detachVoices=()=>{},drawnStep=-1;
  extraCleanup=()=>{audio?.pause();stopComputer();detachVoices();stopFireworks();};
  if(audio&&guided&&topic==='hoeren'){
   const cues=annaAudioCues[audioTrack]||[];
@@ -5141,7 +5141,7 @@ function runPrep(topic,mode,n){
   const q=questions[session.answers.length];hintCount=0;tries=0;firstCorrect=typeof session.firstCorrect==='boolean'?session.firstCorrect:null;checked=false;given=typeof session.draft==='string'?session.draft:'';
   const options=q.options?gameShuffle(q.options):[];
   const coach=topic==='hoeren'?'Bärlis Hörplan: 1. Wer und wo? 2. Wichtige Einzelheiten. 3. Was geschieht zuerst? 4. Warum? Höre die passende Stelle noch einmal.':q.skill==='verlaengern'?`Bärli macht es vor: Hund → Hunde. Nach dem d hörst du ein e. Deshalb endet Hund auf d. Versuche das jetzt mit „${q.context}“.`:`Bärli erklärt: Nomen schreibt man groß. -ung, -heit, -keit und -schaft haben hier den Artikel die. Bei -nis kann der Artikel das oder die sein. Schau deshalb genau auf das einzelne Wort. Schau auf die Wortart, die Endung -${q.skill} und den passenden Artikel. Denke selbst nach, bevor du prüfst.`;
-  root.innerHTML=`<p class="kicker">Aufgabe ${session.answers.length+1} von ${questions.length}</p><div class="bar"><span style="width:${session.answers.length/questions.length*100}%"></span></div>${guided&&topic!=='hoeren'?`<div class="prep-coach"><strong>Bärli begleitet dich</strong><p>${escapeHtml(coach)}</p></div>`:''}${topic==='hoeren'?`<div class="prep-question-highlight"><span>❓ Die Frage</span><h2>${escapeHtml(q.prompt)}</h2></div>`:`<h2>${escapeHtml(q.prompt)}</h2>`}${q.context?`<div class="prep-word">${escapeHtml(q.context)}</div>`:''}<form id="prep-form">${q.type==='choice'?`<div class="options">${options.map(v=>`<button class="choice" type="button" data-prep-option="${escapeHtml(v)}" aria-pressed="false">${escapeHtml(v)}</button>`).join('')}</div>`:'<label class="field" for="prep-answer">Deine Antwort</label><input class="answer" id="prep-answer" autocomplete="off" autocapitalize="off" spellcheck="false">'}<div class="actions"><button class="primary" type="submit" id="prep-check">${test?'Antwort abgeben':'Prüfen'}</button>${test?'':'<button class="secondary" type="button" id="prep-help">Hilfe 1 von 3</button>'}</div></form><div id="prep-help-text" class="tip" hidden></div><p id="prep-feedback" class="inline-status" role="status"></p><button class="primary" type="button" id="prep-next" hidden>Weiter</button>`;
+  root.innerHTML=`<p class="kicker">Aufgabe ${session.answers.length+1} von ${questions.length}</p><div class="bar"><span style="width:${session.answers.length/questions.length*100}%"></span></div>${guided&&topic!=='hoeren'?`<div class="prep-coach"><strong>Bärli begleitet dich</strong><p>${escapeHtml(coach)}</p></div>`:''}${topic==='hoeren'?`<div class="prep-question-highlight"><span>❓ Die Frage</span><h2 tabindex="-1">${escapeHtml(q.prompt)}</h2></div>`:`<h2>${escapeHtml(q.prompt)}</h2>`}${q.context?`<div class="prep-word">${escapeHtml(q.context)}</div>`:''}<form id="prep-form">${q.type==='choice'?`<div class="options">${options.map(v=>`<button class="choice" type="button" data-prep-option="${escapeHtml(v)}" aria-pressed="false">${escapeHtml(v)}</button>`).join('')}</div>`:'<label class="field" for="prep-answer">Deine Antwort</label><input class="answer" id="prep-answer" autocomplete="off" autocapitalize="off" spellcheck="false">'}<div class="actions"><button class="primary" type="submit" id="prep-check">${test?'Antwort abgeben':'Prüfen'}</button>${test?'':'<button class="secondary" type="button" id="prep-help">Hilfe 1 von 3</button>'}</div></form><div id="prep-help-text" class="tip" hidden></div><p id="prep-feedback" class="inline-status" role="status"></p><button class="primary" type="button" id="prep-next" hidden>Weiter</button>`;
   if(q.type==='write'){const input=document.querySelector('#prep-answer');input.value=given;input.oninput=()=>{given=input.value;session.draft=given;save();};}
   else root.querySelectorAll('[data-prep-option]').forEach(b=>b.onclick=()=>{if(checked)return;given=b.dataset.prepOption;session.draft=given;root.querySelectorAll('[data-prep-option]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));save();});
   if(!test)document.querySelector('#prep-help').onclick=()=>{hintCount=Math.min(3,hintCount+1);document.querySelector('#prep-help-text').hidden=false;document.querySelector('#prep-help-text').textContent=q.hints[hintCount-1];document.querySelector('#prep-help').textContent=hintCount===3?'Alle Hilfen geöffnet':'Hilfe '+(hintCount+1)+' von 3';};
@@ -5153,6 +5153,8 @@ function runPrep(topic,mode,n){
    if(correct){checked=true;record(correct);document.querySelector('#prep-next').hidden=false;document.querySelector('#prep-check').disabled=true;document.querySelector('#prep-next').focus();}
   };
   document.querySelector('#prep-next').onclick=()=>draw();
+  if(drawnStep>=0 && drawnStep!==session.answers.length){root.scrollIntoView({block:'start',behavior:'instant'});root.querySelector('h2')?.focus({preventScroll:true});}
+  drawnStep=session.answers.length;
  }
  draw();
 }
