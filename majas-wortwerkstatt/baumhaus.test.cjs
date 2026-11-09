@@ -46,7 +46,7 @@ exam('nomen',1,15,12);assert.equal(tree.stats(tree.stateRead()).balance,20,'zwei
 exam('nomen',2,15,15,true,true);assert.equal(tree.stats(tree.stateRead()).passed,2,'Lesehilfe/assistierte Tests gelten nicht');
 tree.render('shop');
 assert(app.innerHTML.includes('Bärli AG Osnabrück'),'Shop öffnet');
-assert(app.innerHTML.includes('Möbel & Bettwäsche'),'Möbelkategorie');
+assert(app.innerHTML.includes('Möbel &amp; Bettwäsche'),'Möbelkategorie wird HTML-korrekt kodiert');
 tree.render('shop','weihnachten');
 assert(app.innerHTML.includes('Noch')||app.innerHTML.includes('fehlen'),'Weihnachtsabteilung bleibt gesperrt');
 assert(index.includes('href="#baumhaus"'),'Baumhaus auf Startseite');
