@@ -61,6 +61,10 @@ test('Hörtext: fünf vorhandene MP3-Dateien und Aufnahmesteuerung mit drei Gesc
  }
  await page.goto(url('pruefung/hoeren/ueben/1'),{waitUntil:'domcontentloaded'});
  await expect(page.locator('#prep-reading')).toHaveCount(1);
+ await expect(page.locator('.fs-mini')).toHaveCount(0);
+ await expect(page.locator('.fs-mini-link')).toBeVisible();
+ const isAfter=await page.evaluate(()=>{const player=document.querySelector('.prep-audio'),link=document.querySelector('.fs-mini-link');return !!player&&!!link&&!!(player.compareDocumentPosition(link)&Node.DOCUMENT_POSITION_FOLLOWING);});
+ expect(isAfter,'Der Hörtext muss vor dem optionalen Figurenstimmen-Link stehen').toBeTruthy();
  const mode=page.locator('#prep-playback-mode'),rate=page.locator('#prep-playback-speed');
  await expect(mode).toBeVisible();
  await expect(rate).toBeVisible();
