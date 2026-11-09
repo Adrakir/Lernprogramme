@@ -39,7 +39,7 @@ test('Bärlis Outfit-Ideen: Vorschauen ohne Kauf und direkte Artikellinks',async
   for(const name of ['schule','regen','detektiv','musik']){
     await page.goto(route('baerli/schrank/set-'+name),{waitUntil:'domcontentloaded'});
     await expect(page.locator('.bw-set-items a')).toHaveCount(4);
-    await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id',/^[a-z0-9,\-]+$/);
+    await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id',/^[a-z0-9,-]+$/);
     await expect(page.locator('.bw-set-explain')).toContainText('keine Sterne');
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
     expect(overflow,name+' darf nicht horizontal scrollen').toBeLessThanOrEqual(2);
