@@ -47,4 +47,13 @@ assert(html.includes("bearOutfitKey='majas-wortwerkstatt-baerli-auswahl-v1'"),'e
 assert(html.includes("starWalletKey='majas-wortwerkstatt-sternenbeutel-v1'"),'existing star save key preserved');
 assert(css.includes('@media(max-width:620px)'), 'mobile layout');
 for(const doc of ['AGENTS.md','PROJECT_STATE.md','README.md'])assert(fs.existsSync(path.join(base,doc)),'handoff doc: '+doc);
+
+const newWardrobeIds=['abenteuercap','partyhut','forscherbrille','herzbrille','ringelpullover','blauejacke','schlaghose','kordhose','punkteschal','winterschal','lilasneaker','streifenstiefel'];
+for(const id of newWardrobeIds)assert(wardrobeJs.includes("id:'"+id+"'"),'new clothing remains available: '+id);
+new vm.Script(wardrobeJs);
+assert(wardrobeJs.includes('bearFigure(true,item)'),'new clothes can be previewed on Bärli');
+assert(wardrobeJs.includes('if(previewItem)equipped.push(previewItem)'),'preview overlay replaces worn slot');
+assert(wardrobeJs.includes('bw-category-sample'),'wardrobe categories have images');
+assert(wardrobeJs.includes('Anprobe – noch nicht gekauft'),'preview distinguished from purchase');
+assert(!wardrobeJs.includes('localStorage.clear('),'wardrobe does not erase saved child data');
 console.log('PASS: parseable scripts, learning/adventure, hearing, didactics, parent snapshot, storage, wardrobe, handoff.');
