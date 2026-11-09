@@ -10,7 +10,7 @@ const setInput=(p,sel,v)=>p.locator(sel).evaluate((e,v)=>{e.value=v;e.dispatchEv
 
  // Siedetemperatur: Ethanol/Wasser-Vergleich steht direkt unter der Überschrift.
  await go(p,'heating');
- assert.equal(await p.evaluate(()=>document.querySelector('#page-heating .page-head').nextElementSibling.id),'boilCompare');
+ assert.equal(await p.evaluate(()=>document.querySelector('#page-heating .lz-box').nextElementSibling.id),'boilCompare');
  assert.match(await p.locator('#boilCompare').innerText(),/78 °C[\s\S]*100 °C/);
  await setInput(p,'#bcTemp','90');
  assert.match(await p.locator('#bcText').innerText(),/Ethanol siedet/);

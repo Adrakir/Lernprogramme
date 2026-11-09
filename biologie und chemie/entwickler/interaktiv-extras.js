@@ -18,6 +18,7 @@ function curvePath(){let d='M'+X(0)+' '+Y(-20);for(let t=0;t<=10.001;t+=.1)d+='L
 const zonesSvg=seg.map(([a,b,label],i)=>`<g class="ice-zone" data-icezone="${i}" role="button" tabindex="0" aria-label="Abschnitt ${label} erklären"><rect x="${X(a)}" y="38" width="${X(b)-X(a)}" height="232" fill="transparent"/><text x="${(X(a)+X(b))/2}" y="${i%2?76:286}" text-anchor="middle" class="ice-lab">${label}</text></g>`).join('');
 const html=`<section class="panel ice-panel" aria-labelledby="iceTitle"><span class="pill">Vom Eiswürfel zum Wasserdampf</span><h3 id="iceTitle">🧊 Eiswürfel erhitzen – die ganze Heizkurve</h3>
 <p>Starte das virtuelle Erhitzen und verfolge die Kurve live. <b>Tippe die Abschnitte an</b> („fest“, „schmilzt“ …), um zu sehen, was mit den Teilchen passiert – und warum die Kurve zweimal stehen bleibt.</p>
+<p class="small muted">Die Teilchenbilder sind ein stark vereinfachtes <b>Modell</b>: Echte Teilchen sind keine sichtbaren Kugeln – das Modell hilft nur beim Erklären.</p>
 <div class="ice-grid"><svg viewBox="0 0 640 305" class="ice-svg" role="img" aria-label="Heizkurve von Eis bei minus 20 Grad bis Wasserdampf über 100 Grad mit zwei waagerechten Abschnitten beim Schmelzen und Sieden">
 <path d="M${X(0)} ${Y(110)}V${Y(-20)}H${X(10)}" stroke="#37474f" stroke-width="2.5" fill="none"/>
 <g class="ice-ticks">${[-20,0,20,100].map(T=>`<path d="M${X(0)-5} ${Y(T)}h5" stroke="#37474f"/><text x="${X(0)-9}" y="${Y(T)+4}" text-anchor="end">${T}</text>`).join('')}<text x="18" y="34">°C</text><text x="${X(10)-4}" y="${Y(-20)-8}" text-anchor="end">Zeit →</text></g>
@@ -60,7 +61,7 @@ const colPart=k=>{const d=(x,y,cls)=>`<circle cx="${x}" cy="${y}" r="5" class="i
  else{b=d(14,14,'fly')+d(58,20,'fly')+d(30,40,'fly')+d(64,44,'fly')}
  return `<svg viewBox="0 0 76 54" class="st-part"><rect x="1" y="1" width="74" height="52" rx="8" fill="#eef7fa" stroke="#9db7c0"/>${b}</svg>`};
 const html=`<section class="panel st-panel" aria-labelledby="stTitle"><span class="pill">Teilchenmodell · Sortierspiel</span><h3 id="stTitle">🧊💧💨 Fest, flüssig oder gasförmig?</h3>
-<p>Tippe zuerst eine Karte an und dann den passenden Zustand. Die Teilchenbilder zeigen dir, wie sich die Teilchen in jedem Zustand verhalten.</p>
+<p>Tippe zuerst eine Karte an und dann den passenden Zustand. Die Teilchenbilder zeigen dir, wie sich die Teilchen in jedem Zustand verhalten – als vereinfachtes <b>Modell</b>, nicht als echtes Foto.</p>
 <div class="st-tray" id="stTray" role="group" aria-label="Beispiele zum Sortieren"></div>
 <div class="st-cols" id="stCols"></div>
 <p class="feedback" id="stFeedback" aria-live="polite">Wähle zuerst eine Karte.</p>
@@ -193,6 +194,21 @@ new MutationObserver(()=>{
   const msg=weak.length?('💡 Deine schwierigsten Themen: <b>'+weak.join('</b> und <b>')+'</b>. Öffne sie unten direkt zum Nachüben.'):'💪 Kein Thema lag unter 75 % – stark!';
   h3.insertAdjacentHTML('beforebegin','<p class="quiz-weakest">'+msg+'</p>')}catch(e){}
 }).observe(end,{attributes:true,attributeFilter:['hidden'],childList:true});
+})();
+
+/* ---------- 7) Lernziele: "Nach diesem Abschnitt kannst du ..." ---------- */
+(function(){
+const goals={
+ 'page-matter':['den Unterschied zwischen Körper und Stoff mit einem Beispiel erklären','Beispiele in fest, flüssig und gasförmig einordnen','beschreiben, wie sich die Teilchen in jedem Zustand verhalten (Modell)'],
+ 'page-devices':['mindestens zehn Laborgeräte benennen und ihren Einsatz nennen','zu einer Aufgabe das passende Gerät auswählen','zu jedem Gerät eine Regel für die richtige Handhabung nennen'],
+ 'page-safety':['drei Laborregeln nennen und begründen','Gefahren in einer Laborszene erkennen','die wichtigsten GHS-Gefahrensymbole erklären'],
+ 'page-solubility':['erklären, dass gelöstes Salz nicht verschwunden ist','einen fairen Löslichkeitsvergleich planen (gleiche Wassermenge, Temperatur, Masse)','gelöst, ungelöst (Bodensatz) und geschmolzen unterscheiden'],
+ 'page-thermal':['erklären, wie Energie von Teilchen zu Teilchen weitergegeben wird','gute und schlechte Wärmeleiter mit Alltagsbeispielen nennen','den Metall-Glas-Versuch beschreiben und auswerten'],
+ 'page-heating':['Verdunsten und Sieden unterscheiden','eine Heizkurve lesen und die waagerechten Abschnitte erklären','die Siedetemperaturen von Wasser (≈ 100 °C) und Ethanol (≈ 78 °C) nennen'],
+ 'page-burner':['die Teile des Gasbrenners benennen','die gelbe und die blaue Flamme vergleichen','die sichere Reihenfolge beim Starten erklären'],
+ 'page-method':['die Teile eines Versuchsprotokolls in die richtige Reihenfolge bringen','Beobachtung und Auswertung auseinanderhalten','eine überprüfbare Vermutung formulieren']};
+Object.entries(goals).forEach(([pid,list])=>{const page=el(pid);if(!page)return;const head=page.querySelector('.page-head');if(!head||page.querySelector('.lz-box'))return;
+ head.insertAdjacentHTML('afterend','<div class="lz-box">🎯 <b>Nach diesem Abschnitt kannst du …</b><ul>'+list.map(g=>'<li>'+g+'</li>').join('')+'</ul></div>')});
 })();
 
 })();
