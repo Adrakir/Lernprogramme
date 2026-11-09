@@ -421,7 +421,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-studio.css?v=20261108c">
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
-<link rel="stylesheet" href="./mobile-start.css?v=20261109b">
+<link rel="stylesheet" href="./mobile-start.css?v=20261109c">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109a">
 </head>
 <body>
@@ -3288,40 +3288,63 @@ const move = hash=>{
   else location.hash=hash;
 };
 function showHome(){
-  // The first screen is purposefully short: only the three main subjects and four destinations.
-  // Full exercise catalogues, audio extras and stories remain available via separate pages.
-  app.innerHTML=`<div class="maja-mobile-home">
-    <div class="maja-quick-heading">
-      <p class="kicker">${icon('leaf')} Deutsch · Klasse 3</p>
-      <h1 tabindex="-1">Fit für den Kombitest</h1>
-      <p>Wähle ein Thema. Du darfst selbst entscheiden, womit du beginnst.</p>
-    </div>
-    <nav class="maja-quick-topic-grid" aria-label="Drei Themen zum Üben">
-      <a class="maja-quick-topic" href="#pruefung/hoeren" aria-label="Hörverständnis üben, Klassenarbeit 16. November">
-        <span class="maja-topic-symbol">${icon('audio')}</span>
-        <strong>Hören</strong><small>16. November</small>
-      </a>
-      <a class="maja-quick-topic" href="#endungen" aria-label="Nomen-Endungen mit ung, heit, keit, schaft und nis üben">
-        <span class="maja-topic-symbol">${icon('puzzle')}</span>
-        <strong>Endungen</strong><small>-ung, -heit …</small>
-      </a>
-      <a class="maja-quick-topic" href="#verlaengern" aria-label="Wörter verlängern üben">
-        <span class="maja-topic-symbol maja-word-symbol"><span class="maja-word-small" aria-hidden="true">d→de</span></span>
-        <strong>Verlängern</strong><small>Hund → Hunde</small>
-      </a>
-    </nav>
-    <a class="maja-quick-test" href="#kombitest"><span>Teste dich<small>Prüfungsaufgaben ausprobieren</small></span>${icon('arrow')}</a>
-    <section class="maja-quick-choices" aria-labelledby="maja-quick-more">
-      <h2 id="maja-quick-more">Was möchtest du danach machen?</h2>
-      <nav class="maja-quick-options" aria-label="Weitere Bereiche">
-        <a href="#comics" class="maja-quick-option"><span class="maja-option-icon">${icon('comic')}</span><span><strong>Comics</strong><small>Alle im Paket</small></span></a>
-        <a href="#spiele" class="maja-quick-option"><span class="maja-option-icon">${icon('game')}</span><span><strong>Spiele</strong><small>Mit Sternen</small></span></a>
-        <a href="#lernberater" class="maja-quick-option"><span class="maja-option-icon">${icon('paw')}</span><span><strong>Bärli hilft dir</strong><small>Dein Lernberater</small></span></a>
-        <a href="#baerli/schrank" class="maja-quick-option"><span class="maja-option-icon">${icon('hanger')}</span><span><strong>Bärlis Kleidung</strong><small>${starBalance()} ★ im Beutel</small></span></a>
-      </nav>
-    </section>
-    <a href="#stationen" class="maja-quick-all">Alle weiteren Lernthemen ${icon('arrow')}</a>
-  </div>`;
+ app.innerHTML=`<div class="maja-mobile-home maja-door-home">
+  <div class="maja-quick-heading">
+   <p class="kicker">${icon('leaf')} Deutsch · Klasse 3</p>
+   <h1 tabindex="-1">Was möchtest du heute machen?</h1>
+   <p>Wähle einen Weg. Du kannst jederzeit zurück.</p>
+  </div>
+  <nav class="maja-door-grid" aria-label="Lernen oder Abenteuer">
+   <a class="maja-door-card maja-door-learn" href="#lernen">
+    <span class="maja-door-visual" aria-hidden="true">${icon('book')}</span>
+    <span><strong>📚 Deutsch lernen</strong><small>Hören, Wörter und Klassenarbeiten</small></span>
+    <span class="maja-door-next" aria-hidden="true">→</span>
+   </a>
+   <a class="maja-door-card maja-door-adventure" href="#abenteuer">
+    <img class="maja-door-bear" src="./baerli/baerli.webp" alt="" loading="eager" width="110" height="110">
+    <span><strong>⭐ Abenteuer erleben</strong><small>Comics, Spiele und Bärlis Kleider</small></span>
+    <span class="maja-door-next" aria-hidden="true">→</span>
+   </a>
+  </nav>
+  <div class="maja-door-shortcuts">
+   <a class="maja-quick-test" href="#pruefung/hoeren"><span>🎧 Hörverständnis üben<small>Klassenarbeit am 16. November</small></span>${icon('arrow')}</a>
+   <a class="maja-quick-all" href="#lernweg">Mein Lernweg ${icon('arrow')}</a>
+  </div>
+  <div class="maja-door-parent"><a href="#erwachsene">Für Eltern und Lehrkräfte</a> · <a href="#einstellungen">Einstellungen & Sicherung</a></div>
+ </div>`;
+}
+function showJourneyHub(kind){
+ const learn=kind==='lernen';
+ const items=learn?[
+  {href:'#pruefung/hoeren',icon:'audio',title:'Hörverständnis',sub:'Zuhören und Fragen lösen',visual:'🎧'},
+  {href:'#endungen',icon:'puzzle',title:'Nomen-Endungen',sub:'-ung · -heit · -keit · -schaft · -nis',visual:'🧩'},
+  {href:'#verlaengern',icon:'link',title:'Wörter verlängern',sub:'Hund → Hunde',visual:'✏️'},
+  {href:'#pruefung',icon:'trophy',title:'Klassenarbeit üben',sub:'Geführt üben und fünf Tests',visual:'🏅'}
+ ]:[
+  {href:'#comics',icon:'comic',title:'Comics',sub:'Maja, Fuji und Minka',visual:'💬'},
+  {href:'#spiele',icon:'game',title:'Spiele',sub:'Rätsel lösen und Sterne sammeln',visual:'🎮'},
+  {href:'#lernberater',icon:'paw',title:'Bärli hilft dir',sub:'Hinweise und Lernideen',visual:'🐾'},
+  {href:'#baerli/schrank',icon:'hanger',title:'Bärlis Kleidung',sub:starCount(starBalance())+' im Beutel',visual:'🧥'}
+ ];
+ app.innerHTML=`<div class="maja-page-hub maja-journey-hub">
+  ${homeLink()}
+  <header class="maja-hub-header">
+   <p class="kicker">${learn?'📚 Lernmodus':'⭐ Abenteuermodus'} · Deutsch Klasse 3</p>
+   <h1 tabindex="-1">${learn?'Was möchtest du üben?':'Was möchtest du entdecken?'}</h1>
+   <p>${learn?'Wähle eine Aufgabe. Du kannst sie mit Bärli Schritt für Schritt üben.':'Such dir ein Abenteuer aus und entdecke deine Sterne.'}</p>
+  </header>
+  <nav class="maja-journey-grid" aria-label="${learn?'Deutsch lernen':'Abenteuer und Spiele'}">
+   ${items.map(item=>`<a class="maja-journey-card" href="${item.href}">
+     <span class="maja-journey-visual" aria-hidden="true">${item.visual}</span>
+     <span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.sub)}</small></span>
+     ${icon('arrow')}
+    </a>`).join('')}
+  </nav>
+  <div class="maja-journey-footer">
+   <a class="secondary" href="${learn?'#lernweg':'#lernen'}">${learn?'Mein Tagesplan':'Zum Lernen'}</a>
+   <a class="secondary" href="${learn?'#stationen':'#tagescomic'}">${learn?'Weitere Deutschthemen':'Tagescomic'}</a>
+  </div>
+ </div>`;
 }
 
 function showLearningAdvisor(){
@@ -5281,6 +5304,7 @@ function render(initial=false){
   const number=Number(index);
   const oldRoute=route;
   route=page||'start';
+  if(page==='lernen'||page==='abenteuer')showJourneyHub(page);
   if(page==='lernberater')showLearningAdvisor();
   else if(page==='comics')showComicHub();
   else if(page==='stationen')showStationHub();
