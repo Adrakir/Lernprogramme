@@ -16,6 +16,33 @@ Eine eigenständige, interaktive Deutschlernapp mit Maja, Bärli, Fuji und Minka
 
 Die Auswahl der Computerstimmen hängt von den Stimmen ab, die auf dem jeweiligen Gerät und im Browser vorhanden sind. Die App kann nicht garantieren, dass jede gewünschte Stimme überall verfügbar ist.
 
+## Bärlis Baumhaus und fiktive Bärli AG Osnabrück (November 2026)
+
+Die öffentliche App hat nun den zusätzlichen, freiwilligen Bereich **[Bärlis Baumhaus](https://adrakir.github.io/Lernprogramme/majas-wortwerkstatt/#baumhaus)**. Die bisherige Startseite mit den drei Lernpiktogrammen und vier bebilderten Angeboten bleibt unverändert; „Bärlis Baumhaus“ ist ein weiterer Link.
+
+**Freischaltung:** Bestehe einen der bestehenden zehn verschiedenen Abschlusstests (fünf Hörtests und fünf Rechtschreibtests) mit mindestens **80 %**. Beim ersten Bestehen jedes unterschiedlichen Tests erhältst du genau **10 Bärli-Taler**, auch wenn du den Test später wiederholst. Bestwerte bleiben erhalten. Prüfungen müssen vollständig und ohne Lesehilfe abgeschlossen sein. Die Taler sind **virtuell** und unabhängig von den vorhandenen Sternen.
+
+**Das erste Baumhauszimmer** ist beim Einzug ansonsten leer: Bärli, ein **blauer Sitzsack** und **Bärlis Laptop** sind schon da und kostenlos. Tippe auf den Laptop, um den **gelb-blauen Shop „Bärli AG Osnabrück“** zu öffnen. Dies ist ein **reiner Spielshop**, ohne echte Bestellung, Versand oder Bezahlvorgang.
+
+**Shop-Abteilungen und Prüfungsgrenzen:**
+
+| Abteilung | Ab bestandenen Prüfungen | Beispiele |
+|---|---:|---|
+| Möbel und Bettwäsche | 1 | Holzbett, Nachttisch, drei Bettwäsche-Sets, Kommode, Sofa, Bücherregal |
+| Dekoration | 1 | Kissen, Bilder, Zimmerpflanze, Laterne |
+| Tapeten | 3 | Wolken, Wald, Sterne, Regen, Weihnachten, Regenbogen |
+| Bücher | 4 | Abenteuer, Tiere, Detektivgeschichten, Märchen |
+| Elektrogeräte | 5 | Radio, Wecker, Fernseher, Musikanlage, Ventilator |
+| Weihnachten | 6 | Weihnachtsbaum, Kugeln, Lichterkette, Nikolausstiefel |
+| Besondere Möbel | 8 | Kamin, Leseecke, Fernrohr |
+| Zweites Zimmer | 10 | Zusätzlicher frei einrichtbarer Raum |
+
+Die **54 Shopartikel** werden mit den durch bestandene Prüfungen verfügbaren Bärli-Talern bezahlt. **Bestellte Dinge** stehen anschließend im Baumhaus. Ein Gegenstand lässt sich auswählen und mit Pfeilen oder durch Tippen auf eine Stelle im Zimmer verschieben; er kann in die Kiste gelegt und später wieder aufgestellt werden. Bettwäsche landet beim Aufstellen neben beziehungsweise auf einem vorhandenen Bett. Ein gekaufter Weihnachtsbaum kann mit gekauften Kugeln geschmückt werden. Tapeten verändern die Wand; beim zweiten Zimmer lassen sich Möbel zwischen Räumen bewegen.
+
+Alle Bestellungen und Positionen werden lokal unter `majas-wortwerkstatt-baumhaus-v1` gespeichert und sind in der bestehenden JSON-Lernstandssicherung enthalten. Im Schrank gibt es zusätzlich **39 neue Regen- und Weihnachtsartikel** mit eigenen Zeichnungen in den Bereichen **Regensachen** und **Weihnachten**. Alte Sternenkäufe und Bärli-Outfits bleiben unverändert.
+
+**Technik:** `baerli-baumhaus.js/.css` (Belohnungswelt und Shop), `baerli-saison.js` (Saisonkleidung), `baumhaus.test.cjs` (feste Prüfungs- und Shopregeln), `e2e/treehouse-and-shop.spec.cjs` (Browserabläufe), `baerli-inventar.test.cjs` (Saisonsachen). Browser-Emulation ersetzt keine Abnahme auf echten iPhones und iPads.
+
 ## Bärlis Kleiderschrank (Erweiterung 09.11.2026)
 
 Im Bereich **Bärlis Kleidung** gibt es jetzt zwölf weitere Sachen in den sechs Kategorien Hüte, Brillen, Pullover/Jacken, Hosen, Schals und Schuhe. Die Kategorien haben Beispielbilder mit Artikelzahl. Beim Blättern wird die gewählte Kleidung **probeweise direkt auf Bärli gezeigt**, ohne sie zu kaufen oder Sterne abzuziehen. Erst **Für … Sterne kaufen** erwirbt ein Stück; bereits gekaufte Artikel lassen sich weiter an- und ausziehen. Bestehende Kleidung und gespeicherte Sterne bleiben erhalten. Die visuelle Abnahme auf realen Geräten ist noch offen.
