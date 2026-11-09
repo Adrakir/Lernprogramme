@@ -285,6 +285,17 @@
  background:#e9e9e2;border:1px solid #d6d7ce;display:block;
 }
 .maja-classic-home .maja-option-photo img{height:100%;width:100%;display:block;object-fit:cover}
+.maja-classic-home .maja-option-icon.maja-option-photo{position:relative}
+.maja-classic-home .maja-option-photo::after{
+ position:absolute;right:2px;bottom:2px;display:grid;place-items:center;
+ width:27px;height:27px;border-radius:8px;background:#fffcf0e8;
+ border:1px solid #ffffffcc;font-size:17px;line-height:1;content:"";
+}
+.maja-classic-home .maja-quick-option:nth-child(1) .maja-option-photo::after{content:"💬"}
+.maja-classic-home .maja-quick-option:nth-child(2) .maja-option-photo::after{content:"🎮"}
+.maja-classic-home .maja-quick-option:nth-child(3) .maja-option-photo::after{content:"💡"}
+.maja-classic-home .maja-quick-option:nth-child(4) .maja-option-photo::after{content:"👒"}
+
 .maja-classic-home .maja-quick-option strong{font-size:1.08rem;overflow-wrap:normal;hyphens:auto}
 .maja-classic-home .maja-quick-option small{font-size:.8rem}
 .maja-classic-home .maja-home-extras{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;padding:12px 0 0}
