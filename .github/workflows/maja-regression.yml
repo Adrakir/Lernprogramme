@@ -34,6 +34,40 @@ jobs:
       - name: Validate Adventsgeschichten, Geschenke und die zeitgesteuerte Freischaltung
         run: node majas-wortwerkstatt/advent.test.cjs
 
+  browser-compatibility:
+    name: WebKit/Safari + Android + Firefox compatibility audit (emulation)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser engines
+        working-directory: majas-wortwerkstatt
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium webkit firefox
+      - name: Verify audio, images and touch navigation across browsers
+        working-directory: majas-wortwerkstatt
+        run: npx playwright test -c playwright.device.config.cjs
+      - name: Upload cross-engine audit screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-browser-engine-device-audit
+          path: majas-wortwerkstatt/qa-device-shots/*.png
+          if-no-files-found: ignore
+      - name: Upload cross-engine failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-browser-engine-failures
+          path: |
+            majas-wortwerkstatt/playwright-report/
+            majas-wortwerkstatt/test-results/
+          if-no-files-found: ignore
+
   browser:
     name: Chromium browser smoke checks (emulated viewports)
     # Pinned: Playwright unterstützt "ubuntu-latest" (26.04) noch nicht.
