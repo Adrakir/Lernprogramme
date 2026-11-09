@@ -31,7 +31,8 @@ jobs:
           echo "Alter Lauf: $OLD_RUN | Commit: $current_sha | Status: $state"
           if [[ "$current_sha" == "$EXPECTED_SHA"* && "$state" != "completed" ]]; then
             echo "Veralteten Lauf stoppen, damit die neuere Advent-Version veröffentlichen kann."
-            gh api -X POST "$endpoint/cancel"
+            gh api -X POST "$endpoint/force-cancel"
+            echo "GitHub-API: Force-Cancel nur für den exakt verifizierten veralteten Run angefordert."
           else
             echo "Kein Abbruch nötig (oder Commits stimmen nicht überein)."
           fi
