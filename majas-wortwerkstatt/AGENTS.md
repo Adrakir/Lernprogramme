@@ -1,0 +1,45 @@
+# AI-Handoff: Majas Wortwerkstatt (Klasse 3)
+
+**Geltungsbereich:** Nur Dateien unter `majas-wortwerkstatt/`. Andere Lernprogramme im Repository nicht ohne Auftrag verändern.
+
+## Immer in dieser Reihenfolge anfangen
+1. Den aktuellen Default-Branch `main` und die letzten Commits lesen.
+2. `majas-wortwerkstatt/PROJECT_STATE.md` und diese Datei lesen.
+3. Die GitHub-Issues [#22](https://github.com/Adrakir/Lernprogramme/issues/22) bis [#26](https://github.com/Adrakir/Lernprogramme/issues/26) prüfen. Aktualisierten Stand mit der tatsächlichen Implementierung abgleichen.
+4. `majas-wortwerkstatt/README.md`, `index.html`, `mobile-start.css`, `maja-plus.js` und vorhandene Tests prüfen.
+5. **Die erste noch offene Aufgabe** aus `PROJECT_STATE.md` oder den Issues übernehmen, nicht eine neue App oder einen Parallel-Entwurf erstellen.
+
+## Projekt und Ziele
+- Interaktive, kindgerechte Deutschapp Klasse 3 mit Maja, Bärli, Fuji und Minka.
+- Mobile first; iPhone, iPad, Android, Windows; große Touchflächen, gute Kontraste, klarer Fokus, Bilder und Audio.
+- Für Kinder kurze Seiten, höchstens vier Entscheidungen pro Überblicksseite, klare Zurück-/Weiter-Navigation.
+- Lernmodus: Erklären → gemeinsam üben → selbstständig üben → Tests → Fehler gezielt verbessern.
+- Abenteuermodus: Comics, Spiele und Bärlis Kleidung; pädagogischer Inhalt bleibt erkennbar.
+- Keine unnötigen langen Scrollseiten; Bilder und Beschriftungen passen zusammen.
+- Öffentlicher Einstieg: https://adrakir.github.io/Lernprogramme/majas-wortwerkstatt/ (nicht ohne echten Aufruf als live verifiziert melden).
+
+## Technische Einordnung
+- Einstieg: `index.html`; eingebettete Hauptlogik/Hash-Router in `render()`.
+- Styling: `mobile-start.css`; zusätzliche bestehende CSS-Dateien nicht löschen.
+- Fortschritt / Sicherung: `maja-plus.js` exportiert/importiert `localStorage`-Schlüssel mit Präfix `majas-wortwerkstatt`.
+- Existierende Speicher-Keys, besonders `majas-wortwerkstatt-sternenbeutel-v1`, `majas-wortwerkstatt-baerli-auswahl-v1`, `majas-wortwerkstatt-klasse3-v1`, `majas-wortwerkstatt-lernweg-v1`, `majas-wortwerkstatt-klassenarbeiten-nov2026-v1`, müssen rückwärtskompatibel bleiben.
+- Neue Stimmauswahl und Geschwindigkeiten unter `majas-wortwerkstatt-hoer-*`, damit die Einstellungen in die vorhandene JSON-Sicherung eingehen.
+- Keine personenbezogenen Kinder-Lerndaten, privaten Exportdateien oder Geheimnisse in GitHub hochladen.
+- Das bisher große `index.html` schrittweise modularisieren, nicht ungeprüft vollständig überschreiben.
+
+## Prüfungen vor einem Commit
+```bash
+node majas-wortwerkstatt/mobile-start.test.cjs
+node majas-wortwerkstatt/experience.test.cjs
+```
+Außerdem relevante bestehende `*.test.cjs` ausführen. Die Node-Tests sind nur statische Checks; Audio, Bildschirmgrößen, echte Interaktion und visuelle Overlays brauchen separate Browsertests (Issue #22, #23, #24).
+
+## So eine Arbeit abschließen / einer anderen KI übergeben
+1. Funktion in vorhandener App implementieren, vorhandene Links und Zustände erhalten.
+2. Tests und Geräte-/Browser-Status im Commit bzw. Issue notieren; fehlende echte Tests als **nicht verifiziert** kennzeichnen.
+3. `PROJECT_STATE.md` aktualisieren: Was ist fertig? Was wurde getestet? Was bleibt? Was soll als Nächstes geschehen?
+4. Passendes GitHub-Issue ergänzen/schließen, nur wenn alle Abnahmekriterien erfüllt sind.
+5. Commit-Link und öffentliche Seite nennen, **aber nur behaupten, dass GitHub Pages aktualisiert ist, wenn die Bereitstellung überprüft wurde**.
+
+## Prompt für einen neuen Chat / anderen KI-Assistenten
+> Setze die Arbeit an `Adrakir/Lernprogramme/majas-wortwerkstatt` fort. Lies zuerst `AGENTS.md` und `PROJECT_STATE.md`, dann die offenen GitHub-Issues #22–#26 und die jüngsten Commits. Prüfe den tatsächlichen Zustand; erledige die nächste offene Aufgabe in der bestehenden App und aktualisiere danach Tests, `PROJECT_STATE.md` und das Issue. Erhalte alle vorhandenen Spiele, Comics, Audios, Sterne und Lernstände. Nichts erfinden oder als live behaupten, ohne es zu prüfen.
