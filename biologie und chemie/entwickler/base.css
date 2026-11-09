@@ -433,3 +433,16 @@ main{padding-bottom:96px}
 .dev-handling p{margin:4px 0}
 /* Wissenscheck-Hinweis */
 .quiz-weakest{background:#fff4e0;border-radius:12px;padding:10px 14px;font-size:15px}
+/* Lehrkräfte-Bereich */
+.teach-sec{border:1px solid var(--line,#d6dee8);border-radius:14px;padding:14px 16px;margin:12px 0;background:var(--paper,#fff)}
+.teach-sec h3{margin:0 0 8px}
+.teach-table{width:100%;border-collapse:collapse;font-size:14.5px}
+.teach-table th,.teach-table td{text-align:left;padding:7px 10px;border-bottom:1px solid #e2eaf0;vertical-align:middle}
+.teach-table td:last-child{min-width:130px}
+.teach-table .bar{width:100%;height:9px;border-radius:30px;background:#e3ebeb;overflow:hidden}
+.teach-table .bar i{display:block;height:100%;background:var(--teal,#177f7a)}
+.teach-import{cursor:pointer}
+.teach-links{flex-wrap:wrap}
+.teach-log{margin:6px 0;padding-left:20px}
+.teach-log li{margin:4px 0}
+@media print{body.teach-printing .app>*{display:none}body.teach-printing #v4panel-teacher,body.teach-printing .app,body.teach-printing main,body.teach-printing .stage{display:block!important}body.teach-printing .side,body.teach-printing .topbar,body.teach-printing .v4tabs,body.teach-printing .v4row,body.teach-printing .teach-import{display:none!important}}

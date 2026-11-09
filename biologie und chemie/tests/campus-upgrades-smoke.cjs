@@ -95,5 +95,15 @@ const setInput=(p,sel,v)=>p.locator(sel).evaluate((e,v)=>{e.value=v;e.dispatchEv
  await p.locator('[data-device="Pipette"]').click();await p.waitForTimeout(100);
  assert.match(await p.locator('#deviceInfo .dev-handling').innerText(),/Pipettierhilfe/);
 
+ // Lehrkräfte-Bereich: Auswertung, Export, Niveau wirkt im Wissenscheck
+ await go(p,'v4study');await p.locator('[data-v4tab="teacher"]').click();
+ assert((await p.locator('.teach-table tbody tr').count())>=8,'Auswertungstabelle');
+ await p.selectOption('#teachLevel','leicht');
+ await go(p,'quiz');assert.equal(await p.locator('#quizLength').inputValue(),'8');
+ await p.locator('#quizApply').click();
+ const leicht=await p.evaluate(()=>({n:state.quiz.questions.length,maxOpts:Math.max(...state.quiz.questions.map(q=>q.options.length)),ok:state.quiz.questions.every(q=>q.options[q.correct]!==undefined)}));
+ assert.equal(leicht.n,8);assert(leicht.maxOpts<=3,'Leicht: max. 3 Optionen');assert(leicht.ok,'Korrekte Antwort erhalten');
+ await go(p,'v4study');await p.locator('[data-v4tab="teacher"]').click();await p.selectOption('#teachLevel','normal');
+
  assert.deepEqual(errors,[]);await browser.close();console.log(`PASS ${engine}: ethanol comparison, custom heating curve, micro zoom, drawn lab scenes and interactive explanation step`);
 })().catch(e=>{console.error(e);process.exit(1)});

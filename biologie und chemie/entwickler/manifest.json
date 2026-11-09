@@ -168,6 +168,13 @@
                   }
     },
     {
+        "file":  "lehrkraefte.js",
+        "tag":  "script",
+        "attrs":  {
+
+                  }
+    },
+    {
         "file":  "appearance.css",
         "tag":  "style",
         "attrs":  {
