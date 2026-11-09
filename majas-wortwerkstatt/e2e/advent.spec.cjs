@@ -1,0 +1,95 @@
+'use strict';
+const {test,expect}=require('@playwright/test');
+const fs=require('node:fs'),path=require('node:path');
+const url=hash=>'/majas-wortwerkstatt/#'+hash;
+async function date(page,dateString){
+ await page.clock.install({time:new Date(dateString)});
+}
+async function capture(page,name,project){
+ const folder=path.join(__dirname,'..','qa-advent-shots');
+ fs.mkdirSync(folder,{recursive:true});
+ await page.screenshot({path:path.join(folder,project+'-'+name+'.png'),fullPage:false,animations:'disabled'});
+}
+test('November: 24 verschlossene Türchen auf vier kurzen Seiten und Geschichten-Vorschau ohne Geschenk',async({page},info)=>{
+ await date(page,'2026-11-09T12:00:00+01:00');
+ await page.goto(url('advent'),{waitUntil:'domcontentloaded'});
+ await expect(page.locator('h1')).toHaveText('Bärlis Adventskalender');
+ await expect(page.locator('.adv-door')).toHaveCount(6);
+ await expect(page.locator('.adv-ready')).toHaveCount(0);
+ await expect(page.locator('.adv-locked')).toHaveCount(6);
+ await expect(page.locator('.adv-preview-link')).toBeVisible();
+ await capture(page,'november-tueren',info.project.name);
+ await page.locator('.adv-preview-link').click();
+ await expect(page.locator('.adv-story-content')).toContainText('Die geheimnisvolle Sternenpost');
+ await expect(page.locator('.adv-claim')).toHaveCount(0);
+ expect(await page.evaluate(()=>localStorage.getItem('majas-wortwerkstatt-advent-v1'))).toBeNull();
+ await page.goto(url('advent/seite/4'));
+ await expect(page.locator('.adv-door')).toHaveCount(6);
+ await expect(page.locator('.adv-door-number').first()).toHaveText('19');
+ await expect(page.locator('.adv-door-number').last()).toHaveText('24');
+ const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
+ expect(overflow).toBeLessThanOrEqual(2);
+});
+test('1. Dezember: Weihnachtsmütze wird kostenlos und einmalig verschenkt, freiwillige Frage bringt Stern',async({page})=>{
+ await date(page,'2026-12-01T12:00:00+01:00');
+ await page.goto(url('advent'),{waitUntil:'domcontentloaded'});
+ await expect(page.locator('.adv-ready')).toHaveCount(1);
+ await page.goto(url('advent/tuer/1'));
+ await expect(page.locator('.adv-claim')).toBeVisible();
+ await expect(page.locator('.adv-story-content')).toContainText('Bärli');
+ await page.locator('.adv-claim').click();
+ await expect(page.locator('.adv-collected')).toContainText('Rote Weihnachtsmütze');
+ const getWallet=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-sternenbeutel-v1')));
+ let wallet=await getWallet();
+ expect(wallet.purchases['item:saison-weihnachtsmuetze'].cost).toBe(0);
+ await page.locator('[data-adv-answer="1"]').click();
+ await expect(page.locator('.adv-answer-status')).toContainText('Bonus-Stern');
+ wallet=await getWallet();
+ expect(wallet.rewards['advent:frage:2026-12-01'].amount).toBe(1);
+ await page.reload({waitUntil:'domcontentloaded'});
+ await expect(page.locator('.adv-claim')).toHaveCount(0);
+ await expect(page.locator('.adv-quiz-options button:disabled')).toHaveCount(3);
+ wallet=await getWallet();
+ expect(Object.keys(wallet.rewards).filter(key=>key.startsWith('advent:frage:')).length).toBe(1);
+ await page.goto(url('advent/tuer/2'));
+ await expect(page.getByText('Türchen 2 ist noch geschlossen')).toBeVisible();
+ await expect(page.locator('.adv-claim')).toHaveCount(0);
+});
+test('6. Dezember: Baumhausgeschenk wird in der Möbelkiste behalten, Baumhaus bleibt ohne bestandene Prüfung gesperrt',async({page})=>{
+ await date(page,'2026-12-06T12:00:00+01:00');
+ await page.goto(url('advent/tuer/6'),{waitUntil:'domcontentloaded'});
+ await page.locator('.adv-claim').click();
+ await expect(page.locator('.adv-collected')).toContainText('Weihnachtsbaum');
+ const state=await page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-baumhaus-v1')));
+ expect(state.orders.weihnachtsbaum).toBe(0);
+ expect(state.placed).toEqual([]);
+ await page.goto(url('baumhaus'));
+ await expect(page.getByText('Das Baumhaus ist noch verschlossen')).toBeVisible();
+ await page.reload({waitUntil:'domcontentloaded'});
+ const again=await page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-baumhaus-v1')));
+ expect(again.orders.weihnachtsbaum).toBe(0);
+});
+test('8. Dezember: geschenktes Kart-Level 4 ist spielbar und kostet keinen Stern',async({page})=>{
+ await date(page,'2026-12-08T12:00:00+01:00');
+ await page.goto(url('advent/tuer/8'),{waitUntil:'domcontentloaded'});
+ await page.locator('.adv-claim').click();
+ await expect(page.locator('.adv-collected')).toContainText('Bärlis Nomen-Rallye');
+ const wallet=await page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-sternenbeutel-v1')));
+ expect(wallet.purchases['level:kart:4'].cost).toBe(0);
+ await page.locator('.adv-use').click();
+ await expect(page).toHaveURL(/#spiele\/kart\/4$/);
+ await expect(page.locator('#game-board')).toBeVisible();
+ await expect(page.getByText('Majas Spielwiese · Level 4')).toBeVisible();
+});
+test('24. Dezember: alle Türen erreichbar, letzter Kamin als Geschenk und keine Dopplung',async({page})=>{
+ await date(page,'2026-12-24T12:00:00+01:00');
+ await page.goto(url('advent/seite/4'),{waitUntil:'domcontentloaded'});
+ await expect(page.locator('.adv-ready')).toHaveCount(6);
+ await page.goto(url('advent/tuer/24'));
+ await page.locator('.adv-claim').click();
+ await expect(page.locator('.adv-collected')).toContainText('Kamin');
+ await page.reload({waitUntil:'domcontentloaded'});
+ const state=await page.evaluate(()=>JSON.parse(localStorage.getItem('majas-wortwerkstatt-baumhaus-v1')));
+ expect(state.orders.kamin).toBe(0);
+ await expect(page.locator('.adv-claim')).toHaveCount(0);
+});
