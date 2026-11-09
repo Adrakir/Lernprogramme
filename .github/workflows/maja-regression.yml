@@ -29,6 +29,8 @@ jobs:
         run: node majas-wortwerkstatt/pruefungen-comics.test.cjs
       - name: Validate wardrobe inventory and saved-outfit compatibility
         run: node majas-wortwerkstatt/baerli-inventar.test.cjs
+      - name: Validate treehouse exam gating and virtual shop
+        run: node majas-wortwerkstatt/baumhaus.test.cjs
 
   browser:
     name: Chromium browser smoke checks (emulated viewports)
@@ -64,6 +66,13 @@ jobs:
         with:
           name: maja-baerli-wardrobe-review
           path: majas-wortwerkstatt/qa-wardrobe-shots/*.png
+          if-no-files-found: ignore
+      - name: Upload Baumhaus and Bärli AG shop preview
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maja-baumhaus-shop-review
+          path: majas-wortwerkstatt/qa-treehouse-shots/*.png
           if-no-files-found: ignore
       - name: Upload failed-run browser diagnostics
         if: failure()
