@@ -114,6 +114,7 @@ function wardrobeMain(mode='kleidung'){
  +'<section class="bw-intro">'+bearFigure()+'<div><p class="bw-balance">⭐ '+starCount(starBalance())+' im Beutel</p><p>Kombiniere Kleidung, Taschen und Utensilien. Alles Gekaufte bleibt erhalten.</p><div class="bw-worn">'+(ownedAndWorn().map(x=>'<span>'+htmlEsc(x.title)+'</span>').join('')||'<span>Bärli trägt sein Lieblingsoutfit</span>')+'</div></div></section>'
   +'<nav class="bw-tabs" aria-label="Bereiche"><a href="#baerli/schrank/kleidung" '+(current==='kleidung'?'aria-current="page"':'')+'>👕 Kleidung</a><a href="#baerli/schrank/extras" '+(current==='extras'?'aria-current="page"':'')+'>🧸 Extras</a><a href="#baerli/schrank/saison" '+(current==='saison'?'aria-current="page"':'')+'>☔🎄 Saison</a></nav>'
  +'<a href="#baumhaus" class="bw-set-link">🌳 Bärlis Baumhaus einrichten →</a>'
+ +'<a href="#advent" class="bw-set-link">🎄 Bärlis Adventskalender öffnen →</a>'
  +'<div class="bw-category-grid">'+options.map(([id,label,emoji])=>{const sample=bearItems.find(item=>inSection(item,id));const count=bearItems.filter(item=>inSection(item,id)).length;return '<a href="#baerli/schrank/'+id+'" class="bw-category"><span class="bw-category-sample" aria-hidden="true">'+(sample?subPreview(sample):'<span class="bw-emoji">'+emoji+'</span>')+'</span><strong>'+label+'</strong><small>'+count+' Sachen</small></a>';}).join('')+'</div>'+(current==='kleidung'?'<a href="#baerli/schrank/outfits" class="bw-set-link">🎭 Outfit-Ideen mit Bärli entdecken →</a>':'')+'</div>';
 }
 function wardrobeSection(category,message='',i=0){
