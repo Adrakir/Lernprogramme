@@ -42,6 +42,15 @@ Die sechs Kleidungskategorien zeigen nun bebilderte Artikelsymbole mit Stückzah
 
 **Offen:** Positionierung aller SVG-Ebenen auf realem iPhone/iPad/Desktop visuell kontrollieren, besonders Hüte/Brillen/Schals bei Kombinationen sowie alle Sterne-/Kauf-/Backup-Vorgänge in echten Browsern. Playwright-Regressionsprüfung für die Anprobe ergänzt; Ergebnis in dieser Sitzung nicht ausgeführt bzw. bestätigt.
 
+## 5. Fortsetzung: Testabläufe und Comicdarstellung (09.11.2026)
+
+- **Hörabschlusstests:** In den fünf echten Prüfungswegen ist die Lesevorlage während des Tests nicht mehr aufklappbar. Aufnahme und Computerstimme bleiben wählbar, inklusive Normal/Langsam/Sehr langsam; erneutes Tippen auf „Anhören“ startet die laufende Aufnahme von vorne. Im geführten Lernweg und in den Übungen bleibt die gekennzeichnete Lesehilfe erhalten. Fragen, Antwortoptionen, Bewertung und Erläuterungen bleiben bestehen.
+- **Schulcomics:** Die zwei Dialoge pro Bild bekommen deutliche Sprechblasenform mit Sprechblasen-Zeiger; sie bleiben **unter** dem Bild, sodass Köpfe und Szenen nicht von Text verdeckt werden.
+- **Detektivcomics:** Auf breitem Display erscheinen Sprechblasen bei neuen Nutzungen standardmäßig am Bild, auf schmalen Displays zunächst darunter. Die Wahl wird gespeichert und kann geändert werden. Der in Schulcomics bisher funktionslose Umschalter ist ausgeblendet; Bildvergrößerung und abschnittsweises Vorlesen bleiben erhalten.
+- **Automatisierte QA:** `e2e/learning-and-comics.spec.cjs` enthält komplette Testläufe für fünf Hörtests (je 5 Fragen) und fünf Rechtschreibtests (je 15 Aufgaben), zwei Mobil-Samples, acht Comic-Einstiege mit Zoom/Überlauf sowie Umschaltung der Comic-Sprechblasen. `pruefungen-comics.test.cjs` prüft zusätzlich die Datensätze und Medienpfade. Die Node-Tests sind im CI-Workflow verknüpft.
+- **Nachweis:** Ein GitHub-Actions-Lauf nach Integration der neuen Prüfungen und des Comic-Umschalters war erfolgreich: [Run 42698714838](https://github.com/Adrakir/Lernprogramme/actions/runs/42698714838), einschließlich Node-/Chromium-Jobs. Dieser Lauf ist **keine** Prüfung auf echtem iPhone/iPad/Android. Weitere visuelle Vergleichsscreenshots der Schul-/Detektivcomics werden durch den Workflow bereitgestellt; Sichtkontrolle und Browser-Hardwareabnahme bleiben gesondert offen.
+- **Cache:** Neue CSS-/JS-Versionen und PWA-Cache `v3`, damit installierte Versionen die Änderungen erhalten können.
+
 ## 5. Nächste Abnahme
 1. Auf Testprofil alte Kleiderkäufe importieren; alle sechs Kategorien und neue Teile kombinieren. Visuelle Screenshots / mobile Kontrollliste an Issue #23.
 2. Alle 10 Tests in Live-App auf echten Geräten vollständig durchspielen und bei Fehlern Frage, Antwort, Begründung, Gerät dokumentieren (Issues #22 und #25).
