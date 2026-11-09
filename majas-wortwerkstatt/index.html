@@ -3940,23 +3940,78 @@ function bearIntro(){
   </div><img src="./baerli/baerli.webp" alt="Bärli in seinem lila Strickanzug mit gelbem Ohrfähnchen" width="600" height="600" loading="lazy"></section>`;
 }
 function showBearWardrobe(message=''){
+  const categoryImages={hut:'🎩',oberteil:'🧥',hose:'👖',brille:'👓',hals:'🧣',schuhe:'👟',spielzeug:'🪁',schule:'🎒'};
+  const categories=Object.keys(bearGroups),parts=location.hash.slice(1).split('/');
+  const section=parts[2]||'uebersicht',selectedGroup=Object.hasOwn(bearGroups,section)?section:null;
+  const page=Number(parts[3])>0?Math.floor(Number(parts[3])):1;
+  const allInGroup=selectedGroup?bearItems.filter(item=>item.group===selectedGroup):[];
+  const totalPages=Math.max(1,Math.ceil(allInGroup.length/4)),currentPage=Math.min(page,totalPages);
+  const pageItems=allInGroup.slice((currentPage-1)*4,currentPage*4);
+  const groupStart=section==='seite2'?4:0;
   const owned=bearItems.filter(item=>starOwned('item:'+item.id));
-  const equipped=owned.filter(item=>bearOutfit[item.group]===item.id);
-  const boxes={hut:'100 0 230 110',ball:'300 330 100 100',heft:'20 315 100 110',schal:'140 160 160 110',boot:'300 330 110 95',stift:'15 315 100 110',krone:'140 5 160 95',drachen:'300 280 100 150',ranzen:'15 315 100 115'};
-  app.innerHTML=`<div class="route">${homeLink()}
-    <div class="unit-head lilac"><span class="icon-box">${icon('star')}</span><div><h1 tabindex="-1">Bärlis Laden &amp; Schrank</h1><p>Kaufe Kleidung, Spielsachen und Schulsachen für Bärli.</p></div></div>
-    <section class="panel bear-wardrobe"><div class="bear-dress-stage">
-      <img src="./baerli/baerli.webp" alt="Bärli trägt seinen lila Strickanzug" width="600" height="600">
-      <svg viewBox="0 0 450 450" aria-hidden="true"><g stroke="#52434b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${equipped.map(item=>item.art).join('')}</g></svg>
-    </div><div><h2>${starCount(starBalance())} im Beutel</h2><p>Ein Kauf zieht den angegebenen Preis ab. Was du gekauft hast, gehört dir dauerhaft. Anziehen und Wechseln sind kostenlos.</p>
-    <p id="bear-equipped">${equipped.length?'Ausgewählt: '+equipped.map(item=>item.title).join(', '):'Bärli trägt gerade sein Lieblingsoutfit.'}</p>
-    <div class="actions"><a class="primary" href="#stationen">Sterne verdienen</a><a class="secondary" href="#sterne">Sternenbeutel und Käufe</a><a class="secondary" href="#spiele">Spielen</a></div></div></section>
+  const layer={hose:1,schuhe:2,oberteil:3,hals:4,brille:5,hut:6,spielzeug:7,schule:8};
+  const equipped=owned.filter(item=>bearOutfit[item.group]===item.id).sort((a,b)=>(layer[a.group]||0)-(layer[b.group]||0));
+  const boxes={
+    hut:'110 0 220 112',krone:'130 5 180 95',muetze:'128 5 190 105',sonnenhut:'105 5 230 107',
+    schal:'140 160 160 110',brille:'140 95 170 85',sonnenbrille:'135 95 175 85',
+    winterpullover:'100 160 240 155',regenjacke:'100 160 240 155',
+    jeans:'120 283 220 125',rotehose:'120 283 220 125',
+    sneaker:'120 380 230 65',stiefel:'120 375 230 73',
+    ball:'300 330 100 100',heft:'20 315 100 110',boot:'300 330 110 95',
+    stift:'15 315 100 110',drachen:'300 280 100 150',ranzen:'15 315 100 115'
+  };
+  const preview=item=>`<span class="shop-item-preview" aria-hidden="true"><svg viewBox="${boxes[item.id]||'0 0 450 450'}"><g stroke="#52434b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${item.art}</g></svg></span>`;
+  const categoryGrid=`<div class="bear-category-grid" aria-label="Kleidung und Gegenstände aussuchen">
+    ${categories.slice(groupStart,groupStart+4).map(key=>{
+      const item=bearItems.find(x=>x.group===key);
+      return `<a href="#baerli/schrank/${key}" class="bear-category-card">
+        ${preview(item)}
+        <span><strong>${escapeHtml(bearGroups[key])}</strong><small>${bearItems.filter(x=>x.group===key).length} verschiedene Dinge</small></span>
+        <span class="bear-category-arrow" aria-hidden="true">→</span>
+      </a>`;
+    }).join('')}
+    </div>
+    <nav class="bear-pages" aria-label="Kategorienblätter">
+      <a class="${groupStart===0?'primary':'secondary'}" href="#baerli/schrank/uebersicht" ${groupStart===0?'aria-current="page"':''}>1 · Kleidung</a>
+      <a class="${groupStart===4?'primary':'secondary'}" href="#baerli/schrank/seite2" ${groupStart===4?'aria-current="page"':''}>2 · Mehr entdecken</a>
+    </nav>`;
+  const itemGrid=`<div class="bear-category-heading">
+       <a class="secondary" href="#baerli/schrank/${categories.indexOf(selectedGroup)<4?'uebersicht':'seite2'}">← Kategorien</a>
+       <h2>${categoryImages[selectedGroup]} ${escapeHtml(bearGroups[selectedGroup])}</h2>
+       <span>Seite ${currentPage} von ${totalPages}</span>
+     </div>
+     <div class="bear-item-list bear-item-pages">
+       ${pageItems.map(item=>{
+         const has=owned.includes(item),selected=equipped.includes(item),wearable=!['spielzeug','schule'].includes(item.group);
+         const verb=wearable?(selected?'Ausziehen':'Anziehen'):(selected?'Wegräumen':'Dazustellen');
+         return `<div class="bear-item">${preview(item)}
+            <div class="shop-item-copy"><strong>${escapeHtml(item.title)}</strong><span>${has?'Schon gekauft':item.stars+' Sterne'}</span></div>
+            ${has?`<button class="secondary" type="button" data-bear-item="${item.id}" aria-label="${escapeHtml(item.title)} ${verb.toLowerCase()}" aria-pressed="${selected}">${verb}</button>`:
+            `<button class="secondary star-purchase" type="button" data-buy-item="${item.id}" ${starBalance()<item.stars?'disabled':''}>${starBalance()<item.stars?'Noch '+starCount(item.stars-starBalance()):'Kaufen · '+item.stars+' ★'}</button>`}
+          </div>`;
+       }).join('')}
+     </div>
+     <nav class="bear-pages" aria-label="Zwischen Kleidungsstück-Seiten wechseln">
+       ${currentPage>1?`<a class="secondary" href="#baerli/schrank/${selectedGroup}/${currentPage-1}">← Zurück</a>`:''}
+       ${currentPage<totalPages?`<a class="primary" href="#baerli/schrank/${selectedGroup}/${currentPage+1}">Weiter →</a>`:''}
+       <a class="secondary" href="#baerli/schrank/${categories.indexOf(selectedGroup)<4?'uebersicht':'seite2'}">Andere Dinge aussuchen</a>
+     </nav>`;
+  app.innerHTML=`<div class="route bear-wardrobe-v2">${homeLink()}
+    <div class="unit-head lilac"><span class="icon-box">${icon('hanger')}</span><div><h1 tabindex="-1">Bärlis Kleiderschrank</h1><p>Wähle ein Bild aus. Bärli kann mehrere Kleidungsstücke zusammen tragen!</p></div></div>
+    <section class="panel bear-wardrobe bear-wardrobe-compact">
+      <div class="bear-dress-stage">
+       <img src="./baerli/baerli.webp" alt="Bärli mit braunem Plüschfell, gelbem Ohrfähnchen und lila Grundkleidung" width="600" height="600">
+       <svg viewBox="0 0 450 450" aria-hidden="true"><g stroke="#52434b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${equipped.map(item=>item.art).join('')}</g></svg>
+      </div>
+      <div class="bear-wardrobe-status"><h2>${starCount(starBalance())} ★</h2>
+       <p>${equipped.length?'Bärli trägt: '+escapeHtml(equipped.filter(item=>!['spielzeug','schule'].includes(item.group)).map(item=>item.title).join(', ')||'sein Lieblingsoutfit'):'Bärli trägt sein Lieblingsoutfit.'}</p>
+       <p class="subtle">Gekaufte Sachen bleiben erhalten. Umziehen kostet keine Sterne.</p>
+       <a class="secondary" href="#stationen">★ Sterne verdienen</a>
+      </div>
+    </section>
     <p id="shop-status" class="shop-notice" tabindex="-1" role="status">${escapeHtml(message)}</p>
-    ${Object.entries(bearGroups).map(([group,label])=>`<section class="panel"><h2>${label}</h2><div class="bear-item-list">${bearItems.filter(item=>item.group===group).map(item=>{
-      const has=owned.includes(item),selected=equipped.includes(item),verb=group==='kleidung'?(selected?'Ausziehen':'Anziehen'):(selected?'Wegräumen':'Dazustellen');
-      return `<div class="bear-item"><span class="shop-item-preview" aria-hidden="true"><svg viewBox="${boxes[item.id]}"><g stroke="#52434b" stroke-width="2.5">${item.art}</g></svg></span><div class="shop-item-copy"><strong>${item.title}</strong><span>${has?'Gehört dir':item.stars+' Sterne'}</span></div>
-        ${has?`<button class="secondary" type="button" data-bear-item="${item.id}" aria-label="${item.title} auswählen" aria-pressed="${selected}">${verb}</button>`:`<button class="secondary star-purchase" type="button" data-buy-item="${item.id}" ${starBalance()<item.stars?'disabled':''}>Für ${item.stars} Sterne kaufen</button>${starBalance()<item.stars?`<span class="subtle">Noch ${starCount(item.stars-starBalance())}</span>`:''}`}</div>`;
-    }).join('')}</div></section>`).join('')}
+    ${selectedGroup?itemGrid:categoryGrid}
+    <div class="actions bear-back-links"><a href="#sterne" class="plain">Sternenbeutel ansehen</a><a class="plain" href="#spiele">Zu den Spielen</a></div>
   </div>`;
   app.querySelectorAll('[data-buy-item]').forEach(button=>button.onclick=()=>{
     const item=bearItems.find(x=>x.id===button.dataset.buyItem),result=starPurchase('item:'+item.id);
@@ -3967,10 +4022,9 @@ function showBearWardrobe(message=''){
     const item=owned.find(item=>item.id===button.dataset.bearItem);
     if(bearOutfit[item.group]===item.id)delete bearOutfit[item.group];else bearOutfit[item.group]=item.id;
     try{localStorage.setItem(bearOutfitKey,JSON.stringify(bearOutfit));}catch{}
-    showBearWardrobe();app.querySelector(`[data-bear-item="${item.id}"]`).focus({preventScroll:true});
+    showBearWardrobe();app.querySelector(`[data-bear-item="${item.id}"]`)?.focus({preventScroll:true});
   });
 }
-
 function showBear(page){
   if(page==='schrank'){showBearWardrobe();return;}
   const now=new Date();
