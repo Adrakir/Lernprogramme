@@ -65,6 +65,14 @@ Auf **jedem Gerät einzeln** und jeweils in `#pruefung/hoeren/gefuehrt/1`, `#pru
 - [ ] Comicbilder haben unbeschnittene Figuren, lesbare Sprechblasen und konsistente Größen/Perspektiven.
 - [ ] Spielsteuerung funktioniert mit Touch und Tastatur; Sterne werden nicht doppelt vergeben.
 
+### Neue Kleidung und kostenlose Anprobe (Erweiterung 09.11.2026)
+
+- [ ] Sechs Kategorien zeigen jeweils Kleidungsbild und passende Artikelanzahl; neue zwölf Artikel sind in den richtigen Kategorien auffindbar.
+- [ ] Vor dem Kauf wird das aktuelle Stück als **Anprobe** auf Bärli gezeigt; beim Umblättern oder Verlassen werden **keine Sterne ausgegeben und keine Käufe verändert**.
+- [ ] Bereits getragenes Kleidungsstück derselben Kategorie wird in der Anprobe nur vorübergehend ersetzt; der gespeicherte Outfit-Stand bleibt unverändert, bis tatsächlich gekauft/angezogen wird.
+- [ ] Die neuen Hüte, Brillen, Jacken, Hosen, Schals und Schuhe auf echtem Smartphone/Tablet/PC kombiniert prüfen (Augen frei, keine überstehenden/fehlenden Füße, keine schiefen Hüte).
+- [ ] Bestehenden Lernstand inklusive älterer Kleidungs-IDs importieren; neue Gegenstände kaufen, erneut anziehen, Seite neu laden und den Sterne-Bestand vergleichen.
+
 ## F. Lernstand / Elternbereich (Issue #22)
 
 - [ ] Ein paar Aufgaben lösen, Sterne verdienen und Kleidung kaufen; Browser neu starten und Stand erneut prüfen.
