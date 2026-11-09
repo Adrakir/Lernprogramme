@@ -35,6 +35,14 @@
 - Die verbindlichen manuellen Prüfschritte stehen in [QA_CHECKLIST.md](./QA_CHECKLIST.md).
 - Bei mehreren bearbeitenden KI-Assistenten immer Dateiversion/SHA unmittelbar vor dem Schreiben erneut lesen und bei Konflikt nicht ungeprüft überschreiben.
 
+## Neues Baumhaus und Saison-Schrank (November 2026)
+- **Routen:** `#baumhaus`, `#baumhaus/shop`, `#baumhaus/shop/<kategorie>`; `#baerli/schrank/saison`, `#baerli/schrank/regen`, `#baerli/schrank/weihnachten`. Kein zweites Hash-Routing aufbauen. `window.MajaTreehouse.render` gehört zur Haupt-`render()`-Route und muss vor dem großen Inline-Skript geladen werden.
+- **Dateien:** `baerli-baumhaus.js/.css` für Zimmer, Shop, Prüfungs-Taler und Ausstattung, `baerli-saison.js` für 39 Saisonartikel, `baerli-kleiderschrank.js` für die bisherigen und saisonalen Anproben. Neue Artikel nie durch Änderung alter IDs ersetzen.
+- **Freischaltung:** 10 Bärli-Taler nur einmal je unterschiedlichem bestandenen Abschlusstest (5 Hören, 5 Nomen, jeweils >=80 % und vollständig). Bereits bestandene Tests werden dauerhaft als Bestwert unter `majas-wortwerkstatt-baumhaus-v1` gespiegelt. Vorhandene `prepKey`-/Sternenbeutel-Schlüssel niemals zurücksetzen; Baumhaus nutzt eine eigene Spielwährung.
+- **Auslieferung:** bei JS-/CSS-Updates versionsgebundene Links und `sw.js`-Cache-Versionsnummer erhöhen; neue statische Dateien in `CORE` ergänzen. GitHub Pages `success` und Regressionstest `success` unabhängig prüfen.
+- **Testdateien:** `baumhaus.test.cjs`, `baerli-inventar.test.cjs`, `e2e/treehouse-and-shop.spec.cjs` (einschließlich Weihnachtsschmuck, Bettwäsche, Taler-/Freischaltsicherung). Echte Gerätetests bleiben gesondert offen.
+- **Fiktiver Shop:** Bärli AG Osnabrück ist nur ein Spiel-Store; keine echten Waren, Konten oder Zahlungen. Lernstandsdaten ausschließlich lokal, nie in GitHub veröffentlichen.
+
 ## Prüfungen vor einem Commit
 ```bash
 node majas-wortwerkstatt/mobile-start.test.cjs
