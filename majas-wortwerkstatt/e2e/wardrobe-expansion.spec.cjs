@@ -106,3 +106,27 @@ test('Regensachen und Weihnachtskleidung: bebilderte Saisonfächer, 39 neue Arti
  }));
  expect(after).toEqual(before);
 });
+
+test('Visuelle Artikelmatrix: alle 39 Saisonartikel und vier Outfitkombinationen',async({page},testInfo)=>{
+ test.skip(!testInfo.project.name.includes('desktop'),'umfangreiche Bildkontrolle einmal auf Desktop-Chromium');
+ await page.goto(route('baerli/schrank/saison'),{waitUntil:'domcontentloaded'});
+ const items=await page.evaluate(()=>window.MajaBaerliSaison.map(({id,season,title})=>({id,season,title})));
+ expect(items).toHaveLength(39);
+ const folder=path.join(__dirname,'..','qa-all-season-outfits');
+ fs.mkdirSync(folder,{recursive:true});
+ for(const item of items){
+  await page.goto(route('baerli/schrank/'+item.season+'/'+item.id),{waitUntil:'domcontentloaded'});
+  await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id',item.id);
+  await expect(page.locator('.bw-focus img')).toBeVisible();
+  const noBroken=await page.locator('.bw-focus img').evaluate(el=>el.complete&&el.naturalWidth>0);
+  expect(noBroken,'Bärli-Hintergrund bei '+item.title+' fehlt').toBeTruthy();
+  const clip=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+  expect(clip,item.id+' verursacht horizontales Scrollen').toBeLessThanOrEqual(2);
+  await page.locator('.bw-focus').screenshot({path:path.join(folder,item.id+'.png'),animations:'disabled'});
+ }
+ for(const set of ['schule','regen','detektiv','musik']){
+  await page.goto(route('baerli/schrank/set-'+set),{waitUntil:'domcontentloaded'});
+  await expect(page.locator('.bw-set-try .bw-figure')).toBeVisible();
+  await page.locator('.bw-set-try').screenshot({path:path.join(folder,'set-'+set+'.png'),animations:'disabled'});
+ }
+});
