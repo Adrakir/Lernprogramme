@@ -84,9 +84,9 @@ function subPreview(item){
 // Outfit-Ideen sind Vorschauen, keine automatischen Käufe.
 const outfitIdeas=[
  {id:'schule',title:'Schul-Bärli',emoji:'🎒',ids:['bw26-wolkenhoodie','jeans','bw26-schulrucksack','bw26-buntstift']},
- {id:'regen',title:'Regen-Bärli',emoji:'☔',ids:['bw26-regenmantel','bw26-winterhose','bw26-streifenstiefel','bw26-regenschirm']},
+ {id:'regen',title:'Regen-Bärli',emoji:'☔',ids:['bw26-regenmantel','bw26-winterhose','streifenstiefel','bw26-regenschirm']},
  {id:'detektiv',title:'Detektiv-Bärli',emoji:'🔎',ids:['hut','bw26-latzhose','bw26-lupe','bw26-fernglas']},
- {id:'musik',title:'Musik-Bärli',emoji:'🎵',ids:['bw26-ringelpullover','bw26-karohose','bw26-mikrofon','bw26-trommel']}
+ {id:'musik',title:'Musik-Bärli',emoji:'🎵',ids:['ringelpullover','bw26-karohose','bw26-mikrofon','bw26-trommel']}
 ];
 function outfitItems(idea){return idea.ids.map(id=>bearItems.find(item=>item.id===id)).filter(Boolean);}
 function wardrobeOutfits(id='',message=''){
