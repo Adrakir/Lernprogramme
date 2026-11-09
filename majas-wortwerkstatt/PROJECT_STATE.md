@@ -6,8 +6,8 @@
 
 ## 1. Bereits im GitHub-Code umgesetzt
 
-- [x] **Einstieg vereinfacht:** Startseite mit `#lernen` und `#abenteuer`; zwei gut erkennbare Auswahlfelder, Bärli-Bild.
-- [x] **Vier Ziele pro Modus:** Lernweg Hören, Nomen-Endungen, Verlängern, Klassenarbeit; Abenteuer Comics, Spiele, Bärli hilft, Kleiderschrank.
+- [x] **Vertraute Startseite wiederhergestellt:** `Fit für den Kombitest`, drei größere Themenpiktogramme, „Teste dich“, vier bebilderte Auswahlkacheln und „Alle weiteren Lernthemen“. [HOME_LAYOUT.md](./HOME_LAYOUT.md) dokumentiert die verbindliche Nutzerentscheidung; `#lernen` und `#abenteuer` bleiben als zusätzliche Links bestehen.
+- [x] **Zusätzliche Modi erhalten:** `#lernen` mit Hören/Nomen-Endungen/Verlängern/Klassenarbeit und `#abenteuer` mit Comics/Spielen/Bärli/Kleidung bestehen als optionale Unterseiten.
 - [x] **Lange Archive verkürzt:** `#stationen` und `#comics` seitenweise mit höchstens vier Einträgen; Links zu allen bisherigen Inhalten erhalten.
 - [x] **Hörverständnis-Bedienung:** Aufnahme oder Gerät-Computerstimme; deutsche Stimmen aus dem Browser auswählbar; Tempo 1, 0.85 und 0.7; Anhören/Stopp; roter Frageblock; Antworten einzeln.
 - [x] **Vorlese-Einstellungen portierbar:** Neue Einstellungen unter `majas-wortwerkstatt-hoer-*`, alte `maja-prep-voice-*` werden weiterhin eingelesen.
@@ -26,7 +26,17 @@
 - [x] **Playwright-Smoke-Tests angelegt:** `package.json`, `playwright.config.cjs`, `e2e/smoke.spec.cjs`; CI-Workflow `.github/workflows/maja-regression.yml` enthält einen Chromium-Job.
 - [ ] **Browser-Smoke-Tests tatsächlich erfolgreich ausgeführt:** noch nicht bestätigt. `npm install` und Playwright-Browser konnten in dieser Sitzung nicht lokal heruntergeladen werden; GitHub-Action-Status separat kontrollieren.
 - [ ] **Manuelle echte Gerätetests:** weiterhin offen, Issue #22.
-- [ ] **Zweite Kleiderschrank-Implementierung konsolidieren:** `baerli-kleiderschrank.js` wird nach `index.html` geladen und überschreibt dessen Funktionen. Bis zur Konsolidierung beide Stellen berücksichtigen, [Issue #24](https://github.com/Adrakir/Lernprogramme/issues/24).
+- [ ] **Zweite Kleiderschrank-Implementierung konsolidieren:** `baerli-kleiderschrank.js` wird nach `index.html` geladen. Der veraltete `showHome`-Wrapper wurde entfernt und Slot-Aliase korrigiert, die übrigen doppelten Kleiderschrank-Funktionen sind noch zu konsolidieren. [Issue #24](https://github.com/Adrakir/Lernprogramme/issues/24).
+
+
+### Korrektur der Nutzerbeanstandung: Oberfläche und Funktionen (09.11.2026)
+- [x] **Bisherige Startseitenstruktur zurückgeholt:** drei Hauptthemen, Prüfungsfeld, vier Fotokacheln, weitere Lernangebote. Die Zwischenversion mit nur zwei Moduskarten war nicht die gewünschte Startseite.
+- [x] **Bilder überprüft:** `baerli/leseecke.webp`, `werkstatt.webp`, `baerli.webp`, `kostuemkiste.webp` und der Einstieg `bilderbuecher/index.html` sind im Repository vorhanden.
+- [x] **Funktionaler Konflikt behoben:** veralteter Startseiten-Wrapper im später geladenen `baerli-kleiderschrank.js` entfernt; alte Kategorien für Hüte, Brillen, Hosen, Schals und Schuhe auf die aktiven Slots gemappt; bestehende Auswahlen übernommen.
+- [x] **Tests angepasst:** `mobile-start.test.cjs` und `e2e/smoke.spec.cjs` prüfen jetzt den ursprünglichen 3+4-Einstieg und die sekundären Modi.
+- [x] **Quellcodeprüfung:** acht Inline-Skripte und vier weitere JS-Dateien syntaktisch geprüft; zwölf statische Code-/Verknüpfungschecks bestanden.
+- [ ] **Browsertests und Live-Pages nicht bestätigt:** die öffentliche Seite konnte in dieser Sitzung nicht geöffnet werden. Weder tatsächliche iPhone-Darstellung noch Ton-/Spielablauf oder Playwright-Lauf als erfolgreich behaupten.
+- [ ] **Weitere Funktionen prüfen:** Issues #22, #23, #24, #25 und #26 weiterführen. Besonders Spielwege, Bilderbuch, Hören, Sternenbeutel und Comics auf Geräten testen.
 
 ## 2. Bereits überprüft
 
