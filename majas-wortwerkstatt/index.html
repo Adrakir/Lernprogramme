@@ -5147,6 +5147,12 @@ function runPrep(topic,mode,n){
   }catch{}
   modeSelect.value=savedMode==='computer'?'computer':'recorded';
   speedSelect.value=['1','0.85','0.7'].includes(savedRate)?savedRate:'1';
+  // Mirror legacy preferences into the exportable app namespace even if no control is changed.
+  try{
+   localStorage.setItem('majas-wortwerkstatt-hoer-modus-v1',modeSelect.value);
+   localStorage.setItem('majas-wortwerkstatt-hoer-tempo-v1',speedSelect.value);
+   if(savedVoice)localStorage.setItem('majas-wortwerkstatt-hoer-stimme-v1',savedVoice);
+  }catch{}
   function refreshVoiceList(){
    if(!voiceSelect.isConnected)return;
    const voices=(speechAPI?.getVoices?.()||[]).filter(v=>/^de([-_]|$)/i.test(v.lang));
