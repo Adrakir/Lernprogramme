@@ -43,7 +43,7 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  await p.locator('#nav [data-page=finaltest]').click();assert.match(await p.locator('#ceScore').innerText(),/^40 \/ 40/);
  await p.reload();assert.equal(await p.locator('#ceResults').isVisible(),true);assert.match(await p.locator('#ceScore').innerText(),/^40 \/ 40/);
  // Returning to other learning pages does not lose the draft or results.
- await p.locator('#nav [data-page=home]').click();await p.locator('#luAllAreas').evaluate(e=>e.open=true);await p.getByRole('button',{name:'Abschlusstest zur Klassenarbeit öffnen',exact:true}).click();assert.equal(await p.locator('#page-finaltest').isVisible(),true);
+ await p.locator('#nav [data-page=home]').click();await p.locator('[data-chem-group=tests]').click();await p.locator('#homeCards [data-chem-route=finaltest]').click();assert.equal(await p.locator('#page-finaltest').isVisible(),true);
  fs.mkdirSync('chemie-test-artifacts',{recursive:true});await p.screenshot({path:'chemie-test-artifacts/finaltest-results.png',fullPage:true});
  await p.locator('#ceNew').click();await p.setViewportSize({width:390,height:844});
  assert((await p.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth))<=1,'Mobile overflow');
