@@ -14,3 +14,4 @@
 - Die offenen GitHub-Issues #22–#26 und die letzten Commits prüfen, dann **die nächste offene Aufgabe** in der bestehenden App lösen.
 - Bestehende Comics, Spiele, Audios, Sterne, Lernstände und öffentliche URL erhalten. Statische Tests und tatsächliche Audio-/Browser-Tests getrennt dokumentieren.
 - Nach jeder Änderung die Projektstand-Datei mit erledigtem Punkt, Teststatus, Commit und weiter offenem Schritt aktualisieren. Andere Fachapps nicht durch diese Anweisung verändern.
+- Für Majas app-spezifische manuelle Tests [`majas-wortwerkstatt/QA_CHECKLIST.md`](./majas-wortwerkstatt/QA_CHECKLIST.md) verwenden. Automatisierte Chromium-Emulation ist kein Nachweis für die Tonwiedergabe auf echten iOS-/Android-Geräten.
