@@ -6,7 +6,8 @@ const el=id=>document.getElementById(id);
 const materials=[['Kupfer','gut leitend',1],['Stahl','gut leitend',.65],['Trockenes Holz','schlecht leitend',.08],['Typischer Kunststoff','schlecht leitend',.08]];
 let timer=null,observed=false;
 const solved=new Set(),assisted=new Set();
-el('thRods').innerHTML=materials.map((m,i)=>`<div class="th-rod-row"><div class="th-rod-head"><b>${m[0]}</b><span>${m[1]}</span></div><div class="th-rod" id="thRod${i}" aria-hidden="true">${'<span></span>'.repeat(12)}</div></div>`).join('');
+const rodSwatch=['<svg viewBox="0 0 26 16" aria-hidden="true"><rect width="26" height="16" rx="4" fill="#c46a35"/><path d="M3 4h20" stroke="#e8a079" stroke-width="2"/></svg>','<svg viewBox="0 0 26 16" aria-hidden="true"><rect width="26" height="16" rx="4" fill="#8a949a"/><path d="M3 4h20" stroke="#d8dee2" stroke-width="2"/></svg>','<svg viewBox="0 0 26 16" aria-hidden="true"><rect width="26" height="16" rx="4" fill="#a77b4b"/><path d="M3 5h20M3 10h14" stroke="#7a5530" stroke-width="1.5"/></svg>','<svg viewBox="0 0 26 16" aria-hidden="true"><rect width="26" height="16" rx="4" fill="#e36a8a"/><circle cx="7" cy="8" r="2" fill="#f7b7c7"/></svg>'];
+el('thRods').innerHTML=materials.map((m,i)=>`<div class="th-rod-row"><div class="th-rod-head">${rodSwatch[i]}<b>${m[0]}</b><span>${m[1]}</span></div><div class="th-rod matlook-${i}" id="thRod${i}" aria-hidden="true">${'<span></span>'.repeat(12)}</div></div>`).join('');
 function stop(){if(timer!==null)clearInterval(timer);timer=null;el('thPlay').textContent=Number(el('thTime').value)===10?'▶ Erneut abspielen':'▶ Vergleich abspielen';}
 function progress(){
  const done=observed&&solved.size===4;
@@ -136,6 +137,7 @@ document.querySelectorAll('[data-th-protocol]').forEach(b=>b.addEventListener('c
 }));
 render();practice();
 const openThermalLink=()=>{if(['#waermeleitfaehigkeit','#holz-eisen'].includes(location.hash)){navigate('thermal');if(location.hash==='#holz-eisen'){document.querySelector('#heTitle')?.closest('details')?.setAttribute('open','');}if(location.hash==='#holz-eisen')setTimeout(()=>document.getElementById('heTitle')?.scrollIntoView({block:'start'}),0)}};
+const thExplainBtn=el('thExplainCheck');if(thExplainBtn)thExplainBtn.addEventListener('click',()=>{const t=el('thExplain').value,list=el('thExplainAuto');list.replaceChildren();const add=(cls,txt)=>{const li=document.createElement('li');li.className=cls;li.textContent=txt;list.appendChild(li)};if(t.trim().length<10){add('miss','Schreibe zuerst mindestens einen ganzen Satz.');return}const c1=/(boden|metall)/i.test(t)&&/(gut|schnell|besser)/i.test(t)&&/(leit|weiterg|energie|w(ä|a)rme)/i.test(t);const c2=/(griff|hand)/i.test(t)&&/(schlecht|wenig|kaum|langsam|nicht so gut|isolier|sch(ü|u)tz)/i.test(t);add(c1?'hit':'miss',(c1?'✓ ':'○ ')+'Topfboden: Metall leitet Wärme gut an den Inhalt weiter.'+(c1?'':' – Tipp: Schreibe, dass der Metallboden die Wärme gut/schnell weitergibt.'));add(c2?'hit':'miss',(c2?'✓ ':'○ ')+'Griff: Ein schlechter Wärmeleiter schützt die Hand.'+(c2?'':' – Tipp: Schreibe, dass der Griff die Wärme schlecht leitet und so die Hand schützt.'));add('sum',c1&&c2?'Beide Gedanken gefunden – vergleiche noch mit der Musterlösung!':'Ergänze deine Erklärung und prüfe erneut.')});
 window.addEventListener('hashchange',openThermalLink);openThermalLink();
 })();
 

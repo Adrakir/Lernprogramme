@@ -19,7 +19,7 @@ const app=path.resolve(process.argv[2]||path.join(__dirname,'../Chemie_Entdecker
  assert.match(await p.locator('#peTotal').innerText(),/6 von 6/);assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('chemie5-data')).done.protocoltrainer),true);
  await p.evaluate(()=>window.print=()=>{});await p.locator('#pePrint').click();assert.equal(await p.locator('#cePrintDocument .pe-print-case').count(),6);assert.match(await p.locator('#cePrintDocument').innerText(),/Meine Verbesserungen/);await p.evaluate(()=>window.dispatchEvent(new Event('afterprint')));
  await p.locator('#pePrintSolutions').click();assert.match(await p.locator('#cePrintDocument').innerText(),/Erklärung:/);await p.evaluate(()=>window.dispatchEvent(new Event('afterprint')));
- await p.goto(pathToFileURL(app).href+'#holz-eisen');assert.equal(await p.locator('#page-thermal').isVisible(),true);assert.equal(await p.locator('[data-he-gap]').count(),8);
+ await p.goto(pathToFileURL(app).href+'#holz-eisen');await p.locator('#page-thermal').waitFor({state:'visible',timeout:8000});assert.equal(await p.locator('#page-thermal').isVisible(),true);assert.equal(await p.locator('[data-he-gap]').count(),8);
  await p.locator('#heStrong').click();await p.locator('#heTime').evaluate(e=>{e.value='10';e.dispatchEvent(new Event('input',{bubbles:true}))});assert.match(await p.locator('#heObservation').innerText(),/glühend/);
  await p.locator('#heCheck').click();assert.match(await p.locator('#heFeedback').innerText(),/0 von 8/);
  const answers=['wärmeren','kälteren','Eisen','schlechter','verkohlen','glühen','mit geeigneter Messtechnik nach Anleitung','Beobachtung'];

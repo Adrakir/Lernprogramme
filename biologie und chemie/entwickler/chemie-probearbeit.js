@@ -112,6 +112,17 @@
     }
   ];
 
+  const writingAutoKeys = {
+    'a) Eine unbekannte Flüssigkeit ist verschüttet.': [t => /(abstand|nicht (an|be)?r(ü|u)hr|lehrkraft|lehrer|melden|informier)/i.test(t), t => /(unbekannt|gef(ä|a)hr|giftig|(ä|a)tzend)/i.test(t)],
+    'b) Ein Gasbrenner brennt unbeaufsichtigt.': [t => /(lehrkraft|lehrer|melden|informier|bescheid)/i.test(t), t => /(brand|brennen|feuer|verbrenn)/i.test(t)],
+    'c) Eine Schülerin möchte mit offenen langen Haaren am Brenner arbeiten.': [t => /(zusammenbinde|zusammen binde|hochbinde|zopf|haargummi)/i.test(t), t => /(feuer|brenn|flamme|entz(ü|u)nd)/i.test(t)],
+    'a) Erkläre die Beobachtung.': [t => /metall/i.test(t) && /leit/i.test(t) && /(wachs|schmilz|schmelz|fr(ü|u)her)/i.test(t)],
+    'b) Warum bleibt die Temperatur von reinem Wasser beim Sieden trotz weiterer Energiezufuhr gleich, solange flüssiges Wasser vorhanden ist und der Druck gleich bleibt?': [t => /(dampf|gasf(ö|o)rmig|verdampf)/i.test(t) && /(energie|w(ä|a)rme)/i.test(t)],
+    'a) Durchführung – Was wurde gemacht?': [t => /(teelicht|wachs|stab|st(ä|a)be)/i.test(t) && /(erw(ä|a)rm|erhitz|aufgestellt|stell|abstand)/i.test(t)],
+    'b) Beobachtung – Was war zu sehen?': [t => /(wachs|teelicht)/i.test(t) && /(schmolz|schmilz|schmelz|fl(ü|u)ssig|zuerst|fr(ü|u)her)/i.test(t)],
+    'c) Auswertung – Was bedeutet die Beobachtung für den Materialvergleich?': [t => /(metall|eisen|kupfer)/i.test(t) && /(leit|besser)/i.test(t)]
+  };
+
   const create = (tag, text, parent) => {
     const element = document.createElement(tag);
     if (text) element.textContent = text;
@@ -198,15 +209,18 @@
       feedback.hidden = false;
       if (field.criteria) {
         create('p', `Musterlösung · ${field.model}`, feedback);
-        for (const criterion of field.criteria) {
+        const keys = writingAutoKeys[field.label] || [];
+        field.criteria.forEach((criterion, index) => {
           const label = create('label', '', feedback);
           label.className = 'cp-check';
           const check = create('input', '', label);
           check.type = 'checkbox';
           check.disabled = !answer;
+          const detected = Boolean(answer) && Boolean(keys[index]?.(answer));
+          if (detected) check.checked = true;
           check.addEventListener('change', updateResult);
-          label.append(document.createTextNode(` ${criterion} (1 P.)`));
-        }
+          label.append(document.createTextNode(` ${criterion} (1 P.)${detected ? ' · ✓ automatisch in deiner Antwort erkannt' : ''}`));
+        });
         continue;
       }
 

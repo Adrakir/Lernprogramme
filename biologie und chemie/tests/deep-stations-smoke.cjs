@@ -107,14 +107,14 @@ async function setRange(p,id,value){
    assert.equal(await p.locator('#flameLow').getAttribute('aria-pressed'),'true');
    assert.equal(await p.locator('#flamesExplanation svg').count(),3,'Illustrated flame explanation');
    await p.locator('[data-lab="setup"]').click();
-   assert.equal(await p.locator('#setupTaskCount').innerText(),'1 / 10');
+   assert.equal(await p.locator('#setupTaskCount').innerText(),'1 / 12');
    await p.locator('[data-setup-opt]',{hasText:'Messzylinder'}).click();
    await p.locator('[data-cyl="100"]').waitFor();
    await p.locator('[data-cyl="100"]').click();
    assert(await p.locator('#setupNext').isDisabled(),'100-ml cylinder is not accepted');
    await p.locator('[data-cyl="250"]').click();
    assert.match(await p.locator('#setupFeedback').innerText(),/250-ml-Messzylinder/);
-   for(let step=1;step<10;step++){
+   for(let step=1;step<12;step++){
     await p.locator('#setupNext').click();
     const n=await p.locator('[data-setup-opt]').count();
     for(let i=0;i<n&&await p.locator('#setupNext').isDisabled();i++)await p.locator(`[data-setup-opt="${i}"]`).click();
@@ -122,7 +122,7 @@ async function setRange(p,id,value){
     if(step===8)assert(await p.locator('#setupArt .heat-rods, #setupArt svg').first().isVisible(),'Heat-conduction animation for wax mission');
    }
    await p.locator('#setupNext').click();
-   assert.match(await p.locator('#setupTitle').innerText(),/Alle 10 Gerätemissionen/);
+   assert.match(await p.locator('#setupTitle').innerText(),/Alle 12 Gerätemissionen/);
    await p.locator('#nav [data-page="solubility"]').click();
    await p.locator('#page-solubility .page-head [data-deep-link="particles"]').click();
    assert(await p.locator('#deep-particles').isVisible(),'Prominent solubility link opens particle model, not previous tab');

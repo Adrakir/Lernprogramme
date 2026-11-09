@@ -42,3 +42,22 @@ Direkt unter der Überschrift der Seite **Siedetemperatur** steht ein interaktiv
 Jedes Kapitel hat zuerst einen Satzbaukasten mit Lückenauswahl, Prüfung und Übernahme ins Textfeld. Danach folgt eine automatische Schlüsselwort-Rückmeldung zu jedem Kriterium mit Tipps. Erkannte Kriterien werden in der Selbsteinschätzung vorab angehakt.
 
 `node tests/campus-upgrades-smoke.cjs` prüft diese Erweiterungen.
+## Lernheft und Laborbild
+
+`Lernheft_Chemiearbeit.pdf` (11 Seiten) liegt im selben Ordner wie die Offline-HTML und ist auf der Lernheft-Seite sowie in der Probearbeit verlinkt. Das Laborbild von Seite 1 des Lernhefts ist direkt in **Sicher experimentieren → Finde 6 Gefahren** eingebaut (als eingebettetes JPEG); die sechs Klickstellen entsprechen der Lösung auf Lernheft-Seite 11.
+
+## Interaktive Erklär-Aufgaben
+
+Alle freien Schreibaufgaben besitzen eine automatische Schlüsselwort-Prüfung mit Tipps pro Kriterium: Abschlusstest Teil B (4 Schreibaufgaben), Probeklassenarbeit im Forscher-Campus (Aufgaben 9–12), Probearbeit zum Lernheft (Vorab-Ankreuzen erkannter Kriterien) und die Topfboden-Frage auf der Wärmeleitfähigkeits-Seite. Der virtuelle Brennerführerschein begründet jede Antwort: warum die gewählte Option falsch ist und warum die richtige stimmt.
+
+## Skizzenlabor und Forscherprotokoll
+
+Im Forscherprotokoll (Lernzentrale) ist das Material von der Durchführung getrennt: ankreuzbare Materialliste plus eigene Einträge. Das **Skizzenlabor** stellt 17 Gerätesymbole bereit (Stativ, Dreifuß, Drahtnetz, Gasbrenner, Teelicht, Becherglas, Stäbe u. v. m.), die per Antippen eingefügt und per Ziehen platziert werden. Dazu kommen Freihandstift, Beschriftungen, PNG-Export und Übernahme der Geräteliste ins Material. Station 4 verlinkt direkt dorthin.
+
+## Weitere Ergänzungen
+
+- Gerätemissionen 11 und 12: Schnellkochtopf (höherer Druck → Sieden erst über 100 °C) und Mount Everest (niedriger Druck → Sieden bei ca. 70 °C), beide mit animierten Szenen. Mission 5 zeigt eine korrekte Dreifuß-Drahtnetz-Zeichnung.
+- Lerntrainer: 64 Fragen (40 neue) mit Begründungen, warum die richtige Antwort stimmt und die Ablenker nicht.
+- Stoffeigenschaften im Alltag: Schritt-für-Schritt-Anleitung und animierte Magnet-, Stromkreis- und Schwimmtests.
+- Wärmeleitfähigkeit: Die vier Vergleichsstäbe tragen Material-Markierungen; in der Heftskizze ist der Metallstab (Metallverlauf) klar vom Glasstab (transparent) unterschieden.
+- `tests/protocol-wood-smoke.cjs` wartet nach der Hash-Navigation auf die Seite (behebt WebKit-Flakiness).

@@ -57,5 +57,17 @@ const setInput=(p,sel,v)=>p.locator(sel).evaluate((e,v)=>{e.value=v;e.dispatchEv
  assert.equal(await p.locator('.lu-auto li.hit').count(),2);
  assert.equal(await p.locator('#luStage .lu-check input:checked').count(),2);
 
+ // Neue Funktionen: Lernheft-Laborbild, Skizzenlabor, Materialliste, Lerntrainer-Bank, Führerschein-Begründungen
+ await go(p,'safety');assert.equal(await p.locator('#page-safety .safety-photo').count(),1,'Lernheft-Bild in Finde 6 Gefahren');
+ await p.locator('[data-safety="3"]').click();assert.match(await p.locator('#safetyFeedback').innerText(),/Brennbares|Buch/);
+ assert((await p.evaluate(()=>window.LernCockpitBankChem.length))>=64,'Lerntrainer-Fragenbank erweitert');
+ await go(p,'v4study');await p.locator('[data-v4tab="journal"]').click();
+ assert.equal(await p.locator('#v4SketchStage').count(),1,'Skizzenlabor vorhanden');
+ await p.locator('[data-skpart="brenner"]').click();assert.match(await p.locator('#v4SketchStatus').innerText(),/Gasbrenner/);
+ assert((await p.locator('.v4matgrid input').count())>=20,'Materialliste zum Ankreuzen');
+ const lic=await p.evaluate(()=>{const s=document.querySelector('[data-v4tab="license"]');return !!s});assert(lic);
+ await go(p,'heating');assert.equal(await p.locator('#page-heating a[href="Lernheft_Chemiearbeit.pdf"]').count(),0);
+ await go(p,'sheet');assert.equal(await p.locator('#page-sheet a[href="Lernheft_Chemiearbeit.pdf"]').count(),1,'Lernheft-PDF verlinkt');
+
  assert.deepEqual(errors,[]);await browser.close();console.log(`PASS ${engine}: ethanol comparison, custom heating curve, micro zoom, drawn lab scenes and interactive explanation step`);
 })().catch(e=>{console.error(e);process.exit(1)});

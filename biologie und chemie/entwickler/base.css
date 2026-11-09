@@ -273,3 +273,61 @@ body.high-contrast .mission-scene{background:#eef4f3}
 .bc-cursor{stroke:#e53935;stroke-width:2;stroke-dasharray:2 4;transition:d .3s}
 @media(max-width:760px){.bc-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.bc-vap path,.bc-bub.on circle{animation:none}.bc-bub.on circle{opacity:.8}}
+/* Laborszene als Lernheft-Bild */
+.safety-photo{width:100%;height:auto;display:block;border-radius:14px;box-shadow:0 3px 14px #163d4720}
+
+/* Station 4: neue Missionsgrafiken */
+.tripod-art,.pressure-art,.everest-art{width:100%;max-width:560px;height:auto;display:block;margin:0 auto}
+.pressure-art .press-steam path{animation:bcVap 1.6s ease-in-out infinite}
+.pressure-art .press-steam path:nth-child(2){animation-delay:.7s}
+.pressure-art .press-bubbles circle{animation:bcBub 1.2s ease-in infinite}
+.pressure-art .press-bubbles circle:nth-child(2){animation-delay:.25s}.pressure-art .press-bubbles circle:nth-child(3){animation-delay:.5s}.pressure-art .press-bubbles circle:nth-child(4){animation-delay:.75s}.pressure-art .press-bubbles circle:nth-child(5){animation-delay:.4s}
+.pressure-art .press-flames path{transform-origin:center 222px;animation:teaFlicker 1s ease-in-out infinite alternate}
+.everest-art .ev-bubbles circle{animation:bcBub 1s ease-in infinite}
+.everest-art .ev-bubbles circle:nth-child(2){animation-delay:.3s}.everest-art .ev-bubbles circle:nth-child(3){animation-delay:.55s}.everest-art .ev-bubbles circle:nth-child(4){animation-delay:.15s}.everest-art .ev-bubbles circle:nth-child(5){animation-delay:.7s}
+.everest-art .ev-steam path{animation:bcVap 2s ease-in-out infinite}
+.everest-art .ev-steam path:nth-child(2){animation-delay:.6s}.everest-art .ev-steam path:nth-child(3){animation-delay:1.2s}
+.everest-art .ev-flame path{transform-origin:134px 196px;animation:teaFlicker .9s ease-in-out infinite alternate}
+@keyframes teaFlicker{from{transform:scale(1)}to{transform:scale(1.08,1.16)}}
+
+/* Stoffeigenschaften: Testanimationen */
+.v4propsart{margin:14px 0}.v4propsart svg{width:100%;max-width:640px;height:auto;display:block;margin:0 auto}
+.v4propsart .props-sample.attract{animation:propsAttract 1.2s ease-out forwards}
+@keyframes propsAttract{0%{transform:translateX(0)}55%{transform:translateX(-18px)}100%{transform:translateX(-22px)}}
+.v4propsart .props-zing{animation:propsZing 1s ease-in-out infinite alternate;opacity:0;animation-delay:.9s;animation-fill-mode:forwards}
+@keyframes propsZing{from{opacity:0}to{opacity:1}}
+.v4propsart .props-glow{animation:propsGlow 1.4s ease-in-out infinite alternate}
+@keyframes propsGlow{from{filter:none}to{filter:drop-shadow(0 0 10px #f4c542)}}
+.v4propsart .props-rays{animation:propsGlow 1.4s ease-in-out infinite alternate}
+.v4propsart .props-drop{animation:propsDrop 1.4s ease-in-out forwards}
+.v4propsart .props-float{animation-name:propsFloatIn}
+@keyframes propsDrop{0%{transform:translateY(-80px)}60%{transform:translateY(6px)}100%{transform:translateY(0)}}
+@keyframes propsFloatIn{0%{transform:translateY(-60px)}50%{transform:translateY(10px)}75%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+
+/* Wärmeleitfähigkeit: Material-Optik */
+.th-rod-head svg{width:26px;height:16px;border-radius:4px;flex:none;margin-right:6px;vertical-align:-2px}
+#page-thermal .th-rod.matlook-0{border-left:14px solid #c46a35}#page-thermal .th-rod.matlook-1{border-left:14px solid #8a949a}#page-thermal .th-rod.matlook-2{border-left:14px solid #a77b4b}#page-thermal .th-rod.matlook-3{border-left:14px solid #e36a8a}
+
+/* Forscherprotokoll: Material & Skizzenlabor */
+.v4material{border:1px solid var(--line,#d6dee8);border-radius:14px;padding:10px 14px 14px;margin:6px 0}
+.v4material legend{font-weight:800;padding:0 6px}
+.v4matgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:4px 10px;margin-bottom:8px}
+.v4matopt{display:flex;align-items:center;gap:6px;font-size:14px;padding:4px 6px;border-radius:8px}
+.v4matopt.on{background:#e8f7ee}
+.v4matrow{display:flex;gap:8px;flex-wrap:wrap}.v4matrow input{flex:1;min-width:180px;font:inherit;padding:8px;border-radius:8px;border:1px solid #9fb3c8}
+.v4matchips{margin-top:6px;font-size:14px}
+.v4chip{display:inline-block;background:#eef3f8;border:1px solid #c6d4e2;border-radius:999px;padding:2px 8px;margin:2px}
+.v4chip button{border:0;background:none;cursor:pointer;font-weight:800;color:#a3361f}
+.v4sketchlab{border:2px dashed #9db7c0;border-radius:16px;padding:14px;margin-top:16px;background:#fbfdfe}
+.v4sketchparts{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:6px;margin:10px 0}
+.sk-part{display:grid;justify-items:center;gap:3px;padding:6px 4px;border:1px solid #c6d4e2;border-radius:10px;background:#fff;cursor:pointer}
+.sk-part:hover{border-color:#1d8a5f;background:#f2faf6}
+.sk-part svg{height:44px;width:100%;max-width:70px}
+.sk-part small{font-size:10.5px;text-align:center;line-height:1.15;color:#365562}
+.v4sketchstage{margin:8px 0}
+#v4SketchStage{width:100%;height:auto;display:block;background:#fff;border-radius:12px;touch-action:none;cursor:default}
+#v4SketchStage.pen{cursor:crosshair}
+#v4SketchStage .sk-item{cursor:grab}
+.v4sketchtools button[aria-pressed="true"]{background:#1d8a5f;color:#fff}
+@media print{.v4sketchparts,.v4sketchtools{display:none!important}}
+@media(prefers-reduced-motion:reduce){.pressure-art .press-steam path,.pressure-art .press-bubbles circle,.pressure-art .press-flames path,.everest-art .ev-bubbles circle,.everest-art .ev-steam path,.everest-art .ev-flame path,.v4propsart .props-sample.attract,.v4propsart .props-drop,.v4propsart .props-glow,.v4propsart .props-rays{animation:none}}
