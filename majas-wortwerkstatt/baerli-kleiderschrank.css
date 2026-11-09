@@ -1,0 +1,83 @@
+/* Bärlis mobile Seiten-Navigation: große Bilder, ein Gegenstand pro Seite */
+.bw-page{max-width:850px;margin:0 auto;padding:6px 0 28px}
+.bw-page a{color:var(--forest)}
+.bw-back{display:inline-flex;align-items:center;min-height:44px;font-weight:800;text-decoration:none;margin-bottom:8px}
+.bw-header{text-align:center;max-width:620px;margin:0 auto 13px}
+.bw-header .kicker{justify-content:center;margin-bottom:7px}
+.bw-header h1{font-size:clamp(1.75rem,5vw,2.7rem);margin:0 0 7px}
+.bw-header p{margin:0;color:var(--muted)}
+.bw-intro{display:grid;grid-template-columns:minmax(160px,240px) 1fr;gap:18px;align-items:center;background:#f7efe7;border:1px solid #e4d6c7;border-radius:22px;padding:12px 18px;margin-bottom:14px}
+.bw-intro p{margin:0 0 8px}
+.bw-balance{font-weight:900;color:#75511d;font-size:1.15rem}
+.bw-worn{display:flex;flex-wrap:wrap;gap:5px}
+.bw-worn span{border:1px solid #e2d1bb;border-radius:99px;padding:3px 9px;font-size:.78rem;background:#fff9ef}
+.bw-figure{position:relative;margin:auto;width:min(100%,230px);aspect-ratio:1}
+.bw-figure img{display:block;width:100%;height:100%;object-fit:contain;border-radius:15px}
+.bw-figure svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.bw-tabs{display:flex;gap:10px;justify-content:center;margin:5px 0 12px}
+.bw-tabs a{padding:9px 17px;border:2px solid #b9cbc3;border-radius:999px;background:#fffdf7;text-decoration:none;font-weight:800;min-height:44px}
+.bw-tabs a[aria-current=page]{background:#185b4a;border-color:#185b4a;color:white}
+.bw-category-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.bw-category{background:#fffefa;border:1.5px solid #cbd7cc;border-radius:17px;min-height:116px;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;flex-direction:column;text-decoration:none;box-shadow:0 4px 0 #d5ddd3}
+.bw-category:focus-visible,.bw-category:hover{border-color:#185b4a;box-shadow:0 4px 0 #89baa5}
+.bw-category strong{font-size:1rem}
+.bw-emoji{font-size:2.5rem;line-height:1.1}
+.bw-chevron{display:none}
+.bw-focus{display:grid;grid-template-columns:minmax(160px,1.1fr) minmax(175px,1fr);background:#f8f0e7;border:1px solid #ddd2c4;border-radius:20px;gap:12px;padding:12px;align-items:center}
+.bw-focus .bw-figure{width:min(100%,270px)}
+.bw-product{display:flex;flex-direction:column;gap:5px;align-items:center;text-align:center}
+.bw-item-picture{height:96px;width:125px;background:#fffaf1;border:1px solid #d6cbbb;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bw-item-picture svg{width:100%;height:100%}
+.bw-product-copy strong{display:block;font-size:1.13rem}
+.bw-product-copy span{color:var(--muted);font-size:.87rem}
+.bw-product .primary{min-height:44px;min-width:154px;font-size:.96rem}
+.bw-product button:disabled{opacity:.55}
+.bw-wallet{font-weight:800;color:#795f25;margin:0;font-size:.83rem}
+.bw-message{margin:0;min-height:1.3em;font-size:.8rem;color:var(--forest)}
+.bw-pagination{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-top:14px}
+.bw-pagination span{text-align:center;font-weight:800;white-space:nowrap}
+.bw-pagination button{border-radius:13px;padding:11px 13px;min-height:47px;border:1.5px solid #8db2a3;background:#ebf6f0;color:#154f3f;font-weight:800}
+.bw-pagination button:disabled{opacity:.35}
+.bw-bottom{display:flex;gap:10px;justify-content:space-between;margin:15px 0}
+.bw-bottom a{font-size:.85rem;font-weight:750;min-height:40px;display:flex;align-items:center}
+.bw-word-icon{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;line-height:1.02;letter-spacing:-.03em;color:#205b4e;padding:3px}
+.bw-word-icon span{font-size:12px}
+.bw-word-icon b:last-child{color:#b26531}
+.bw-comic-icon{width:35px;height:35px;max-width:100%}
+.bw-tile-bear{width:39px;height:39px;object-fit:cover;object-position:center 25%;border-radius:8px}
+.bw-books-tile .maja-option-icon{font-size:28px}
+.bw-comic-banner{display:flex;align-items:center;gap:16px;background:#f8edda;border:1px solid #e3cfb1;padding:14px;border-radius:18px;margin:12px 0 20px}
+.bw-comic-banner img{width:100px;height:100px;object-fit:cover;border-radius:16px}
+.bw-comic-banner strong{font-size:1.2rem}
+.bw-comic-banner p{margin:2px 0 12px}
+.bw-comic-banner a{display:inline-flex;min-height:44px;align-items:center}
+@media(max-width:560px){
+ .bw-page{padding-bottom:14px}
+ .bw-header{margin-bottom:9px}
+ .bw-header h1{font-size:1.65rem}
+ .bw-header p{font-size:.87rem}
+ .bw-intro{grid-template-columns:140px 1fr;gap:9px;padding:8px 10px}
+ .bw-intro .bw-figure{width:140px}
+ .bw-intro p{font-size:.81rem;line-height:1.34}
+ .bw-worn{display:none}
+ .bw-category-grid{gap:8px}
+ .bw-category{min-height:99px}
+ .bw-emoji{font-size:2.25rem}
+ .bw-category strong{font-size:.92rem}
+ .bw-tabs{margin:0 0 9px}
+ .bw-tabs a{padding:8px 15px}
+ .bw-focus{grid-template-columns:45% 55%;padding:9px;gap:6px}
+ .bw-focus .bw-figure{width:100%}
+ .bw-item-picture{width:110px;height:74px}
+ .bw-product-copy strong{font-size:.97rem;line-height:1.2}
+ .bw-product .primary{font-size:.85rem;min-width:0;width:100%;padding:8px 6px}
+ .bw-product-copy span,.bw-wallet,.bw-message{font-size:.78rem}
+ .bw-bottom{margin-top:8px}
+}
+@media(max-width:350px){
+ .bw-intro{grid-template-columns:115px 1fr}
+ .bw-intro .bw-figure{width:115px}
+ .bw-focus{grid-template-columns:39% 61%}
+ .bw-item-picture{width:90px}
+ .bw-category strong{font-size:.82rem}
+}
