@@ -64,6 +64,18 @@
   if(page==="comicstudio" && index && !["toncheck"].includes(index))return;
   if(page==="pruefung" && index!=="hoeren")return;
   if(page==="tagescomic"&&index!=="melody-und-die-hausaufgaben")return;
+  // Im Hörtest muss zuerst die eigentliche Hörsteuerung sichtbar sein.
+  // Die Figurenstimmen bleiben als kurzer, optionaler Link NACH dem Hörbereich.
+  if(page==="pruefung"&&index==="hoeren"){
+   const player=app.querySelector(".prep-audio");
+   if(player&&!app.querySelector(".fs-mini-link")){
+    const link=document.createElement("div");
+    link.className="actions fs-mini-link";
+    link.innerHTML='<a class="secondary" href="#figurenstimmen">🐻 Bärli und Majas kurze Stimmen kennenlernen →</a>';
+    player.insertAdjacentElement("afterend",link);
+   }
+   return;
+  }
   const target=page==="start"?app.querySelector(".home-priorities"):app.querySelector(".route>.unit-head");
   if(!target||app.querySelector(".fs-mini"))return;
   const section=document.createElement("section");
