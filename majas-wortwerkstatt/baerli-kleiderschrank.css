@@ -131,3 +131,9 @@
  .bw-set-link{font-size:.95rem}
 }
 @media(max-width:360px){.bw-set-items a{flex-wrap:wrap}.bw-set-items a small{max-width:100%;text-align:left}}
+
+/* Drei klare Abteilungen: Kleidung, Extras sowie Regen- und Weihnachtssachen. */
+.bw-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.bw-tabs a{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;padding:9px 5px;font-size:.92rem}
+@media(max-width:560px){.bw-tabs a{font-size:.8rem;padding:9px 3px;line-height:1.15}}
+@media(max-width:350px){.bw-tabs a{font-size:.72rem;letter-spacing:-.02em}}
