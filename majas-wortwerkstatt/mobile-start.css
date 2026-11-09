@@ -174,3 +174,51 @@
  .prep-audio-compact .prep-play-buttons{flex-wrap:nowrap}
  .prep-audio-compact .prep-play-buttons button{flex:1;white-space:nowrap;padding-inline:11px}
 }
+
+/* Kindgerechte Einstiege: höchstens zwei Entscheidungen auf der Startseite,
+ * danach vier bebilderte Ziele. Keine langen Scrolldokumente. */
+.maja-door-home{max-width:860px;margin:0 auto}
+.maja-door-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:17px 0}
+.maja-door-card{min-height:205px;border:2px solid #bed7c9;border-radius:23px;background:#ecf6ed;padding:17px;color:#183a35;text-decoration:none;display:flex;align-items:center;flex-direction:column;justify-content:center;position:relative;text-align:center;gap:11px}
+.maja-door-card.maja-door-adventure{background:#fff3df;border-color:#ead6a7}
+.maja-door-card strong{font-size:1.27rem;display:block;line-height:1.25}
+.maja-door-card small{font-size:.92rem;display:block;line-height:1.35;color:#4e625b;margin-top:7px}
+.maja-door-card .maja-door-visual{width:90px;height:75px;display:grid;place-items:center;border-radius:15px;background:#d6ebdf}
+.maja-door-card .maja-door-visual svg{width:53px;height:53px}
+.maja-door-bear{width:89px;height:89px;object-fit:cover;border-radius:18px}
+.maja-door-next{position:absolute;right:12px;top:11px;font-size:1.3rem}
+.maja-door-shortcuts{display:grid;gap:8px}
+.maja-door-shortcuts .maja-quick-test{font-size:1.08rem}
+.maja-door-parent{text-align:center;margin-top:14px;font-size:.9rem;color:var(--muted)}
+.maja-door-parent a{color:#185b4a}
+.maja-journey-hub{max-width:870px}
+.maja-journey-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:17px}
+.maja-journey-card{display:flex;align-items:center;gap:12px;padding:13px;background:#fffdf8;border:1.5px solid #cadae0;border-radius:16px;min-height:110px;color:#203741;text-decoration:none}
+.maja-journey-card:nth-child(2){background:#f3ecfa;border-color:#d9c9e5}
+.maja-journey-card:nth-child(3){background:#f4faed;border-color:#cddbc0}
+.maja-journey-card:nth-child(4){background:#fff3df;border-color:#e8d5aa}
+.maja-journey-card strong{display:block;font-size:1.1rem;line-height:1.2}
+.maja-journey-card small{display:block;color:var(--muted);font-size:.83rem;margin-top:4px;line-height:1.25}
+.maja-journey-card .maja-journey-visual{font-size:2rem;background:#fffefa;border-radius:13px;width:64px;height:66px;flex:none;display:grid;place-items:center;border:1px solid #d8dfd6}
+.maja-journey-card>svg{margin-left:auto}
+.maja-journey-footer{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.maja-door-card:focus-visible,.maja-door-card:hover,.maja-journey-card:focus-visible,.maja-journey-card:hover{border-color:#145943;outline-offset:2px}
+@media(max-width:620px){
+ .maja-door-grid{gap:9px}
+ .maja-door-card{padding:11px;min-height:190px}
+ .maja-door-card strong{font-size:1rem}
+ .maja-door-card small{font-size:.78rem}
+ .maja-door-bear{width:74px;height:74px}
+ .maja-door-card .maja-door-visual{width:72px;height:72px}
+ .maja-journey-grid{gap:9px}
+ .maja-journey-card{padding:10px;min-height:100px;gap:7px;flex-wrap:wrap}
+ .maja-journey-card .maja-journey-visual{width:43px;height:46px;font-size:1.5rem}
+ .maja-journey-card strong{font-size:.92rem}
+ .maja-journey-card small{font-size:.72rem}
+ .maja-journey-card>svg{width:18px;height:18px}
+}
+@media(max-width:360px){
+ .maja-door-card strong{font-size:.9rem}
+ .maja-door-card small{font-size:.7rem}
+ .maja-journey-grid{grid-template-columns:1fr}
+}
