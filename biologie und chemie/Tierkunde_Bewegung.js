@@ -24,7 +24,7 @@ const profiles={
  dog:{head:200, neck:288, shoulder:364, hip:719, top:217, ribs:13, headScale:1, tailLength:132, bounce:6, spineFlex:7},
  cat:{head:202, neck:283, shoulder:361, hip:700, top:223, ribs:13, headScale:.86, tailLength:159, bounce:5, spineFlex:23}
 };
-const state={species:'dog',section:'skeleton',mode:'walk',speed:1,playing:false,labels:true,silhouette:false,progress:0,frameId:0,lastTs:0,root:null,selected:'spine',zoom:false};
+const state={species:'dog',section:'skeleton',mode:'walk',speed:1,playing:false,labels:true,silhouette:false,progress:0,frameId:0,lastTs:0,lastPaint:0,root:null,selected:'spine',zoom:false};
 const prefersReduced=()=>window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const n=(v)=>Number(v).toFixed(1).replace(/\.0$/,'');
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -172,12 +172,13 @@ function loop(time){
  if(!state.playing || !document.getElementById('rig-studio'))return;
  if(state.lastTs)state.progress+=(Math.min(90,time-state.lastTs)/1000)*MODES[state.mode].speed*state.speed;
  state.lastTs=time;
- frame();
+// Auf schwächeren Tablets nicht jeden Bildschirm-Refresh mit 20 kB SVG neu zeichnen.
+ if(!state.lastPaint||time-state.lastPaint>=30){frame();state.lastPaint=time}
  state.frameId=requestAnimationFrame(loop);
 }
 function stop(){if(state.frameId)cancelAnimationFrame(state.frameId);state.frameId=0;state.lastTs=0}
 function play(flag){
- state.playing=flag;stop();
+ state.playing=flag;stop();state.lastPaint=0;
  const b=id('rig-play');if(b){b.textContent=flag?'⏸ Pause':'▶ Abspielen';b.setAttribute('aria-pressed',String(flag))}
  if(flag)state.frameId=requestAnimationFrame(loop);
 }
@@ -193,7 +194,7 @@ function attach(){
  const lab=id('rig-studio');if(!lab)return;
  lab.addEventListener('click',e=>{
  const target=e.target.closest('button');if(!target)return;
- if(target.dataset.rigMode){choose(target.dataset.rigMode);return}
+ if(target.dataset.rigMode){choose(target.dataset.rigMode);if(!state.playing)play(true);return}
  if(target.id==='rig-play'){play(!state.playing);return}
  if(target.id==='rig-reset'){state.progress=0;play(false);frame();return}
  if(target.id==='rig-step'){play(false);state.progress=frac(state.progress+.04166);frame();return}
@@ -249,7 +250,7 @@ function mount(args){
  '<div class="rig-note">💡 <strong>Beobachtungsmodell:</strong> Die Zeichnung zeigt vereinfachte Bewegungsabläufe, keine millimetergenaue Anatomie oder reale Röntgenanimation. Zum Knochennamen tippe auf das Skelett oder nutze die beschriftete Knochenliste darunter.</div>';
  legacy.parentNode.insertBefore(container,legacy);
  attach();choose(state.mode);
- play(false);
+ play(!prefersReduced());
 }
 window.BioSkeletonLab={mount,stop,MODES,renderFrame:frame,getState:()=>({species:state.species,mode:state.mode,playing:state.playing,speed:state.speed,progress:state.progress})};
 if(['skeleton','motion'].includes((decodeURIComponent(location.hash.slice(1)).split('/')[1]||'skeleton'))){
