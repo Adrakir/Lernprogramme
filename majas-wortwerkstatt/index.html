@@ -5070,6 +5070,12 @@ function runPrep(topic,mode,n){
 
  if(audio){
   const modeSelect=document.querySelector('#prep-playback-mode');
+  // Native Safari-Auswahlfelder kürzen den langen Namen bei nur 320 CSS-Pixeln.
+  // „Vorlesen mit: Computer“ ist hier vollständig lesbar, die Stimmwahl bleibt separat.
+  if(window.matchMedia?.('(max-width:360px)')?.matches){
+   const option=modeSelect.querySelector('option[value="computer"]');
+   if(option)option.textContent='Computer';
+  }
   const speedSelect=document.querySelector('#prep-playback-speed');
   const voiceSelect=document.querySelector('#prep-voice-list');
   const voiceRow=document.querySelector('#prep-voice-row');
