@@ -301,6 +301,7 @@ function render(focus){
  if(window.BioSkeletonLab)window.BioSkeletonLab.mount({animal,section,bone,gait});
  if(window.BioLernstudio)window.BioLernstudio.mount({animal,section});
  if(window.BioDentalLab)window.BioDentalLab.mount({animal,section});
+ if(window.BioBehaviorLab)window.BioBehaviorLab.mount({animal,section});
  if(focus){$('#content').focus({preventScroll:true});scrollTo({top:0,behavior:'instant'});}
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}
