@@ -88,18 +88,18 @@
 ### 2. Getrennte gemeinsame Ergebnisübersicht
 - Die Haupt-App akzeptiert den JSON-Export des 41-Antworten-Übungstests und zeigt Häufigkeiten für Erwachsen-/Kindheitsangaben und fünf Lebensbereiche **getrennt** von ASRS, Autismus, AQ-10 und dem eigenständigen Kriterien-Trainer.
 - Kein validierter gemeinsamer ADHS-/AuDHS-Gesamtscore, keine automatische Diagnose. Übungsdaten sind als fiktiver Fall markiert, wenn sie im Übungsmodus erzeugt wurden.
-- Haupt-App-JSON-Exporte können ebenfalls wieder eingelesen werden; ein neuer Export kann die importierten Übungsdaten enthalten.
+- Haupt-App-JSON-Exporte können ebenfalls wieder eingelesen werden; ein neuer Export kann die importierten Übungsdaten und den bestätigten AQ-10-Originalwert enthalten. Auch der AQ-10-Wert bleibt beim Export-/Import-Rundlauf erhalten.
 
 ### 3. Erweiterte Fallarbeit
 - [falltrainer.html](./falltrainer.html): sechs fiktive Erwachsenenfälle (Anna, Robert, Mira, Daniel, Samira, Leonie) mit drei Entscheidungen pro Fall = 18 didaktische Aufgaben.
 - Zu jeder Entscheidung gibt es eine gezielte Hilfe und eine fachlich begründete Rückmeldung. Bearbeitungsstand, richtige Entscheidungen, Fallstatus, Ergebnisse und Druckansicht sind integriert.
-- Separater Bereich mit Unterrichtsablauf, Reflexionsfragen und einem transparenten 8-Punkte-Bewertungsraster für Fallanalysen.
+- Separater direkt im Browser aufrufbarer Lehrkraftbereich mit Unterrichtsablauf, Reflexionsfragen und einem transparenten 8-Punkte-Bewertungsraster für Fallanalysen.
 - Die Lernpunktzahl ist ausdrücklich **keine** ADHS-/Autismus-/AuDHS-Diagnostik.
 - Kein Zwang, persönliche Gesundheitsangaben in einer Unterrichtssituation zu machen.
 
 ### 4. Lesbarkeit, Barrierefreiheit und Qualität
 - Beschriftete Radiogruppen im Hauptformular; größere Schrift auch für Fragebeschriftungen und Hinweise; kontrastreiche Darstellung, responsive Navigation und Tastaturbedienung.
-- Automatisierte Browserregression in [qa-browser.cjs](./qa-browser.cjs), GitHub Action `.github/workflows/adhs-audhs-browser-tests.yml` (Chromium, Ubuntu 24.04); 17 Szenarien inklusive Speichern, Import, Export, sämtlicher Fallentscheidungen und 390px-Mobilansicht.
+- Automatisierte Browserregression in [qa-browser.cjs](./qa-browser.cjs), GitHub Action `.github/workflows/adhs-audhs-browser-tests.yml` (Chromium, Ubuntu 24.04); 18 Szenarien inklusive Speichern, Import, Export, sämtlicher Fallentscheidungen und 390px-Mobilansicht.
 - Diese Browser-Tests ersetzen keine manuelle Prüfung in iOS Safari, Android Chrome/Edge, mit VoiceOver/TalkBack oder gedrucktem PDF.
 - Diagnoseverfahren bleiben nach Rechte- und Fachgrenzen getrennt; DIVA-5 wird nicht nachgebaut.
 
@@ -108,3 +108,6 @@
 2. Android Chrome/Edge: Kontrastwechsel, Tastatur, Schriftgröße, Import und Export.
 3. Tastatur und Screenreader: Navigation, Beschriftung aller Bedienelemente, richtige Fokus-Reihenfolge, Feedbackansage.
 4. Druck/als PDF speichern: Seitenumbrüche, Lesbarkeit und Vollständigkeit der Ergebnisübersichten.
+
+### Letzte bestätigte Tests
+- 18 von 18 Chromium-Browserszenarien erfolgreich; GitHub-Pages-Deployment erfolgreich (10.11.2026). Prüfprotokoll in der GitHub Action. Ein tatsächlicher Test auf iOS Safari und Android Chrome/Edge ist weiterhin offen.
