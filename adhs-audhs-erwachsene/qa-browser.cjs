@@ -148,7 +148,12 @@ async function main(){
   const x=await open(browser,"visualisieren.html");const p=x.page;try{
    assert.equal(await p.locator('main > section.card').count(),8);
    assert.equal(await p.locator('img.visual').count(),5);
-   const imageStates=await p.locator('img.visual').evaluateAll(nodes=>nodes.map(el=>({ok:el.complete&&el.naturalWidth>0,alt:!!el.getAttribute("alt")})));
+   const images=p.locator('img.visual');
+   for(let i=0;i<5;i++){
+    await images.nth(i).scrollIntoViewIfNeeded();
+    await p.waitForFunction(index=>{const img=document.querySelectorAll('img.visual')[index];return img.complete&&img.naturalWidth>0},i,{timeout:7000});
+   }
+   const imageStates=await images.evaluateAll(nodes=>nodes.map(el=>({ok:el.complete&&el.naturalWidth>0,alt:!!el.getAttribute("alt")})));
    assert(imageStates.every(o=>o.ok&&o.alt),JSON.stringify(imageStates));
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
