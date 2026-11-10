@@ -45,6 +45,15 @@ fieldset{border:0;margin:0;padding:0;min-width:0}legend{font-weight:750;padding:
 .result-guide summary{cursor:pointer;font-weight:750;color:var(--ink)}
 @media(max-width:720px){.result-split{grid-template-columns:1fr}.result-guide{padding:14px}}
 @media print{.result-guide{break-inside:avoid;background:white!important}.result-lead{color:black}.result-track{border:1px solid #aaa}.result-track span{background:#777!important}}
+
+.narrative-report{border:1px solid var(--line);padding:22px}
+.narrative-report h2{margin:0 0 10px}
+.narrative-report section{padding:13px 16px;border:1px solid var(--line);border-radius:13px;background:var(--paper);margin:13px 0}
+.narrative-report section h3{margin:0 0 8px;font-size:18px}
+.narrative-report .narrative-lead{padding:15px;border-left:4px solid var(--teal);background:var(--soft);border-radius:11px}
+.narrative-report ul{padding-left:24px}.narrative-report li{margin:6px 0}
+.narrative-report p{margin:9px 0}
+@media print{.narrative-report section{break-inside:avoid}.narrative-report .narrative-lead{border:1px solid #aaa;background:white}}
 </style>
 </head>
 <body>
@@ -140,6 +149,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}legend{font-weight:750;padding:
 <div class="eyebrow">Einfach erklärt · Erwachsene</div><h1 class="h1">Was sagen meine Ergebnisse aus?</h1><p class="intro">Jedes Ergebnis wird in vier Schritten erklärt: <strong>Was wurde gezählt?</strong> · <strong>Was bedeutet das?</strong> · <strong>Was bedeutet es nicht?</strong> · <strong>Was kann man als Nächstes tun?</strong></p>
 <div class="note"><strong>Wichtig zu wissen:</strong> Es gibt hier keinen gemeinsamen ADHS-/AuDHS-Gesamtwert. Der ASRS ist ein Screening; die übrigen Lernfragen beschreiben nur Antworten. DIVA-5 ist ein Interview durch Fachpersonen.</div>
 <div id="resultCards" class="two" aria-live="polite"></div>
+<div id="mainNarrativeReport" class="card narrative-report" aria-live="polite" style="margin-top:14px"></div>
 <div class="card" id="combinedResults" style="margin-top:14px">
 <h2>Zusätzlicher Übungsfragebogen – verständlich erklärt</h2>
 <p>Hier lassen sich die Ergebnisse des eigenständigen 41-Antworten-Übungstests ergänzen, ohne sie mit dem ASRS oder DIVA-5 zu einem erfundenen Diagnosescore zu vermischen.</p>
@@ -317,8 +327,57 @@ function renderResults(){
  aqText+='<div class="result-explain"><strong>Was bedeutet das?</strong><p>Beim originalen AQ-10 kann ein Wert ab 6 von 10 ein Anlass sein, eine ausführlichere Autismusabklärung anzubieten. Auch andere klinische Gründe können für eine Abklärung sprechen.</p></div><p><strong>Was bedeutet es nicht?</strong> Ein AQ-10-Ergebnis beweist oder widerlegt Autismus nicht und kann alleine keine AuDHS-Diagnose ergeben.</p><p><strong>Nächster Schritt:</strong> Bei entsprechendem Verdacht die Entwicklung und soziale/sensorische Merkmale mit einer Fachperson besprechen.</p>';
  const autDone=aut.reduce((s,v)=>s+v.done,0);
  const autHtml='<div class="result-numeral">'+autDone+' von 12</div><p>Autismus-Lernfragen beantwortet.</p><p class="result-lead">Diese Fragen zeigen nur, zu welchen Themen „oft“ oder „sehr oft“ ausgewählt wurde.</p>'+aut.map(v=>guideLine(v.name+" – häufig",v.notable,4)+'<p class="result-fine">'+v.done+' von 4 Fragen in diesem Bereich beantwortet.</p>').join("")+'<div class="result-explain"><strong>So liest man die Balken</strong><p>Zum Beispiel heißt 3 von 4: drei selbst formulierte Fragen in diesem Bereich wurden häufig bejaht. Das ist weder eine Autismus-Punktzahl noch ein Grenzwert.</p></div><p><strong>Nächster Schritt:</strong> Für eine echte Einordnung braucht es ein ausführliches Gespräch über soziale Kommunikation, Entwicklung und weitere Merkmale.</p>';
- $("resultCards").innerHTML=resultCard("Standardisiertes Kurzscreening","ASRS v1.1 – ADHS-Screening",asrsText)+resultCard("Nicht validierte Lernübung","18 ADHS-Kriterien – Lerntrainer",crit)+resultCard("Separater Originaltestwert","AQ-10 – Autismus-Screening",aqText)+resultCard("Nicht validierte Lernübung","Autismus-Themen – Lernfragen",autHtml);
+ $("resultCards").innerHTML=resultCard("Standardisiertes Kurzscreening","ASRS v1.1 – ADHS-Screening",asrsText)+resultCard("Nicht validierte Lernübung","18 ADHS-Kriterien – Lerntrainer",crit)+resultCard("Separater Originaltestwert","AQ-10 – Autismus-Screening",aqText)+resultCard("Nicht validierte Lernübung","Autismus-Themen – Lernfragen",autHtml);renderMainNarrative();
 }
+function mainNarrativeSection(title,body){return '<section><h3>'+title+'</h3>'+body+'</section>';}
+function mainNarrativeTopics(arr,list,max){
+ const positive=arr.map((v,i)=>({v,i})).filter(x=>x.v===1).slice(0,max);
+ if(!positive.length)return '<p>In diesem Bereich wurden bisher keine eindeutigen „Ja“-Angaben gemacht.</p>';
+ return '<ul>'+positive.map(x=>'<li>'+escapes(list[x.i][2])+'</li>').join('')+'</ul>';
+}
+function renderMainNarrative(){
+ const a=asrsStatus(),cAdult=state.critA.filter(v=>v!==null).length,cChild=state.critC.filter(v=>v!==null).length;
+ const aq=getAQ(),aut=autStats(),autAnswered=aut.reduce((n,x)=>n+x.done,0);
+ const hasPractice=!!importedPractice,answeredPractice=hasPractice?importedPractice.heute.filter(v=>v!==null).length+importedPractice.kindheit.filter(v=>v!==null).length+importedPractice.lebensbereiche.filter(v=>v!==null).length:0;
+ let h='<h2>Ausführlicher Auswertungstext</h2><p class="subtle">Wird automatisch aus den aktuellen oder früher gespeicherten Antworten erzeugt und beim Drucken als PDF mit ausgegeben. Diese Beschreibung ist kein medizinischer Befund.</p>';
+ if(a.answered===0&&cAdult===0&&cChild===0&&autAnswered===0&&aq===null&&!hasPractice){
+  $("mainNarrativeReport").innerHTML=h+'<div class="narrative-lead"><strong>Es liegen noch keine Ergebnisse vor.</strong><p>Beantworte einen Fragebogen oder lade eine früher gespeicherte JSON-Datei hoch. Der Text wird dann automatisch ergänzt.</p></div>';return;
+ }
+ h+='<div class="narrative-lead"><strong>Zusammenfassung</strong><p>Dieser Lernbericht betrachtet ADHS-Screening, eigenständige Lernfragen und gegebenenfalls einen extern ermittelten AQ-10-Wert getrennt. '+(hasPractice?'Ein zusätzlicher 41-Antworten-Übungsbogen wurde übernommen. ':'')+'Er stellt keine ADHS-, Autismus- oder AuDHS-Diagnose und keine Erkrankungswahrscheinlichkeit fest.</p></div>';
+ let asrs='';
+ if(!a.complete)asrs='<p>Der ASRS-Kurzfragebogen ist noch nicht vollständig: '+a.answered+' von 6 Fragen sind beantwortet. Daher wird kein Screening-Ergebnis interpretiert.</p>';
+ else asrs='<p>Im ASRS-Kurzscreening wurden '+a.positive+' von 6 Antworten nach den offiziellen Regeln positiv gewertet. '+(a.positive>=4?'Damit wurde der Screening-Richtwert erreicht; eine weiterführende fachliche ADHS-Abklärung kann sinnvoll sein.':'Der Screening-Richtwert wurde nicht erreicht. Das schließt ADHS bei entsprechenden Beschwerden nicht aus.')+'</p><p>Der Wert sagt nicht aus, wie wahrscheinlich ADHS ist. Ein Screening prüft weder alle diagnostischen Bedingungen noch mögliche andere Ursachen.</p>';
+ h+=mainNarrativeSection('1. ADHS-Kurzscreening (ASRS-6)',asrs);
+ let adhd='';
+ if(cAdult===0&&cChild===0)adhd='<p>Der eigenständige Kriterien-Trainer wurde bisher nicht beantwortet. Aktuelle Schwierigkeiten und Kindheitshinweise können deshalb aus dieser Übung nicht beschrieben werden.</p>';
+ else{
+  const now=state.critA.filter(v=>v===1).length,child=state.critC.filter(v=>v===1).length;
+  adhd='<p>Im selbst verfassten Lerntrainer wurden '+cAdult+' von 18 aktuellen und '+cChild+' von 18 rückblickenden Kindheitsfragen beantwortet. Heute lauten '+now+' Antworten „Ja“, für die Kindheit '+child+'.</p><p><strong>Beispielhaft bejahte aktuelle Themen:</strong></p>'+mainNarrativeTopics(state.critA,CRITERIA,5);
+  adhd+='<p>Eine einzelne bejahte Lernfrage bestätigt noch kein diagnostisches ADHS-Kriterium. Die Antworten können lediglich auf Themen hinweisen, die im Gespräch vertieft werden sollten.</p>';
+ }
+ adhd+='<p><strong>Zusätzliche Angaben:</strong> Dauer: '+escapes($("duration").selectedOptions[0].textContent)+'. Entwicklung vor dem 12. Geburtstag: '+escapes($("onset").selectedOptions[0].textContent)+'. Anzahl der Situationen: '+escapes($("contexts").selectedOptions[0].textContent)+'. Markierte Lebensbereiche mit Auswirkungen: '+state.domains.length+'.</p>';
+ h+=mainNarrativeSection('2. ADHS-Themen und Entwicklungsverlauf',adhd);
+ let autism='';
+ if(autAnswered)autism+='<p>Im eigenständigen Autismus-Lernbereich wurden '+autAnswered+' von 12 Fragen beantwortet. Die Antworten betreffen soziale Kommunikation, Routinen und Interessen sowie sensorische Besonderheiten.</p><ul>'+aut.map(v=>'<li>'+escapes(v.name)+': '+v.notable+' von vier Fragen mit „oft“ oder „sehr oft“ ('+v.done+' beantwortet)</li>').join('')+'</ul><p>Die Häufigkeiten sind keine Autismus-Skala und kein klinisch überprüfter Grenzwert.</p>';
+ else autism+='<p>Die eigens formulierten Autismus-Lernfragen sind noch nicht beantwortet.</p>';
+ if(aq!==null)autism+='<p>Für den separat ausgefüllten Original-AQ-10 wurde ein bestätigter Gesamtwert von '+aq+' von 10 eingetragen. '+(aq>=6?'Der in der NICE-Leitlinie genannte Richtwert für eine vertiefte Autismusabklärung wurde erreicht.':'Der genannte Richtwert wurde nicht erreicht; bei klinischem Verdacht kann eine Abklärung dennoch sinnvoll sein.')+' Dieser Wert allein beweist oder widerlegt Autismus nicht.</p>';
+ else autism+='<p>Ein bestätigter Original-AQ-10-Gesamtwert wurde nicht eingetragen.</p>';
+ h+=mainNarrativeSection('3. Autismusbezogene Hinweise',autism);
+ let practice='';
+ if(!hasPractice)practice='<p>Der getrennte 41-Antworten-Übungsbogen wurde bisher nicht importiert. Ein vorhandener JSON-Export kann im Bereich „Zusätzlicher Übungsfragebogen“ übernommen werden.</p>';
+ else{
+  const adult=importedPractice.heute.filter(v=>v===3||v===4).length,child=importedPractice.kindheit.filter(v=>v===3||v===4).length;
+  const impacted=importedPractice.lebensbereiche.filter(v=>v===2||v===3).length;
+  practice='<p>'+(importedPractice.fiktiverFall?'Die Daten stammen aus einem ausdrücklich fiktiven Übungsfall. ':'Es wurden eigene Übungsantworten importiert. ')+'Der Übungsbogen umfasst '+answeredPractice+' von 41 bearbeiteten Feldern.</p><p>Im Erwachsenenalter wurden '+adult+' von 18 Themen mit „oft“ oder „sehr oft“ bewertet, für die Kindheit '+child+' von 18. In '+impacted+' der fünf Lebensbereiche wurden deutliche oder sehr starke Auswirkungen markiert.</p><p>Diese Werte sind nur Häufigkeiten des eigens entwickelten Fragebogens und dürfen nicht zu einem ASRS- oder AuDHS-Gesamtwert addiert werden.</p>';
+ }
+ h+=mainNarrativeSection('4. Zusätzlicher 41-Fragen-Übungsbogen',practice);
+ let combined='<p>ADHS und Autismus können gemeinsam auftreten. Für AuDHS müssen jedoch die Kriterien beider Bedingungen <strong>unabhängig voneinander</strong> fachlich untersucht werden. Auch zwei auffällige Kurzscreenings belegen keine Doppeldiagnose.</p>';
+ if(a.complete&&aq!==null)combined+='<p>In dieser Auswertung ist der Screening-Richtwert für ADHS '+(a.positive>=4?'erreicht':'nicht erreicht')+' und für den Original-AQ-10 '+(aq>=6?'erreicht':'nicht erreicht')+'. Daraus ergibt sich keine gemeinsame Diagnosepunktzahl.</p>';
+ h+=mainNarrativeSection('5. AuDHS: mögliche Überschneidungen',combined);
+ h+=mainNarrativeSection('6. Was vor einer fachlichen Einschätzung noch geklärt werden müsste','<p>Wichtig wären konkrete Alltagssituationen, die zeitliche Entwicklung und Dauer der Beschwerden, Funktionsbeeinträchtigungen in mehreren Lebenssituationen und – soweit vorhanden – Kindheitsinformationen.</p><p>Schlafprobleme, psychische Belastungen und andere mögliche Erklärungen oder Begleiterkrankungen sollten ebenfalls berücksichtigt werden. Die Abklärung gehört in fachliche Hände.</p>');
+ $("mainNarrativeReport").innerHTML=h;
+}
+
 function exportData(){const payload={hinweis:"Unterrichts-/Lernmaterial, keine Diagnose",stand:"2026-11-10",eigenstaendiger_uebungstest:importedPractice,asrs:{antworten:state.asrs,positiv:asrsStatus().complete?asrsStatus().positive:null},dsm5_lerntrainer:{erwachsene:state.critA,kindheit:state.critC,notizen:state.notes,bereiche:state.domains,vor12:$("onset").value,dauer:$("duration").value,situationen:$("contexts").value,differenzialdiagnostik:$("alternatives").value,anamnesenotizen:$("evidence").value},autismus_lernfragen:state.aut,aq10_originalwert:getAQ(),aq10_eingabe:{score:getAQ(),originalBestaetigt:getAQ()!==null}};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="neurokompass-lernauswertung.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function clearAll(){if(!confirm("Alle Eingaben dieser Sitzung zurücksetzen?"))return;state.asrs.fill(null);state.critA.fill(null);state.critC.fill(null);state.aut.fill(null);state.notes.fill("");state.domains=[];state.critIndex=0;importedPractice=null;mainSaveEnabled=false;try{localStorage.removeItem(MAIN_KEY)}catch(e){}$("saveToggle").setAttribute("aria-pressed","false");$("saveToggle").textContent="◌ Lokal sichern";$("mainSaveStatus").textContent="Sicherung deaktiviert; lokale Kopie gelöscht.";["onset","duration","contexts","alternatives","aqNote"].forEach(k=>$(k).value="");$("aqScore").value="";$("evidence").value="";renderAsrs();renderCrit();renderAut();renderDomains();renderAQ();renderImportedPractice();go("home");}
 document.addEventListener("click",e=>{const nav=e.target.closest("[data-view]");if(nav){go(nav.dataset.view);return}const next=e.target.closest("[data-go]");if(next){go(next.dataset.go);return}const c=e.target.closest("[data-case]");if(c){state.caseIndex=Number(c.dataset.case);renderCases();return}if(e.target.id==="showSolution"){const answer=$("caseAnswer"),visible=answer.hidden;answer.hidden=!visible;e.target.setAttribute("aria-expanded",String(visible));e.target.textContent=visible?"Musterlösung verbergen":"Musterlösung einblenden";}});
@@ -327,8 +386,8 @@ $("aqScore").addEventListener("input",renderAQ);$("critNext").addEventListener("
 $("themeBtn").addEventListener("click",()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark";});$("fontBtn").addEventListener("click",()=>{enlarged=!enlarged;document.body.classList.toggle("large-text",enlarged);$("fontBtn").textContent=enlarged?"A− Schrift":"A+ Schrift";});
 $("saveToggle").addEventListener("click",()=>{if(mainSaveEnabled){mainSaveEnabled=false;try{localStorage.removeItem(MAIN_KEY)}catch(e){}$("saveToggle").setAttribute("aria-pressed","false");$("saveToggle").textContent="◌ Lokal sichern";$("mainSaveStatus").textContent="Lokale Kopie entfernt. Antworten bleiben nur in dieser Sitzung.";}else{mainSaveEnabled=true;$("saveToggle").setAttribute("aria-pressed","true");$("saveToggle").textContent="✓ Lokal gesichert";persistMain();}});
 $("mainDeleteSaved").addEventListener("click",()=>{if(!confirm("Gespeicherte lokale Kopie der Haupt-App löschen? Die offenen Antworten bleiben bis zum Neuladen sichtbar."))return;try{localStorage.removeItem(MAIN_KEY)}catch(e){}mainSaveEnabled=false;$("saveToggle").setAttribute("aria-pressed","false");$("saveToggle").textContent="◌ Lokal sichern";$("mainSaveStatus").textContent="Lokale Kopie entfernt und Speicherung deaktiviert.";});
-$("importPractice").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>262144)throw Error("Datei zu groß (maximal 256 KB).");const p=JSON.parse(await file.text());if(!validPractice(p))throw Error("Diese Datei enthält keinen gültigen 41-Felder-Übungstest.");importedPractice=p;renderImportedPractice();persistMain();$("practiceImportStatus").textContent="Übungsantworten erfolgreich importiert und getrennt angezeigt.";}catch(err){$("practiceImportStatus").textContent="Import abgelehnt: "+err.message;}finally{e.target.value="";}});
-$("clearPracticeImport").addEventListener("click",()=>{importedPractice=null;renderImportedPractice();persistMain();$("practiceImportStatus").textContent="Übernommene Übungsdaten entfernt.";});
+$("importPractice").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>262144)throw Error("Datei zu groß (maximal 256 KB).");const p=JSON.parse(await file.text());if(!validPractice(p))throw Error("Diese Datei enthält keinen gültigen 41-Felder-Übungstest.");importedPractice=p;renderImportedPractice();renderMainNarrative();persistMain();$("practiceImportStatus").textContent="Übungsantworten erfolgreich importiert und getrennt angezeigt.";}catch(err){$("practiceImportStatus").textContent="Import abgelehnt: "+err.message;}finally{e.target.value="";}});
+$("clearPracticeImport").addEventListener("click",()=>{importedPractice=null;renderImportedPractice();renderMainNarrative();persistMain();$("practiceImportStatus").textContent="Übernommene Übungsdaten entfernt.";});
 $("importMain").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>262144)throw Error("Datei zu groß (maximal 256 KB).");applyMainPayload(validateMainExport(JSON.parse(await file.text())));persistMain();$("mainImportStatus").textContent="Haupt-App-Ergebnisse importiert. Bitte Werte prüfen.";}catch(err){$("mainImportStatus").textContent="Import abgelehnt: "+err.message;}finally{e.target.value="";}});
 document.addEventListener("change",persistMain);
 document.addEventListener("input",persistMain);
