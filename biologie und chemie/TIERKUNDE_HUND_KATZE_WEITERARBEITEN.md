@@ -36,6 +36,34 @@ Zusatzfunktionen: vereinfachter deutscher Browser-Vorleser, anpassbare Schriftgr
 - Stammgeschichte Katze: Library of Congress, https://www.loc.gov/everyday-mysteries/categories/zoology/item/how-did-cats-become-domesticated/
 - Körpersprache: RSPCA, https://www.rspca.org.uk/adviceandwelfare/pets/dogs/behaviour/understanding und https://www.rspca.org.uk/adviceandwelfare/pets/cats/behaviour
 
+
+## Neu: animiertes Skelett- und Bewegungslabor (10. November 2026)
+
+**In GitHub integriert, vorhandene Seiten und Speicherstände beibehalten.**
+
+Dateien:
+- `Tierkunde_Bewegung.js` — SVG-Skelettrig, per 2-Segment-Gelenkberechnung bewegliche Vorder- und Hinterbeine, Wirbelsäule, Rippen, Schädel, Becken, Schwanz; getrennte Bewegungsprofile für Hund und Katze.
+- `Tierkunde_Bewegung.css` — verbesserte Darstellung, Farben, große Bedienelemente, Fokus, responsives Layout, Druckansicht.
+- `BioLabor_Hund_Katze.html` lädt die zwei Dateien nach dem bestehenden Programm.
+- `Tierkunde_Hund_Katze.js` ruft `window.BioSkeletonLab.mount({animal,section,bone,gait})` nach jedem Rendern auf und erhält damit Tier- und Bereichswechsel.
+
+Die neue Animationsansicht erscheint in den Stationen **Skelett** und **Fortbewegung**. Die ältere Zeichnung wird in einen aufklappbaren Referenzbereich verschoben und nicht gelöscht.
+
+Sechs animierte Bewegungen: **Gehen**, **Traben**, **Schnell laufen**, **Springen**, **Anschleichen**, **Strecken**. Steuerung: automatischer Start (außer bei System-Einstellung „Bewegungen reduzieren“), Pause/Wiedergabe, Einzelschritt, Neustart, Geschwindigkeit 0,5–2×, Zeitleiste, Beschriftungen, optionaler Körperumriss und Zoom. Bei Anklicken eines Knochenbereichs stehen die Erklärungen auch direkt bei der Animation. SVG wird zur Schonung von Mobilgeräten auf ungefähr 30 Zeichnungen/Sekunde begrenzt. Die animierte SVG-Bühne wird nicht als ständig aktualisierte Screenreader-Live-Region behandelt.
+
+**Biologische Grenze:** Die Animation ist ein qualitatives Lernmodell mit gelenkig beweglichen Knochen, **keine** aus Motion Capture, Röntgen oder exakten anatomischen Gelenkwinkeln berechnete Bewegung. Körperformen, Gelenkwinkel und Proportionen sind schematisch; die gezeigten Zusammenhänge sollen verständlich und nicht als medizinische Bildgebung interpretiert werden.
+
+### Tests
+- JS-Syntax beider Dateien erfolgreich.
+- **12 Varianten** (6 Gänge × 2 Arten) mit je **8 Einzelbildern** = **96 SVG-Frames** auf valide Koordinaten, 4 bewegliche Gliedmaßen und 13 schematische sichtbare Rippen geprüft.
+- **17/17** syntaktische, strukturelle, DOM-simulierte Bedien- und Inhaltsprüfungen erfolgreich: unter anderem Initialisierung, Abspielen, Anhalten, Schritt, Tierwechsel, Bewegung beibehalten und ältere Zeichnung erhalten.
+- **Noch offen:** tatsächliche visuelle Prüfung in Chromium/WebKit und auf physischen Mobilgeräten, Tonvorlese-Kontrolle und externe GitHub-Pages-Auslieferung. Nicht von simulierten Tests auf reale Browserkompatibilität schließen.
+
+### Empfehlungen für die nächste Überarbeitung
+- Veterinäranatomische Detailgrafiken und die Modellproportionen von einer sachkundigen Lehrkraft/Anatomiefachperson prüfen lassen.
+- Playwright/Browser-Tests mit echten Klicks, Animationframes und Responsive Screenshots vor Ort ergänzen.
+- Die SVG-Szenen sind vollständig im Repo und ohne Fremd-CDN nutzbar.
+
 ## Teststatus
 - Syntaxprüfung neuer JS-Datei erfolgreich (`new Function`).
 - 22 von 22 **simulierten DOM-/Routen-/Interaktionsprüfungen** erfolgreich (Hund, Katze, SVG-Klick, Zoom, 7 Stationen, Quizantwort, Wechsel, Integration).
