@@ -120,3 +120,22 @@
 - Bereits lokal gespeicherte Tests aus den bisherigen Datenschemata `neurokompass.exercise.v1` und `neurokompass.main.v1` bleiben lesbar; beim Wiederherstellen werden die neuen **ausführlichen Auswertungstexte** aus den alten Antworten aufgebaut, ohne erneute Testbearbeitung.
 - Bestehende JSON-Dateien können wie zuvor per Import wiederhergestellt werden; sowohl Haupt-App als auch Übungstest unterstützen die bisherige Datei-Struktur.
 - QA: Browser-Regressionstest umfasst den Download beider JSON-Dateien, erneutes Herunterladen, sichtbare Textfallbacks, Import und das Wiederaufbauen ausführlicher Berichte aus gespeicherten Bestandsdaten.
+
+## Autismussensible Bedienung – Überarbeitung vom 10.11.2026
+
+**Ziel:** Erwachsenengerechte, vorhersagbare und reizärmere Lernumgebung. Dies ist eine technische/didaktische Umsetzung, kein Beleg aus einer durchgeführten Usability-Studie mit autistischen Erwachsenen.
+
+- **Seitenübergreifender Ruhemodus:** Alle vier Seiten (`index.html`, `uebungstest.html`, `visualisieren.html`, `falltrainer.html`) bieten einen eigenen Ruhemodus-Schalter. Bei Aktivierung: CSS-Animationen und Übergänge aus, Bewegungs- und Schatteneffekte reduziert, dekorative Bilder ausgeblendet. Die Präferenz wird separat als `neurokompass.preferences.v1` in localStorage gehalten und auf allen Seiten der gleichen GitHub-Pages-Origin gelesen. Der gespeicherte Schalter enthält **keine Gesundheits-/Testergebnisse**. Zusätzlich wird `prefers-reduced-motion` respektiert.
+- **Autismus-Lernfragen als 12-Schritte-Abfolge:** Jeweils eine Frage pro Ansicht mit fortlaufender Nummer, Fortschritt, konkretem Alltagsbeispiel, Zurück/Weiter, offen lassen, und expliziter Erklärung vor dem Start. Kein Zeitlimit.
+- **Präzisere Antworten:** Für eigens formulierte Fragen gibt es neben bekannten Antworten „Manchmal“, „Kommt auf die Situation an“, „Weiß ich nicht“, „Nicht zutreffend“ und „Möchte ich nicht beantworten“. Diese zusätzlichen Antworten sind nicht automatisch positiv oder negativ; die Auswertung unterscheidet häufige Angaben und nicht eindeutig bewertete Antworten. Keine Änderung der lizenzierten ASRS-6-Antwortskala.
+- **Rückwärtskompatibilität:** Bisherige numerische Autismus-Antwortcodes `0–3` bedeuten unverändert Nie/Selten/Oft/Sehr oft. Neu für die eigenen Autismus-Lernfragen: `8=Manchmal`, `4=situationsabhängig`, `5=weiß nicht`, `6=nicht zutreffend`, `7=keine Antwort gewünscht`. Für den eigenständigen 41-Antworten-Test bleiben `0–5` unverändert; hinzu kommen `6–8` für eigene Antworten und `5–7` bei den fünf Alltagsauswirkungsfragen. Die JSON-Importvalidierung akzeptiert beide Versionen. Alte lokal gespeicherte Antworten werden automatisch wie bisher angezeigt.
+- **Autismus-Lernbereich:** zusätzliche sachliche Informationen zu Masking/Camouflaging und freiwillige Angaben zu Stärken, Interessen und hilfreichen Rahmenbedingungen. Diese Angaben erscheinen beschreibend und **nicht diagnostisch bewertet** im ausführlichen Lernbericht und in JSON-Ex- und Importen. Alte JSON-Dateien ohne diese Felder bleiben gültig.
+- **Lesetiefe:** Die ausführlichen Auswertungstexte lassen sich aus- und einklappen. Beim Drucken öffnet die App den vollständigen Bericht, damit er nicht versehentlich im PDF fehlt.
+- **Unverändert:** ASRS-6 und seine geprüften Grenzwerte, getrennte ADHS-/Autismus-Screenings, DIVA-5 nur als Informations- und Lernbereich, keine automatische medizinische Diagnostik, bisherige Links/Übungsfälle.
+
+### Weitere Usability-Abnahme empfohlen
+1. Mit mehreren **autistischen Erwachsenen unterschiedlicher Bedürfnisse** tatsächlich testen: Wie deutlich ist die Schrittfolge? Sind Beispiele zu konkret oder missverständlich? Lässt sich „Nicht zutreffend“ sicher von „Nie“ unterscheiden? Ist Masking respektvoll und verständlich dargestellt?
+2. Ruhemodus und Speicherpräferenz auf echten Android-/iOS-Geräten über alle vier Seiten und Browserneustarts prüfen.
+3. Screenreader mit TalkBack und VoiceOver, Tastatur-Navigation sowie Überschriften und Formulargruppen prüfen.
+4. Vergleich der Drucklayouts bei zusammengeklappten Berichten; Datensicherheit auf geteilten Geräten prüfen. Keine automatische Sync- oder Cloud-Speicherung.
+
