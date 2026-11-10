@@ -303,6 +303,8 @@ function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show'
 function chooseSection(v){section=v;location.hash=animal+'/'+section;render(true)}
 function chooseAnimal(v){animal=v;bone='spine';tooth='canine';mood='relax';gait='walk';resetQuiz();location.hash=animal+'/'+section;render(true)}
 document.addEventListener('click',function(e){
+ const diagramBone=e.target.closest('[data-bone]');
+ if(diagramBone&&!diagramBone.matches('button')){bone=diagramBone.dataset.bone;render(false);return}
  const b=e.target.closest('button');if(!b)return;
  if(b.dataset.species){chooseAnimal(b.dataset.species);return}
  if(b.dataset.section){chooseSection(b.dataset.section);return}
