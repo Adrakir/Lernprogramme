@@ -33,11 +33,19 @@
 .narrative-report li{margin:6px 0}.narrative-report .report-note{padding:13px 15px;border-left:4px solid var(--blue);background:var(--light);border-radius:10px;margin:13px 0}
 @media print{.narrative-report{break-before:page}.narrative-report section{break-inside:avoid}.narrative-report .report-note{background:white!important;border:1px solid #aaa}}
 .export-panel[hidden]{display:none!important}.export-panel{background:var(--light)}.export-panel textarea{background:var(--card);color:var(--ink)}@media print{.export-panel{display:none!important}}
+
+/* Freiwillige, seitenübergreifende reizreduzierte Darstellung. Keine medizinischen Nutzerdaten gespeichert. */
+html[data-calm="true"] *,html[data-calm="true"] *::before,html[data-calm="true"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;box-shadow:none!important}
+html[data-calm="true"] .hero,html[data-calm="true"] .intro,html[data-calm="true"] .stage{background-image:none!important}
+html[data-calm="true"] .media-feature figure,html[data-calm="true"] .visual-preview img,html[data-calm="true"] .topic-visual img,html[data-calm="true"] .graphic-cards img,html[data-calm="true"] img.visual,html[data-calm="true"] #caseImage{display:none!important}
+html[data-calm="true"] .bubble,html[data-calm="true"] .sensicon,html[data-calm="true"] .pipe-arrow{opacity:.35}
+html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,html[data-calm="true"] .topic-visual{grid-template-columns:1fr!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style></head>
 <body>
 <header class="header">
 <div><strong>NeuroKompass · ADHS-Anamnese-Werkstatt</strong><div style="font-size:12px;opacity:.86">Eigenständiger, interaktiver Übungstest für Erwachsene</div></div>
-<div class="tools"><button id="theme" type="button">◐ Kontrast</button><button id="size" type="button">A+ Schrift</button></div>
+<div class="tools"><button id="calmModeBtn" type="button" aria-pressed="false">Ruhemodus: aus</button> <button id="theme" type="button">◐ Kontrast</button><button id="size" type="button">A+ Schrift</button></div>
 </header>
 <main class="wrap">
 <div class="hero"><div class="eyebrow">Erwachsene · Selbsterkundung und Fallarbeit</div><h1>ADHS verstehen: 18 Themen, zwei Lebensphasen.</h1>
@@ -258,5 +266,20 @@ $("importAnswers").addEventListener("change",async e=>{const file=e.target.files
 
 render();exerciseRestore();
 })();
+
+const CALM_PREF_KEY="neurokompass.preferences.v1";
+function calmApply(active){
+ document.documentElement.dataset.calm=active?"true":"false";
+ const button=document.getElementById("calmModeBtn");
+ if(button){button.setAttribute("aria-pressed",String(active));button.textContent=active?"Ruhemodus: an":"Ruhemodus: aus";}
+}
+function calmRestore(){let active=false;try{active=JSON.parse(localStorage.getItem(CALM_PREF_KEY)||"null")?.calm===true;}catch(e){}calmApply(active);}
+document.getElementById("calmModeBtn").addEventListener("click",()=>{
+ const value=document.documentElement.dataset.calm!=="true";calmApply(value);
+ try{localStorage.setItem(CALM_PREF_KEY,JSON.stringify({calm:value}));}catch(e){}
+});
+window.addEventListener("storage",event=>{if(event.key===CALM_PREF_KEY)calmRestore();});
+calmRestore();
+
 </script>
 </body></html>
