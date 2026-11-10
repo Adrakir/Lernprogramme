@@ -234,7 +234,7 @@ function mount(args){
  '<div class="rig-head"><div><span class="rig-eyebrow">INTERAKTIVES BEWEGUNGS-LABOR · '+(state.species==='cat'?'KATZE':'HUND')+'</span><h3>🦴 So bewegt sich das Skelett</h3><p>Sieh dir an, wie Knochen und Gelenke beim Laufen, Springen und Anschleichen zusammenspielen.</p></div><span class="rig-chip">6 Bewegungen</span></div>'+
  '<div class="rig-modes" role="group" aria-label="Bewegungsart auswählen">'+
  Object.entries(MODES).map(([k,m])=>'<button type="button" data-rig-mode="'+k+'" aria-pressed="false">'+m.symbol+' '+m.title+'</button>').join('')+'</div>'+
- '<div class="rig-stage" id="rig-stage"><svg class="rig-svg" viewBox="0 0 1000 560" role="img" aria-label="Animiertes schematisches Skelett; Gelenke und Knochen bewegen sich entsprechend der gewählten Gangart">'+
+ '<div class="rig-stage" id="rig-stage" aria-live="off"><svg class="rig-svg" viewBox="0 0 1000 560" role="group" aria-label="Bewegliches schematisches Skelett mit anwählbaren Knochen">'+
  '<defs><linearGradient id="rig-scene-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fcf8"/><stop offset=".55" stop-color="#edf6ee"/><stop offset="1" stop-color="#e4f1f1"/></linearGradient></defs><g id="rig-scene"></g></svg></div>'+
  '<div class="rig-transport"><button type="button" id="rig-play" class="rig-primary" aria-pressed="false">▶ Abspielen</button>'+
  '<button type="button" id="rig-step" title="Ein Bild weiter">⏭ Einzelschritt</button>'+
