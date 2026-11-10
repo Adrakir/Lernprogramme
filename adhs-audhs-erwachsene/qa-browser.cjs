@@ -496,6 +496,21 @@ async function main(){
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
  });
+
+ await run("PDF-Ausgabe enthält ausgeklappte Berichte auch nach vorherigem Einklappen",async()=>{
+  for(const [file,section,printButton] of [["index.html","mainNarrativeDetails","printBtn"],["uebungstest.html","exerciseNarrativeDetails","print"]]){
+   const x=await open(browser,file);const p=x.page;try{
+    if(file==="index.html")await p.locator('.nav[data-view="results"]').click();
+    await p.locator("#"+section+" summary").click();
+    assert.equal(await p.locator("#"+section).evaluate(el=>el.open),false);
+    await p.evaluate(()=>{window.__testPrinted=false;window.print=()=>{window.__testPrinted=true;}});
+    await p.locator("#"+printButton).click();
+    assert.equal(await p.locator("#"+section).evaluate(el=>el.open),true);
+    assert.equal(await p.evaluate(()=>window.__testPrinted),true);
+    assert.deepEqual(x.errors,[]);
+   }finally{await close(x)}
+  }
+ });
  await run("Mobilansicht 390px: keine ungewollte horizontale Seitenüberbreite",async()=>{
   for(const filename of URLS){const x=await open(browser,filename,true);try{
    const dims=await x.page.evaluate(()=>({page:document.documentElement.scrollWidth,window:window.innerWidth}));
