@@ -63,6 +63,19 @@ html[data-calm="true"] .media-feature figure,html[data-calm="true"] .visual-prev
 html[data-calm="true"] .bubble,html[data-calm="true"] .sensicon,html[data-calm="true"] .pipe-arrow{opacity:.35}
 html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,html[data-calm="true"] .topic-visual{grid-template-columns:1fr!important}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Autismus-Lernfragen: eine Aufgabe pro Ansicht, präzise Sprache und übersichtliche Optionen */
+#autWizard{max-width:900px}#autStepProgress{font-size:17px}#autQuestions .question{border:0;padding:10px 0;background:transparent}
+.aut-example{border-left:4px solid var(--teal);background:var(--soft);padding:13px;border-radius:10px;margin:15px 0}
+.aut-answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.aut-choice input{position:absolute;opacity:0;width:1px;height:1px}
+.aut-choice label{min-height:48px;display:flex;align-items:center;border:1px solid var(--line);padding:11px 13px;border-radius:11px;background:var(--paper);cursor:pointer;font-weight:700}
+.aut-choice input:checked + label{outline:2px solid var(--accent);background:var(--soft)}
+.aut-choice input:focus-visible + label{outline:3px solid #e8ae42;outline-offset:2px}
+.aut-notes{font-size:14px;color:var(--muted);margin:14px 0 0}
+#autMasking details{margin-top:12px;border:1px solid var(--line);padding:13px;border-radius:11px}#autMasking summary{cursor:pointer;font-weight:750}
+#autStrengths textarea{display:block;width:100%;padding:11px;border:1px solid var(--line);border-radius:11px;background:var(--paper);color:var(--ink);margin:7px 0 14px}
+@media(max-width:720px){.aut-answers{grid-template-columns:1fr}#autWizard .buttons{display:grid;grid-template-columns:1fr;gap:7px}}
 </style>
 </head>
 <body>
@@ -134,7 +147,32 @@ html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,htm
 <div class="media-feature card"><figure><img src="./assets/reizverarbeitung.svg" alt="Symbolbild: Person mit Kopfhörern, umgeben von verschiedenen Sinnesreizen" loading="lazy"></figure><div><h2>Sensorische Besonderheiten visualisiert</h2><p>Interaktiver Reizregler mit Erklärung, warum Reizempfindlichkeit nicht allein für eine Diagnose ausreicht.</p><a class="btn outline" href="./visualisieren.html#sensorik">Sensorik-Animation öffnen ↗</a></div></div>
 <div class="eyebrow">Erwachsene · Autismusmerkmalen auf der Spur</div><h1 class="h1">Autismus und AQ-10</h1><p class="intro">Für AuDHS ist eine eigene Betrachtung autistischer Merkmale wichtig. Dieser Lernfragebogen ist selbst verfasst. Er bildet Kommunikations-, Routinen-, Interessen- und sensorische Bereiche ab, ohne einen klinischen Gesamtwert vorzutäuschen.</p>
 <div class="warning"><strong>Nicht der AQ-10!</strong> Die zwölf folgenden Fragen sind ausschließlich eine <strong>Lernübung ohne validierten Grenzwert</strong>. Zum offiziellen AQ-10 sind hier ein Quellenlink und die Eingabe eines separat, korrekt ermittelten Originalergebnisses vorgesehen.</div>
-<div id="autQuestions"></div><div class="card" id="autResult" aria-live="polite"></div>
+<div class="card" id="autStartGuide">
+<h2>Bevor du beginnst: So läuft die Lernübung ab</h2>
+<p><strong>12 Fragen, jeweils eine pro Bildschirm.</strong> Es gibt keine Zeitbegrenzung. Mit „Zurück“ kannst du Antworten ändern, mit „Frage überspringen“ eine Frage offen lassen. Die Antworten werden nicht automatisch übertragen. Eine dauerhafte Speicherung erfolgt ausschließlich nach Aktivierung von „Lokal sichern“.</p>
+<p>Denke an deinen üblichen Alltag als erwachsene Person, nicht nur an einen einzelnen guten oder schwierigen Tag. Die Situationen sind Beispiele – sie müssen nicht wortwörtlich auf dich passen.</p>
+<p><strong>Antworten:</strong> „Kommt auf die Situation an“, „Weiß ich nicht“, „Nicht zutreffend“ und „Möchte ich nicht beantworten“ werden getrennt dokumentiert und <strong>nicht als Ja oder Nein gezählt</strong>.</p>
+</div>
+<div class="card" id="autWizard">
+<div class="row"><strong id="autStepProgress" role="status">Frage 1 von 12</strong><span id="autAnswered" class="subtle">0 von 12 bearbeitet</span></div>
+<div class="progress" role="progressbar" aria-label="Bearbeitungsstand Autismus-Lernfragen" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0" id="autProgress"><div id="autProgressBar" style="width:0"></div></div>
+<div id="autQuestions"></div>
+<div class="buttons"><button id="autPrev" class="btn outline" type="button">← Zurück</button><button id="autSkip" class="btn outline" type="button">Frage offen lassen</button><button id="autNext" class="btn" type="button">Weiter →</button></div>
+</div>
+<div class="card" id="autResult" aria-live="polite"></div>
+<div class="card" id="autMasking">
+<h2>Vertiefung: Masking und unterschiedliche soziale Erfahrungen</h2>
+<p><strong>Masking (Camouflaging)</strong> beschreibt beispielsweise das bewusste Nachahmen sozialer Regeln oder das Unterdrücken eigener Verhaltensweisen, um in einer Situation weniger aufzufallen. Das kann anstrengend sein, ist aber <strong>für sich allein kein Autismus-Nachweis</strong>.</p>
+<details><summary>Beispiele aus dem Erwachsenenalltag anzeigen</summary>
+<ul><li>Gespräche vorher im Kopf durchspielen und später lange darüber nachdenken.</li><li>Bewusst Blickkontakt oder bestimmte Gesten einsetzen, obwohl dies Konzentration erfordert.</li><li>Nach einer Besprechung Ruhe brauchen, weil viele Reize und soziale Entscheidungen gleichzeitig verarbeitet wurden.</li></ul>
+<p>Solche Erfahrungen können auch andere Ursachen haben. Eine fachliche Abklärung betrachtet den Entwicklungsverlauf, die gesamte Situation und mögliche Alternativerklärungen.</p></details>
+</div>
+<div class="card" id="autStrengths">
+<h2>Was hilft dir im Alltag? (freiwillig)</h2>
+<p>In einer Lernfallanalyse sind nicht nur Schwierigkeiten wichtig. Hier können besondere Interessen, Fähigkeiten, hilfreiche Abläufe und Umgebungsbedingungen dokumentiert werden. Sie werden in der ausführlichen Auswertung als eigene Angaben gekennzeichnet.</p>
+<label class="caption" for="strengthsNote">Stärken, Interessen und Fähigkeiten</label><textarea id="strengthsNote" maxlength="2000" rows="3" placeholder="Zum Beispiel: Genauigkeit, intensive Interessen oder gutes Erkennen von Details"></textarea>
+<label class="caption" for="supportsNote">Hilfreiche Bedingungen oder Strategien</label><textarea id="supportsNote" maxlength="2000" rows="3" placeholder="Zum Beispiel: Vorhersehbare Termine, schriftliche Absprachen, ruhiger Arbeitsplatz"></textarea>
+</div>
 <div class="card" style="margin-top:14px"><h2>Offizieller AQ-10: externen Wert eintragen</h2><p>Der AQ-10 besteht aus zehn festgelegten Fragen. Nach NICE kann ein Wert <strong>ab 6 von 10</strong> eine umfassende Autismusabklärung begründen; auch bei niedrigerem Wert kann aufgrund der klinischen Einschätzung eine Abklärung sinnvoll sein.</p>
 <div class="two"><div><label class="caption" for="aqScore">Gesamtwert aus einem tatsächlich ausgefüllten Original-AQ-10</label><input id="aqScore" type="number" min="0" max="10" step="1" placeholder="0–10" inputmode="numeric"></div><div><label class="caption" for="aqNote">Wurde die Originalauswertung verwendet?</label><select id="aqNote"><option value="">Bitte auswählen</option><option value="yes">Ja, Originalfragebogen</option><option value="no">Nein / unsicher</option></select></div></div>
 <div class="result" id="aqResult" aria-live="polite">Noch kein bestätigter AQ-10-Wert vorhanden.</div><a class="external" href="https://www.nice.org.uk/guidance/cg142/chapter/recommendations" target="_blank" rel="noopener noreferrer">NICE-Leitlinie CG142 und AQ-10-Empfehlung</a></div>
@@ -243,7 +281,7 @@ const CASES=[
 {name:"Daniel",age:29,icon:"🌙",type:"Ähnliche Symptome – andere Ursache?",story:"Daniel schläft seit Monaten schlecht, arbeitet nachts und hat seit vier Monaten starke Konzentrations- und Gedächtnisprobleme. In Kindheit und Jugend gab es nach eigener Erinnerung keine vergleichbaren Auffälligkeiten.",tasks:["Warum reicht ein hoher ASRS-Wert nicht?","Welche Erklärungen sind zunächst zu prüfen?"],solution:"Eine neue Symptomatik bei Schlafmangel und hoher Belastung erfordert differenzialdiagnostische Untersuchung. Bei ADHS werden früh beginnende, längerfristige Symptome erwartet. Schlafstörungen, Belastung, Depression und weitere Ursachen sollten abgeklärt werden. Unvollständige Kindheitserinnerungen schließen ADHS allein nicht aus."},
 {name:"Samira",age:38,icon:"🎧",type:"Autismus und Camouflaging?",story:"Samira erlebt Gesprächsregeln als schwer vorhersehbar, beobachtet andere bewusst und ahmt soziale Abläufe nach. Lautstärke und Gerüche überfordern sie. Ordnung und Termintreue sind unauffällig. Als Kind hatte sie sehr intensive Spezialinteressen.",tasks:["Welche Autismusbereiche sollten vertieft werden?","Warum ist Masking kein einzelnes Diagnosekriterium?","Muss eine ADHS-Diagnose vorliegen?"],solution:"Die Untersuchung würde soziale Kommunikation, wechselseitige Interaktion, Routinen/Interessen, sensorische Besonderheiten und Entwicklungsverlauf vertiefen. Camouflaging kann ein wichtiges Gesprächsthema sein, ist aber allein kein Autismus-Nachweis. ADHS ist für eine Autismusdiagnose nicht erforderlich."}
 ];
-const state={asrs:Array(6).fill(null),critA:Array(18).fill(null),critC:Array(18).fill(null),aut:Array(12).fill(null),notes:Array(18).fill(""),domains:[],caseIndex:0,critIndex:0};
+const state={asrs:Array(6).fill(null),critA:Array(18).fill(null),critC:Array(18).fill(null),aut:Array(12).fill(null),notes:Array(18).fill(""),domains:[],caseIndex:0,critIndex:0,autIndex:0};
 const MAIN_KEY="neurokompass.main.v1";
 let mainSaveEnabled=false, importedPractice=null;
 function validArray(a,n,max){return Array.isArray(a)&&a.length===n&&a.every(v=>v===null||(Number.isInteger(v)&&v>=0&&v<=max));}
@@ -260,18 +298,18 @@ function renderImportedPractice(){
  target.innerHTML='<div class="result-guide"><span class="result-pill">'+(importedPractice.fiktiverFall===true?"Nur ein fiktiver Übungsfall":"Übernommene Übungsantworten")+'</span><h3>So liest du den Übungsbogen</h3><div class="result-numeral">'+answered+' von 41</div><p>Antworten wurden eingetragen. '+(41-answered)+' Fragen sind noch offen. '+unclear+' Antworten lauten „Weiß ich nicht“.</p><p class="result-lead">Im Erwachsenenalter wurde bei '+freq+' von 18 Themen „oft“ oder „sehr oft“ angekreuzt.</p><p class="result-meaning">Das ist eine Zählung von Antworten – kein ADHS-Score und keine Erkrankungswahrscheinlichkeit.</p><div class="result-split">'+rows.map(r=>'<div><strong>'+r[0]+'</strong>'+guideLine("Heute häufig",r[1][0],9)+guideLine("Kindheit häufig",r[1][2],9)+'<p class="result-fine">Heute '+r[1][1]+'/9 und Kindheit '+r[1][3]+'/9 beantwortet.</p></div>').join("")+'</div><p><strong>Auswirkungen im Alltag:</strong> Bei '+imp.filter(v=>v===2||v===3).length+' von '+imp.filter(v=>v!==null).length+' beantworteten Lebensbereichen wurde „deutlich“ oder „sehr stark“ ausgewählt.</p><div class="result-explain"><strong>Was bedeutet das?</strong><p>Die Angaben zeigen, bei welchen Themen die fiktive oder reale Fallperson häufiger Schwierigkeiten beschreibt. Die Antworten können als Gesprächsgrundlage dienen.</p></div><p><strong>Was bedeutet es nicht?</strong> Der Übungsbogen ist nicht normiert, gibt keine Diagnose und darf nicht mit dem ASRS- oder AQ-10-Ergebnis verrechnet werden.</p><p><strong>Was kann man als Nächstes tun?</strong> Konkrete Alltagssituationen und mögliche Kindheitshinweise sammeln und – bei tatsächlichen Beschwerden – professionell abklären lassen.</p></div>';
 }
 function mainPayload(){
-return {version:1,answers:{asrs:state.asrs.slice(),critA:state.critA.slice(),critC:state.critC.slice(),aut:state.aut.slice(),notes:state.notes.slice(),domains:state.domains.slice()},ui:{onset:$("onset").value,duration:$("duration").value,contexts:$("contexts").value,alternatives:$("alternatives").value,aqNote:$("aqNote").value,aqScore:$("aqScore").value,evidence:$("evidence").value},practice:importedPractice};
+return {version:1,answers:{asrs:state.asrs.slice(),critA:state.critA.slice(),critC:state.critC.slice(),aut:state.aut.slice(),notes:state.notes.slice(),domains:state.domains.slice()},ui:{onset:$("onset").value,duration:$("duration").value,contexts:$("contexts").value,alternatives:$("alternatives").value,aqNote:$("aqNote").value,aqScore:$("aqScore").value,evidence:$("evidence").value,strengths:$("strengthsNote").value,supports:$("supportsNote").value},practice:importedPractice};
 }
-function validMainPayload(v){const a=v&&v.answers;return !!a&&validArray(a.asrs,6,4)&&validArray(a.critA,18,2)&&validArray(a.critC,18,2)&&validArray(a.aut,12,3)&&Array.isArray(a.notes)&&a.notes.length===18&&a.notes.every(x=>typeof x==="string"&&x.length<=3000)&&Array.isArray(a.domains)&&a.domains.every(n=>Number.isInteger(n)&&n>=0&&n<5)&&v.ui&&typeof v.ui==="object"&&["onset","duration","contexts","alternatives","aqNote","aqScore","evidence"].every(k=>typeof v.ui[k]==="string"&&v.ui[k].length<=3000)&&(!v.practice||validPractice(v.practice));}
+function validMainPayload(v){const a=v&&v.answers;return !!a&&validArray(a.asrs,6,4)&&validArray(a.critA,18,2)&&validArray(a.critC,18,2)&&validArray(a.aut,12,8)&&Array.isArray(a.notes)&&a.notes.length===18&&a.notes.every(x=>typeof x==="string"&&x.length<=3000)&&Array.isArray(a.domains)&&a.domains.every(n=>Number.isInteger(n)&&n>=0&&n<5)&&v.ui&&typeof v.ui==="object"&&["onset","duration","contexts","alternatives","aqNote","aqScore","evidence"].every(k=>typeof v.ui[k]==="string"&&v.ui[k].length<=3000)&&["strengths","supports"].every(k=>v.ui[k]===undefined||(typeof v.ui[k]==="string"&&v.ui[k].length<=2000))&&(!v.practice||validPractice(v.practice));}
 function applyMainPayload(v){if(!validMainPayload(v))throw Error("Ungültiges Haupt-App-Datenformat");
 for(const k of ["asrs","critA","critC","aut","notes","domains"])state[k]=v.answers[k].slice();
-for(const k of ["onset","duration","contexts","alternatives","aqNote","aqScore","evidence"])$(k).value=v.ui[k];
+for(const k of ["onset","duration","contexts","alternatives","aqNote","aqScore","evidence"])$(k).value=v.ui[k];$("strengthsNote").value=typeof v.ui.strengths==="string"?v.ui.strengths:"";$("supportsNote").value=typeof v.ui.supports==="string"?v.ui.supports:"";
 importedPractice=v.practice||null;renderAsrs();renderAut();renderCrit();renderDomains();renderAQ();renderImportedPractice();renderResults();
 }
 function persistMain(){if(!mainSaveEnabled)return;try{localStorage.setItem(MAIN_KEY,JSON.stringify({active:true,data:mainPayload()}));$("mainSaveStatus").textContent="Lokale Speicherung ist aktiv: nur in diesem Browser, einschließlich Notizen und importiertem Übungstest.";}catch(err){mainSaveEnabled=false;$("saveToggle").setAttribute("aria-pressed","false");$("saveToggle").textContent="◌ Lokal sichern";$("mainSaveStatus").textContent="Lokales Speichern ist in diesem Browser nicht möglich.";}}
 function restoreMain(){try{const x=JSON.parse(localStorage.getItem(MAIN_KEY)||"null");if(x&&x.active===true&&validMainPayload(x.data)){applyMainPayload(x.data);mainSaveEnabled=true;$("saveToggle").setAttribute("aria-pressed","true");$("saveToggle").textContent="✓ Lokal gesichert";$("mainSaveStatus").textContent="Vorherigen Bearbeitungsstand dieses Browsers wiederhergestellt.";}}catch(e){$("mainSaveStatus").textContent="Gespeicherter Bearbeitungsstand konnte nicht gelesen werden.";}}
 function validateMainExport(o){if(!o||!o.asrs||!o.dsm5_lerntrainer||!Array.isArray(o.autismus_lernfragen))throw Error("Keine passende NeuroKompass-Datei");
-const d=o.dsm5_lerntrainer;const aq=o.aq10_eingabe||null;const aqValid=aq&&Number.isInteger(Number(aq.score))&&Number(aq.score)>=0&&Number(aq.score)<=10&&aq.originalBestaetigt===true;const legacyValid=!aq&&Number.isInteger(o.aq10_originalwert)&&o.aq10_originalwert>=0&&o.aq10_originalwert<=10;const u={onset:d.vor12||"",duration:d.dauer||"",contexts:d.situationen||"",alternatives:d.differenzialdiagnostik||"",aqNote:aqValid||legacyValid?"yes":"",aqScore:aqValid?String(aq.score):legacyValid?String(o.aq10_originalwert):"",evidence:d.anamnesenotizen||""};
+const d=o.dsm5_lerntrainer;const aq=o.aq10_eingabe||null;const aqValid=aq&&Number.isInteger(Number(aq.score))&&Number(aq.score)>=0&&Number(aq.score)<=10&&aq.originalBestaetigt===true;const legacyValid=!aq&&Number.isInteger(o.aq10_originalwert)&&o.aq10_originalwert>=0&&o.aq10_originalwert<=10;const u={onset:d.vor12||"",duration:d.dauer||"",contexts:d.situationen||"",alternatives:d.differenzialdiagnostik||"",aqNote:aqValid||legacyValid?"yes":"",aqScore:aqValid?String(aq.score):legacyValid?String(o.aq10_originalwert):"",evidence:d.anamnesenotizen||"",strengths:o.lernressourcen?.staerken||"",supports:o.lernressourcen?.hilfreiche_bedingungen||""};
 return {answers:{asrs:o.asrs.antworten,critA:d.erwachsene,critC:d.kindheit,aut:o.autismus_lernfragen,notes:d.notizen,domains:d.bereiche},ui:u,practice:o.eigenstaendiger_uebungstest||null};}
 
 let enlarged=false;
@@ -290,13 +328,65 @@ function renderAsrsResult(){
  $("asrsResult").innerHTML=content;
 }
 function renderCrit(){const i=state.critIndex,c=CRITERIA[i];$("critPosition").textContent="Kriterium "+(i+1)+" von 18";const count=state.critA.filter(v=>v!==null).length+state.critC.filter(v=>v!==null).length;$("critProgressText").textContent=count+"/36 Antworten";$("critBar").style.width=(100*count/36)+"%";$("critCurrent").innerHTML='<div class="divider"></div><span class="tag">'+(c[0]==="U"?"Unaufmerksamkeit":"Hyperaktivität / Impulsivität")+' · '+c[1]+'</span><h2 style="margin-top:6px">'+escapes(c[2])+'</h2><div class="level"><div><h3>Erwachsenenalter</h3><small>Beispiel: '+escapes(c[3])+'</small><div style="margin-top:12px">'+radios("critA",i,yn,state.critA[i])+'</div></div><div><h3>Kindheit (vor 12)</h3><small>Beispiel: '+escapes(c[4])+'</small><div style="margin-top:12px">'+radios("critC",i,yn,state.critC[i])+'</div></div></div><div style="margin-top:15px"><label class="caption" for="critNote">Optionales Fallbeispiel / Beleg (kein Original-DIVA-Inhalt)</label><textarea id="critNote" placeholder="Eigene Formulierung für das Lernbeispiel"></textarea></div>';$("critNote").value=state.notes[i]||"";$("critPrev").disabled=i===0;$("critNext").textContent=i===17?"Zur Auswertung →":"Weiter →";}
-function renderAut(){let h="";AUT.forEach((q,i)=>h+='<div class="question"><span class="qnum">'+escapes(q[0]).toUpperCase()+' · '+(i+1)+' / 12</span><p>'+escapes(q[1])+'</p>'+radios("aut",i,agree,state.aut[i])+'</div>');$("autQuestions").innerHTML=h;renderAutResult();}
-function autStats(){return ["Soziale Kommunikation","Routinen & Interessen","Sensorik & Regulation"].map((name,k)=>{const vals=state.aut.slice(k*4,k*4+4),ans=vals.filter(v=>v!==null);return {name,done:ans.length,notable:ans.filter(v=>v>=2).length}});}
+
+const AUT_EXAMPLES=[
+"Beispiel: Du führst ein Gespräch und denkst bewusst darüber nach, wann du eine Frage stellen oder antworten kannst.",
+"Beispiel: Kolleginnen oder Kollegen machen eine indirekte Andeutung; du bist unsicher, was erwartet wird.",
+"Beispiel: Dieselben Worte können je nach Tonfall ernst oder ironisch gemeint sein.",
+"Beispiel: Nach einer Besprechung brauchst du Zeit für dich, auch wenn die Begegnung angenehm war.",
+"Beispiel: Ein Termin wird kurzfristig verschoben, ohne dass du deine Planung darauf vorbereiten konntest.",
+"Beispiel: Du fühlst dich wohler, wenn der Tagesablauf bekannt und vorhersehbar ist.",
+"Beispiel: Du beschäftigst dich besonders gern und ausführlich mit einzelnen Wissensgebieten.",
+"Beispiel: Eine wiederholte Bewegung oder Handlung hilft dir, dich in einer Situation zu regulieren.",
+"Beispiel: Ein helles Büro oder mehrere Stimmen gleichzeitig können dich stark beanspruchen.",
+"Beispiel: Bestimmte Kleidungsstoffe, Etiketten oder Lebensmittelkonsistenzen fühlen sich unangenehm an.",
+"Beispiel: Nach einer lauten Veranstaltung suchst du einen ruhigeren Ort auf.",
+"Beispiel: Du hörst leise Geräusche, die anderen nicht auffallen – oder bemerkst andere Reize kaum."
+];
+const AUT_OPTIONS=[
+{value:0,label:"Nie"},
+{value:1,label:"Selten"},
+{value:8,label:"Manchmal"},
+{value:2,label:"Oft"},
+{value:3,label:"Sehr oft"},
+{value:4,label:"Kommt auf die Situation an"},
+{value:5,label:"Weiß ich nicht"},
+{value:6,label:"Nicht zutreffend"},
+{value:7,label:"Möchte ich nicht beantworten"}
+];
+function autOptionMarkup(i){
+ return '<div class="aut-answers" role="radiogroup" aria-label="Antwort auf Lernfrage '+(i+1)+'">'+AUT_OPTIONS.map(({value,label})=>{
+ const id="aut_"+i+"_"+value;return '<span class="aut-choice"><input id="'+id+'" name="aut_'+i+'" type="radio" value="'+value+'" '+(state.aut[i]===value?"checked":"")+'><label for="'+id+'">'+label+'</label></span>';
+ }).join("")+'</div>';
+}
+function renderAutProgress(){
+ const done=state.aut.filter(v=>v!==null).length;
+ $("autStepProgress").textContent="Frage "+(state.autIndex+1)+" von 12";
+ $("autAnswered").textContent=done+" von 12 bearbeitet";
+ $("autProgressBar").style.width=(100*done/12)+"%";
+ $("autProgress").setAttribute("aria-valuenow",String(done));
+}
+function renderAut(){
+ const i=state.autIndex,q=AUT[i];
+ $("autQuestions").innerHTML='<div class="question"><span class="qnum">'+escapes(q[0]).toUpperCase()+'</span><h2 id="autStepTitle" tabindex="-1">'+escapes(q[1])+'</h2><div class="aut-example"><strong>Konkretes Beispiel</strong><p>'+escapes(AUT_EXAMPLES[i])+'</p></div><p class="aut-notes">Beurteile deine übliche Erfahrung im Erwachsenenalter. Wenn die Situation auf dich nicht passt oder du keine sichere Antwort hast, wähle die entsprechende Antwort – sie zählt nicht als Nein.</p>'+autOptionMarkup(i)+'</div>';
+ $("autPrev").disabled=i===0;$("autNext").textContent=i===11?"Auswertung anzeigen →":"Weiter →";
+ renderAutProgress();renderAutResult();
+}
+function autAdvance(n){
+ if(n>0&&state.autIndex===11){renderAutResult();$("autResult").scrollIntoView({behavior:"smooth",block:"start"});return;}
+ state.autIndex=Math.max(0,Math.min(11,state.autIndex+n));renderAut();
+ const title=$("autStepTitle");if(title)title.focus({preventScroll:true});
+ $("autWizard").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function autStats(){return ["Soziale Kommunikation","Routinen & Interessen","Sensorik & Regulation"].map((name,k)=>{
+ const vals=state.aut.slice(k*4,k*4+4),ans=vals.filter(v=>v!==null);
+ return {name,done:ans.length,notable:ans.filter(v=>v===2||v===3).length,unsure:ans.filter(v=>v>=4&&v<=7).length,sometimes:ans.filter(v=>v===8).length};
+});}
 function renderAutResult(){
- const ss=autStats(),done=ss.reduce((n,v)=>n+v.done,0);
- let html='<h2>Autismus-Lernfragen: Was wurde angekreuzt?</h2><p><strong>'+done+' von 12 Fragen beantwortet.</strong> Es gibt drei Themen mit je vier eigenen Lernfragen.</p>';
- html+=ss.map(s=>'<div class="result-line"><strong>'+s.name+'</strong><span>'+s.notable+' von 4 häufig</span></div><div class="result-track"><span style="width:'+(s.notable*25)+'%"></span></div><p class="result-fine">'+s.done+' von 4 Fragen beantwortet. „Häufig“ bedeutet „oft“ oder „sehr oft“.</p>').join("");
- html+='<div class="result-explain"><strong>Beispiel:</strong> 3 von 4 bedeutet, dass in drei der vier Fragen dieses Themenbereichs „oft“ oder „sehr oft“ gewählt wurde. <strong>Das bedeutet nicht, dass Autismus zu 75 % vorliegt.</strong></div><p><strong>Was ist als Nächstes sinnvoll?</strong> Diese Beobachtungen anhand konkreter Alltagssituationen besprechen. Für eine wirkliche Einordnung ist eine fachliche Autismusdiagnostik erforderlich.</p><p class="result-fine">Diese eigens verfassten Fragen haben keine klinischen Grenzwerte und ersetzen nicht den AQ-10.</p>';
+ const ss=autStats(),done=ss.reduce((n,v)=>n+v.done,0),uncertain=ss.reduce((n,v)=>n+v.unsure,0);
+ let html='<h2>Auswertung der zwölf Lernfragen</h2><p><strong>'+done+' von 12 Fragen bearbeitet.</strong> '+(12-done)+' sind offen, '+uncertain+' Antworten sind situationsabhängig, unklar, nicht zutreffend oder bewusst nicht beantwortet.</p>';
+ html+=ss.map(s=>'<div class="result-line"><strong>'+s.name+'</strong><span>'+s.notable+' von 4 mit „oft“ oder „sehr oft“</span></div><div class="result-track"><span style="width:'+(s.notable*25)+'%"></span></div><p class="result-fine">'+s.done+' von 4 Fragen bearbeitet; '+s.sometimes+' Mal „manchmal“, '+s.unsure+' alternative oder zurückhaltende Antworten. Diese werden nicht als Nein oder häufiger Hinweis gezählt.</p>').join("");
+ html+='<div class="result-explain"><strong>Was bedeuten die Balken?</strong><p>„3 von 4“ bedeutet nur, dass drei von vier eigens formulierten Fragen häufig angekreuzt wurden. Das bedeutet nicht, dass Autismus zu 75 % vorliegt.</p></div><p><strong>Was ist als Nächstes sinnvoll?</strong> Alltagssituationen und Veränderungen über die Zeit besprechen. Für eine wirkliche Einordnung ist eine fachliche Autismusdiagnostik erforderlich.</p><p class="result-fine">Diese Lernfragen sind nicht der offizielle AQ-10 und besitzen keinen diagnostischen Grenzwert.</p>';
  $("autResult").innerHTML=html;
 }
 function renderAQ(){const v=$("aqScore").value,confirm=$("aqNote").value;let t;if(v===""||confirm===""){t="Für eine AQ-10-Einordnung bitte Originalwert und Herkunft angeben."}else if(!/^\d+$/.test(v)||Number(v)>10){t="Bitte einen ganzen Wert von 0 bis 10 eingeben."}else if(confirm!=="yes"){t="Ohne bestätigte Original-AQ-10-Auswertung ist keine Anwendung der NICE-Schwelle möglich."}else{t=Number(v)>=6?"AQ-10: "+v+"/10. Die NICE-Schwelle für das Angebot einer umfassenden Autismusabklärung ist erreicht.":"AQ-10: "+v+"/10. Die NICE-Schwelle ist nicht erreicht. Eine Abklärung kann bei entsprechendem klinischem Verdacht trotzdem sinnvoll sein."}$("aqResult").textContent=t;}
@@ -391,13 +481,18 @@ function renderMainNarrative(){
  let combined='<p>ADHS und Autismus können gemeinsam auftreten. Für AuDHS müssen jedoch die Kriterien beider Bedingungen <strong>unabhängig voneinander</strong> fachlich untersucht werden. Auch zwei auffällige Kurzscreenings belegen keine Doppeldiagnose.</p>';
  if(a.complete&&aq!==null)combined+='<p>In dieser Auswertung ist der Screening-Richtwert für ADHS '+(a.positive>=4?'erreicht':'nicht erreicht')+' und für den Original-AQ-10 '+(aq>=6?'erreicht':'nicht erreicht')+'. Daraus ergibt sich keine gemeinsame Diagnosepunktzahl.</p>';
  h+=mainNarrativeSection('5. AuDHS: mögliche Überschneidungen',combined);
+ const strengths=$("strengthsNote").value.trim(),supports=$("supportsNote").value.trim();
+ if(strengths||supports)h+=mainNarrativeSection('Freiwillige Angaben: Stärken und hilfreiche Bedingungen',
+ (strengths?'<p><strong>Genannte Interessen und Fähigkeiten:</strong> '+escapes(strengths)+'</p>':'')+
+ (supports?'<p><strong>Als hilfreich beschriebene Rahmenbedingungen:</strong> '+escapes(supports)+'</p>':'')+
+ '<p class="subtle">Diese Angaben stammen aus der freiwilligen Selbstauskunft und werden nicht diagnostisch bewertet.</p>');
  h+=mainNarrativeSection('6. Was vor einer fachlichen Einschätzung noch geklärt werden müsste','<p>Wichtig wären konkrete Alltagssituationen, die zeitliche Entwicklung und Dauer der Beschwerden, Funktionsbeeinträchtigungen in mehreren Lebenssituationen und – soweit vorhanden – Kindheitsinformationen.</p><p>Schlafprobleme, psychische Belastungen und andere mögliche Erklärungen oder Begleiterkrankungen sollten ebenfalls berücksichtigt werden. Die Abklärung gehört in fachliche Hände.</p>');
  $("mainNarrativeReport").innerHTML=h;
 }
 
 let currentExport="";
 const EXPORT_NAME="neurokompass-lernauswertung.json";
-function exportPayload(){return {hinweis:"Unterrichts-/Lernmaterial, keine Diagnose",stand:"2026-11-10",eigenstaendiger_uebungstest:importedPractice,asrs:{antworten:state.asrs,positiv:asrsStatus().complete?asrsStatus().positive:null},dsm5_lerntrainer:{erwachsene:state.critA,kindheit:state.critC,notizen:state.notes,bereiche:state.domains,vor12:$("onset").value,dauer:$("duration").value,situationen:$("contexts").value,differenzialdiagnostik:$("alternatives").value,anamnesenotizen:$("evidence").value},autismus_lernfragen:state.aut,aq10_originalwert:getAQ(),aq10_eingabe:{score:getAQ(),originalBestaetigt:getAQ()!==null}};}
+function exportPayload(){return {hinweis:"Unterrichts-/Lernmaterial, keine Diagnose",stand:"2026-11-10",eigenstaendiger_uebungstest:importedPractice,asrs:{antworten:state.asrs,positiv:asrsStatus().complete?asrsStatus().positive:null},dsm5_lerntrainer:{erwachsene:state.critA,kindheit:state.critC,notizen:state.notes,bereiche:state.domains,vor12:$("onset").value,dauer:$("duration").value,situationen:$("contexts").value,differenzialdiagnostik:$("alternatives").value,anamnesenotizen:$("evidence").value},autismus_lernfragen:state.aut,aq10_originalwert:getAQ(),aq10_eingabe:{score:getAQ(),originalBestaetigt:getAQ()!==null},lernressourcen:{staerken:$("strengthsNote").value,hilfreiche_bedingungen:$("supportsNote").value}};}
 function prepareExport(){currentExport=JSON.stringify(exportPayload(),null,2);$("exportJsonText").value=currentExport;$("exportPanel").hidden=false;return currentExport;}
 function downloadJson(){
  if(!currentExport)prepareExport();
@@ -408,9 +503,10 @@ function downloadJson(){
 function exportData(){prepareExport();downloadJson();$("exportPanel").scrollIntoView({block:"nearest",behavior:"smooth"});}
 async function shareExport(){if(!currentExport)prepareExport();try{if(typeof File!=="function"||!navigator.share)throw new Error("Teilen nicht verfügbar");const file=new File([currentExport],EXPORT_NAME,{type:"application/json"});if(navigator.canShare&&!navigator.canShare({files:[file]}))throw new Error("Dateifreigabe nicht unterstützt");await navigator.share({files:[file],title:"NeuroKompass Lernergebnisse"});$("exportStatus").textContent="Die Datei wurde an die ausgewählte Teilen-Funktion übergeben.";}catch(err){$("exportStatus").textContent=err.name==="AbortError"?"Teilen abgebrochen.":"Auf diesem Gerät nicht verfügbar. Bitte den JSON-Text kopieren oder den Download versuchen.";}}
 async function copyExport(){if(!currentExport)prepareExport();try{if(!navigator.clipboard?.writeText)throw new Error("Clipboard nicht verfügbar");await navigator.clipboard.writeText(currentExport);$("exportStatus").textContent="JSON-Text kopiert. In einer Textdatei einfügen und als .json speichern.";}catch(err){$("exportJsonText").focus();$("exportJsonText").select();try{const ok=document.execCommand("copy");if(!ok)throw Error("copy failed");$("exportStatus").textContent="JSON-Text kopiert. In einer Datei mit Endung .json speichern.";}catch(e){$("exportStatus").textContent="Der Text ist markiert. Bitte „Kopieren“ im Textauswahlmenü wählen und als .json speichern.";}}}
-function clearAll(){if(!confirm("Alle Eingaben dieser Sitzung zurücksetzen?"))return;state.asrs.fill(null);state.critA.fill(null);state.critC.fill(null);state.aut.fill(null);state.notes.fill("");state.domains=[];state.critIndex=0;importedPractice=null;mainSaveEnabled=false;try{localStorage.removeItem(MAIN_KEY)}catch(e){}$("saveToggle").setAttribute("aria-pressed","false");$("saveToggle").textContent="◌ Lokal sichern";$("mainSaveStatus").textContent="Sicherung deaktiviert; lokale Kopie gelöscht.";["onset","duration","contexts","alternatives","aqNote"].forEach(k=>$(k).value="");$("aqScore").value="";$("evidence").value="";renderAsrs();renderCrit();renderAut();renderDomains();renderAQ();renderImportedPractice();go("home");}
+function clearAll(){if(!confirm("Alle Eingaben dieser Sitzung zurücksetzen?"))return;state.asrs.fill(null);state.critA.fill(null);state.critC.fill(null);state.aut.fill(null);state.notes.fill("");state.domains=[];state.critIndex=0;importedPractice=null;mainSaveEnabled=false;try{localStorage.removeItem(MAIN_KEY)}catch(e){}$("saveToggle").setAttribute("aria-pressed","false");$("saveToggle").textContent="◌ Lokal sichern";$("mainSaveStatus").textContent="Sicherung deaktiviert; lokale Kopie gelöscht.";["onset","duration","contexts","alternatives","aqNote"].forEach(k=>$(k).value="");$("strengthsNote").value="";$("supportsNote").value="";state.autIndex=0;$("aqScore").value="";$("evidence").value="";renderAsrs();renderCrit();renderAut();renderDomains();renderAQ();renderImportedPractice();go("home");}
 document.addEventListener("click",e=>{const nav=e.target.closest("[data-view]");if(nav){go(nav.dataset.view);return}const next=e.target.closest("[data-go]");if(next){go(next.dataset.go);return}const c=e.target.closest("[data-case]");if(c){state.caseIndex=Number(c.dataset.case);renderCases();return}if(e.target.id==="showSolution"){const answer=$("caseAnswer"),visible=answer.hidden;answer.hidden=!visible;e.target.setAttribute("aria-expanded",String(visible));e.target.textContent=visible?"Musterlösung verbergen":"Musterlösung einblenden";}});
-document.addEventListener("change",e=>{const match=/^(asrs|critA|critC|aut)_(\d+)_(\d+)$/.exec(e.target.id||"");if(match){const group=match[1],idx=Number(match[2]);state[group][idx]=Number(e.target.value);if(group==="asrs")renderAsrsResult();if(group==="aut")renderAutResult();if(group==="critA"||group==="critC"){const count=state.critA.filter(v=>v!==null).length+state.critC.filter(v=>v!==null).length;$("critProgressText").textContent=count+"/36 Antworten";$("critBar").style.width=100*count/36+"%"}return}if(e.target.classList.contains("domainCheck")){state.domains=Array.from(document.querySelectorAll(".domainCheck:checked")).map(x=>Number(x.value));return}if(e.target.id==="aqNote")renderAQ();});
+document.addEventListener("change",e=>{const match=/^(asrs|critA|critC|aut)_(\d+)_(\d+)$/.exec(e.target.id||"");if(match){const group=match[1],idx=Number(match[2]);state[group][idx]=Number(e.target.value);if(group==="asrs")renderAsrsResult();if(group==="aut"){renderAutProgress();renderAutResult();}if(group==="critA"||group==="critC"){const count=state.critA.filter(v=>v!==null).length+state.critC.filter(v=>v!==null).length;$("critProgressText").textContent=count+"/36 Antworten";$("critBar").style.width=100*count/36+"%"}return}if(e.target.classList.contains("domainCheck")){state.domains=Array.from(document.querySelectorAll(".domainCheck:checked")).map(x=>Number(x.value));return}if(e.target.id==="aqNote")renderAQ();});
+$("autPrev").addEventListener("click",()=>autAdvance(-1));$("autNext").addEventListener("click",()=>autAdvance(1));$("autSkip").addEventListener("click",()=>autAdvance(1));
 $("aqScore").addEventListener("input",renderAQ);$("critNext").addEventListener("click",()=>{state.critIndex<17?(state.critIndex++,renderCrit()):go("results")});$("critPrev").addEventListener("click",()=>{state.critIndex=Math.max(0,state.critIndex-1);renderCrit()});$("critCurrent").addEventListener("input",e=>{if(e.target.id==="critNote")state.notes[state.critIndex]=e.target.value;});$("printBtn").addEventListener("click",()=>{renderResults();window.print()});$("exportBtn").addEventListener("click",exportData);
 $("saveFile").addEventListener("click",downloadJson);
 $("shareFile").addEventListener("click",shareExport);
