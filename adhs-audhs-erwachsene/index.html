@@ -447,7 +447,7 @@ function renderMainNarrative(){
  const aq=getAQ(),aut=autStats(),autAnswered=aut.reduce((n,x)=>n+x.done,0);
  const hasPractice=!!importedPractice,answeredPractice=hasPractice?importedPractice.heute.filter(v=>v!==null).length+importedPractice.kindheit.filter(v=>v!==null).length+importedPractice.lebensbereiche.filter(v=>v!==null).length:0;
  let h='<h2>Ausführlicher Auswertungstext</h2><p class="subtle">Wird automatisch aus den aktuellen oder früher gespeicherten Antworten erzeugt und beim Drucken als PDF mit ausgegeben. Diese Beschreibung ist kein medizinischer Befund.</p>';
- if(a.answered===0&&cAdult===0&&cChild===0&&autAnswered===0&&aq===null&&!hasPractice){
+ if(a.answered===0&&cAdult===0&&cChild===0&&autAnswered===0&&aq===null&&!hasPractice&&!$("strengthsNote").value.trim()&&!$("supportsNote").value.trim()){
   $("mainNarrativeReport").innerHTML=h+'<div class="narrative-lead"><strong>Es liegen noch keine Ergebnisse vor.</strong><p>Beantworte einen Fragebogen oder lade eine früher gespeicherte JSON-Datei hoch. Der Text wird dann automatisch ergänzt.</p></div>';return;
  }
  h+='<div class="narrative-lead"><strong>Zusammenfassung</strong><p>Dieser Lernbericht betrachtet ADHS-Screening, eigenständige Lernfragen und gegebenenfalls einen extern ermittelten AQ-10-Wert getrennt. '+(hasPractice?'Ein zusätzlicher 41-Antworten-Übungsbogen wurde übernommen. ':'')+'Er stellt keine ADHS-, Autismus- oder AuDHS-Diagnose und keine Erkrankungswahrscheinlichkeit fest.</p></div>';
