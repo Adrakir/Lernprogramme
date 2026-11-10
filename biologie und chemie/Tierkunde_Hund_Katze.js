@@ -93,7 +93,7 @@ function skeletonSvg(){
 }
 function skeletonPage(){
  const b=BONES.find(x=>x.id===bone);
- return pageTitle('01','Das Skelett des '+(animal==='dog'?'Hundes':'Katze'),'Tippe auf die nummerierten Knochen. Erfahre, welche Aufgabe sie haben und warum der Körperbau zur Lebensweise passt.')+
+ return pageTitle('01',animal==='dog'?'Das Skelett des Hundes':'Das Skelett der Katze','Tippe auf die nummerierten Knochen. Erfahre, welche Aufgabe sie haben und warum der Körperbau zur Lebensweise passt.')+
  '<div class="bone-board">'+skeletonSvg()+'</div><p class="diagram-caption">Neun anklickbare Knochenbereiche. Die Zeichnung ist ein wissenschaftlich orientiertes, aber vereinfachtes Lernschema – nicht jede einzelne Rippe oder Zehe ist dargestellt.</p>'+
  '<div class="chips" aria-label="Knochen auswählen">'+BONES.map((x,i)=>'<button type="button" data-bone="'+x.id+'" class="chip '+(x.id===bone?'active':'')+'">'+(i+1)+'. '+x.label+'</button>').join('')+'</div>'+
  '<div class="detail" aria-live="polite"><h3>🦴 '+b.label+'</h3><p><b>Was ist das?</b> '+b.why+'</p><p style="margin-top:9px"><b>Warum gerade bei '+A().name+'?</b> '+b[animal]+'</p></div>'+
@@ -137,7 +137,7 @@ function toothSketch(){
 function teethPage(){
  const d=DENTAL.find(x=>x.id===tooth);
  const data=animal==='dog'?['12','4','16','10']:['12','4','10','4'];
- return pageTitle('03','Das Gebiss des '+(animal==='dog'?'Hundes':'Katze'),'Warum haben Raubtiere keine breiten Mahlzähne wie Kühe? Wähle die Zahntypen und erfahre, was sie können.')+
+ return pageTitle('03',animal==='dog'?'Das Gebiss des Hundes':'Das Gebiss der Katze','Warum haben Raubtiere keine breiten Mahlzähne wie Kühe? Wähle die Zahntypen und erfahre, was sie können.')+
  '<div class="two"><div><div class="bone-board">'+toothSketch()+'</div><p class="diagram-caption">Farbschema einer Seitenansicht. Die genaue Zahnanzahl gilt für das ganze Gebiss, nicht nur für diese Zeichnung.</p><div class="tooth-key">'+DENTAL.map((d,i)=>'<button type="button" data-tooth="'+d.id+'" class="'+(tooth===d.id?'active':'')+'"><span class="dot" style="background:'+d.color+'"></span>'+d.label+'<br><strong>'+data[i]+' Zähne</strong></button>').join('')+'</div><div class="detail"><h3>🦷 '+d.label+'</h3><p>'+d[animal]+'</p></div></div>'+
  '<aside class="panel"><div class="big-icon">🦷</div><h3>Das vollständige bleibende Gebiss</h3><div class="score">'+A().teeth+'</div><p><b>'+A().name+': '+A().teeth+' bleibende Zähne.</b> Das Milchgebiss hat normalerweise '+A().milk+' Zähne.</p><p>'+A().diet+'</p><h3>Was sind Reißzähne?</h3><p>Ein oberer und ein unterer Backenzahn bilden zusammen eine scharfe „Schere“. Sie schneiden Fleisch und anderes Futter in Stücke.</p></aside></div>'+
  '<div class="info-cards spaced">'+card('✂️','Schneiden statt Mahlen','Fangzähne halten fest. Reißzähne schneiden. Der Hund hat außerdem mehr hintere Backenzähne, mit denen er auch Nahrung zerdrücken kann.')+card('🥩','Zusammenhang mit Nahrung','Die Zahnform passt zur ursprünglichen Lebensweise als Raubtier. Pflanzenfresser besitzen dagegen oft große Kauflächen zum Zerreiben faserreicher Nahrung.')+'</div>'+
