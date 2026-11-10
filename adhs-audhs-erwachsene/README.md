@@ -76,3 +76,35 @@
 
 ### Offene Endgeräte-Checks
 - iPhone Safari, Android (Chrome/Edge), Desktopbrowser inkl. Dark Mode, Screenreader, `prefers-reduced-motion` und browserseitige PDF-Druckausgabe manuell prüfen.
+
+## Verbesserungsrunde – 10. November 2026 (Erwachsenen-App)
+
+### 1. Freiwillige lokale Wiederaufnahme
+- Haupt-App und `uebungstest.html` besitzen getrennte, ausdrücklich aktivierbare lokale Sicherungen (`localStorage`). Vor Einwilligung wird **nichts automatisch dauerhaft gespeichert**; der Speicherknopf zeigt den aktiven Zustand an.
+- Die Sicherungen behalten Antworten, Notizen und (in der Haupt-App) ausdrücklich importierte Übungsdaten. Sie werden beim erneuten Laden nur dann wiederhergestellt, wenn die lokale Speicherung zuvor eingeschaltet wurde.
+- Deaktivieren entfernt die gespeicherte Kopie. Zusätzlich existieren Löschknöpfe. Auf geteilten Geräten ist die Speicherung nicht empfohlen; browserseitiger Speicher ist nicht verschlüsselt.
+- Export bleibt manuell, und passende JSON-Dateien können wieder importiert werden. Der Import prüft Struktur, Antwortbereiche, Zeichenzahl und Dateigröße (max. 256 KB) und lehnt fehlerhafte Dateien ab.
+
+### 2. Getrennte gemeinsame Ergebnisübersicht
+- Die Haupt-App akzeptiert den JSON-Export des 41-Antworten-Übungstests und zeigt Häufigkeiten für Erwachsen-/Kindheitsangaben und fünf Lebensbereiche **getrennt** von ASRS, Autismus, AQ-10 und dem eigenständigen Kriterien-Trainer.
+- Kein validierter gemeinsamer ADHS-/AuDHS-Gesamtscore, keine automatische Diagnose. Übungsdaten sind als fiktiver Fall markiert, wenn sie im Übungsmodus erzeugt wurden.
+- Haupt-App-JSON-Exporte können ebenfalls wieder eingelesen werden; ein neuer Export kann die importierten Übungsdaten enthalten.
+
+### 3. Erweiterte Fallarbeit
+- [falltrainer.html](./falltrainer.html): sechs fiktive Erwachsenenfälle (Anna, Robert, Mira, Daniel, Samira, Leonie) mit drei Entscheidungen pro Fall = 18 didaktische Aufgaben.
+- Zu jeder Entscheidung gibt es eine gezielte Hilfe und eine fachlich begründete Rückmeldung. Bearbeitungsstand, richtige Entscheidungen, Fallstatus, Ergebnisse und Druckansicht sind integriert.
+- Separater Bereich mit Unterrichtsablauf, Reflexionsfragen und einem transparenten 8-Punkte-Bewertungsraster für Fallanalysen.
+- Die Lernpunktzahl ist ausdrücklich **keine** ADHS-/Autismus-/AuDHS-Diagnostik.
+- Kein Zwang, persönliche Gesundheitsangaben in einer Unterrichtssituation zu machen.
+
+### 4. Lesbarkeit, Barrierefreiheit und Qualität
+- Beschriftete Radiogruppen im Hauptformular; größere Schrift auch für Fragebeschriftungen und Hinweise; kontrastreiche Darstellung, responsive Navigation und Tastaturbedienung.
+- Automatisierte Browserregression in [qa-browser.cjs](./qa-browser.cjs), GitHub Action `.github/workflows/adhs-audhs-browser-tests.yml` (Chromium, Ubuntu 24.04); 17 Szenarien inklusive Speichern, Import, Export, sämtlicher Fallentscheidungen und 390px-Mobilansicht.
+- Diese Browser-Tests ersetzen keine manuelle Prüfung in iOS Safari, Android Chrome/Edge, mit VoiceOver/TalkBack oder gedrucktem PDF.
+- Diagnoseverfahren bleiben nach Rechte- und Fachgrenzen getrennt; DIVA-5 wird nicht nachgebaut.
+
+### Nächste manuelle Abnahme
+1. Safari auf einem echten iPhone: Touch-Ziele, Radioauswahl und Dateiimport, Rückkehr aus dem Hintergrund.
+2. Android Chrome/Edge: Kontrastwechsel, Tastatur, Schriftgröße, Import und Export.
+3. Tastatur und Screenreader: Navigation, Beschriftung aller Bedienelemente, richtige Fokus-Reihenfolge, Feedbackansage.
+4. Druck/als PDF speichern: Seitenumbrüche, Lesbarkeit und Vollständigkeit der Ergebnisübersichten.
