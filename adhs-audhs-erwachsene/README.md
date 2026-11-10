@@ -36,3 +36,20 @@
 - Browsertests auf iOS Safari, Android und Desktop, einschließlich Druck- und Exportszenarien.
 - Professionelle Quellen- und Lizenzprüfung insbesondere für zusätzliche normierte Fragebögen.
 - Erweiterung der Fallwerkstatt um strukturierte differentialdiagnostische Entscheidungswege.
+
+## Eigenständiger ADHS-Übungstest (2026-11-10)
+
+- Direktlink: [uebungstest.html](./uebungstest.html)
+- Eigenständig formulierter Übungsfragebogen für **Erwachsene** (kein DIVA-5, ASRS, WURS-k oder validierter Screeningtest).
+- 18 Themen aus den Bereichen Aufmerksamkeit/Organisation und Aktivität/Impulsivität, jeweils mit einer eigenen Frage für das Erwachsenenalter und einer retrospektiven Frage für die Zeit vor dem zwölften Geburtstag (36 Antworten).
+- Fünf weitere Fragen zu den Auswirkungen auf Beruf, Haushalt, Beziehungen, soziale Kontakte sowie Freizeit/Selbstbild. Insgesamt 41 Antworten.
+- Mehrseitige, mobilfreundliche Schrittfolge mit Zurück/Weiter, „Weiß ich nicht“, Fortschrittsanzeige und optionalen Beispielsnotizen.
+- Automatische **rein beschreibende** Auswertung: Häufigkeiten der Antworten „oft“/„sehr oft“ nach Bereich und Lebensphase, unklare Antworten, Belastung pro Lebensbereich. Keine klinischen Cut-offs, Diagnosewahrscheinlichkeit oder Subtypen-Klassifikation.
+- Druck-/PDF-Funktion über den Browser, freiwilliger JSON-Export, Kontrast- und Schriftanpassung, ein fiktiver Demo-Fall mit sichtbarer Kennzeichnung.
+- Keine automatische Speicherung und kein Netzwerkversand persönlicher Antworten; nur externe Informationslinks werden durch aktives Anklicken geöffnet.
+- Verlinkung aus der NeuroKompass-Startseite, Navigation und DIVA-5-Infoseite.
+- Quelle für fachliche Diagnostikgrenzen: https://www.nice.org.uk/guidance/ng87/chapter/recommendations und für DIVA-5-Nutzungsbedingungen https://www.divacenter.eu/faq/.
+
+### Technische Prüfung
+- Browser-Skript syntaktisch geprüft, 18 Fragen in 2 Bereichen (9/9), 5 Beeinträchtigungsbereiche, insgesamt 41 Felder.
+- GitHub Pages für spätere Releases prüfen; manueller Endgerätetest (echtes iPhone, Android, Desktop) noch ausstehend.
