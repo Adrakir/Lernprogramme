@@ -398,6 +398,104 @@ async function main(){
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
  });
+
+ await run("Autismusfragen: zwölf Einzelschritte mit Alltagserklärung und Zurück/Weiter",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="autism"]').click();
+   assert.equal(await p.locator("#autQuestions .question").count(),1);
+   assert.match(await p.locator("#autStepProgress").innerText(),/Frage 1 von 12/);
+   assert.match(await p.locator("#autQuestions").innerText(),/Konkretes Beispiel/);
+   await p.locator('label[for="aut_0_3"]').click();
+   await p.locator("#autNext").click();
+   assert.match(await p.locator("#autStepProgress").innerText(),/Frage 2 von 12/);
+   assert.equal(await p.locator("#autQuestions .question").count(),1);
+   await p.locator('label[for="aut_1_4"]').click();
+   await p.locator("#autPrev").click();
+   assert.equal(await p.locator('input[id="aut_0_3"]').isChecked(),true);
+   await p.locator("#autNext").click();
+   assert.equal(await p.locator('input[id="aut_1_4"]').isChecked(),true);
+   assert.match(await p.locator("#autResult").innerText(),/1 von 4 mit „oft“ oder „sehr oft“/);
+   assert.match(await p.locator("#autResult").innerText(),/alternative oder zurückhaltende Antworten/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Autismusantworten: unklar, situationsabhängig und übersprungen sind kein Ja",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="autism"]').click();
+   await p.locator('label[for="aut_0_8"]').click();
+   await p.locator("#autNext").click();
+   await p.locator('label[for="aut_1_5"]').click();
+   await p.locator("#autNext").click();
+   await p.locator('label[for="aut_2_6"]').click();
+   await p.locator("#autNext").click();
+   await p.locator('label[for="aut_3_7"]').click();
+   let text=await p.locator("#autResult").innerText();
+   assert.match(text,/0 von 4 mit „oft“ oder „sehr oft“/);
+   assert.match(text,/3 alternative oder zurückhaltende Antworten/);
+   await p.locator("#autNext").click();
+   await p.locator("#autSkip").click();
+   assert.match(await p.locator("#autStepProgress").innerText(),/Frage 6 von 12/);
+   await p.locator('.nav[data-view="results"]').click();
+   assert.match(await p.locator("#resultCards").innerText(),/0 von 4/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Alte gespeicherte Autismusantworten 0–3 bleiben gleich",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   const fixture={active:true,data:{version:1,
+     answers:{asrs:Array(6).fill(null),critA:Array(18).fill(null),critC:Array(18).fill(null),
+       aut:[3,2,1,0,...Array(8).fill(null)],notes:Array(18).fill(""),domains:[]},
+     ui:{onset:"",duration:"",contexts:"",alternatives:"",aqNote:"",aqScore:"",evidence:""},
+     practice:null}};
+   await p.evaluate(v=>localStorage.setItem("neurokompass.main.v1",JSON.stringify(v)),fixture);
+   await p.reload();await p.locator('.nav[data-view="autism"]').click();
+   assert.equal(await p.locator("#aut_0_3").isChecked(),true);
+   assert.match(await p.locator("#autResult").innerText(),/2 von 4 mit „oft“ oder „sehr oft“/);
+   await p.locator("#autNext").click();assert.equal(await p.locator("#aut_1_2").isChecked(),true);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Ruhemodus bleibt auf der jeweiligen Seite beim Neuladen aktiv",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator("#calmModeBtn").click();
+   assert.equal(await p.locator("#calmModeBtn").getAttribute("aria-pressed"),"true");
+   assert.equal(await p.locator("html").getAttribute("data-calm"),"true");
+   await p.reload();
+   assert.equal(await p.locator("html").getAttribute("data-calm"),"true");
+   await p.locator("#calmModeBtn").click();
+   assert.equal(await p.locator("html").getAttribute("data-calm"),"false");
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Erweiterte Übung: situationsabhängig / nicht anwendbar korrekt gespeichert und importiert",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   await p.locator('label[for="r_adult_0_6"]').click();
+   await p.locator('label[for="r_child_0_7"]').click();
+   assert.match(await p.locator("#report").innerText(),/2 von 41/);
+   const [dl]=await Promise.all([p.waitForEvent("download"),p.locator("#export").click()]);
+   const buffer=fs.readFileSync(await dl.path());
+   const obj=JSON.parse(buffer.toString("utf8"));
+   assert.equal(obj.heute[0],6);assert.equal(obj.kindheit[0],7);
+   await p.locator("#importAnswers").setInputFiles({name:"antworten.json",mimeType:"application/json",buffer});
+   await p.waitForFunction(()=>document.querySelector("#importStatus").textContent.includes("importiert"));
+   assert.match(await p.locator("#report").innerText(),/2 von 41/);
+   assert.match(await p.locator("#narrativeReport").innerText(),/Ausführlicher Auswertungstext/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Autismus: freiwillige Ressourcen im Bericht, Altdatei ohne Ressourcen weiterhin gültig",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="autism"]').click();
+   await p.locator("#strengthsNote").fill("Genaue Beobachtung und Interesse an Karten");
+   await p.locator("#supportsNote").fill("Schriftliche Absprachen helfen");
+   await p.locator('.nav[data-view="results"]').click();
+   const report=await p.locator("#mainNarrativeReport").innerText();
+   assert.match(report,/Genaue Beobachtung und Interesse an Karten/);
+   assert.match(report,/Schriftliche Absprachen helfen/);
+   assert.match(report,/nicht diagnostisch bewertet/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
  await run("Mobilansicht 390px: keine ungewollte horizontale Seitenüberbreite",async()=>{
   for(const filename of URLS){const x=await open(browser,filename,true);try{
    const dims=await x.page.evaluate(()=>({page:document.documentElement.scrollWidth,window:window.innerWidth}));
