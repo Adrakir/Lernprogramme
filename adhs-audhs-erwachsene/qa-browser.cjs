@@ -38,10 +38,10 @@ async function main(){
   const x=await open(browser,"index.html");const p=x.page;try{
    await p.locator('.nav[data-view="asrs"]').click();
    for(let i=0;i<6;i++){let v=[2,2,2,3,0,0][i];await p.locator('label[for="asrs_'+i+'_'+v+'"]').click();}
-   assert.match(await p.locator("#asrsResult").innerText(),/4\/6/);
+   assert.match(await p.locator("#asrsResult").innerText(),/4 von 6 positiv/);
    assert.match(await p.locator("#asrsResult").innerText(),/Screening-Schwelle erreicht/);
    for(let i=0;i<6;i++){let v=[1,1,1,2,2,2][i];await p.locator('label[for="asrs_'+i+'_'+v+'"]').click();}
-   assert.match(await p.locator("#asrsResult").innerText(),/0\/6/);
+   assert.match(await p.locator("#asrsResult").innerText(),/0 von 6 positiv/);
    assert.match(await p.locator("#asrsResult").innerText(),/Screening-Schwelle nicht erreicht/);
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
@@ -278,6 +278,46 @@ async function main(){
    assert.equal(await p.locator("#aqNote").inputValue(),"yes");
    await p.locator('.nav[data-view="asrs"]').click();
    assert.match(await p.locator("#asrsResult").innerText(),/1 von 6/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+
+ await run("Klare Auswertung: unvollständige, positive und getrennte Ergebnisse in Alltagssprache",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="results"]').click();
+   let text=await p.locator("#resultCards").innerText();
+   assert.match(text,/Noch nicht ausgewertet/);
+   assert.match(text,/Was bedeutet es nicht/);
+   assert.match(text,/Nächster Schritt/);
+   await p.locator('.nav[data-view="asrs"]').click();
+   for(let i=0;i<6;i++){const v=[2,2,2,3,0,0][i];await p.locator('label[for="asrs_'+i+'_'+v+'"]').click();}
+   await p.locator('.nav[data-view="results"]').click();
+   text=await p.locator("#resultCards").innerText();
+   assert.match(text,/Die Schwelle für eine weitere ADHS-Abklärung ist erreicht/);
+   assert.match(text,/4 von 6/);
+   assert.match(text,/keine Diagnose/);
+   assert.match(text,/keine Wahrscheinlichkeit/);
+   await p.locator('.nav[data-view="autism"]').click();
+   await p.locator('label[for="aut_0_3"]').click();
+   assert.match(await p.locator("#autResult").innerText(),/Das bedeutet nicht/);
+   await p.locator('.nav[data-view="audhd"]').click();
+   assert.match(await p.locator("#audhdResult").innerText(),/kein AuDHS-Nachweis/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("41-Fragen-Bogen: Ergebnis erklärt Beispiele, Lebensphasen und Grenzen",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   let text=await p.locator("#report").innerText();
+   assert.match(text,/0 von 41 Fragen/);
+   assert.match(text,/noch offen/);
+   await p.locator('label[for="r_adult_0_3"]').click();
+   await p.locator('label[for="r_child_0_4"]').click();
+   text=await p.locator("#report").innerText();
+   assert.match(text,/Im Erwachsenenalter wurden 1 von 18 Alltagsthemen/);
+   assert.match(text,/Einzelheiten überblicken/);
+   assert.match(text,/Kindheit – rückblickend/);
+   assert.match(text,/keine Diagnosegrenze/);
+   assert.match(text,/Was wäre als Nächstes sinnvoll/);
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
  });
