@@ -9,7 +9,7 @@ const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 const { chromium } = require("playwright");
 const BASE = __dirname;
-const URLS = ["index.html", "uebungstest.html", "visualisieren.html"];
+const URLS = ["index.html", "uebungstest.html", "visualisieren.html", "falltrainer.html"];
 const url = name => pathToFileURL(path.join(BASE, name)).href;
 let passed = 0, failed = 0;
 async function run(name, fn) {
@@ -167,6 +167,93 @@ async function main(){
    await p.locator('[data-chart="b"]').click();assert.equal(await p.locator("#chartAv").innerText(),"7/9");
    await p.locator('[data-opt="1"]').click();assert.match(await p.locator("#quizFeedback").innerText(),/Richtig/);
    await p.locator("#motionBtn").click();assert.equal(await p.locator("#motionBtn").getAttribute("aria-pressed"),"true");
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+
+ await run("Übungstest: lokale Sicherung ist freiwillig und nach Ausschalten gelöscht",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   assert.equal(await p.locator("#saveToggle").getAttribute("aria-pressed"),"false");
+   await p.locator('label[for="r_adult_0_3"]').click();
+   await p.reload();
+   assert.match(await p.locator("#progressNumber").innerText(),/0 von 41/);
+   await p.locator("#saveToggle").click();
+   await p.locator('label[for="r_adult_0_3"]').click();
+   await p.reload();
+   assert.match(await p.locator("#progressNumber").innerText(),/1 von 41/);
+   assert.equal(await p.locator("#saveToggle").getAttribute("aria-pressed"),"true");
+   await p.locator("#saveToggle").click();
+   await p.reload();
+   assert.match(await p.locator("#progressNumber").innerText(),/0 von 41/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Haupt-App: Speicherung aktivieren, ASRS-Antwort wiederherstellen, lokale Kopie entfernen",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator("#saveToggle").click();
+   await p.locator('.nav[data-view="asrs"]').click();
+   await p.locator('label[for="asrs_0_2"]').click();
+   await p.reload();
+   await p.locator('.nav[data-view="asrs"]').click();
+   assert.match(await p.locator("#asrsResult").innerText(),/1 von 6/);
+   assert.equal(await p.locator("#saveToggle").getAttribute("aria-pressed"),"true");
+   await p.locator("#saveToggle").click();
+   await p.reload();
+   await p.locator('.nav[data-view="asrs"]').click();
+   assert.match(await p.locator("#asrsResult").innerText(),/0 von 6/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("JSON-Übungstest exportieren, in Haupt-App importieren und getrennt anzeigen",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   await p.locator('label[for="r_adult_0_3"]').click();
+   const [dl]=await Promise.all([p.waitForEvent("download"),p.locator("#export").click()]);
+   const buffer=fs.readFileSync(await dl.path());
+   await p.goto(url("index.html"));
+   await p.locator('.nav[data-view="results"]').click();
+   await p.locator("#importPractice").setInputFiles({name:"lerntest.json",mimeType:"application/json",buffer});
+   await p.waitForFunction(()=>document.querySelector("#practiceImportStatus").textContent.includes("erfolgreich"));
+   assert.match(await p.locator("#practiceReport").innerText(),/Aufmerksamkeit \/ Organisation/);
+   assert.match(await p.locator("#practiceReport").innerText(),/1 von 1/);
+   await p.locator("#clearPracticeImport").click();
+   assert.match(await p.locator("#practiceImportStatus").innerText(),/entfernt/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Übungstest: JSON importiert frühere Antworten wieder, ungültige Datei wird abgelehnt",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   await p.locator('label[for="r_adult_0_3"]').click();
+   const [dl]=await Promise.all([p.waitForEvent("download"),p.locator("#export").click()]);
+   const buffer=fs.readFileSync(await dl.path());
+   p.once("dialog", d=>d.accept());
+   await p.locator("#clear").click();
+   await p.locator("#importAnswers").setInputFiles({name:"test.json",mimeType:"application/json",buffer});
+   await p.waitForFunction(()=>document.querySelector("#importStatus").textContent.includes("importiert"));
+   assert.match(await p.locator("#progressNumber").innerText(),/1 von 41/);
+   await p.locator("#importAnswers").setInputFiles({name:"invalid.json",mimeType:"application/json",buffer:Buffer.from("{}")});
+   await p.waitForFunction(()=>document.querySelector("#importStatus").textContent.includes("Import abgelehnt"));
+   assert.match(await p.locator("#progressNumber").innerText(),/1 von 41/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Fallwerkstatt Plus: 6 Fälle und 18 didaktische Entscheidungen",async()=>{
+  const x=await open(browser,"falltrainer.html");const p=x.page;try{
+   assert.equal(await p.locator(".case-tab").count(),6);
+   const choices=[[1,0,1],[0,1,0],[0,1,0],[1,1,0],[0,0,1],[1,1,1]];
+   for(let i=0;i<choices.length;i++){
+    await p.locator('[data-case="'+i+'"]').click();
+    for(let j=0;j<3;j++){
+     await p.locator('[data-choice="'+choices[i][j]+'"]').click();
+     assert.match(await p.locator("#feedback").innerText(),/Richtig beurteilt/);
+     if(j<2)await p.locator("#next").click();
+    }
+   }
+   assert.match(await p.locator("#answeredTotal").innerText(),/18\/18/);
+   assert.equal(await p.locator("#correctTotal").innerText(),"18");
+   assert.match(await p.locator("#caseTotal").innerText(),/6\/6/);
+   p.once("dialog",d=>d.accept());
+   await p.locator("#resetCases").click();
+   assert.match(await p.locator("#answeredTotal").innerText(),/0\/18/);
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
  });
