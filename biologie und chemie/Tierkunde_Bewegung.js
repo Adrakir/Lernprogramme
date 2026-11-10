@@ -96,7 +96,8 @@ function poseScene(){
  const m=state.mode,p=profiles[state.species],sp=spinePoints(state.species,phase,m),
  shoulder=sp.shoulder,hip=sp.hip;
  const ground=496;
- const vertebraCount=20; // 13 Brust- und 7 Lendenwirbel (Halswirbel separat)let ribs='',spineNodes='';
+ const vertebraCount=20; // 13 Brust- und 7 Lendenwirbel (Halswirbel separat)
+ let ribs='',spineNodes='';
  const thorX=shoulder.x+12,lumX=hip.x-16,hipDy=hip.y-45,baseBack=shoulder.y-44;
  function back(x){
    const t=clamp((x-thorX)/(lumX-thorX),0,1);
