@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#edf6f2">
+<meta name="description" content="BioLabor 5: Hund und Katze verstehen – interaktive Skelette, Gebiss, Abstammung, Jagd, Bewegung, Körpersprache und Wissenstests für Klasse 5.">
+<title>Hund & Katze erforschen | BioLabor 5</title>
+<link rel="stylesheet" href="Tierkunde_Hund_Katze.css">
+<script defer src="Tierkunde_Hund_Katze.js"></script>
+</head>
+<body>
+<a href="#content" class="skip">Zum Inhalt springen</a>
+<div class="app-shell">
+<header class="topbar">
+<a href="BioLabor_5_Biologie_V9_2.html" class="back"><span aria-hidden="true">←</span> BioLabor 5</a>
+<strong class="brand">🐾 Tierdetektive <span>Hund & Katze</span></strong>
+<div class="utilities">
+<button type="button" class="tool" id="theme" aria-label="Darstellung hell oder dunkel wechseln">◐ <span>Kontrast</span></button>
+<button type="button" class="tool" id="font" aria-label="Schriftgröße verändern">A+ <span>Schrift</span></button>
+<button type="button" class="tool" id="speak" aria-label="Die aktuelle Lernseite vorlesen">🔊 <span>Vorlesen</span></button>
+<button type="button" class="tool" id="print" aria-label="Lernseite drucken">⎙ <span>Drucken</span></button>
+</div>
+</header>
+<section class="hero" aria-label="Einführung">
+<div class="hero-copy"><span class="kicker">NEUE LERNWELT · BIOLOGIE KLASSE 5</span><h1>Hund & Katze<br><em>unter der Lupe</em></h1><p>Warum rennt ein Hund ausdauernd? Warum schleicht eine Katze lautlos? Entdecke, wie Knochen, Zähne und Verhalten zusammenpassen.</p>
+<div class="hero-facts"><span>🦴 Zwei anklickbare Skelette</span><span>🦷 Zwei Gebisse</span><span>🔎 Körpersprache verstehen</span></div></div>
+<div class="hero-animals" aria-hidden="true"><span class="animal-emoji">🐕</span><span class="paw-seal">🐾</span><span class="animal-emoji">🐈</span></div>
+</section>
+<div class="workspace">
+<aside class="side">
+<div class="choose-heading"><strong>Wähle dein Tier</strong><small>Du kannst jederzeit wechseln.</small></div>
+<div class="species-switch" role="group" aria-label="Tier auswählen">
+<button class="species active" type="button" data-species="dog" aria-pressed="true"><span>🐕</span> Hund</button>
+<button class="species" type="button" data-species="cat" aria-pressed="false"><span>🐈</span> Katze</button>
+</div>
+<div class="menu-label">DEINE FORSCHERSTATIONEN</div>
+<nav id="sections" class="sections" aria-label="Lernstationen">
+<button type="button" class="section active" data-section="skeleton"><span>01</span> 🦴 Das Skelett</button>
+<button type="button" class="section" data-section="origin"><span>02</span> 🌍 Abstammung</button>
+<button type="button" class="section" data-section="teeth"><span>03</span> 🦷 Das Gebiss</button>
+<button type="button" class="section" data-section="hunt"><span>04</span> 🔍 Jagdverhalten</button>
+<button type="button" class="section" data-section="motion"><span>05</span> 🐾 Fortbewegung</button>
+<button type="button" class="section" data-section="signals"><span>06</span> 👀 Körpersprache</button>
+<button type="button" class="section" data-section="compare"><span>07</span> ⚖️ Vergleich</button>
+<button type="button" class="section" data-section="quiz"><span>08</span> 🏆 Wissenstest</button>
+</nav>
+<div class="side-note"><span>💡</span><div><b>Forscherfrage</b><p>Frage bei jedem Körperteil: Was ist seine Aufgabe – und warum ist das nützlich?</p></div></div>
+</aside>
+<main id="content" class="content" tabindex="-1" aria-live="polite"></main>
+</div>
+<footer class="footer"><strong>BioLabor 5 · Tierdetektive</strong><span>Eigenständig gestaltete, vereinfachte Lernzeichnungen. Keine maßstabsgetreuen Präparate.</span><a href="BioLabor_5_Biologie_V9_2.html">Zur Biologie-Übersicht</a></footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
