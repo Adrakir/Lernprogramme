@@ -1730,4 +1730,45 @@ function run(){
  document.body.appendChild(panel);
  document.getElementById('selbsttestEnde').onclick=function(){history.replaceState(null,'',location.pathname);location.reload();};
 }
-})();</script></body></html>
+})();</script>
+<!-- Tierkunde-Erweiterung: bestehende Lernwelten und Lernstände bleiben erhalten. -->
+<style>
+.biotiere-promo{margin-top:23px;padding:23px;border:1px solid #c8e4d8;border-radius:19px;background:linear-gradient(120deg,#e9f6ef,#e5f2fc)}
+.biotiere-promo h2{margin:5px 0 10px;color:#13564c}.biotiere-promo p{color:#466d66}
+.biotiere-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.biotiere-tile{display:flex;gap:12px;align-items:center;min-height:104px;border-radius:16px;background:#fff;border:1px solid #cce2d7;padding:16px;text-decoration:none;color:#15473e}
+.biotiere-tile:hover,.biotiere-tile:focus-visible{border-color:#277c67;box-shadow:0 0 0 2px #93d9bb}
+.biotiere-tile .biotiere-ico{font-size:2.65rem;flex-shrink:0}.biotiere-tile strong{display:block;color:#184c42}.biotiere-tile small{display:block;color:#50766c;margin-top:4px;line-height:1.4}
+.biotiere-nav{display:flex;align-items:center;gap:12px;padding:12px 11px;margin:2px 0;width:100%;border-radius:12px;text-decoration:none;color:#526f69;font-size:.86rem;font-weight:800}
+.biotiere-nav:hover{background:#e4f5ef;color:#13574e}
+.biotiere-nav .navicon{width:24px;font-size:19px}
+body.highcontrast .biotiere-promo,body.highcontrast .biotiere-tile{background:#fff;color:#000}
+@media(max-width:650px){.biotiere-grid{grid-template-columns:1fr}.biotiere-tile{min-height:76px}}
+@media print{.biotiere-promo{display:none!important}}
+</style>
+<script>
+(function(){
+'use strict';
+const entry='BioLabor_Hund_Katze.html';
+const oldHomeAnimal=home;
+home=function(){
+ return oldHomeAnimal()+'<section class="biotiere-promo" aria-label="Neue Lernwelt Hund und Katze"><span class="kicker">NEU · TIERKUNDE</span><h2>🐾 Hund und Katze erforschen</h2><p>Entdecke zwei interaktive Skelette, Abstammung, Gebiss, Jagd, Fortbewegung und Körpersprache. Jedes Tier erhält einen eigenen Lernweg mit Wissenstest.</p><div class="biotiere-grid"><a class="biotiere-tile" href="'+entry+'#dog/skeleton"><span class="biotiere-ico">🐕</span><span><strong>Hund erforschen →</strong><small>42 Zähne · Wolfsverwandtschaft · Laufen · Körpersprache</small></span></a><a class="biotiere-tile" href="'+entry+'#cat/skeleton"><span class="biotiere-ico">🐈</span><span><strong>Katze erforschen →</strong><small>30 Zähne · Wildkatze · Springen · Jagdverhalten</small></span></a></div></section>';
+};
+const oldNavAnimal=updateNav;
+updateNav=function(){
+ oldNavAnimal();
+ const nav=document.getElementById('nav');
+ if(!nav)return;
+ const heading=document.createElement('div');
+ heading.className='nav-section';
+ heading.textContent='Tierwelt · Hund und Katze';
+ const dog=document.createElement('a'),cat=document.createElement('a');
+ dog.className='biotiere-nav';dog.href=entry+'#dog/skeleton';dog.innerHTML='<span class="navicon">🐕</span><span>Hund erforschen</span>';
+ cat.className='biotiere-nav';cat.href=entry+'#cat/skeleton';cat.innerHTML='<span class="navicon">🐈</span><span>Katze erforschen</span>';
+ const ref=Array.from(nav.querySelectorAll('.nav-section')).find(x=>x.textContent.includes('Üben & Testen'));
+ nav.insertBefore(heading,ref||null);nav.insertBefore(dog,ref||null);nav.insertBefore(cat,ref||null);
+};
+if(typeof render==='function')render();
+})();
+</script>
+</body></html>
