@@ -62,6 +62,7 @@ html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,htm
 <input id="importAnswers" type="file" accept=".json,application/json" style="display:block;max-width:100%;margin-top:7px">
 <p id="importStatus" role="status" class="muted">Beim Import werden die aktuellen Antworten ersetzt. Importierte Inhalte bleiben zunächst nur in dieser Sitzung.</p>
 </div>
+<div class="card" id="exerciseGuide"><h2>Bevor du den Übungsbogen startest</h2><p><strong>18 Themen in zwei Lebensphasen und fünf Fragen zum Alltag:</strong> insgesamt 41 Antworten. Du kannst ohne Zeitlimit arbeiten, zurückgehen oder Fragen offen lassen.</p><p>„Kommt auf die Situation an“, „Nicht anwendbar“, „Weiß ich nicht“ und „Möchte ich nicht beantworten“ werden als eigenständige Antworten erfasst. Sie zählen <strong>nicht als „oft“, „sehr oft“ oder „Nein“</strong>. Das ist keine normierte medizinische Bewertung.</p><p>Das Wiederherstellen deiner Antworten ist freiwillig. Mit dem JSON-Export kannst du Ergebnisse zwischen Geräten übertragen. Die App schickt Antworten nicht automatisch an einen Server.</p></div>
 <div class="introgrid">
 <div class="card"><span class="smallcaps">Themenfragen</span><strong>18</strong><span class="muted">Aufmerksamkeit und Impulsivität</span></div>
 <div class="card"><span class="smallcaps">Lebensphasen</span><strong>2</strong><span class="muted">Heute und vor dem 12. Geburtstag</span></div>
@@ -77,7 +78,7 @@ html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,htm
 <div class="row"><h2>Deine Antworten – einfach erklärt</h2><span class="smallcaps" id="resultMode">Nur zur Übung</span></div>
 <p class="muted">Du siehst zuerst eine Zusammenfassung in Alltagssprache. Darunter wird erklärt, wie die Zahlen zustande kommen. Das ist kein Diagnosetest.</p>
 <div id="report"></div>
-<div id="narrativeReport" class="narrative-report" aria-label="Automatischer ausführlicher Lernbericht"></div>
+<details id="exerciseNarrativeDetails" open><summary><strong>Ausführlichen Auswertungstext anzeigen oder ausblenden</strong></summary><div id="narrativeReport" class="narrative-report" aria-label="Automatischer ausführlicher Lernbericht"></div></details>
 </section>
 <div class="buttons notprint"><button class="btn secondary" id="demo" type="button">Fiktiven Beispielfall laden</button><button class="btn secondary" id="clear" type="button">Übung zurücksetzen</button><button class="btn" id="print" type="button">Auswertung und Bericht als PDF drucken</button><button class="btn secondary" id="export" type="button">JSON-Datei herunterladen</button></div>
 <section id="exerciseExportPanel" class="card export-panel" hidden aria-label="Ergebnisse als JSON sichern"><h2>Ergebnisse sichern – auch auf iPhone und iPad</h2><p>Der Download wurde angestoßen. Falls keine Datei erscheint, benutze „Über Teilen sichern“ oder kopiere den Text. Du entscheidest selbst, wo die Datei gespeichert wird.</p>
@@ -124,13 +125,13 @@ const IMPACT=[
 ["Soziale Kontakte","Wie deutlich beeinflussen sie Freundschaften und andere Kontakte?"],
 ["Freizeit und Selbstbild","Wie sehr beeinträchtigen sie Hobbys, Erholung oder das eigene Selbstvertrauen?"]
 ];
-const FREQ=["Nie / nicht zutreffend","Selten","Manchmal","Oft","Sehr oft","Weiß ich nicht"];
-const EFFECT=["Gar nicht","Leicht","Deutlich","Sehr stark","Unklar"];
+const FREQ=["Nie / nicht zutreffend","Selten","Manchmal","Oft","Sehr oft","Weiß ich nicht","Kommt auf die Situation an","Nicht anwendbar","Möchte ich nicht beantworten"];
+const EFFECT=["Gar nicht","Leicht","Deutlich","Sehr stark","Unklar","Kommt auf die Situation an","Nicht anwendbar","Möchte ich nicht beantworten"];
 const model={adult:Array(18).fill(null),child:Array(18).fill(null),impact:Array(5).fill(null),notes:Array(18).fill(""),stage:0,index:0,demo:false};
 const SAVE_KEY="neurokompass.exercise.v1";
 let saveEnabled=false;
 function validAnswers(values,length,max){return Array.isArray(values)&&values.length===length&&values.every(v=>v===null||(Number.isInteger(v)&&v>=0&&v<=max));}
-function validExercise(obj){return !!obj&&typeof obj==="object"&&validAnswers(obj.heute,18,5)&&validAnswers(obj.kindheit,18,5)&&validAnswers(obj.lebensbereiche,5,4)&&Array.isArray(obj.notizen)&&obj.notizen.length===18&&obj.notizen.every(v=>typeof v==="string"&&v.length<=2000);}
+function validExercise(obj){return !!obj&&typeof obj==="object"&&validAnswers(obj.heute,18,8)&&validAnswers(obj.kindheit,18,8)&&validAnswers(obj.lebensbereiche,5,7)&&Array.isArray(obj.notizen)&&obj.notizen.length===18&&obj.notizen.every(v=>typeof v==="string"&&v.length<=2000);}
 function applyExercise(obj){if(!validExercise(obj))throw Error("Ungültiges Format für den 41-Antworten-Übungstest");model.adult=obj.heute.slice();model.child=obj.kindheit.slice();model.impact=obj.lebensbereiche.slice();model.notes=obj.notizen.slice();model.stage=0;model.index=0;model.demo=obj.fiktiverFall===true;render();}
 function exerciseData(){return {typ:"NeuroKompass selbst formulierter ADHS-Übungstest",stand:"2026-11-10",hinweis:"kein diagnostischer Test",fiktiverFall:model.demo,heute:model.adult,kindheit:model.child,lebensbereiche:model.impact,notizen:model.notes};}
 function exerciseSave(){if(!saveEnabled)return;try{localStorage.setItem(SAVE_KEY,JSON.stringify({active:true,data:exerciseData()}));$("saveStatus").textContent="Lokale Sicherung aktiv: Antworten werden nur auf diesem Gerät gespeichert.";}catch(e){saveEnabled=false;$("saveToggle").setAttribute("aria-pressed","false");$("saveToggle").textContent="Lokale Sicherung aktivieren";$("saveStatus").textContent="Speichern nicht möglich (Browser-Speicher blockiert oder voll).";}}
@@ -140,7 +141,7 @@ let large=false;
 function safe(v){return String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function choice(group,index,opts,value){return '<div class="choices" role="radiogroup" aria-label="Antwortmöglichkeiten">'+opts.map((o,n)=>{const id="r_"+group+"_"+index+"_"+n;return '<span class="choice"><input type="radio" id="'+id+'" name="'+group+"_"+index+'" value="'+n+'" '+(value===n?"checked":"")+'><label for="'+id+'">'+safe(o)+'</label></span>'}).join("")+'</div>';}
 function count(arr){return arr.filter(x=>x!==null).length;}
-function stats(arr){return {done:count(arr),often:arr.filter(x=>x===3||x===4).length,unsure:arr.filter(x=>x===5).length};}
+function stats(arr){return {done:count(arr),often:arr.filter(x=>x===3||x===4).length,unsure:arr.filter(x=>x>=5).length};}
 function summary(){return {a:stats(model.adult),c:stats(model.child),au:stats(model.adult.slice(0,9)),ah:stats(model.adult.slice(9)),cu:stats(model.child.slice(0,9)),ch:stats(model.child.slice(9)),imp:count(model.impact),impHigh:model.impact.filter(x=>x===2||x===3).length,done:count(model.adult)+count(model.child)+count(model.impact)};}
 function topicVisual(stage,i){
  const group=stage?"impact":i<9?"attention":"activity";
@@ -168,7 +169,7 @@ function evalMetric(label,count,total){
  return '<div class="eval-metric"><span>'+safe(label)+'</span><strong>'+count+' von '+total+'</strong></div><div class="eval-meter" aria-hidden="true"><span style="width:'+(100*count/total)+'%"></span></div>';
 }
 function block(name,a,c){
- return '<div class="eval-step"><h3>'+safe(name)+'</h3><p class="eval-help">In diesem Themenbereich gibt es neun Fragen zum Erwachsenenalter und neun zur Kindheit.</p>'+evalMetric("Heute: oft oder sehr oft",a.often,9)+'<p class="eval-help">'+a.done+' von 9 beantwortet, '+a.unsure+' davon mit „Weiß ich nicht“.</p>'+evalMetric("Kindheit: oft oder sehr oft",c.often,9)+'<p class="eval-help">'+c.done+' von 9 beantwortet, '+c.unsure+' davon mit „Weiß ich nicht“.</p><div class="eval-note"><strong>So liest man es:</strong> Wenn dort „3 von 9“ steht, wurden drei von neun Alltagssituationen in diesem Themenblock als häufig markiert. Das ist <strong>keine</strong> Diagnosegrenze.</div></div>';
+ return '<div class="eval-step"><h3>'+safe(name)+'</h3><p class="eval-help">In diesem Themenbereich gibt es neun Fragen zum Erwachsenenalter und neun zur Kindheit.</p>'+evalMetric("Heute: oft oder sehr oft",a.often,9)+'<p class="eval-help">'+a.done+' von 9 beantwortet, '+a.unsure+' davon nicht eindeutig bewertet (z. B. „Weiß ich nicht“).</p>'+evalMetric("Kindheit: oft oder sehr oft",c.often,9)+'<p class="eval-help">'+c.done+' von 9 beantwortet, '+c.unsure+' davon nicht eindeutig bewertet (z. B. „Weiß ich nicht“).</p><div class="eval-note"><strong>So liest man es:</strong> Wenn dort „3 von 9“ steht, wurden drei von neun Alltagssituationen in diesem Themenblock als häufig markiert. Das ist <strong>keine</strong> Diagnosegrenze.</div></div>';
 }
 function oftenExamples(arr,which,maxCount){
  const yes=arr.map((v,i)=>(v===3||v===4)?i:null).filter(i=>i!==null);
@@ -176,12 +177,12 @@ function oftenExamples(arr,which,maxCount){
  return labels.length?'<ul class="eval-list">'+labels.join("")+'</ul>':'<p class="eval-help">In diesem Lebensabschnitt wurde bisher kein Thema als „oft“ oder „sehr oft“ markiert.</p>';
 }
 function report(){
- const s=summary(),done=s.done,open=41-done,undecided=s.a.unsure+s.c.unsure+model.impact.filter(v=>v===4).length;
+ const s=summary(),done=s.done,open=41-done,undecided=s.a.unsure+s.c.unsure+model.impact.filter(v=>v>=4).length;
  const adultFreq=s.a.often,childFreq=s.c.often;
  let html='<div class="eval-hero">';
  if(model.demo)html+='<strong>Fiktiver Übungsfall – keine Angaben einer echten Person</strong><p>Die folgenden Antworten sind nur ein Beispiel, mit dem du die Auswertung verstehen kannst.</p>';
  html+='<div class="eval-pill">Schritt 1 · Wurde der Bogen vollständig bearbeitet?</div><div class="eval-numeral">'+done+' von 41 Fragen</div>';
- html+='<p>'+(done===41?"Alle Fragen wurden bearbeitet.":open+" Fragen sind noch offen – die Auswertung ist daher vorläufig.")+' '+undecided+' Antworten lauten „Weiß ich nicht“ oder „Unklar“.</p><div class="meter"><div style="width:'+(done/41*100)+'%"></div></div>';
+ html+='<p>'+(done===41?"Alle Fragen wurden bearbeitet.":open+" Fragen sind noch offen – die Auswertung ist daher vorläufig.")+' '+undecided+' Antworten sind situationsabhängig, unklar, nicht anwendbar oder bewusst zurückgehalten.</p><div class="meter"><div style="width:'+(done/41*100)+'%"></div></div>';
  html+='<p class="eval-lead">Im Erwachsenenalter wurden '+adultFreq+' von 18 Alltagsthemen mit „oft“ oder „sehr oft“ beantwortet.</p>';
  html+='<p>Rückblickend auf die Kindheit wurden '+childFreq+' von 18 Themen häufig erinnert. Bei '+s.impHigh+' von '+s.imp+' bearbeiteten Lebensbereichen wurden deutliche oder sehr starke Auswirkungen angegeben.</p>';
  html+='<p class="eval-help">Das ist eine verständliche Zusammenfassung der eigenen Antworten. Daraus wird weder ein ADHS-Wert noch eine Diagnosewahrscheinlichkeit berechnet.</p></div>';
@@ -221,7 +222,7 @@ function renderNarrative(){
  else impacts+='<p>Bisher wurde kein beantworteter Lebensbereich als deutlich oder sehr stark belastet markiert. Offene Fragen und andere Lebenssituationen sind dadurch nicht beurteilt.</p>';
  impacts+='<p>Ob diese Belastungen klinisch relevant sind, erfordert konkrete Beispiele, Zeitverlauf und fachliche Einordnung.</p>';
  html+=narrativeSection('3. Auswirkungen im Alltag',impacts);
- const unknown=s.a.unsure+s.c.unsure+model.impact.filter(v=>v===4).length;
+ const unknown=s.a.unsure+s.c.unsure+model.impact.filter(v=>v>=4).length;
  let limits='<p>'+unknown+' Angaben wurden mit „Weiß ich nicht“ oder „Unklar“ beantwortet; '+(41-s.done)+' Angaben sind unbeantwortet. Beide Gruppen werden nicht als „Nein“ gezählt.</p>';
  limits+='<p>Auch bei vielen häufigen Antworten gilt: Dieser selbst verfasste Übungstest besitzt keine diagnostisch validierten Grenzwerte, keine Wahrscheinlichkeit und keine Bestimmung eines ADHS-Subtyps.</p>';
  html+=narrativeSection('4. Grenzen der Auswertung',limits);
