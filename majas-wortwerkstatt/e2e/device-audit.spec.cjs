@@ -76,6 +76,9 @@ test('Hörtext: fünf vorhandene MP3-Dateien und Aufnahmesteuerung mit drei Gesc
  await mode.selectOption('computer');
  await expect(page.locator('#prep-voice-row')).toBeVisible();
  await expect(page.locator('#prep-playback-speed')).toHaveValue('0.7');
+ if(page.viewportSize()?.width<=360){
+  await expect(page.locator('#prep-playback-mode option[value="computer"]')).toHaveText('Computer');
+ }
  await page.reload({waitUntil:'domcontentloaded'});
  await expect(page.locator('#prep-playback-mode')).toHaveValue('computer');
  await expect(page.locator('#prep-playback-speed')).toHaveValue('0.7');
