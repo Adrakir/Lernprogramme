@@ -244,6 +244,8 @@ function mount(args){
  '<button type="button" id="rig-overlay" aria-pressed="'+state.silhouette+'">👁 Körperumriss '+(state.silhouette?'an':'aus')+'</button>'+
  '<button type="button" id="rig-zoom" aria-pressed="false">🔎 Vergrößern</button></div>'+
  '<div id="rig-explain" class="rig-explain" aria-live="polite"></div>'+
+// Genau den aktuell angewählten Knochen in Sichtweite der Animation erklären.
+ '<div class="rig-selected-bone" aria-live="polite"><span class="rig-selected-symbol">🦴</span><div><strong>Ausgewählter Knochenbereich</strong><p>'+BONE_NAMES[state.selected]+'</p></div></div>'+
  '<div class="rig-note">💡 <strong>Beobachtungsmodell:</strong> Die Zeichnung zeigt vereinfachte Bewegungsabläufe, keine millimetergenaue Anatomie oder reale Röntgenanimation. Zum Knochennamen tippe auf das Skelett oder nutze die beschriftete Knochenliste darunter.</div>';
  legacy.parentNode.insertBefore(container,legacy);
  attach();choose(state.mode);
