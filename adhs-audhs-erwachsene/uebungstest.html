@@ -26,6 +26,12 @@
 .eval-examples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media(max-width:700px){.eval-examples{grid-template-columns:1fr}.eval-step{padding:13px}}
 @media print{.eval-hero,.eval-note,.eval-step{background:#fff!important;border:1px solid #aaa}.eval-meter{border:1px solid #999}.eval-meter>span{background:#666!important}}
+.narrative-report{margin-top:25px;padding-top:17px;border-top:2px solid var(--line)}
+.narrative-report section{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:16px;margin:13px 0}
+.narrative-report h2{margin-top:0}.narrative-report h3{font-size:18px;margin:0 0 8px}
+.narrative-report p{margin:8px 0}.narrative-report ul{padding-left:24px}
+.narrative-report li{margin:6px 0}.narrative-report .report-note{padding:13px 15px;border-left:4px solid var(--blue);background:var(--light);border-radius:10px;margin:13px 0}
+@media print{.narrative-report{break-before:page}.narrative-report section{break-inside:avoid}.narrative-report .report-note{background:white!important;border:1px solid #aaa}}
 </style></head>
 <body>
 <header class="header">
@@ -62,8 +68,9 @@
 <div class="row"><h2>Deine Antworten – einfach erklärt</h2><span class="smallcaps" id="resultMode">Nur zur Übung</span></div>
 <p class="muted">Du siehst zuerst eine Zusammenfassung in Alltagssprache. Darunter wird erklärt, wie die Zahlen zustande kommen. Das ist kein Diagnosetest.</p>
 <div id="report"></div>
+<div id="narrativeReport" class="narrative-report" aria-label="Automatischer ausführlicher Lernbericht"></div>
 </section>
-<div class="buttons notprint"><button class="btn secondary" id="demo" type="button">Fiktiven Beispielfall laden</button><button class="btn secondary" id="clear" type="button">Übung zurücksetzen</button><button class="btn" id="print" type="button">Als PDF drucken</button><button class="btn secondary" id="export" type="button">JSON-Export</button></div>
+<div class="buttons notprint"><button class="btn secondary" id="demo" type="button">Fiktiven Beispielfall laden</button><button class="btn secondary" id="clear" type="button">Übung zurücksetzen</button><button class="btn" id="print" type="button">Auswertung und Bericht als PDF drucken</button><button class="btn secondary" id="export" type="button">JSON-Export</button></div>
 <div class="card visual-preview"><img src="./assets/au-dhs.svg" alt="Überlappende Kreise als Symbol für die getrennt zu prüfenden Bereiche ADHS und Autismus" loading="lazy"><div><h2>AuDHS als Bild erklärt</h2><p>Eine interaktive Grafik zeigt, was gemeinsames Auftreten bedeutet und weshalb es keine automatische Doppeldiagnose aus Fragebogenergebnissen geben kann.</p><a class="btn secondary" href="./visualisieren.html#audhs">AuDHS-Visualisierung öffnen ↗</a></div></div>
 <div class="card"><h2>Vertiefung mit fiktiven Fällen</h2><p>Sechs Erwachsenenfälle mit insgesamt 18 didaktischen Entscheidungen, Hilfen und Musterbegründungen. Die Lernpunktzahl ist keine Diagnose.</p><a class="btn secondary" href="./falltrainer.html">Geführte Fallwerkstatt öffnen ↗</a></div>
 <div class="card"><h2>Wichtige Lernhinweise</h2>
@@ -172,15 +179,53 @@ function report(){
  $("report").innerHTML=html;
  $("resultMode").textContent=model.demo?"Fiktiver Übungsfall":"Nicht validiert";
 }
-function render(){renderQuestion();report();}
+
+function narrativeFrequent(arr,limit=6){
+ const selected=arr.map((v,i)=>({v,i})).filter(p=>p.v===3||p.v===4).sort((a,b)=>b.v-a.v).slice(0,limit);
+ if(!selected.length)return '<p>In diesem Zeitraum wurden bisher keine der dargestellten Situationen als „oft“ oder „sehr oft“ markiert. Daraus folgt keine Ausschlussdiagnose.</p>';
+ return '<ul>'+selected.map(p=>'<li><strong>'+safe(ITEMS[p.i][1])+'</strong> – '+(p.v===4?'sehr oft':'oft')+'</li>').join('')+'</ul>';
+}
+function narrativeSection(title,text){return '<section><h3>'+title+'</h3>'+text+'</section>';}
+function renderNarrative(){
+ const s=summary(),aValid=model.adult.filter(v=>v!==null&&v!==5).length,cValid=model.child.filter(v=>v!==null&&v!==5).length;
+ const highImpact=IMPACT.filter((x,i)=>model.impact[i]===2||model.impact[i]===3).map(x=>x[0]);
+ const pairCount=ITEMS.filter((x,i)=>(model.adult[i]===3||model.adult[i]===4)&&(model.child[i]===3||model.child[i]===4)).length;
+ let html='<h2>Ausführlicher Auswertungstext</h2><p class="muted">Automatisch aus den Antworten erstellt – auch aus früher gespeicherten und importierten Übungsbögen. Kein klinischer Befund.</p>';
+ if(s.done===0){$("narrativeReport").innerHTML=html+'<div class="report-note"><strong>Noch kein Text möglich.</strong><p>Im Übungstest wurden noch keine Fragen beantwortet. Nach dem Ausfüllen oder Importieren eines gespeicherten Bogens entsteht hier automatisch ein beschreibender Bericht.</p></div>';return;}
+ const intro='Im eigenständig formulierten ADHS-Übungsbogen wurden '+s.done+' von 41 Feldern bearbeitet. '+(s.done===41?'Alle Felder sind beantwortet.':'Die verbleibenden '+(41-s.done)+' Felder sind noch offen.')+' Die Auswertung beschreibt Angaben, keine Diagnose.';
+ html+='<div class="report-note"><strong>'+(model.demo?'Fiktiver Übungsfall':'Beschreibender Lernbericht')+'</strong><p>'+intro+'</p></div>';
+ let current=aValid?'<p>Für das Erwachsenenalter liegen '+aValid+' eindeutige Häufigkeitsangaben vor. Bei '+s.a.often+' von 18 Themen wurde „oft“ oder „sehr oft“ angegeben.</p>':'<p>Für das Erwachsenenalter liegen bislang keine eindeutigen Häufigkeitsangaben vor.</p>';
+ current+='<p>Davon betreffen '+s.au.often+' der neun möglichen Themen Aufmerksamkeit und Organisation und '+s.ah.often+' der neun möglichen Themen Aktivität und Impulsivität. Dies zeigt Schwerpunkte der ausgewählten Antworten, aber keine klinische Schwere.</p><p><strong>Beispiele aus den Antworten:</strong></p>'+narrativeFrequent(model.adult);
+ html+=narrativeSection('1. Beschriebene Schwierigkeiten im Erwachsenenalter',current);
+ let childhood=cValid?'<p>Rückblickend wurden '+cValid+' der 18 Kindheitsthemen mit einer konkreten Häufigkeit eingeschätzt. '+s.c.often+' davon wurden als „oft“ oder „sehr oft“ erinnert.</p>':'<p>Zum Zeitraum vor dem zwölften Geburtstag liegen bislang keine eindeutigen Häufigkeitsangaben vor. Der Entwicklungsverlauf lässt sich aus diesen Angaben nicht beurteilen.</p>';
+ childhood+='<p><strong>Ausgewählte Erinnerungen:</strong></p>'+narrativeFrequent(model.child);
+ if(aValid&&cValid)childhood+='<p>Bei '+pairCount+' der 18 dargestellten Themen wurden sowohl heute als auch rückblickend häufige Schwierigkeiten angegeben. Das kann in einer Anamnese besprochen werden, bestätigt aber keinen Beginn oder eine ADHS-Diagnose.</p>';
+ childhood+='<p>Kindheitserinnerungen können lückenhaft sein; bei Bedarf können vorhandene Zeugnisse oder frühere Bezugspersonen weitere Informationen liefern.</p>';
+ html+=narrativeSection('2. Hinweise aus der Kindheit',childhood);
+ let impacts='<p>Die Auswirkungen wurden für '+s.imp+' von fünf Lebensbereichen bewertet. In '+s.impHigh+' dieser Bereiche sind „deutliche“ oder „sehr starke“ Schwierigkeiten angekreuzt.</p>';
+ if(highImpact.length)impacts+='<p><strong>Betroffene Bereiche laut Antworten:</strong></p><ul>'+highImpact.map(x=>'<li>'+safe(x)+'</li>').join('')+'</ul>';
+ else impacts+='<p>Bisher wurde kein beantworteter Lebensbereich als deutlich oder sehr stark belastet markiert. Offene Fragen und andere Lebenssituationen sind dadurch nicht beurteilt.</p>';
+ impacts+='<p>Ob diese Belastungen klinisch relevant sind, erfordert konkrete Beispiele, Zeitverlauf und fachliche Einordnung.</p>';
+ html+=narrativeSection('3. Auswirkungen im Alltag',impacts);
+ const unknown=s.a.unsure+s.c.unsure+model.impact.filter(v=>v===4).length;
+ let limits='<p>'+unknown+' Angaben wurden mit „Weiß ich nicht“ oder „Unklar“ beantwortet; '+(41-s.done)+' Angaben sind unbeantwortet. Beide Gruppen werden nicht als „Nein“ gezählt.</p>';
+ limits+='<p>Auch bei vielen häufigen Antworten gilt: Dieser selbst verfasste Übungstest besitzt keine diagnostisch validierten Grenzwerte, keine Wahrscheinlichkeit und keine Bestimmung eines ADHS-Subtyps.</p>';
+ html+=narrativeSection('4. Grenzen der Auswertung',limits);
+ let next='<p>'+((41-s.done)>0?'Für eine vollständigere Beschreibung könnten zunächst die noch offenen Fragen ergänzt werden. ':'Die ausgefüllten Angaben können als Gesprächsgrundlage dienen. ')+'Wichtig für eine professionelle Abklärung wären konkrete Beispiele, Beschwerden über mindestens sechs Monate, Kindheitsverlauf, Beeinträchtigung in mehreren Lebenssituationen und die Prüfung möglicher anderer Ursachen.</p>';
+ next+='<p>Für AuDHS müssten autistische Merkmale unabhängig davon fachlich untersucht werden. Ein Ergebnis dieses Übungsbogens allein kann weder ADHS noch Autismus oder AuDHS feststellen.</p>';
+ html+=narrativeSection('5. Fragen für die weitere Abklärung',next);
+ $("narrativeReport").innerHTML=html;
+}
+
+function render(){renderQuestion();report();renderNarrative();}
 function next(){if(!model.stage&&model.index===17){model.stage=1;model.index=0;}else if(model.stage&&model.index===4){$("results").scrollIntoView({behavior:"smooth",block:"start"});return;}else{model.index++;}renderQuestion();exerciseSave();$("questionCard").scrollIntoView({behavior:"smooth",block:"start"});}
 function prev(){if(model.stage&&model.index===0){model.stage=0;model.index=17;}else model.index=Math.max(0,model.index-1);renderQuestion();exerciseSave();$("questionCard").scrollIntoView({behavior:"smooth",block:"start"});}
-$("question").addEventListener("change",e=>{const m=/^r_(adult|child|impact)_(\d+)_(\d+)$/.exec(e.target.id||"");if(!m)return;model[m[1]][Number(m[2])]=Number(m[3]);const s=summary();$("progressNumber").textContent=s.done+" von 41 beantwortet";$("progressBar").style.width=(s.done/41*100)+"%";report();exerciseSave();});
+$("question").addEventListener("change",e=>{const m=/^r_(adult|child|impact)_(\d+)_(\d+)$/.exec(e.target.id||"");if(!m)return;model[m[1]][Number(m[2])]=Number(m[3]);const s=summary();$("progressNumber").textContent=s.done+" von 41 beantwortet";$("progressBar").style.width=(s.done/41*100)+"%";report();renderNarrative();exerciseSave();});
 $("question").addEventListener("input",e=>{if(e.target.id==="note")model.notes[model.index]=e.target.value;exerciseSave();});
 $("next").addEventListener("click",next);$("prev").addEventListener("click",prev);$("review").addEventListener("click",()=>$("results").scrollIntoView({behavior:"smooth",block:"start"}));
 $("demo").addEventListener("click",()=>{if(!confirm("Fiktive Antworten einsetzen und die bisherigen Übungsantworten überschreiben?"))return;model.adult=[4,3,4,3,4,3,4,3,4,1,0,2,1,2,3,1,2,1];model.child=[3,3,3,4,3,3,4,3,4,1,0,1,1,1,3,1,1,2];model.impact=[3,3,2,2,3];model.notes.fill("");model.notes[4]="Die Fallperson hat schon in der Grundschule oft Termine und Materialien durcheinandergebracht.";model.demo=true;model.stage=0;model.index=0;render();exerciseSave();$("results").scrollIntoView({behavior:"smooth",block:"start"});});
 $("clear").addEventListener("click",()=>{if(!confirm("Alle Antworten und Notizen dieses Übungstests löschen?"))return;model.adult.fill(null);model.child.fill(null);model.impact.fill(null);model.notes.fill("");model.stage=0;model.index=0;model.demo=false;render();exerciseSave();$("questionCard").scrollIntoView({behavior:"smooth",block:"start"});});
-$("print").addEventListener("click",()=>{report();window.print();});
+$("print").addEventListener("click",()=>{report();renderNarrative();window.print();});
 $("export").addEventListener("click",()=>{const data=exerciseData();const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download="adhs-uebungstest-ergebnis.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $("theme").addEventListener("click",()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark";});
 $("size").addEventListener("click",()=>{large=!large;document.body.classList.toggle("large-text",large);$("size").textContent=large?"A− Schrift":"A+ Schrift";});
