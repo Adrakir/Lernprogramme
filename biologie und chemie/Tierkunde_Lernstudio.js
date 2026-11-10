@@ -168,4 +168,6 @@ function mount(args){
 document.addEventListener('click',click);
 document.addEventListener('change',change);
 window.BioLernstudio={mount,getProgress:()=>JSON.parse(JSON.stringify(saved)),complete:progress,selfTest:()=>window.BioTierwissen.selfTest()&&STATIONS.length===7};
+const init=decodeURIComponent(location.hash.slice(1)).split('/');
+if(STATIONS.includes(init[1]||'skeleton'))mount({animal:init[0]==='cat'?'cat':'dog',section:init[1]||'skeleton'});
 })();
