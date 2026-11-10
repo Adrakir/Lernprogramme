@@ -98,3 +98,10 @@
 .dark .rig-selected-bone{background:#305747;border-color:#507c67;color:#ecfff2}
 .dark .rig-selected-bone strong,.dark .rig-selected-bone p{color:#ebfaef}
 @media print{.rig-selected-bone{background:#fff;border:1px solid #ddd}}
+
+.rig-phasebar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#e7f4eb;border:1px solid #cfe4d6;border-radius:11px;color:#32664e;padding:10px 14px;margin:10px 0;font-size:.81rem}
+.rig-phasebar strong{color:#1b6049}
+.rig-phasebar span{color:#577a68;font-size:.75rem;margin-left:auto}
+.dark .rig-phasebar{background:#315846;border-color:#4b7962;color:#e3fae9}
+.dark .rig-phasebar strong,.dark .rig-phasebar span{color:#d2f4df}
+@media(max-width:600px){.rig-phasebar{padding:9px 11px}.rig-phasebar span{flex-basis:100%;margin-left:0}}
