@@ -238,7 +238,7 @@ async function main(){
  });
  await run("Fallwerkstatt Plus: 6 Fälle und 18 didaktische Entscheidungen",async()=>{
   const x=await open(browser,"falltrainer.html");const p=x.page;try{
-   assert.equal(await p.locator(".case-tab").count(),6);
+   assert.equal(await p.locator(".case-tab").count(),6);assert.match(await p.locator("#teacherArea").innerText(),/Beurteilungsraster/);
    const choices=[[1,0,1],[0,1,0],[0,1,0],[1,1,0],[0,0,1],[1,1,1]];
    for(let i=0;i<choices.length;i++){
     await p.locator('[data-case="'+i+'"]').click();
@@ -254,6 +254,30 @@ async function main(){
    p.once("dialog",d=>d.accept());
    await p.locator("#resetCases").click();
    assert.match(await p.locator("#answeredTotal").innerText(),/0\/18/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+
+ await run("Haupt-App: JSON-Export und Import erhält ASRS und bestätigten AQ-10-Wert",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="asrs"]').click();
+   await p.locator('label[for="asrs_0_2"]').click();
+   await p.locator('.nav[data-view="autism"]').click();
+   await p.locator("#aqScore").fill("7");
+   await p.locator("#aqNote").selectOption("yes");
+   await p.locator('.nav[data-view="results"]').click();
+   const [dl]=await Promise.all([p.waitForEvent("download"),p.locator("#exportBtn").click()]);
+   const buffer=fs.readFileSync(await dl.path());
+   p.once("dialog",d=>d.accept());
+   await p.locator("#resetBtn").click();
+   await p.locator('.nav[data-view="results"]').click();
+   await p.locator("#importMain").setInputFiles({name:"hauptergebnis.json",mimeType:"application/json",buffer});
+   await p.waitForFunction(()=>document.querySelector("#mainImportStatus").textContent.includes("importiert"));
+   await p.locator('.nav[data-view="autism"]').click();
+   assert.equal(await p.locator("#aqScore").inputValue(),"7");
+   assert.equal(await p.locator("#aqNote").inputValue(),"yes");
+   await p.locator('.nav[data-view="asrs"]').click();
+   assert.match(await p.locator("#asrsResult").innerText(),/1 von 6/);
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
  });
