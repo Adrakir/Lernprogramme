@@ -96,14 +96,14 @@ function poseScene(){
  const m=state.mode,p=profiles[state.species],sp=spinePoints(state.species,phase,m),
  shoulder=sp.shoulder,hip=sp.hip;
  const ground=496;
- const vertebraCount=23;let ribs='',spineNodes='';
+ const vertebraCount=20; // 13 Brust- und 7 Lendenwirbel (Halswirbel separat)let ribs='',spineNodes='';
  const thorX=shoulder.x+12,lumX=hip.x-16,hipDy=hip.y-45,baseBack=shoulder.y-44;
  function back(x){
    const t=clamp((x-thorX)/(lumX-thorX),0,1);
    return baseBack+(hipDy-baseBack)*t+Math.sin(t*Math.PI)*(sp.bend-3);
  }
  for(let i=0;i<vertebraCount;i++){const x=thorX+i*(lumX-thorX)/(vertebraCount-1),y=back(x);
-  spineNodes+='<g transform="translate('+n(x)+' '+n(y)+')"><rect x="-8" y="-7" width="16" height="14" rx="4" fill="#efdfbb" stroke="#9d8762" stroke-width="2"/><path d="M0 -7v-10" stroke="#bb9d72" stroke-width="4" stroke-linecap="round"/></g>';
+  spineNodes+='<g transform="translate('+n(x)+' '+n(y)+')"><rect x="-8" y="-7" width="16" height="14" rx="4" fill="'+(i<13?'#f5dfac':'#b8ded4')+'" stroke="'+(i<13?'#9d8762':'#48897a')+'" stroke-width="2"/><path d="M0 -7v-10" stroke="#bb9d72" stroke-width="4" stroke-linecap="round"/></g>';
  }
  for(let i=0;i<p.ribs;i++){
    const x=thorX+13+i*14.4,y=back(x),endX=x+8,endY=y+116-Math.sin(i/(p.ribs-1)*Math.PI)*11;
@@ -143,6 +143,17 @@ function poseScene(){
  '<text x="'+n(shoulder.x+95)+'" y="'+n(shoulder.y+145)+'" class="rig-tiny">Rippen</text><path d="M'+n(shoulder.x+106)+' '+n(shoulder.y+131)+'l-3 -24" class="rig-pointer"/>'+
  '<text x="'+n(hip.x-33)+'" y="'+n(hip.y-110)+'" class="rig-tiny">Becken</text><path d="M'+n(hip.x)+' '+n(hip.y-98)+'l0 36" class="rig-pointer"/>'+
  '<text x="50" y="528" font-size="14" fill="#55756c">Pfeile / Zahlen sind vereinfachte Lernhilfen · Modell, kein Röntgenbild</text></g>':'';
+ // Gelenke und Kraftrichtungen zeigen, ohne eine biomechanische Messung vorzutäuschen.
+ const phaseIndex=Math.min(3,Math.floor(phase*4));
+ const labels={walk:['Abstützen','Pfote anheben','Vorschwingen','Wieder aufsetzen'],trot:['Diagonale A','Gewichtswechsel','Diagonale B','Gewichtswechsel'],gallop:['Abstoßen','Strecken','Vorschwingen','Abfangen'],jump:['Vorbereiten','Absprung','Flugphase','Landung'],sneak:['Gewicht verlagern','Vorsichtig heben','Pfote führen','Leise absetzen'],stretch:['Beugen','Strecken','Beugen','Strecken']};
+ const phaseCaption=labels[m][phaseIndex];
+ const force=(m==='jump'||m==='gallop')?
+ '<path d="M'+n(hip.x+13)+' '+n(hip.y+37)+'l35 -59" fill="none" stroke="#cf7041" stroke-width="6" stroke-linecap="round" marker-end="url(#rig-force-head)"/>'+
+ '<text x="'+n(hip.x+58)+'" y="'+n(hip.y+2)+'" fill="#ab4e2c" font-size="17" font-weight="900">Abstoß</text>':
+ m==='sneak'?'<path d="M'+n(shoulder.x-17)+' '+n(shoulder.y+52)+'l-37 0" fill="none" stroke="#cc8740" stroke-width="6" stroke-linecap="round" marker-end="url(#rig-force-head)"/>':'';
+ const stageOverlay='<rect x="777" y="35" width="176" height="59" rx="13" fill="#fff" fill-opacity=".93" stroke="#c7dfd4"/>'+
+ '<text x="792" y="58" fill="#3d7c69" font-weight="800" font-size="14">BEWEGUNGSPHASE</text>'+
+ '<text x="792" y="80" fill="#1e5445" font-weight="900" font-size="18">'+phaseCaption+'</text>';
  const shadows='<ellipse cx="'+n(shoulder.x-2)+'" cy="'+(ground+10)+'" rx="115" ry="8" fill="#2f6c60" opacity=".09"/>'+
  '<ellipse cx="'+n(hip.x+8)+'" cy="'+(ground+10)+'" rx="106" ry="8" fill="#2f6c60" opacity=".08"/>';
  return '<rect width="1000" height="560" rx="16" fill="url(#rig-scene-bg)"/>'+
@@ -153,7 +164,7 @@ function poseScene(){
  spine+
  wrapBone('pelvis',pelvis)+
  wrapBone('tail',tail)+
- wrapBone('skull',skull)+fore+hind+highlights;
+ wrapBone('skull',skull)+fore+hind+force+stageOverlay+highlights;
 }
 function explainMode(){
  const e=id('rig-explain'),mode=MODES[state.mode],n=state.species==='cat'?'Katze':'Hund';
@@ -164,6 +175,8 @@ function frame(){
  if(svg)svg.innerHTML=poseScene();
  const bar=id('rig-timeline'),phase=frac(state.progress);
  if(bar)bar.value=String(Math.round(phase*100));
+ const phaseStep=id('rig-phasestep');
+ if(phaseStep){const names={jump:['Vorbereitung','Abstoßen','Flugphase','Landung'],walk:['Abstützen','Anheben','Schwingen','Aufsetzen'],trot:['Diagonal A','Wechsel','Diagonal B','Wechsel'],gallop:['Abstoßen','Strecken','Flug','Abfangen'],sneak:['Belasten','Anheben','Führen','Absetzen'],stretch:['Beugen','Strecken','Beugen','Strecken']};phaseStep.textContent=names[state.mode][Math.min(3,Math.floor(phase*4))]}
  const phaseLabel=id('rig-phase');
  if(phaseLabel)phaseLabel.textContent=Math.round(phase*100)+' %';
 }
@@ -235,7 +248,8 @@ function mount(args){
  '<div class="rig-modes" role="group" aria-label="Bewegungsart auswählen">'+
  Object.entries(MODES).map(([k,m])=>'<button type="button" data-rig-mode="'+k+'" aria-pressed="false">'+m.symbol+' '+m.title+'</button>').join('')+'</div>'+
  '<div class="rig-stage" id="rig-stage" aria-live="off"><svg class="rig-svg" viewBox="0 0 1000 560" role="group" aria-label="Bewegliches schematisches Skelett mit anwählbaren Knochen">'+
- '<defs><linearGradient id="rig-scene-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fcf8"/><stop offset=".55" stop-color="#edf6ee"/><stop offset="1" stop-color="#e4f1f1"/></linearGradient></defs><g id="rig-scene"></g></svg></div>'+
+ '<defs><marker id="rig-force-head" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#cf7041"/></marker><linearGradient id="rig-scene-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fcf8"/><stop offset=".55" stop-color="#edf6ee"/><stop offset="1" stop-color="#e4f1f1"/></linearGradient></defs><g id="rig-scene"></g></svg></div>'+
+ '<div class="rig-phasebar">🔬 Aktuelle Phase: <strong id="rig-phasestep">Abstützen</strong><span>Orangefarbene Pfeile zeigen vereinfacht die Bewegungsrichtung.</span></div>'+ 
  '<div class="rig-transport"><button type="button" id="rig-play" class="rig-primary" aria-pressed="false">▶ Abspielen</button>'+
  '<button type="button" id="rig-step" title="Ein Bild weiter">⏭ Einzelschritt</button>'+
  '<button type="button" id="rig-reset" title="Animation zurücksetzen">↻ Neustart</button>'+
