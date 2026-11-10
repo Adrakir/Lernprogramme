@@ -258,7 +258,7 @@ function renderAsrsResult(){
  const a=asrsStatus();
  let content='<h2>Was sagt das ASRS-Ergebnis?</h2><div class="meterlabel"><strong>Bearbeitet</strong><span>'+a.answered+' von 6</span></div><div class="progress"><div style="width:'+(100*a.answered/6)+'%"></div></div>';
  if(!a.complete)content+='<p><strong>Es fehlen noch '+(6-a.answered)+' Antworten.</strong> Erst danach ist die Screening-Auswertung sinnvoll.</p>';
- else content+='<div class="result-numeral">'+a.positive+' von 6 positiv</div><p class="result-lead">'+(a.positive>=4?"Hinweis: Eine weitere ADHS-Abklärung kann sinnvoll sein.":"Der Richtwert für ein auffälliges Screening wurde nicht erreicht.")+'</p><p>Hier wurde nur gezählt, welche Antworten die Regeln des Kurzscreenings erfüllen. Das Ergebnis ist <strong>keine ADHS-Diagnose</strong>.</p>';
+ else content+='<div class="result-numeral">'+a.positive+' von 6 positiv</div><p class="result-lead">'+(a.positive>=4?"Screening-Schwelle erreicht: Eine weitere ADHS-Abklärung kann sinnvoll sein.":"Screening-Schwelle nicht erreicht: Der Richtwert für ein auffälliges Screening wurde nicht erreicht.")+'</p><p>Hier wurde nur gezählt, welche Antworten die Regeln des Kurzscreenings erfüllen. Das Ergebnis ist <strong>keine ADHS-Diagnose</strong>.</p>';
  content+='<p class="result-fine">Auswertung: Fragen 1–3 gelten ab „Manchmal“ als positiv, Fragen 4–6 erst ab „Oft“. Ab vier positiv gewerteten Antworten ist der Screening-Richtwert erreicht. Ein niedrigerer Wert schließt ADHS nicht aus.</p><p><strong>Beispiel:</strong> „4 von 6“ bedeutet vier positiv gewertete Antworten, nicht „67 % ADHS“.</p>';
  $("asrsResult").innerHTML=content;
 }
