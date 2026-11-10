@@ -21,8 +21,8 @@ const BONE_NAMES={
  tail:'Schwanzwirbel: der bewegliche Schwanz unterstützt Balance und Körpersprache.'
 };
 const profiles={
- dog:{head:200, neck:288, shoulder:364, hip:719, top:217, ribs:12, headScale:1, tailLength:132, bounce:6, spineFlex:7},
- cat:{head:202, neck:283, shoulder:361, hip:700, top:223, ribs:12, headScale:.86, tailLength:159, bounce:5, spineFlex:23}
+ dog:{head:200, neck:288, shoulder:364, hip:719, top:217, ribs:13, headScale:1, tailLength:132, bounce:6, spineFlex:7},
+ cat:{head:202, neck:283, shoulder:361, hip:700, top:223, ribs:13, headScale:.86, tailLength:159, bounce:5, spineFlex:23}
 };
 const state={species:'dog',section:'skeleton',mode:'walk',speed:1,playing:false,labels:true,silhouette:false,progress:0,frameId:0,lastTs:0,root:null,selected:'spine',zoom:false};
 const prefersReduced=()=>window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -212,7 +212,7 @@ function attach(){
 function mount(args){
  stop();const main=id('content');if(!main)return;
  state.species=args.animal==='cat'?'cat':'dog';state.section=args.section;state.selected=args.bone||'spine';
- if(args.gait&&MODES[args.gait]&&args.section==='motion')state.mode=args.gait;
+ 
  state.zoom=false;
  if(!['skeleton','motion'].includes(args.section))return;
  const board=main.querySelector('.bone-board');
