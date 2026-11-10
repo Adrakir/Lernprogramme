@@ -53,3 +53,26 @@
 ### Technische Prüfung
 - Browser-Skript syntaktisch geprüft, 18 Fragen in 2 Bereichen (9/9), 5 Beeinträchtigungsbereiche, insgesamt 41 Felder.
 - GitHub Pages für spätere Releases prüfen; manueller Endgerätetest (echtes iPhone, Android, Desktop) noch ausstehend.
+
+## Visualisiertes Lernen – 2026-11-10
+
+### Neue Seite
+- [visualisieren.html](./visualisieren.html) (öffentlicher Link: https://adrakir.github.io/Lernprogramme/adhs-audhs-erwachsene/visualisieren.html).
+- Acht Lernstationen: Aufmerksamkeit (Reize ein-/ausblenden), Planung (Schrittfolge), Impulsivität (Impuls–Pause–Antwort), Sensorik (Reizregler), Entwicklung (Kindheit / Erwachsenenalter), AuDHS (zwei einzeln und gemeinsam untersuchte Bereiche), didaktischer Auswertungsvergleich (fiktive Balken) sowie ein Wissenstest mit vier Rückmeldungen.
+- Fünf eigens gezeichnete und im Repo gespeicherte SVG-Vektorbilder: `assets/aufmerksamkeit.svg`, `assets/planung.svg`, `assets/impulsivitaet.svg`, `assets/reizverarbeitung.svg`, `assets/au-dhs.svg`. Keine Stockbilder, keine externe Bildbibliothek.
+- Animationen über HTML/CSS/JavaScript ohne externes Skript und ohne Tracking. Für Bewegung gibt es einen Pausenknopf und `prefers-reduced-motion`-Unterstützung.
+- Illustrationen mit Alternativtexten, reagierender mobilen Darstellung und Tastatur-freundlichen Steuerelementen.
+
+### Integration
+- `index.html`: neuer Navigationslink und Vorschaubereiche mit eigenen Illustrationen; Animationen aus den Bereichen Autismus, AuDHS, DIVA-5, Fallwerkstatt und Auswertung erreichbar.
+- `uebungstest.html`: Illustrationen für Aufmerksamkeit, Hyperaktivität/Impulsivität und Alltagsauswirkungen werden abhängig vom aktuellen Fragebereich angezeigt. Direktlinks führen zur passenden Animation. Die 41 Antwortfelder, ihre Werte und die reine Lern-Auswertung bleiben unverändert.
+
+### Verifikation
+- Alle drei Inline-Skripte konnten syntaktisch interpretiert werden.
+- Link- und Bildpfade anhand der GitHub-Dateien geprüft; fünf SVG-Dateien enthalten Bildtitel und Beschreibungen.
+- 15 simulierte DOM-Laufzeittests für die visuellen Interaktionen bestanden; dies ist **kein** tatsächlicher Browser-, iOS- oder Android-Test.
+- Inhaltliche Referenzen: https://www.nice.org.uk/guidance/ng87/chapter/recommendations und https://www.nice.org.uk/guidance/cg142/chapter/recommendations sowie https://www.divacenter.eu/diva-5/about-diva-5/.
+- Keine medizinische oder diagnostische Aussage aus den Modellen ableiten.
+
+### Offene Endgeräte-Checks
+- iPhone Safari, Android (Chrome/Edge), Desktopbrowser inkl. Dark Mode, Screenreader, `prefers-reduced-motion` und browserseitige PDF-Druckausgabe manuell prüfen.
