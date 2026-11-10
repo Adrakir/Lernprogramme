@@ -122,7 +122,7 @@ $("clear").addEventListener("click",()=>{if(!confirm("Alle Antworten und Notizen
 $("print").addEventListener("click",()=>{report();window.print();});
 $("export").addEventListener("click",()=>{const data={typ:"NeuroKompass selbst formulierter ADHS-Übungstest",stand:"2026-11-10",hinweis:"kein diagnostischer Test",fiktiverFall:model.demo,heute:model.adult,kindheit:model.child,lebensbereiche:model.impact,notizen:model.notes};const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download="adhs-uebungstest-ergebnis.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $("theme").addEventListener("click",()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark";});
-$("size").addEventListener("click",()=>{large=!large;document.documentElement.style.fontSize=large?"19px":"";$("size").textContent=large?"A− Schrift":"A+ Schrift";});
+$("size").addEventListener("click",()=>{large=!large;document.body.style.fontSize=large?"19px":"16px";$("size").textContent=large?"A− Schrift":"A+ Schrift";});
 render();
 })();
 </script>
