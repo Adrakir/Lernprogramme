@@ -91,3 +91,10 @@
  .rig-stage{border:1px solid #aaa}.rig-note,.rig-explain{color:#333}
  .rig-explain{background:#fff;border:1px solid #ddd}
 }
+
+.rig-selected-bone{display:flex;align-items:flex-start;gap:12px;margin-top:12px;padding:13px 16px;background:#e3f2ec;border:1px solid #cee6d8;border-radius:13px;color:#264d43}
+.rig-selected-bone strong{display:block;font-size:.86rem;color:#185f4c}.rig-selected-bone p{margin:4px 0 0;font-size:.81rem;color:#47695e}
+.rig-selected-symbol{font-size:1.45rem}
+.dark .rig-selected-bone{background:#305747;border-color:#507c67;color:#ecfff2}
+.dark .rig-selected-bone strong,.dark .rig-selected-bone p{color:#ebfaef}
+@media print{.rig-selected-bone{background:#fff;border:1px solid #ddd}}
