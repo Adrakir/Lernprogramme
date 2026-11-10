@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ADHS-Anamnese-Werkstatt · Interaktiver Übungstest für Erwachsene</title>
+<meta name="description" content="Eigenständiger Lernfragebogen mit 18 Alltagssituationen im Erwachsenenalter und in der Kindheit, fünf Alltagsfragen und didaktischer Auswertung. Kein DIVA-5.">
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color-scheme:light;--bg:#f3f5f9;--card:#fff;--ink:#1c2b3b;--muted:#506279;--line:#dbe4ef;--blue:#245aa7;--light:#e6f0fa;--green:#1b7273;--orange:#fff0d7}
+:root[data-theme=dark]{color-scheme:dark;--bg:#131d29;--card:#212f3c;--ink:#f6f8fb;--muted:#cad3df;--line:#4a5c71;--blue:#91bfff;--light:#283f56;--green:#9fe0d7;--orange:#42382c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #eca54d;outline-offset:3px}a{color:var(--blue)}.header{background:#162940;color:#fff;padding:15px max(16px,calc((100vw - 1160px)/2));display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}.header strong{font-size:18px}.header a{color:#fff}.tools{display:flex;gap:7px;flex-wrap:wrap}.tools button{padding:7px 10px;background:#2c425b;color:#fff;border:1px solid #9aabc3;border-radius:10px}.wrap{max-width:1160px;padding:24px 16px 70px;margin:auto}.hero{background:linear-gradient(110deg,#173049,#205a65);padding:25px 27px;border-radius:24px;color:#fff;margin-bottom:18px}.hero p{max-width:72ch;color:#dfeff3}.hero a{color:#fff}.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-weight:800;font-size:12px;color:#bce3e0}h1{font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-.025em;margin:8px 0 13px}h2{line-height:1.2;font-size:24px;margin:0 0 13px}h3{font-size:17px;margin:0 0 9px}p{margin:8px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:21px;margin:14px 0;box-shadow:0 4px 19px #182e4409}.warning{background:var(--orange);border-left:4px solid #d29330;border-radius:12px;padding:15px 16px;margin:14px 0}.hint{background:var(--light);border-left:4px solid var(--blue);padding:12px 15px;border-radius:11px;margin:12px 0}.muted{color:var(--muted);font-size:14px}.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.row{display:flex;align-items:center;gap:13px;justify-content:space-between;flex-wrap:wrap}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}.btn{padding:10px 15px;border-radius:11px;background:var(--blue);color:#fff;border:1px solid var(--blue);font-weight:750;min-height:44px}.btn.secondary{background:transparent;color:var(--blue)}.btn:disabled{opacity:.45;cursor:not-allowed}.meter{height:11px;background:var(--line);border-radius:99px;overflow:hidden;margin:9px 0 19px}.meter>div{height:100%;background:linear-gradient(90deg,#3279bd,#3aa58c);transition:width .2s}.qbox{border:1px solid var(--line);border-radius:15px;padding:17px;margin-top:13px}.qbox h3{margin-bottom:11px}.choices{display:flex;flex-wrap:wrap;gap:7px}.choice{position:relative}.choice input{position:absolute;opacity:0;width:1px;height:1px}.choice label{display:block;padding:8px 13px;background:var(--bg);border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:650;font-size:13px;min-height:43px}.choice input:checked+label{border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue);background:var(--light);color:var(--blue)}.choice input:focus-visible+label{outline:3px solid #eca54d;outline-offset:2px}textarea{width:100%;resize:vertical;min-height:85px;padding:11px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink)}.bar{height:9px;background:var(--line);border-radius:11px;overflow:hidden;margin:6px 0 12px}.bar div{height:100%;background:var(--green)}.segment{background:var(--bg);border:1px solid var(--line);padding:14px;border-radius:13px;margin:12px 0}.segment strong{font-size:15px}.smallcaps{font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.07em}.item{padding:8px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.hidden{display:none!important}footer{margin-top:26px;color:var(--muted);font-size:12px}.introgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.introgrid .card{margin:0}.introgrid strong{display:block;font-size:24px}a.back{color:#fff;display:inline-block;margin-top:8px}
+@media(max-width:710px){.two,.introgrid{grid-template-columns:1fr}.card{padding:16px}.header{padding:14px}.wrap{padding:14px 11px 55px}.hero{padding:21px}.choice{flex:1 1 30%}.choice label{text-align:center}.buttons .btn{flex:1 1 100%}.btn{min-height:46px}}
+@media print{body{background:#fff;color:#000}.header,.hero,.buttons,.notprint,#questionCard,.warning:first-of-type,footer{display:none!important}.wrap{padding:0}.card,.segment{break-inside:avoid;box-shadow:none;background:#fff;border-color:#bbb}#results{display:block!important} .bar{border:1px solid #777} .bar div{background:#666}.hidden{display:block!important}#results .notprint{display:none!important}}
+</style></head>
+<body>
+<header class="header">
+<div><strong>NeuroKompass · ADHS-Anamnese-Werkstatt</strong><div style="font-size:12px;opacity:.86">Eigenständiger, interaktiver Übungstest für Erwachsene</div></div>
+<div class="tools"><button id="theme" type="button">◐ Kontrast</button><button id="size" type="button">A+ Schrift</button></div>
+</header>
+<main class="wrap">
+<div class="hero"><div class="eyebrow">Erwachsene · Selbsterkundung und Fallarbeit</div><h1>ADHS verstehen: 18 Themen, zwei Lebensphasen.</h1>
+<p>Bearbeite zu jedem Alltagsthema eine Frage für das Erwachsenenalter und eine rückblickende Frage zur Kindheit. Danach werden fünf mögliche Auswirkungen erfasst. Die Auswertung zeigt nachvollziehbar deine Antworten, ohne eine Diagnose zu behaupten.</p>
+<a class="back" href="./index.html">← Zur Übersicht ADHS / AuDHS</a></div>
+<div class="warning"><strong>Nur Lernmaterial.</strong> Alle Texte und Antwortskalen sind eigenständig formuliert. Das ist <strong>nicht der DIVA-5, ASRS, WURS-k oder ein klinisch validierter Test</strong>. Ein hoher Wert ist kein Nachweis einer ADHS; ein niedriger Wert schließt sie nicht aus. Die App speichert oder verschickt Antworten nicht automatisch.</div>
+<div class="introgrid">
+<div class="card"><span class="smallcaps">Themenfragen</span><strong>18</strong><span class="muted">Aufmerksamkeit und Impulsivität</span></div>
+<div class="card"><span class="smallcaps">Lebensphasen</span><strong>2</strong><span class="muted">Heute und vor dem 12. Geburtstag</span></div>
+<div class="card"><span class="smallcaps">Alltagsbereiche</span><strong>5</strong><span class="muted">Funktionelle Auswirkungen</span></div>
+</div>
+<section class="card" id="questionCard">
+<div class="row"><span class="smallcaps" id="qLabel">Alltagsthema 1/18</span><strong id="progressNumber">0 von 41 beantwortet</strong></div>
+<div class="meter" aria-label="Fortschritt"><div id="progressBar" style="width:0"></div></div>
+<div id="question" aria-live="polite"></div>
+<div class="buttons"><button id="prev" class="btn secondary" type="button">← Zurück</button><button id="next" class="btn" type="button">Weiter →</button><button id="review" class="btn secondary" type="button">Auswertung ansehen</button></div>
+</section>
+<section id="results" class="card" aria-live="polite">
+<div class="row"><h2>Deine Übungsauswertung</h2><span class="smallcaps" id="resultMode">Nur zur Übung</span></div>
+<div id="report"></div>
+</section>
+<div class="buttons notprint"><button class="btn secondary" id="demo" type="button">Fiktiven Beispielfall laden</button><button class="btn secondary" id="clear" type="button">Übung zurücksetzen</button><button class="btn" id="print" type="button">Als PDF drucken</button><button class="btn secondary" id="export" type="button">JSON-Export</button></div>
+<div class="card"><h2>Wichtige Lernhinweise</h2>
+<p>Ein ADHS-Diagnosegespräch prüft, ob die Merkmale schon in der Kindheit begonnen haben, über längere Zeit bestehen, in mehreren Lebenssituationen auftreten und das Leben merklich beeinträchtigen. Es untersucht außerdem andere mögliche Ursachen wie Schlafprobleme, Angst oder Depression. <a href="https://www.nice.org.uk/guidance/ng87/chapter/recommendations" target="_blank" rel="noopener noreferrer">NICE NG87</a></p>
+<p>Bei <strong>AuDHS</strong> müssen autistische Merkmale zusätzlich eigenständig untersucht werden. Die Ergebnisse dieses Übungsbogens liefern dafür weder einen Autismus- noch einen AuDHS-Wert. <a href="./index.html">Zum separaten Autismus-/AuDHS-Lernbereich</a></p>
+<p>Offizielle Hintergrundinformation zum ärztlich geführten Interview: <a href="https://www.divacenter.eu/diva-5/about-diva-5/" target="_blank" rel="noopener noreferrer">DIVA Foundation</a>. Dessen Originalinhalte werden hier nicht übernommen.</p></div>
+<footer>NeuroKompass · selbst verfasster Lernfragebogen · nicht normiert · kein klinischer Grenzwert · kein Diagnoseersatz</footer>
+</main>
+<script>
+"use strict";
+(()=>{
+const $=id=>document.getElementById(id);
+const ITEMS=[
+["Aufmerksamkeit","Einzelheiten überblicken","Beim Prüfen von wichtigen Dokumenten entgehen mir Details, obwohl ich sorgfältig vorgehen möchte.","Bei Schulaufgaben übersah ich häufig einzelne Arbeitsschritte, obwohl ich den Stoff verstand."],
+["Aufmerksamkeit","Gedanklich dabeibleiben","Während einer längeren Aufgabe verliere ich den roten Faden und muss mich erneut einarbeiten.","Bei längeren Beschäftigungen schweiften meine Gedanken schnell ab."],
+["Aufmerksamkeit","Gesagtes aufnehmen","Bei Erklärungen bekomme ich manchmal nur einen Teil der Information mit, obwohl ich zuhören möchte.","Mehrteilige mündliche Anweisungen gingen bei mir oft nicht vollständig ein."],
+["Aufmerksamkeit","Vorhaben abschließen","Ich starte mit Energie, doch die letzten Schritte von Aufgaben bleiben oft liegen.","Angefangene Hausaufgaben oder kleinere Pflichten brachte ich häufig nicht zu Ende."],
+["Aufmerksamkeit","Reihenfolgen organisieren","Mehrere Arbeitsschritte oder Termine sinnvoll zu planen fällt mir schwer.","Hefte, Schultasche und Tagesaufgaben zu ordnen gelang mir oft nur mit Hilfe."],
+["Aufmerksamkeit","Längere Denkarbeit anfangen","Ich schiebe geistig anstrengende Aufgaben trotz ihrer Wichtigkeit auf.","Bei großen Schulaufgaben suchte ich oft eine andere Beschäftigung."],
+["Aufmerksamkeit","Gegenstände wiederfinden","Ich suche oft Dinge, die ich gerade erst benutzt oder abgelegt habe.","Wichtige Schulsachen und persönliche Dinge waren regelmäßig nicht auffindbar."],
+["Aufmerksamkeit","Störreize ausblenden","Geräusche oder kurze Meldungen unterbrechen meine Konzentration wiederholt.","Im Klassenraum richtete sich meine Aufmerksamkeit schnell auf Nebensachen."],
+["Aufmerksamkeit","Kleine Pflichten behalten","Absprachen und kurze Erledigungen vergesse ich trotz guter Absicht.","Ich vergaß oft, etwas mitzubringen oder eine zugesagte Aufgabe zu erledigen."],
+["Aktivität und Impulsivität","Bewegungsdrang beim Sitzen","Beim langen Sitzen bewege ich unbemerkt Hände, Beine oder andere Körperteile.","Beim Unterricht oder Essen konnte ich Hände und Füße schwer stillhalten."],
+["Aktivität und Impulsivität","Den Platz verlassen","In Situationen, in denen längeres Sitzen erwartet wird, stehe ich wiederholt auf.","Während ruhiger Gruppenphasen wollte ich häufig umherlaufen."],
+["Aktivität und Impulsivität","Innere Rastlosigkeit","Ich fühle mich häufig innerlich getrieben, selbst wenn ich von außen ruhig wirke.","Schon damals fiel mir ruhiges Verweilen in stillen Situationen schwer."],
+["Aktivität und Impulsivität","Ruhe bei Hobbys","Bei einer leisen Freizeitbeschäftigung fällt es mir schwer, mein Aktivitätsniveau niedrig zu halten.","Ruhige Spiele oder Beschäftigungen wurden oft durch mein Bewegungsbedürfnis unterbrochen."],
+["Aktivität und Impulsivität","Dauernd beschäftigt sein","Ich empfinde häufig den Drang, ständig etwas tun oder beginnen zu müssen.","Ich wechselte oft rastlos von einer Aktivität zur nächsten."],
+["Aktivität und Impulsivität","Sehr viel sprechen","Ich bemerke gelegentlich erst später, dass ich Gespräche stark dominiert habe.","In Gruppen sprach ich häufig deutlich mehr als andere."],
+["Aktivität und Impulsivität","Schnell reagieren","Ich antworte manchmal, obwohl die andere Person ihre Frage noch nicht beendet hat.","Bei Fragen rief ich die Antwort oft schon heraus, bevor sie fertig gestellt waren."],
+["Aktivität und Impulsivität","Geduld bei Wartezeiten","In Wartesituationen spüre ich einen starken Drang, schneller dranzukommen.","Bei Spielen und gemeinsamen Aktivitäten fiel mir das Abwarten schwer."],
+["Aktivität und Impulsivität","Andere unterbrechen","Ich falle anderen ins Wort oder schalte mich ungefragt in laufende Gespräche ein.","In Spiele oder Gespräche anderer mischte ich mich häufig ein."]
+];
+const IMPACT=[
+["Beruf oder Ausbildung","Wie deutlich beeinträchtigen solche Schwierigkeiten deine Tätigkeit im Beruf, Studium oder bei verbindlichen Aufgaben?"],
+["Haushalt und Organisation","Wie sehr erschweren sie Termine, Haushalt, Zahlungen oder alltägliche Planung?"],
+["Familie und Partnerschaft","Wie stark belasten sie Absprachen und Beziehungen in Familie oder Partnerschaft?"],
+["Soziale Kontakte","Wie deutlich beeinflussen sie Freundschaften und andere Kontakte?"],
+["Freizeit und Selbstbild","Wie sehr beeinträchtigen sie Hobbys, Erholung oder das eigene Selbstvertrauen?"]
+];
+const FREQ=["Nie / nicht zutreffend","Selten","Manchmal","Oft","Sehr oft","Weiß ich nicht"];
+const EFFECT=["Gar nicht","Leicht","Deutlich","Sehr stark","Unklar"];
+const model={adult:Array(18).fill(null),child:Array(18).fill(null),impact:Array(5).fill(null),notes:Array(18).fill(""),stage:0,index:0,demo:false};
+let large=false;
+function safe(v){return String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function choice(group,index,opts,value){return '<div class="choices" role="radiogroup" aria-label="Antwortmöglichkeiten">'+opts.map((o,n)=>{const id="r_"+group+"_"+index+"_"+n;return '<span class="choice"><input type="radio" id="'+id+'" name="'+group+"_"+index+'" value="'+n+'" '+(value===n?"checked":"")+'><label for="'+id+'">'+safe(o)+'</label></span>'}).join("")+'</div>';}
+function count(arr){return arr.filter(x=>x!==null).length;}
+function stats(arr){return {done:count(arr),often:arr.filter(x=>x===3||x===4).length,unsure:arr.filter(x=>x===5).length};}
+function summary(){return {a:stats(model.adult),c:stats(model.child),au:stats(model.adult.slice(0,9)),ah:stats(model.adult.slice(9)),cu:stats(model.child.slice(0,9)),ch:stats(model.child.slice(9)),imp:count(model.impact),impHigh:model.impact.filter(x=>x===2||x===3).length,done:count(model.adult)+count(model.child)+count(model.impact)};}
+function renderQuestion(){
+const s=summary(),i=model.index;
+$("qLabel").textContent=model.stage?"Alltagsauswirkungen "+(i+1)+" von 5":"Alltagsthema "+(i+1)+" von 18";
+$("progressNumber").textContent=s.done+" von 41 beantwortet";$("progressBar").style.width=(s.done/41*100)+"%";
+if(model.stage){
+ const o=IMPACT[i];
+ $("question").innerHTML='<span class="smallcaps">Auswirkungen</span><h2>'+safe(o[0])+'</h2><div class="qbox"><h3>'+safe(o[1])+'</h3>'+choice("impact",i,EFFECT,model.impact[i])+'</div>';
+}else{
+ const o=ITEMS[i];
+ $("question").innerHTML='<span class="smallcaps">'+safe(o[0])+'</span><h2>'+safe(o[1])+'</h2><div class="two"><div class="qbox"><h3>Heute · Erwachsenenalter</h3><p>'+safe(o[2])+'</p>'+choice("adult",i,FREQ,model.adult[i])+'</div><div class="qbox"><h3>Früher · vor 12 Jahren</h3><p>'+safe(o[3])+'</p>'+choice("child",i,FREQ,model.child[i])+'</div></div><div style="margin-top:15px"><label for="note" class="muted">Konkrete Situation oder Beleg (freiwillig)</label><textarea id="note" maxlength="2000" placeholder="Was könnte man in einem Fallbeispiel dazu berichten?"></textarea></div>';
+ $("note").value=model.notes[i]||"";
+}
+$("prev").disabled=!model.stage&&i===0;$("next").textContent=model.stage&&i===4?"Zur Auswertung →":"Weiter →";
+}
+function block(name,a,c){
+return '<div class="segment"><h3>'+safe(name)+'</h3><div class="row"><span>Erwachsenenalter: häufig berichtet</span><strong>'+a.often+' von 9</strong></div><div class="bar"><div style="width:'+(a.often/9*100)+'%"></div></div><div class="row"><span>Kindheit: häufig erinnert</span><strong>'+c.often+' von 9</strong></div><div class="bar"><div style="width:'+(c.often/9*100)+'%"></div></div><p class="muted">Unklar: heute '+a.unsure+' · Kindheit '+c.unsure+'. Die Balken sind keine diagnostischen Normwerte.</p></div>';
+}
+function report(){
+const s=summary();
+let html='<div class="row"><strong>'+s.done+' von 41 Fragen bearbeitet</strong><span class="muted">'+(41-s.done)+' noch offen</span></div><div class="meter"><div style="width:'+(s.done/41*100)+'%"></div></div>';
+if(model.demo)html+='<div class="hint"><strong>Fiktiver Übungsfall.</strong> Die Ergebnisse stammen aus einem vorgefertigten Fall und sind keine Angaben einer realen Person.</div>';
+html+=block("Aufmerksamkeit und Organisation",s.au,s.cu)+block("Aktivität und Impulsivität",s.ah,s.ch);
+html+='<div class="segment"><h3>Fünf Lebensbereiche – beschreibende Übersicht</h3><p><strong>'+s.impHigh+' von '+s.imp+' bearbeiteten Bereichen</strong> als „deutlich“ oder „sehr stark“ eingeschätzt.</p>';
+IMPACT.forEach((o,i)=>{const v=model.impact[i];html+='<div class="item"><div class="row"><span>'+safe(o[0])+'</span><strong>'+(v===null?"Noch offen":EFFECT[v])+'</strong></div></div>';});html+='</div>';
+html+='<div class="hint"><strong>Interpretation:</strong> '+(s.done===41?"Alle Fragen wurden bearbeitet. ":"Der Bogen ist noch unvollständig. ")+'Die Auswertung zeigt allein Häufigkeiten der selbst gewählten Antworten. Sie lässt keine Diagnose, keine diagnostische Wahrscheinlichkeit und keine Einordnung in ADHS-Subtypen zu. „Weiß ich nicht“ zählt nicht als „Nein“.</div>';
+html+='<h3>Was bei der fachlichen Abklärung noch zählt</h3><p>Entwicklungsverlauf, Symptome in mehreren Lebenssituationen, mindestens sechsmonatige Persistenz, tatsächliche Beeinträchtigung und die Prüfung anderer Ursachen. Für die Frage nach AuDHS müssen zusätzlich eigenständig Autismusmerkmale untersucht werden.</p>';
+$("report").innerHTML=html;$("resultMode").textContent=model.demo?"Fiktiver Übungsfall":"Nicht validiert";
+}
+function render(){renderQuestion();report();}
+function next(){if(!model.stage&&model.index===17){model.stage=1;model.index=0;}else if(model.stage&&model.index===4){$("results").scrollIntoView({behavior:"smooth",block:"start"});return;}else{model.index++;}renderQuestion();$("questionCard").scrollIntoView({behavior:"smooth",block:"start"});}
+function prev(){if(model.stage&&model.index===0){model.stage=0;model.index=17;}else model.index=Math.max(0,model.index-1);renderQuestion();$("questionCard").scrollIntoView({behavior:"smooth",block:"start"});}
+$("question").addEventListener("change",e=>{const m=/^r_(adult|child|impact)_(\d+)_(\d+)$/.exec(e.target.id||"");if(!m)return;model[m[1]][Number(m[2])]=Number(m[3]);model.demo=false;const s=summary();$("progressNumber").textContent=s.done+" von 41 beantwortet";$("progressBar").style.width=(s.done/41*100)+"%";report();});
+$("question").addEventListener("input",e=>{if(e.target.id==="note")model.notes[model.index]=e.target.value;});
+$("next").addEventListener("click",next);$("prev").addEventListener("click",prev);$("review").addEventListener("click",()=>$("results").scrollIntoView({behavior:"smooth",block:"start"}));
+$("demo").addEventListener("click",()=>{if(!confirm("Fiktive Antworten einsetzen und die bisherigen Übungsantworten überschreiben?"))return;model.adult=[4,3,4,3,4,3,4,3,4,1,0,2,1,2,3,1,2,1];model.child=[3,3,3,4,3,3,4,3,4,1,0,1,1,1,3,1,1,2];model.impact=[3,3,2,2,3];model.notes.fill("");model.notes[4]="Die Fallperson hat schon in der Grundschule oft Termine und Materialien durcheinandergebracht.";model.demo=true;model.stage=0;model.index=0;render();$("results").scrollIntoView({behavior:"smooth",block:"start"});});
+$("clear").addEventListener("click",()=>{if(!confirm("Alle Antworten und Notizen dieses Übungstests löschen?"))return;model.adult.fill(null);model.child.fill(null);model.impact.fill(null);model.notes.fill("");model.stage=0;model.index=0;model.demo=false;render();$("questionCard").scrollIntoView({behavior:"smooth",block:"start"});});
+$("print").addEventListener("click",()=>{report();window.print();});
+$("export").addEventListener("click",()=>{const data={typ:"NeuroKompass selbst formulierter ADHS-Übungstest",stand:"2026-11-10",hinweis:"kein diagnostischer Test",fiktiverFall:model.demo,heute:model.adult,kindheit:model.child,lebensbereiche:model.impact,notizen:model.notes};const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download="adhs-uebungstest-ergebnis.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$("theme").addEventListener("click",()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark";});
+$("size").addEventListener("click",()=>{large=!large;document.documentElement.style.fontSize=large?"19px":"";$("size").textContent=large?"A− Schrift":"A+ Schrift";});
+render();
+})();
+</script>
+</body></html>
