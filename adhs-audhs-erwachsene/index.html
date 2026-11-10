@@ -55,12 +55,20 @@ fieldset{border:0;margin:0;padding:0;min-width:0}legend{font-weight:750;padding:
 .narrative-report p{margin:9px 0}
 @media print{.narrative-report section{break-inside:avoid}.narrative-report .narrative-lead{border:1px solid #aaa;background:white}}
 .export-panel{margin:14px 0;padding:17px;border:1px solid var(--line);background:var(--soft);border-radius:15px}.export-panel[hidden]{display:none!important}.export-panel h3{margin:0 0 8px}.export-panel .buttons{margin-bottom:12px}.export-panel textarea{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px}
+
+/* Freiwillige, seitenübergreifende reizreduzierte Darstellung. Keine medizinischen Nutzerdaten gespeichert. */
+html[data-calm="true"] *,html[data-calm="true"] *::before,html[data-calm="true"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;box-shadow:none!important}
+html[data-calm="true"] .hero,html[data-calm="true"] .intro,html[data-calm="true"] .stage{background-image:none!important}
+html[data-calm="true"] .media-feature figure,html[data-calm="true"] .visual-preview img,html[data-calm="true"] .topic-visual img,html[data-calm="true"] .graphic-cards img,html[data-calm="true"] img.visual,html[data-calm="true"] #caseImage{display:none!important}
+html[data-calm="true"] .bubble,html[data-calm="true"] .sensicon,html[data-calm="true"] .pipe-arrow{opacity:.35}
+html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,html[data-calm="true"] .topic-visual{grid-template-columns:1fr!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header class="top">
 <div class="brand"><span class="brandmark" aria-hidden="true">✦</span><div>NeuroKompass <small>ADHS · Autismus · AuDHS | Erwachsene</small></div></div>
-<div class="topactions"><button id="saveToggle" type="button" aria-pressed="false">◌ Lokal sichern</button><button id="themeBtn" type="button" aria-label="Darstellung wechseln">◐ Kontrast</button><button id="fontBtn" type="button">A+ Schrift</button><button id="resetBtn" type="button">↺ Zurücksetzen</button></div>
+<div class="topactions"><button id="saveToggle" type="button" aria-pressed="false">◌ Lokal sichern</button><button id="calmModeBtn" type="button" aria-pressed="false">Ruhemodus: aus</button> <button id="themeBtn" type="button" aria-label="Darstellung wechseln">◐ Kontrast</button><button id="fontBtn" type="button">A+ Schrift</button><button id="resetBtn" type="button">↺ Zurücksetzen</button></div>
 </header>
 <div class="layout">
 <aside aria-label="Hauptnavigation" id="nav">
@@ -419,6 +427,21 @@ document.addEventListener("input",persistMain);
 
 renderAsrs();renderCrit();renderAut();renderDomains();renderAQ();renderCases();renderImportedPractice();restoreMain();go("home");
 })();
+
+const CALM_PREF_KEY="neurokompass.preferences.v1";
+function calmApply(active){
+ document.documentElement.dataset.calm=active?"true":"false";
+ const button=document.getElementById("calmModeBtn");
+ if(button){button.setAttribute("aria-pressed",String(active));button.textContent=active?"Ruhemodus: an":"Ruhemodus: aus";}
+}
+function calmRestore(){let active=false;try{active=JSON.parse(localStorage.getItem(CALM_PREF_KEY)||"null")?.calm===true;}catch(e){}calmApply(active);}
+document.getElementById("calmModeBtn").addEventListener("click",()=>{
+ const value=document.documentElement.dataset.calm!=="true";calmApply(value);
+ try{localStorage.setItem(CALM_PREF_KEY,JSON.stringify({calm:value}));}catch(e){}
+});
+window.addEventListener("storage",event=>{if(event.key===CALM_PREF_KEY)calmRestore();});
+calmRestore();
+
 </script>
 </body>
 </html>
