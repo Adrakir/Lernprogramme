@@ -111,3 +111,12 @@
 
 ### Letzte bestätigte Tests
 - 18 von 18 Chromium-Browserszenarien erfolgreich; GitHub-Pages-Deployment erfolgreich (10.11.2026). Prüfprotokoll in der GitHub Action. Ein tatsächlicher Test auf iOS Safari und Android Chrome/Edge ist weiterhin offen.
+
+## JSON-Export auf Mobilgeräten und Auswertung älterer gespeicherter Tests (10.11.2026)
+
+- Für die Haupt-App und den eigenständigen 41-Antworten-Übungsbogen startet der JSON-Export einen Download über einen kurz in das Dokument eingefügten Download-Link. Der erzeugte Blob-Link bleibt ausreichend lange verfügbar, sodass insbesondere mobile Browser nicht durch das sofortige Freigeben der URL blockiert werden.
+- Zusätzlich öffnet sich jeweils ein sichtbarer Sicherungsbereich mit „Download erneut versuchen“, „Über Teilen sichern“ (nur bei Browserunterstützung), „JSON-Text kopieren“ und einem auslesbaren Textfeld für manuelles Kopieren. Diese Schritte sind Fallbacks – Browser können Downloads weiterhin unterschiedlich behandeln.
+- Die Daten können Notizen und gesundheitsbezogene Lernangaben enthalten. Teilen/Kopieren erfolgt nur nach aktiver Auswahl, ohne automatische Netzwerkübertragung durch die App.
+- Bereits lokal gespeicherte Tests aus den bisherigen Datenschemata `neurokompass.exercise.v1` und `neurokompass.main.v1` bleiben lesbar; beim Wiederherstellen werden die neuen **ausführlichen Auswertungstexte** aus den alten Antworten aufgebaut, ohne erneute Testbearbeitung.
+- Bestehende JSON-Dateien können wie zuvor per Import wiederhergestellt werden; sowohl Haupt-App als auch Übungstest unterstützen die bisherige Datei-Struktur.
+- QA: Browser-Regressionstest umfasst den Download beider JSON-Dateien, erneutes Herunterladen, sichtbare Textfallbacks, Import und das Wiederaufbauen ausführlicher Berichte aus gespeicherten Bestandsdaten.
