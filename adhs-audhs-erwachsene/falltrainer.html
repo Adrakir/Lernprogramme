@@ -22,6 +22,25 @@ main{max-width:1120px;margin:0 auto;padding:22px 15px 60px}.hero{padding:24px;bo
 <div class="buttons"><button class="btn outline" id="previous">← Vorherige Frage</button><button class="btn" id="next">Nächste Entscheidung →</button><button class="btn outline" id="showSummary">Lernübersicht</button></div>
 </section>
 <section id="summaryArea" class="card" aria-live="polite"><div class="eyebrow">Didaktischer Lernstand</div><h2>Auswertung der Fallentscheidungen</h2><div class="stats"><div class="stat"><strong id="answeredTotal">0/18</strong><span class="muted">Bearbeitet</span></div><div class="stat"><strong id="correctTotal">0</strong><span class="muted">Richtig beantwortet</span></div><div class="stat"><strong id="caseTotal">0/6</strong><span class="muted">Fälle vollständig</span></div></div><p id="scoreInfo" class="note"></p><div id="caseSummary"></div><div class="buttons"><button class="btn" id="printSummary">Lernübersicht drucken / PDF</button><button class="btn outline" id="resetCases">Lernstand zurücksetzen</button></div></section>
+<section id="teacherArea" class="card">
+<div class="eyebrow">Für Unterricht und Fortbildung</div>
+<h2>Didaktischer Leitfaden und Beurteilungsraster</h2>
+<p>Die Fälle sind für erwachsene Lernende konzipiert. Lernende sollen <strong>keine persönlichen Diagnosen oder Selbstauskünfte offenlegen müssen</strong>. Für Gruppenarbeiten werden ausschließlich die fiktiven Fälle genutzt.</p>
+<div class="two">
+<div><h3>Unterrichtsablauf</h3><ol><li>Eine Fallbeschreibung gemeinsam lesen und relevante Beobachtungen markieren.</li><li>Jede Entscheidung zunächst begründen; bei Bedarf die Hilfe einblenden.</li><li>Nach der Antwort die fachliche Begründung vergleichen und Alternativen diskutieren.</li><li>Zum Abschluss fehlende Informationen und nächste diagnostische Schritte benennen.</li></ol></div>
+<div><h3>Beispiel: Reflexionsfragen</h3><ol><li>Welcher Befund wäre hilfreich, fehlt aber in der Beschreibung?</li><li>Was ist eine Beobachtung, was schon eine Interpretation?</li><li>Welche andere Ursache oder Begleiterkrankung ist denkbar?</li><li>Warum entscheidet ein Screeningwert nicht über eine Diagnose?</li></ol></div>
+</div>
+<details class="hint"><summary><strong>Beurteilungsraster anzeigen – vier Kriterien, je 0–2 Punkte</strong></summary>
+<table style="width:100%;border-collapse:collapse;margin-top:12px"><thead><tr><th style="text-align:left">Kriterium</th><th>0</th><th>1</th><th>2</th></tr></thead><tbody>
+<tr><td style="padding:7px;border-bottom:1px solid var(--line)">Symptome und Befunde trennen</td><td>nicht</td><td>teilweise</td><td>klar</td></tr>
+<tr><td style="padding:7px;border-bottom:1px solid var(--line)">Entwicklungsverlauf berücksichtigen</td><td>nicht</td><td>teilweise</td><td>klar</td></tr>
+<tr><td style="padding:7px;border-bottom:1px solid var(--line)">Alternativerklärungen diskutieren</td><td>nicht</td><td>teilweise</td><td>klar</td></tr>
+<tr><td style="padding:7px">ADHS und Autismus getrennt einordnen</td><td>nicht</td><td>teilweise</td><td>klar</td></tr>
+</tbody></table>
+<p class="muted">Maximal 8 Punkte als didaktisches Bewertungsraster einer Fallanalyse. Es ist weder eine medizinische Skala noch eine Bewertung einer realen Person. Lehrkräfte können die Kriterien abhängig vom Lernziel anpassen.</p>
+</details>
+<p class="note">Für einen Ausdruck kann die Funktion „Lernübersicht drucken / PDF“ verwendet werden. Zu den bearbeiteten Fällen erscheinen die Begründungen in der Ergebnisübersicht.</p>
+</section>
 <footer><p>Die Fallbewertung ist ein Lernquiz und keine medizinische Beurteilung. Diagnosen erfordern eine umfassende fachliche Untersuchung. Weitere Informationen: <a href="https://www.nice.org.uk/guidance/ng87/chapter/recommendations" target="_blank" rel="noopener noreferrer">NICE NG87 (ADHS)</a>, <a href="https://www.nice.org.uk/guidance/cg142/chapter/recommendations" target="_blank" rel="noopener noreferrer">NICE CG142 (Autismus)</a> und <a href="https://www.divacenter.eu/diva-5/about-diva-5/" target="_blank" rel="noopener noreferrer">DIVA-5</a>.</p><p><a href="./visualisieren.html">Bilder und Animationen</a> · <a href="./uebungstest.html">Interaktiver Übungstest</a> · <a href="./index.html">Haupt-App</a></p></footer>
 </main>
 <script>
