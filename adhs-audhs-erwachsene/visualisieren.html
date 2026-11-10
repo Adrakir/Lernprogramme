@@ -19,9 +19,17 @@ section{scroll-margin-top:18px}.card{background:var(--paper);border:1px solid va
 body.pause-motion *,body.pause-motion *::before,body.pause-motion *::after{animation-play-state:paused!important;transition-duration:0s!important}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.bubble,.pipe-arrow{transform:none!important}}
 @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}main{padding:14px 12px 50px}.intro{padding:21px}.card{padding:16px}.scene{height:238px}.work-item{width:43%}.bubble{font-size:11px;padding:6px}.chartrow{grid-template-columns:86px 1fr 43px;gap:6px;font-size:12px}.venn .circ{width:170px;height:170px}.venn .circ.adhd{transform:translateX(-55px)}.venn .circ.aut{transform:translateX(55px)}.controls .btn{flex:1 1 auto}.pipeline{gap:5px}.pipe{min-width:75px;padding:10px;font-size:13px}.pipe-arrow{font-size:17px}}@media print{header,.nav,.controls,.quizbox,button,footer{display:none!important}body{background:#fff;color:#000}.card{box-shadow:none;border:1px solid #aaa;break-inside:avoid}.visual{max-width:650px}.stage{border:1px solid #aaa;background:#fff}.details{background:#fff}.note,.warning{border:1px solid #aaa}}
+
+/* Freiwillige, seitenübergreifende reizreduzierte Darstellung. Keine medizinischen Nutzerdaten gespeichert. */
+html[data-calm="true"] *,html[data-calm="true"] *::before,html[data-calm="true"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;box-shadow:none!important}
+html[data-calm="true"] .hero,html[data-calm="true"] .intro,html[data-calm="true"] .stage{background-image:none!important}
+html[data-calm="true"] .media-feature figure,html[data-calm="true"] .visual-preview img,html[data-calm="true"] .topic-visual img,html[data-calm="true"] .graphic-cards img,html[data-calm="true"] img.visual,html[data-calm="true"] #caseImage{display:none!important}
+html[data-calm="true"] .bubble,html[data-calm="true"] .sensicon,html[data-calm="true"] .pipe-arrow{opacity:.35}
+html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,html[data-calm="true"] .topic-visual{grid-template-columns:1fr!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style></head>
 <body>
-<header><div><a href="./index.html">✦ NeuroKompass</a><div class="sub">Visuelles Lernstudio · Erwachsene</div></div><div><button id="motionBtn" aria-pressed="false">⏸ Animationen pausieren</button> <button id="themeBtn">◐ Nachtmodus</button></div></header>
+<header><div><a href="./index.html">✦ NeuroKompass</a><div class="sub">Visuelles Lernstudio · Erwachsene</div></div><div><button id="calmModeBtn" type="button" aria-pressed="false">Ruhemodus: aus</button> <button id="motionBtn" aria-pressed="false">⏸ Animationen pausieren</button> <button id="themeBtn">◐ Nachtmodus</button></div></header>
 <main>
 <div class="intro"><div class="eyebrow">Lernen mit Bildern und interaktiven Modellen</div><h1>ADHS und AuDHS anschaulich verstehen.</h1><p>Fünf eigenständig gezeichnete Bilder, kleine Animationen, schrittweise Erklärungen und ein Wissenstest. Alle Darstellungen sind <strong>didaktische Beispiele</strong> und keine Messung von Gehirnleistung, Diagnosen oder individuellen Fähigkeiten.</p><a class="btn" style="background:#fff;color:#173f55;border-color:#fff" href="./uebungstest.html">Zum interaktiven Übungstest →</a></div>
 <nav class="nav" aria-label="Direkt zu Themen"><a href="#aufmerksamkeit">① Aufmerksamkeit</a><a href="#planung">② Planung</a><a href="#impuls">③ Impulsivität</a><a href="#sensorik">④ Sensorik</a><a href="#zeit">⑤ Lebensphasen</a><a href="#audhs">⑥ AuDHS</a><a href="#auswertung">⑦ Auswertung</a><a href="#quiz">⑧ Wissenstest</a><a href="./falltrainer.html">⑨ Fallwerkstatt Plus</a></nav>
@@ -129,4 +137,19 @@ let paused=false;$("motionBtn").addEventListener("click",()=>{paused=!paused;doc
 $("themeBtn").addEventListener("click",()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark";$("themeBtn").textContent=document.documentElement.dataset.theme==="dark"?"☼ Heller Modus":"◐ Nachtmodus";});
 setFocus(false);setPlan();setImpulse();setSensor(1);setLife(0);setVenn("both");setChart("a");renderQuiz();
 })();
+
+const CALM_PREF_KEY="neurokompass.preferences.v1";
+function calmApply(active){
+ document.documentElement.dataset.calm=active?"true":"false";
+ const button=document.getElementById("calmModeBtn");
+ if(button){button.setAttribute("aria-pressed",String(active));button.textContent=active?"Ruhemodus: an":"Ruhemodus: aus";}
+}
+function calmRestore(){let active=false;try{active=JSON.parse(localStorage.getItem(CALM_PREF_KEY)||"null")?.calm===true;}catch(e){}calmApply(active);}
+document.getElementById("calmModeBtn").addEventListener("click",()=>{
+ const value=document.documentElement.dataset.calm!=="true";calmApply(value);
+ try{localStorage.setItem(CALM_PREF_KEY,JSON.stringify({calm:value}));}catch(e){}
+});
+window.addEventListener("storage",event=>{if(event.key===CALM_PREF_KEY)calmRestore();});
+calmRestore();
+
 </script></body></html>
