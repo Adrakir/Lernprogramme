@@ -196,7 +196,7 @@ html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,htm
 <div class="eyebrow">Einfach erklärt · Erwachsene</div><h1 class="h1">Was sagen meine Ergebnisse aus?</h1><p class="intro">Jedes Ergebnis wird in vier Schritten erklärt: <strong>Was wurde gezählt?</strong> · <strong>Was bedeutet das?</strong> · <strong>Was bedeutet es nicht?</strong> · <strong>Was kann man als Nächstes tun?</strong></p>
 <div class="note"><strong>Wichtig zu wissen:</strong> Es gibt hier keinen gemeinsamen ADHS-/AuDHS-Gesamtwert. Der ASRS ist ein Screening; die übrigen Lernfragen beschreiben nur Antworten. DIVA-5 ist ein Interview durch Fachpersonen.</div>
 <div id="resultCards" class="two" aria-live="polite"></div>
-<div id="mainNarrativeReport" class="card narrative-report" aria-live="polite" style="margin-top:14px"></div>
+<details id="mainNarrativeDetails" open><summary><strong>Ausführlichen Bericht anzeigen oder ausblenden</strong></summary><div id="mainNarrativeReport" class="card narrative-report" aria-live="polite" style="margin-top:14px"></div></details>
 <div class="card" id="combinedResults" style="margin-top:14px">
 <h2>Zusätzlicher Übungsfragebogen – verständlich erklärt</h2>
 <p>Hier lassen sich die Ergebnisse des eigenständigen 41-Antworten-Übungstests ergänzen, ohne sie mit dem ASRS oder DIVA-5 zu einem erfundenen Diagnosescore zu vermischen.</p>
@@ -285,7 +285,7 @@ const state={asrs:Array(6).fill(null),critA:Array(18).fill(null),critC:Array(18)
 const MAIN_KEY="neurokompass.main.v1";
 let mainSaveEnabled=false, importedPractice=null;
 function validArray(a,n,max){return Array.isArray(a)&&a.length===n&&a.every(v=>v===null||(Number.isInteger(v)&&v>=0&&v<=max));}
-function validPractice(p){return !!p&&typeof p==="object"&&validArray(p.heute,18,5)&&validArray(p.kindheit,18,5)&&validArray(p.lebensbereiche,5,4)&&Array.isArray(p.notizen)&&p.notizen.length===18&&p.notizen.every(s=>typeof s==="string"&&s.length<=2000);}
+function validPractice(p){return !!p&&typeof p==="object"&&validArray(p.heute,18,8)&&validArray(p.kindheit,18,8)&&validArray(p.lebensbereiche,5,7)&&Array.isArray(p.notizen)&&p.notizen.length===18&&p.notizen.every(s=>typeof s==="string"&&s.length<=2000);}
 function practiceCounts(p,start,end){const a=p.heute.slice(start,end),c=p.kindheit.slice(start,end);return [a.filter(v=>v===3||v===4).length,a.filter(v=>v!==null).length,c.filter(v=>v===3||v===4).length,c.filter(v=>v!==null).length];}
 function renderImportedPractice(){
  const target=$("practiceReport");
