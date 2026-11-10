@@ -1,0 +1,93 @@
+/* BioLabor – anatomisches Bewegungs-Labor */
+.rig-studio{
+ --rig-ink:#233e3b;--rig-secondary:#55756d;--rig-brand:#175d50;
+ --rig-bg:#f1f8f5;--rig-edge:#cfe4d9;--rig-border:#d5e4db;
+ --rig-shadow:0 16px 44px rgba(26,72,57,.08);
+ border:1px solid var(--rig-edge);border-radius:23px;
+ padding:clamp(16px,2.2vw,27px);margin:8px 0 25px;
+ background:linear-gradient(150deg,#ffffff,#edf8f3 84%);
+ box-shadow:var(--rig-shadow);color:var(--rig-ink);
+}
+.dark .rig-studio{
+ --rig-ink:#f2fbf5;--rig-secondary:#c6dfd3;--rig-brand:#a7f4d7;
+ --rig-bg:#2d443b;--rig-edge:#5e8675;--rig-border:#476857;
+ --rig-shadow:none;
+ background:linear-gradient(145deg,#29473d,#22372f);
+}
+.rig-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:17px}
+.rig-head h3{margin:6px 0;font-size:clamp(1.25rem,2.2vw,1.75rem);line-height:1.17;letter-spacing:-.035em;color:var(--rig-ink)}
+.rig-head p{margin:0;color:var(--rig-secondary);font-size:.88rem;max-width:680px}
+.rig-eyebrow{font-size:.68rem;letter-spacing:.11em;font-weight:950;color:var(--rig-brand)}
+.rig-chip{background:#dff5e9;color:#185f51;padding:7px 11px;border-radius:999px;white-space:nowrap;font-size:.76rem;font-weight:850}
+.dark .rig-chip{background:#3b6956;color:#e1f7e8}
+.rig-modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.rig-modes button,.rig-visual-options button,.rig-transport button{
+ border:1px solid var(--rig-border);color:var(--rig-ink);background:var(--card);
+ border-radius:12px;min-height:44px;padding:10px 11px;font-weight:780;
+ transition:background .15s,border-color .15s,transform .15s;
+}
+.rig-modes button:hover,.rig-transport button:hover,.rig-visual-options button:hover{border-color:#4d9782;transform:translateY(-1px)}
+.rig-modes button.active{color:#fff;background:#1a695a;border-color:#1a695a;box-shadow:0 0 0 2px rgba(27,110,89,.11)}
+.dark .rig-modes button.active{background:#9adfc3;border-color:#9adfc3;color:#113a2d}
+.rig-stage{overflow:hidden;position:relative;border-radius:18px;border:1px solid #cce0d6;background:#f7fbf7;box-shadow:inset 0 2px 12px rgba(51,103,75,.06)}
+.rig-stage::after{content:"LIVE · SKELETT-MODELL";position:absolute;bottom:12px;right:14px;pointer-events:none;font-size:.61rem;font-weight:900;letter-spacing:.10em;color:#5a8376;background:rgba(251,255,249,.87);padding:4px 7px;border-radius:6px}
+.rig-svg{display:block;width:100%;height:auto;max-height:560px;min-height:220px}
+.rig-bone{cursor:pointer;transition:opacity .15s}
+.rig-bone:hover{filter:drop-shadow(0 0 5px #c98742)}
+.rig-bone.rig-selected{filter:drop-shadow(0 0 3px #e59c4a)}
+.rig-bone.rig-selected>path:first-child{stroke:#ba854c}
+.rig-bone:focus-visible{outline:none;filter:drop-shadow(0 0 7px #d88939)}
+.rig-tiny{font-size:17px;fill:#315e55;font-weight:850;paint-order:stroke;stroke:#f6fbf5;stroke-width:4px}
+.rig-pointer{stroke:#5d8c7c;fill:none;stroke-width:2;stroke-linecap:round}
+.rig-transport{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.rig-transport .rig-primary{background:#146854;color:#fff;border-color:#146854;min-width:126px}
+.dark .rig-transport .rig-primary{background:#9adfc3;color:#193b30;border-color:#9adfc3}
+.rig-transport label{margin-left:auto;font-weight:800;font-size:.81rem;color:var(--rig-secondary)}
+.rig-transport input[type=range]{width:clamp(75px,12vw,150px);accent-color:#1d7c62}
+.rig-transport output,.rig-scrub output{min-width:40px;font-size:.86rem;font-weight:850;color:var(--rig-ink);text-align:right}
+.rig-scrub{display:flex;align-items:center;gap:12px;padding:12px 0 7px}
+.rig-scrub label{font-size:.77rem;font-weight:850;color:var(--rig-secondary);white-space:nowrap}
+.rig-scrub input{flex:1;min-width:90px;accent-color:#14715a}
+.rig-visual-options{display:flex;gap:8px;flex-wrap:wrap;padding:11px 0 5px;border-top:1px solid var(--rig-border)}
+.rig-visual-options button{min-height:39px;padding:7px 11px;font-size:.77rem}
+.rig-visual-options button[aria-pressed=true]{background:#dcefe5;border-color:#54a389;color:#1a5e4f}
+.dark .rig-visual-options button[aria-pressed=true]{background:#376451;color:#e1faea}
+.rig-explain{margin-top:13px;background:#fff;border:1px solid var(--rig-border);padding:17px 20px;border-radius:15px;color:#385a53}
+.dark .rig-explain{background:#223d32;color:#d4eae0}
+.rig-explain strong{color:var(--rig-brand);font-size:1.02rem}
+.rig-explain p{color:inherit;font-size:.87rem;line-height:1.56;margin:8px 0}
+.rig-hint{background:#e5f4ea;border-left:3px solid #268464;padding:10px 13px;border-radius:6px;font-size:.85rem;color:#2b6454}
+.dark .rig-hint{background:#2e5445;color:#e4f6ea}
+.rig-note{margin-top:12px;font-size:.76rem;color:var(--rig-secondary);line-height:1.55}
+.rig-reference{margin:8px 0 22px;border:1px solid var(--rig-border);border-radius:13px;background:var(--card);padding:12px 15px;color:var(--ink)}
+.rig-reference summary{cursor:pointer;font-weight:800;font-size:.85rem}
+.rig-reference[open] summary{margin-bottom:16px}
+.rig-reference .bone-board{margin:6px 0}
+.rig-zoomed .rig-stage{overflow:auto;max-height:86vh}
+.rig-zoomed .rig-svg{width:1250px;max-width:none;min-width:1250px}
+.rig-zoomed .rig-stage::after{display:none}
+.rig-studio :is(button,input):focus-visible,.rig-reference summary:focus-visible{outline:3px solid #dba23d;outline-offset:3px}
+@media(max-width:880px){
+ .rig-studio{padding:16px}.rig-transport label{margin-left:0}
+ .rig-modes{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:590px){
+ .rig-head{align-items:flex-start}.rig-chip{display:none}
+ .rig-modes{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .rig-modes button{font-size:.75rem;min-height:46px;padding:7px}
+ .rig-transport{gap:6px}.rig-transport button{font-size:.77rem;padding:8px 9px;min-height:43px}
+ .rig-transport .rig-primary{min-width:110px}
+ .rig-transport label{margin-left:auto}
+ .rig-transport input[type=range]{width:80px}
+ .rig-scrub label{font-size:.72rem}
+ .rig-svg{min-height:170px}
+ .rig-visual-options button{flex:1 1 120px}
+ .rig-note{font-size:.73rem}
+}
+@media(prefers-reduced-motion:reduce){.rig-studio *{transition:none!important;animation:none!important}}
+@media print{
+ .rig-studio{border:1px solid #aaa;box-shadow:none;background:#fff;color:#000;break-inside:avoid}
+ .rig-modes,.rig-transport,.rig-visual-options,.rig-scrub,.rig-reference{display:none!important}
+ .rig-stage{border:1px solid #aaa}.rig-note,.rig-explain{color:#333}
+ .rig-explain{background:#fff;border:1px solid #ddd}
+}
