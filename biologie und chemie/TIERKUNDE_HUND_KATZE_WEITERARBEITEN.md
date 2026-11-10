@@ -1,4 +1,4 @@
-# BioLabor 5 – Hund & Katze (Stand 10. November 2026)
+# BioLabor 5 – Hund & Katze (Überarbeitung 10. November 2026)
 
 ## Ziel und bestehende Links
 Die neue Tierkunde ist **Teil der bestehenden Biologie-App**, nicht Ersatz für deren Inhalte. Eingebunden in `BioLabor_5_Biologie_V9_2.html` über zwei neue Einträge in der Seitennavigation und zwei große Startkacheln.
@@ -9,6 +9,54 @@ Die neue Tierkunde ist **Teil der bestehenden Biologie-App**, nicht Ersatz für 
 - Direkt Katze: `BioLabor_Hund_Katze.html#cat/skeleton`
 
 Alle Pfade relativ zum Verzeichnis `biologie und chemie/` im Repository `Adrakir/Lernprogramme`.
+
+
+## Qualitätsüberarbeitung für Lehrer und Schüler – 10. November 2026
+
+**Echte Änderungen sind im Repository `Adrakir/Lernprogramme`, Branch `main`, committed.** Die vorhandene BioLabor-App wurde nicht durch eine neue App ersetzt. Die neue Tierkunde bleibt über dieselbe öffentliche HTML-Adresse verlinkt. Bestehende Biologie-Lernstände und ältere Tierkunde-Quizstände werden nicht überschrieben.
+
+### Neue und überarbeitete Dateien
+
+- `Tierkunde_Curriculum.js`: 7 Lernbereiche für Hund und Katze, je 3 fachlich erklärte Lernschritte mit Denkfragen; insgesamt **42 Lernfragen** in 14 tierbezogenen Lernwegen.
+- `Tierkunde_Lernstudio.js` und `.css`: geführtes Lernen, 2 eigenständig lösbare Anwendungsaufgaben je Lernbereich/Tier (**28 Aufgaben**), inklusive Knochenbeschriftung, Zuordnung und Reihenfolge mit Pfeiltasten, Rückmeldung, Hilfen, Lehreransicht, lokaler Fortschrittsspeicherung. Bereits vorhandene Quizfragen bleiben bestehen.
+- `Tierkunde_Scherenlabor.js` und `.css`: bewegliche schematische Unterkiefer-Animation, Reißzahnpaar oberer P4 / unterer M1, 5 Zahnarten-Auswahlen, Tempo über Regler, Beschreibung und direkter Fachquellenlink.
+- `Tierkunde_Verhaltenslabor.js` und `.css`: 7 verschiedene Situationen (entspannt, Angst, Drohung, Abwehr, Flucht, Jagd, Spiel) mit animiertem Körperspracheschema, Sicherheitsfrage und Erklärung; auf Hunde und Katzen getrennt anwendbar (14 Szenenkombinationen).
+- `Tierkunde_Bewegung.js` und `.css`: genauere schematische Trennung von 13 Brust- und 7 Lendenwirbeln plus Halsbereich, 13 Rippen pro Körperseite, sichtbare Gangphasen und orange Kraftrichtung beim Abstoß; 6 Bewegungsarten für 2 Tiere.
+- `Tierkunde_Hund_Katze.js`: ruft nach jedem Bereichswechsel das Bewegungs-, Lern-, Gebiss- und Verhaltenslabor auf. Link zu fachlich betreuten veterinäranatomischen Onlineatlanten. Animierte eigene Skizzen werden nicht als exakte Präparate bezeichnet.
+- `BioLabor_Hund_Katze.html`: lädt neue Styles und Scripte in der korrekten Reihenfolge.
+- `BioLabor_5_Biologie_V9_2.html`: zeigt auf der ursprünglichen Biologie-Startseite die Anzahl abgeschlossener Tierkunde-Stationen von Hund und Katze jeweils getrennt an; nur lesender Zugriff auf den neuen Speicher-Key.
+
+### Ablauf für Schülerinnen und Schüler
+
+1. Tier wählen; passenden Lernbereich aufrufen.
+2. Drei kurze angeleitete Schritte (Entdecken – Verstehen – Anwenden) mit Denkfragen, Hinweisen und kurzen Vorlesetexten.
+3. Der darunter sichtbare bewegliche Skelett-, Zahn- oder Körpersprache-Lernbereich dient als interaktives Anschauungsmodell.
+4. Zwei unterschiedliche Anwendungsaufgaben je Station; Fehlerrückmeldung erklärt die richtige Lösung.
+5. Nach zwei erfolgreichen Aufgaben gilt die Station als abgeschlossen. Fortschritt auf diesem Gerät im eigenen Speicher `biolab5-tierstudio-2026`; bestehende Keys werden nicht verändert.
+6. Der zuvor lange Textbereich mit Anatomielexikon bleibt über `Schulbuchwissen ... aufklappen` zugänglich.
+7. Alte MCQ-Abschlusstests werden weiterhin angeboten. In der Biologie-Startansicht erscheint der Tierkunde-Fortschritt als eigene Zahl; es werden **keine** alten Sterne oder Lernstandsdaten umgerechnet.
+
+### Fachlicher Qualitätsrahmen
+
+- Quellen für anatomisch detaillierte Darstellungen: IMAIOS, Veterinäranatomie Hund https://www.imaios.cn/en/vet-anatomy/dog/dog-osteology2 und Katze https://www.imaios.cn/en/vet-anatomy/cat/cat-osteology2. **Keine** Copyright-Grafiken kopieren oder direkt in GitHub einbauen.
+- Zahnanatomie und Zahnformeln: Merck Veterinary Manual https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals
+- Gangarten: Zink & Carr, *Canine Sports Medicine and Rehabilitation*, doi:10.1002/9781119380627.ch2
+- Körpersprache: RSPCA; einzelne Schwanz-, Ohr- oder Augenzeichen nie isoliert als eindeutige Emotion ausgeben.
+- Unsere neuen SVGs sind **eigene dynamische Lernschemata**, keine 3D-Präparate, anatomischen Präzisionsmodelle, Motion-Capture-Daten oder Fotos. Ihre Geometrie wurde nicht von einer Tierärztin oder einem Tierarzt validiert; gerade das Skelett muss vor einer Verwendung als exakte fachliche Abbildung gegengeprüft werden.
+
+### Tests des Überarbeitungsstands
+
+- 49/49 automatisierte **Syntax-, Struktur-, Lehrplan-, Bildgenerator- und Frameprüfungen** erfolgreich: alle neuen JS-Dateien, HTML-Verknüpfung, beide Arten × sieben Einheiten, beide Arten × sechs Bewegungsarten mit jeweils fünf Frames, sechs Kieferstellungen.
+- 16/16 zusätzliche simulierte **DOM-Interaktionsprüfungen** erfolgreich: geführte Lernschritte, Antwortkorrektur, Aufgaben zuordnen, Reihenfolge ändern, Lernstandslogik, Tierwechsel, Kieferanimation, Körperspracheszenen und Sicherheitsentscheidung.
+- Ein im Zuge der Tests entdeckter Syntax-/Laufzeitfehler bei der Initialisierung der Wirbelgrafik wurde behoben und der Animationsgenerator danach erneut geprüft.
+- **NICHT nachgewiesen:** erfolgreiche öffentliche Auslieferung via GitHub Pages (externer Webabruf war nicht möglich), reale Darstellung und Klicktests in iOS Safari, Android Edge oder Chrome, tatsächliche Sprachqualität und veterinäranatomische Präzision. Commit auf GitHub ≠ verifizierte GitHub-Pages-Website.
+
+### Nächste technische Kontrollpunkte
+
+1. Neue GitHub-Pages-Version im echten Browser öffnen; nach Asset-Cache ggf. einmal aktualisieren.
+2. iPhone/Tablet/PC: alle 7 Stationen öffnen, Start/Pause/Schritt, Regler, Seitenwechsel, Kontrast, Schriftgröße und Audio prüfen.
+3. Tatsächliche anatomische Bildqualität durch eine fachkundige Lehrkraft oder Tierärztin prüfen; nach Freigabe möglichst hochwertige eigene oder eindeutig lizenzierte Abbildungen einsetzen. Kein unverifiziertes Kopieren aus IMAIOS.
+4. Mit Screenreader und Tastatur testen, besonders die laufend neu gezeichneten SVG-Gruppen; falls nötig eine statische Knochenliste als vollwertige Alternative anbieten.
 
 ## Architektur
 - `BioLabor_Hund_Katze.html`: eigenständige HTML-Einstiegsseite mit Zurück-Link zu BioLabor.
