@@ -321,6 +321,83 @@ async function main(){
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
  });
+
+ await run("Haupt-App: Download, sichtbarer JSON-Text, Wiederholung und Fallback",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="asrs"]').click();
+   await p.locator('label[for="asrs_0_2"]').click();
+   await p.locator('.nav[data-view="results"]').click();
+   const [dl]=await Promise.all([p.waitForEvent("download"),p.locator("#exportBtn").click()]);
+   assert.equal(dl.suggestedFilename(),"neurokompass-lernauswertung.json");
+   const raw=await p.locator("#exportJsonText").inputValue();
+   assert.equal(JSON.parse(raw).asrs.antworten[0],2);
+   assert.equal(await p.locator("#exportPanel").isVisible(),true);
+   const [again]=await Promise.all([p.waitForEvent("download"),p.locator("#saveFile").click()]);
+   assert.equal(again.suggestedFilename(),"neurokompass-lernauswertung.json");
+   await p.locator("#shareFile").click();
+   assert.match(await p.locator("#exportStatus").innerText(),/Teilen nicht möglich|nicht verfügbar|nicht unterstützt/);
+   await p.locator("#closeExport").click();
+   assert.equal(await p.locator("#exportPanel").isVisible(),false);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Übungsbogen: Download plus sichtbarer JSON-Text für iOS/Android",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   await p.locator('label[for="r_adult_0_3"]').click();
+   const [dl]=await Promise.all([p.waitForEvent("download"),p.locator("#export").click()]);
+   assert.equal(dl.suggestedFilename(),"adhs-uebungstest-ergebnis.json");
+   const raw=await p.locator("#exerciseJsonText").inputValue();
+   assert.equal(JSON.parse(raw).heute[0],3);
+   assert.equal(await p.locator("#exerciseExportPanel").isVisible(),true);
+   const [again]=await Promise.all([p.waitForEvent("download"),p.locator("#downloadAgain").click()]);
+   assert.equal(again.suggestedFilename(),"adhs-uebungstest-ergebnis.json");
+   await p.locator("#shareExercise").click();
+   assert.match(await p.locator("#exerciseExportStatus").innerText(),/Teilen nicht möglich|nicht verfügbar/);
+   await p.locator("#closeExerciseExport").click();
+   assert.equal(await p.locator("#exerciseExportPanel").isVisible(),false);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Ältere lokal gespeicherte Übungsantworten erhalten neuen Erzählbericht",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   const fixture={
+     active:true,data:{
+       typ:"NeuroKompass selbst formulierter ADHS-Übungstest",stand:"2026-11-10",hinweis:"kein diagnostischer Test",fiktiverFall:false,
+       heute:[3,...Array(17).fill(null)],kindheit:[4,...Array(17).fill(null)],
+       lebensbereiche:[2,null,null,null,null],notizen:Array(18).fill("")
+     }
+   };
+   await p.evaluate(v=>localStorage.setItem("neurokompass.exercise.v1",JSON.stringify(v)),fixture);
+   await p.reload();
+   assert.match(await p.locator("#progressNumber").innerText(),/3 von 41/);
+   const report=await p.locator("#narrativeReport").innerText();
+   assert.match(report,/Ausführlicher Auswertungstext/);
+   assert.match(report,/Einzelheiten überblicken/);
+   assert.match(report,/Auswirkungen im Alltag/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Ältere lokal gespeicherte Haupt-App-Antworten erhalten neuen Bericht",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   const fixture={
+    active:true,
+    data:{
+      version:1,
+      answers:{asrs:[2,2,2,3,0,0],critA:Array(18).fill(null),critC:Array(18).fill(null),aut:Array(12).fill(null),notes:Array(18).fill(""),domains:[]},
+      ui:{onset:"",duration:"",contexts:"",alternatives:"",aqNote:"",aqScore:"",evidence:""},
+      practice:null
+    }
+   };
+   await p.evaluate(v=>localStorage.setItem("neurokompass.main.v1",JSON.stringify(v)),fixture);
+   await p.reload();
+   await p.locator('.nav[data-view="results"]').click();
+   const report=await p.locator("#mainNarrativeReport").innerText();
+   assert.match(report,/Ausführlicher Auswertungstext/);
+   assert.match(report,/4 von 6 Antworten/);
+   assert.match(report,/keine ADHS-, Autismus- oder AuDHS-Diagnose/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
  await run("Mobilansicht 390px: keine ungewollte horizontale Seitenüberbreite",async()=>{
   for(const filename of URLS){const x=await open(browser,filename,true);try{
    const dims=await x.page.evaluate(()=>({page:document.documentElement.scrollWidth,window:window.innerWidth}));
