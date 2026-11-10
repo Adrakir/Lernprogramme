@@ -298,6 +298,7 @@ function render(focus){
  const views={skeleton:skeletonPage,origin:originPage,teeth:teethPage,hunt:huntPage,motion:motionPage,signals:signalsPage,compare:comparePage,quiz:quizPage};
  $('#content').innerHTML=(views[section]||skeletonPage)();
  if(window.BioSkeletonLab)window.BioSkeletonLab.mount({animal,section,bone,gait});
+ if(window.BioLernstudio)window.BioLernstudio.mount({animal,section});
  if(focus){$('#content').focus({preventScroll:true});scrollTo({top:0,behavior:'instant'});}
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}
