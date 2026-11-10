@@ -16,6 +16,31 @@ const BONES=[
 {id:'feet',label:'Pfoten & Zehen',why:'Hund und Katze sind Zehengänger. Sie setzen vor allem die Zehenballen auf, nicht die ganze Fußsohle wie wir.',dog:'Krallen sind normalerweise nicht einziehbar. Pfotenballen polstern Schritte und geben Halt.',cat:'Krallen können meist in Hauttaschen zurückgezogen werden. So bleiben sie scharf und die Katze kann beim Anschleichen oft leiser auftreten.'},
 {id:'tail',label:'Schwanzwirbel',why:'Der Schwanz enthält viele kleine Wirbel und Muskeln. Er hilft bei Bewegung und Verständigung.',dog:'Die Stellung des Schwanzes gehört zur Körpersprache und kann beim Balancieren helfen.',cat:'Der bewegliche Schwanz unterstützt das Balancieren und vermittelt zusammen mit Ohren und Körperhaltung Gefühle.'}
 ];
+const ATLAS=[
+['Schädel','Harte Schädelknochen schützen das Gehirn. Die Augen liegen geschützt in Augenhöhlen.'],
+['Unterkiefer','Der bewegliche Unterkiefer trägt die unteren Zähne. Kaumuskeln öffnen und schließen das Maul.'],
+['Halswirbel','Gewöhnlich sieben Halswirbel tragen den Kopf. Die ersten beiden Wirbel ermöglichen besonders wichtige Kopfbewegungen.'],
+['Brustwirbel','Gewöhnlich 13 Brustwirbel tragen die Rippen und bilden mit ihnen den Brustkorb.'],
+['Lendenwirbel','Gewöhnlich sieben Lendenwirbel liegen hinter dem Brustkorb. Starke Rückenmuskeln setzen hier an; besonders Katzen nutzen ihre Beweglichkeit beim Sprinten.'],
+['Kreuzbein','Gewöhnlich drei verwachsene Kreuzbeinwirbel verbinden die Wirbelsäule fest mit dem Becken.'],
+['Schwanzwirbel','Die Zahl der Schwanzwirbel ist unterschiedlich. Schwanzmuskeln steuern Bewegungen und Körpersprache.'],
+['Rippen','Meist 13 Rippenpaare umschließen mit Brustbein und Wirbelsäule den Brustraum. Sie schützen Organe und bewegen sich beim Atmen.'],
+['Brustbein','Das Brustbein verbindet viele Rippen an der Körperunterseite und stabilisiert den Brustkorb.'],
+['Schulterblatt','Das flache Schulterblatt liegt seitlich am Brustkorb. Daran setzen Muskeln an, die das Vorderbein bewegen.'],
+['Oberarmknochen (Humerus)','Verbindet Schultergelenk und Ellenbogengelenk. Er wirkt als Hebel, wenn Muskeln ziehen.'],
+['Elle (Ulna)','Ein Unterarmknochen. Ihr oberes Ende bildet den Ellenbogenhöcker, an dem der Streckmuskel ansetzt.'],
+['Speiche (Radius)','Der zweite Unterarmknochen. Er überträgt Kräfte vom Ellenbogen zur Vorderpfote.'],
+['Handwurzelknochen','Kleine Knochen bilden das Vorderfußwurzelgelenk; beim Tier entspricht es unserem Handgelenk.'],
+['Mittelhandknochen','Längere Knochen zwischen Handwurzel und Vorderzehen. Sie übertragen beim Auftreten Kräfte.'],
+['Zehenknochen','Gliedern die Zehen. Die letzten Zehenknochen tragen die Krallen aus Horn.'],
+['Beckenknochen','Das Becken umfasst unter anderem Darmbein, Sitzbein und Schambein und trägt die Hüftgelenkspfanne.'],
+['Oberschenkelknochen (Femur)','Stabiler Knochen zwischen Hüfte und Knie. Starke Muskeln bewegen ihn zum Laufen und Springen.'],
+['Kniescheibe (Patella)','Kleiner Knochen in einer Sehne am Knie. Er verbessert die Kraftübertragung des Streckmuskels.'],
+['Schienbein (Tibia)','Trägt einen großen Teil der Kraft im Unterschenkel zwischen Knie und Sprunggelenk.'],
+['Wadenbein (Fibula)','Dünnerer Knochen neben dem Schienbein. Er trägt zur Stabilisierung und zu Muskelansätzen bei.'],
+['Fußwurzel / Sprunggelenk','Das Sprunggelenk liegt beim Tier deutlich oberhalb der Pfote. Sein Fersenhöcker wirkt als Hebel.'],
+['Mittelfußknochen','Verbinden Sprunggelenk mit Hinterzehen. Sie verlängern den Fußabschnitt beim Zehengang.']
+];
 const DENTAL=[
 {id:'incisor',label:'Schneidezähne',color:'#7eb6b8',dog:'12 kleine Schneidezähne. Sie knabbern und nehmen kleine Stücke auf.',cat:'12 kleine Schneidezähne. Sie helfen beim Abnagen und bei der Fellpflege.'},
 {id:'canine',label:'Fangzähne',color:'#e5a55d',dog:'4 spitze Fangzähne halten Beute oder Gegenstände fest. Sie schneiden nicht wie Scheren.',cat:'4 lange, spitze Fangzähne packen und halten Beute.'},
@@ -94,10 +119,12 @@ function skeletonSvg(){
 function skeletonPage(){
  const b=BONES.find(x=>x.id===bone);
  return pageTitle('01',animal==='dog'?'Das Skelett des Hundes':'Das Skelett der Katze','Tippe auf die nummerierten Knochen. Erfahre, welche Aufgabe sie haben und warum der Körperbau zur Lebensweise passt.')+
- '<div class="bone-board">'+skeletonSvg()+'</div><p class="diagram-caption">Neun anklickbare Knochenbereiche. Die Zeichnung ist ein wissenschaftlich orientiertes, aber vereinfachtes Lernschema – nicht jede einzelne Rippe oder Zehe ist dargestellt.</p>'+
+ '<div class="actionline"><button type="button" class="btn secondary" data-action="zoom">🔎 Skelett vergrößern</button></div><div class="bone-board">'+skeletonSvg()+'</div><p class="diagram-caption">Neun anklickbare Knochenbereiche. Die Zeichnung ist ein wissenschaftlich orientiertes, aber vereinfachtes Lernschema – nicht jede einzelne Rippe oder Zehe ist dargestellt.</p>'+
  '<div class="chips" aria-label="Knochen auswählen">'+BONES.map((x,i)=>'<button type="button" data-bone="'+x.id+'" class="chip '+(x.id===bone?'active':'')+'">'+(i+1)+'. '+x.label+'</button>').join('')+'</div>'+
  '<div class="detail" aria-live="polite"><h3>🦴 '+b.label+'</h3><p><b>Was ist das?</b> '+b.why+'</p><p style="margin-top:9px"><b>Warum gerade bei '+A().name+'?</b> '+b[animal]+'</p></div>'+
  callout('Der wichtigste Zusammenhang','Das Skelett gibt Halt, schützt Organe und bildet mit Muskeln und Gelenken ein Bewegungssystem. Die Knochen selbst ziehen nicht – Muskeln bewegen sie über Sehnen.')+
+ '<div class="panel white spaced anatomy-atlas"><h3>🔎 Anatomie-Lexikon: 23 Knochen und Bauteile</h3><p class="smallnote">Du kannst jeden Begriff öffnen. So erfährst du mehr als die neun Bereiche der großen Zeichnung zeigen.</p><div class="atlas-grid">'+ATLAS.map((x,i)=>'<details><summary>'+(i+1)+'. '+x[0]+'</summary><p>'+x[1]+'</p></details>').join('')+'</div></div>'+
+ callout('Wirbel-Zahlen zum Merken','Hund und Katze besitzen normalerweise 7 Halswirbel, 13 Brustwirbel, 7 Lendenwirbel und 3 verwachsene Kreuzbeinwirbel. Die Zahl der Schwanzwirbel kann variieren.')+
  '<div class="info-cards spaced">'+card('🦴','Gemeinsamer Bauplan','Hund und Katze besitzen wie wir einen Schädel, eine Wirbelsäule, Rippen, zwei Vorder- und zwei Hintergliedmaßen.')+card('🐾','Besonderheit','Beide gehen auf Zehen und Ballen. Die Katze ist besonders beweglich beim Anschleichen und Springen; viele Hunde sind auf längeres Laufen eingestellt.')+'</div>'+
  navLine('origin','Weiter: Woher kommen sie?');
 }
@@ -284,6 +311,7 @@ document.addEventListener('click',function(e){
  if(b.dataset.mood){mood=b.dataset.mood;render(false);return}
  if(b.dataset.gait){gait=b.dataset.gait;render(false);return}
  if(b.dataset.answer!==undefined&&!checked){chosen=Number(b.dataset.answer);render(false);return}
+ if(b.dataset.action==='zoom'){const frame=document.querySelector('.bone-board');if(frame){frame.classList.toggle('zoomed');b.textContent=frame.classList.contains('zoomed')?'🔎 Wieder verkleinern':'🔎 Skelett vergrößern';}return}
  if(b.dataset.action==='hint'&&!checked){hints=Math.min(2,hints+1);render(false);return}
  if(b.dataset.action==='check'&&chosen!==null&&!checked){checked=true;if(chosen===quiz[qi].c)score++;render(false);return}
  if(b.dataset.action==='next'&&checked){qi++;checked=false;chosen=null;hints=0;render(false);return}
