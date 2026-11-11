@@ -123,3 +123,44 @@ Sechs animierte Bewegungen: **Gehen**, **Traben**, **Schnell laufen**, **Springe
 - Quellen / biologisch korrekte Erklärungen beibehalten. SVGs sind explizit schematisch, keine anatomisch maßstabsgetreuen Präparate.
 - Änderungen der Lernstationen in `Tierkunde_Hund_Katze.js`, der Ansicht in CSS. Danach JavaScript-Syntax und die Routen beider Tierarten testen.
 - Weitere Verbesserungsmöglichkeiten: hochwertige, lizenzgeprüfte anatomische Detailillustrationen anstelle vereinfachter SVG-Grafiken; echte mobile Browsertests; individuelle Audio-Stimmen.
+
+
+## Fortschritt 11. November 2026 – Forschercheck und bessere Bedienung
+
+### Geänderte Dateien
+
+- `Tierkunde_Transferlabor.js` und `.css` (neu): 14 anwendungsorientierte Fallaufgaben, sieben für Hund und sieben für Katze. Jede Lernstation enthält eine eigenständig gezeichnete Funktionsskizze, eine Beobachtungsgeschichte, drei Antwortmöglichkeiten, Denkhinweis und Erklärung zur gewählten Lösung.
+- `Tierkunde_Hund_Katze.js`: Forschercheck wird bei jedem Tier- und Stationswechsel nach den bisherigen Lern-, Gebiss-, Skelett- und Verhaltensmodulen angebunden.
+- `BioLabor_Hund_Katze.html`: neues CSS/JavaScript ergänzt; Beschriftung der neuen Aufgabe im Einstieg; `aria-live` vom gesamten dynamischen Lernbereich entfernt, um unbeabsichtigtes Vorlesen des kompletten Seiteninhalts bei jedem Wechsel zu vermeiden.
+- `BioLabor_5_Biologie_V9_2.html`: bestehende Biologie-Startseite bleibt erhalten und zeigt die Zahl absolvierter Forscherfälle je Tier zusätzlich an.
+
+### Didaktische Ergänzungen
+
+1. Schüler übertragen ihr Wissen zu Skelett, Domestikation, Gebiss, Jagd, Fortbewegung, Körpersprache und Vergleich in neue Alltagssituationen.
+2. Unpassende Antworten werden ausdrücklich erklärt, statt nur mit „falsch“ markiert. Die Situation kann sofort erneut bearbeitet werden.
+3. Körperhaltung und Sicherheit werden im Kontext beurteilt; ein einzelnes Signal (z. B. Schwanzwedeln) wird nicht als eindeutiger Gefühlsbeweis vermittelt.
+4. Die 14 neuen SVG-Funktionsskizzen sind vereinfachte didaktische Modelle aus sieben Grafiktypen, keine Fotos, CT-Aufnahmen oder maßstabsgetreuen Knochengrafiken.
+5. Der neue Fortschritt liegt ausschließlich lokal im getrennten Schlüssel `biolab5-tiertransfer-202611`. Vorherige Quizstände und Lernstudio-Daten bleiben unverändert. Der Forschercheck kann beliebig oft wiederholt werden.
+6. Funktionen für reduziertes Bewegungstempo (Betriebssystemeinstellung), Tastaturfokus sowie große Touch-Ziele sind im neuen Modul berücksichtigt.
+
+### Prüfung des neuen Moduls
+
+- JavaScript-Syntax des neuen und des erweiterten Hauptmoduls geprüft.
+- Selbsttest aller 14 Kombinationen (beide Tiere × sieben Lernstationen) mit je drei Antwortmöglichkeiten bestanden.
+- In einem simulierten DOM alle 14 Stationsansichten erzeugt; die Skizzen- und Auswahl-Elemente waren vorhanden.
+- Falsche und richtige Antwort, Erklärtext und lokale Fortschrittsspeicherung in der simulierten Umgebung geprüft.
+- Die CSS-/JS-Verknüpfung und die Startseiten-Erweiterung mit dem Repositorycode abgeglichen.
+- **Nicht verifiziert:** tatsächliche öffentliche GitHub-Pages-Auslieferung und reale Darstellung oder Klicktests in iOS Safari, Android oder Desktop-Browsern. Das bleibt eine offene manuelle Qualitätssicherung.
+- **Fachliche Grenze:** Die schematischen Bildproportionen wurden nicht anatomisch extern begutachtet; für exakte Knochenformen und Gelenkgeometrie sind veterinärmedizinische Atlanten und fachkundige Freigabe erforderlich.
+
+### Direkter Einstieg
+
+- https://adrakir.github.io/Lernprogramme/biologie%20und%20chemie/BioLabor_5_Biologie_V9_2.html
+- https://adrakir.github.io/Lernprogramme/biologie%20und%20chemie/BioLabor_Hund_Katze.html
+- Hund: `#dog/skeleton`; Katze: `#cat/skeleton`. Der Forschercheck erscheint unter dem jeweiligen Lern- beziehungsweise Anschauungsbereich.
+
+### Fachliche Orientierung
+
+- RSPCA, Körpersprache Hund: https://www.rspca.org.uk/adviceandwelfare/pets/dogs/behaviour/understanding
+- RSPCA, Körpersprache Katze: https://www.rspca.org.uk/adviceandwelfare/pets/cats/behaviour
+- Merck Veterinary Manual, Zahnaufbau und -bezeichnungen: https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals
