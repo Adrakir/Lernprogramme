@@ -177,6 +177,26 @@ function oftenExamples(arr,which,maxCount){
  const labels=yes.slice(0,maxCount).map(i=>'<li>'+safe(ITEMS[i][1])+' – '+safe(arr[i]===4?"sehr oft":"oft")+'</li>');
  return labels.length?'<ul class="eval-list">'+labels.join("")+'</ul>':'<p class="eval-help">In diesem Lebensabschnitt wurde bisher kein Thema als „oft“ oder „sehr oft“ markiert.</p>';
 }
+function practiceClinicalOrientation(){
+ const now=model.adult.map((v,i)=>({v,i})).filter(x=>x.v===3||x.v===4);
+ const child=model.child.map((v,i)=>({v,i})).filter(x=>x.v===3||x.v===4);
+ const nowKnown=model.adult.filter(v=>v!==null&&v!==5).length;
+ const childKnown=model.child.filter(v=>v!==null&&v!==5).length;
+ const impacts=model.impact.filter(v=>v===2||v===3).length;
+ const itemNames=now.slice(0,5).map(x=>safe(ITEMS[x.i][1])).join(', ');
+ let h='<h3>Welche diagnostischen Möglichkeiten sollten abgeklärt werden?</h3>';
+ h+='<p>Dieser eigenständige Übungsbogen beschreibt <strong>ADHS-nahe Alltagsthemen</strong>, ist aber kein standardisierter Diagnosetest. Es gibt bewusst keine Prozentwahrscheinlichkeit, keine eigenständige Verdachtsdiagnose und keine erfundene Grenzwertschwelle.</p>';
+ if(nowKnown===0)h+='<p><strong>Aktuell noch nicht einordbar:</strong> Im Erwachsenenalter fehlen verwertbare Häufigkeitsangaben.</p>';
+ else if(now.length)h+='<p><strong>ADHS als Gesprächsfrage:</strong> Unter den häufig berichteten aktuellen Schwierigkeiten sind '+itemNames+'. Diese Beispiele können bei anhaltender Belastung eine fachärztliche ADHS-Abklärung begründen, müssen aber im zeitlichen Verlauf und zusammen mit möglichen anderen Ursachen geprüft werden.</p>';
+ else h+='<p><strong>ADHS:</strong> Bisher wurden keine aktuellen Lernfragen häufig beantwortet. Ein niedriges Ergebnis schließt ADHS nicht aus.</p>';
+ if(childKnown===0)h+='<p><strong>Kindheit nicht geklärt:</strong> Für die frühen Jahre fehlen verwertbare Antworten. Schulzeugnisse und Beobachtungen aus der Familie können helfen.</p>';
+ else h+='<p><strong>Entwicklung:</strong> Für die Kindheit sind '+childKnown+' Themen auswertbar; '+child.length+' wurden häufig erinnert. Erinnerungen und Daten aus verschiedenen Lebensphasen müssen fachlich eingeordnet werden.</p>';
+ if(impacts)h+='<p><strong>Alltagsbeeinträchtigung:</strong> '+impacts+' von fünf Bereichen wurden deutlich oder sehr stark beeinträchtigt eingeschätzt. Für das Arztgespräch sollten konkrete Folgen und hilfreiche Anpassungen dokumentiert werden.</p>';
+ h+='<p><strong>Autismus / AuDHS:</strong> Dieser Bogen untersucht autistische Merkmale nicht ausreichend. Bei entsprechenden Beobachtungen können ADHS und Autismus getrennt und gemeinsam fachlich geprüft werden. <a href="./vertiefung.html">100 vertiefende Fragen</a> · <a href="./arztgespraech.html">Arztgesprächshilfe</a>.</p>';
+ h+='<p><strong>Andere Ursachen:</strong> Auch Depressionen, Angst/Panik, Schlafstörungen, Erschöpfung, körperliche Erkrankungen, Schmerzen und Medikamenteneffekte können sich auf Aufmerksamkeit und Belastbarkeit auswirken oder zusätzlich bestehen.</p>';
+ h+='<p class="muted">Diese Hinweise sind eine Orientierung zum Besprechen, keine klinische Entscheidung über ADHS, Autismus oder AuDHS.</p>';
+ return h;
+}
 function report(){
  const s=summary(),done=s.done,open=41-done,undecided=s.a.unsure+s.c.unsure+model.impact.filter(v=>v>=4).length;
  const adultFreq=s.a.often,childFreq=s.c.often;
@@ -191,6 +211,7 @@ function report(){
  html+='<div class="eval-step"><div class="eval-pill">Schritt 3 · Welche Alltagssituationen wurden häufig genannt?</div><div class="eval-examples"><div><h3>Heute – Erwachsenenalter</h3>'+oftenExamples(model.adult,"adult",6)+'</div><div><h3>Kindheit – rückblickend</h3>'+oftenExamples(model.child,"child",6)+'</div></div><p class="eval-help">Hier werden maximal sechs Beispiele pro Lebensphase angezeigt. Die übrigen Antworten bleiben über den Fragebogen und im JSON-Export verfügbar.</p></div>';
  html+='<div class="eval-step"><div class="eval-pill">Schritt 4 · Wie stark wurde der Alltag als beeinträchtigt beschrieben?</div><p><strong>'+s.impHigh+' von '+s.imp+' beantworteten Lebensbereichen</strong> wurden mit „deutlich“ oder „sehr stark“ eingeschätzt.</p>';
  IMPACT.forEach((o,i)=>{const v=model.impact[i];html+='<div class="eval-bullet"><strong>'+safe(o[0])+'</strong><span>'+(v===null?"Noch nicht beantwortet":safe(EFFECT[v]))+'</span></div>';});html+='</div>';
+ html+='<div class="eval-step"><div class="eval-pill">Diagnostische Orientierung · Welche Abklärung kann sinnvoll sein?</div>'+practiceClinicalOrientation()+'</div>';
  html+='<div class="eval-step"><div class="eval-pill">Schritt 5 · Was bedeutet das Ergebnis?</div><div class="eval-note"><strong>Es beschreibt deine Angaben, nicht eine Diagnose.</strong><p>Ein hoher Zähler bedeutet lediglich, dass in mehreren selbst formulierten Fragen Schwierigkeiten als häufig angegeben wurden. Ein niedriger Zähler schließt ADHS nicht aus. Der Übungstest hat keine medizinisch validierten Grenzwerte.</p></div><p><strong>Was lässt sich nicht daraus ableiten?</strong> Weder „ADHS vorhanden“, „kein ADHS“, eine Prozentwahrscheinlichkeit noch eine AuDHS-Diagnose oder ein ADHS-Subtyp.</p><p><strong>Was wäre als Nächstes sinnvoll?</strong> '+(open>0?"Zunächst offene Fragen ergänzen und unklare Antworten nach Möglichkeit einordnen. ":"Konkrete Situationen notieren, in denen Schwierigkeiten den Alltag beeinflussen. ")+'Bei anhaltenden relevanten Beschwerden kann eine qualifizierte Fachperson Symptome, Entwicklung, Dauer, Auswirkungen in mehreren Situationen und andere mögliche Ursachen überprüfen.</p><p>Für AuDHS muss Autismus gesondert untersucht werden. <a href="./index.html">Zur ADHS-/AuDHS-Übersicht</a></p></div>';
  $("report").innerHTML=html;
  $("resultMode").textContent=model.demo?"Fiktiver Übungsfall":"Nicht validiert";
@@ -229,7 +250,8 @@ function renderNarrative(){
  html+=narrativeSection('4. Grenzen der Auswertung',limits);
  let next='<p>'+((41-s.done)>0?'Für eine vollständigere Beschreibung könnten zunächst die noch offenen Fragen ergänzt werden. ':'Die ausgefüllten Angaben können als Gesprächsgrundlage dienen. ')+'Wichtig für eine professionelle Abklärung wären konkrete Beispiele, Beschwerden über mindestens sechs Monate, Kindheitsverlauf, Beeinträchtigung in mehreren Lebenssituationen und die Prüfung möglicher anderer Ursachen.</p>';
  next+='<p>Für AuDHS müssten autistische Merkmale unabhängig davon fachlich untersucht werden. Ein Ergebnis dieses Übungsbogens allein kann weder ADHS noch Autismus oder AuDHS feststellen.</p>';
- html+=narrativeSection('5. Fragen für die weitere Abklärung',next);
+ html+=narrativeSection('5. Diagnostische Orientierung für das Gespräch',practiceClinicalOrientation());
+ html+=narrativeSection('6. Fragen für die weitere Abklärung',next);
  $("narrativeReport").innerHTML=html;
 }
 
