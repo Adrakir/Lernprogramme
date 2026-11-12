@@ -250,6 +250,47 @@ function signalsPage(){
  card('❤️','Tiere nicht erschrecken','Angst, Drohen und Flucht sind wichtige Signale. Rückzug ermöglichen statt festhalten. Ein Erwachsener hilft bei unsicheren Situationen.')+'</div>'+
  navLine('compare','Weiter: Hund und Katze vergleichen');
 }
+const focusedComparisons = {
+ origin: {
+  title: 'Vom Wildtier zum Haustier im Vergleich',
+  rows: [
+   ['Vorfahren', 'Frühere Wolfspopulationen', 'Afrikanisch-vorderasiatische Wildkatzen'],
+   ['Nähe zum Menschen', 'Die ersten Hunde lebten mit Menschen zusammen, bevor Ackerbau weit verbreitet war. Wie der Kontakt begann, wird erforscht.', 'Getreidevorräte zogen Mäuse an. Wildkatzen fanden dadurch Beute in der Nähe von Siedlungen.'],
+   ['Zusammenleben', 'Menschen nutzten Hunde später unter anderem zum Bewachen, Hüten und Jagen.', 'Katzen konnten in Siedlungen Mäuse fangen. Daraus entwickelte sich über viele Generationen das Zusammenleben.'],
+  ],
+  note: 'Die genauen Ursprünge werden mithilfe von Knochenfunden und Erbgut erforscht.',
+  sources: [
+   ['Smithsonian: Hund', 'https://www.si.edu/stories/your-dog-little-wolfy'],
+   ['Library of Congress: Katze', 'https://www.loc.gov/everyday-mysteries/categories/zoology/item/how-did-cats-become-domesticated/'],
+  ],
+ },
+ hunt: {
+  title: 'Jagdverhalten im Vergleich',
+  rows: [
+   ['Beute finden', 'Viele Hunde nutzen ihre Nase, um eine Spur zu verfolgen.', 'Katzen nutzen unter anderem Gehör und Augen, um kleine Bewegungen zu orten.'],
+   ['Sich nähern', 'Ein Hund kann einer Spur folgen, stehen bleiben oder ein Ziel verfolgen. Je nach Rasse und Tier sieht das unterschiedlich aus.', 'Eine Katze jagt häufig allein. Sie nähert sich oft geduckt und wartet, bis die Beute nah ist.'],
+   ['Festhalten', 'Mit den Eckzähnen kann ein Hund etwas fassen und festhalten.', 'Die Katze kann sich mit den Hinterbeinen abstoßen und Beute mit Vorderpfoten und Krallen fassen.'],
+  ],
+  note: 'Spurensuche, Anschleichen oder Anspringen kann man auch beim Spielen beobachten.',
+  sources: [],
+ },
+};
+
+function focusedComparison(section){
+ const comparison = focusedComparisons[section];
+ if(!comparison)return '';
+ return `<section class="tier-side-by-side" aria-labelledby="tier-comparison-heading">
+   <h3 id="tier-comparison-heading">${comparison.title}</h3>
+   <table role="table" aria-labelledby="tier-comparison-heading">
+    <thead role="rowgroup"><tr role="row"><th role="columnheader" scope="col">Merkmal</th><th role="columnheader" scope="col">Hund</th><th role="columnheader" scope="col">Katze</th></tr></thead>
+    <tbody role="rowgroup">${comparison.rows.map(([feature,dog,cat])=>
+     `<tr role="row"><th role="rowheader" scope="row">${feature}</th><td role="cell"><span aria-hidden="true">Hund</span>${dog}</td><td role="cell"><span aria-hidden="true">Katze</span>${cat}</td></tr>`).join('')}</tbody>
+   </table>
+   <p class="tier-compare-note">${comparison.note}
+    ${comparison.sources.map(([label,url])=>`<a href="${url}">${label}</a>`).join(' · ')}</p>
+  </section>`;
+}
+
 function comparePage(){
  const rows=[
  ['Abstammung','Frühere Wolfspopulationen','Afrikanisch-vorderasiatische Wildkatze'],
@@ -293,7 +334,13 @@ function quizPage(){
 }
 function updateControls(){
  document.querySelectorAll('[data-species]').forEach(x=>{x.classList.toggle('active',x.dataset.species===animal);x.setAttribute('aria-pressed',String(x.dataset.species===animal))});
- document.querySelectorAll('#sections [data-section]').forEach(x=>x.classList.toggle('active',x.dataset.section===section));
+ const stations=$('#sections');
+ stations.querySelectorAll('[data-section]').forEach(x=>x.classList.toggle('active',x.dataset.section===section));
+ const active=stations.querySelector('.active');
+ if(active&&stations.scrollWidth>stations.clientWidth){
+  const item=active.getBoundingClientRect(),menu=stations.getBoundingClientRect();
+  if(item.left<menu.left||item.right>menu.right)stations.scrollLeft+=item.left-menu.left;
+ }
 }
 function render(focus){
  updateControls();
@@ -304,6 +351,9 @@ function render(focus){
  if(window.BioDentalLab)window.BioDentalLab.mount({animal,section});
  if(window.BioBehaviorLab)window.BioBehaviorLab.mount({animal,section});
  if(window.BioTransferLab)window.BioTransferLab.mount({animal,section});
+ if(focusedComparisons[section]){
+  $('#content .page-title').insertAdjacentHTML('afterend',focusedComparison(section));
+ }
  if(focus){$('#content').focus({preventScroll:true});scrollTo({top:0,behavior:'instant'});}
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}

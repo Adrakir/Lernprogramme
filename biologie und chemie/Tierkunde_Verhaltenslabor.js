@@ -1,76 +1,257 @@
-/* BioLabor 5 – Körpersprache beobachten. Kein Tierverhalten aus einem Einzelzeichen ableiten. */
-(function(){
-'use strict';
-const SCENES={
- relax:{label:'Entspannt',icon:'☀️',desc:'Lockere Körperhaltung und fließende Bewegungen können auf Entspannung hinweisen.',ears:'neutral',tail:'locker',context:'Das Tier hat Ruhe und ausreichend Platz.',safe:'Beobachten',why:'Auch bei einem entspannten Tier entscheidet die Situation; nicht ungefragt anfassen.'},
- fear:{label:'Ängstlich',icon:'😟',desc:'Geduckter Körper, angelegte Ohren oder Rückzug können Angst anzeigen.',ears:'angelegt',tail:'tief',context:'Ein fremdes Geräusch erschreckt das Tier.',safe:'Abstand lassen',why:'Nicht bedrängen und einen Rückzugsweg frei lassen.'},
- threat:{label:'Drohen',icon:'⚠️',desc:'Angespanntes Stehen, Zähnezeigen, Knurren oder Fauchen können eine Warnung sein.',ears:'verändert',tail:'angespannt',context:'Eine fremde Person kommt dem Tier zu nahe.',safe:'Abstand lassen',why:'Warnsignale ernst nehmen. Nicht in die Enge treiben.'},
- attack:{label:'Abwehr',icon:'🛑',desc:'Ein Tier kann sich verteidigen, wenn es keinen Ausweg sieht.',ears:'verändert',tail:'angespannt',context:'Das Tier wurde in die Enge gedrängt.',safe:'Abstand lassen',why:'Ruhig Distanz schaffen und Hilfe von Erwachsenen holen. Nicht dazwischen greifen.'},
- flee:{label:'Flucht',icon:'💨',desc:'Das Tier richtet die Bewegung vom Auslöser weg aus. Angst und Flucht sind nicht dasselbe wie Angriff.',ears:'nach hinten',tail:'tief',context:'Das Tier sucht einen sicheren Rückzugsort.',safe:'Abstand lassen',why:'Ein fliehendes Tier nie verfolgen oder einfangen wollen.'},
- hunt:{label:'Jagd',icon:'🔎',desc:'Gebückte Haltung und konzentrierter Blick können beim Beobachten oder Lauern auftreten.',ears:'aufmerksam',tail:'kontrolliert',context:'Das Tier beobachtet ein sich bewegendes Objekt.',safe:'Beobachten',why:'Nicht mitten in die Jagdsituation eingreifen; Abstand wahren.'},
- play:{label:'Spiel',icon:'🎾',desc:'Lockere Bewegungen und typische Spielsignale können Spielabsicht zeigen. Beim Hund ist die Spielverbeugung häufig.',ears:'beweglich',tail:'lebhaft',context:'Das Tier hat freiwillig Kontakt zu einem bekannten Spielpartner.',safe:'Beobachten',why:'Spielsignale mit Körperspannung und Situation abgleichen; nicht jedes wilde Rennen ist Spiel.'}
-};
-const state={animal:'dog',scene:'relax',answer:null,learned:{}};
-const el=s=>document.getElementById(s);
-const n=v=>Number(v).toFixed(1).replace(/\.0$/,'');
-function figure(){
- const k=state.scene,t=SCENES[k],cat=state.animal==='cat',fear=['fear','flee','hunt'].includes(k),aggr=['threat','attack'].includes(k);
- const yy=fear?206:k==='play'&& !cat?195:k==='threat'&&cat?150:176;
- const hY=yy-30,earY=hY-36,tailBase={x:524,y:yy+13};
- const bodyPath=k==='threat'&&cat?'M245 '+(yy+40)+'Q310 '+(yy-76)+' 406 '+(yy-57)+'Q469 '+(yy-53)+' 522 '+(yy+44)+'Q431 '+(yy+104)+' 280 '+(yy+88)+'Z':'M244 '+(yy+37)+'Q315 '+(yy-32)+' 454 '+(yy+9)+'Q517 '+(yy+19)+' 522 '+(yy+45)+'Q430 '+(yy+106)+' 282 '+(yy+87)+'Z';
- const tail=k==='fear'||k==='flee'?'M524 '+(yy+43)+'Q553 '+(yy+95)+' 568 '+(yy+120):
- (k==='threat'&&cat?'M521 '+(yy+18)+'Q564 '+(yy-120)+' 605 '+(yy-56)+'Q625 '+(yy-11)+' 624 '+(yy+9):
- k==='hunt'?'M523 '+(yy+44)+'Q571 '+(yy+66)+' 614 '+(yy+40):
- 'M522 '+(yy+39)+'Q587 '+(yy+2)+' 627 '+(yy-30));
- const legs=fear?
- '<path d="M296 '+(yy+74)+'l-33 40h-43M459 '+(yy+66)+'l-20 47h-39" stroke="#4d8070" stroke-width="22" stroke-linecap="round" fill="none"/>':
- k==='play'&&!cat?
- '<path d="M288 '+(yy+85)+'l-77 65h-51M462 '+(yy+86)+'l22 70h-30" stroke="#4d8070" stroke-width="23" fill="none" stroke-linecap="round"/>':
- '<path d="M295 '+(yy+84)+'l-12 92h-31M468 '+(yy+80)+'l14 96h-28" stroke="#4d8070" stroke-width="24" fill="none" stroke-linecap="round"/>';
- const ears=cat?
- (fear||aggr?'<path d="M145 '+(earY+15)+'l-39 13l42 -39M192 '+(earY+11)+'l49 13l-45 -45" fill="#8bbb9f" stroke="#4d8070" stroke-width="5"/>':
- '<path d="M143 '+(earY+21)+'l-16 -53l49 30l40 -30l3 54" fill="#9fc9b1" stroke="#4d8070" stroke-width="5"/>'):
- (fear||aggr?'<path d="M146 '+(earY+11)+'l-27 29m90 -31l31 28" stroke="#4d8070" stroke-width="20" stroke-linecap="round"/>':
- '<path d="M148 '+earY+'q-36 -53 -37 14m108 -11q33 -55 31 10" stroke="#4d8070" stroke-width="21" stroke-linecap="round" fill="none"/>');
- const eyes=aggr?'<path d="M175 '+(hY+9)+'l18 0" stroke="#173f35" stroke-width="5"/>':
- '<ellipse cx="184" cy="'+(hY+9)+'" rx="'+(fear?7:5)+'" ry="'+(fear?8:6)+'" fill="#1c4a3b"/>';
- const mouth=aggr?'<path d="M131 '+(hY+34)+'q25 16 50 2m-30 6l9 8l9 -9" stroke="#603f32" stroke-width="4" fill="none"/>':'<path d="M131 '+(hY+38)+'q23 9 44 -1" fill="none" stroke="#527468" stroke-width="3"/>';
- const motion=k==='play'?'behavior-wag':k==='flee'?'behavior-flee':'';
- return '<svg viewBox="0 0 760 380" role="img" aria-label="Schematisches Bild zum Verhalten: '+t.label+'"><rect width="760" height="380" rx="17" fill="#eff7f1"/>'+
- '<path d="M35 349H719" stroke="#b6d8c1" stroke-width="3" stroke-dasharray="11 9"/>'+
- '<g class="'+motion+'">'+legs+'<path d="'+bodyPath+'" fill="'+(aggr?'#c6ad94':'#a2c7ad')+'" stroke="#4b8070" stroke-width="5"/>'+
- '<path d="'+tail+'" fill="none" stroke="'+(k==='threat'&&cat?'#a18767':'#769d89')+'" stroke-width="'+(k==='threat'&&cat?'23':'18')+'" stroke-linecap="round" class="'+(k==='play'?'behavior-tail':'')+'"/>'+
- '<path d="M234 '+(yy+32)+'Q190 '+(hY-8)+' 160 '+(hY+12)+'Q120 '+(hY-9)+' 111 '+(hY+23)+'Q95 '+(hY+54)+' 129 '+(hY+67)+'Q193 '+(hY+78)+' 241 '+(hY+48)+'Z" fill="#b1d5be" stroke="#4b8070" stroke-width="5"/>'+
- ears+eyes+mouth+
- (cat?'<path d="M110 '+(hY+36)+'l-45 -9m44 17l-51 1m144 -14l45 -12" stroke="#779889" stroke-width="2"/>':'')+'</g>'+
- '<rect x="29" y="24" width="190" height="45" rx="12" fill="#fff" fill-opacity=".95"/><text x="46" y="54" font-size="22" font-weight="900" fill="#225c48">'+t.icon+' '+t.label+'</text>'+
- '<text x="42" y="371" font-size="13" fill="#527a68">Vereinfachte Körperspracheskizze · immer die Gesamtsituation bewerten</text></svg>';
-}
-function render(){
- const root=el('behavior-lab');if(!root)return;
- const t=SCENES[state.scene];
- root.innerHTML='<div class="behavior-head"><div><small>👀 FALLLABOR · KÖRPERSPRACHE</small><h3>Was möchte das Tier zeigen?</h3><p>Vergleiche Haltung, Ohren, Schwanz und Umgebung. Ein Zeichen allein reicht nicht.</p></div><span>7 Situationen</span></div>'+
- '<div class="behavior-picks" role="group" aria-label="Situation auswählen">'+Object.entries(SCENES).map(([k,x])=>'<button type="button" data-scene="'+k+'" aria-pressed="'+(state.scene===k)+'">'+x.icon+' '+x.label+'</button>').join('')+'</div>'+
- '<div class="behavior-stage">'+figure()+'</div>'+
- '<div class="behavior-hints"><div><b>👂 Ohren</b><span>'+t.ears+'</span></div><div><b>🐾 Haltung</b><span>'+t.desc+'</span></div><div><b>🐕 Schwanz</b><span>'+t.tail+'</span></div></div>'+
- '<div class="behavior-story"><b>Situation:</b> '+t.context+' <p><b>Forscherfrage:</b> Wie sollte sich ein Mensch jetzt verhalten?</p>'+
- '<div class="behavior-choices" role="group" aria-label="Sichere Reaktion auswählen">'+['Abstand lassen','Beobachten','Sofort streicheln'].map(x=>'<button type="button" data-answer="'+x+'" aria-pressed="'+(state.answer===x)+'">'+x+'</button>').join('')+'</div>'+
- (state.answer?'<p class="behavior-result '+(state.answer===t.safe?'correct':'wrong')+'" role="status"><b>'+(state.answer===t.safe?'✓ Gute Entscheidung!':'↗ Überlege noch einmal.')+'</b> '+t.why+'</p>':'')+'</div>';
-}
-function mount(params){
- if(params.section!=='signals')return;
- state.animal=params.animal==='cat'?'cat':'dog';state.scene='relax';state.answer=null;
- const content=el('content');if(!content)return;
- const root=document.createElement('section');root.id='behavior-lab';root.className='behavior-lab';
- const ref=content.querySelector('.ls-reference');content.insertBefore(root,ref||null);
- root.addEventListener('click',e=>{
- const b=e.target.closest('button');if(!b)return;
- if(b.dataset.scene){state.scene=b.dataset.scene;state.answer=null;render()}
- if(b.dataset.answer){state.answer=b.dataset.answer;render()}
- });
- render();
-}
-window.BioBehaviorLab={mount,SCENES,figure};
-const init=decodeURIComponent(location.hash.slice(1)).split('/');
-if((init[1]||'skeleton')==='signals')mount({animal:init[0]==='cat'?'cat':'dog',section:'signals'});
+/* BioLabor 5: Körpersprache bei Hund und Katze im selben Kontext beobachten. */
+(() => {
+  'use strict';
+
+  const SCENES = {
+    greet: {
+      label: 'Freudige Begrüßung',
+      context: 'Eine vertraute Person kommt nach Hause. Das Tier nähert sich freiwillig.',
+      dog: ['Locker', 'Weicher Körper, das Tier kommt in einem lockeren Gang näher.', 'Oft weite, lockere Bewegungen.'],
+      cat: ['Nach vorn oder locker seitlich', 'Lockere Schritte. Die Katze kann sich an einem vertrauten Menschen reiben.', 'Häufig aufgerichtet, die Spitze kann gebogen sein.'],
+      question: 'Was spricht in dieser Situation für eine freundliche Begrüßung?',
+      choices: ['Das Tier kommt freiwillig näher und bewegt sich locker.', 'Der Hund wedelt. Der Rest der Haltung ist egal.', 'Die Katze hat vier Pfoten am Boden.'],
+      explanation: 'Entscheidend ist das Zusammenspiel aus vertrauter Situation, freiwilliger Annäherung und lockerer Haltung.',
+    },
+    relax: {
+      label: 'Entspannt',
+      context: 'Das Tier steht in seiner vertrauten Umgebung und kann sich frei bewegen.',
+      dog: ['Locker, in natürlicher Stellung', 'Das Gewicht verteilt sich auf die Beine, der Körper wirkt weich.', 'Locker in seiner natürlichen Haltung.'],
+      cat: ['Locker, in natürlicher Stellung', 'Die Katze steht oder bewegt sich ohne sichtbare Anspannung.', 'Locker getragen, ohne heftiges Schlagen.'],
+      question: 'Welche Beobachtungen passen zusammen?',
+      choices: ['Lockere Haltung und freie Bewegung in vertrauter Umgebung.', 'Steifer Körper und deutliches Zurückweichen.', 'Fauchen und ein hoch aufgewölbter Rücken.'],
+      explanation: 'Bei Entspannung wirken Bewegungen und Körperhaltung locker. Wie Ohren und Schwanz dabei stehen, hängt auch vom Tier ab.',
+    },
+    fear: {
+      label: 'Angst',
+      context: 'Ein plötzliches Geräusch erschreckt das Tier. Es versucht, sich kleiner zu machen.',
+      dog: ['Nach hinten gelegt', 'Kopf und Körper sind gesenkt. Der Hund kann zurückweichen.', 'Tief, manchmal zwischen die Hinterbeine gezogen.'],
+      cat: ['Seitlich oder nach hinten abgeflacht', 'Die Katze duckt sich und sucht möglicherweise ein Versteck.', 'Tief, oft dicht am Körper.'],
+      question: 'Wie hilfst du einem Tier, das sich vor dem Geräusch fürchtet?',
+      choices: ['Lass ihm Abstand und halte den Rückzugsweg frei.', 'Geh gleich näher heran und halte es fest.', 'Versperre den Weg, damit du es besser beobachten kannst.'],
+      explanation: 'Mit Abstand und einem freien Rückzugsweg kann sich das Tier selbst in Sicherheit bringen.',
+    },
+    threat: {
+      label: 'Drohen',
+      context: 'Jemand kommt näher. Das Tier ist angespannt und warnt, zum Beispiel durch Knurren oder Fauchen.',
+      dog: ['Je nach Situation nach vorn oder zurück', 'Der Körper kann steif sein. Manche Hunde zeigen die Zähne.', 'Oft steif oder mit kurzen, angespannten Bewegungen.'],
+      cat: ['Häufig seitlich oder flach nach hinten', 'Die Katze kann den Rücken aufwölben, ihr Fell sträuben und fauchen.', 'Kann gesträubt wirken.'],
+      question: 'Wozu kann ein Warnsignal dienen?',
+      choices: ['Es kann Abstand schaffen, bevor es zu einer Auseinandersetzung kommt.', 'Es lädt sicher zum Spielen ein.', 'Es zeigt, dass Anfassen das Tier sofort beruhigt.'],
+      explanation: 'Knurren oder Fauchen sind Warnsignale. Ruhig Abstand lassen und das Tier nicht bedrängen.',
+    },
+    attack: {
+      label: 'Abwehr',
+      context: 'Das Tier wird in die Enge gedrängt. Es kann nach vorn ausweichen, schnappen oder mit der Pfote abwehren.',
+      dog: ['Häufig zurückgezogen', 'Der Hund kann sich versteifen und kurz nach vorn schnellen.', 'Angespannt. Die genaue Haltung kann unterschiedlich sein.'],
+      cat: ['Oft flach nach hinten', 'Die Katze kann mit einer angehobenen Vorderpfote abwehren.', 'Angespannt, manchmal gesträubt.'],
+      question: 'Was tust du, wenn ein Tier sich abwehrt?',
+      choices: ['Ruhig Distanz schaffen und einen Erwachsenen holen.', 'Die Hand näher heranhalten.', 'Zwischen das Tier und seinen Rückzugsweg treten.'],
+      explanation: 'Mit Abstand sinkt der Druck auf das Tier. Lass einen Erwachsenen helfen, statt nach dem Tier zu greifen.',
+    },
+    flee: {
+      label: 'Flucht',
+      context: 'Das Tier bewegt sich rasch vom Auslöser weg und sucht einen sicheren Ort.',
+      dog: ['Häufig nach hinten', 'Der Hund wendet sich ab und läuft weg.', 'Beim Weglaufen oft niedrig.'],
+      cat: ['Häufig nach hinten', 'Die Katze flüchtet in Deckung, zum Beispiel unter ein Möbelstück.', 'Häufig tief oder dicht am Körper.'],
+      question: 'Woran erkennst du Flucht in dieser Szene am besten?',
+      choices: ['Das Tier bewegt sich vom Auslöser weg.', 'Das Tier hat Ohren.', 'Die Katze schaut kurz zur Seite.'],
+      explanation: 'Bei Flucht ist die Bewegungsrichtung der wichtigste Hinweis in dieser Szene. Lass das Tier weglaufen.',
+    },
+    hunt: {
+      label: 'Jagd',
+      context: 'Ein kleines Tier bewegt sich. Hund und Katze richten ihre Aufmerksamkeit darauf.',
+      dog: ['Aufmerksam zum Reiz gerichtet, je nach Ohrenform', 'Der Hund kann wittern, fixieren oder plötzlich hinterherlaufen.', 'Haltung und Bewegung hängen von der Jagdphase ab.'],
+      cat: ['Zum Geräusch oder Ziel gerichtet', 'Die Katze kann mit niedrigem Körper anschleichen oder lauern.', 'Beim Lauern oft tief und mit wenig Bewegung.'],
+      question: 'Was hilft, Anschleichen von Angst zu unterscheiden?',
+      choices: ['Schau, wohin das Tier blickt und ob es sich einem Ziel nähert oder sich zurückzieht.', 'Eine tiefe Haltung bedeutet immer Angst.', 'Die Farbe des Fells zeigt die Absicht.'],
+      explanation: 'Eine geduckte Haltung kann in beiden Situationen vorkommen. Ziel, Richtung und Umgebung geben weitere Hinweise.',
+    },
+    play: {
+      label: 'Spiel',
+      context: 'Das Tier hat einen vertrauten Spielpartner oder ein Spielzeug und kann jederzeit aufhören.',
+      dog: ['Beweglich, Körper wirkt locker', 'Bei einer Spielverbeugung gehen Vorderkörper und Vorderbeine tief. Das Hinterteil bleibt höher.', 'Oft locker und lebhaft bewegt.'],
+      cat: ['Beweglich und oft zum Spielzeug gerichtet', 'Die Katze kann eine Pfote anheben, lauern und ein Spielzeug anspringen.', 'Beweglich, je nach Spielphase unterschiedlich getragen.'],
+      question: 'Welche Beobachtung passt zur Spielverbeugung des Hundes?',
+      choices: ['Der Vorderkörper geht tief, das Hinterteil bleibt oben.', 'Der Hund versucht, sich hinter einem Möbelstück zu verstecken.', 'Der Hund steht steif, warnt und weicht zurück.'],
+      explanation: 'Die Verbeugung kann eine Einladung zum Spiel sein. Auch hier gehören lockere Bewegungen und die Situation zum Gesamtbild.',
+    },
+  };
+
+  const features = ['Ohren', 'Körper', 'Schwanz'];
+  const animalNames = {dog: 'Hund', cat: 'Katze'};
+  const answerOrder = Object.keys(SCENES);
+  const animations = new Set(['greet', 'flee', 'play']);
+  const state = {scene: 'greet', answer: null, markers: true, paused: false, large: false};
+
+  function figure(animal, scene, markers = state.markers) {
+    const cat = animal === 'cat';
+    const low = ['fear', 'flee', 'hunt'].includes(scene);
+    const warn = ['threat', 'attack'].includes(scene);
+    const earsBack = ['fear', 'flee'].includes(scene) || warn;
+    const bow = !cat && scene === 'play';
+    const [headY, frontY, backY] = bow ? [151, 151, 111]
+      : scene === 'fear' ? [149, 147, 145]
+      : scene === 'hunt' ? [146, 145, 132]
+      : scene === 'flee' ? [132, 140, 133]
+      : scene === 'attack' ? [134, 140, 125]
+      : [cat ? 108 : 102, 122, 122];
+    const headX = low || bow || scene === 'attack' ? 122 : 142;
+    const fill = cat ? '#7eb4ab' : '#cd965f';
+    const dark = cat ? '#386d66' : '#805633';
+    const light = cat ? '#c8e1d9' : '#edcda3';
+    const arch = cat && scene === 'threat' ? 65 : Math.min(frontY, backY) - 18;
+    const body = `M${headX + 24} ${headY + 13} Q188 ${frontY + 13} 222 ${frontY}
+      Q267 ${arch} 331 ${backY - 6} Q369 ${backY - 6} 384 ${backY + 17}
+      Q386 ${backY + 43} 353 ${backY + 49} Q305 ${frontY + 36} 265 ${frontY + 54}
+      Q209 ${frontY + 65} 186 ${frontY + 32} L${headX + 9} ${headY + 29}Z`;
+    const tails = {
+      greet: cat ? `Q410 123 415 72Q420 43 442 52` : `Q415 134 453 94`,
+      fear: cat ? `Q419 190 429 210` : `Q410 190 373 205`,
+      threat: cat ? `Q407 121 411 83Q418 64 431 68` : `Q417 139 452 125`,
+      attack: cat ? `Q411 164 451 183` : `Q411 153 442 148`,
+      flee: `Q421 167 463 167`,
+      hunt: `Q422 171 466 169`,
+      play: cat ? `Q425 144 446 117` : `Q417 116 451 83`,
+      relax: cat ? `Q416 145 427 186Q435 198 451 195` : `Q414 153 436 174`,
+    };
+    const tailStart = [377, backY + 20];
+    const earPoint = cat ? [headX + (earsBack ? -19 : 20), headY - (earsBack ? 22 : 24)]
+      : [headX + (earsBack ? 19 : 12), headY - (earsBack ? 12 : 6)];
+    const ears = cat
+      ? earsBack
+        ? `M${headX - 12} ${headY - 14}l-17 -18l30 7m9 2l29 -9l-14 24`
+        : `M${headX - 19} ${headY - 16}l3 -36l22 28l23 -20l-2 35`
+      : earsBack
+        ? `M${headX + 4} ${headY - 18}q23 -5 31 10q-5 12 -24 12Z`
+        : `M${headX + 3} ${headY - 23}q20 -8 26 13q-3 28 -17 29q-10 -11 -9 -42Z`;
+    const muzzle = cat
+      ? `M${headX - 25} ${headY + 2}q-18 8 -5 23q24 15 46 2l7 -23Z`
+      : `M${headX - 20} ${headY - 4}l-32 15q-7 10 3 20q18 12 54 0l9 -26Z`;
+    const legFront = scene === 'flee' ? `M221 ${frontY + 40}l-31 34l-35 15`
+      : cat && ['attack', 'play'].includes(scene) ? `M217 ${frontY + 44}l-24 29l-44 -14`
+      : bow ? `M215 ${frontY + 44}l-41 24h-36`
+      : low ? `M224 ${frontY + 37}l-18 38h-22` : `M222 ${frontY + 42}l-12 58h-23`;
+    const legBack = scene === 'flee' ? `M354 ${backY + 37}l38 32l29 9`
+      : low ? `M349 ${backY + 37}l21 25l-24 19h-16`
+      : `M352 ${backY + 39}l15 27l-16 ${58 - 27 + 122 - backY}h-23`;
+    const dot = (i, x, y, tx, ty) => `<g class="behavior-marker"><line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}"/>
+      <circle cx="${x}" cy="${y}" r="13"/><text x="${x}" y="${y + 5}">${i}</text></g>`;
+    const tailPoint = {
+      greet: cat ? [442,52] : [453,94],
+      fear: cat ? [429,210] : [373,205],
+      threat: cat ? [431,68] : [452,125],
+      attack: cat ? [451,183] : [442,148],
+      flee: [463,167],
+      hunt: [466,169],
+      play: cat ? [446,117] : [451,83],
+      relax: cat ? [451,195] : [436,174],
+    }[scene];
+    return `<svg viewBox="0 0 520 252" role="img" aria-label="${animalNames[animal]}, ${SCENES[scene].label}, schematische Darstellung">
+      <path class="behavior-ground" d="M23 234H497"/>
+      <g class="${scene === 'flee' ? 'behavior-flee' : ''}">
+        <g fill="none" stroke="${dark}" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+          <path d="${legFront}" opacity=".48" transform="translate(22 -3)"/>
+          <path d="${legBack}" opacity=".48" transform="translate(19 -3)"/>
+          <path class="${animations.has(scene) && scene !== 'flee' ? 'behavior-tail' : ''}" d="M${tailStart.join(' ')} ${tails[scene]}" stroke-width="${cat && scene === 'threat' ? 21 : 13}"/>
+        </g>
+        <path d="${body}" fill="${fill}" stroke="${dark}" stroke-width="3"/>
+        <path d="${legFront} ${legBack}" fill="none" stroke="${dark}" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="${legFront} ${legBack}" fill="none" stroke="${fill}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+        ${cat ? `<path d="M250 ${frontY + 2}l11 20m14 -28l12 19m13 -24l11 18" stroke="${dark}" stroke-width="4" opacity=".5" fill="none"/>`
+          : `<path d="M222 ${frontY + 3}q26 0 32 21q-8 23 -40 20l-16 -18Z" fill="${light}" opacity=".8"/>`}
+        <ellipse cx="${headX}" cy="${headY}" rx="${cat ? 30 : 32}" ry="30" fill="${fill}" stroke="${dark}" stroke-width="3"/>
+        <path d="${muzzle}" fill="${light}" stroke="${dark}" stroke-width="3"/>
+        <path d="${ears}" fill="${dark}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="${headX - (cat ? 16 : 19)}" cy="${headY - 4}" r="${scene === 'fear' ? 4.8 : 3.8}" fill="#233a33"/>
+        <circle cx="${headX - (cat ? 33 : 49)}" cy="${headY + 12}" r="4.5" fill="#233a33"/>
+        ${cat ? `<path d="M${headX - 23} ${headY + 17}l-27 -4m26 9l-28 5" fill="none" stroke="${dark}" stroke-width="1.6"/>` : ''}
+        ${warn ? `<path d="M${headX - 36} ${headY + 23}q11 -5 22 1" stroke="${dark}" stroke-width="2.5" fill="none"/>` : ''}
+      </g>
+      ${scene === 'play' && cat ? '<circle cx="81" cy="219" r="12" fill="#e3a54e" stroke="#8d5724" stroke-width="2"/>' : ''}
+      ${markers ? `<g class="${scene === 'flee' ? 'behavior-flee' : ''}">${dot(1, 63, 50, ...earPoint)
+        + dot(2, 268, 33, 271, frontY + 17) + dot(3, 470, 45, ...tailPoint)}</g>` : ''}
+    </svg>`;
+  }
+
+  function animalCard(animal) {
+    const scene = SCENES[state.scene];
+    return `<figure class="behavior-animal">
+      <figcaption>${animalNames[animal]}</figcaption>
+      <div class="behavior-stage">${figure(animal, state.scene)}</div>
+      <dl>${scene[animal].map((text, index) =>
+        `<div><dt><span aria-hidden="true">${index + 1}</span> ${features[index]}</dt><dd>${text}</dd></div>`).join('')}</dl>
+    </figure>`;
+  }
+
+  function render(focus) {
+    const root = document.getElementById('behavior-lab');
+    if (!root) return;
+    const scene = SCENES[state.scene];
+    const offset = answerOrder.indexOf(state.scene) % scene.choices.length;
+    const order = scene.choices.map((_, i) => (i + offset) % scene.choices.length);
+    root.classList.toggle('behavior-paused', state.paused);
+    root.classList.toggle('behavior-large', state.large);
+    root.innerHTML = `<header class="behavior-head">
+      <h3>Hund und Katze im direkten Vergleich</h3>
+      <p>Wähle eine Situation und vergleiche Ohren, Körper und Schwanz.</p>
+    </header>
+    <div class="behavior-picks" role="group" aria-label="Situation auswählen">
+      ${Object.entries(SCENES).map(([key, item]) => `<button type="button" data-scene="${key}" aria-pressed="${state.scene === key}">${item.label}</button>`).join('')}
+    </div>
+    <div class="behavior-context"><h4>${scene.label}</h4><p>${scene.context}</p></div>
+    <div class="behavior-tools">
+      <button type="button" data-behavior-tool="size" aria-pressed="${state.large}">${state.large ? 'Bilder verkleinern' : 'Bilder vergrößern'}</button>
+      <button type="button" data-behavior-tool="markers" aria-pressed="${state.markers}">Bildmarkierungen</button>
+      ${animations.has(state.scene) ? `<button type="button" data-behavior-tool="motion" aria-pressed="${state.paused}">${state.paused ? 'Animation fortsetzen' : 'Animation pausieren'}</button>` : ''}
+    </div>
+    <div class="behavior-compare">${animalCard('dog')}${animalCard('cat')}</div>
+    <div class="behavior-story">
+      <h4>${scene.question}</h4>
+      <div class="behavior-choices" role="group" aria-label="Antwort auswählen">
+        ${order.map(i => `<button type="button" data-behavior-answer="${i}" aria-pressed="${state.answer === i}">${scene.choices[i]}</button>`).join('')}
+      </div>
+      ${state.answer === null ? '' : `<p class="behavior-result ${state.answer === 0 ? 'correct' : 'wrong'}" role="status">
+        <strong>${state.answer === 0 ? 'Richtig.' : 'Schau noch einmal hin.'}</strong> ${scene.explanation}</p>`}
+    </div>
+    <p class="behavior-source">Schematische Zeichnungen. Ein einzelnes Zeichen reicht selten aus.
+      <a href="https://www.rspca.org.uk/adviceandwelfare/pets/dogs/behaviour/understanding">Quelle Hund</a> ·
+      <a href="https://www.rspca.org.uk/adviceandwelfare/pets/cats/behaviour">Quelle Katze</a>
+    </p>`;
+    if (focus) root.querySelector(focus)?.focus({preventScroll: true});
+  }
+
+  function mount({section}) {
+    if (section !== 'signals') return;
+    const content = document.getElementById('content');
+    if (!content || document.getElementById('behavior-lab')) return;
+    const root = document.createElement('section');
+    root.id = 'behavior-lab';
+    root.className = 'behavior-lab';
+    root.setAttribute('aria-label', 'Körpersprache von Hund und Katze');
+    const title = content.querySelector('.page-title');
+    content.insertBefore(root, title?.nextElementSibling ?? content.firstElementChild);
+    root.addEventListener('click', event => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      const {scene, behaviorAnswer, behaviorTool} = button.dataset;
+      if (scene && scene !== state.scene) {
+        state.scene = scene;
+        state.answer = null;
+        render(`[data-scene="${scene}"]`);
+      } else if (behaviorAnswer !== undefined) {
+        state.answer = Number(behaviorAnswer);
+        render(`[data-behavior-answer="${behaviorAnswer}"]`);
+      } else if (behaviorTool) {
+        if (behaviorTool === 'markers') state.markers = !state.markers;
+        if (behaviorTool === 'motion') state.paused = !state.paused;
+        if (behaviorTool === 'size') state.large = !state.large;
+        render(`[data-behavior-tool="${behaviorTool}"]`);
+      }
+    });
+    render();
+  }
+
+  window.BioBehaviorLab = {mount, SCENES, figure};
+  const [, section] = decodeURIComponent(location.hash.slice(1)).split('/');
+  mount({section});
 })();
