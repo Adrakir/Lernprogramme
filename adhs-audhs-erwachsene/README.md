@@ -178,3 +178,12 @@
 - https://adrakir.github.io/Lernprogramme/adhs-audhs-erwachsene/
 - https://adrakir.github.io/Lernprogramme/adhs-audhs-erwachsene/vertiefung.html
 - https://adrakir.github.io/Lernprogramme/adhs-audhs-erwachsene/arztgespraech.html
+
+## Abklärungsorientierung in allen Auswertungen – 12. November 2026
+
+- **Haupt-App**: Neuer, gesonderter Ergebnisblock „Welche diagnostischen Möglichkeiten sollten abgeklärt werden?“ trennt ASRS-6, die offiziellen AQ-10-Richtwertinformationen und eigenständig formulierte Lernfragen. Bei Hinweisen aus beiden Bereichen kann eine gemeinsame ADHS-/Autismusabklärung (AuDHS) empfohlen werden – ausdrücklich ohne Diagnosen, Wahrscheinlichkeiten oder gemeinsame Punktsumme.
+- **41-Fragen-Übungstest**: Ausführliche Gesprächsorientierung mit häufig genannten Alltagsthemen, Kindesalter, funktionellen Einschränkungen und der ausdrücklichen Aussage, dass dieser Bogen alleine Autismus nicht untersucht.
+- **100-Fragen-Vertiefung**: Getrennte Beschreibungen für ADHS- und autismusbezogene Themen, gemeinsame Abklärungsfragestellung, fehlende Kindheitsbelege, Familienanamnese und mögliche Begleiterkrankungen. Diese Auswertung wird auch in den kopierbaren Bericht übernommen.
+- **Alte Daten**: Bei Wiederherstellung oder JSON-Import werden die Ergebnisabschnitte aus den bestehenden Antworten neu generiert. Die Haupt-App aktualisiert die neue Orientierung auch sofort nach dem Import oder Entfernen des separaten 41-Fragen-Bogens. Verwertbare Kindheitsantworten werden unabhängig davon erkannt, ob sie „oft“/„sehr oft“ lauten.
+- **Rechte und Fachgrenzen**: Kein eigener ADHS-/Autismus-/AuDHS-Cut-off in nicht validierten Fragen; keine DIVA-5-Kopie. Screenings bleiben vom diagnostischen Fachgespräch getrennt.
+- **Technische Prüfungen**: 16 isolierte Logiktests mit leeren, auffälligen, unauffälligen, gemischten und unklaren Eingaben bestanden. Drei zusätzliche Browserregressionsszenarien zu allen Auswertungen und ein vierter zu JSON-Import/Neuberechnung in `qa-browser.cjs` hinzugefügt. Die neue JavaScript-Syntax wurde kontrolliert. Die Browser-Suite wurde hier nicht tatsächlich ausgeführt; iOS/Android und Live-GitHub-Pages müssen zusätzlich geprüft werden.
