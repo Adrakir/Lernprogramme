@@ -198,6 +198,7 @@ html[data-calm="true"] .media-feature,html[data-calm="true"] .visual-preview,htm
 <div class="note">Wie liest man eine Auswertungsgrafik richtig? <a href="./visualisieren.html#auswertung">Ein animiertes Vergleichsbeispiel erklärt den Unterschied zwischen Antwortmuster und Diagnose.</a></div>
 <div class="eyebrow">Einfach erklärt · Erwachsene</div><h1 class="h1">Was sagen meine Ergebnisse aus?</h1><p class="note">Für vertiefte Beschwerden, konkrete Beispiele aus Kindheit und Erwachsenenalter sowie einen ausdruckbaren Bericht: <a href="./vertiefung.html">100-Fragen-Vertiefungsbogen öffnen</a>. Für das Gespräch mit Hausarzt oder Fachärztin: <a href="./arztgespraech.html">Arztgesprächshilfe</a>. Diese Bögen werden nicht mit ASRS zu einem Gesamtscore addiert.</p><p class="intro">Jedes Ergebnis wird in vier Schritten erklärt: <strong>Was wurde gezählt?</strong> · <strong>Was bedeutet das?</strong> · <strong>Was bedeutet es nicht?</strong> · <strong>Was kann man als Nächstes tun?</strong></p>
 <div class="note"><strong>Wichtig zu wissen:</strong> Es gibt hier keinen gemeinsamen ADHS-/AuDHS-Gesamtwert. Der ASRS ist ein Screening; die übrigen Lernfragen beschreiben nur Antworten. DIVA-5 ist ein Interview durch Fachpersonen.</div>
+<div id="clinicalOrientation" class="card" aria-label="Diagnostische Möglichkeiten für das Arztgespräch" aria-live="polite"></div>
 <div id="resultCards" class="two" aria-live="polite"></div>
 <details id="mainNarrativeDetails" open><summary><strong>Ausführlichen Bericht anzeigen oder ausblenden</strong></summary><div id="mainNarrativeReport" class="card narrative-report" aria-live="polite" style="margin-top:14px"></div></details>
 <div class="card" id="combinedResults" style="margin-top:14px">
@@ -418,6 +419,36 @@ function guideLine(label,count,total){
 function resultCard(tag,title,body){
  return '<article class="card result-guide"><span class="result-pill">'+tag+'</span><h2>'+title+'</h2>'+body+'</article>';
 }
+function clinicalOrientationText(){
+ const as=asrsStatus(),aq=getAQ(),currentYes=state.critA.filter(v=>v===1).length,adultAnswered=state.critA.filter(v=>v!==null).length,childAnswered=state.critC.filter(v=>v!==null).length,childYes=state.critC.filter(v=>v===1).length,aut=autStats(),autAnswered=aut.reduce((n,x)=>n+x.done,0),autFrequent=aut.reduce((n,x)=>n+x.notable,0);
+ const practice=importedPractice,practiceCurrent=practice?practice.heute.filter(v=>v===3||v===4).length:0,practiceChild=practice?practice.kindheit.filter(v=>v===3||v===4).length:0;
+ const adReported=(adultAnswered>0&&currentYes>0)||(!!practice&&practiceCurrent>0);
+ const auReported=autAnswered>0&&autFrequent>0;
+ const adScreen=as.complete&&as.positive>=4,auScreen=aq!==null&&aq>=6;
+ const any=as.answered>0||adultAnswered>0||childAnswered>0||autAnswered>0||aq!==null||!!practice;
+ let h='<h2>Welche diagnostischen Möglichkeiten sollten abgeklärt werden?</h2><p>Dieser Abschnitt bietet eine verständliche <strong>Abklärungsorientierung</strong> und <strong>keine Diagnose</strong>. Standardisierte Screening-Hinweise und eigene Lernantworten werden nicht vermischt oder zu einer Wahrscheinlichkeit verrechnet.</p>';
+ if(!any)return h+'<p><strong>Noch nicht beurteilbar:</strong> Es wurden bisher keine Testergebnisse eingetragen. Bitte einen Fragebogen bearbeiten oder eine Sicherungsdatei laden.</p>';
+ h+='<h3>ADHS</h3>';
+ if(adScreen)h+='<p><strong>ASRS-Screening-Richtwert erreicht:</strong> Ein spezialisiertes ADHS-Diagnosegespräch ist sinnvoll. Das Screening beweist keine ADHS.</p>';
+ else if(as.complete)h+='<p><strong>ASRS-Screening-Richtwert nicht erreicht:</strong> ADHS ist dadurch nicht ausgeschlossen. Beschwerden, Entwicklung und andere Ursachen können trotzdem fachlich geprüft werden.</p>';
+ else if(adReported)h+='<p><strong>ADHS-bezogene Lernangaben vorhanden:</strong> Einzelne Themen wurden bejaht, ohne dass ein vollständiges standardisiertes Screening vorliegt. Das ist kein diagnostischer Grenzwert.</p>';
+ else h+='<p>Derzeit fehlen für eine gezielte ADHS-Orientierung ausreichende Angaben.</p>';
+ if(adReported)h+='<p>Zusätzlich wurden in nicht validierten Lernfragen aktuelle ADHS-bezogene Schwierigkeiten angegeben. Sie sind Gesprächsanlässe, keine bestätigten Kriterien.</p>';
+ h+='<h3>Autismus</h3>';
+ if(auScreen)h+='<p><strong>Original-AQ-10: NICE-Richtwert erreicht:</strong> Eine umfassende Autismusabklärung sollte angeboten werden. Der Wert beweist keinen Autismus.</p>';
+ else if(aq!==null)h+='<p><strong>Original-AQ-10: Richtwert nicht erreicht:</strong> Bei entsprechendem klinischem Verdacht kann eine Abklärung trotzdem sinnvoll sein.</p>';
+ else if(auReported)h+='<p>Autismusbezogene Lernangaben sind vorhanden; sie sollten zusammen mit sozialer Kommunikation, Routinen, sensorischer Wahrnehmung und Entwicklungsgeschichte besprochen werden.</p>';
+ else h+='<p>Aus den bislang verfügbaren Angaben ergibt sich noch keine spezifische Orientierung für eine Autismusabklärung.</p>';
+ if(auReported)h+='<p>Die selbst verfassten Autismus-Lernfragen sind <strong>nicht</strong> der AQ-10 und enthalten keine anerkannte Diagnoseschwelle.</p>';
+ if((adScreen||adReported)&&(auScreen||auReported))h+='<h3>ADHS und Autismus gemeinsam (AuDHS)</h3><p>Es liegen Hinweise oder Gesprächsanlässe aus beiden Themenfeldern vor. Fachpersonen können beide Fragestellungen <strong>getrennt und gemeinsam</strong> prüfen. Auch das Zusammentreffen auffälliger Antworten ist keine AuDHS-Diagnose.</p>';
+ h+='<h3>Welche Angaben fehlen noch?</h3><ul>';
+ if(childAnswered===0&&practiceChild===0)h+='<li>Konkrete Kindheitserinnerungen und nach Möglichkeit Schulzeugnisse oder Fremdberichte.</li>';
+ else h+='<li>Vorliegende Kindheitsangaben ('+childYes+' bejahte Kriterien-Lernfragen'+(practice?' und '+practiceChild+' häufige Themen im getrennten Übungsbogen':'')+') müssen in der Entwicklungsanamnese zeitlich eingeordnet werden.</li>';
+ h+='<li>Auswirkungen in unterschiedlichen Lebensbereichen, Dauer, Verlauf und hilfreiche Anpassungen.</li>';
+ h+='<li>Abklärung möglicher anderer oder begleitender Ursachen: Depression, Angst/Panik, Schlafstörungen, Schmerzen, Überlastung, Medikamente und weitere körperliche Faktoren.</li></ul>';
+ h+='<p><strong>Nächster Schritt:</strong> Mit einer qualifizierten Fachperson besprechen, welche spezialisierte ADHS- oder Autismusdiagnostik sinnvoll ist. <a href="./arztgespraech.html">Gesprächshilfe</a> · <a href="./vertiefung.html">100 vertiefende Fragen</a>.</p>';
+ return h;
+}
 function renderResults(){
  const a=asrsStatus(),ad=counts(state.critA,0,9),hy=counts(state.critA,9,18),childA=counts(state.critC,0,9),childH=counts(state.critC,9,18),aq=getAQ(),aut=autStats();
  const critDone=ad.done+hy.done,childDone=childA.done+childH.done;
@@ -437,6 +468,7 @@ function renderResults(){
  aqText+='<div class="result-explain"><strong>Was bedeutet das?</strong><p>Beim originalen AQ-10 kann ein Wert ab 6 von 10 ein Anlass sein, eine ausführlichere Autismusabklärung anzubieten. Auch andere klinische Gründe können für eine Abklärung sprechen.</p></div><p><strong>Was bedeutet es nicht?</strong> Ein AQ-10-Ergebnis beweist oder widerlegt Autismus nicht und kann alleine keine AuDHS-Diagnose ergeben.</p><p><strong>Nächster Schritt:</strong> Bei entsprechendem Verdacht die Entwicklung und soziale/sensorische Merkmale mit einer Fachperson besprechen.</p>';
  const autDone=aut.reduce((s,v)=>s+v.done,0);
  const autHtml='<div class="result-numeral">'+autDone+' von 12</div><p>Autismus-Lernfragen beantwortet.</p><p class="result-lead">Diese Fragen zeigen nur, zu welchen Themen „oft“ oder „sehr oft“ ausgewählt wurde.</p>'+aut.map(v=>guideLine(v.name+" – häufig",v.notable,4)+'<p class="result-fine">'+v.done+' von 4 Fragen in diesem Bereich beantwortet.</p>').join("")+'<div class="result-explain"><strong>So liest man die Balken</strong><p>Zum Beispiel heißt 3 von 4: drei selbst formulierte Fragen in diesem Bereich wurden häufig bejaht. Das ist weder eine Autismus-Punktzahl noch ein Grenzwert.</p></div><p><strong>Nächster Schritt:</strong> Für eine echte Einordnung braucht es ein ausführliches Gespräch über soziale Kommunikation, Entwicklung und weitere Merkmale.</p>';
+ $("clinicalOrientation").innerHTML=clinicalOrientationText();
  $("resultCards").innerHTML=resultCard("Standardisiertes Kurzscreening","ASRS v1.1 – ADHS-Screening",asrsText)+resultCard("Nicht validierte Lernübung","18 ADHS-Kriterien – Lerntrainer",crit)+resultCard("Separater Originaltestwert","AQ-10 – Autismus-Screening",aqText)+resultCard("Nicht validierte Lernübung","Autismus-Themen – Lernfragen",autHtml);renderMainNarrative();
 }
 function mainNarrativeSection(title,body){return '<section><h3>'+title+'</h3>'+body+'</section>';}
@@ -489,7 +521,8 @@ function renderMainNarrative(){
  (strengths?'<p><strong>Genannte Interessen und Fähigkeiten:</strong> '+escapes(strengths)+'</p>':'')+
  (supports?'<p><strong>Als hilfreich beschriebene Rahmenbedingungen:</strong> '+escapes(supports)+'</p>':'')+
  '<p class="subtle">Diese Angaben stammen aus der freiwilligen Selbstauskunft und werden nicht diagnostisch bewertet.</p>');
- h+=mainNarrativeSection('6. Was vor einer fachlichen Einschätzung noch geklärt werden müsste','<p>Wichtig wären konkrete Alltagssituationen, die zeitliche Entwicklung und Dauer der Beschwerden, Funktionsbeeinträchtigungen in mehreren Lebenssituationen und – soweit vorhanden – Kindheitsinformationen.</p><p>Schlafprobleme, psychische Belastungen und andere mögliche Erklärungen oder Begleiterkrankungen sollten ebenfalls berücksichtigt werden. Die Abklärung gehört in fachliche Hände.</p>');
+ h+=mainNarrativeSection('6. Diagnostische Möglichkeiten und nächste Schritte',clinicalOrientationText());
+ h+=mainNarrativeSection('7. Was vor einer fachlichen Einschätzung noch geklärt werden müsste','<p>Wichtig wären konkrete Alltagssituationen, die zeitliche Entwicklung und Dauer der Beschwerden, Funktionsbeeinträchtigungen in mehreren Lebenssituationen und – soweit vorhanden – Kindheitsinformationen.</p><p>Schlafprobleme, psychische Belastungen und andere mögliche Erklärungen oder Begleiterkrankungen sollten ebenfalls berücksichtigt werden. Die Abklärung gehört in fachliche Hände.</p>');
  $("mainNarrativeReport").innerHTML=h;
 }
 
