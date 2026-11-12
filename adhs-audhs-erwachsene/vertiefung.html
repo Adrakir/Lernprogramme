@@ -21,27 +21,27 @@ $('start').addEventListener('click',()=>enter('question'));
 $('resume').addEventListener('click',()=>enter('question'));
 $('example-note').addEventListener('input',storeNotes);$('impact-note').addEventListener('input',storeNotes);contexts.forEach(id=>$(id).addEventListener('input',persist));
 function report(){
- let txt='NEUROKOMPASS – ANAMNESEVERTIEFUNG (NICHT DIAGNOSTISCH)\\n';
- txt+='Bearbeitete Fragen: '+Object.keys(answers).length+' / '+DATA.length+'.\\n';
+ let txt='NEUROKOMPASS – ANAMNESEVERTIEFUNG (NICHT DIAGNOSTISCH)\n';
+ txt+='Bearbeitete Fragen: '+Object.keys(answers).length+' / '+DATA.length+'.\n';
  let html='';
  for(const c of cats){const subset=DATA.filter(x=>x.cat===c);const filled=subset.filter(x=>answers[x.id]!==undefined);const unk=filled.filter(x=>answers[x.id]===5).length;const frequent=filled.filter(x=>answers[x.id]===3||answers[x.id]===4).length;const missing=subset.length-filled.length;
  html+='<article class="summary-block"><h3>'+esc(c)+'</h3><p>'+filled.length+' von '+subset.length+' beantwortet; davon '+frequent+' mit „oft/sehr oft“, '+unk+' mit „weiß nicht“ und '+missing+' offen.</p><p class="muted">Diese Zählung ist rein beschreibend und kein medizinischer Grenzwert.</p></article>';
- txt+='\\n'+c+': '+filled.length+'/'+subset.length+' bearbeitet; '+frequent+' mal oft/sehr oft; '+unk+' weiß nicht; '+missing+' offen.\\n';
+ txt+='\n'+c+': '+filled.length+'/'+subset.length+' bearbeitet; '+frequent+' mal oft/sehr oft; '+unk+' weiß nicht; '+missing+' offen.\n';
  }
  $('summary').innerHTML=html;
  const labels={family:'Familiärer Hintergrund',history:'Frühe Entwicklung / Schulzeugnisse',timing:'Beginn und Veränderung',help:'Bisherige Diagnosen, Behandlung, Hilfen',wishes:'Wünsche für den Arzttermin'};
  let details='';
- for(const k of contexts){const v=$(k).value.trim();if(v){details+='<p><b>'+labels[k]+':</b> '+esc(v)+'</p>';txt+='\\n'+labels[k]+': '+v+'\\n'}}
+ for(const k of contexts){const v=$(k).value.trim();if(v){details+='<p><b>'+labels[k]+':</b> '+esc(v)+'</p>';txt+='\n'+labels[k]+': '+v+'\n'}}
  details+='<p><b>Zu besprechen:</b> Welche Merkmale bestanden bereits in der Kindheit? In welchen Lebensbereichen zeigen sie sich? Welche Beobachtungen von Angehörigen oder aus Zeugnissen liegen vor? Was ist neu, vor allem im Zusammenhang mit Depression, Angst, Schlaf und körperlicher Belastung? Welche fachärztliche Abklärung ist sinnvoll?</p>';
  $('report-text').innerHTML=details;
  let long='';
  for(const x of DATA){const a=answers[x.id],n=notes[x.id]||{},ans=a===undefined?'Offen':SCALE[a];const any=a!==undefined||n.example||n.impact;
  if(!any)continue;
  long+='<div class="report-entry"><h4>'+x.id+' · '+esc(x.topic)+' · '+esc(x.phase)+'</h4><p>'+esc(x.q)+'</p><p><b>Antwort:</b> '+esc(ans)+'</p>'+(n.example?'<p><b>Beispiel:</b> '+esc(n.example)+'</p>':'')+(n.impact?'<p><b>Auswirkung/Hilfe:</b> '+esc(n.impact)+'</p>':'')+'</div>';
- txt+='\\n'+x.id+' '+x.topic+' ('+x.phase+'): '+ans+'\\n'+x.q+'\\n'+(n.example?'Beispiel: '+n.example+'\\n':'')+(n.impact?'Auswirkung/Hilfe: '+n.impact+'\\n':'');
+ txt+='\n'+x.id+' '+x.topic+' ('+x.phase+'): '+ans+'\n'+x.q+'\n'+(n.example?'Beispiel: '+n.example+'\n':'')+(n.impact?'Auswirkung/Hilfe: '+n.impact+'\n':'');
  }
  $('all-answers').innerHTML=long||'<p class="muted">Noch keine beantworteten Fragen.</p>';
- $('report-copy').value=txt+'\\nKein Diagnosetest. Eine fachliche Untersuchung ist notwendig.\\n';
+ $('report-copy').value=txt+'\nKein Diagnosetest. Eine fachliche Untersuchung ist notwendig.\n';
 }
 function download(){const blob=new Blob([JSON.stringify(pack(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='neurokompass-vertiefung-100.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);setStatus('JSON-Download angestoßen. Bitte im Downloadordner prüfen.')}
 function load(obj){if(!obj||obj.format!=='neurokompass-vertiefung'||obj.version!==1||typeof obj.answers!=='object'||Array.isArray(obj.answers))throw Error('Keine passende Vertiefungsdatei');
