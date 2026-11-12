@@ -139,3 +139,42 @@
 3. Screenreader mit TalkBack und VoiceOver, Tastatur-Navigation sowie Überschriften und Formulargruppen prüfen.
 4. Vergleich der Drucklayouts bei zusammengeklappten Berichten; Datensicherheit auf geteilten Geräten prüfen. Keine automatische Sync- oder Cloud-Speicherung.
 
+
+## Neue Anamnesevertiefung und Arztgespräch – 12. November 2026
+
+**Ziel:** Den bestehenden NeuroKompass für Erwachsene mit vertieften, aber ausdrücklich nicht diagnostischen Fragen und einem strukturierten Arztgespräch ergänzen. Der ASRS-6-Screeningbereich bleibt unverändert, der bestehende 41-Fragen-Übungstest bleibt separat auswertbar; es werden keine Punkte unterschiedlicher Bögen zusammengezählt.
+
+### Neue Seiten
+
+- [vertiefung.html](./vertiefung.html) – **100 eigene Fragen** mit 36 ADHS-bezogenen (18 Themen in zwei Lebensphasen), 32 autismusbezogenen (16 Themen in zwei Lebensphasen), 12 Fragen zu möglichen anderen Erklärungen und Überschneidungen, 12 Fragen zur konkreten Teilhabe und Alltagsfunktion sowie 8 Fragen zum Entwicklungs- und Lebensverlauf.
+- [arztgespraech.html](./arztgespraech.html) – **13 strukturierte Notizfelder und 11 Arztfragen** mit anonymisierter Vorlage zum EM-Renten-Fallbeispiel, einschließlich Hinweis auf einen Bruder mit nach Fallangabe diagnostiziertem ADHS und Autismus. Diese Familienangabe ist ausdrücklich kein Diagnosenachweis für die Fallperson.
+
+### Bedienung und Verarbeitung
+
+- Im 100-Fragen-Bogen eine Frage pro Schritt, sechs Antwortmöglichkeiten (einschließlich „Weiß nicht“), Beispiele, optionale Freitexte für konkrete Situationen und deren Folgen, Themenwechsel und Fortschrittsanzeige.
+- Auswertung berichtet ausschließlich absolute Häufigkeiten von Antwortkategorien sowie offene/unklare Angaben. **Kein** klinischer Score, Grenzwert, Subtyp, Diagnosetyp oder diagnostische Wahrscheinlichkeit.
+- Beide neuen Seiten können unabhängig ausgedruckt oder über den Browser als PDF gespeichert werden; JSON-Import/Export wird unterstützt, Inhalte in Berichten HTML-escaped.
+- Keine Datenübermittlung; Speichern von Gesundheitsnotizen ist **nur nach ausdrücklicher lokaler Einwilligung** aktivierbar, unverschlüsselt im Browser. Auf fremden/geteilten Geräten nicht verwenden.
+- Die anonyme Fallvorlage in der Arztgesprächshilfe wird nur auf ausdrücklichen Knopfdruck eingefügt. Ohne Knopfdruck werden keine familiären oder medizinischen Fallangaben als persönliche Angaben ausgegeben.
+- Hauptseite und 41-Fragen-Test verlinken die beiden neuen Seiten, behalten aber ihre bisherige Auswertung und Datenspeicherstruktur.
+
+### Fachliche und rechtliche Einordnung
+
+- Fachliche Orientierung: [NICE NG87](https://www.nice.org.uk/guidance/ng87/chapter/recommendations) und [NICE CG142](https://www.nice.org.uk/guidance/cg142/chapter/Recommendations). Diagnostik erfordert fachliche Beurteilung, aktuelle und kindliche Entwicklung, mehrere Lebensbereiche, Angaben Dritter nach Möglichkeit, Funktionsbeeinträchtigungen, Begleiterkrankungen und Differentialdiagnosen.
+- [DIVA Foundation FAQ](https://www.divacenter.eu/faq/): Original-DIVA-5-Interview darf nicht ohne Lizenz digital nachgebildet oder in ein automatisch diagnostisches Instrument umgebaut werden. Der hier erstellte Fragenkatalog ist **kein DIVA-5**, kein adaptiertes DIVA-5 und kein validierter diagnostischer Test.
+- Der Begriff „AuDHS“ beschreibt das gemeinsame Auftreten von ADHS und Autismus; ein Familienbefund oder die Anzahl berichteter Merkmale bestätigt kein eigenes AuDHS.
+- Depression, Angst/Panik, Schlafstörungen, Schmerzen, Stress und medikamentöse Effekte werden als mögliche begleitende oder andere Erklärungen mitberücksichtigt. Chronische Überforderung oder Verlust der Belastbarkeit seit 2021 werden **nicht** automatisch einer neuroentwicklungsbedingten Störung zugeschrieben.
+- Bei EM-Rentenfragen wird die Einschätzung der Fallperson von der sozialmedizinischen Stundenleistung und der rechtlichen DRV-Entscheidung getrennt.
+
+### Qualitätssicherung
+
+- Alle beteiligten Inline-JavaScript-Blöcke syntaktisch geprüft; Anzahl der neuen Fragen und der Antwortgruppen kontrolliert.
+- **14 simulierte DOM-Interaktionsprüfungen** erfolgreich zu Fortschritt, Antwortverarbeitung, HTML-Escaping, Arzt-Vorlage, lokaler Speicherung, JSON-Download und Löschung. Das sind keine echten Browser- oder Mobilgerätetests.
+- `qa-browser.cjs` umfasst zwei zusätzliche Playwright-Regressionsszenarien für die neuen Seiten. Die mobile 390px-Prüfung berücksichtigt jetzt sechs HTML-Seiten.
+- **Noch nicht bestätigt:** Live-Auslieferung über GitHub Pages, reale Playwright-Ausführung im laufenden Arbeitsschritt sowie iOS-Safari-/Android-Tests, Screenreader- und Druckabnahme.
+
+### Direktlinks
+
+- https://adrakir.github.io/Lernprogramme/adhs-audhs-erwachsene/
+- https://adrakir.github.io/Lernprogramme/adhs-audhs-erwachsene/vertiefung.html
+- https://adrakir.github.io/Lernprogramme/adhs-audhs-erwachsene/arztgespraech.html
