@@ -87,7 +87,7 @@ const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 let animal='dog',section='skeleton',bone='spine',tooth='canine',mood='relax',gait='walk',quiz=[],qi=0,chosen=null,checked=false,hints=0,score=0,best={dog:0,cat:0};
 try{best=Object.assign(best,JSON.parse(localStorage.getItem(KEY)||'{}').best||{})}catch(e){}
 const A=()=>SPECIES[animal];
-function pageTitle(id,title,subtitle){return '<div class="page-title"><div><span class="kicker">FORSCHERSTATION '+id+' · '+A().name.toUpperCase()+'</span><h2>'+title+'</h2><p>'+subtitle+'</p></div><span class="mini-tag">'+A().emoji+' '+A().name+'</span></div>'}
+function pageTitle(id,title,subtitle,action=''){return '<div class="page-title"><div><span class="kicker">FORSCHERSTATION '+id+' · '+A().name.toUpperCase()+'</span><h2>'+title+'</h2><p>'+subtitle+'</p>'+action+'</div><span class="mini-tag">'+A().emoji+' '+A().name+'</span></div>'}
 function card(icon,name,txt){return '<article class="fact"><span class="emoji">'+icon+'</span><h3>'+name+'</h3><p>'+txt+'</p></article>'}
 function callout(title,body){return '<div class="callout"><strong>'+title+'</strong><p>'+body+'</p></div>'}
 function navLine(next,label){return '<div class="actionline spaced"><button type="button" data-section="'+next+'" class="btn">'+label+' →</button><button type="button" data-section="quiz" class="btn secondary">🧠 Jetzt testen</button></div>'}
@@ -118,7 +118,8 @@ function skeletonSvg(){
 }
 function skeletonPage(){
  const b=BONES.find(x=>x.id===bone);
- return pageTitle('01',animal==='dog'?'Das Skelett des Hundes':'Das Skelett der Katze','Tippe auf die nummerierten Knochen. Erfahre, welche Aufgabe sie haben und warum der Körperbau zur Lebensweise passt.')+
+ const practiceLink='<a class="btn secondary" href="BioLabor_5_Biologie_V9_2.html#klassenarbeit/'+(animal==='dog'?'hund':'katze')+'">Skelett selbst beschriften</a>';
+ return pageTitle('01',animal==='dog'?'Das Skelett des Hundes':'Das Skelett der Katze','Tippe auf die nummerierten Knochen. Erfahre, welche Aufgabe sie haben und warum der Körperbau zur Lebensweise passt.',practiceLink)+
  '<div class="actionline"><button type="button" class="btn secondary" data-action="zoom">🔎 Skelett vergrößern</button></div><div class="bone-board">'+skeletonSvg()+'</div><p class="diagram-caption">Neun anklickbare Knochenbereiche. Die Zeichnung ist ein wissenschaftlich orientiertes, aber vereinfachtes Lernschema – nicht jede einzelne Rippe oder Zehe ist dargestellt.</p>'+
  '<div class="chips" aria-label="Knochen auswählen">'+BONES.map((x,i)=>'<button type="button" data-bone="'+x.id+'" class="chip '+(x.id===bone?'active':'')+'">'+(i+1)+'. '+x.label+'</button>').join('')+'</div>'+
  '<div class="detail" aria-live="polite"><h3>🦴 '+b.label+'</h3><p><b>Was ist das?</b> '+b.why+'</p><p style="margin-top:9px"><b>Warum gerade bei '+A().name+'?</b> '+b[animal]+'</p></div>'+
