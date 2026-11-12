@@ -309,3 +309,85 @@ body.lc-theme-contrast #bio-klassenarbeit {
 @media (max-width: 355px) {
   #bio-klassenarbeit .bk-step span { display: none; }
 }
+
+.bk-exam-sheet .bk-exam-instructions { margin-bottom: 12px; }
+.bk-exam-animal {
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid var(--bk-border, #cbdcd4);
+  border-radius: 10px;
+}
+
+.bk-exam-animal h3 { margin: 0 0 4px; }
+.bk-exam-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.25fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.bk-exam-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 550px;
+  background: white;
+  border-radius: 8px;
+}
+
+.bk-exam-diagram line, .bk-exam-number {
+  stroke: #293d35;
+  stroke-width: 2.6;
+  fill: white;
+}
+
+.bk-exam-dot { fill: #293d35; stroke: white; stroke-width: 2; }
+.bk-exam-diagram text {
+  fill: #172d22;
+  font: 700 24px system-ui, sans-serif;
+  text-anchor: middle;
+}
+
+.bk-exam-labels { margin: 0; padding-left: 2.1em; }
+.bk-exam-labels li { padding: 4px 0; }
+.bk-exam-labels li::marker { font-weight: 700; }
+.bk-exam-blank { display: block; min-height: 1.45em; border-bottom: 1px solid currentColor; }
+.bk-exam-credit { font-size: .77em; }
+.bk-exam-points { margin: 12px 0 8px; font-weight: 700; }
+
+.bk-answer-sheets {
+  padding: 10px 12px;
+  margin-block: 12px;
+  border: 1px solid var(--bk-border);
+  border-radius: 10px;
+}
+.bk-answer-sheets summary { cursor: pointer; color: var(--bk-strong); font-weight: 700; }
+
+@media screen and (max-width: 700px) {
+  .bk-exam-layout { grid-template-columns: 1fr; gap: 5px; }
+  .bk-exam-labels { margin-top: 5px; }
+}
+
+@media print {
+  #main > .printpage.bk-exam-sheet,
+  #main > .bk-exam-sheet + .printpage {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+  #main .bk-exam-sheet { break-inside: avoid; color: #151515; background: white; }
+  .bk-exam-sheet .bk-exam-animal {
+    break-inside: avoid;
+    padding: 2.5mm;
+    margin: 3mm 0;
+    border-radius: 3mm;
+    border-color: #999;
+  }
+  .bk-exam-sheet .bk-exam-layout {
+    grid-template-columns: minmax(0, 112mm) minmax(0, 1fr);
+    gap: 4mm;
+  }
+  .bk-exam-sheet .bk-exam-diagram { max-width: 112mm; }
+  .bk-exam-sheet .bk-exam-labels { font-size: 10pt; }
+  .bk-exam-sheet .bk-exam-labels li { padding: 1.4mm 0; }
+  .bk-exam-sheet .bk-exam-blank { min-height: 5mm; }
+}

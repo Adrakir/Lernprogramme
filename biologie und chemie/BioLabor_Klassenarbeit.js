@@ -139,6 +139,51 @@
     </figcaption></figure>`;
   }
 
+  const animalExamSets = [
+    [0, 2, 4, 7, 9],
+    [1, 3, 5, 6, 8],
+    [0, 1, 3, 7, 8],
+  ];
+
+  function examAnimal(id, indices, first, solved) {
+    const animal = species[id];
+    const [x, y, width, height] = animal.image;
+    const points = indices.map((index, i) => ({point: animal.points[index], number: first + i}));
+    return `<section class="bk-exam-animal" data-exam-animal="${id}">
+      <h3>${animal.name}</h3>
+      <div class="bk-exam-layout">
+        <svg class="bk-exam-diagram" viewBox="${animal.bounds.join(' ')}" role="img"
+          aria-label="Skelett ${id === 'katze' ? 'der Katze' : 'des Hundes'} in Seitenansicht, Markierungen ${first} bis ${first + indices.length - 1}">
+          <image href="Skelettbilder/${id}.webp" x="${x}" y="${y}" width="${width}" height="${height}" preserveAspectRatio="none"/>
+          ${points.map(({point: [, px, py, mx, my], number}) => `<g>
+            <line x1="${mx}" y1="${my}" x2="${px}" y2="${py}"/>
+            <circle class="bk-exam-dot" cx="${px}" cy="${py}" r="6"/>
+            <circle class="bk-exam-number" cx="${mx}" cy="${my}" r="23"/>
+            <text x="${mx}" y="${my + 8}">${number}</text>
+          </g>`).join('')}
+        </svg>
+        <ol class="bk-exam-labels" start="${first}">${points.map(({point: [key]}) =>
+          `<li>${solved ? wrapTerm(terms[key][0]) : '<span class="bk-exam-blank"></span>'}</li>`).join('')}</ol>
+      </div>
+    </section>`;
+  }
+
+  function examSkeletons(version, first, solved) {
+    const cat = animalExamSets[version % animalExamSets.length];
+    const dog = animalExamSets[(version + 1) % animalExamSets.length];
+    return `<section class="panel printpage bk-exam-sheet ${solved ? 'solutions-sheet' : ''}">
+      <div class="printlogo">BioLabor 5 · Biologie · Klasse 5</div>
+      <h2>${solved ? 'Lösungen zur Übungsklassenarbeit' : 'Übungsklassenarbeit'} ${version + 1} · Teil B</h2>
+      <p class="bk-exam-instructions">${solved ? 'So werden die markierten Stellen beschriftet.'
+        : 'Beschrifte die markierten Knochen und Knochenbereiche. Schreibe zu jeder Nummer den passenden Fachbegriff. Jede richtige Beschriftung zählt 1 Punkt.'}</p>
+      ${examAnimal('katze', cat, first, solved)}
+      ${examAnimal('hund', dog, first + cat.length, solved)}
+      ${solved ? '' : '<p class="bk-exam-points">Teil B: ______ / 10 Punkte</p>'}
+      <p class="bk-exam-credit">Abbildungen: <a href="${source}${species.katze.file}">Katze</a> und
+        <a href="${source}${species.hund.file}">Hund</a> aus dem Anatomieatlas von Chauveau und Arloing (1890, gemeinfrei).</p>
+    </section>`;
+  }
+
   const wrapTerm = text => text.replace(/^(Oberarm|Unterarm|Oberschenkel)(knochen)$/, '$1<wbr>$2');
 
   const button = (action, label, style = '') =>
@@ -242,6 +287,10 @@
             <p>${chosen === q.correct ? 'Mit Tipp gelöst.' : `Deine ${practice ? 'erste Antwort' : 'Antwort'}: ${chosen}.`} ${hint && chosen !== q.correct ? 'Tipp benutzt.' : ''}</p>
             <p><b>Richtig ist</b> ${q.correct} · ${q.explanation}</p></li>`).join('')}</ol>` :
           '<p>Alle Antworten stimmen.</p>'}
+        ${practice ? '' : `<details class="bk-answer-sheets">
+          <summary>Beschriftete Skelette von Katze und Hund ansehen</summary>
+          ${['katze', 'hund'].map(animal => examAnimal(animal, species[animal].points.map((_, i) => i), 1, true)).join('')}
+        </details>`}
         <div class="button-row">${practice && review.length ? button('retry', 'Diese Stellen noch einmal üben') : ''}
           ${button('restart', practice ? 'Ganze Runde neu starten' : 'Neuen Probetest starten', 'secondary')}
           ${practice ? button('mode:test', 'Zum Probetest', 'secondary') : button('mode:practice', 'Weiter beschriften', 'secondary')}</div>
@@ -346,5 +395,5 @@
     draw();
   }
 
-  window.BioLaborKlassenarbeit = {mount};
+  window.BioLaborKlassenarbeit = {mount, examSkeletons};
 })();
