@@ -574,6 +574,26 @@ async function main(){
   }finally{await close(x)}
  });
 
+
+ await run("41er JSON-Import: Abklärungsorientierung aktualisiert sich ohne Neuladen",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="results"]').click();
+   assert.match(await p.locator("#clinicalOrientation").innerText(),/Noch nicht beurteilbar/);
+   const example={heute:Array(18).fill(null),kindheit:Array(18).fill(null),lebensbereiche:Array(5).fill(null),notizen:Array(18).fill("")};
+   example.heute[0]=4;
+   example.kindheit[0]=1;
+   await p.locator("#importPractice").setInputFiles({name:"anonym-uebungstest.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(example),"utf8")});
+   await p.waitForFunction(()=>document.getElementById("practiceImportStatus").textContent.includes("erfolgreich"));
+   const after=await p.locator("#clinicalOrientation").innerText();
+   assert.match(after,/ADHS-bezogene Lernangaben vorhanden/);
+   assert.match(after,/Kindheitsangaben/);
+   assert.doesNotMatch(after,/Für mindestens.*fehlen.*Kindheitsangaben/);
+   await p.locator("#clearPracticeImport").click();
+   assert.match(await p.locator("#clinicalOrientation").innerText(),/Noch nicht beurteilbar/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+
  await run("PDF-Ausgabe enthält ausgeklappte Berichte auch nach vorherigem Einklappen",async()=>{
   for(const [file,section,printButton] of [["index.html","mainNarrativeDetails","printBtn"],["uebungstest.html","exerciseNarrativeDetails","print"]]){
    const x=await open(browser,file);const p=x.page;try{
