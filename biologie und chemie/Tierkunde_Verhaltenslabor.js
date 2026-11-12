@@ -80,7 +80,16 @@
   const features = ['Ohren', 'Körper', 'Schwanz'];
   const animalNames = {dog: 'Hund', cat: 'Katze'};
   const answerOrder = Object.keys(SCENES);
-  const animations = new Set(['greet', 'flee', 'play']);
+  const movements = {
+    greet: 'Der Hund bewegt die Rute locker. Bei der Katze bewegt sich vor allem die Spitze des aufgerichteten Schwanzes.',
+    relax: 'Der Brustkorb hebt und senkt sich leicht.',
+    fear: 'Die Tiere ducken sich und verlagern ihr Gewicht nach hinten.',
+    threat: 'Die Katze wölbt den Rücken. Der Hund bleibt in der Skizze angespannt stehen.',
+    attack: 'Der Hund bewegt den Kopf kurz nach vorn. Die Katze hebt die Vorderpfote zur Abwehr.',
+    flee: 'Beide Tiere stoßen sich ab und bewegen sich vom Auslöser weg.',
+    hunt: 'Die Katze schleicht niedrig vorwärts. Der Hund senkt den Kopf, um zu wittern.',
+    play: 'Der Hund senkt den Vorderkörper. Die Katze bewegt eine Vorderpfote zum Spielzeug.',
+  };
   const state = {scene: 'greet', answer: null, markers: true, paused: false, large: false};
 
   function figure(animal, scene, markers = state.markers) {
@@ -96,9 +105,9 @@
       : scene === 'attack' ? [134, 140, 125]
       : [cat ? 108 : 102, 122, 122];
     const headX = low || bow || scene === 'attack' ? 122 : 142;
-    const fill = cat ? '#7eb4ab' : '#cd965f';
-    const dark = cat ? '#386d66' : '#805633';
-    const light = cat ? '#c8e1d9' : '#edcda3';
+    const fill = cat ? '#718889' : '#bc844e';
+    const dark = cat ? '#354c50' : '#664329';
+    const light = cat ? '#d6e1da' : '#f1d4aa';
     const arch = cat && scene === 'threat' ? 65 : Math.min(frontY, backY) - 18;
     const body = `M${headX + 24} ${headY + 13} Q188 ${frontY + 13} 222 ${frontY}
       Q267 ${arch} 331 ${backY - 6} Q369 ${backY - 6} 384 ${backY + 17}
@@ -146,30 +155,65 @@
       play: cat ? [446,117] : [451,83],
       relax: cat ? [451,195] : [436,174],
     }[scene];
-    return `<svg viewBox="0 0 520 252" role="img" aria-label="${animalNames[animal]}, ${SCENES[scene].label}, schematische Darstellung">
-      <path class="behavior-ground" d="M23 234H497"/>
-      <g class="${scene === 'flee' ? 'behavior-flee' : ''}">
-        <g fill="none" stroke="${dark}" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
-          <path d="${legFront}" opacity=".48" transform="translate(22 -3)"/>
-          <path d="${legBack}" opacity=".48" transform="translate(19 -3)"/>
-          <path class="${animations.has(scene) && scene !== 'flee' ? 'behavior-tail' : ''}" d="M${tailStart.join(' ')} ${tails[scene]}" stroke-width="${cat && scene === 'threat' ? 21 : 13}"/>
+    const prefix = `pose-${animal}`;
+    const leg = (path, color, width, attributes = '') => `<path d="${path}" fill="none"
+      stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round" ${attributes}/>`;
+    const headPivot = `--pose-x:${headX + 23}px;--pose-y:${headY + 13}px`;
+    const frontPivot = `--pose-x:217px;--pose-y:${frontY + 40}px`;
+    const tailPivot = `--pose-x:${tailStart[0]}px;--pose-y:${tailStart[1]}px`;
+    return `<svg class="pose-${scene} pose-${animal}" viewBox="0 0 520 252" role="img"
+      aria-label="${animalNames[animal]}, ${SCENES[scene].label}, schematische Darstellung">
+      <defs>
+        <linearGradient id="${prefix}-coat" x2="0" y2="1">
+          <stop stop-color="${light}"/><stop offset=".54" stop-color="${fill}"/><stop offset="1" stop-color="${dark}"/>
+        </linearGradient>
+        <linearGradient id="${prefix}-ground" x2="0" y2="1">
+          <stop stop-color="#f8fbf6"/><stop offset="1" stop-color="#dceae0"/>
+        </linearGradient>
+        <clipPath id="${prefix}-body"><path d="${body}"/></clipPath>
+      </defs>
+      <rect width="520" height="252" rx="12" fill="url(#${prefix}-ground)"/>
+      <ellipse class="pose-shadow" cx="270" cy="229" rx="144" ry="10" fill="#557360" opacity=".13"/>
+      <path class="behavior-ground" d="M23 237H497"/>
+      <g class="pose-animal">
+        <g class="pose-tail" style="${tailPivot}">
+          ${leg(`M${tailStart.join(' ')} ${tails[scene]}`, dark, cat && scene === 'threat' ? 25 : 15)}
+          ${leg(`M${tailStart.join(' ')} ${tails[scene]}`, fill, cat && scene === 'threat' ? 20 : 11)}
+          ${markers ? dot(3, 470, 38, ...tailPoint) : ''}
         </g>
-        <path d="${body}" fill="${fill}" stroke="${dark}" stroke-width="3"/>
-        <path d="${legFront} ${legBack}" fill="none" stroke="${dark}" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="${legFront} ${legBack}" fill="none" stroke="${fill}" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
-        ${cat ? `<path d="M250 ${frontY + 2}l11 20m14 -28l12 19m13 -24l11 18" stroke="${dark}" stroke-width="4" opacity=".5" fill="none"/>`
-          : `<path d="M222 ${frontY + 3}q26 0 32 21q-8 23 -40 20l-16 -18Z" fill="${light}" opacity=".8"/>`}
-        <ellipse cx="${headX}" cy="${headY}" rx="${cat ? 30 : 32}" ry="30" fill="${fill}" stroke="${dark}" stroke-width="3"/>
-        <path d="${muzzle}" fill="${light}" stroke="${dark}" stroke-width="3"/>
-        <path d="${ears}" fill="${dark}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>
-        <circle cx="${headX - (cat ? 16 : 19)}" cy="${headY - 4}" r="${scene === 'fear' ? 4.8 : 3.8}" fill="#233a33"/>
-        <circle cx="${headX - (cat ? 33 : 49)}" cy="${headY + 12}" r="4.5" fill="#233a33"/>
-        ${cat ? `<path d="M${headX - 23} ${headY + 17}l-27 -4m26 9l-28 5" fill="none" stroke="${dark}" stroke-width="1.6"/>` : ''}
-        ${warn ? `<path d="M${headX - 36} ${headY + 23}q11 -5 22 1" stroke="${dark}" stroke-width="2.5" fill="none"/>` : ''}
+        <g class="pose-far-legs" opacity=".52">
+          ${leg(legFront, dark, 16, 'transform="translate(21 -4)"')}
+          ${leg(legBack, dark, 16, 'transform="translate(18 -4)"')}
+        </g>
+        <g class="pose-torso">
+          <path d="${body}" fill="url(#${prefix}-coat)" stroke="${dark}" stroke-width="2.8"/>
+          <g clip-path="url(#${prefix}-body)">
+            <path d="M175 ${frontY + 37}Q235 ${frontY + 75} 385 ${backY + 38}v40H167Z" fill="${light}" opacity=".5"/>
+            ${cat ? `<path d="M225 ${frontY - 15}q12 15 22 31m8 -40q8 16 21 32m12 -36q8 15 21 29m13 -23q8 14 20 23"
+              stroke="${dark}" stroke-width="5" opacity=".48" fill="none" stroke-linecap="round"/>`
+              : `<path d="M197 ${frontY + 5}q34 -12 51 16q4 24 -35 29l-35 -18Z" fill="${light}" opacity=".85"/>`}
+          </g>
+          ${markers ? dot(2, 268, 30, 271, frontY + 17) : ''}
+        </g>
+        <g class="pose-front" style="${frontPivot}">${leg(legFront, dark, 20)}${leg(legFront, fill, 14)}</g>
+        <g class="pose-back" style="--pose-x:352px;--pose-y:${backY + 38}px">${leg(legBack, dark, 20)}${leg(legBack, fill, 14)}</g>
+        <g class="pose-head" style="${headPivot}">
+          <ellipse cx="${headX}" cy="${headY}" rx="${cat ? 29 : 32}" ry="${cat ? 27 : 30}" fill="url(#${prefix}-coat)" stroke="${dark}" stroke-width="2.8"/>
+          <path d="${muzzle}" fill="${light}" stroke="${dark}" stroke-width="2.5"/>
+          <path d="${ears}" fill="${dark}" stroke="${dark}" stroke-width="3" stroke-linejoin="round"/>
+          ${cat && !earsBack ? `<path d="M${headX - 15} ${headY - 24}v-20l11 17m9 0l12 -13l-2 17" fill="#dbac9e" opacity=".8"/>` : ''}
+          <g class="pose-eye" style="--pose-x:${headX - 16}px;--pose-y:${headY - 4}px">
+            <ellipse cx="${headX - 16}" cy="${headY - 4}" rx="5.2" ry="${scene === 'fear' ? 5.4 : 4.3}" fill="${cat ? '#d4b55e' : '#a06a38'}" stroke="#253a33" stroke-width="1.7"/>
+            <ellipse cx="${headX - 16}" cy="${headY - 4}" rx="${cat ? 1.8 : 2.7}" ry="3.5" fill="#253a33"/>
+          </g>
+          <ellipse cx="${headX - (cat ? 33 : 49)}" cy="${headY + 12}" rx="5.2" ry="3.8" fill="#253a33"/>
+          <path d="M${headX - (cat ? 30 : 45)} ${headY + 19}q9 4 20 0" fill="none" stroke="${dark}" stroke-width="1.8" stroke-linecap="round"/>
+          ${cat ? `<path d="M${headX - 24} ${headY + 16}l-28 -6m27 10l-27 1m27 3l-24 8" fill="none" stroke="${dark}" stroke-width="1.4"/>` : ''}
+          ${warn ? `<path d="M${headX - 36} ${headY + 23}q11 -5 22 1" stroke="${dark}" stroke-width="2.5" fill="none"/>` : ''}
+          ${markers ? dot(1, 63, 44, ...earPoint) : ''}
+        </g>
       </g>
-      ${scene === 'play' && cat ? '<circle cx="81" cy="219" r="12" fill="#e3a54e" stroke="#8d5724" stroke-width="2"/>' : ''}
-      ${markers ? `<g class="${scene === 'flee' ? 'behavior-flee' : ''}">${dot(1, 63, 50, ...earPoint)
-        + dot(2, 268, 33, 271, frontY + 17) + dot(3, 470, 45, ...tailPoint)}</g>` : ''}
+      ${scene === 'play' && cat ? '<g class="pose-toy"><circle cx="135" cy="208" r="10" fill="#e3a54e" stroke="#8d5724" stroke-width="2"/><path d="M128 207q8 -5 14 2" fill="none" stroke="#fff1c7" stroke-width="2"/></g>' : ''}
     </svg>`;
   }
 
@@ -202,9 +246,10 @@
     <div class="behavior-tools">
       <button type="button" data-behavior-tool="size" aria-pressed="${state.large}">${state.large ? 'Bilder verkleinern' : 'Bilder vergrößern'}</button>
       <button type="button" data-behavior-tool="markers" aria-pressed="${state.markers}">Bildmarkierungen</button>
-      ${animations.has(state.scene) ? `<button type="button" data-behavior-tool="motion" aria-pressed="${state.paused}">${state.paused ? 'Animation fortsetzen' : 'Animation pausieren'}</button>` : ''}
+      <button type="button" data-behavior-tool="motion" aria-pressed="${state.paused}">${state.paused ? 'Animation fortsetzen' : 'Animation pausieren'}</button>
     </div>
     <div class="behavior-compare">${animalCard('dog')}${animalCard('cat')}</div>
+    <p class="behavior-motion-note">${movements[state.scene]}</p>
     <div class="behavior-story">
       <h4>${scene.question}</h4>
       <div class="behavior-choices" role="group" aria-label="Antwort auswählen">
@@ -243,7 +288,13 @@
         render(`[data-behavior-answer="${behaviorAnswer}"]`);
       } else if (behaviorTool) {
         if (behaviorTool === 'markers') state.markers = !state.markers;
-        if (behaviorTool === 'motion') state.paused = !state.paused;
+        if (behaviorTool === 'motion') {
+          state.paused = !state.paused;
+          root.classList.toggle('behavior-paused', state.paused);
+          button.setAttribute('aria-pressed', String(state.paused));
+          button.textContent = state.paused ? 'Animation fortsetzen' : 'Animation pausieren';
+          return;
+        }
         if (behaviorTool === 'size') state.large = !state.large;
         render(`[data-behavior-tool="${behaviorTool}"]`);
       }
