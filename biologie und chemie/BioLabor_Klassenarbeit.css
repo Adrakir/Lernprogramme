@@ -1,40 +1,69 @@
 #bio-klassenarbeit {
-  --bk-border: #b6cec5;
+  --bk-border: #cbdcd4;
   --bk-paper: #fff;
-  --bk-selected: #e3f5ed;
-  --bk-strong: #135b4d;
-  --bk-text: #253b39;
+  --bk-sheet: #f2f7f3;
+  --bk-selected: #e0f2e8;
+  --bk-strong: #145a47;
+  --bk-text: #233933;
+  --bk-muted: #4b655d;
+  --bk-retry: #fff1d9;
+  --bk-retry-ink: #743d17;
   color: var(--bk-text);
 }
 
 body.lc-theme-dark #bio-klassenarbeit {
   --bk-border: #64887d;
   --bk-paper: #192f2c;
+  --bk-sheet: #233b35;
   --bk-selected: #2b5148;
   --bk-strong: #bce8d7;
   --bk-text: #f2faf7;
+  --bk-muted: #c0dbd1;
+  --bk-retry: #493420;
+  --bk-retry-ink: #ffe1ae;
 }
 
 body.highcontrast #bio-klassenarbeit,
 body.lc-theme-contrast #bio-klassenarbeit {
-  --bk-border: currentColor;
+  --bk-border: #222;
   --bk-paper: #fff;
+  --bk-sheet: #fff;
   --bk-selected: #ffecad;
   --bk-strong: #111;
   --bk-text: #111;
+  --bk-muted: #222;
 }
 
-#main .bk-heading { gap: 10px; margin-bottom: 12px; }
-#main .bk-heading h1 { margin: 5px 0 7px; overflow-wrap: anywhere; }
-#main .bk-heading p { margin: 0; }
+#main .bk-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+#main .bk-heading h1 {
+  margin: 4px 0;
+  font-size: clamp(1.65rem, 3.4vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+}
+
+#main .bk-heading p { margin: 0; color: var(--muted); }
 
 #bio-klassenarbeit h3, #bio-klassenarbeit h4 { margin: 0; }
+#bio-klassenarbeit a { color: var(--bk-strong); text-decoration: underline; }
 
-#bio-klassenarbeit .bk-modes {
+.bk-modes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-block: 12px;
+  gap: 5px;
+  padding: 5px;
+  margin-bottom: 12px;
+  border: 1px solid var(--bk-border);
+  border-radius: 15px;
+  background: var(--bk-sheet);
 }
 
 #bio-klassenarbeit .bk-step,
@@ -42,7 +71,7 @@ body.lc-theme-contrast #bio-klassenarbeit {
   min-height: 44px;
   padding: 8px 10px;
   border: 1px solid var(--bk-border);
-  border-radius: 11px;
+  border-radius: 10px;
   background: var(--bk-paper);
   color: var(--bk-text);
   font-weight: 700;
@@ -54,83 +83,138 @@ body.lc-theme-contrast #bio-klassenarbeit {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 52px;
+  gap: 9px;
+  background: transparent;
+  border-color: transparent;
 }
 
-#bio-klassenarbeit .bk-step span {
+#bio-klassenarbeit .bk-step span,
+.bk-fact-number,
+.bk-bone-number,
+.bk-answer-letter {
   display: grid;
   place-items: center;
-  inline-size: 1.65em;
-  block-size: 1.65em;
   flex: 0 0 auto;
+  inline-size: 1.7em;
+  block-size: 1.7em;
   border-radius: 50%;
-  background: var(--bk-selected);
+  background: var(--bk-sheet);
   color: var(--bk-strong);
+  font-size: .87em;
+  font-weight: 800;
 }
 
-#bio-klassenarbeit :is(.bk-step, .bk-word)[aria-pressed="true"] {
+#bio-klassenarbeit .bk-step span { background: var(--bk-paper); }
+#bio-klassenarbeit .bk-step[aria-pressed="true"] {
+  background: var(--bk-paper);
+  color: var(--bk-strong);
+  border-color: var(--bk-border);
+  box-shadow: 0 2px 5px #23393310;
+}
+#bio-klassenarbeit .bk-step[aria-pressed="true"] span,
+#bio-klassenarbeit .bk-species .bk-word[aria-pressed="true"] {
+  background: #145a47;
+  border-color: #145a47;
+  color: #fff;
+}
+#bio-klassenarbeit .bk-word[aria-pressed="true"] {
   background: var(--bk-selected);
   color: var(--bk-strong);
   border-color: var(--bk-strong);
-  box-shadow: inset 0 0 0 1px var(--bk-strong);
 }
 
 #bio-klassenarbeit .bk-panel {
   margin: 0;
+  padding: clamp(13px, 2.3vw, 24px);
   background: var(--bk-paper);
   color: var(--bk-text);
   border-color: var(--bk-border);
-  padding: clamp(13px, 3vw, 26px);
 }
 
-.bk-intro { margin-bottom: 12px; }
-.bk-intro p { margin: 0; }
-.bk-intro small { display: block; margin-top: 6px; }
-.bk-species { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-#bio-klassenarbeit .bk-species button { min-inline-size: 76px; }
+.bk-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  margin-bottom: 14px;
+}
+
+.bk-tools p, .bk-tools small { margin: 0; color: var(--bk-muted); font-size: .91em; }
+.bk-species { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+#bio-klassenarbeit .bk-species button { min-inline-size: 82px; padding-inline: 12px; }
 
 .bk-work {
   display: grid;
-  grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr);
-  gap: clamp(14px, 3vw, 30px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(14px, 2.6vw, 26px);
   align-items: start;
 }
 
-.bk-work.bk-text-task { grid-template-columns: minmax(0, 1fr); max-inline-size: 700px; }
-.bk-controls { display: grid; min-inline-size: 0; gap: 12px; align-content: start; }
-.bk-controls > :is(button, .button-row) { justify-self: start; }
+.bk-work.bk-text-task { grid-template-columns: minmax(0, 1fr); max-inline-size: 680px; }
+.bk-controls { display: grid; min-inline-size: 0; gap: 11px; align-content: start; }
+.bk-controls > button { justify-self: start; }
 .bk-bone-list, .bk-options { display: grid; gap: 7px; }
 .bk-bone-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.bk-bone-list button, .bk-options button { text-align: start; }
+.bk-bone-list button, .bk-options button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: start;
+}
 .bk-options button:not(:disabled):hover, .bk-bone-list button:hover { border-color: var(--bk-strong); }
-.bk-options .bk-word:disabled { opacity: .7; }
-#bio-klassenarbeit .bk-wrong { border-color: #b65832; border-style: dashed; }
+.bk-options button:disabled:not(.bk-correct) { opacity: .65; }
+#bio-klassenarbeit .bk-correct {
+  background: var(--bk-selected);
+  color: var(--bk-strong);
+  border-color: var(--bk-strong);
+}
+#bio-klassenarbeit .bk-wrong {
+  background: var(--bk-retry);
+  color: var(--bk-retry-ink);
+  border-color: var(--bk-retry-ink);
+}
+
+.bk-index {
+  border: 1px solid var(--bk-border);
+  border-radius: 12px;
+  padding-inline: 10px;
+}
+.bk-index summary {
+  padding-block: 11px;
+  color: var(--bk-strong);
+  font-weight: 700;
+  cursor: pointer;
+}
+.bk-index .bk-bone-list { padding-bottom: 10px; }
+#bio-klassenarbeit .bk-bone-list button { font-size: .85em; padding-inline: 7px; }
 
 .bk-figure {
   min-inline-size: 0;
   inline-size: 100%;
-  max-inline-size: 560px;
-  margin: 0 auto;
+  margin: 0;
+  padding: 9px 12px 6px;
+  border: 1px solid var(--bk-border);
+  border-radius: 15px;
+  background: var(--bk-sheet);
 }
-
-.bk-figure-mensch { max-inline-size: 306px; }
-.bk-round .bk-figure-mensch { max-inline-size: 255px; }
 
 .bk-picture {
   position: relative;
-  border-radius: 14px;
+  max-inline-size: 570px;
+  margin-inline: auto;
+  border-radius: 10px;
   background: white;
-  border: 1px solid var(--bk-border);
   isolation: isolate;
 }
 
+.bk-figure-mensch .bk-picture { max-inline-size: 252px; }
+.bk-round .bk-figure-mensch .bk-picture { max-inline-size: 219px; }
 .bk-picture svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .bk-picture svg line { stroke: #145747; stroke-width: 2; vector-effect: non-scaling-stroke; }
 .bk-picture svg circle { fill: #145747; stroke: white; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-.bk-picture svg .bk-start { fill: #ffdf77; stroke: #145747; }
-.bk-figure figcaption { font-size: .83em; text-align: center; margin-top: 5px; }
-#bio-klassenarbeit a { color: var(--bk-strong); text-decoration: underline; }
+.bk-picture svg .bk-start { fill: #ffd779; stroke: #145747; }
+.bk-figure figcaption { color: var(--bk-muted); font-size: .81em; text-align: center; margin-top: 4px; }
 .bk-figure figcaption a { margin-inline-start: .4em; }
 
 .bk-marker {
@@ -140,8 +224,8 @@ body.lc-theme-contrast #bio-klassenarbeit {
   transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
-  inline-size: clamp(30px, 5vw, 37px);
-  block-size: clamp(30px, 5vw, 37px);
+  inline-size: clamp(30px, 5vw, 36px);
+  block-size: clamp(30px, 5vw, 36px);
   padding: 0;
   border: 2px solid #1a6154;
   border-radius: 50%;
@@ -150,22 +234,34 @@ body.lc-theme-contrast #bio-klassenarbeit {
   font-size: .84rem;
   font-weight: 800;
 }
-
 .bk-marker[aria-pressed="true"] { background: #145747; color: white; }
 .bk-marker:focus-visible { z-index: 1; }
 
-.bk-progress { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: .92em; }
-.bk-progress progress { flex: 1 1 120px; width: 100%; height: .65em; accent-color: #237b66; }
-#bio-klassenarbeit .bk-round h3 { margin: 8px 0 12px; }
+.bk-progress {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 12px;
+  align-items: center;
+  color: var(--bk-muted);
+  font-size: .87em;
+}
+.bk-progress strong { color: var(--bk-strong); }
+.bk-panel-practice .bk-progress span { grid-column: 1/-1; }
+.bk-progress progress { grid-column: 1/-1; width: 100%; height: .5em; accent-color: #237b66; }
+#bio-klassenarbeit .bk-round h3 { margin: 9px 0 12px; line-height: 1.25; }
+
 .bk-feedback, .bk-hint {
   background: var(--bk-selected);
   color: var(--bk-text);
-  border-radius: 10px;
-  border-inline-start: 3px solid var(--bk-strong);
-  padding: 10px 13px;
+  border-radius: 12px;
+  padding: 11px 13px;
   margin: 0;
 }
+.bk-feedback-retry, .bk-hint { background: var(--bk-retry); color: var(--bk-retry-ink); }
 .bk-feedback p { margin: 4px 0 0; }
+.bk-fact { display: flex; align-items: start; gap: 10px; }
+.bk-fact-number { background: #145a47; color: white; inline-size: 2em; block-size: 2em; }
+.bk-response:empty { display: none; }
 
 .bk-score { margin-block: 5px 10px; }
 .bk-score strong { color: var(--bk-strong); font-size: 1.7em; }
@@ -176,22 +272,40 @@ body.lc-theme-contrast #bio-klassenarbeit {
 .bk-review p { margin: 4px 0; }
 .bk-review details { margin-block: 5px; }
 .bk-review summary, .bk-credits summary { cursor: pointer; }
-.bk-review .bk-figure { max-inline-size: 265px; margin-inline: 0; }
-.bk-review .bk-figure-mensch { max-inline-size: 140px; }
-.bk-credits { margin: 14px 0; font-size: .85em; }
+.bk-review .bk-figure { max-inline-size: 270px; }
+.bk-review .bk-figure-mensch { max-inline-size: 160px; }
+.bk-credits { margin: 12px 0; font-size: .85em; }
 .bk-links { margin-top: 14px; }
 .bk-links h2 { margin-top: 0; }
 
 @media (max-width: 900px) {
   .bk-work { grid-template-columns: minmax(0, 1fr); }
-  .bk-round .bk-figure-mensch { max-inline-size: 205px; }
+  .bk-discover .bk-controls { display: contents; }
+  .bk-discover .bk-fact { grid-row: 1; }
+  .bk-round .bk-figure-mensch .bk-picture { max-inline-size: 183px; }
   .bk-round .bk-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 500px) {
-  #bio-klassenarbeit .bk-modes { gap: 5px; }
-  #bio-klassenarbeit .bk-step { flex-direction: column; gap: 3px; padding-inline: 4px; font-size: .88em; }
-  .bk-discover .bk-figure-mensch { max-inline-size: 252px; }
-  .bk-round .bk-figure { max-inline-size: 280px; }
-  .bk-round .bk-figure-mensch { max-inline-size: 181px; }
+  #main .bk-heading { margin-bottom: 12px; }
+  #main .bk-heading > button { display: none; }
+  .bk-modes { padding: 4px; margin-bottom: 8px; }
+  #bio-klassenarbeit .bk-step { gap: 4px; padding-inline: 2px; font-size: .82em; }
+  .bk-tools { gap: 6px; margin-bottom: 9px; }
+  .bk-species { width: 100%; }
+  #bio-klassenarbeit .bk-species button { min-inline-size: 0; }
+  .bk-discover { gap: 9px; }
+  .bk-figure { padding: 5px 6px 4px; }
+  .bk-discover .bk-figure-mensch .bk-picture { max-inline-size: 208px; }
+  .bk-round .bk-figure-mensch .bk-picture { max-inline-size: 161px; }
+  .bk-round .bk-figure:not(.bk-figure-mensch) .bk-picture { max-inline-size: 256px; }
+  .bk-round .bk-options button { gap: 5px; padding-inline: 7px; font-size: .9em; }
+  .bk-round .bk-controls { gap: 7px; }
+  .bk-options button:not(.bk-correct) .bk-answer-letter { display: none; }
+  .bk-work .bk-figure figcaption { display: none; }
+  body:has(#bio-klassenarbeit) #lcOpen { position: static; display: block; margin: 0 14px 14px auto; }
+}
+
+@media (max-width: 355px) {
+  #bio-klassenarbeit .bk-step span { display: none; }
 }

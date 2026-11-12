@@ -84,11 +84,7 @@
       'Hinterpfoten, Brustbein und Schädel', 'Vorderpfoten, Beckenknochen und Schwanzwirbel',
       'Der gemeinsame Bauplan umfasst unter anderem Schädel, Rippen und Becken. Pfoten haben hier nur Katze und Hund.'],
   ];
-  const modes = {
-    discover: ['Entdecken', 'Tippe auf eine Nummer. So findest du den Namen und die Aufgabe des Knochens.'],
-    practice: ['Beschriften', 'Wähle den Begriff zur markierten Stelle. Wenn du feststeckst, nutze den Tipp.'],
-    test: ['Probetest', 'Ordne je fünf Knochen zu und beantworte fünf Vergleichsfragen. Die Lösungen siehst du am Ende.'],
-  };
+  const modes = {discover: 'Entdecken', practice: 'Beschriften', test: 'Probetest'};
 
   const shuffle = values => {
     const list = [...values];
@@ -143,6 +139,8 @@
     </figcaption></figure>`;
   }
 
+  const wrapTerm = text => text.replace(/^(Oberarm|Unterarm|Oberschenkel)(knochen)$/, '$1<wbr>$2');
+
   const button = (action, label, style = '') =>
     `<button class="btn ${style}" type="button" data-bk="${action}">${label}</button>`;
 
@@ -150,6 +148,7 @@
     let id = speciesIds.includes(initialSpecies) ? initialSpecies : 'mensch';
     let mode = 'discover';
     let selected = 0;
+    let indexOpen = matchMedia('(min-width: 901px)').matches;
     let round = [];
     let answers = [];
     let index = 0;
@@ -172,13 +171,21 @@
     function discover() {
       const animal = species[id];
       const [name, , explanation] = terms[animal.points[selected][0]];
-      return `<div class="bk-work bk-discover">${diagram(id, selected, true)}
-        <section class="bk-controls">
-          <div class="bk-feedback" aria-live="polite"><h3>${selected + 1}. ${name}</h3><p>${explanation}</p></div>
-          <div class="bk-bone-list" aria-label="Knochenbereiche">${animal.points.map(([key], i) => `
-            <button type="button" class="bk-word" data-point="${i}" aria-pressed="${selected === i}">${i + 1}. ${terms[key][0]}</button>`).join('')}</div>
+      return `<div class="bk-work bk-discover">
+        ${diagram(id, selected, true)}
+        <div class="bk-controls">
+          <div class="bk-feedback bk-fact" aria-live="polite">
+            <span class="bk-fact-number" aria-hidden="true">${selected + 1}</span>
+            <div><h3>${name}</h3><p>${explanation}</p></div>
+          </div>
+          <details class="bk-index"${indexOpen ? ' open' : ''}>
+            <summary>Alle ${animal.points.length} Knochenbereiche</summary>
+            <div class="bk-bone-list">${animal.points.map(([key], i) => `
+              <button type="button" class="bk-word" data-point="${i}" aria-pressed="${selected === i}">
+                <span class="bk-bone-number" aria-hidden="true">${i + 1}</span><span>${wrapTerm(terms[key][0])}</span></button>`).join('')}</div>
+          </details>
           ${button('mode:practice', 'Jetzt selbst beschriften')}
-        </section></div>`;
+        </div></div>`;
     }
 
     function task() {
@@ -187,20 +194,25 @@
       const hasDiagram = Boolean(q.point);
       const mark = hasDiagram ? species[q.id].points.indexOf(q.point) : -1;
       const practice = mode === 'practice';
+      const category = hasDiagram ? species[q.id].name : 'Vergleich';
       return `<section class="bk-round">
-        <div class="bk-progress"><span>Aufgabe ${index + 1} von ${round.length}</span><progress value="${index + 1}" max="${round.length}" aria-label="Aufgabenfortschritt"></progress></div>
+        <div class="bk-progress">
+          ${practice ? '' : `<strong>${category}</strong>`}
+          <span>Aufgabe ${index + 1} von ${round.length}</span><progress value="${index + 1}" max="${round.length}" aria-label="Aufgabenfortschritt"></progress></div>
         <h3 data-bk-heading tabindex="-1">${q.prompt}</h3>
         <div class="bk-work ${hasDiagram ? '' : 'bk-text-task'}">
           ${hasDiagram ? diagram(q.id, mark, false) : ''}
           <div class="bk-controls">
             <div class="bk-options" aria-label="Antworten">${q.options.map((option, i) => {
               const wrong = practice && feedback === option && !answer;
-              return `<button type="button" class="bk-word ${wrong ? 'bk-wrong' : ''}" data-answer="${i}"
-                ${answer ? 'disabled' : ''}>${option}${wrong ? ' <span aria-hidden="true">↻</span>' : ''}</button>`;
+              const correct = answer && option === q.correct;
+              const status = wrong ? 'bk-wrong' : correct ? 'bk-correct' : '';
+              return `<button type="button" class="bk-word ${status}" data-answer="${i}" aria-label="${option}"
+                ${answer ? 'disabled' : ''}><span class="bk-answer-letter" aria-hidden="true">${correct ? '✓' : String.fromCharCode(65 + i)}</span><span>${wrapTerm(option)}</span></button>`;
             }).join('')}</div>
             ${practice && !answer ? `${button('hint', hintOpen ? 'Tipp ausblenden' : 'Tipp anzeigen', 'secondary')}
               ${hintOpen ? `<p class="bk-hint">${q.hint}</p>` : ''}` : ''}
-            <div aria-live="polite">${practice && feedback ? `<div class="bk-feedback">
+            <div class="bk-response" aria-live="polite">${practice && feedback ? `<div class="bk-feedback ${answer ? '' : 'bk-feedback-retry'}">
               <strong>${answer ? 'Richtig zugeordnet' : 'Versuch es noch einmal.'}</strong>
               <p>${answer ? `${q.correct}. ${q.explanation}` : 'Schau genau, wo die Linie endet.'}</p></div>` : ''}</div>
             ${answer ? button('next', index + 1 === round.length ? 'Ergebnis ansehen' : 'Nächste Aufgabe') : ''}
@@ -237,15 +249,17 @@
     }
 
     function draw(focus) {
+      indexOpen = root.querySelector('.bk-index')?.open ?? indexOpen;
       const best = getBest();
-      root.innerHTML = `<div class="bk-modes" aria-label="Lernschritt wählen">
-        ${Object.entries(modes).map(([key, [label]], i) => `<button type="button" class="bk-step"
+      root.innerHTML = `<div class="bk-modes" role="group" aria-label="Lernschritt wählen">
+        ${Object.entries(modes).map(([key, label], i) => `<button type="button" class="bk-step"
           data-bk="mode:${key}" aria-pressed="${mode === key}"><span aria-hidden="true">${i + 1}</span>${label}</button>`).join('')}</div>
-        <section class="panel bk-panel" aria-label="${modes[mode][0]}">
-          <div class="bk-intro"><p>${modes[mode][1]}</p>
-          ${mode === 'test' && Number.isInteger(best) ? `<small>Dein Bestwert auf diesem Gerät: ${best}/20</small>` : ''}</div>
-          ${mode !== 'test' ? `<div class="bk-species" aria-label="Skelett wählen">${speciesIds.map(animal => `
-            <button type="button" class="bk-word" data-bk="species:${animal}" aria-pressed="${animal === id}">${species[animal].name}</button>`).join('')}</div>` : ''}
+        <section class="panel bk-panel bk-panel-${mode}" aria-label="${modes[mode]}">
+          ${mode !== 'test' ? `<div class="bk-tools"><div class="bk-species" role="group" aria-label="Skelett wählen">${speciesIds.map(animal => `
+            <button type="button" class="bk-word" data-bk="species:${animal}" aria-pressed="${animal === id}">${species[animal].name}</button>`).join('')}</div>
+            ${mode === 'discover' ? '<p>Tippe auf eine Nummer im Bild.</p>' : ''}</div>`
+            : `<div class="bk-tools"><p>20 Aufgaben · Lösungen am Ende</p>
+              ${Number.isInteger(best) ? `<small>Dein Bestwert auf diesem Gerät: ${best}/20</small>` : ''}</div>`}
           ${mode === 'discover' ? discover() : index === round.length ? result() : task()}
         </section>
         <details class="bk-credits"><summary>Bildquellen</summary><ul>
