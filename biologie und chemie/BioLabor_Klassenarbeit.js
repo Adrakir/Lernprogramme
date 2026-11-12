@@ -2,6 +2,11 @@
   'use strict';
 
   const source = 'https://commons.wikimedia.org/wiki/File:';
+  const anatomy = window.BioLaborAnatomie;
+  const toothSources = [
+    ['Mensch: Cleveland Clinic', 'https://my.clevelandclinic.org/health/articles/24655-teeth'],
+    ['Katze und Hund: Merck Veterinary Manual', 'https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals'],
+  ];
   const terms = {
     skull: ['Schädel', 'Suche ganz vorn am Kopf.', 'Der Schädel umgibt und schützt das Gehirn.'],
     clavicle: ['Schlüsselbein', 'Suche den schmalen Knochen oberhalb des Brustkorbs.', 'Das Schlüsselbein verbindet das Brustbein mit dem Schulterblatt.'],
@@ -95,24 +100,39 @@
     return list;
   };
 
-  function boneQuestion(id, point) {
-    const key = point[0];
-    const [correct, hint, explanation] = terms[key];
-    const alternatives = species[id].points.map(([term]) => term).filter(term => term !== key);
-    const options = shuffle([correct, ...shuffle(alternatives).slice(0, 3).map(term => terms[term][0])]);
-    return {id, point, correct, hint, explanation, options, prompt: 'Wie heißt der markierte Knochenbereich?'};
+  function pointsFor(id, topic) {
+    return topic === 'teeth' ? anatomy.jaws[id].marks : species[id].points;
   }
 
-  function newRound(mode, id, retryPoints) {
+  function termFor(id, topic, key) {
+    if (topic === 'teeth') return [anatomy.toothLabels[key], ...anatomy.toothWhy[id][key]];
+    const [name, hint, general] = terms[key];
+    return [name, hint, anatomy?.boneWhy[id]?.[key] ?? general];
+  }
+
+  function pointQuestion(id, topic, point) {
+    const key = point[0];
+    const [correct, hint, explanation] = termFor(id, topic, key);
+    const alternatives = pointsFor(id, topic).map(([term]) => term).filter(term => term !== key);
+    const options = shuffle([correct, ...shuffle(alternatives).slice(0, 3).map(term => termFor(id, topic, term)[0])]);
+    const prompt = topic === 'teeth' ? 'Was ist am Gebiss markiert?' : 'Wie heißt der markierte Knochenbereich?';
+    return {id, point, correct, hint, explanation, options, prompt};
+  }
+
+  function newRound(mode, id, topic, retryPoints) {
     if (mode === 'practice') {
-      return shuffle(retryPoints ?? species[id].points).map(point => boneQuestion(id, point));
+      return shuffle(retryPoints ?? pointsFor(id, topic)).map(point => pointQuestion(id, topic, point));
     }
-    const bones = speciesIds.flatMap(animal =>
-      shuffle(species[animal].points).slice(0, 5).map(point => boneQuestion(animal, point)));
+    const toothTest = topic === 'teeth';
+    const diagrams = speciesIds.flatMap(animal => {
+      const points = shuffle(pointsFor(animal, topic));
+      return (toothTest ? points : points.slice(0, 5)).map(point => pointQuestion(animal, topic, point));
+    });
+    if (toothTest) return diagrams;
     const facts = shuffle(comparison).map(([prompt, correct, b, c, d, explanation]) => ({
       id: 'vergleich', prompt, correct, explanation, options: shuffle([correct, b, c, d]),
     }));
-    return [...bones, ...facts];
+    return [...diagrams, ...facts];
   }
 
   function diagram(id, selected, revealNames) {
@@ -189,8 +209,9 @@
   const button = (action, label, style = '') =>
     `<button class="btn ${style}" type="button" data-bk="${action}">${label}</button>`;
 
-  function mount(root, {initialSpecies, getBest, saveBest}) {
+  function mount(root, {initialSpecies, initialTopic, getBest, saveBest}) {
     let id = speciesIds.includes(initialSpecies) ? initialSpecies : 'mensch';
+    let topic = initialTopic === 'teeth' && anatomy ? 'teeth' : 'bones';
     let mode = 'discover';
     let selected = 0;
     let indexOpen = matchMedia('(min-width: 901px)').matches;
@@ -204,7 +225,7 @@
 
     function start(nextMode, retryPoints) {
       mode = nextMode;
-      if (mode !== 'discover') round = newRound(mode, id, retryPoints);
+      if (mode !== 'discover') round = newRound(mode, id, topic, retryPoints);
       answers = [];
       index = 0;
       hintOpen = false;
@@ -213,21 +234,27 @@
       feedback = '';
     }
 
+    function picture(animal, index, interactive) {
+      return topic === 'teeth' ? anatomy.toothDiagram(animal, index, interactive) : diagram(animal, index, interactive);
+    }
+
     function discover() {
-      const animal = species[id];
-      const [name, , explanation] = terms[animal.points[selected][0]];
+      const points = pointsFor(id, topic);
+      const [name, , explanation] = termFor(id, topic, points[selected][0]);
+      const teeth = topic === 'teeth';
       return `<div class="bk-work bk-discover">
-        ${diagram(id, selected, true)}
+        ${picture(id, selected, true)}
         <div class="bk-controls">
           <div class="bk-feedback bk-fact" aria-live="polite">
             <span class="bk-fact-number" aria-hidden="true">${selected + 1}</span>
             <div><h3>${name}</h3><p>${explanation}</p></div>
           </div>
+          ${teeth ? `<p class="bk-jaw-note"><strong>${anatomy.jaws[id].count}</strong><br>Vereinfachtes Modell einer Gebissseite.</p>` : ''}
           <details class="bk-index"${indexOpen ? ' open' : ''}>
-            <summary>Alle ${animal.points.length} Knochenbereiche</summary>
-            <div class="bk-bone-list">${animal.points.map(([key], i) => `
+            <summary>Alle ${points.length} ${teeth ? 'Zahngruppen' : 'Knochenbereiche'}</summary>
+            <div class="bk-bone-list">${points.map(([key], i) => `
               <button type="button" class="bk-word" data-point="${i}" aria-pressed="${selected === i}">
-                <span class="bk-bone-number" aria-hidden="true">${i + 1}</span><span>${wrapTerm(terms[key][0])}</span></button>`).join('')}</div>
+                <span class="bk-bone-number" aria-hidden="true">${i + 1}</span><span>${wrapTerm(termFor(id, topic, key)[0])}</span></button>`).join('')}</div>
           </details>
           ${button('mode:practice', 'Jetzt selbst beschriften')}
         </div></div>`;
@@ -237,7 +264,7 @@
       const q = round[index];
       const answer = answers[index];
       const hasDiagram = Boolean(q.point);
-      const mark = hasDiagram ? species[q.id].points.indexOf(q.point) : -1;
+      const mark = hasDiagram ? pointsFor(q.id, topic).indexOf(q.point) : -1;
       const practice = mode === 'practice';
       const category = hasDiagram ? species[q.id].name : 'Vergleich';
       return `<section class="bk-round">
@@ -246,7 +273,7 @@
           <span>Aufgabe ${index + 1} von ${round.length}</span><progress value="${index + 1}" max="${round.length}" aria-label="Aufgabenfortschritt"></progress></div>
         <h3 data-bk-heading tabindex="-1">${q.prompt}</h3>
         <div class="bk-work ${hasDiagram ? '' : 'bk-text-task'}">
-          ${hasDiagram ? diagram(q.id, mark, false) : ''}
+          ${hasDiagram ? picture(q.id, mark, false) : ''}
           <div class="bk-controls">
             <div class="bk-options" aria-label="Antworten">${q.options.map((option, i) => {
               const wrong = practice && feedback === option && !answer;
@@ -269,7 +296,7 @@
     function result() {
       const correct = answers.filter(a => a.chosen === a.question.correct).length;
       const practice = mode === 'practice';
-      const groups = practice ? [id] : [...speciesIds, 'vergleich'];
+      const groups = practice ? [id] : topic === 'teeth' ? speciesIds : [...speciesIds, 'vergleich'];
       const review = answers.filter(a => a.chosen !== a.question.correct || a.hint);
       const title = practice ? 'Deine Beschriftungsrunde' : 'Dein Ergebnis im Probetest';
       return `<section class="bk-result">
@@ -283,11 +310,11 @@
         ${review.length ? `<h4>${practice ? 'Das kannst du wiederholen' : 'Schau dir diese Antworten noch einmal an'}</h4>
           <ol class="bk-review">${review.map(({question: q, chosen, hint}) => `<li>
             <strong>${species[q.id]?.name ?? 'Vergleich'} · ${q.point ? q.correct : q.prompt}</strong>
-            ${q.point ? `<details><summary>Stelle am Skelett ansehen</summary>${diagram(q.id, species[q.id].points.indexOf(q.point), false)}</details>` : ''}
+            ${q.point ? `<details><summary>Markierung ansehen</summary>${picture(q.id, pointsFor(q.id, topic).indexOf(q.point), false)}</details>` : ''}
             <p>${chosen === q.correct ? 'Mit Tipp gelöst.' : `Deine ${practice ? 'erste Antwort' : 'Antwort'}: ${chosen}.`} ${hint && chosen !== q.correct ? 'Tipp benutzt.' : ''}</p>
             <p><b>Richtig ist</b> ${q.correct} · ${q.explanation}</p></li>`).join('')}</ol>` :
           '<p>Alle Antworten stimmen.</p>'}
-        ${practice ? '' : `<details class="bk-answer-sheets">
+        ${practice || topic === 'teeth' ? '' : `<details class="bk-answer-sheets">
           <summary>Beschriftete Skelette von Katze und Hund ansehen</summary>
           ${['katze', 'hund'].map(animal => examAnimal(animal, species[animal].points.map((_, i) => i), 1, true)).join('')}
         </details>`}
@@ -299,20 +326,25 @@
 
     function draw(focus) {
       indexOpen = root.querySelector('.bk-index')?.open ?? indexOpen;
-      const best = getBest();
-      root.innerHTML = `<div class="bk-modes" role="group" aria-label="Lernschritt wählen">
+      const best = getBest(topic);
+      const teeth = topic === 'teeth';
+      root.innerHTML = `${anatomy ? `<div class="bk-topics" role="group" aria-label="Thema wählen">
+        <button type="button" class="bk-word" data-bk="topic:bones" aria-pressed="${!teeth}">Skelett</button>
+        <button type="button" class="bk-word" data-bk="topic:teeth" aria-pressed="${teeth}">Gebiss</button>
+      </div>` : ''}<div class="bk-modes" role="group" aria-label="Lernschritt wählen">
         ${Object.entries(modes).map(([key, label], i) => `<button type="button" class="bk-step"
           data-bk="mode:${key}" aria-pressed="${mode === key}"><span aria-hidden="true">${i + 1}</span>${label}</button>`).join('')}</div>
         <section class="panel bk-panel bk-panel-${mode}" aria-label="${modes[mode]}">
-          ${mode !== 'test' ? `<div class="bk-tools"><div class="bk-species" role="group" aria-label="Skelett wählen">${speciesIds.map(animal => `
+          ${mode !== 'test' ? `<div class="bk-tools"><div class="bk-species" role="group" aria-label="${teeth ? 'Gebiss wählen' : 'Skelett wählen'}">${speciesIds.map(animal => `
             <button type="button" class="bk-word" data-bk="species:${animal}" aria-pressed="${animal === id}">${species[animal].name}</button>`).join('')}</div>
             ${mode === 'discover' ? '<p>Tippe auf eine Nummer im Bild.</p>' : ''}</div>`
-            : `<div class="bk-tools"><p>20 Aufgaben · Lösungen am Ende</p>
-              ${Number.isInteger(best) ? `<small>Dein Bestwert auf diesem Gerät: ${best}/20</small>` : ''}</div>`}
+            : `<div class="bk-tools"><p>${round.length} Aufgaben · Lösungen am Ende</p>
+              ${Number.isInteger(best) ? `<small>Dein Bestwert auf diesem Gerät: ${best}/${round.length}</small>` : ''}</div>`}
           ${mode === 'discover' ? discover() : index === round.length ? result() : task()}
         </section>
-        <details class="bk-credits"><summary>Bildquellen</summary><ul>
-          ${speciesIds.map(animal => `<li>${species[animal].name}: <a href="${source}${species[animal].file}">${species[animal].credit}</a> (gemeinfrei)</li>`).join('')}
+        <details class="bk-credits"><summary>${teeth ? 'Fachquellen zum Gebiss' : 'Bildquellen'}</summary><ul>
+          ${teeth ? toothSources.map(([label, url]) => `<li><a href="${url}">${label}</a></li>`).join('')
+            : speciesIds.map(animal => `<li>${species[animal].name}: <a href="${source}${species[animal].file}">${species[animal].credit}</a> (gemeinfrei)</li>`).join('')}
         </ul></details>`;
       if (focus) {
         const target = root.querySelector(focus);
@@ -353,7 +385,15 @@
 
       const action = target.dataset.bk;
       if (!action) return;
-      if (action.startsWith('mode:')) {
+      if (action.startsWith('topic:')) {
+        const nextTopic = action.slice(6);
+        if (nextTopic !== topic) {
+          topic = nextTopic;
+          selected = 0;
+          start('discover');
+          draw(`[data-bk="${action}"]`);
+        }
+      } else if (action.startsWith('mode:')) {
         const nextMode = action.slice(5);
         if (nextMode !== mode) {
           start(nextMode);
@@ -387,7 +427,7 @@
       firstAnswer = '';
       feedback = '';
       if (index === round.length && mode === 'test') {
-        saveBest(answers.filter(a => a.chosen === a.question.correct).length);
+        saveBest(topic, answers.filter(a => a.chosen === a.question.correct).length);
       }
       draw('[data-bk-heading]');
     }

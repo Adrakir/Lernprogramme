@@ -391,3 +391,42 @@ body.lc-theme-contrast #bio-klassenarbeit {
   .bk-exam-sheet .bk-exam-labels li { padding: 1.4mm 0; }
   .bk-exam-sheet .bk-exam-blank { min-height: 5mm; }
 }
+
+.bk-topics {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+#bio-klassenarbeit .bk-topics .bk-word {
+  min-inline-size: 88px;
+}
+
+#bio-klassenarbeit .bk-topics .bk-word[aria-pressed="true"] {
+  background: #145a47;
+  border-color: #145a47;
+  color: white;
+}
+
+.bk-dentition .bk-picture { max-inline-size: 540px; }
+.bk-dentition .bk-gum { fill: #eed3c4; stroke: #b68a7b; stroke-width: 1.2; }
+.bk-dentition .bk-tooth {
+  fill: #fff4d8;
+  stroke: #69583e;
+  stroke-width: 1.15;
+  vector-effect: non-scaling-stroke;
+}
+
+.bk-jaw-note {
+  margin: 0;
+  color: var(--bk-muted);
+  font-size: .9em;
+}
+
+@media (max-width: 500px) {
+  #main .bk-heading p { display: none; }
+  .bk-topics .bk-word { flex: 1; }
+  #bio-klassenarbeit .bk-panel { padding: 11px; }
+  .bk-round .bk-figure:not(.bk-figure-mensch):not(.bk-dentition) .bk-picture { max-inline-size: 236px; }
+  .bk-work .bk-dentition figcaption { display: block; }
+}
