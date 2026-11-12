@@ -525,6 +525,55 @@ async function main(){
   }finally{await close(x)}
  });
 
+
+ await run("Abklärungsorientierung: ASRS und AQ-10 getrennt, gemeinsame Fragestellung",async()=>{
+  const x=await open(browser,"index.html");const p=x.page;try{
+   await p.locator('.nav[data-view="asrs"]').click();
+   for(let i=0;i<6;i++)await p.locator('label[for="asrs_'+i+'_'+[2,2,2,3,0,0][i]+'"]').click();
+   await p.locator('.nav[data-view="autism"]').click();
+   await p.locator("#aqScore").fill("6");
+   await p.locator("#aqNote").selectOption("yes");
+   await p.locator('.nav[data-view="results"]').click();
+   const body=await p.locator("#clinicalOrientation").innerText();
+   assert.match(body,/ASRS-Screening-Richtwert erreicht/);
+   assert.match(body,/Original-AQ-10: NICE-Richtwert erreicht/);
+   assert.match(body,/ADHS und Autismus gemeinsam \(AuDHS\)/);
+   assert.match(body,/keine Diagnose/i);
+   assert.match(await p.locator("#mainNarrativeReport").innerText(),/Diagnostische Möglichkeiten und nächste Schritte/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Vertiefungsbogen: getrennte häufige Themen und Entwicklungslücken in Orientierung",async()=>{
+  const x=await open(browser,"vertiefung.html");const p=x.page;try{
+   await p.locator("#start").click();
+   await p.locator('#options [data-answer="4"]').click();
+   await p.locator("#jump").selectOption("1");
+   await p.locator('#options [data-answer="3"]').click();
+   await p.locator("#finish").click();
+   const body=await p.locator("#orientation").innerText();
+   assert.match(body,/ADHS-Fachabklärung/);
+   assert.match(body,/Autismus-Fachabklärung/);
+   assert.match(body,/AuDHS/);
+   assert.match(body,/Kindheit/);
+   assert.match(body,/keine.*Diagnose|keine automatische.*Diagnose|nicht validiert/i);
+   assert.match(await p.locator("#report-copy").inputValue(),/DIAGNOSTISCHE ORIENTIERUNG/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("41-Fragen-Übungstest: separat begründete Orientierung ohne Autismusdiagnose",async()=>{
+  const x=await open(browser,"uebungstest.html");const p=x.page;try{
+   p.once("dialog",d=>d.accept());
+   await p.locator("#demo").click();
+   const body=await p.locator("#report").innerText();
+   assert.match(body,/Diagnostische Orientierung/);
+   assert.match(body,/ADHS als Gesprächsfrage/);
+   assert.match(body,/Autismus \/ AuDHS/);
+   assert.match(body,/keine.*Diagnose|keine.*Wahrscheinlichkeit/i);
+   assert.match(await p.locator("#narrativeReport").innerText(),/Diagnostische Orientierung für das Gespräch/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+
  await run("PDF-Ausgabe enthält ausgeklappte Berichte auch nach vorherigem Einklappen",async()=>{
   for(const [file,section,printButton] of [["index.html","mainNarrativeDetails","printBtn"],["uebungstest.html","exerciseNarrativeDetails","print"]]){
    const x=await open(browser,file);const p=x.page;try{
