@@ -9,7 +9,7 @@ const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 const { chromium } = require("playwright");
 const BASE = __dirname;
-const URLS = ["index.html", "uebungstest.html", "visualisieren.html", "falltrainer.html"];
+const URLS = ["index.html", "uebungstest.html", "visualisieren.html", "falltrainer.html", "vertiefung.html", "arztgespraech.html"];
 const url = name => pathToFileURL(path.join(BASE, name)).href;
 let passed = 0, failed = 0;
 async function run(name, fn) {
@@ -493,6 +493,34 @@ async function main(){
    assert.match(report,/Genaue Beobachtung und Interesse an Karten/);
    assert.match(report,/Schriftliche Absprachen helfen/);
    assert.match(report,/nicht diagnostisch bewertet/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+
+ await run("100-Fragen-Vertiefung: Antwort, Navigation, Auswertung und Bericht",async()=>{
+  const x=await open(browser,"vertiefung.html");const p=x.page;try{
+   await p.locator("#start").click();
+   assert.match(await p.locator("#progress-number").innerText(),/Frage 1 von 100/);
+   await p.locator('#options [data-answer="3"]').click();
+   await p.locator("#next").click();
+   assert.match(await p.locator("#progress-number").innerText(),/Frage 2 von 100/);
+   await p.locator("#finish").click();
+   assert.match(await p.locator("#summary").innerText(),/36|32/);
+   const txt=await p.locator("#report-copy").inputValue();
+   assert.match(txt,/Anamnesevertiefung|ANAMNESEVERTIEFUNG/);
+   assert.match(txt,/Oft/);
+   assert.deepEqual(x.errors,[]);
+  }finally{await close(x)}
+ });
+ await run("Arztgespräch: anonyme Vorlage, Brudervorgeschichte und HTML-Sicherheit",async()=>{
+  const x=await open(browser,"arztgespraech.html");const p=x.page;try{
+   await p.locator("#fillCase").click();
+   assert.match(await p.locator("#family").inputValue(),/Bruder.*ADHS.*Autismus/);
+   assert.match(await p.locator("#work").inputValue(),/Systemadministrator/);
+   await p.locator("#family").fill('<b>Privat</b>');
+   const report=await p.locator("#report-body").innerText();
+   assert.match(report,/<b>Privat<\/b>/);
+   assert.equal(await p.locator("#report-body b").filter({hasText:"Privat"}).count(),0);
    assert.deepEqual(x.errors,[]);
   }finally{await close(x)}
  });
