@@ -329,7 +329,8 @@
 
   function readProgress() {
     try {
-      return JSON.parse(localStorage.getItem(storageKey)) || {};
+      const progress = JSON.parse(localStorage.getItem(storageKey));
+      return progress && typeof progress === 'object' && !Array.isArray(progress) ? progress : {};
     } catch {
       return {};
     }
@@ -337,8 +338,15 @@
 
   function saveLesson(id, values) {
     try {
+      if (window.LernCockpit?.acceptsNativeWrites?.() === false) return;
       const progress = readProgress();
-      progress[id] = values;
+      const existing = progress[id] || {};
+      progress[id] = {
+        ...existing,
+        ...values,
+        answers: {...existing.answers, ...values.answers},
+        done: {...existing.done, ...values.done},
+      };
       localStorage.setItem(storageKey, JSON.stringify(progress));
     } catch {
       // Die Übungen bleiben auch ohne Browserspeicher nutzbar.
@@ -455,11 +463,12 @@
   }
 
   function input(question, name, value) {
+    const attributes = `id="${name}" name="${name}" aria-describedby="${name}-feedback"`;
     if (question.options) {
-      return `<select name="${name}"><option value="">Auswählen</option>${question.options.map(option =>
+      return `<select ${attributes}><option value="">Auswählen</option>${question.options.map(option =>
         `<option${option === value ? ' selected' : ''}>${escape(option)}</option>`).join('')}</select>`;
     }
-    return `<input name="${name}" type="${question.number ? 'number' : 'text'}"
+    return `<input ${attributes} type="${question.number ? 'number' : 'text'}"
       ${question.number ? 'min="0" max="99" step="1"' : 'maxlength="24"'}
       value="${escape(value || '')}" autocomplete="off">`;
   }
@@ -473,12 +482,13 @@
         <label class="bs-check"><input type="checkbox" data-bs-written="${index}"${saved.done[index] ? ' checked' : ''}>
           Antwort mit der Musterlösung verglichen</label></section>`;
     }
-    const fields = entry.questions.map((question, i) => `<label class="bs-field"><span>${escape(question.prompt)}</span>
-      ${input(question, prefix + '-' + i, saved.answers[prefix + '-' + i])}<small></small></label>`).join('');
+    const field = (question, name, prompt) => `<div class="bs-field">
+      <label for="${name}"><span>${escape(prompt)}</span></label>
+      ${input(question, name, saved.answers[name])}<small id="${name}-feedback"></small></div>`;
+    const fields = entry.questions.map((question, i) => field(question, prefix + '-' + i, question.prompt)).join('');
     return `<form class="bs-task" data-bs-task="${index}"><h3>${index + 1}. ${entry.title}</h3>
       <div class="bs-fields${entry.table ? ' bs-counts' : ''}">${fields}
-      ${entry.word ? `<label class="bs-field"><span>Lösungswort aus den Buchstaben</span>
-        ${input({}, prefix + '-word', saved.answers[prefix + '-word'])}<small></small></label>` : ''}</div>
+      ${entry.word ? field({}, prefix + '-word', 'Lösungswort aus den Buchstaben') : ''}</div>
       ${entry.hint ? `<details class="bs-hint"><summary>Tipp anzeigen</summary><p>${entry.hint}</p></details>` : ''}
       <button type="submit" class="bs-action">Antworten prüfen</button>
       <p class="bs-result" role="status">${saved.done[index] ? '✓ Schon einmal richtig gelöst.' : ''}</p>
@@ -610,8 +620,170 @@
     });
   }
 
+  // Die Hinweise folgen der Feldreihenfolge des Arbeitsblatts.
+  const fieldHints = {
+    wolf: [
+      [
+        'Überlege, wie die Tiere in der Biologie eingeordnet werden. Die Haustierhaltung ändert diese Einordnung nicht.',
+        'Vergleiche die vollständigen Gebisse. Denk an 10 Zähne oben und 11 unten auf jeder Seite.',
+        'Schau auf den Bodenkontakt. Berührt bei einem der Tiere die Ferse den Boden?',
+        'Überlege, wie ein Wildtier Beute und wie ein Suchhund eine Spur findet.',
+        'Achte auf das Wort „Wildform“.',
+        'Denk an das typische Verhalten der Wildform gegenüber Menschen.',
+        'Hier geht es um freilebende Eltern und Jungtiere, die gemeinsam in einem Revier leben.',
+        'Wer wurde durch die Auswahl von Elterntieren in unterschiedlichen Formen gezüchtet?',
+        'Denk an den Größenunterschied zwischen Chihuahua und Schäferhund.',
+        'Gesucht ist die domestizierte Form, aus der Menschen Rassen züchteten.',
+        'Achte auf die Formulierung „viele Tiere dieser Haustierform“.',
+        'Überlege, bei welchem Tier die Form von Ohren und Rute je nach Rasse unterschiedlich ist.',
+      ],
+      [
+        'Gesucht ist der Name des wilden Verwandten.',
+        'So heißt die Gruppe, in der die wilden Elterntiere mit ihren Jungen leben.',
+        'Überlege, was Reste in der Nähe eines Lagers für die Tiere interessant machte.',
+        'Bei welcher Tätigkeit suchten und verfolgten Menschen Wild?',
+        'Gesucht ist eine Aufgabe, bei der die Tiere das Grundstück im Blick behalten.',
+      ],
+      [
+        'Hier geht es um den langen Weg vom Wildtier zum Haustier.',
+        'Hier geht es um die Auswahl passender Elterntiere.',
+        'Suche die Erklärung mit vererbbaren Merkmalen innerhalb einer Art.',
+        'Denk an die Aufgabe an einer Schafherde.',
+        'Welche Erklärung beschreibt Folgen für die Gesundheit oder das Wohlbefinden des Tieres?',
+      ],
+    ],
+    gebiss: [
+      [
+        'Zähle oben ganz vorn die kleinen Zähne bis zum langen Fangzahn.',
+        'Zähle unten ganz vorn die kleinen Zähne bis zum langen Fangzahn.',
+        'Suche oben den langen Zahn direkt hinter den Schneidezähnen.',
+        'Suche unten den langen Zahn direkt hinter den Schneidezähnen.',
+        'Zähle oben vom Fangzahn bis einschließlich zum oberen Reißzahn.',
+        'Zähle unten die Zähne zwischen Fangzahn und unterem Reißzahn.',
+        'Zähle oben die Zähne hinter dem oberen Reißzahn.',
+        'Zähle unten vom unteren Reißzahn bis zum Kieferende. Zähle den Reißzahn mit.',
+        'Addiere die Werte für oben und unten. Verdopple die Summe für die zweite Seite.',
+      ],
+      [
+        'Schau auf die Summe aus der Zählaufgabe oder in den Gebissvergleich.',
+        'Suche die langen, spitzen Zähne hinter den kleinen Vorderzähnen.',
+        'Gesucht ist das Tier, das der Jäger gefangen hat.',
+        'Was lässt sich mit den scharfen Zahnkanten wie mit einer Schere teilen?',
+        'Überlege, wovon sich Kaninchen ernähren.',
+      ],
+      [
+        'Denk an die kleinen Zähne ganz vorn.',
+        'Denk an die langen Fangzähne.',
+        'Denk an die Klingen einer Schere.',
+        'Bewege den Unterkiefer im Modell. In welche Richtung geht er hauptsächlich?',
+        'Welche Zähne liegen beim Kaninchen ganz vorne und wachsen nach?',
+        'Welche Zahnflächen sind zum Zermahlen geeignet?',
+      ],
+    ],
+    pfote: [
+      [
+        'Gesucht ist der Knochenbereich am Kopf.',
+        'Verfolge den Rücken nach hinten bis in den Schwanz.',
+        'Suche die gebogenen Knochen um Herz und Lunge.',
+        'Suche die Verbindung zwischen Rumpf und Hinterbein.',
+        'Denk an das Gelenk bei der hoch stehenden Ferse. Das Knie liegt näher am Rumpf.',
+      ],
+      [
+        'Schau auf die kleine Spitze vor dem runden Polster.',
+        'Schau auf eines der vier kleinen Polster nahe der Zehen.',
+        'Suche das einzelne große Polster hinter den vier kleinen.',
+        'Vergleiche die kleinen Spitzen vor den Zehen bei beiden Spuren.',
+      ],
+      [
+        'Überlege, welche Teile beim Gehen den Boden tragen.',
+        'Denk an Halt auf weichem Boden. Der Hund kann sie nicht einziehen.',
+        'Denk an die Polster, auf denen die Pfote aufsetzt.',
+        'Welche Spuren fehlen meist, wenn die Katze normal geht?',
+        'Achte darauf, ob die Ferse beim Gehen aufsetzen kann.',
+      ],
+    ],
+    katze: [
+      [],
+      [],
+      [
+        'Suche im Gebiss die langen Zähne direkt hinter den kleinen Vorderzähnen.',
+        'Schau an die Vorderkante des Kiefers, vor die langen Eckzähne.',
+        'Denk an die zwei scharfen Backenzähne, die wie Scherenklingen zusammenarbeiten.',
+        'Beobachte beim Katzensprung, von welchen Beinen der kräftige Stoß kommt.',
+        'Schiebe den Lichtregler nach links. Was passiert mit der dunklen Öffnung im Auge?',
+      ],
+    ],
+    sinne: [
+      [
+        'Hier geht es um die Suche nach vermissten Menschen.',
+        'Hier geht es darum, eine bestimmte Duftspur zu finden und zu melden.',
+        'Denk an einen Hund, der mit einer Herde arbeitet.',
+        'Gesucht ist ein Assistenzhund, der eine blinde Person sicher führt.',
+        'Gesucht ist die Unterstützung einer Fachkraft bei einer Behandlung.',
+      ],
+      [
+        'Beachte die lockere Haltung und vergleiche die Stellung von Vorder- und Hinterkörper.',
+        'Lies angelegte Ohren, tiefen Körper und eingezogene Rute zusammen.',
+        'Knurren und ein steifer Körper sind gemeinsam ein Warnzeichen.',
+        'Die Ohren wenden sich einem Reiz zu. Der übrige Körper bleibt entspannt.',
+        'Die Katze bewegt sich weg. Wie kannst du ihr das ermöglichen?',
+      ],
+    ],
+    bewegung: [
+      [
+        'Suche zwischen Unterarm und Handfläche.',
+        'Diese Knochen liegen zwischen Handgelenk und Fingern.',
+        'Suche ganz vorn an der Hand, hinter der Handfläche.',
+        'Gesucht ist der mittlere Abschnitt des Fußes.',
+        'Halte die Handfläche nach oben und folge der Daumenseite bis in den Unterarm.',
+        'Halte die Handfläche nach oben und folge der Kleinfingerseite bis in den Unterarm.',
+      ],
+      [
+        'Beginne direkt unter dem Schädel.',
+        'In diesem Abschnitt setzen die Rippen an.',
+        'Diese kräftigen Wirbel liegen im unteren Rücken über dem Becken.',
+        'Dieser Abschnitt besteht aus fünf verwachsenen Wirbeln und ist mit dem Becken verbunden.',
+        'Suche das unterste kleine Ende der Wirbelsäule.',
+        'Achte auf die kleinen seitlichen Öffnungen in den Querfortsätzen.',
+        'Suche den Wirbeltyp, an dem Rippen ansetzen.',
+        'Achte auf den besonders kräftigen Wirbelkörper.',
+      ],
+      [
+        'Welcher Gelenktyp lässt Bewegungen in viele Richtungen und Drehung zu?',
+        'Die Gelenkflächen an der Daumenwurzel sehen vereinfacht wie zwei Sättel aus.',
+        'Denk an die Bewegung beim Nein-Sagen mit dem Kopf.',
+        'Beuge und strecke den Finger. Die Bewegung erinnert an eine Tür.',
+        'Gesucht ist eine Flüssigkeit, die das Gleiten im Gelenk erleichtert.',
+        'Unterscheide das Gewebe, das Muskelkraft überträgt, vom Band zwischen zwei Knochen.',
+        'Gesucht ist die Hülle rund um das Gelenk.',
+        'Suche im Inneren vieler Knochen nach dem blutbildenden Gewebe.',
+      ],
+    ],
+  };
+
+  function fieldHint(id, taskIndex, index, entry) {
+    if (entry.word && index === entry.questions.length) {
+      return 'Lies die Buchstaben deiner Zuordnungen von oben nach unten. Prüfe zuerst die markierten Begriffe.';
+    }
+    if (id === 'katze' && taskIndex === 0) {
+      const region = ['Kopf', 'Schulter', 'Rücken', 'Hüfte', 'oberes Hinterbein', 'unterer Knick am Hinterbein',
+        'Hinterfuß', 'Unterschenkel des Hinterbeins', 'Brustkorb', 'Vorderfuß', 'zwischen Ellenbogen und Vorderpfote', 'oberes Vorderbein'];
+      return 'Suche an beiden Zeichnungen in diesem Bereich: ' + region[catOrder[index]] + '.';
+    }
+    if (id === 'katze' && taskIndex === 1) {
+      const direction = [
+        'ganz vorn am Kopf', 'oberhalb des Oberarms', 'entlang des Rückens', 'dort, wo die Hinterbeine am Rumpf ansetzen',
+        'zwischen Hüfte und Knie', 'am tieferen Knick des Hinterbeins', 'ganz unten am Hinterbein',
+        'zwischen Knie und Sprunggelenk', 'am Brustkorb', 'ganz unten am Vorderbein',
+        'zwischen Ellenbogen und Vorderpfote', 'zwischen Schulter und Ellenbogen',
+      ];
+      return 'Die Markierung liegt ' + direction[index] + '.';
+    }
+    return fieldHints[id]?.[taskIndex]?.[index] || entry.hint || '';
+  }
+
   function bindLesson(root, id, lesson, saved) {
-    const save = () => saveLesson(id, saved);
+    const save = changes => saveLesson(id, changes);
     root.querySelectorAll('[data-bs-task]').forEach(form => {
       const index = Number(form.dataset.bsTask);
       const entry = lesson.tasks[index];
@@ -619,9 +791,9 @@
       inputs.forEach(field => field.addEventListener('input', () => {
         saved.answers[field.name] = field.value;
         field.removeAttribute('aria-invalid');
-        field.closest('label').querySelector('small').textContent = '';
+        document.getElementById(field.getAttribute('aria-describedby')).textContent = '';
         form.querySelector('.bs-result').textContent = '';
-        save();
+        save({answers: {[field.name]: field.value}});
       }));
       form.addEventListener('submit', event => {
         event.preventDefault();
@@ -629,21 +801,24 @@
         if (entry.word) expected.push(entry.word);
         let right = 0;
         let unanswered = 0;
+        const answers = {};
         inputs.forEach((field, i) => {
           const value = field.value.trim();
-          const correct = value.toLocaleUpperCase('de') === String(expected[i]).toLocaleUpperCase('de');
+          const correct = value !== '' && (entry.questions[i]?.number
+            ? Number(value) === expected[i]
+            : value.toLocaleUpperCase('de') === String(expected[i]).toLocaleUpperCase('de'));
+          answers[field.name] = field.value;
           saved.answers[field.name] = field.value;
           right += Number(correct);
           unanswered += Number(!value);
           field.setAttribute('aria-invalid', String(!correct));
-          field.closest('label').querySelector('small').textContent = correct ? '✓ Richtig' : value ? 'Noch einmal prüfen' : 'Noch offen';
+          const hint = value && !correct ? fieldHint(id, index, i, entry) : '';
+          document.getElementById(field.getAttribute('aria-describedby')).textContent = correct ? '✓ Richtig'
+            : value ? (hint ? 'Tipp: ' + hint : 'Noch einmal prüfen') : 'Noch offen';
         });
         const allCorrect = right === expected.length;
-        if (allCorrect) {
-          saved.done[index] = true;
-          if (entry.word) saved.word = true;
-          save();
-        }
+        const completed = allCorrect ? {done: {[index]: true}, ...(entry.word ? {word: true} : {})} : {};
+        save({answers, ...completed});
         const result = form.querySelector('.bs-result');
         result.textContent = allCorrect ? '✓ ' + entry.reason + (entry.word ? ' Der Laufzettel zeigt dein Lösungswort.' : '') :
           right + ' von ' + expected.length + ' richtig. ' +
@@ -652,17 +827,17 @@
     });
     root.querySelectorAll('textarea').forEach(field => field.addEventListener('input', () => {
       saved.answers[field.name] = field.value;
-      save();
+      save({answers: {[field.name]: field.value}});
     }));
     root.querySelectorAll('[data-bs-written]').forEach(box => box.addEventListener('change', () => {
       saved.done[box.dataset.bsWritten] = box.checked;
-      save();
+      save({done: {[box.dataset.bsWritten]: box.checked}});
     }));
     root.querySelector('[data-bs-rating]')?.addEventListener('change', event => {
       saved.rating = event.target.value;
-      save();
+      save({rating: saved.rating});
     });
-    if (lesson.matrix) bindMatrix(root, saved, save);
+    if (lesson.matrix) bindMatrix(root, saved, () => save({matrix: saved.matrix}));
   }
 
   function mount(root, id, target) {

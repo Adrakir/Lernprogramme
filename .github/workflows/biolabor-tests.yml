@@ -1,0 +1,44 @@
+name: BioLabor prüfen
+on:
+  push:
+    paths:
+      - 'biologie und chemie/BioLabor_*'
+      - 'biologie und chemie/Tierkunde_*'
+      - 'biologie und chemie/Skelettbilder/**'
+      - 'biologie und chemie/tests/bio/**'
+      - 'biologie und chemie/entwickler/package*.json'
+      - '.github/workflows/biolabor-tests.yml'
+  pull_request:
+    paths:
+      - 'biologie und chemie/BioLabor_*'
+      - 'biologie und chemie/Tierkunde_*'
+      - 'biologie und chemie/Skelettbilder/**'
+      - 'biologie und chemie/tests/bio/**'
+      - 'biologie und chemie/entwickler/package*.json'
+      - '.github/workflows/biolabor-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Playwright und Browser installieren
+        working-directory: 'biologie und chemie/entwickler'
+        run: |
+          npm ci --ignore-scripts
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: BioLabor im Browser prüfen
+        env:
+          NODE_PATH: '${{ github.workspace }}/biologie und chemie/entwickler/node_modules'
+          BIO_BROWSER: ${{ matrix.browser }}
+        run: node 'biologie und chemie/tests/bio/smoke.cjs'

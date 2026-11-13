@@ -8,7 +8,7 @@
 <meta content="Interaktives Biologie-Lernlabor für Klasse 5: Lebewesen, Skelett, Wirbelsäule, Knochen, Muskeln und Gelenke" name="description"/>
 <title>BioLabor 5 · Biologie Version 9.2</title>
 <link rel="stylesheet" href="BioLabor_Klassenarbeit.css?v=4">
-<link rel="stylesheet" href="BioLabor_Schulstoff.css?v=2">
+<link rel="stylesheet" href="BioLabor_Schulstoff.css?v=3">
 <link rel="stylesheet" href="Tierkunde_Verhaltenslabor.css?v=20261112-v3">
 <link rel="stylesheet" href="BioLabor_Modelle.css?v=1">
 <style>:root{--bg:#f4f8f7;--surface:#fff;--ink:#21343b;--muted:#667c82;--line:#dfe9e8;--teal:#20766c;--deep:#12574f;--mint:#e4f5ef;--blue:#eaf2ff;--gold:#e2a83c;--rose:#faece7;--shadow:0 12px 35px rgba(29,64,60,.07);--radius:19px;--scale:1}
@@ -469,7 +469,7 @@ function route(to){if(location.hash.slice(1)!==to){location.hash=to;return}ui.ro
 function onHash(){stopSpeech();ui.route=decodeURIComponent(location.hash.slice(1)||'home');ui.tab='discover';ui.selectedFeature=null;render();document.getElementById('sidebar').classList.remove('open');document.getElementById('shade').hidden=true;window.scrollTo({top:0,behavior:'instant'})}
 function render(){applySettings();updateNav();let html='';const r=ui.route.split('/');if(r[0]==='home')html=home();else if(r[0]==='learn'&&topicById(r[1])){ui.topic=r[1];html=learn()}else if(r[0]==='practice'){ui.topic=topicById(r[1])?r[1]:'spine';if(!ui.quiz||ui.quiz.route!==ui.route)startQuiz('topic',ui.topic,false);html=quizPage()}else if(r[0]==='assess'||r[0]==='daily'||r[0]==='mix'||r[0]==='weak'){if(!ui.quiz||ui.quiz.route!==ui.route)startQuiz(r[0],null,false);html=quizPage()}else if(r[0]==='games')html=games();else if(r[0]==='progress')html=progress();else if(r[0]==='print')html=printPage();else html=home();document.getElementById('main').innerHTML=html;const slide=document.getElementById('forceArm');if(slide)recalcLever();if(document.getElementById('plantStage'))updatePlant();if(document.getElementById('modelLoad'))updateModel();}
 function moduleCard(m){return `<article class="card modulecard card-click"><div class="moduleIcon" style="background:${m.color}">${m.icon}</div><h3>${esc(m.title)}</h3><p>${esc(m.short)}</p><div class="progressbar" aria-label="${moduleProgress(m.id)} Prozent gelernte Aufgaben"><span style="width:${moduleProgress(m.id)}%"></span></div><div class="tag">${moduleProgress(m.id)} % geübt · ca. ${m.duration} Min.</div><button type="button" class="btn small secondary" data-go="learn/${m.id}">Lernbereich öffnen →</button></article>`}
-function home(){let last=state.results.at(-1);return `<section class="hero"><div class="hero-content"><span class="kicker">Dein interaktives Lernlabor · Klasse 5</span><h1>Biologie wird<br><span style="color:var(--teal)">lebendig.</span></h1><p>Erforsche Lebewesen, das Skelett, Knochen, Gelenke, Muskeln und die Wirbelsäule. Entdecke die Bewegung von Gelenken, erforsche Pflanzen und prüfe Modelle am Bildschirm.</p><div class="button-row"><button class="btn" data-go="learn/life">Mit dem Lernen starten →</button><button class="btn secondary" data-go="assess">Lernstand prüfen</button><button class="btn secondary" data-go="klassenarbeit">Klassenarbeit vorbereiten</button></div></div><div class="hero-art float">${heroSvg()}</div></section><div class="statrow"><div class="stat"><small>DEINE STERNE</small><b>⭐ ${state.stars}</b></div><div class="stat"><small>BEHERRSCHTE AUFGABEN</small><b>${masteredCount()} <span style="font-size:.8rem;color:var(--muted)">/ ${questions.length}</span></b></div><div class="stat"><small>ÜBUNGSFORTSCHRITT</small><b>${masteryPercent()} %</b></div></div><div class="sectiontop"><h2>Deine sieben Biologie-Lernwelten</h2><span class="pill">🧭 Freie Reihenfolge</span></div><div class="grid">${modules.map(moduleCard).join('')}</div><div class="sectiontop"><h2>Heute schon geforscht?</h2></div><div class="two-col equal"><div class="card"><span class="eyebrow">⭐ Tages-Challenge</span><h3>4 Fragen – jeden Tag neu</h3><p>Eine kleine Mischung aus den Themen. Mit Rückmeldung und Sternen zum Sammeln.</p><button class="btn small" data-go="daily">Challenge starten →</button></div><div class="card"><span class="eyebrow">🧠 Persönliche Übung</span><h3>Übe genau das, was noch schwerfällt</h3><p>${last?'Dein letzter Test ist gespeichert. Schau dir die Rückmeldung an.':'Mache zunächst den Lernstandstest. Danach bekommst du gezielte Übungsvorschläge.'}</p><button class="btn small secondary" data-go="${last?'progress':'assess'}">${last?'Fortschritt ansehen':'Lernstandstest starten'} →</button></div></div><div class="keynote"><b>Hinweis:</b> Die App läuft nach dem Speichern auch ohne Internet. Fortschritt wird – sofern vom Browser erlaubt – auf diesem Gerät gespeichert. Die Bilder sind eigene vereinfachte Lernschemata, keine medizinisch maßstabsgetreuen Zeichnungen.</div>`}
+function home(){let last=state.results.at(-1);return `<section class="hero"><div class="hero-content"><span class="kicker">Dein interaktives Lernlabor · Klasse 5</span><h1>Biologie wird<br><span style="color:var(--teal)">lebendig.</span></h1><p>Erforsche Lebewesen, das Skelett, Knochen, Gelenke, Muskeln und die Wirbelsäule. Entdecke die Bewegung von Gelenken, erforsche Pflanzen und prüfe Modelle am Bildschirm.</p><div class="button-row"><button class="btn" data-go="learn/life">Mit dem Lernen starten →</button><button class="btn secondary" data-go="assess">Lernstand prüfen</button></div></div><div class="hero-art float">${heroSvg()}</div></section><div class="statrow"><div class="stat"><small>DEINE STERNE</small><b>⭐ ${state.stars}</b></div><div class="stat"><small>BEHERRSCHTE AUFGABEN</small><b>${masteredCount()} <span style="font-size:.8rem;color:var(--muted)">/ ${questions.length}</span></b></div><div class="stat"><small>ÜBUNGSFORTSCHRITT</small><b>${masteryPercent()} %</b></div></div><div class="sectiontop"><h2>Deine sieben Biologie-Lernwelten</h2><span class="pill">🧭 Freie Reihenfolge</span></div><div class="grid">${modules.map(moduleCard).join('')}</div><div class="sectiontop"><h2>Heute schon geforscht?</h2></div><div class="two-col equal"><div class="card"><span class="eyebrow">⭐ Tages-Challenge</span><h3>4 Fragen – jeden Tag neu</h3><p>Eine kleine Mischung aus den Themen. Mit Rückmeldung und Sternen zum Sammeln.</p><button class="btn small" data-go="daily">Challenge starten →</button></div><div class="card"><span class="eyebrow">🧠 Persönliche Übung</span><h3>Übe genau das, was noch schwerfällt</h3><p>${last?'Dein letzter Test ist gespeichert. Schau dir die Rückmeldung an.':'Mache zunächst den Lernstandstest. Danach bekommst du gezielte Übungsvorschläge.'}</p><button class="btn small secondary" data-go="${last?'progress':'assess'}">${last?'Fortschritt ansehen':'Lernstandstest starten'} →</button></div></div><div class="keynote"><b>Hinweis:</b> Die App läuft nach dem Speichern auch ohne Internet. Fortschritt wird – sofern vom Browser erlaubt – auf diesem Gerät gespeichert. Die Bilder sind eigene vereinfachte Lernschemata, keine medizinisch maßstabsgetreuen Zeichnungen.</div>`}
 function infoIcon(text){return `<button class="btn plain small" data-action="speak" data-text="${esc(text)}">🔊 Vorlesen</button>`}
 function diagram(m){if(m.id==='life')return `<div class="illust-frame">${lifeSvg()}</div><p class="diagramlegend">Öffne das Pflanzen-Labor, um die Entwicklung und Lichtreaktion selbst zu steuern.</p><button class="btn small secondary" data-action="tab" data-id="lifeLab">🌞 Pflanzen-Labor starten →</button>`;if(m.id==='skeleton')return `<div class="illust-frame">${skeletonSvg()}</div><p><button type="button" class="btn secondary" data-go="klassenarbeit/mensch">Skelett selbst beschriften</button></p><p class="diagramlegend">Tippe auf die Zahlen im Skelett.</p><div class="feature-grid">${skeletonLegend.map(([id,name],i)=>`<button class="btn small secondary" data-feature="${id}">${i+1}. ${esc(name)}</button>`).join('')}</div><div class="keynote" id="diagramInfo" role="status">Wähle eine Stelle aus.</div>`;if(m.id==='models')return `<div class="illust-frame">${modelSvg()}</div><p class="diagramlegend">Im Modell-Labor kannst du die Belastung selbst verändern.</p><button class="btn small secondary" data-action="tab" data-id="modelLab">🧱 Modell-Labor starten →</button>`;const source={spine:spineSvg,bone:boneSvg,joints:jointSvg,muscles:muscleSvg}[m.id];return `<div class="illust-frame">${source()}</div><p class="diagramlegend">👉 Tippe farbige Bereiche der Zeichnung an. Die Fachwörter werden erklärt.</p><div class="detail-info" id="diagramInfo" role="status">Wähle ein Bauteil in der Zeichnung aus.</div>${m.id==='muscles'?`<div class="diagram-controls"><button class="btn small" data-action="arm" data-move="flex">💪 Arm beugen</button><button class="btn small secondary" data-action="arm" data-move="stretch">↔ Arm strecken</button></div><div class="detail-info" id="armInfo">Beim Strecken arbeitet vor allem der Trizeps.</div>`:''}${m.id==='joints'?`<div class="diagram-controls"><button class="btn small" data-action="jointMove" data-move="bend">Gelenk bewegen</button><button class="btn small secondary" data-action="jointMove" data-move="reset">Zurücksetzen</button></div>`:''}`}
 function learn(){const m=topicById(ui.topic);const tabs=[['discover','🔍 Entdecken'],['knowledge','📖 Lernwissen'],['practice','✏️ Üben'],['flash','🧠 Merkkarten'],...(m.id==='muscles'?[['lever','⚖️ Hebel-Labor']]:[]),...(m.id==='life'?[['lifeLab','🌞 Pflanzen-Labor']]:[]),...(m.id==='models'?[['modelLab','🧱 Modell-Labor']]:[]),...(m.id==='joints'?[['jointLab','⚙️ Gelenke bewegen']]:[])];return `<div class="learninghead"><div><div class="kicker">Lernwelt ${modules.indexOf(m)+1} von ${modules.length} · ca. ${m.duration} Minuten</div><h1>${m.icon} ${esc(m.title)}</h1><p>${esc(m.sub)}</p><div class="progressbar"><span style="width:${moduleProgress(m.id)}%"></span></div></div><button class="btn small secondary" data-go="home">← Übersicht</button></div><div class="tabs" role="tablist" aria-label="Bereich wählen">${tabs.map(([id,t])=>`<button class="tab ${ui.tab===id?'active':''}" role="tab" aria-selected="${ui.tab===id}" data-action="tab" data-id="${id}">${t}</button>`).join('')}</div><div id="tabContent">${learnTab(m)}</div>`}
@@ -531,29 +531,39 @@ function printTests(){const used=new Set();return Array.from({length:3},(_,t)=>{
 function printPage(){
  const tests=printTests();
  const skeletons=window.BioLaborKlassenarbeit?.examSkeletons;
+ const schoolExam=window.BioLaborPruefung;
+ const skeletonPoints=skeletons ? 10 : 0;
  const solutions=ui.printSolutions;
+ const version=ui.route.split('/')[1];
+ const visibleTests=tests.map((test,t)=>({test,t})).filter(({t})=>!['1','2','3'].includes(version)||Number(version)===t+1);
  return `<div class="learninghead no-print">
    <div><span class="kicker">Ausdrucken und offline üben</span><h1>🖨 Drei Übungsklassenarbeiten</h1>
-   <p>Je 14 Aufgaben aus den Biologie-Lernwelten${skeletons ? ' und 10 Beschriftungen an den Skeletten von Katze und Hund' : ''}. Zu jeder Version gibt es ein eigenes Lösungsblatt.</p></div>
+   <p>Teil A prüft die Biologie-Grundlagen. Teil B enthält zwei Skelette zum Beschriften. Teil C behandelt Gebiss, Geruchssinn und Körpersprache. Jede Version hat eigene Lösungsblätter.</p></div>
    <button class="btn small secondary" data-go="home">← Übersicht</button>
  </div>
+ <nav class="bs-print-picker no-print" aria-label="Klassenarbeit auswählen">
+   ${[['', 'Alle drei'], ['1','Arbeit 1'], ['2','Arbeit 2'], ['3','Arbeit 3']].map(([id,label])=>
+     `<a class="btn secondary small" href="#print${id ? '/' + id : ''}"${(['1','2','3'].includes(version) ? version === id : !id) ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
+ </nav>
  <div class="button-row no-print" style="margin-bottom:20px">
    <button class="btn" data-action="doPrint">🖨 Drucken / PDF sichern</button>
    <button class="btn secondary" data-action="toggleSolutions">${solutions ? 'Lösungsblätter ausblenden' : 'Lösungsblätter zusätzlich anzeigen'}</button>
  </div>
- ${tests.map((test,t)=>`<section class="panel printpage">
+ ${visibleTests.map(({test,t})=>`<section class="panel printpage">
    <div class="printlogo">BioLabor 5 · Biologie · Klasse 5</div>
    <h2>${test.label}${skeletons ? ' · Teil A' : ''}</h2>
-   <p>Name: _______________________ &nbsp; Datum: __________ &nbsp; Gesamtpunkte: ____ / ${test.qs.length + (skeletons ? 10 : 0)}</p>
-   <p class="smallnote">Bei Mehrfachauswahl können mehrere Antworten richtig sein. Kreuze an oder schreibe deine Antwort auf.</p>
+   <p>Name: _______________________ &nbsp; Datum: __________ &nbsp; Gesamtpunkte: ____ / ${test.qs.length + skeletonPoints + (schoolExam?.points(t) ?? 0)}</p>
+   <p class="smallnote">Teil A zählt pro richtig gelöster Aufgabe 1 Punkt. Bei Mehrfachauswahl zählt die vollständige richtige Auswahl.</p>
    ${test.qs.map((q,i)=>`<div class="printcard"><b>${i+1}. ${esc(q.ask)} <span class="smallnote">(${esc(topicById(q.topic).title)})</span></b>
      ${q.opts ? `<div class="print-options">${q.opts.map((x,j)=>`<span>□ ${String.fromCharCode(65+j)}) ${esc(x)}</span>`).join('')}</div>` : '<div class="lined"></div>'}</div>`).join('')}
- </section>${skeletons?.(t,test.qs.length+1,false) ?? ''}`).join('')}
- ${solutions ? tests.map((test,t)=>`<section class="panel printpage solutions-sheet">
+ </section>${skeletons?.(t,test.qs.length+1,false) ?? ''}
+ ${schoolExam?.schoolExam(t,test.qs.length+skeletonPoints+1,false) ?? ''}`).join('')}
+ ${solutions ? visibleTests.map(({test,t})=>`<section class="panel printpage solutions-sheet">
    <div class="printlogo">BioLabor 5 · Lösungen · Klasse 5</div>
    <h2>Lösungen zu ${test.label}${skeletons ? ' · Teil A' : ''}</h2>
    ${test.qs.map((q,i)=>`<div class="solutionline"><strong>${i+1}.</strong><span>${esc(answerText(q))}<small>${esc(q.why)}</small></span></div>`).join('')}
- </section>${skeletons?.(t,test.qs.length+1,true) ?? ''}`).join('') : ''}
+ </section>${skeletons?.(t,test.qs.length+1,true) ?? ''}
+ ${schoolExam?.schoolExam(t,test.qs.length+skeletonPoints+1,true) ?? ''}`).join('') : ''}
  <p class="smallnote no-print">Tipp: Im Browser-Druckdialog kannst du „Als PDF speichern“ wählen.</p>`;
 }
 function settingsDialog(){openDialog('⚙ Darstellung und Bedienung',`<p>Wähle eine Ansicht, in der du entspannt lernen kannst. Änderungen gelten sofort.</p><div class="settingRow"><label><input type="checkbox" id="settingContrast" ${state.settings.contrast?'checked':''}> Hoher Kontrast</label></div><div class="settingRow"><label><input type="checkbox" id="settingLarge" ${state.settings.large?'checked':''}> Größere Schrift</label></div><div class="settingRow"><label><input type="checkbox" id="settingMotion" ${state.settings.animations?'checked':''}> Animationen zulassen</label></div><div class="settingRow"><label for="settingBg">Hintergrundfarbe</label><input id="settingBg" type="color" value="${esc(state.settings.bg)}"></div><div class="settingRow"><label for="settingInk">Textfarbe</label><input id="settingInk" type="color" value="${esc(state.settings.ink)}"></div><p class="smallnote">Die natürliche Qualität der Sprachausgabe hängt vom Gerät und den installierten Stimmen ab.</p>`) }
@@ -1341,7 +1351,7 @@ render();
 'use strict';
 const APP="bio"; const TITLE="BioLabor 5 \u00b7 Biologie Version 9.2"; const SUBJECT=APP==='bio'?'Biologie':'Chemie';
 const HUBKEY='lerncockpit-'+APP+'-2026'; const MAX_EVENTS=3000,MAX_NATIVE_BYTES=1000000;
-const NATIVE=["biolabor-kl5-v1", "biolabor8-study-v1"];
+const NATIVE=["biolabor-kl5-v1", "biolabor8-study-v1", "biolab5-schulstoff-1"];
 const TOPICS={"spine": "Wirbelsäule", "skeleton": "Skelett", "bones": "Knochen", "joints": "Gelenke", "muscles": "Muskeln", "life": "Lebewesen und Pflanzen", "models": "Modelle und Hebel"};
 const defaultSettings=()=>({theme:'system',font:'normal',focus:false,motion:'system',voice:'',rate:1,level:2,count:10,timer:false,help:true,review:'adaptive',rewards:true});
 const emptyProfile=()=>({settings:defaultSettings(),events:[],rewardKeys:[],badges:[],completedRuns:[],native:{},created:new Date().toISOString(),migration:0});
@@ -1374,13 +1384,29 @@ function migrate(){const p=profile();if(p.migration>=1)return;
  p.events=p.events.slice(-MAX_EVENTS);p.migration=1;save();
 }
 migrate();
+// Der vorhandene Laufzettel gehört beim ersten Speichern zum aktuell geöffneten Profil.
+if (get('biolab5-schulstoff-1') !== null && !Object.hasOwn(profile().native || {}, 'biolab5-schulstoff-1')) save();
+
+function readStoredProfile() {
+  try { return JSON.parse(get(HUBKEY) || 'null')?.active; }
+  catch { return undefined; }
+}
+
+function acceptsNativeWrites() {
+  const current = readStoredProfile();
+  return !current || current === store.active;
+}
+
+window.addEventListener('storage', event => {
+  if (event.key === HUBKEY && !acceptsNativeWrites()) location.reload();
+});
 function record(x){if(!x||typeof x.correct!=='boolean')return;
  const p=profile(),ev={id:String(x.id||'unbekannt'),topic:String(x.topic||'allgemein'),correct:x.correct,assisted:!!x.assisted,mode:String(x.mode||'übung'),skill:String(x.skill||'wissen'),at:new Date().toISOString(),source:'live',sessionId:String(x.sessionId||'')};
  p.events.push(ev);if(p.events.length>3000)p.events.splice(0,p.events.length-3000);
  const key='r:'+ev.id+':'+today();if(ev.correct&&!ev.assisted&&!p.rewardKeys.includes(key)){p.rewardKeys.push(key)};
  updateBadges();save(); if(document.getElementById('lcModal')?.hidden===false)draw();
 }
-window.LernCockpit={record,open:()=>open('lernstand'),settings:()=>profile().settings,debug:()=>({store,metrics:metrics()})};
+window.LernCockpit={record,open:()=>open('lernstand'),settings:()=>profile().settings,acceptsNativeWrites,debug:()=>({store,metrics:metrics()})};
 const days=(ev)=>new Set(ev.map(e=>e.at?.slice(0,10))).size;
 const evidence=()=>profile().events.filter(e=>e&&typeof e.correct==='boolean'&&typeof e.id==='string');
 function byTask(id){return evidence().filter(e=>e.id===id).sort((a,b)=>Date.parse(a.at||'')-Date.parse(b.at||''))}
@@ -1431,7 +1457,7 @@ function sessionHTML(){if(!session)return `<p class="lc-muted">Trainiere in klei
  return `<div class="lc-between"><b>Aufgabe ${session.i+1}/${session.questions.length}</b><small>${esc(TOPICS[q.topic]||q.topic)} · Niveau ${q.level}</small></div>${bar(session.i,session.questions.length)}<h3>${esc(q.ask)}</h3><div class="lc-answers">${opts.map(o=>`<button ${session.answered?'disabled':''} class="${session.selected===o.i?'selected':''}" data-lc="answer" data-id="${o.i}">${esc(o.text)}</button>`).join('')}</div>${!session.answered?`<div class="lc-actions">${profile().settings.help?'<button data-lc="hint">Hinweis '+(session.hints?session.hints:'')+'</button>':''}<button data-lc="check" ${session.selected===null?'disabled':''}>Antwort prüfen</button></div>`:''}${session.hints?`<p class="lc-hint">${esc(q.hints[Math.min(session.hints-1,q.hints.length-1)]||'Achte auf den Fachbegriff und seine Funktion.')}</p>`:''}${session.answered?`<div class="lc-feedback" role="status"><b>${session.isCorrect?'✓ Richtig':'Noch nicht richtig'}</b><p>${esc(q.why)}</p><p>${session.hints?'Diese Antwort wurde mit Hinweis bearbeitet.':'Ohne Hinweis bearbeitet.'}</p></div><button data-lc="next">${session.i===session.questions.length-1?'Auswertung ansehen':'Nächste Aufgabe →'}</button>`:''}<button class="lc-plain" data-lc="abandon">Training beenden</button>`;
 }
 function settingsPage(){const s=profile().settings,sel=(id,v,opts)=>`<label>${id}<select data-set="${v}">${opts.map(([a,b])=>`<option value="${a}" ${String(s[v])===String(a)?'selected':''}>${b}</option>`).join('')}</select></label>`;return `<p class="lc-muted">Alle Änderungen werden für dieses lokale Lernprofil gespeichert.</p><div class="lc-settings">${sel('Darstellung','theme',[['system','Geräteeinstellung'],['light','Hell'],['dark','Dunkel'],['contrast','Hoher Kontrast']])}${sel('Schriftgröße','font',[['normal','Normal'],['large','Groß'],['xl','Sehr groß']])}${sel('Animationen','motion',[['system','Geräteeinstellung'],['normal','Normal'],['slow','Langsam'],['off','Aus']])}${sel('Bevorzugtes Lernniveau','level',[[1,'Grundlagen'],[2,'Verstehen'],[3,'Anwenden']])}${sel('Aufgaben pro Einheit','count',[[5,'5 Fragen'],[10,'10 Fragen'],[15,'15 Fragen'],[20,'20 Fragen']])}${sel('Wiederholungen','review',[['adaptive','Nach Lernbedarf (7 Tage)'],['daily','Jeden Tag'],['3days','Alle drei Tage']])}${sel('Sprachtempo','rate',[[0.7,'Langsam'],[0.85,'Etwas langsamer'],[1,'Normal'],[1.2,'Schneller']])}<label>Vorlesestimme<select id="lcVoice" data-set="voice"><option value="">Gerätestimme</option></select></label><label class="lc-check"><input type="checkbox" data-check="focus" ${s.focus?'checked':''}> Konzentrationsmodus: weniger Ablenkung</label><label class="lc-check"><input type="checkbox" data-check="help" ${s.help?'checked':''}> Hinweise im Cockpit-Training anbieten</label><label class="lc-check"><input type="checkbox" data-check="timer" ${s.timer?'checked':''}> Zeit im Ergebnis anzeigen (ohne Zeitlimit)</label><label class="lc-check"><input type="checkbox" data-check="rewards" ${s.rewards?'checked':''}> Abzeichenanzeige aktivieren</label></div><div class="lc-actions"><button data-lc="speak">Vorlesen testen</button><button data-lc="stopVoice">Vorlesen stoppen</button></div><p class="lc-muted">Die Einstellung für Aufgabenanzahl und Niveau steuert das neue Cockpit-Training. In älteren Übungsmodulen bleiben die ursprünglichen Fragen erhalten. Die Sprachausgabe hängt von den auf deinem Gerät vorhandenen Stimmen ab.</p>`}
-function profilePage(){return `<h3>Lokale Lernprofile und Datensicherung</h3><p class="lc-muted">Profile bleiben nur in diesem Browser. Ein Wechsel lädt die App neu und trennt auch die bisherigen Ergebnisse der Lernwelten. Maximal sechs Profile pro Fach.</p><label>Aktives Profil<select id="lcProfile">${Object.keys(store.profiles).map(k=>`<option ${k===store.active?'selected':''} value="${esc(k)}">${esc(k)}</option>`).join('')}</select></label><div class="lc-actions"><button data-lc="switch">Profil wechseln</button><button data-lc="create">Neues Profil anlegen</button></div><h3>Sichern und wiederherstellen</h3><div class="lc-actions"><button data-lc="export">Sicherung als JSON</button><button data-lc="csv">Lernbericht als CSV</button><button data-lc="print">Bericht drucken</button></div><label>Sicherungsdatei auswählen<input type="file" id="lcImportFile" accept="application/json,.json"></label><div class="lc-actions"><button data-lc="import">Sicherung überprüfen und importieren</button><button data-lc="reset">Aktives Profil zurücksetzen</button></div><p class="lc-muted">Ein Import überschreibt nach Bestätigung die Profile dieses Fachs. Biologie- und Chemie-Dateien können nicht miteinander verwechselt werden. Vor einem Wechsel auf ein anderes Gerät die JSON-Sicherung exportieren.</p>`}
+function profilePage(){return `<h3>Lokale Lernprofile und Datensicherung</h3><p class="lc-muted">Profile bleiben in diesem Browser. Beim Wechsel lädt die App neu. Jedes Profil hat seinen eigenen Laufzettel. Maximal sechs Profile pro Fach.</p><label>Aktives Profil<select id="lcProfile">${Object.keys(store.profiles).map(k=>`<option ${k===store.active?'selected':''} value="${esc(k)}">${esc(k)}</option>`).join('')}</select></label><div class="lc-actions"><button data-lc="switch">Profil wechseln</button><button data-lc="create">Neues Profil anlegen</button></div><h3>Sichern und wiederherstellen</h3><div class="lc-actions"><button data-lc="export">Sicherung als JSON</button><button data-lc="csv">Lernbericht als CSV</button><button data-lc="print">Bericht drucken</button></div><label>Sicherungsdatei auswählen<input type="file" id="lcImportFile" accept="application/json,.json"></label><div class="lc-actions"><button data-lc="import">Sicherung überprüfen und importieren</button><button data-lc="reset">Aktives Profil zurücksetzen</button></div><p class="lc-muted">Ein Import überschreibt nach Bestätigung die Profile dieses Fachs. Biologie- und Chemie-Dateien können nicht miteinander verwechselt werden. Die JSON-Sicherung enthält auch den Laufzettel. Für den Gerätewechsel exportiere die Sicherung und importiere sie am anderen Gerät.</p>`}
 function draw(){document.getElementById('lcTabs').innerHTML=tabs.map(([id,l])=>`<button class="${tab===id?'active':''}" data-tab="${id}" aria-current="${tab===id?'page':'false'}">${l}</button>`).join('');document.getElementById('lcBody').innerHTML=({lernstand:summary,lehrkraft:teacherPage,abzeichen:badgePage,training:sessionHTML,einstellungen:settingsPage,profile:profilePage})[tab]();const notice=document.getElementById('lcNotice');notice.hidden=true;if(tab==='einstellungen'){toggleVoice()}}
 function apply(){let s=profile().settings;document.body.classList.toggle('lc-theme-dark',s.theme==='dark');document.body.classList.toggle('lc-theme-light',s.theme==='light');document.body.classList.toggle('lc-theme-contrast',s.theme==='contrast');document.body.classList.toggle('lc-font-large',s.font==='large');document.body.classList.toggle('lc-font-xl',s.font==='xl');document.body.classList.toggle('lc-focus',!!s.focus);document.body.classList.toggle('lc-reduced',s.motion==='off'||(s.motion==='system'&&matchMedia('(prefers-reduced-motion: reduce)').matches));document.body.classList.toggle('lc-slow',s.motion==='slow');document.body.classList.toggle('lc-hide-rewards',!s.rewards);document.body.classList.toggle('lc-no-timer',!s.timer);}
 function fileSave(name,content,type){let b=new Blob([content],{type}),a=document.createElement('a'),url=URL.createObjectURL(b);a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
@@ -1822,7 +1848,8 @@ if(typeof render==='function')render();
 <script src="BioLabor_Klassenarbeit.js?v=4"></script>
 <script src="Tierkunde_Verhaltenslabor.js?v=20261112-v3"></script>
 <script src="BioLabor_Modelle.js?v=1"></script>
-<script src="BioLabor_Schulstoff.js?v=2"></script>
+<script src="BioLabor_Schulstoff.js?v=3"></script>
+<script src="BioLabor_Pruefung.js?v=1"></script>
 <script>
 (() => {
   const previousNavItems = navItems;
@@ -1833,12 +1860,14 @@ if(typeof render==='function')render();
   const schoolLink = ['#schulstoff', 'Schulstoff & Stationsarbeit öffnen'];
 
   home = function () {
-    const page = previousHome();
-    const card = schoolwork?.linkCard('Schulstoff & Stationsarbeit',
-      'Bearbeite die Aufgaben aus Buch und Heft und vergleiche Hund, Katze und Mensch.', [schoolLink]) || '';
-    return page.includes('<div class="statrow">')
-      ? page.replace('<div class="statrow">', card + '<div class="statrow">')
-      : page + card;
+    return `<section class="bs-start" aria-labelledby="bs-start-title">
+      <h2 id="bs-start-title"><a href="#schulstoff">Für die Klassenarbeit üben <span aria-hidden="true">→</span></a></h2>
+      <p>Öffne die Lernstationen aus deinem Buch und Heft.</p>
+      <div class="bs-start-links">
+        <a href="#klassenarbeit">Skelette und Gebisse beschriften</a>
+        <a href="#print">Probeklassenarbeiten drucken</a>
+      </div>
+    </section>` + previousHome();
   };
 
   learn = function () {
@@ -1846,9 +1875,11 @@ if(typeof render==='function')render();
   };
 
   navItems = function () {
-    return [...previousNavItems(),
+    const items = previousNavItems();
+    return [items[0],
+      {id: 'schulstoff', icon: '📚', title: 'Schulstoff & Stationsarbeit'},
       {id: 'klassenarbeit', icon: '✏️', title: 'Klassenarbeit vorbereiten'},
-      {id: 'schulstoff', icon: '📚', title: 'Schulstoff & Stationsarbeit'}];
+      ...items.slice(1)];
   };
 
   render = function () {
