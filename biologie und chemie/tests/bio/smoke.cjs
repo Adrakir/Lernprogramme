@@ -132,6 +132,7 @@ async function run() {
     await page.getByRole('heading', {name: 'Das Raubtiergebiss', exact: true}).waitFor();
 
     await page.goto(home + '#print');
+    await page.locator('.bs-exam-sheet').first().waitFor();
     assert.equal(await page.locator('.bs-exam-sheet').count(), 3);
     assert.equal(await page.locator('.solutions-sheet').count(), 0);
     for (const version of [1, 3]) {
