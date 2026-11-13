@@ -93,7 +93,6 @@
         'Das vollständige bleibende Hunde- und Wolfsgebiss hat in der Regel 42 Zähne. Die Hauskatze hat normalerweise 30. Beim Menschen sind es mit Weisheitszähnen bis zu 32. Seine breiten Mahlflächen helfen, unterschiedliche Nahrung zu zerkleinern.',
         'Beim Kaninchen folgt auf die nachwachsenden Nagezähne eine Zahnlücke. Hinten zermahlen die Backenzähne Pflanzen. Die Form der Zähne verrät, welche Aufgaben sie erfüllen.',
       ],
-      diagram: 'teeth',
       tasks: [
         {...task('Zähne des Hundes zählen', [
           ...['Schneidezähne', 'Eckzähne', 'Vordere Backenzähne', 'Hintere Backenzähne']
@@ -386,9 +385,24 @@
     katze: [[69,31],[203,48],[351,13],[504,10],[646,111],[653,256],[628,330],[640,195],[375,167],[256,345],[218,228],[162,146]],
   };
 
+  const skeletonFunctions = [
+    'Umschließt und schützt das Gehirn. Der Kiefer trägt die Zähne.',
+    'Hier setzt der Oberarm an. Muskeln verbinden das Schulterblatt mit dem Rumpf und bewegen es beim Laufen mit.',
+    'Stützt den Rumpf, schützt das Rückenmark und setzt sich im Schwanz fort. Beim Sprung kann sich der Rücken beugen und strecken.',
+    'Verbindet die Hinterbeine mit dem Rumpf. Über das Becken gelangt die Kraft aus den Hinterbeinen auf den Körper.',
+    'Verbindet Hüfte und Knie. Die Muskeln am Oberschenkel strecken das Bein beim Absprung.',
+    'Das Fersenbein gehört zum Sprunggelenk. Hier zieht die Achillessehne, wenn das Hinterbein den Körper abstößt.',
+    'Zehen und Ballen setzen auf. Die Ballen polstern den Schritt.',
+    'Die Knochen liegen zwischen Knie und Sprunggelenk. Das kräftigere Schienbein trägt den größeren Teil der Last.',
+    'Die gebogenen Rippen bilden zusammen mit anderen Knochen den Brustkorb und schützen Herz und Lunge.',
+    'Zehen und Ballen stützen das Tier. Die Vorderbeine nehmen bei der Landung einen großen Teil der Belastung auf.',
+    'Elle und Speiche verbinden Ellenbogen und Vorderpfote. Sie stützen den Körper über die Vorderbeine.',
+    'Der Oberarmknochen liegt zwischen Schulter und Ellenbogen. Beide Gelenke verändern beim Laufen den Winkel des Vorderbeins.',
+  ];
+
   function skeletonImage(species, label, order, height) {
     const imageHeight = species === 'hund' ? 472 : 348;
-    return `<figure class="bs-figure"><svg viewBox="0 0 720 ${height}" role="img"
+    return `<figure class="bs-figure"><div class="bs-skeleton-scroll" aria-label="${label}, vergrößerbare Zeichnung"><div class="bs-skeleton-view" style="aspect-ratio:720/${height}"><svg viewBox="0 0 720 ${height}" role="img"
       aria-label="${label}, Seitenansicht mit zwölf markierten Bereichen">
       <rect width="720" height="${height}" rx="14" fill="white"/>
       <image href="Skelettbilder/${species}.webp" x="18" y="0" width="690" height="${imageHeight}"/>
@@ -396,10 +410,16 @@
         const [x, y] = points[species][point];
         const [mx, my] = numberPositions[species][point];
         const mark = species === 'hund' ? i + 1 : String.fromCharCode(65 + i);
-        return `<g class="bs-annotation"><line x1="${x}" y1="${y}" x2="${mx}" y2="${my + 8}"/>
+        return `<g class="bs-annotation" data-bs-bone-line="${point}"><line x1="${x}" y1="${y}" x2="${mx}" y2="${my + 8}"/>
           <circle class="bs-dot" cx="${x}" cy="${y}" r="5"/><circle class="bs-mark" cx="${mx}" cy="${my + 8}" r="15"/>
           <text x="${mx}" y="${my + 14}">${mark}</text></g>`;
-      }).join('')}</svg><figcaption>${label} · <a href="https://commons.wikimedia.org/wiki/File:${species === 'hund'
+      }).join('')}</svg>${order.map((point, i) => {
+        const [x, y] = numberPositions[species][point];
+        const mark = species === 'hund' ? i + 1 : String.fromCharCode(65 + i);
+        return `<button type="button" data-bs-bone="${point}" data-bs-animal="${species}"
+          aria-label="${label} ${mark}" aria-pressed="false" tabindex="${i === 0 ? 0 : -1}"
+          style="--x:${100*x/720}%;--y:${100*(y+8)/height}%"><span>${mark}</span></button>`;
+      }).join('')}</div></div><figcaption>${label} · <a href="https://commons.wikimedia.org/wiki/File:${species === 'hund'
         ? 'SqueletteChienChauveau1990.jpg' : 'SqueletteChatChauveau1990.jpg'}">Bildquelle</a></figcaption></figure>`;
   }
 
@@ -414,9 +434,11 @@
 
   function showDiagram(id) {
     if (id === 'skeletons') {
-      return '<div class="bs-figures">' + skeletonImage('hund', 'Hund', skeletonTerms.map((_, i) => i), 527) +
+      return '<div class="bs-figures" data-bs-skeleton>' + skeletonImage('hund', 'Hund', skeletonTerms.map((_, i) => i), 527) +
         skeletonImage('katze', 'Katze', catOrder, 374) + '</div>' +
-        '<h3>Gebiss der Katze</h3>' + (window.BioLaborAnatomie?.toothDiagram('katze', null, false) || '');
+        '<div class="bs-skeleton-tools"><button type="button" class="bs-action" data-bs-bone-mode aria-pressed="false">Knochen am Bild entdecken</button>' +
+        '<button type="button" class="bs-action bs-secondary" data-bs-skeleton-zoom aria-pressed="false">Bilder vergrößern</button></div>' +
+        '<p data-bs-bone-result role="status">Schalte „Knochen am Bild entdecken“ ein und wähle eine Markierung. Mit den Pfeiltasten wechselst du zwischen den Markierungen eines Tiers.</p>';
     }
     if (id === 'paws') {
       return `<figure class="bs-figure bs-paws"><svg viewBox="0 0 360 177" role="img"
@@ -428,11 +450,6 @@
           <circle class="bs-mark" cx="${mx}" cy="${my}" r="12"/>
           <text x="${mx}" y="${my+5}">${'ABC'[i]}</text></g>`).join('')}
         </svg><figcaption>Typische Pfotenspuren, vereinfacht</figcaption></figure>`;
-    }
-    if (id === 'teeth' && window.BioLaborAnatomie) {
-      return '<div class="bs-figures">' + ['hund', 'katze'].map(species =>
-        '<div><h3>' + (species === 'hund' ? 'Hund' : 'Katze') + '</h3>' +
-        window.BioLaborAnatomie.toothDiagram(species, null, false) + '</div>').join('') + '</div>';
     }
     return '';
   }
@@ -494,6 +511,10 @@
           <span data-bs-value="${row}-${i+1}">–</span></div></td>`).join('')}</tr>`).join('')}</tbody>
       <tfoot><tr><th scope="row" colspan="2">Summe</th>${breeds.map((_, i) => `<td data-bs-sum="${i+1}">–</td>`).join('')}</tr></tfoot></table></div>
       <p class="bs-result" data-bs-matrix-result role="status"></p>
+      <section class="bs-matrix-chart" aria-label="Punktesummen im Vergleich">
+        ${breeds.map(([name], i) => `<div><b>${name}</b><div class="bs-bar-track" aria-hidden="true"><span data-bs-bar="${i}"></span></div>
+          <output data-bs-bar-value="${i}">–</output></div>`).join('')}
+      </section>
     </section>`;
   }
 
@@ -512,7 +533,10 @@
         completed[index] += Number(value > 0);
       }));
       sums.forEach((sum, i) => {
-        root.querySelector('[data-bs-sum="' + (i + 1) + '"]').textContent = completed[i] ? sum : '–';
+        const value = completed[i] ? sum : '–';
+        root.querySelector('[data-bs-sum="' + (i + 1) + '"]').textContent = value;
+        root.querySelector('[data-bs-bar-value="' + i + '"]').textContent = value;
+        root.querySelector('[data-bs-bar="' + i + '"]').style.width = (sum / (criteria.length * 3 * 4) * 100) + '%';
       });
       const result = root.querySelector('[data-bs-matrix-result]');
       if (completed.every(total => total === criteria.length)) {
@@ -531,6 +555,59 @@
       update();
       save();
     }));
+  }
+
+  function bindSkeleton(root) {
+    const figures = root.querySelector('[data-bs-skeleton]');
+    if (!figures) return;
+    const controls = root.querySelector('[data-bs-bone-mode]');
+    const zoom = root.querySelector('[data-bs-skeleton-zoom]');
+    const reading = root.querySelector('[data-bs-bone-result]');
+    const instruction = reading.textContent;
+    const buttons = [...figures.querySelectorAll('[data-bs-bone]')];
+    const show = bone => {
+      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.bsBone === bone)));
+      figures.querySelectorAll('[data-bs-bone-line]').forEach(mark =>
+        mark.classList.toggle('bs-active-bone', mark.dataset.bsBoneLine === bone));
+      reading.textContent = bone === undefined ? instruction : skeletonTerms[bone] + '. ' + skeletonFunctions[bone];
+    };
+    controls.addEventListener('click', () => {
+      const on = controls.getAttribute('aria-pressed') !== 'true';
+      controls.setAttribute('aria-pressed', String(on));
+      controls.textContent = on ? 'Beschriftungen ausblenden' : 'Knochen am Bild entdecken';
+      figures.classList.toggle('bs-skeleton-active', on);
+      show();
+      if (on) reading.textContent = 'Tippe eine Markierung an. Der gleiche Knochen leuchtet bei beiden Tieren auf.';
+    });
+    zoom.addEventListener('click', () => {
+      const on = figures.classList.toggle('bs-skeleton-large');
+      zoom.setAttribute('aria-pressed', String(on));
+      zoom.textContent = on ? 'Bilder verkleinern' : 'Bilder vergrößern';
+      figures.querySelectorAll('.bs-skeleton-scroll').forEach(view => {
+        if (on) view.tabIndex = 0;
+        else {
+          view.removeAttribute('tabindex');
+          view.scrollLeft = 0;
+        }
+      });
+    });
+    figures.addEventListener('click', event => {
+      const button = event.target.closest('[data-bs-bone]');
+      if (!button) return;
+      buttons.filter(peer => peer.dataset.bsAnimal === button.dataset.bsAnimal)
+        .forEach(peer => { peer.tabIndex = peer === button ? 0 : -1; });
+      show(button.dataset.bsBone);
+    });
+    figures.addEventListener('keydown', event => {
+      const delta = {ArrowLeft:-1, ArrowUp:-1, ArrowRight:1, ArrowDown:1}[event.key];
+      if (!delta || !event.target.matches('[data-bs-bone]')) return;
+      event.preventDefault();
+      const peers = buttons.filter(button => button.dataset.bsAnimal === event.target.dataset.bsAnimal);
+      const next = peers[(peers.indexOf(event.target) + delta + peers.length) % peers.length];
+      event.target.tabIndex = -1;
+      next.tabIndex = 0;
+      next.focus();
+    });
   }
 
   function bindLesson(root, id, lesson, saved) {
@@ -606,6 +683,7 @@
         <details class="bs-hint"><summary>Lernwissen aufklappen</summary><ul>${lesson.facts.map(fact => `<li>${fact}</li>`).join('')}</ul></details>
         ${shortcuts(lesson.links)}</section>
       ${lesson.diagram ? `<section class="bs-panel"><h2>Schau genau hin</h2>${showDiagram(lesson.diagram)}</section>` : ''}
+      ${window.BioLaborModelle?.has(id) ? '<section class="bm-section" data-bs-modelle></section>' : ''}
       ${lesson.matrix ? renderMatrix() : ''}
       <section class="bs-panel"><h2>Deine Aufgaben</h2>${lesson.tasks.map((entry, index) => renderTask(entry, index, saved)).join('')}</section>
       ${stationIds.includes(id) ? `<section class="bs-panel"><h2>Wie sicher bist du?</h2>
@@ -614,6 +692,8 @@
         ${shortcuts([['#schulstoff', 'Zurück zum Laufzettel']])}</section>` : ''}
     </div>`;
     bindLesson(root, id, lesson, saved);
+    bindSkeleton(root);
+    window.BioLaborModelle?.mount(root.querySelector('[data-bs-modelle]'), id);
     if (id === 'bewegung' && Object.hasOwn(movementTasks, target)) {
       const exercise = root.querySelector('[data-bs-task="' + movementTasks[target] + '"] h3');
       exercise.tabIndex = -1;

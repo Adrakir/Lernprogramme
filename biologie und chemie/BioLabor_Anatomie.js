@@ -104,13 +104,18 @@
     t: 'M0 0H1L.91 20Q.55 33 .08 17Z',
   };
 
-  function toothDiagram(id, selected, interactive) {
+  function toothDiagram(id, selected, interactive, {showMarker = true, highlight = false} = {}) {
     const jaw = jaws[id];
     const selection = jaw.marks[selected];
     const [, px, py, mx, my, second] = selection || [];
     const line = (x, y) => `<line x1="${mx}" y1="${my}" x2="${x}" y2="${y}"/><circle cx="${x}" cy="${y}" r="4.5"/>`;
-    const row = (teeth, y, flipped) => teeth.map(([type, x, w]) =>
-      `<path class="bk-tooth" d="${outlines[type]}" transform="translate(${x} ${y}) scale(${w} ${flipped ? -1 : 1})"/>`).join('');
+    const group = type => ({i: 'incisor', c: 'canine', f: 'canine', p: 'premolar', s: 'premolar', m: 'molar', t: 'molar'})[type];
+    const row = (teeth, y, flipped) => teeth.map(([type, x, w]) => {
+      const key = type === 'r' ? (flipped ? 'molar' : 'premolar') : group(type);
+      const active = highlight && (selection?.[0] === key || (type === 'r' && selection?.[0] === 'carnassial'));
+      return `<path class="bk-tooth${active ? ' bm-tooth-active' : ''}" d="${outlines[type]}"
+        transform="translate(${x} ${y}) scale(${w} ${flipped ? -1 : 1})"/>`;
+    }).join('');
     const markers = interactive ? jaw.marks.map(([key, , , x, y], i) =>
       `<button type="button" class="bk-marker" data-point="${i}" aria-pressed="${i === selected}"
        aria-label="${i + 1}. ${toothLabels[key]}" style="--x:${x / 4.6}%;--y:${y / 2.6}%">${i + 1}</button>`).join('') : '';
@@ -119,8 +124,8 @@
        aria-label="Schematische Seitenansicht einer Kieferhälfte, vorn links">
         <path class="bk-gum" d="M31 79Q140 47 250 56L422 59L420 79Z M31 189L420 189L421 208L249 213Q143 219 31 189Z"/>
         ${row(jaw.upper, 77, false)}${row(jaw.lower, 191, true)}
-        ${selection ? line(px,py) + (second ? line(...second) : '') : ''}
-        ${!interactive && selection ? `<circle class="bk-start" cx="${mx}" cy="${my}" r="10"/>` : ''}
+        ${showMarker && selection ? line(px,py) + (second ? line(...second) : '') : ''}
+        ${showMarker && !interactive && selection ? `<circle class="bk-start" cx="${mx}" cy="${my}" r="10"/>` : ''}
       </svg>${markers}</div>
       <figcaption>Vorn links · Oberkiefer oben</figcaption>
     </figure>`;
