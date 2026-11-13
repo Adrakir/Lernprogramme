@@ -161,7 +161,7 @@ function mount(args){
  const rig=main.querySelector('#rig-studio');
  if(rig)main.insertBefore(rig,box.nextSibling);
  const old=document.createElement('details');old.className='ls-reference';old.innerHTML='<summary>📚 Schulbuchwissen, Knochenlexikon und weitere Erklärungen aufklappen</summary>';
- Array.from(main.children).forEach(el=>{if(el!==box&&el!==title&&el!==rig)old.appendChild(el)});
+ Array.from(main.children).forEach(el=>{if(el!==box&&el!==title&&el!==rig&&!el.classList.contains('bs-context'))old.appendChild(el)});
  main.appendChild(old);
  render();
 }

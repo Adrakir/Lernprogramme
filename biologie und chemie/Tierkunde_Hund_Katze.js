@@ -354,6 +354,9 @@ function render(focus){
  if(focusedComparisons[section]){
   $('#content .page-title').insertAdjacentHTML('afterend',focusedComparison(section));
  }
+ if(window.BioLaborSchulstoff){
+  $('#content .page-title').insertAdjacentHTML('afterend',window.BioLaborSchulstoff.forAnimal(section,animal));
+ }
  if(focus){$('#content').focus({preventScroll:true});scrollTo({top:0,behavior:'instant'});}
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}

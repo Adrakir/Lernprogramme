@@ -106,7 +106,8 @@
 
   function toothDiagram(id, selected, interactive) {
     const jaw = jaws[id];
-    const [, px, py, mx, my, second] = jaw.marks[selected];
+    const selection = jaw.marks[selected];
+    const [, px, py, mx, my, second] = selection || [];
     const line = (x, y) => `<line x1="${mx}" y1="${my}" x2="${x}" y2="${y}"/><circle cx="${x}" cy="${y}" r="4.5"/>`;
     const row = (teeth, y, flipped) => teeth.map(([type, x, w]) =>
       `<path class="bk-tooth" d="${outlines[type]}" transform="translate(${x} ${y}) scale(${w} ${flipped ? -1 : 1})"/>`).join('');
@@ -118,8 +119,8 @@
        aria-label="Schematische Seitenansicht einer Kieferhälfte, vorn links">
         <path class="bk-gum" d="M31 79Q140 47 250 56L422 59L420 79Z M31 189L420 189L421 208L249 213Q143 219 31 189Z"/>
         ${row(jaw.upper, 77, false)}${row(jaw.lower, 191, true)}
-        ${line(px,py)}${second ? line(...second) : ''}
-        ${interactive ? '' : `<circle class="bk-start" cx="${mx}" cy="${my}" r="10"/>`}
+        ${selection ? line(px,py) + (second ? line(...second) : '') : ''}
+        ${!interactive && selection ? `<circle class="bk-start" cx="${mx}" cy="${my}" r="10"/>` : ''}
       </svg>${markers}</div>
       <figcaption>Vorn links · Oberkiefer oben</figcaption>
     </figure>`;

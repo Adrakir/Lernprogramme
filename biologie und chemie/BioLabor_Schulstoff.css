@@ -1,0 +1,94 @@
+.bs-school, .bs-context {
+  --bs-paper: var(--surface, var(--card, #fff));
+  --bs-accent: var(--teal, var(--jade-dark, #12574f));
+  --bs-soft: var(--mint, var(--sage, #e4f5ef));
+}
+.bs-school { max-width: 1120px; margin-inline: auto; }
+.bs-heading {
+  background: var(--bs-soft);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: clamp(16px, 3vw, 32px);
+  margin-bottom: 18px;
+}
+.bs-heading h1 { margin: 8px 0; }
+.bs-heading a, .bs-card h3 a { color: var(--bs-accent); }
+.bs-panel {
+  background: var(--bs-paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: clamp(13px, 2.2vw, 24px);
+  margin: 0 0 16px;
+}
+.bs-panel h2 { margin: 0 0 .55em; }
+.bs-context { margin: 12px 0; }
+.bs-context > strong { display: block; }
+.bs-context p, .bs-card p, .bs-heading p { margin: .3em 0; }
+.bs-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 12px 0; }
+.bs-card, .bs-task { border: 1px solid var(--line); border-radius: 13px; padding: 14px; min-width: 0; }
+.bs-card small { color: var(--muted); }
+.bs-card h3, .bs-task h3 { margin: 0 0 .4em; line-height: 1.25; }
+.bs-task { margin-top: 14px; }
+.bs-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.bs-links a, .bs-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 7px 12px;
+  border: 1px solid var(--bs-accent);
+  border-radius: 9px;
+  background: var(--bs-soft);
+  color: var(--bs-accent);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+.bs-links a:hover { text-decoration: underline; }
+.bs-secondary { background: var(--bs-paper); }
+.bs-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 15px; }
+.bs-field, .bs-write { display: flex; flex-direction: column; align-items: stretch; gap: 5px; min-width: 0; }
+.bs-field small { min-height: 1.25em; color: var(--muted); }
+.bs-counts .bs-field:last-child { grid-column: 1 / -1; max-width: 200px; }
+.bs-task select, .bs-task input:not([type="checkbox"]), .bs-task textarea, .bs-panel select {
+  background: var(--bs-paper);
+  border: 1px solid var(--muted);
+  border-radius: 8px;
+  color: var(--ink);
+  font: inherit;
+  min-height: 44px;
+  min-width: 0;
+  padding: 6px 9px;
+}
+.bs-task textarea { resize: vertical; }
+.bs-task [aria-invalid="true"] { border-width: 2px; border-color: #b25629; }
+.bs-check { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.bs-check input { width: 20px; height: 20px; flex-shrink: 0; }
+.bs-hint { margin: 9px 0; padding: 9px; border-radius: 8px; background: var(--bs-soft); }
+.bs-hint li + li { margin-top: .55em; }
+.bs-school summary { cursor: pointer; font-weight: 700; }
+.bs-result { min-height: 1.5em; margin: 7px 0 0; }
+.bs-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 12px; }
+.bs-figure { margin: 0; min-width: 0; }
+.bs-figure svg { width: 100%; height: auto; display: block; border-radius: 12px; }
+.bs-figure figcaption { padding: 5px 0; color: var(--muted); }
+.bs-paws { max-width: 390px; margin-inline: auto; }
+.bs-annotation line { stroke: #226756; stroke-width: 2.5; }
+.bs-dot { fill: #226756; stroke: white; stroke-width: 2; }
+.bs-mark { fill: white; stroke: #226756; stroke-width: 2.5; }
+.bs-annotation text { fill: #194f42; text-anchor: middle; font: 700 18px system-ui; }
+.bs-table-wrap { overflow: auto; margin-top: 12px; }
+.bs-table { width: 100%; min-width: 620px; border-collapse: collapse; }
+.bs-table :is(th, td) { padding: 8px; border: 1px solid var(--line); text-align: left; }
+.bs-table :is(thead, tfoot) { background: var(--bs-soft); font-weight: 700; }
+.bs-score { display: flex; align-items: center; gap: 8px; }
+.bs-score span { min-width: 1.5em; text-align: center; }
+.bs-school :is(a, button, input, select, textarea, summary, .bs-table-wrap):focus-visible, .bs-context a:focus-visible {
+  outline: 3px solid var(--bs-accent);
+  outline-offset: 2px;
+}
+@media (max-width: 720px) { .bs-cards { grid-template-columns: 1fr; } }
+@media (max-width: 520px) {
+  .bs-fields, .bs-figures { grid-template-columns: 1fr; }
+  .bs-counts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media print { .bs-context, .bs-links, .bs-action { display: none; } .bs-task { break-inside: avoid-page; } }
