@@ -435,5 +435,10 @@
     draw();
   }
 
-  window.BioLaborKlassenarbeit = {mount, examSkeletons};
+  function skeletonQuestion(animal, key) {
+    const index = species[animal].points.findIndex(([part]) => part === key);
+    return diagram(animal, index, false);
+  }
+
+  window.BioLaborKlassenarbeit = {mount, examSkeletons, skeletonQuestion};
 })();

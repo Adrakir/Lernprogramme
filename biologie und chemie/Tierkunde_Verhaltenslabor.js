@@ -92,7 +92,7 @@
   };
   const state = {scene: 'greet', answer: null, markers: true, paused: false, large: false};
 
-  function figure(animal, scene, markers = state.markers) {
+  function figure(animal, scene, markers = state.markers, revealScene = true) {
     const cat = animal === 'cat';
     const low = ['fear', 'flee', 'hunt'].includes(scene);
     const warn = ['threat', 'attack'].includes(scene);
@@ -162,7 +162,7 @@
     const frontPivot = `--pose-x:217px;--pose-y:${frontY + 40}px`;
     const tailPivot = `--pose-x:${tailStart[0]}px;--pose-y:${tailStart[1]}px`;
     return `<svg class="pose-${scene} pose-${animal}" viewBox="0 0 520 252" role="img"
-      aria-label="${animalNames[animal]}, ${SCENES[scene].label}, schematische Darstellung">
+      aria-label="${animalNames[animal]}${revealScene ? ", " + SCENES[scene].label : ""}, schematische Darstellung">
       <defs>
         <linearGradient id="${prefix}-coat" x2="0" y2="1">
           <stop stop-color="${light}"/><stop offset=".54" stop-color="${fill}"/><stop offset="1" stop-color="${dark}"/>

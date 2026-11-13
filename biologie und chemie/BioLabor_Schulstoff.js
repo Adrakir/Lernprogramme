@@ -198,7 +198,7 @@
         writing('Eine Begegnung deuten', 'Ein Hund wedelt und senkt locker den Vorderkörper. Die Katze legt die Ohren an und zieht sich zurück. Beschreibe beide Tiere. Was könnten ihre Signale bedeuten?',
           'Die lockere Spielverbeugung des Hundes deutet auf eine Einladung zum Spielen hin. Die Katze weicht zurück und legt die Ohren an. Sie möchte wahrscheinlich Abstand. Eine ähnliche Schwanzbewegung kann bei verschiedenen Tieren etwas anderes bedeuten.'),
       ],
-      links: [[animal('dog/signals'), 'Hundesignale beobachten'], [animal('cat/signals'), 'Katzensignale beobachten'], ['#schulstoff/wolf', 'Zu Wolf und Hund']],
+      links: [['#koerpersprache', 'Körpersprache am Bild üben'], [animal('dog/signals'), 'Hundesignale beobachten'], [animal('cat/signals'), 'Katzensignale beobachten'], ['#schulstoff/wolf', 'Zu Wolf und Hund']],
     },
     bewegung: {
       title: 'Skelett, Knochen, Gelenke und Muskeln', source: 'Heft und Arbeitsblätter zum Bewegungssystem · Bioskop 1, S. 231–233',
@@ -323,6 +323,7 @@
       quiz: [],
     };
     const selected = (targets[section] || []).map(id => [school(id), lessons[id].title]);
+    if (section === 'signals') selected.unshift([main('koerpersprache'), 'Körpersprache am Bild üben']);
     return linkCard('Aufgaben aus Buch und Heft', 'Übe passend zu dieser Lernstation.',
       [...selected, [school(), 'Alle Aufgaben']]);
   }
@@ -844,8 +845,9 @@
     const lesson = Object.hasOwn(lessons, id) ? lessons[id] : undefined;
     if (!lesson) {
       root.innerHTML = '<div class="bs-school"><header class="bs-heading"><h1>Schulstoff & Stationsarbeit</h1>' +
-        '<p>Aufgaben aus Buch, Heft und Arbeitsblättern zur Vorbereitung auf die Klassenarbeit.</p></header>' +
-        renderOverview() + '</div>';
+        '<p>Aufgaben aus Buch, Heft und Arbeitsblättern zur Vorbereitung auf die Klassenarbeit.</p>' +
+        shortcuts([['#probetest','Interaktive Probeklassenarbeit'], ['#koerpersprache','Körpersprache am Bild üben'], ['#lehrkraft','Stationen für die Lehrkraft']]) +
+        '</header>' + renderOverview() + '</div>';
       return;
     }
     const saved = readProgress()[id] || {};

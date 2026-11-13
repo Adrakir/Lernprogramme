@@ -1,0 +1,93 @@
+.bp-root { --bp-ink: var(--deep, #12574f); --bp-wash: var(--mint, #e4f5ef); }
+.bp-heading h1:focus, .bp-panel h2:focus { outline: none; }
+.bp-versions, .bp-teacher-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-top: 14px; }
+.bp-versions .bs-card { display: flex; flex-direction: column; align-items: flex-start; }
+.bp-versions .bs-card p { flex: 1; }
+.bp-versions button { margin-top: 8px; }
+.bp-jump, .bp-scene-tabs { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
+.bp-jump button { min-width: 44px; min-height: 44px; }
+.bp-jump [aria-current="step"], .bp-scene-tabs [aria-pressed="true"] { background: var(--teal); color: #fff; }
+.bp-panel h2 { overflow-wrap: anywhere; }
+.bp-actions { margin-top: 16px; }
+.bp-picture { max-width: 550px; }
+.bp-picture .bk-figure { margin: 0; }
+.bp-picture .bk-picture { width: 100%; }
+.bp-picture .bk-figure-mensch { max-width: 310px; }
+.bp-choices, .bp-match, .bp-criteria { display: grid; gap: 8px; padding: 0; margin: 12px 0; border: 0; min-inline-size: 0; }
+.bp-choices label, .bp-criteria label {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.bp-choices label:has(input:checked), .bp-criteria label:has(input:checked) { background: var(--bp-wash); border-color: var(--teal); }
+.bp-choices input, .bp-criteria input { flex: 0 0 auto; margin-top: .25em; accent-color: var(--teal); }
+.bp-match label, .bp-writing { display: grid; gap: 5px; }
+.bp-match select, .bp-writing textarea {
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--muted);
+  border-radius: 9px;
+  font: inherit;
+  padding: 8px 10px;
+  min-height: 44px;
+  width: 100%;
+}
+.bp-writing textarea { resize: vertical; }
+.bp-note, .bp-status { padding: 8px 11px; border-radius: 9px; background: var(--bp-wash); }
+.bp-note { margin: 12px 0 0; }
+.bp-note p:last-child { margin-bottom: 0; }
+.bp-status { margin: 10px 0 0; }
+.bp-review { border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; padding: 10px 12px; }
+.bp-review[open] summary { margin-bottom: 10px; }
+.bp-review > p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.bp-criteria legend { margin: 5px 0; font-weight: 700; }
+.bp-answers { padding-inline-start: 1.35em; }
+.bp-checked { border: 0; padding: 0; min-inline-size: 0; }
+.bp-observation-image { position: relative; max-width: 640px; }
+.bp-observation-image svg { display: block; width: 100%; height: auto; border-radius: 12px; }
+.bp-observation-image svg * { animation: none !important; }
+.bp-observation-image button {
+  position: absolute;
+  top: var(--bo-y);
+  left: var(--bo-x);
+  transform: translate(-50%,-50%);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid #27614f;
+  border-radius: 50%;
+  background: #fff;
+  color: #1c4c3d;
+  font: inherit;
+  font-weight: 800;
+}
+.bp-observation-image button[aria-pressed="true"] { background: #ffd891; color: #523616; border-color: #78481c; }
+.bp-teacher-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.bp-station { display: grid; gap: 8px; margin: 0; }
+.bp-station h2, .bp-station p { margin-bottom: 4px; }
+.bp-station-book { color: var(--muted); }
+.bp-station-text strong { display: block; color: var(--bp-ink); }
+.bp-station-links { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.bp-station-links > div { display: grid; gap: 5px; justify-items: start; }
+.bp-qr { width: 112px; height: 112px; flex: 0 0 auto; display: block; }
+.bp-qr svg { display: block; width: 100%; height: 100%; }
+.bp-station-links [role="status"]:empty { display: none; }
+.bp-station-links [role="status"], .bp-station-links input { min-width: 0; max-width: 100%; }
+@media(max-width: 740px) {
+  .bp-versions, .bp-teacher-grid { grid-template-columns: 1fr; }
+  .bp-actions button, .bp-actions a { min-height: 44px; }
+}
+@media print {
+  .bp-teacher .bp-no-print { display: none !important; }
+  .bp-teacher .bs-heading, .bp-teacher .bs-panel { padding: 3mm; margin: 0; border: 1px solid #777; background: #fff; }
+  .bp-teacher-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 3mm; }
+  .bp-station { break-inside: avoid; color: #182825; }
+  .bp-teacher .bs-heading, .bp-station-text strong { color: #182825; }
+  .bp-teacher h2 { font-size: 12pt; }
+  .bp-qr { width: 26mm; height: 26mm; }
+}
