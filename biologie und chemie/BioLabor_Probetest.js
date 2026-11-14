@@ -63,6 +63,9 @@
 
   function examStart(active) {
     const historyItems = Object.entries(stored.completed || {});
+    const check = stored.followup;
+    const followupReady = check && !check.done && Date.now() >= Date.parse(check.at);
+    const followupActive = stored.round?.followup && !stored.round.finished;
     return heading('Interaktive Probeklassenarbeit',
       'Wähle eine von drei Fassungen. Plane etwa 15–20 Minuten ein. Jede Fassung enthält Bildaufgaben, Zuordnungen und zwei kurze Erklärfragen.',
       '<a href="#schulstoff">Zum Schulstoff</a><a href="#print">Arbeiten zum Drucken</a>') +
@@ -70,6 +73,10 @@
       <p>Du kannst Fragen überspringen, zurückgehen und Antworten ändern. Tipps und Lösungen erscheinen nach der Abgabe. Erklärtexte vergleichst du dann selbst mit den Musterantworten.</p>
       ${active ? `<p class="bp-status">Arbeit ${active.version + 1} ist ${active.phase === 'results' ? 'abgegeben' : 'noch offen'}.</p>
         <div class="button-row">${button('resume', active.phase === 'results' ? 'Letzte Auswertung öffnen' : 'Arbeit fortsetzen')}</div>` : ''}
+      ${check && !check.done ? '<div class="bp-note"><strong>Kurzer Lerncheck</strong><p>' +
+        (followupReady ? 'Prüfe mit neuen Beispielen, was du behalten hast.'
+          : 'Der Lerncheck ist ab ' + new Intl.DateTimeFormat('de-DE',{dateStyle:'medium'}).format(new Date(check.at)) + ' verfügbar.') +
+        '</p>' + (followupReady ? button('followup',followupActive ? 'Lerncheck fortsetzen' : 'Lerncheck starten') : '') + '</div>' : ''}
       <div class="bp-versions">${versions.map((questions, index) => `<article class="bs-card">
         <h3>Arbeit ${index + 1}</h3><p>${questions.length} Aufgaben · ${questions.filter(q => !q.criteria).reduce((sum,q) => sum + maxPoints(q),0)} automatisch prüfbare Punkte</p>
         ${button('start', 'Arbeit ' + (index + 1) + ' starten', true, index)}</article>`).join('')}</div></section>` +
@@ -223,7 +230,7 @@
     const links = [...new Set(open.map(topic => retry[topic][round.variant].skill))];
     return heading('Deine Wiederholungsrunde',
       (round.topics.length - open.length) + ' von ' + round.topics.length + ' Aufgaben in einem neuen Beispiel richtig gelöst.',
-      '<a href="#probetest/auswertung">Zur Auswertung der Arbeit</a>') +
+      round.followup ? '<a href="#probetest">Zu den Probearbeiten</a>' : '<a href="#probetest/auswertung">Zur Auswertung der Arbeit</a>') +
       `<section class="bs-panel bp-panel"><h2>${open.length ? 'Diese Themen bleiben offen' : 'Alle Themen dieser Runde gelöst'}</h2>
         <div class="bs-links">${links.map(skill => `<a href="${skills[skill][1]}">${skills[skill][0]}</a>`).join('')}</div>
         ${open.length ? '<div class="button-row bp-actions">' + button('retry-again', 'Offene Themen erneut üben') + '</div>' : ''}
@@ -257,7 +264,7 @@
         start: () => examStart(active),
         arbeit: () => active?.phase === 'work' ? examQuestion(active, confirm) : examStart(active),
         auswertung: () => active?.phase === 'results' ? examResults(active) : examStart(active),
-        wiederholen: () => !round?.topics?.length || active?.phase !== 'results'
+        wiederholen: () => !round?.topics?.length || (!round.followup && active?.phase !== 'results')
           ? examStart(active) : round.finished ? practiceResults(round) : practiceRound(round),
       };
       root.innerHTML = '<div class="bs-school bp-root">' + (Object.hasOwn(views, screen) ? views[screen]() : examStart(active)) + '</div>';
@@ -274,8 +281,8 @@
       render();
     }
 
-    function newRound(topics) {
-      stored.round = {topics, answers: {}, checked: {}, index: 0, variant: ((stored.round?.variant ?? -1) + 1) % 3, finished: false};
+    function newRound(topics, followup = false) {
+      stored.round = {topics, followup, answers: {}, checked: {}, index: 0, variant: ((stored.round?.variant ?? -1) + 1) % 3, finished: false};
       save();
       open('wiederholen');
     }
@@ -373,8 +380,12 @@
           break;
         }
         case 'retry': newRound(needsPractice(active)); break;
+        case 'followup':
+          if (round?.followup && !round.finished) open('wiederholen');
+          else if (stored.followup?.topics?.length && Date.now() >= Date.parse(stored.followup.at)) newRound(stored.followup.topics, true);
+          break;
         case 'retry-again':
-          newRound(missedTopics(round));
+          newRound(missedTopics(round), round.followup);
           break;
         case 'retry-check':
           if (!hasAnswer(retry[round.topics[round.index]][round.variant], round.answers[round.index])) {
@@ -387,8 +398,17 @@
           render();
           break;
         case 'retry-next':
-          if (round.index + 1 === round.topics.length) round.finished = true;
-          else round.index += 1;
+          if (round.index + 1 === round.topics.length) {
+            round.finished = true;
+            if (!missedTopics(round).length) {
+              if (round.followup) stored.followup.done = true;
+              else {
+                const tomorrow = new Date();
+                tomorrow.setHours(24,0,0,0);
+                stored.followup = {at:tomorrow.toISOString(), topics:round.topics.slice(0,3), done:false};
+              }
+            }
+          } else round.index += 1;
           save();
           focus = round.finished ? 'h1' : '.bp-panel h2';
           render();

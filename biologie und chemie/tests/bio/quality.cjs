@@ -60,6 +60,24 @@ module.exports = async function checkQuality(page, home) {
   await page.keyboard.press('Escape');
   assert.equal(await page.evaluate(() => document.activeElement.id),'lcOpen');
 
+  await page.evaluate(() => {
+    const key = 'biolab5-probetest-1';
+    const stored = JSON.parse(localStorage.getItem(key));
+    stored.followup = {at:'2020-01-01T00:00:00Z', topics:['schulter'], done:false};
+    localStorage.setItem(key, JSON.stringify(stored));
+  });
+  await open('probetest');
+  await page.reload();
+  await page.getByRole('button',{name:'Lerncheck starten',exact:true}).click();
+  const exercise = page.locator('.bp-root');
+  await exercise.getByRole('heading',{name:'Fehler gezielt wiederholen',exact:true}).waitFor();
+  assert.ok(await exercise.getByRole('radio',{name:'Schulterblatt'}).isVisible());
+  await exercise.getByRole('radio',{name:'Schulterblatt'}).check();
+  await exercise.getByRole('button',{name:'Antwort prüfen'}).click();
+  await exercise.getByRole('button',{name:'Ergebnis anzeigen'}).click();
+  assert.match(await exercise.innerText(),/1 von 1/);
+  assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('biolab5-probetest-1')).followup.done),true);
+
   await open('lehrkraft');
   await page.locator('[data-bl-stations]').selectOption('required');
   assert.equal(await page.locator('.bp-station:visible').count(),3);
