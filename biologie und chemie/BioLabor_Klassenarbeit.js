@@ -247,7 +247,7 @@
         <div class="bk-controls">
           <div class="bk-feedback bk-fact" aria-live="polite">
             <span class="bk-fact-number" aria-hidden="true">${selected + 1}</span>
-            <div><h3>${name}</h3><p>${explanation}</p></div>
+            <div><h2>${name}</h2><p>${explanation}</p></div>
           </div>
           ${teeth ? `<p class="bk-jaw-note"><strong>${anatomy.jaws[id].count}</strong><br>Vereinfachtes Modell einer Gebissseite.</p>` : ''}
           <details class="bk-index"${indexOpen ? ' open' : ''}>
@@ -271,7 +271,7 @@
         <div class="bk-progress">
           ${practice ? '' : `<strong>${category}</strong>`}
           <span>Aufgabe ${index + 1} von ${round.length}</span><progress value="${index + 1}" max="${round.length}" aria-label="Aufgabenfortschritt"></progress></div>
-        <h3 data-bk-heading tabindex="-1">${q.prompt}</h3>
+        <h2 data-bk-heading tabindex="-1">${q.prompt}</h2>
         <div class="bk-work ${hasDiagram ? '' : 'bk-text-task'}">
           ${hasDiagram ? picture(q.id, mark, false) : ''}
           <div class="bk-controls">
@@ -300,7 +300,7 @@
       const review = answers.filter(a => a.chosen !== a.question.correct || a.hint);
       const title = practice ? 'Deine Beschriftungsrunde' : 'Dein Ergebnis im Probetest';
       return `<section class="bk-result">
-        <h3 data-bk-heading tabindex="-1">${title}</h3>
+        <h2 data-bk-heading tabindex="-1">${title}</h2>
         <p class="bk-score"><strong>${correct} von ${round.length}</strong> ${practice ? 'beim ersten Versuch richtig' : 'richtig'}</p>
         <ul class="bk-scores">${groups.map(group => {
           const rows = answers.filter(a => a.question.id === group);

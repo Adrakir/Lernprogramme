@@ -83,3 +83,15 @@ body.tier-contrast { --bg:#fff; --card:#fff; --ink:#111; --muted:#222; --line:#5
 [data-bl-motion] { min-height:44px; max-width:100%; margin-block:.4rem; }
 .bl-motion-compare { margin-block:.5rem; }
 .bl-motion-compare > p { margin:.55rem 0 0; }
+
+#bio-klassenarbeit .bk-fact h2 { margin:0 0 .35rem; font-size:1.08rem; }
+:where(#main,#content) [tabindex="-1"]:focus-visible,
+#main svg [role="button"]:focus-visible { outline:3px solid #a86608; outline-offset:3px; }
+
+.lc-theme-dark #bio-klassenarbeit :is(.bk-fact p,.bk-jaw-note strong) { color:#e6f5ef; }
+.lc-theme-dark #lcModal .bl-progress { background:transparent; border-color:#678c91; }
+.lc-theme-dark #lcModal .lc-top small { color:#b8d4d7; }
+body.dark #content .ls-tabs button[aria-pressed="false"] { background:#203a34; color:#edf9f0; }
+#main { scroll-margin-top:72px; }
+.lc-theme-dark #lcModal .bl-progress p { color:#c9e1e5; }
+.lc-theme-dark #lcModal .bl-progress a { color:#a3ebd4; }

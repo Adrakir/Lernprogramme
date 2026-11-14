@@ -236,13 +236,13 @@
     root.classList.toggle('behavior-paused', state.paused);
     root.classList.toggle('behavior-large', state.large);
     root.innerHTML = `<header class="behavior-head">
-      <h3>Hund und Katze im direkten Vergleich</h3>
+      <h2>Hund und Katze im direkten Vergleich</h2>
       <p>Wähle eine Situation und vergleiche Ohren, Körper und Schwanz.</p>
     </header>
     <div class="behavior-picks" role="group" aria-label="Situation auswählen">
       ${Object.entries(SCENES).map(([key, item]) => `<button type="button" data-scene="${key}" aria-pressed="${state.scene === key}">${item.label}</button>`).join('')}
     </div>
-    <div class="behavior-context"><h4>${scene.label}</h4><p>${scene.context}</p></div>
+    <div class="behavior-context"><h3>${scene.label}</h3><p>${scene.context}</p></div>
     <div class="behavior-tools">
       <button type="button" data-behavior-tool="size" aria-pressed="${state.large}">${state.large ? 'Bilder verkleinern' : 'Bilder vergrößern'}</button>
       <button type="button" data-behavior-tool="markers" aria-pressed="${state.markers}">Bildmarkierungen</button>

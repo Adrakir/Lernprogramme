@@ -22,6 +22,29 @@ module.exports = async function checkQuality(page, home) {
   assert.ok(await page.getByText('Geführter Lernweg',{exact:true}).isVisible());
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),0);
 
+  const main = page.locator('#main');
+  const skip = page.getByRole('link', {name:'Zum Lerninhalt springen'});
+  await skip.focus();
+  await skip.press('Enter');
+  assert.equal(await main.evaluate(el => el === document.activeElement),true);
+  assert.ok(page.url().endsWith('#learn/spine'));
+  const menu = page.getByRole('button',{name:'Lernmenü öffnen'});
+  await menu.focus();
+  await menu.press('Enter');
+  assert.equal(await page.locator('#menuToggle').getAttribute('aria-expanded'),'true');
+  await page.waitForFunction(() => document.activeElement.closest('#sidebar') !== null);
+  await page.keyboard.press('Escape');
+  assert.equal(await menu.getAttribute('aria-expanded'),'false');
+  assert.equal(await menu.evaluate(el => el === document.activeElement),true);
+  assert.equal(await page.locator('#sidebar').evaluate(el => el.inert),true);
+
+  const learningSteps = main.getByRole('group',{name:'Lernschritt wählen'});
+  await learningSteps.getByRole('button',{name:/Lernwissen/}).press('Enter');
+  const selected = learningSteps.getByRole('button',{name:/Lernwissen/,pressed:true});
+  assert.equal(await selected.evaluate(el => el === document.activeElement),true);
+  await learningSteps.getByRole('button',{name:/Entdecken/}).click();
+  assert.equal(await main.getByRole('group',{name:/Wirbelsäule/}).locator('[role="button"]').count()>0,true);
+
   for (const route of ['assess','print','print/3']) {
     await open(route);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),0,route);

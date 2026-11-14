@@ -87,7 +87,7 @@ const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>'
 let animal='dog',section='skeleton',bone='spine',tooth='canine',mood='relax',gait='walk',quiz=[],qi=0,chosen=null,checked=false,hints=0,score=0,best={dog:0,cat:0};
 try{best=Object.assign(best,JSON.parse(localStorage.getItem(KEY)||'{}').best||{})}catch(e){}
 const A=()=>SPECIES[animal];
-function pageTitle(id,title,subtitle,action=''){return '<div class="page-title"><div><span class="kicker">FORSCHERSTATION '+id+' · '+A().name.toUpperCase()+'</span><h2>'+title+'</h2><p>'+subtitle+'</p>'+action+'</div><span class="mini-tag">'+A().emoji+' '+A().name+'</span></div>'}
+function pageTitle(id,title,subtitle,action=''){return '<div class="page-title"><div><span class="kicker">FORSCHERSTATION '+id+' · '+A().name.toUpperCase()+'</span><h1>'+title+'</h1><p>'+subtitle+'</p>'+action+'</div><span class="mini-tag">'+A().emoji+' '+A().name+'</span></div>'}
 function card(icon,name,txt){return '<article class="fact"><span class="emoji">'+icon+'</span><h3>'+name+'</h3><p>'+txt+'</p></article>'}
 function callout(title,body){return '<div class="callout"><strong>'+title+'</strong><p>'+body+'</p></div>'}
 function navLine(next,label){return '<div class="actionline spaced"><button type="button" data-section="'+next+'" class="btn">'+label+' →</button><button type="button" data-section="quiz" class="btn secondary">🧠 Jetzt testen</button></div>'}
@@ -320,11 +320,11 @@ function quizPage(){
  const pct=Math.round(score/quiz.length*100);
  if(score>best[animal]){best[animal]=score;try{localStorage.setItem(KEY,JSON.stringify({best:best}))}catch(e){}}
  return pageTitle('08','Wissenstest abgeschlossen','Dein Ergebnis wird nur auf diesem Gerät gespeichert.')+
- '<div class="panel white"><span class="kicker">DEIN ERGEBNIS</span><div class="score">'+score+' / '+quiz.length+'</div><h3>'+(pct>=85?'🏆 Tierforscher-Profi!':pct>=60?'🌱 Schon viel verstanden!':'🔍 Nächste Runde wird besser!')+'</h3><p>Du hast '+pct+' % der Fragen richtig beantwortet. '+(pct>=85?'Du kannst Skelett, Gebiss und Verhalten sehr gut erklären.':'Schau dir die Erklärungen noch einmal an und versuche es erneut.')+'</p><p>Dein bisheriges bestes Ergebnis für '+A().name+': '+best[animal]+' von '+quiz.length+'.</p><div class="actionline"><button class="btn" data-action="restart">Erneut üben</button><button class="btn secondary" data-section="skeleton">Skelett wiederholen</button></div></div>';
+ '<div class="panel white"><span class="kicker">DEIN ERGEBNIS</span><div class="score">'+score+' / '+quiz.length+'</div><h2>'+(pct>=85?'🏆 Tierforscher-Profi!':pct>=60?'🌱 Schon viel verstanden!':'🔍 Nächste Runde wird besser!')+'</h2><p>Du hast '+pct+' % der Fragen richtig beantwortet. '+(pct>=85?'Du kannst Skelett, Gebiss und Verhalten sehr gut erklären.':'Schau dir die Erklärungen noch einmal an und versuche es erneut.')+'</p><p>Dein bisheriges bestes Ergebnis für '+A().name+': '+best[animal]+' von '+quiz.length+'.</p><div class="actionline"><button class="btn" data-action="restart">Erneut üben</button><button class="btn secondary" data-section="skeleton">Skelett wiederholen</button></div></div>';
  }
  const q=quiz[qi],percent=Math.round(qi/quiz.length*100),letters=['A','B','C','D'];
  return pageTitle('08','Wissenstest · '+A().name,'Teste dein Wissen über Knochen, Zähne, Jagd, Bewegung und Körpersprache. Jede Antwort wird erklärt.')+
- '<div class="panel white"><div class="quiz-head"><span class="kicker">FRAGE '+(qi+1)+' VON '+quiz.length+'</span><span class="mini-tag">⭐ '+score+' richtig</span></div><div class="meter" aria-label="'+percent+' Prozent abgeschlossen"><span style="width:'+percent+'%"></span></div><h3 style="font-size:1.25rem">'+escapeHtml(q.q)+'</h3>'+
+ '<div class="panel white"><div class="quiz-head"><span class="kicker">FRAGE '+(qi+1)+' VON '+quiz.length+'</span><span class="mini-tag">⭐ '+score+' richtig</span></div><div class="meter" role="progressbar" aria-label="Fortschritt im Wissenstest" aria-valuenow="'+percent+'"><span style="width:'+percent+'%"></span></div><h2 style="font-size:1.25rem">'+escapeHtml(q.q)+'</h2>'+
  '<div class="answers">'+q.a.map((a,i)=>'<button type="button" data-answer="'+i+'" class="answer '+(chosen===i?'chosen ':'')+(checked&&i===q.c?'correct ':checked&&chosen===i?'wrong ':'')+'" '+(checked?'disabled':'')+'><strong>'+letters[i]+'.</strong> '+escapeHtml(a)+'</button>').join('')+'</div>'+
  (hints>0&&!checked?'<div class="callout"><strong>💡 Hinweis '+hints+'</strong><p>'+(hints===1?escapeHtml(q.hint):'Überlege, welche Funktion das Merkmal wirklich erfüllt. Streiche Antworten, die biologisch nicht passen.')+'</p></div>':'')+
  (checked?'<div class="feedback '+(chosen===q.c?'':'bad')+'" role="status"><strong>'+(chosen===q.c?'✓ Richtig!':'↗ Noch nicht richtig.')+'</strong><p><b>Richtige Antwort:</b> '+escapeHtml(q.a[q.c])+'</p><p>'+escapeHtml(q.why)+'</p>'+(chosen!==q.c?'<small>Warum deine Wahl nicht passt: Diese Aussage erfüllt die in der Erklärung beschriebene Funktion nicht.</small>':'')+'</div>':'')+
@@ -357,7 +357,7 @@ function render(focus){
  if(window.BioLaborSchulstoff){
   $('#content .page-title').insertAdjacentHTML('afterend',window.BioLaborSchulstoff.forAnimal(section,animal));
  }
- if(focus)window.BioLaborLernweg?.focus($('#content .page-title h2') || $('#content'),true);
+ if(focus)window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}
 function chooseSection(v){section=v;location.hash=animal+'/'+section;render(true)}
@@ -392,6 +392,6 @@ if(!initial[0])$('#tier-intro').open=true;
 if(SPECIES[initial[0]])animal=initial[0];
 if(['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(initial[1]))section=initial[1];
 resetQuiz();render(false);
-if(SPECIES[initial[0]]&&initial[1])window.BioLaborLernweg?.focus($('#content .page-title h2') || $('#content'),true);
+if(SPECIES[initial[0]]&&initial[1])window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
 window.BioTierkundeSelfTest=function(){return BONES.length===9&&DENTAL.length===4&&Q.filter(x=>x.animal==='dog').length>=10&&Q.filter(x=>x.animal==='cat').length>=10&&!!$('#content')&&!!$('.skeleton-svg')||section!=='skeleton'};
 })();

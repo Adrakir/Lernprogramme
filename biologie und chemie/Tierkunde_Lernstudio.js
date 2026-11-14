@@ -17,7 +17,7 @@ function question(){
  const step=lesson.steps[state.step],q=step[2],answers=step[3];
  let h='<div class="ls-stepbuttons" role="group" aria-label="Lernschritte">';
  h+=lesson.steps.map((s,i)=>'<button data-ls="step" data-num="'+i+'" aria-current="'+(i===state.step?'step':'false')+'"><span>'+(i+1)+'</span>'+esc(s[0])+'</button>').join('');
- h+='</div><article class="ls-card"><small>SCHRITT '+(state.step+1)+' VON '+lesson.steps.length+'</small><h4>'+esc(step[0])+'</h4><p>'+esc(step[1])+'</p>';
+ h+='</div><article class="ls-card"><small>SCHRITT '+(state.step+1)+' VON '+lesson.steps.length+'</small><h3>'+esc(step[0])+'</h3><p>'+esc(step[1])+'</p>';
  if(lesson.detail)h+='<p class="ls-species-note">🐾 '+esc(lesson.detail)+'</p>';
  h+='<div class="ls-question"><strong>🔎 Denkfrage</strong><p>'+esc(q)+'</p><div class="ls-options">';
  h+=answers.map((v,i)=>'<button data-ls="answer" data-num="'+i+'" class="'+(state.answers.choice===i?'ls-choosen':'')+'">'+esc(v)+'</button>').join('');
@@ -42,7 +42,7 @@ function diagram(){
 }
 function task(){
  const r=record(),t=state.task,assignment=t===0;
- let h='<article class="ls-card"><small>FORSCHERAUFGABE '+(t+1)+' VON 2</small><h4>'+(assignment?'🧩 Zuordnen und Beschriften':'🔢 Reihenfolge herstellen')+'</h4>';
+ let h='<article class="ls-card"><small>FORSCHERAUFGABE '+(t+1)+' VON 2</small><h3>'+(assignment?'🧩 Zuordnen und Beschriften':'🔢 Reihenfolge herstellen')+'</h3>';
  h+='<p>'+(assignment?esc(lesson.pairHint):'Ordne die Schritte mit den Pfeilen. Der erste steht oben.')+'</p>';
  if(assignment){
   if(state.section==='skeleton')h+=diagram();
@@ -61,7 +61,7 @@ function task(){
  return h;
 }
 function teacher(){
- return '<article class="ls-card"><small>LEHRERANSICHT · '+esc(lesson.title)+'</small><h4>Lernziel und Unterrichtsablauf</h4>'+
+ return '<article class="ls-card"><small>LEHRERANSICHT · '+esc(lesson.title)+'</small><h3>Lernziel und Unterrichtsablauf</h3>'+
  '<p><b>Fachliches Ziel:</b> '+esc(lesson.goal)+'</p>'+
  '<p><b>1. Aktivierung (5 Min.):</b> Schüler betrachten die große Darstellung und beschreiben, was sie beobachten.</p>'+
  '<p><b>2. Erklärung (5 Min.):</b> Fachbegriffe mit dem Körperbau verbinden. Schüler erklären jeweils „weil“.</p>'+
@@ -74,7 +74,7 @@ function teacher(){
 function render(){
  const root=$('#ls-studio');if(!root)return;
  const r=record();
- let h='<div class="ls-head"><div><span class="ls-eyebrow">DEIN LERNWEG · '+(state.animal==='dog'?'HUND':'KATZE')+'</span><h3>'+lesson.icon+' '+esc(lesson.title)+'</h3><p>'+esc(lesson.goal)+'</p></div><div class="ls-total"><strong>'+progress(state.animal)+'/7</strong><span>geschafft</span></div></div>';
+ let h='<div class="ls-head"><div><span class="ls-eyebrow">DEIN LERNWEG · '+(state.animal==='dog'?'HUND':'KATZE')+'</span><h2>'+lesson.icon+' '+esc(lesson.title)+'</h2><p>'+esc(lesson.goal)+'</p></div><div class="ls-total"><strong>'+progress(state.animal)+'/7</strong><span>geschafft</span></div></div>';
  h+='<div class="ls-tabs" role="group" aria-label="Lernmodus"><button data-ls="mode" data-mode="guide" aria-pressed="'+(state.mode==='guide')+'">📖 Geführtes Lernen</button><button data-ls="mode" data-mode="task" aria-pressed="'+(state.mode==='task')+'">✏️ Übungen</button><button data-ls="mode" data-mode="teacher" aria-pressed="'+(state.mode==='teacher')+'">👩‍🏫 Lehrerhinweise</button></div>';
  h+=state.mode==='guide'?question():state.mode==='task'?task():teacher();
  h+='<div class="ls-progress"><span><b>Übungen geschafft:</b> '+r.done.filter(Boolean).length+' von 2</span><div><i style="width:'+(r.done.filter(Boolean).length*50)+'%"></i></div></div>';

@@ -15,7 +15,7 @@
  background:linear-gradient(145deg,#29473d,#22372f);
 }
 .rig-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:17px}
-.rig-head h3{margin:6px 0;font-size:clamp(1.25rem,2.2vw,1.75rem);line-height:1.17;letter-spacing:-.035em;color:var(--rig-ink)}
+.rig-head h2{margin:6px 0;font-size:clamp(1.25rem,2.2vw,1.75rem);line-height:1.17;letter-spacing:-.035em;color:var(--rig-ink)}
 .rig-head p{margin:0;color:var(--rig-secondary);font-size:.88rem;max-width:680px}
 .rig-eyebrow{font-size:.68rem;letter-spacing:.11em;font-weight:950;color:var(--rig-brand)}
 .rig-chip{background:#dff5e9;color:#185f51;padding:7px 11px;border-radius:999px;white-space:nowrap;font-size:.76rem;font-weight:850}
@@ -101,7 +101,7 @@
 
 .rig-phasebar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#e7f4eb;border:1px solid #cfe4d6;border-radius:11px;color:#32664e;padding:10px 14px;margin:10px 0;font-size:.81rem}
 .rig-phasebar strong{color:#1b6049}
-.rig-phasebar span{color:#577a68;font-size:.75rem;margin-left:auto}
+.rig-phasebar span{color:#456655;font-size:.75rem;margin-left:auto}
 .dark .rig-phasebar{background:#315846;border-color:#4b7962;color:#e3fae9}
 .dark .rig-phasebar strong,.dark .rig-phasebar span{color:#d2f4df}
 @media(max-width:600px){.rig-phasebar{padding:9px 11px}.rig-phasebar span{flex-basis:100%;margin-left:0}}

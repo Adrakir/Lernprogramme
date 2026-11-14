@@ -245,7 +245,7 @@ function mount(args){
  const container=document.createElement('section');container.className='rig-studio';container.id='rig-studio';
  container.setAttribute('aria-label','Animiertes Skelett von '+(state.species==='cat'?'Katze':'Hund'));
  container.innerHTML=
- '<div class="rig-head"><div><span class="rig-eyebrow">INTERAKTIVES BEWEGUNGS-LABOR · '+(state.species==='cat'?'KATZE':'HUND')+'</span><h3>🦴 So bewegt sich das Skelett</h3><p>Sieh dir an, wie Knochen und Gelenke beim Laufen, Springen und Anschleichen zusammenspielen.</p></div><span class="rig-chip">6 Bewegungen</span></div>'+
+ '<div class="rig-head"><div><span class="rig-eyebrow">INTERAKTIVES BEWEGUNGS-LABOR · '+(state.species==='cat'?'KATZE':'HUND')+'</span><h2>🦴 So bewegt sich das Skelett</h2><p>Sieh dir an, wie Knochen und Gelenke beim Laufen, Springen und Anschleichen zusammenspielen.</p></div><span class="rig-chip">6 Bewegungen</span></div>'+
  '<div class="rig-modes" role="group" aria-label="Bewegungsart auswählen">'+
  Object.entries(MODES).map(([k,m])=>'<button type="button" data-rig-mode="'+k+'" aria-pressed="false">'+m.symbol+' '+m.title+'</button>').join('')+'</div>'+
  '<div class="rig-stage" id="rig-stage" aria-live="off"><svg class="rig-svg" viewBox="0 0 1000 560" role="group" aria-label="Bewegliches schematisches Skelett mit anwählbaren Knochen">'+

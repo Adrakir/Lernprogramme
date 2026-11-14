@@ -248,7 +248,7 @@ body.lc-theme-contrast #bio-klassenarbeit {
 .bk-progress strong { color: var(--bk-strong); }
 .bk-panel-practice .bk-progress span { grid-column: 1/-1; }
 .bk-progress progress { grid-column: 1/-1; width: 100%; height: .5em; accent-color: #237b66; }
-#bio-klassenarbeit .bk-round h3 { margin: 9px 0 12px; line-height: 1.25; }
+#bio-klassenarbeit .bk-round h2 { font-size:1.08rem; margin: 9px 0 12px; line-height: 1.25; }
 
 .bk-feedback, .bk-hint {
   background: var(--bk-selected);
