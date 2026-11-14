@@ -29,8 +29,32 @@ module.exports = async function checkQuality(page, home) {
   assert.match(await page.locator('#diagramInfo').innerText(),/Kauen und Sprechen/);
   const skeletonLabels = page.locator('#main .feature-grid button:visible');
   assert.equal(await skeletonLabels.count(),2);
+  for (const [name,features] of [
+    ['Brustkorb & Wirbelsäule',['wirbelsaeule','rippen','brustbein','rippenknorpel']],
+    ['Arm & Hand',['schluesselbein','schulterblatt','oberarm','elle','speiche','handwurzel','mittelhand','finger']],
+    ['Becken',['becken']],
+    ['Bein & Fuß',['oberschenkel','kniescheibe','schienbein','wadenbein','fusswurzel','mittelfuss','zehen','gelenkknorpel']]
+  ]) {
+    const view = views.getByRole('button',{name,exact:true});
+    await view.click();
+    assert.equal(await view.getAttribute('aria-pressed'),'true',name);
+    const figure = page.getByRole('group',{name:name+' am menschlichen Skelett',exact:true});
+    const markers = figure.getByRole('button');
+    assert.deepEqual(await markers.evaluateAll(elements => elements.map(element => element.dataset.feature)),features,name);
+    assert.deepEqual(await skeletonLabels.evaluateAll(elements => elements.map(element => element.dataset.feature)),features,name);
+    assert.ok(await figure.evaluate(svg => {
+      const crop = svg.viewBox.baseVal;
+      return [...svg.querySelectorAll('[data-feature]:not([hidden]) circle')].every(circle => {
+        const {cx,cy,r}=circle;
+        const x=cx.baseVal.value,y=cy.baseVal.value,radius=r.baseVal.value;
+        return x-radius>=crop.x && x+radius<=crop.x+crop.width && y-radius>=crop.y && y+radius<=crop.y+crop.height;
+      });
+    }),name);
+    assert.equal(await page.locator('#diagramInfo').innerText(),'Wähle eine Stelle aus.');
+  }
   await views.getByRole('button',{name:'Gesamt',exact:true}).click();
   assert.equal(await skeletonLabels.count(),23);
+  assert.equal(await page.locator('#main .illust-frame svg [data-feature]:not([hidden])').count(),23);
   await open('home');
   await page.getByRole('button',{name:'Alle Themen', exact:true}).click();
   const directory = page.locator('.bl-directory');

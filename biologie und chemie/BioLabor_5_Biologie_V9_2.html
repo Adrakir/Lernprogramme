@@ -27,7 +27,7 @@ body.highcontrast{--bg:#fff;--surface:#fff;--ink:#000;--muted:#222;--line:#444;-
 .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}.feature-grid .btn{min-height:43px;white-space:normal;text-align:center;line-height:1.3;padding:9px 10px}.illustration g[data-feature],.diagramLabel{cursor:pointer}.illustration g[data-feature]:hover circle,.illustration g[data-feature]:focus circle{stroke:#d17a38;stroke-width:5;fill:#fff0cf}.illustration g[data-feature]:focus{outline:none}.illust-frame svg{width:100%;max-width:100%;height:auto;display:block}.feature-grid+.keynote{margin-top:12px}
 #diagramZoom[data-topic="skeleton"]{margin-bottom:12px}
 [data-skeleton-view="kopf"] [data-skeleton-overview],
-[data-skeleton-view="kopf"] [data-feature]:not([data-feature="schaedel"],[data-feature="kiefer"]){display:none}
+[data-skeleton-view] [data-feature][hidden]{display:none}
 [data-skeleton-view="kopf"] svg :is([data-feature="schaedel"],[data-feature="kiefer"]) circle{r:13px}
 .panel .inputGroup{margin:16px 0 19px}.inputGroup input[type=range]{min-height:32px;accent-color:#20766c;cursor:pointer;width:100%}.joint-controls{margin-bottom:17px}.panel .feedback{margin:15px 0}.panel .answers .answer{min-height:50px}.panel .answers .answer:disabled{cursor:default;opacity:.92}.panel .answers .answer.correct{border-color:#348d6f;background:#e3f6eb}.tabs{scrollbar-width:thin;scroll-padding-inline:12px}.illust-frame .illustration{touch-action:pan-y}@media(max-width:720px){.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.feature-grid .btn{font-size:.77rem;padding:10px 7px;min-height:48px}.illust-frame svg{min-height:210px}.joint-controls{grid-template-columns:1fr 1fr}.joint-controls .btn{min-height:50px}}@media(max-width:380px){.feature-grid{grid-template-columns:1fr 1fr;gap:6px}.feature-grid .btn{font-size:.72rem}}@media print{.feature-grid,.tab,.panel .inputGroup{display:none}.illust-frame svg{max-width:100%;height:190px}}
 
@@ -1669,7 +1669,14 @@ learnTab=function(m){const html=originalLearnTab(m);return m.id==='spine'&&ui.ta
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='spineLoad')updateSpineLoadLab()});
 const diagramZoomViews={
  spine:[['all','0 0 500 330','Gesamt'],['hals','140 20 310 112','Halswirbel (7)'],['brust','140 102 310 148','Brustwirbel (12)'],['lende','140 234 310 82','Lendenwirbel (5)'],['kreuz','140 276 310 58','Kreuz- & Steißbein']],
- skeleton:[['all','0 0 500 610','Gesamt'],['kopf','181 8 140 121','Kopf'],['rumpf','140 115 240 250','Brustkorb & Wirbelsäule'],['arm','70 130 200 290','Arm & Hand'],['becken','140 295 230 130','Becken'],['bein','140 355 240 255','Bein & Fuß']],
+ skeleton:[
+  ['all','0 0 500 610','Gesamt'],
+  ['kopf','181 8 140 121','Kopf',['schaedel','kiefer']],
+  ['rumpf','160 146 180 180','Brustkorb & Wirbelsäule',['wirbelsaeule','rippen','brustbein','rippenknorpel']],
+  ['arm','108 123 254 287','Arm & Hand',['schluesselbein','schulterblatt','oberarm','elle','speiche','handwurzel','mittelhand','finger']],
+  ['becken','175 307 150 90','Becken',['becken']],
+  ['bein','150 361 200 244','Bein & Fuß',['oberschenkel','kniescheibe','schienbein','wadenbein','fusswurzel','mittelfuss','zehen','gelenkknorpel']]
+ ],
  joints:[['all','0 0 500 330','Gesamt'],['nah','150 70 230 170','Gelenk nah'],['umfeld','110 50 300 230','Kapsel & Bänder']]
 };
 function injectDiagramZoom(){
@@ -1696,7 +1703,7 @@ document.addEventListener('click',e=>{
  const frame=document.querySelector('#main .illust-frame');
  const svg=frame?.querySelector('svg');
  if(!svg||!view)return;
- const [key,viewBox]=view;
+ const [key,viewBox,label,features]=view;
  svg.setAttribute('viewBox',viewBox);
  bar.querySelectorAll('[data-diazoom]').forEach(option=>{
   option.classList.toggle('secondary',option!==button);
@@ -1704,13 +1711,14 @@ document.addEventListener('click',e=>{
  });
  if(topic!=='skeleton')return;
  const panel=frame.closest('.panel');
- const headSelected=key==='kopf';
- const previousHead=panel.dataset.skeletonView==='kopf';
+ if(panel.dataset.skeletonView===key)return;
  panel.dataset.skeletonView=key;
- svg.setAttribute('aria-label',headSelected?'Kopfansicht mit Schädel und Unterkiefer.':'Interaktives Skelettschema mit Knochen und Knorpel. Wähle eine Nummer oder eine Beschriftung aus der Liste.');
- if(headSelected===previousHead)return;
- panel.querySelectorAll('.feature-selected').forEach(marker=>marker.classList.remove('feature-selected'));
- panel.querySelector('#diagramInfo').textContent=headSelected?'Wähle Schädel oder Unterkiefer.':'Wähle eine Stelle aus.';
+ svg.setAttribute('aria-label',key==='kopf'?'Kopfansicht mit Schädel und Unterkiefer.':key==='all'?'Interaktives Skelettschema mit Knochen und Knorpel.':label+' am menschlichen Skelett');
+ panel.querySelectorAll('[data-feature]').forEach(element=>{
+  element.toggleAttribute('hidden',Boolean(features&&!features.includes(element.dataset.feature)));
+  element.classList.remove('feature-selected');
+ });
+ panel.querySelector('#diagramInfo').textContent=key==='kopf'?'Wähle Schädel oder Unterkiefer.':'Wähle eine Stelle aus.';
 });
 let animalKind='mensch';
 const spineAnimals={
