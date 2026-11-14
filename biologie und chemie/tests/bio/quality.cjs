@@ -9,6 +9,44 @@ module.exports = async function checkQuality(page, home) {
     }, hash);
   };
   await page.setViewportSize({width:320,height:740});
+  await open('practice/skeleton');
+  const quiz = page.locator('.quizframe');
+  const position = quiz.locator('.quiz-position');
+  const choices = quiz.locator('[data-action="answer"]');
+  const initialOptions = await choices.allTextContents();
+  const initialQuestion = await quiz.locator('.question').innerText();
+  const hint = quiz.locator('[data-action="hint"]');
+  await hint.press('Enter');
+  assert.equal(await hint.evaluate(el => el===document.activeElement),true);
+  await choices.first().press('Enter');
+  assert.equal(await choices.first().evaluate(el => el===document.activeElement),true);
+  await page.reload();
+  assert.equal(await quiz.locator('.question').innerText(),initialQuestion);
+  assert.deepEqual(await choices.allTextContents(),initialOptions);
+  assert.equal(await choices.first().getAttribute('aria-pressed'),'true');
+  assert.match(await hint.innerText(),/1\/3/);
+  await quiz.locator('[data-action="solution"]').press('Enter');
+  assert.equal(await quiz.locator('.feedback').evaluate(el => el===document.activeElement),true);
+  const storedAnswerCount = () => page.evaluate(() => JSON.parse(localStorage.getItem('biolabor-kl5-v1')).trainingDrafts.skeleton.answers.length);
+  assert.equal(await storedAnswerCount(),1);
+  await page.reload();
+  assert.ok(await quiz.locator('.feedback').isVisible());
+  assert.equal(await storedAnswerCount(),1);
+  await quiz.locator('[data-action="nextQuestion"]').press('Enter');
+  assert.equal(await position.evaluate(el => el===document.activeElement),true);
+  assert.match(await position.innerText(),/Aufgabe 2 von/);
+  await quiz.getByRole('button',{name:'Übung verlassen'}).click();
+  await page.waitForURL(url => url.hash==='#home');
+  await open('practice/spine');
+  await quiz.locator('[data-action="hint"]').press('Enter');
+  await open('learn/skeleton');
+  await page.locator('.tabs button[data-action=tab][data-id=practice]').click();
+  await page.getByRole('button',{name:'Übung fortsetzen',exact:true}).click();
+  assert.match(await position.innerText(),/Aufgabe 2 von/);
+  assert.equal(await storedAnswerCount(),1);
+  await page.reload();
+  assert.match(await position.innerText(),/Aufgabe 2 von/);
+
   const releaseLabel = /\b(?:Version\s+\d+|V\d+(?:[._]\d+)?)\b/i;
   for (const route of ['home','bio8','print','lehrkraft']) {
     await open(route);
@@ -16,6 +54,17 @@ module.exports = async function checkQuality(page, home) {
     assert.doesNotMatch(await page.locator('body').innerText(),releaseLabel,route);
   }
   await open('learn/skeleton');
+  const footNumbers = async () => page.locator('.skeleton-frame').evaluate(frame => {
+    const markers = ['fusswurzel','mittelfuss','zehen'].map(id =>
+      frame.querySelector(`[data-feature="${id}"] circle`).getBoundingClientRect());
+    return {
+      width: Math.min(...markers.map(r => r.width)),
+      overlap: markers.some((a,i) => markers.slice(i+1).some(b =>
+        a.left<b.right && a.right>b.left && a.top<b.bottom && a.bottom>b.top))
+    };
+  });
+  assert.ok((await footNumbers()).width>=24);
+  assert.equal((await footNumbers()).overlap,false);
   const views = page.getByRole('group',{name:'Skelettansicht'});
   const headView = views.getByRole('button',{name:'Kopf',exact:true});
   await headView.click();
@@ -51,6 +100,7 @@ module.exports = async function checkQuality(page, home) {
       });
     }),name);
     assert.equal(await page.locator('#diagramInfo').innerText(),'Wähle eine Stelle aus.');
+    if(name==='Bein & Fuß')assert.equal((await footNumbers()).overlap,false);
   }
   await views.getByRole('button',{name:'Gesamt',exact:true}).click();
   assert.equal(await skeletonLabels.count(),23);
