@@ -19,6 +19,32 @@ module.exports = async function checkQuality(page, home) {
     const channels = background.match(/\d+/g)?.slice(0,3).map(Number);
     assert.ok(channels?.every(channel => channel<90),region+' '+background);
   }
+  for (const [route,selector] of [
+    ['home','.modulecard h3'],
+    ['learn/joints','.panel h2'],
+    ['schulstoff/gebiss','.bm-top h2'],
+    ['schulstoff/gebiss','.bm-reading h3']
+  ]) {
+    await open(route);
+    const heading = page.locator(selector).first();
+    const ratio = await heading.evaluate(el => {
+      const rgb = value => value.match(/[\d.]+/g).map(Number);
+      const luminance = channels => channels.slice(0,3).reduce((sum,channel,index) => {
+        const value = channel/255;
+        const linear = value <= 0.04045 ? value/12.92 : ((value+0.055)/1.055)**2.4;
+        return sum+linear*[0.2126,0.7152,0.0722][index];
+      },0);
+      let surface = el;
+      while (surface && rgb(getComputedStyle(surface).backgroundColor)[3]===0) {
+        surface = surface.parentElement;
+      }
+      const ink = luminance(rgb(getComputedStyle(el).color));
+      const background = luminance(rgb(getComputedStyle(surface ?? document.body).backgroundColor));
+      return (Math.max(ink,background)+0.05)/(Math.min(ink,background)+0.05);
+    });
+    assert.ok(ratio>=4.5,route+' '+selector+' contrast '+ratio.toFixed(2));
+  }
+  await open('home');
   await page.reload();
   assert.equal(await quickTheme.inputValue(),'dark');
   await page.locator('#lcOpen').click();

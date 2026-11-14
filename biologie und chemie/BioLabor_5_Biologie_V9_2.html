@@ -151,9 +151,17 @@ body.highcontrast .v5-statement{color:#000;background:#e6f4f0}
   --teal:#91dfcb;--deep:#a7e9d7;--mint:#203c3d;--blue:#25364f;--rose:#402f36;
   --shadow:0 12px 35px #0003;
  }
- body.lc-theme-dark :is(.topbar,.stat,.sidebar-bottom,.iconbutton,.chipButton,.bl-directory,
+ body.lc-theme-dark :is(.topbar,.panel,.stat,.sidebar-bottom,.iconbutton,.chipButton,.bl-directory,
  .questionCard,.answer,.tab,.token,.v5-level,.b8-card,.b9-betty,.biotiere-promo){
   background:var(--surface);color:var(--ink);border-color:var(--line);
+ }
+ body.lc-theme-dark #main :is(h1,h2,h3,h4,h5,h6){color:var(--ink)}
+ body.lc-theme-dark #main :is(h1,h2,h3,h4,h5,h6) :is(a,span){color:inherit}
+ body.lc-theme-dark #main .hero h1 span{color:var(--deep)}
+ body.lc-theme-dark .bm-section{--bm-wash:var(--mint);--bm-border:var(--line)}
+ body.lc-theme-dark .bm-section :is(.bm-options,.bm-challenge) button[aria-pressed="true"]{color:#102923}
+ body.lc-theme-dark #main :is(.v7-home-highlight,.b8-hero){
+  background:linear-gradient(120deg,#224144,#26364b);border-color:var(--line);
  }
  body.lc-theme-dark .hero{background:linear-gradient(120deg,#224144,#26364b);color:var(--ink)}
  body.lc-theme-dark :is(.navitem.active,.navitem:hover,.tab.active,.answer.selected,.token.active,.v5-level.active){
