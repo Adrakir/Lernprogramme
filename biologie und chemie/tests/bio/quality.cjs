@@ -15,6 +15,22 @@ module.exports = async function checkQuality(page, home) {
     assert.doesNotMatch(await page.title(),releaseLabel,route);
     assert.doesNotMatch(await page.locator('body').innerText(),releaseLabel,route);
   }
+  await open('learn/skeleton');
+  const views = page.getByRole('group',{name:'Skelettansicht'});
+  const headView = views.getByRole('button',{name:'Kopf',exact:true});
+  await headView.click();
+  assert.equal(await headView.getAttribute('aria-pressed'),'true');
+  const skeleton = page.getByRole('group',{name:'Kopfansicht mit Schädel und Unterkiefer.'});
+  assert.deepEqual(await skeleton.getByRole('button').evaluateAll(markers => markers.map(marker => marker.dataset.feature)),['schaedel','kiefer']);
+  assert.equal(await skeleton.locator('[data-skeleton-overview]:visible').count(),0);
+  const jaw = skeleton.getByRole('button',{name:'2: Unterkiefer',exact:true});
+  assert.ok((await jaw.boundingBox()).width>=44);
+  await jaw.press('Enter');
+  assert.match(await page.locator('#diagramInfo').innerText(),/Kauen und Sprechen/);
+  const skeletonLabels = page.locator('#main .feature-grid button:visible');
+  assert.equal(await skeletonLabels.count(),2);
+  await views.getByRole('button',{name:'Gesamt',exact:true}).click();
+  assert.equal(await skeletonLabels.count(),23);
   await open('home');
   await page.getByRole('button',{name:'Alle Themen', exact:true}).click();
   const directory = page.locator('.bl-directory');
