@@ -22,6 +22,16 @@ module.exports = async function checkQuality(page, home) {
   assert.ok(await page.getByText('Geführter Lernweg',{exact:true}).isVisible());
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),0);
 
+  for (const route of ['assess','print','print/3']) {
+    await open(route);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),0,route);
+  }
+
+  await open('glossary');
+  await page.locator('#glossaryTopic').selectOption('spine');
+  assert.match(await page.locator('#glossaryResults').innerText(), /Bandscheibe/);
+  assert.doesNotMatch(await page.locator('#glossaryResults').innerText(), /Knochenmark/);
+
   await open('schulstoff/haustier');
   await page.getByRole('button',{name:'Rechenbeispiel laden'}).click();
   assert.equal(await page.locator('.bs-table-wrap').evaluate(el => el.scrollWidth - el.clientWidth),0);
@@ -35,6 +45,8 @@ module.exports = async function checkQuality(page, home) {
   const active = page.locator('[data-bs-figure="katze"] button[aria-pressed="true"]');
   assert.ok(await active.isVisible());
   assert.ok((await active.boundingBox()).width>=44);
+  await page.locator('[data-bl-motion]').selectOption('2');
+  assert.match(await page.locator('.bl-motion-compare').innerText(),/Landung|Landen/);
 
   await page.locator('#lcOpen').click();
   await page.locator('#lcTabs [data-tab="familie"]').click();

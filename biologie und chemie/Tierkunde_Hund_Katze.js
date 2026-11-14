@@ -357,7 +357,7 @@ function render(focus){
  if(window.BioLaborSchulstoff){
   $('#content .page-title').insertAdjacentHTML('afterend',window.BioLaborSchulstoff.forAnimal(section,animal));
  }
- if(focus)window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
+ if(focus)window.BioLaborLernweg?.focus($('#content .page-title h2') || $('#content'),true);
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}
 function chooseSection(v){section=v;location.hash=animal+'/'+section;render(true)}
@@ -392,6 +392,6 @@ if(!initial[0])$('#tier-intro').open=true;
 if(SPECIES[initial[0]])animal=initial[0];
 if(['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(initial[1]))section=initial[1];
 resetQuiz();render(false);
-if(SPECIES[initial[0]]&&initial[1])window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
+if(SPECIES[initial[0]]&&initial[1])window.BioLaborLernweg?.focus($('#content .page-title h2') || $('#content'),true);
 window.BioTierkundeSelfTest=function(){return BONES.length===9&&DENTAL.length===4&&Q.filter(x=>x.animal==='dog').length>=10&&Q.filter(x=>x.animal==='cat').length>=10&&!!$('#content')&&!!$('.skeleton-svg')||section!=='skeleton'};
 })();

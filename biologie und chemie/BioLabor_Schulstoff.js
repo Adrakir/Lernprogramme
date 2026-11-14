@@ -45,6 +45,14 @@
     'Fersenbereich am Sprunggelenk', 'Hinterpfote', 'Schien- und Wadenbein',
     'Rippen', 'Vorderpfote', 'Elle und Speiche', 'Oberarmknochen',
   ];
+  const movementPhases = [
+    ['Vor dem Abstoß','Der Hund beugt beim Laufen seine Beine, bevor er sich wieder vom Boden abdrückt.',
+      'Die Katze beugt vor dem Sprung die Hinterbeine. Ihr Körper liegt näher am Boden.','Bei beiden Tieren sind die Beine zunächst gebeugt.'],
+    ['Abstoß','Beim schnellen Laufen drücken die Hinterbeine den Körper vorwärts.',
+      'Beim Sprung streckt die Katze die Hinterbeine kräftig. Sie bewegt sich vorwärts und aufwärts.','In beiden Fällen überträgt die Muskulatur über Sehnen Kraft auf die Knochen.'],
+    ['Landung','Gelenke und Ballen helfen, den Stoß beim nächsten Aufsetzen abzufedern.',
+      'Beim Landen beugt die Katze ihre Beine. Die Ballen und nachgebenden Gelenke dämpfen den Stoß.','Das Beugen verlängert den Weg, auf dem die Bewegung abgebremst wird.'],
+  ];
   const catOrder = [2, 0, 3, 1, 11, 8, 10, 4, 7, 5, 6, 9];
 
   const lessons = {
@@ -574,6 +582,28 @@
     }));
   }
 
+  function compareMovement() {
+    return '<section class="bs-panel"><h2>Bewegungsphasen im Vergleich</h2>' +
+      '<label>Phase auswählen <select data-bl-motion>' + movementPhases.map(([label], i) =>
+        '<option value="' + i + '">' + label + '</option>').join('') + '</select></label>' +
+      '<div class="bl-motion-compare" aria-live="polite"></div>' +
+      shortcuts([[animal('dog/motion'),'Hund in Bewegung'],[animal('cat/motion'),'Katze in Bewegung']]) + '</section>';
+  }
+
+  function bindMovement(root) {
+    const control = root.querySelector('[data-bl-motion]');
+    if (!control) return;
+    const comparison = root.querySelector('.bl-motion-compare');
+    function update() {
+      const [, dog, cat, common] = movementPhases[Number(control.value)];
+      comparison.innerHTML = '<div class="bs-cards"><article class="bs-card"><h3>Hund · Laufen</h3><p>' + dog +
+        '</p></article><article class="bs-card"><h3>Katze · Springen</h3><p>' + cat +
+        '</p></article></div><p><b>Was beide gemeinsam haben</b> ' + common + '</p>';
+    }
+    update();
+    control.addEventListener('change', update);
+  }
+
   function bindSkeleton(root) {
     const figures = root.querySelector('[data-bs-skeleton]');
     if (!figures) return;
@@ -881,6 +911,7 @@
       ${lesson.diagram ? `<section class="bs-panel"><h2>Schau genau hin</h2>${showDiagram(lesson.diagram)}</section>` : ''}
       ${window.BioLaborModelle?.has(id) ? '<section class="bm-section" data-bs-modelle></section>' : ''}
       ${lesson.matrix ? renderMatrix() : ''}
+      ${id === 'pfote' || id === 'katze' ? compareMovement() : ''}
       <section class="bs-panel"><h2 data-bl-school-tasks>Deine Aufgaben</h2>${lesson.tasks.map((entry, index) => renderTask(entry, index, saved)).join('')}</section>
       ${stationIds.includes(id) ? `<section class="bs-panel"><h2>Wie sicher bist du?</h2>
         <label class="bs-field"><span>Meine Einschätzung für den Laufzettel</span><select data-bs-rating><option value="">Auswählen</option>
@@ -889,6 +920,7 @@
     </div>`;
     bindLesson(root, id, lesson, saved);
     bindSkeleton(root);
+    bindMovement(root);
     window.BioLaborModelle?.mount(root.querySelector('[data-bs-modelle]'), id);
     if (id === 'bewegung' && Object.hasOwn(movementTasks, target)) {
       const exercise = root.querySelector('[data-bs-task="' + movementTasks[target] + '"] h3');

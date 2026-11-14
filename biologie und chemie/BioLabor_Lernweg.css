@@ -76,3 +76,10 @@ body.tier-contrast { --bg:#fff; --card:#fff; --ink:#111; --muted:#222; --line:#5
   .bl-print-continuation { display:block; break-before:page; page-break-before:always; margin:0 0 8px; }
   .bl-print-a .printcard { break-inside:avoid; }
 }
+
+.bl-gloss-filter { display:block; margin-block:.6rem; }
+.bl-gloss-filter select { min-height:44px; max-width:100%; }
+
+[data-bl-motion] { min-height:44px; max-width:100%; margin-block:.4rem; }
+.bl-motion-compare { margin-block:.5rem; }
+.bl-motion-compare > p { margin:.55rem 0 0; }
