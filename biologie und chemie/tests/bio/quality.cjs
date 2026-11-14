@@ -9,6 +9,12 @@ module.exports = async function checkQuality(page, home) {
     }, hash);
   };
   await page.setViewportSize({width:320,height:740});
+  const releaseLabel = /\b(?:Version\s+\d+|V\d+(?:[._]\d+)?)\b/i;
+  for (const route of ['home','bio8','print','lehrkraft']) {
+    await open(route);
+    assert.doesNotMatch(await page.title(),releaseLabel,route);
+    assert.doesNotMatch(await page.locator('body').innerText(),releaseLabel,route);
+  }
   await open('home');
   await page.getByRole('button',{name:'Alle Themen', exact:true}).click();
   const directory = page.locator('.bl-directory');
