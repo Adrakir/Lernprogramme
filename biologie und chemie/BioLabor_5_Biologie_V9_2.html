@@ -142,6 +142,39 @@ body.highcontrast .v5-statement{color:#000;background:#e6f4f0}
 .top-actions{flex-shrink:0}
 .breadcrumb{min-width:0}
 #quickTheme{min-height:44px;border:1px solid var(--line);border-radius:11px;background:var(--paper,#fff);color:var(--ink);padding:6px 7px;font-weight:700;font-size:.8rem}
+/* The cockpit's theme also controls the app outside the cockpit. */
+@media screen {
+ body.lc-theme-dark{
+  color-scheme:dark;
+  --bg:#101b23;--surface:#1b2933;--paper:#243640;
+  --ink:#e9f2f2;--muted:#b1c7c9;--line:#415b66;
+  --teal:#91dfcb;--deep:#a7e9d7;--mint:#203c3d;--blue:#25364f;--rose:#402f36;
+  --shadow:0 12px 35px #0003;
+ }
+ body.lc-theme-dark :is(.topbar,.stat,.sidebar-bottom,.iconbutton,.chipButton,.bl-directory,
+ .questionCard,.answer,.tab,.token,.v5-level,.b8-card,.b9-betty,.biotiere-promo){
+  background:var(--surface);color:var(--ink);border-color:var(--line);
+ }
+ body.lc-theme-dark .hero{background:linear-gradient(120deg,#224144,#26364b);color:var(--ink)}
+ body.lc-theme-dark :is(.navitem.active,.navitem:hover,.tab.active,.answer.selected,.token.active,.v5-level.active){
+  background:var(--mint);color:var(--deep);border-color:var(--teal);
+ }
+ body.lc-theme-dark :is(.stars,.sidebar-bottom span,.stat small,.b9-betty p){color:var(--muted)}
+ body.lc-theme-dark :is(.stars,.bs-task,.bs-context,.bs-counts>div,.concept,.detail-info,.keynote,.helpbox){
+  background:var(--paper);color:var(--ink);border-color:var(--line);
+ }
+ body.lc-theme-dark :is(.feedback,.answer.correct){background:#203f36;color:#d8f2e8;border-color:#68ad89}
+ body.lc-theme-dark :is(.feedback.bad,.answer.incorrect){background:#45323c;color:#ffe3e3;border-color:#b47d88}
+ body.lc-theme-dark :is(.btn,.bs-action,.b8-btn){
+  background:#91dfcb;color:#102923;border-color:#91dfcb;
+ }
+ body.lc-theme-dark :is(.btn,.bs-action,.b8-btn):hover{filter:brightness(1.11)}
+ body.lc-theme-dark :is(.btn.secondary,.btn.plain,.bs-secondary,.b8-btn:not(.primary)){
+  background:var(--surface);color:var(--deep);border-color:#54737c;
+ }
+ body.lc-theme-dark :is(.pill,.kicker,.eyebrow,.navhead){color:var(--deep)}
+ body.lc-theme-dark .pill{background:var(--mint);border-color:var(--line)}
+}
 body.lc-theme-dark #quickTheme{color-scheme:dark;background:#21323d;color:#e8f5f6}
 body.lc-theme-contrast #quickTheme{background:#fff;color:#000;border-color:#000}
 @media(max-width:420px){.top-actions{gap:7px}.topbar{padding-inline:10px}}
@@ -1648,6 +1681,14 @@ if(e.target.matches('[data-bl-progress-filter]')){
   return;
 }
 const el=e.target;const k=el.dataset.set||el.dataset.check;if(!k)return;const p=profile();p.settings[k]=el.type==='checkbox'?el.checked:(['rate'].includes(k)?Number(el.value):['count','level'].includes(k)?Number(el.value):el.value);save();apply();if(k!=='voice'){draw();}});
+// A direct night-mode link applies the setting once, for the active profile.
+const appearanceLink=new URL(location.href);
+if(appearanceLink.searchParams.get('theme')==='dark'){
+ profile().settings.theme='dark';
+ save();
+ appearanceLink.searchParams.delete('theme');
+ history.replaceState(history.state,'',appearanceLink);
+}
 quickTheme.addEventListener('change',()=>{
  profile().settings.theme=quickTheme.value;
  save();

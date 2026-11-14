@@ -13,7 +13,12 @@ module.exports = async function checkQuality(page, home) {
   const quickTheme = page.getByLabel('Darstellung: Hell oder Dunkel', {exact:true});
   const originalTheme = await quickTheme.inputValue();
   await quickTheme.selectOption('dark');
-  assert.ok(await page.locator('body.lc-theme-dark').count());
+  await page.waitForFunction(() => getComputedStyle(document.body).backgroundColor==='rgb(16, 27, 35)');
+  for (const region of ['body','.topbar','.sidebar','.bs-start','.modulecard']) {
+    const background = await page.locator(region).first().evaluate(el => getComputedStyle(el).backgroundColor);
+    const channels = background.match(/\d+/g)?.slice(0,3).map(Number);
+    assert.ok(channels?.every(channel => channel<90),region+' '+background);
+  }
   await page.reload();
   assert.equal(await quickTheme.inputValue(),'dark');
   await page.locator('#lcOpen').click();
@@ -28,6 +33,12 @@ module.exports = async function checkQuality(page, home) {
   await page.locator('body.lc-theme-dark').waitFor();
   await page.emulateMedia({colorScheme:'light'});
   await page.locator('body.lc-theme-dark').waitFor({state:'detached'});
+  const nightLink = new URL(home);
+  nightLink.searchParams.set('theme','dark');
+  nightLink.hash='home';
+  await page.goto(nightLink.href);
+  assert.equal(await quickTheme.inputValue(),'dark');
+  assert.equal(new URL(page.url()).searchParams.has('theme'),false);
   await quickTheme.selectOption(originalTheme);
   const quickThemeBox = await quickTheme.boundingBox();
   assert.ok(quickThemeBox.x+quickThemeBox.width<=320);
