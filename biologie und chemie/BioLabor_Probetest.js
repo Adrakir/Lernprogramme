@@ -30,9 +30,17 @@
   function picture(spec) {
     if (!spec) return '';
     const [type, species, part] = spec;
-    if (type === 'bones') return window.BioLaborKlassenarbeit.skeletonQuestion(species, part);
-    const {jaws, toothDiagram} = window.BioLaborAnatomie;
-    return toothDiagram(species, jaws[species].marks.findIndex(([mark]) => mark === part), false);
+    const {jaws, toothDiagram, describeMark, markedPicture} = window.BioLaborAnatomie;
+    const figure = type === 'bones'
+      ? window.BioLaborKlassenarbeit.skeletonQuestion(species, part)
+      : toothDiagram(species, jaws[species].marks.findIndex(([mark]) => mark === part), false);
+    return markedPicture(figure, describeMark(type, species, part));
+  }
+
+  function readQuestion(question) {
+    const description = question.picture ? window.BioLaborAnatomie.describeMark(...question.picture) : '';
+    return window.BioLaborLernweg.readQuestion(question.prompt, description, question.options,
+      question.rows?.map(([label]) => label));
   }
 
   function objectivePoints(question, answer) {
@@ -84,16 +92,8 @@
         ${historyItems.map(([version, entry]) => {
           const summary = examSummary(entry);
           return `<li>Arbeit ${Number(version) + 1} · ${summary.score} von ${summary.max} automatisch geprüften Punkten
-            <details><summary>Aufgaben und Antworten ansehen</summary>
-              ${versions[entry.version].map((question, i) => {
-                const answer = entry.answers[i];
-                return `<details class="bp-review"><summary>Aufgabe ${i + 1} · ${skills[question.skill][0]}</summary>
-                  <p><strong>${question.prompt}</strong></p>
-                  ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
-                  ${question.criteria
-                    ? '<p><strong>Dein Text:</strong> ' + (answer?.trim() ? escape(answer) : 'Keine Antwort') + '</p><p><strong>Musterantwort:</strong> ' + question.sample + '</p>'
-                    : reviewResult(question, answer)}</details>`;
-              }).join('')}</details></li>`;
+            <a href="#probetest/archiv/${Number(version) + 1}">Auswertung zu Arbeit ${Number(version) + 1} öffnen</a>
+            <details><summary>Aufgaben und Antworten ansehen</summary>${archivedQuestions(entry)}</details></li>`;
         }).join('')}</ul></section>` : '');
   }
 
@@ -107,9 +107,9 @@
     if (question.criteria) {
       return `<label class="bp-writing">Deine Erklärung<textarea data-bp-writing maxlength="2000" rows="5">${escape(answer)}</textarea></label>`;
     }
-    return '<div class="bp-choices">' + question.options.map((option, index) => `<label>
+    return '<fieldset class="bp-choices"><legend class="bl-visually-hidden">Antwortmöglichkeiten</legend>' + question.options.map((option, index) => `<label>
       <input type="radio" name="bp-answer" value="${index}"${answer === index ? ' checked' : ''}><span>${option}</span>
-      </label>`).join('') + '</div>';
+      </label>`).join('') + '</fieldset>';
   }
 
   function pendingText(missing) {
@@ -129,7 +129,8 @@
             ${i === index ? 'aria-current="step"' : ''} aria-label="Aufgabe ${i + 1}${hasAnswer(q, active.answers[i]) ? ', beantwortet' : ', offen'}">
             ${i + 1}<span aria-hidden="true">${hasAnswer(q, active.answers[i]) ? ' ✓' : ''}</span></button>`).join('')}
         </nav>
-        <h2 tabindex="-1">${question.prompt}</h2>
+<h2 tabindex="-1">${question.prompt}</h2>
+        <div class="bl-task-reading">${readQuestion(question)}</div>
         ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
         ${optionRows(question, active.answers[index])}
         <div class="button-row bp-actions">
@@ -178,6 +179,50 @@
 
   }
 
+  function archive(entry) {
+    if (!entry) return examStart(stored.exam);
+    const {score, max, writingCount} = examSummary(entry);
+    const compared = Object.values(entry.reviews || {}).filter(review => review.done).length;
+    return heading('Auswertung · Arbeit ' + (entry.version + 1),
+      'Automatisch geprüft: ' + score + ' von ' + max + ' Punkten. Erklärtexte verglichen: ' + compared + ' von ' + writingCount + '.',
+      '<a href="#probetest">Zu den Probearbeiten</a>') +
+      '<section class="bs-panel bp-panel"><h2>Dein Ergebnis nach Themen</h2>' +
+      topicSummary(versions[entry.version], entry.answers) + '</section>' +
+      '<section class="bs-panel bp-panel"><h2>Aufgaben und Antworten</h2>' +
+      archivedQuestions(entry) + '</section>';
+  }
+
+  function archivedQuestions(entry) {
+    return versions[entry.version].map((question, i) => {
+      const answer = entry.answers[i];
+      const status = questionStatus(question, answer, entry.reviews?.[i]);
+      return `<details class="bp-review"><summary>Aufgabe ${i + 1} · ${skills[question.skill][0]} · ${status}</summary>
+        <p><strong>${question.prompt}</strong></p>
+        ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
+        ${question.criteria
+          ? '<p><strong>Dein Text:</strong> ' + (answer?.trim() ? escape(answer) : 'Keine Antwort') + '</p><p><strong>Musterantwort:</strong> ' + question.sample + '</p>'
+          : reviewResult(question, answer)}</details>`;
+    }).join('');
+  }
+
+  function questionStatus(question, answer, review) {
+    if (!hasAnswer(question, answer)) return question.rows && Object.keys(answer || {}).length ? 'Teilweise beantwortet' : 'Offen';
+    if (question.criteria) return review?.done ? 'Selbst verglichen' : 'Selbstvergleich offen';
+    return objectivePoints(question, answer) === maxPoints(question) ? 'Richtig' : 'Noch üben';
+  }
+
+  function topicSummary(questions, answers) {
+    const groups = {};
+    questions.forEach((question, i) => {
+      if (question.criteria) return;
+      const row = groups[question.skill] ||= {points:0, max:0};
+      row.points += objectivePoints(question, answers[i]);
+      row.max += maxPoints(question);
+    });
+    return '<ul class="bp-topic-results">' + Object.entries(groups).map(([skill, row]) =>
+      '<li><span>' + skills[skill][0] + '</span><b>' + row.points + ' von ' + row.max + ' Punkten</b></li>').join('') + '</ul>';
+  }
+
   function examResults(active) {
     const questions = versions[active.version];
     const {score, max, writingCount} = examSummary(active);
@@ -186,7 +231,9 @@
     const links = [...new Set(topics.map(topic => retry[topic][0].skill))];
     return heading('Auswertung · Arbeit ' + (active.version + 1),
       'Automatisch geprüft: ' + score + ' von ' + max + ' Punkten. Erklärtexte verglichen: ' + compared + ' von ' + writingCount + '.') +
-      `<section class="bs-panel bp-panel"><h2>Das kannst du wiederholen</h2>
+      `<section class="bs-panel bp-panel"><h2>Dein Ergebnis nach Themen</h2>
+      ${topicSummary(questions, active.answers)}</section>
+      <section class="bs-panel bp-panel"><h2>Das kannst du wiederholen</h2>
       ${topics.length ? '<div class="bs-links">' + links.map(skill => `<a href="${skills[skill][1]}">${skills[skill][0]}</a>`).join('') + '</div>'
         : '<p>Bei den abgegebenen und ausgewerteten Aufgaben gibt es gerade keinen offenen Übungsschwerpunkt.</p>'}
       <p>Beim Selbstvergleich kannst du abhaken, welche Punkte in deinen Erklärungen vorkommen.</p>
@@ -195,9 +242,10 @@
         ${button('home', 'Zu den drei Arbeiten', true)}</div>
       </section><section class="bs-panel bp-panel"><h2>Antworten und Lösungen</h2>
       ${questions.map((question, index) => {
-        const complete = !question.criteria && objectivePoints(question, active.answers[index]) === maxPoints(question);
+        const status = questionStatus(question, active.answers[index], active.reviews?.[index]);
+        const complete = status === 'Richtig';
         return `<details class="bp-review" data-bp-review="${index}"${complete ? '' : ' open'}><summary>
-          Aufgabe ${index + 1} · ${skills[question.skill][0]}${complete ? ' · ✓' : ''}</summary>
+          Aufgabe ${index + 1} · ${skills[question.skill][0]} · ${status}</summary>
           <p><strong>${question.prompt}</strong></p>
           ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
           ${reviewResult(question, active.answers[index], active, index)}
@@ -214,6 +262,7 @@
     return heading('Fehler gezielt wiederholen', 'Aufgabe ' + (round.index + 1) + ' von ' + round.topics.length + ' · ' + skills[skill][0],
       '<a href="#probetest/auswertung">Zur Auswertung</a>') +
       `<section class="bs-panel bp-panel"><h2 tabindex="-1">${question.prompt}</h2>
+        <div class="bl-task-reading">${readQuestion(question)}</div>
         ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
         ${checked ? `<fieldset disabled class="bp-checked">${optionRows(question, answer)}</fieldset>` : optionRows(question, answer)}
         ${checked ? `<div class="bp-note" role="status"><strong>${correct ? '✓ Richtig.' : 'Noch unsicher.'}</strong>${reviewResult(question, answer)}</div>` : ''}
@@ -244,7 +293,7 @@
     });
   }
 
-  function mountExam(outer, section, setRoute) {
+  function mountExam(outer, section, setRoute, archiveVersion) {
     const root = document.createElement('div');
     outer.replaceChildren(root);
     let screen = section || 'start';
@@ -258,12 +307,14 @@
       setRoute(hash.slice(1));
     };
     function render() {
+      window.speechSynthesis?.cancel();
       const active = stored.exam;
       const round = stored.round;
       const views = {
         start: () => examStart(active),
         arbeit: () => active?.phase === 'work' ? examQuestion(active, confirm) : examStart(active),
         auswertung: () => active?.phase === 'results' ? examResults(active) : examStart(active),
+        archiv: () => archive(stored.completed?.[archiveVersion - 1]),
         wiederholen: () => !round?.topics?.length || (!round.followup && active?.phase !== 'results')
           ? examStart(active) : round.finished ? practiceResults(round) : practiceRound(round),
       };
@@ -400,7 +451,12 @@
         case 'retry-next':
           if (round.index + 1 === round.topics.length) {
             round.finished = true;
-            if (!missedTopics(round).length) {
+            const openTopics = missedTopics(round);
+            if (round.followup) stored.checkResult = {
+              at:new Date().toISOString(), right:round.topics.length - openTopics.length, total:round.topics.length,
+              topics:round.topics.filter(topic => !openTopics.includes(topic)),
+            };
+            if (!openTopics.length) {
               if (round.followup) stored.followup.done = true;
               else {
                 const tomorrow = new Date();
@@ -426,6 +482,7 @@
     let index = stored.observation.index ?? 0;
     let focus;
     function render() {
+      window.speechSynthesis?.cancel();
       const item = observations[index];
       const entry = stored.observation[index] || {};
       const markers = entry.markers || [];
@@ -439,12 +496,21 @@
           ${observations.map((scene, i) => `<button type="button" class="btn small secondary" data-bo-scene="${i}"
             aria-pressed="${i === index}">Szene ${i+1} · ${scene.label}</button>`).join('')}</div>
           <h2 tabindex="-1">Szene ${index + 1} · ${item.label}</h2><p>${item.context}</p>
+          <div class="bl-task-reading">${window.BioLaborLernweg.readAloud('Situation vorlesen', item.context)}</div>
           <div class="bp-observation-image">${illustration}
             ${markerPositions.map(([x,y],i) => `<button type="button" data-bo-marker="${i}" aria-label="${markerLabels[i]}"
               aria-pressed="${markers.includes(i)}" style="--bo-x:${x/5.2}%;--bo-y:${y/2.52}%">${i+1}</button>`).join('')}
           </div>
+          <div class="bp-observation-text">
+            <p>Oder wähle die Merkmale über die Liste.</p>
+            <div class="button-row" role="group" aria-label="Merkmale aus der Liste auswählen">
+              ${markerLabels.map((label,i) => `<button type="button" class="btn small secondary" data-bo-text-marker="${i}" aria-pressed="${markers.includes(i)}">${label} beschreiben</button>`).join('')}
+            </div>
+          </div>
           <p class="bp-status" role="status">${markers.length} von 3 Bildmerkmalen ausgewählt</p>
           ${markers.length ? '<ul class="bp-answers">' + markers.map(i => '<li><b>' + markerLabels[i] + ':</b> ' + item.signals[i] + '</li>').join('') + '</ul>' : ''}
+          ${markers.length ? window.BioLaborLernweg.readAloud('Merkmale vorlesen', markers.map(i =>
+            markerLabels[i] + '. ' + item.signals[i]).join(' ')) : ''}
           ${enough ? `<h3>Was bedeutet die Haltung hier wahrscheinlich?</h3>
             <fieldset class="bp-choices"><legend>Wähle eine Deutung</legend>
             ${item.interpretations.map((option,i) => `<label><input type="radio" name="bo-choice" value="${i}"
@@ -452,11 +518,11 @@
             <label class="bp-writing">Begründe mit zwei Beobachtungen <small>„Ich sehe … und … . In dieser Situation vermute ich deshalb …“</small><textarea data-bo-writing rows="4" maxlength="1500">${escape(entry.text)}</textarea></label>
             <div class="button-row bp-actions"><button type="button" class="btn" data-bo-check>Deutung prüfen</button></div>
             <p data-bo-notice role="status"></p>
-            ${checked ? `<div class="bp-note" role="status"><p><strong>${entry.choice === item.answer ? '✓ Das passt.' : 'Schau noch einmal auf die Situation.'}</strong> ${item.reason}</p>
+            ${checked ? `<div class="bp-note" role="status" tabindex="-1"><p><strong>${entry.choice === item.answer ? '✓ Das passt.' : 'Schau noch einmal auf die Situation.'}</strong> ${item.reason}</p>
               <p><strong>Beispiel für eine Begründung:</strong> ${item.sample}</p></div>` : ''}
             ` : ''}
         </section></div>`;
-      if (focus) root.querySelector(focus)?.focus({preventScroll: true});
+      if (focus) root.querySelector(focus)?.focus({preventScroll: focus !== '.bp-note'});
       focus = undefined;
     }
 
@@ -479,20 +545,21 @@
         stored.observation.index = index;
         save();
         focus = '[data-bo-scene="' + index + '"]';
-      } else if (control.dataset.boMarker !== undefined) {
-        const part = Number(control.dataset.boMarker);
+      } else if (control.dataset.boMarker !== undefined || control.dataset.boTextMarker !== undefined) {
+        const viaList = control.dataset.boTextMarker !== undefined;
+        const part = Number(control.dataset.boTextMarker ?? control.dataset.boMarker);
         const markers = new Set(entry.markers || []);
         if (markers.has(part)) markers.delete(part);
         else markers.add(part);
         update({markers: [...markers], checked: false});
-        focus = '[data-bo-marker="' + part + '"]';
+        focus = (viaList ? '[data-bo-text-marker="' : '[data-bo-marker="') + part + '"]';
       } else if (control.hasAttribute('data-bo-check')) {
         if (!Number.isInteger(entry.choice) || !entry.text?.trim()) {
           root.querySelector('[data-bo-notice]').textContent = 'Wähle eine Deutung und schreibe eine kurze Begründung.';
           return;
         }
         update({checked: true, at: new Date().toISOString()});
-        focus = '[data-bo-check]';
+        focus = '.bp-note';
       } else return;
       render();
     });
@@ -522,11 +589,17 @@
         const compared = Object.values(entry.reviews || {}).filter(review => review.done).length;
         const next = topics.length ? [skills[topics[0]][1], skills[topics[0]][0] + ' wiederholen']
           : compared < questions.filter(q => q.criteria).length ? ['#probetest', 'Erklärtexte vergleichen'] : null;
-        return {version:entry.version, at:entry.at, ...examSummary(entry), compared, strong,
+        const current = stored.exam?.version === entry.version && stored.exam.phase === 'results';
+        return {version:entry.version, url:current ? '#probetest/auswertung' : '#probetest/archiv/' + (entry.version + 1),
+          at:entry.at, ...examSummary(entry), compared, strong,
           topics:topics.map(skill => skills[skill][0]), next};
       }).sort((a,b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
     const scenes = Object.values(stored.observation || {}).filter(entry => entry?.checked);
-    return {entries, last:entries[0], draft:stored.exam?.phase === 'work', observations:scenes.length,
+    const check = stored.followup;
+    const result = stored.checkResult;
+    const checkResult = result && {...result, topics:[...new Set(result.topics.map(topic => skills[retry[topic][0].skill][0]))]};
+    return {entries, last:entries[0], draft:stored.exam?.phase === 'work', observations:scenes.length, checkResult,
+      followupDue:Boolean(check && !check.done && Date.now() >= Date.parse(check.at)),
       observationAt:scenes.map(scene => scene.at).filter(Boolean).sort().at(-1)};
   }
 

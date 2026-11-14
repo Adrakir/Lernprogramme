@@ -245,6 +245,7 @@
       return `<div class="bk-work bk-discover">
         ${picture(id, selected, true)}
         <div class="bk-controls">
+          ${window.BioLaborLernweg?.readAloud('Erklärung vorlesen', name + '. ' + explanation) || ''}
           <div class="bk-feedback bk-fact" aria-live="polite">
             <span class="bk-fact-number" aria-hidden="true">${selected + 1}</span>
             <div><h2>${name}</h2><p>${explanation}</p></div>
@@ -267,13 +268,15 @@
       const mark = hasDiagram ? pointsFor(q.id, topic).indexOf(q.point) : -1;
       const practice = mode === 'practice';
       const category = hasDiagram ? species[q.id].name : 'Vergleich';
+      const description = hasDiagram ? anatomy?.describeMark(topic, q.id, q.point[0]) : '';
+      const read = window.BioLaborLernweg?.readQuestion(q.prompt, description, q.options) || '';
       return `<section class="bk-round">
         <div class="bk-progress">
           ${practice ? '' : `<strong>${category}</strong>`}
           <span>Aufgabe ${index + 1} von ${round.length}</span><progress value="${index + 1}" max="${round.length}" aria-label="Aufgabenfortschritt"></progress></div>
-        <h2 data-bk-heading tabindex="-1">${q.prompt}</h2>
+        <h2 data-bk-heading tabindex="-1">${q.prompt}</h2><div class="bl-task-reading">${read}</div>
         <div class="bk-work ${hasDiagram ? '' : 'bk-text-task'}">
-          ${hasDiagram ? picture(q.id, mark, false) : ''}
+          ${hasDiagram ? '<div>' + anatomy.markedPicture(picture(q.id, mark, false), description) + '</div>' : ''}
           <div class="bk-controls">
             <div class="bk-options" aria-label="Antworten">${q.options.map((option, i) => {
               const wrong = practice && feedback === option && !answer;
@@ -325,6 +328,7 @@
     }
 
     function draw(focus) {
+      window.speechSynthesis?.cancel();
       indexOpen = root.querySelector('.bk-index')?.open ?? indexOpen;
       const best = getBest(topic);
       const teeth = topic === 'teeth';

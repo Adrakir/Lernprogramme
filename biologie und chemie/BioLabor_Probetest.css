@@ -91,3 +91,14 @@
   .bp-teacher h2 { font-size: 12pt; }
   .bp-qr { width: 26mm; height: 26mm; }
 }
+
+.bl-visually-hidden { position:absolute; clip-path:inset(50%); inline-size:1px; block-size:1px; overflow:hidden; white-space:nowrap; }
+.bl-task-reading { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px; }
+.bl-read { min-block-size:44px; }
+.bk-image-text, .bp-observation-text { margin-block:10px; padding:9px 12px; border:1px solid var(--line); border-radius:10px; }
+.bk-image-text summary { padding-block:5px; min-block-size:35px; cursor:pointer; font-weight:700; }
+.bk-image-text p, .bp-observation-text p { margin:6px 0; }
+.bp-observation-text button { min-block-size:44px; }
+.bp-observation-text button[aria-pressed="true"] { outline:2px solid currentColor; outline-offset:2px; }
+.bp-topic-results { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,195px),1fr)); gap:8px; padding:0; margin:0; list-style:none; }
+.bp-topic-results li { display:grid; gap:4px; padding:10px 12px; border:1px solid var(--line); border-radius:9px; }

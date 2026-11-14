@@ -490,9 +490,14 @@
 
   function renderTask(entry, index, saved) {
     const prefix = 'task-' + index;
+    const readText = entry.questions
+      ? entry.questions.map(question => question.prompt +
+        (question.options ? ' Möglichkeiten: ' + question.options.join(', ') : '')).join('. ')
+      : entry.prompt;
+    const reader = window.BioLaborLernweg?.readAloud('Aufgabe ' + (index + 1) + ' vorlesen', entry.title + '. ' + readText) || '';
     if (!entry.questions) {
       return `<section class="bs-task"><h3>${index + 1}. ${entry.title}</h3>
-        <label class="bs-write">${entry.prompt}<textarea name="${prefix}" rows="3">${escape(saved.answers[prefix] || '')}</textarea></label>
+        <div class="bl-task-reading">${reader}</div><label class="bs-write">${entry.prompt}<textarea name="${prefix}" rows="3">${escape(saved.answers[prefix] || '')}</textarea></label>
         <details class="bs-hint"><summary>Musterantwort zum Vergleichen</summary><p>${entry.sample}</p></details>
         <label class="bs-check"><input type="checkbox" data-bs-written="${index}"${saved.done[index] ? ' checked' : ''}>
           Antwort mit der Musterlösung verglichen</label></section>`;
@@ -502,7 +507,7 @@
       ${input(question, name, saved.answers[name])}<small id="${name}-feedback"></small></div>`;
     const fields = entry.questions.map((question, i) => field(question, prefix + '-' + i, question.prompt)).join('');
     return `<form class="bs-task" data-bs-task="${index}"><h3>${index + 1}. ${entry.title}</h3>
-      <div class="bs-fields${entry.table ? ' bs-counts' : ''}">${fields}
+      <div class="bl-task-reading">${reader}</div><div class="bs-fields${entry.table ? ' bs-counts' : ''}">${fields}
       ${entry.word ? field({}, prefix + '-word', 'Lösungswort aus den Buchstaben') : ''}</div>
       ${entry.hint ? `<details class="bs-hint"><summary>Tipp anzeigen</summary><p>${entry.hint}</p></details>` : ''}
       <button type="submit" class="bs-action">Antworten prüfen</button>
@@ -906,6 +911,7 @@
       <button type="button" class="btn small secondary" data-bl-jump=".bl-guide summary">Geführter Einstieg</button></div></header>
       ${window.BioLaborLernweg?.lesson(id, true) || ''}
       <section class="bs-panel"><h2>Das brauchst du</h2><p>${lesson.intro}</p>
+        <div class="bl-task-reading">${window.BioLaborLernweg?.readAloud('Lernwissen vorlesen', lesson.facts.join(' ')) || ''}</div>
         <details class="bs-hint"><summary>Lernwissen aufklappen</summary><ul>${lesson.facts.map(fact => `<li>${fact}</li>`).join('')}</ul></details>
         ${shortcuts(lesson.links)}</section>
       ${lesson.diagram ? `<section class="bs-panel"><h2>Schau genau hin</h2>${showDiagram(lesson.diagram)}</section>` : ''}

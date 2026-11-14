@@ -101,6 +101,53 @@ module.exports = async function checkQuality(page, home) {
   assert.match(await exercise.innerText(),/1 von 1/);
   assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('biolab5-probetest-1')).followup.done),true);
 
+  await page.locator('#lcOpen').click();
+  await page.locator('#lcTabs [data-tab="familie"]').click();
+  assert.match(await page.locator('.bl-progress').innerText(), /Lerncheck am Folgetag[\s\S]*1 von 1 richtig/);
+  await page.locator('#lcClose').click();
+
+  await open('probetest/archiv/1');
+  await page.getByRole('heading',{name:'Auswertung · Arbeit 1',exact:true}).waitFor();
+  assert.match(await page.locator('.bp-topic-results').innerText(), /Skelett und Knochen[\s\S]*0 von 1 Punkten/);
+  await page.getByText('Aufgabe 1 · Skelett und Knochen · Noch üben',{exact:true}).click();
+  const archivedPicture = page.locator('.bp-review[open] .bk-image-text');
+  await archivedPicture.getByText('Bildbeschreibung',{exact:true}).click();
+  assert.match(await archivedPicture.innerText(),/dreieckigen Knochenplatte/);
+
+  await open('probetest/arbeit');
+  await page.getByRole('button',{name:'Aufgabe 1, offen',exact:true}).click();
+  const reader = page.getByRole('button',{name:'Aufgabe vorlesen',exact:true});
+  await reader.waitFor();
+  await page.evaluate(() => {
+    window.__spoken = '';
+    const synth = window.speechSynthesis || {getVoices:() => []};
+    window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
+    synth.speak = utterance => {window.__spoken = utterance.text;};
+    synth.cancel = () => {window.__spoken = '';};
+    if (!window.speechSynthesis) window.speechSynthesis = synth;
+  });
+  await reader.click();
+  assert.match(await page.evaluate(() => window.__spoken),/Hüftgelenk und Knie.*Antwortmöglichkeiten/);
+  await page.getByRole('button',{name:'Vorlesen stoppen',exact:true}).click();
+  assert.equal(await page.evaluate(() => window.__spoken),'');
+  await page.getByRole('button',{name:'Aufgabe vorlesen',exact:true}).click();
+  await page.getByRole('button',{name:'Weiter →',exact:true}).click();
+  assert.equal(await page.evaluate(() => window.__spoken),'');
+  await page.getByText('Bildbeschreibung',{exact:true}).click();
+  assert.match(await page.locator('.bk-image-text').innerText(),/langen, spitzen Zahn/);
+  assert.doesNotMatch(await page.locator('.bk-image-text').innerText(),/Eckzahn/);
+
+  await open('koerpersprache');
+  await page.getByRole('button',{name:'Szene 1 · Hund',exact:true}).click();
+  const ears = page.getByRole('button',{name:'Ohren beschreiben',exact:true});
+  await ears.press('Enter');
+  assert.equal(await ears.getAttribute('aria-pressed'),'true');
+  assert.equal(await ears.evaluate(el => el === document.activeElement),true);
+  await page.getByRole('button',{name:'Rute beschreiben',exact:true}).press('Enter');
+  assert.match(await page.locator('.bp-status').innerText(),/2 von 3/);
+  await page.getByRole('button',{name:'Merkmale vorlesen',exact:true}).click();
+  assert.match(await page.evaluate(() => window.__spoken),/Ohren sind beweglich/);
+
   await open('lehrkraft');
   await page.locator('[data-bl-stations]').selectOption('required');
   assert.equal(await page.locator('.bp-station:visible').count(),3);

@@ -131,5 +131,47 @@
     </figure>`;
   }
 
-  window.BioLaborAnatomie = {boneWhy, toothLabels, toothWhy, jaws, toothDiagram};
+  const markLocations = {
+    bones: {
+      skull: 'Die Linie endet am knöchernen Kopf, der Augen und Gehirn umgibt.',
+      clavicle: 'Die Linie endet an einem schmalen Knochen oberhalb des Brustkorbs zwischen Brustbein und Schulter.',
+      shoulder: 'Die Linie endet an einer flachen, dreieckigen Knochenplatte seitlich am vorderen Rumpf, oberhalb des Ansatzes des Vorderbeins.',
+      humerus: 'Die Linie endet am langen Knochen zwischen Schulter und Ellenbogen.',
+      forearm: 'Die Linie endet an den beiden nebeneinanderliegenden Knochen zwischen Ellenbogen und Handgelenk.',
+      hand: 'Die Linie endet unterhalb des Handgelenks an den kleinen Knochen, aus denen die Fingerknochen hervorgehen.',
+      sternum: 'Die Linie endet am länglichen Knochen genau in der Mitte der Brust, zwischen den vorderen Enden der gepaarten, gebogenen Knochen.',
+      ribs: 'Die Linie endet an einem der gepaarten, bogenförmigen Knochen, die vom Rücken aus seitlich um die Brust herumführen.',
+      spine: 'Die Linie endet an der Kette kleiner aufeinanderfolgender Knochen entlang des Rückens.',
+      pelvis: 'Die Linie endet an einer breiten Knochenstruktur am unteren oder hinteren Ende des Rumpfs. Dort setzen die Beine beziehungsweise Hinterbeine an.',
+      femur: 'Die Linie endet am langen Knochen des Beins zwischen Hüftgelenk und Knie.',
+      kneecap: 'Die Linie endet an dem kleinen Knochen vorn auf dem Kniegelenk.',
+      tibia: 'Die Linie endet am breiteren Knochen des Unterschenkels zwischen Knie und Sprunggelenk.',
+      fibula: 'Die Linie endet am schmaleren Knochen an der Außenseite des Unterschenkels.',
+      foot: 'Die Linie endet unterhalb des Sprunggelenks an den Knochen von Fuß und Zehen.',
+      frontPaw: 'Die Linie endet am untersten Abschnitt des Vorderbeins bei den Zehen.',
+      hindPaw: 'Die Linie endet am untersten Abschnitt des Hinterbeins bei den Zehen.',
+      tail: 'Die Linie endet an den kleinen aufeinanderfolgenden Knochen, die hinter dem Becken den Schwanz bilden.',
+    },
+    teeth: {
+      incisor: 'Die Linie endet an einem kleinen flachen Zahn mit kurzer Schneidkante ganz vorn.',
+      canine: 'Die Linie endet an einem langen, spitzen Zahn. Vor ihm sitzen kleinere Zähne, hinter ihm die Zähne mit Kauflächen oder mehreren Höckern.',
+      premolar: 'Die Linie endet in der mittleren Zahnreihe. Vor dem markierten Zahn liegt ein einzelner spitzer Zahn, dahinter liegen breitere Zähne.',
+      molar: 'Die Linie endet an einem breiten Zahn mit Kaufläche im hinteren Abschnitt der Zahnreihe.',
+      carnassial: 'Zwei Linien markieren einen oberen und einen unteren Zahn im hinteren Abschnitt. Ihre langen, scharfen Kanten gleiten beim Schließen des Kiefers aneinander vorbei.',
+    },
+  };
+  const specimenNames = {mensch:'Mensch', hund:'Hund', katze:'Katze'};
+
+  function describeMark(type, species, part) {
+    const location = markLocations[type]?.[part];
+    if (!location) return '';
+    const label = type === 'bones' ? 'Skelett von ' : 'Gebiss von ';
+    return label + specimenNames[species] + '. ' + location;
+  }
+
+  function markedPicture(figure, description) {
+    return figure + (description ? '<details class="bk-image-text"><summary>Bildbeschreibung</summary><p>' + description + '</p></details>' : '');
+  }
+
+  window.BioLaborAnatomie = {boneWhy, toothLabels, toothWhy, jaws, toothDiagram, describeMark, markedPicture};
 })();

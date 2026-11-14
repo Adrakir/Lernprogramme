@@ -103,6 +103,19 @@
     if (scroll) target.scrollIntoView({block:'start', behavior:'instant'});
   }
 
+  function readAloud(label, text) {
+    return '<button type="button" class="btn small secondary bl-read" data-action="speak" data-text="' +
+      escape(text) + '">' + escape(label) + '</button>' +
+      '<button type="button" class="btn small secondary bl-read" data-action="stopAudio">Vorlesen stoppen</button>';
+  }
+
+  function readQuestion(prompt, description, options = [], rows = []) {
+    const parts = [prompt, description];
+    if (rows.length) parts.push('Ordne diese Begriffe zu. ' + rows.join('. ') + '.');
+    if (options.length) parts.push('Antwortmöglichkeiten. ' + options.join('. ') + '.');
+    return readAloud('Aufgabe vorlesen', parts.filter(Boolean).join(' '));
+  }
+
   function bindMain() {
     const root = document.getElementById('main');
     root.addEventListener('click', event => {
@@ -138,5 +151,5 @@
     return settings || {};
   }
 
-  window.BioLaborLernweg = {lesson, directory, focus, bindMain, animalSettings};
+  window.BioLaborLernweg = {lesson, directory, focus, bindMain, animalSettings, readAloud, readQuestion};
 })();

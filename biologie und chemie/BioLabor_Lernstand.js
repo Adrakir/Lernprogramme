@@ -9,7 +9,8 @@
     ? new Intl.DateTimeFormat('de-DE', {dateStyle:'medium'}).format(new Date(value)) : 'Datum nicht gespeichert';
   const read = () => ({exams:window.BioLaborProbetest?.progress() || {}, stations:window.BioLaborSchulstoff?.progress() || []});
   function next({exams, stations}) {
-    if (exams.draft) return ['#probetest', 'Offene Arbeit fortsetzen'];
+    if (exams.draft) return ['#probetest/arbeit', 'Offene Arbeit fortsetzen'];
+    if (exams.followupDue) return ['#probetest', 'Kurzen Lerncheck starten'];
     const station = stations.filter(s => s.started && s.done < s.total).sort((a,b) => timestamp(b.at)-timestamp(a.at))[0];
     if (exams.last?.next && (!station || timestamp(exams.last.at) >= timestamp(station.at))) return exams.last.next;
     return station ? ['#schulstoff/' + station.id, station.title + ' fortsetzen']
@@ -20,17 +21,20 @@
     const data = read();
     const {exams, stations} = data;
     const rows = [
-      ...(exams.entries || []).map(exam => ({kind:'probetest', at:exam.at, url:'#probetest',
+      ...(exams.entries || []).map(exam => ({kind:'probetest', at:exam.at, url:exam.url,
         label:'Probearbeit ' + (exam.version+1),
         result:exam.score + ' von ' + exam.max + ' Punkten automatisch geprüft · ' +
           exam.compared + ' von ' + exam.writingCount + ' Erklärtexten selbst verglichen'})),
       ...stations.filter(s => s.started).map(s => ({kind:s.id, at:s.at, url:'#schulstoff/' + s.id, label:s.title,
         result:s.done + ' von ' + s.total + ' Aufgaben bearbeitet' + (s.rating ? ' · ' + s.rating : '')})),
+      ...(exams.checkResult ? [{kind:'lerncheck', at:exams.checkResult.at, url:'#probetest',
+        label:'Lerncheck am Folgetag', result:exams.checkResult.right + ' von ' + exams.checkResult.total +
+          ' richtig' + (exams.checkResult.topics.length ? ' · ' + exams.checkResult.topics.join(', ') : '')}] : []),
       ...(exams.observations ? [{kind:'koerpersprache', url:'#koerpersprache', at:exams.observationAt,
         label:'Körpersprache', result:exams.observations + ' von 4 Szenen bearbeitet'}] : []),
     ].sort((a,b) => timestamp(b.at)-timestamp(a.at));
     const [url,label] = next(data);
-    const strong = exams.last?.strong || [];
+    const strong = [...new Set([...(exams.last?.strong || []), ...(exams.checkResult?.topics || [])])];
     const practice = exams.last?.topics || [];
     const family = view === 'familie';
     const filter = view === 'lehrkraft' && rows.length ? '<label>Thema oder Aufgabentyp filtern <select data-bl-progress-filter>' +
