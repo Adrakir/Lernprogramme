@@ -357,7 +357,7 @@ function render(focus){
  if(window.BioLaborSchulstoff){
   $('#content .page-title').insertAdjacentHTML('afterend',window.BioLaborSchulstoff.forAnimal(section,animal));
  }
- if(focus){$('#content').focus({preventScroll:true});scrollTo({top:0,behavior:'instant'});}
+ if(focus)window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}
 function chooseSection(v){section=v;location.hash=animal+'/'+section;render(true)}
@@ -382,13 +382,16 @@ document.addEventListener('click',function(e){
 $('#content').addEventListener('keydown',function(e){const g=e.target.closest('[data-bone]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();bone=g.dataset.bone;render(false)}});
 $('#theme').addEventListener('click',()=>{document.body.classList.toggle('dark');try{localStorage.setItem(KEY+'-theme',document.body.classList.contains('dark')?'dark':'light')}catch(e){}});
 $('#font').addEventListener('click',()=>{const n=Number(document.documentElement.style.getPropertyValue('--scale')||1);document.documentElement.style.setProperty('--scale',String(n>=1.25?1:n+.125));toast('Schriftgröße angepasst')});
-$('#speak').addEventListener('click',()=>{if(!('speechSynthesis' in window)){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}if(speechSynthesis.speaking){speechSynthesis.cancel();toast('Vorlesen beendet');return}const t=new SpeechSynthesisUtterance($('#content').innerText);t.lang='de-DE';t.rate=.89;const v=speechSynthesis.getVoices().find(x=>x.lang.toLowerCase().startsWith('de'));if(v)t.voice=v;speechSynthesis.speak(t);toast('Vorlesen gestartet · erneut tippen zum Stoppen')});
+$('#speak').addEventListener('click',()=>{if(!('speechSynthesis' in window)){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}if(speechSynthesis.speaking){speechSynthesis.cancel();toast('Vorlesen beendet');return}const t=new SpeechSynthesisUtterance($('#content').innerText);t.lang='de-DE';t.rate=Number(animalSettings.rate)||.89;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.voiceURI===animalSettings.voice)||voices.find(x=>x.lang.toLowerCase().startsWith('de'));if(v)t.voice=v;speechSynthesis.speak(t);toast('Vorlesen gestartet · erneut tippen zum Stoppen')});
 $('#print').addEventListener('click',()=>window.print());
-window.addEventListener('hashchange',()=>{const p=decodeURIComponent(location.hash.slice(1)).split('/');if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){animal=p[0];section=p[1];if(section==='quiz')resetQuiz();render(false)}});
+window.addEventListener('hashchange',()=>{const p=decodeURIComponent(location.hash.slice(1)).split('/');if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){if(animal===p[0]&&section===p[1])return;animal=p[0];section=p[1];if(section==='quiz')resetQuiz();render(true)}});
 try{if(localStorage.getItem(KEY+'-theme')==='dark')document.body.classList.add('dark')}catch(e){}
+const animalSettings=window.BioLaborLernweg?.animalSettings() || {};
 const initial=decodeURIComponent(location.hash.slice(1)).split('/');
+if(!initial[0])$('#tier-intro').open=true;
 if(SPECIES[initial[0]])animal=initial[0];
 if(['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(initial[1]))section=initial[1];
 resetQuiz();render(false);
+if(SPECIES[initial[0]]&&initial[1])window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
 window.BioTierkundeSelfTest=function(){return BONES.length===9&&DENTAL.length===4&&Q.filter(x=>x.animal==='dog').length>=10&&Q.filter(x=>x.animal==='cat').length>=10&&!!$('#content')&&!!$('.skeleton-svg')||section!=='skeleton'};
 })();

@@ -345,6 +345,7 @@
       progress[id] = {
         ...existing,
         ...values,
+        at: new Date().toISOString(),
         answers: {...existing.answers, ...values.answers},
         done: {...existing.done, ...values.done},
       };
@@ -411,7 +412,7 @@
 
   function skeletonImage(species, label, order, height) {
     const imageHeight = species === 'hund' ? 472 : 348;
-    return `<figure class="bs-figure"><div class="bs-skeleton-scroll" aria-label="${label}, vergrößerbare Zeichnung"><div class="bs-skeleton-view" style="aspect-ratio:720/${height}"><svg viewBox="0 0 720 ${height}" role="img"
+    return `<figure class="bs-figure" data-bs-figure="${species}"><div class="bs-skeleton-scroll" aria-label="${label}, vergrößerbare Zeichnung"><div class="bs-skeleton-view" style="aspect-ratio:720/${height}"><svg viewBox="0 0 720 ${height}" role="img"
       aria-label="${label}, Seitenansicht mit zwölf markierten Bereichen">
       <rect width="720" height="${height}" rx="14" fill="white"/>
       <image href="Skelettbilder/${species}.webp" x="18" y="0" width="690" height="${imageHeight}"/>
@@ -443,11 +444,16 @@
 
   function showDiagram(id) {
     if (id === 'skeletons') {
-      return '<div class="bs-figures" data-bs-skeleton>' + skeletonImage('hund', 'Hund', skeletonTerms.map((_, i) => i), 527) +
+      return '<div class="bs-skeleton-switch" role="group" aria-label="Skelettansicht">' +
+        '<button type="button" class="bs-action" data-bs-species="hund" aria-pressed="true">Hund</button>' +
+        '<button type="button" class="bs-action" data-bs-species="katze" aria-pressed="false">Katze</button></div>' +
+        '<div class="bs-figures" data-bs-skeleton data-species="hund">' + skeletonImage('hund', 'Hund', skeletonTerms.map((_, i) => i), 527) +
         skeletonImage('katze', 'Katze', catOrder, 374) + '</div>' +
         '<div class="bs-skeleton-tools"><button type="button" class="bs-action" data-bs-bone-mode aria-pressed="false">Knochen am Bild entdecken</button>' +
         '<button type="button" class="bs-action bs-secondary" data-bs-skeleton-zoom aria-pressed="false">Bilder vergrößern</button></div>' +
-        '<p data-bs-bone-result role="status">Schalte „Knochen am Bild entdecken“ ein und wähle eine Markierung. Mit den Pfeiltasten wechselst du zwischen den Markierungen eines Tiers.</p>';
+        '<details class="bs-bone-list"><summary>Knochen in einer Liste auswählen</summary><div>' +
+        skeletonTerms.map((term, index) => `<button type="button" class="bs-action bs-secondary" data-bs-list-bone="${index}" aria-pressed="false">${term}</button>`).join('') +
+        '</div></details><p data-bs-bone-result role="status">Schalte „Knochen am Bild entdecken“ ein und wähle eine Markierung. Mit den Pfeiltasten wechselst du zwischen den Markierungen eines Tiers.</p>';
     }
     if (id === 'paws') {
       return `<figure class="bs-figure bs-paws"><svg viewBox="0 0 360 177" role="img"
@@ -511,13 +517,13 @@
       <h2>Bewertungstabelle</h2>
       <div class="bs-links"><button type="button" class="bs-action" data-bs-matrix="example">Rechenbeispiel laden</button>
         <button type="button" class="bs-action bs-secondary" data-bs-matrix="clear">Tabelle leeren</button></div>
-      <div class="bs-table-wrap" tabindex="0" role="region" aria-label="Bewertungstabelle mit horizontalem Scrollen">
-      <table class="bs-table"><thead><tr><th scope="col">Merkmal</th><th scope="col">Gewicht<br>1–3</th>
+      <div class="bs-table-wrap" role="region" aria-label="Hunderassen bewerten">
+      <table class="bs-table" role="table"><thead role="rowgroup"><tr role="row"><th scope="col">Merkmal</th><th scope="col">Gewicht<br>1–3</th>
       ${breeds.map(([name]) => `<th scope="col">${name}<br>Punkte · Wert</th>`).join('')}</tr></thead>
-      <tbody>${criteria.map((criterion, row) => `<tr><th scope="row">${criterion}</th>
-        <td><select data-bs-cell="${row}-0" aria-label="Gewicht für ${criterion}"><option value="">–</option>
+      <tbody role="rowgroup">${criteria.map((criterion, row) => `<tr role="row"><th scope="row" role="rowheader">${criterion}</th>
+        <td role="cell"><span class="bs-mobile-label">Gewicht · 1–3</span><select data-bs-cell="${row}-0" aria-label="Gewicht für ${criterion}"><option value="">–</option>
         ${[1,2,3].map(n => `<option>${n}</option>`).join('')}</select></td>
-        ${breeds.map(([name], i) => `<td><div class="bs-score"><select data-bs-cell="${row}-${i+1}" aria-label="Punkte für ${criterion}, ${name}">
+        ${breeds.map(([name], i) => `<td role="cell"><span class="bs-mobile-label">${name}</span><div class="bs-score"><select data-bs-cell="${row}-${i+1}" aria-label="Punkte für ${criterion}, ${name}">
           <option value="">–</option>${[1,2,3,4].map(n => `<option>${n}</option>`).join('')}</select>
           <span data-bs-value="${row}-${i+1}">–</span></div></td>`).join('')}</tr>`).join('')}</tbody>
       <tfoot><tr><th scope="row" colspan="2">Summe</th>${breeds.map((_, i) => `<td data-bs-sum="${i+1}">–</td>`).join('')}</tr></tfoot></table></div>
@@ -576,12 +582,23 @@
     const reading = root.querySelector('[data-bs-bone-result]');
     const instruction = reading.textContent;
     const buttons = [...figures.querySelectorAll('[data-bs-bone]')];
+    const list = [...root.querySelectorAll('[data-bs-list-bone]')];
+    const species = [...root.querySelectorAll('[data-bs-species]')];
+    species.forEach(button => button.addEventListener('click', () => {
+      figures.dataset.species = button.dataset.bsSpecies;
+      species.forEach(peer => peer.setAttribute('aria-pressed', String(peer === button)));
+    }));
     const show = bone => {
       buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.bsBone === bone)));
+      list.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.bsListBone === bone)));
       figures.querySelectorAll('[data-bs-bone-line]').forEach(mark =>
         mark.classList.toggle('bs-active-bone', mark.dataset.bsBoneLine === bone));
       reading.textContent = bone === undefined ? instruction : skeletonTerms[bone] + '. ' + skeletonFunctions[bone];
     };
+    list.forEach(button => button.addEventListener('click', () => {
+      if (controls.getAttribute('aria-pressed') !== 'true') controls.click();
+      show(button.dataset.bsListBone);
+    }));
     controls.addEventListener('click', () => {
       const on = controls.getAttribute('aria-pressed') !== 'true';
       controls.setAttribute('aria-pressed', String(on));
@@ -855,14 +872,16 @@
     saved.done ||= {};
     const rating = ['🟢 Kann ich erklären', '🟡 Ich bin noch unsicher', '🔴 Das übe ich noch'];
     root.innerHTML = `<div class="bs-school"><header class="bs-heading"><a href="#schulstoff">← Zum Laufzettel</a>
-      <h1>${lesson.title}</h1><p>${lesson.source}</p></header>
+      <h1>${lesson.title}</h1><p>${lesson.source}</p><div class="bl-actions"><button type="button" class="btn small" data-bl-jump="[data-bl-school-tasks]">Zu den Aufgaben</button>
+      <button type="button" class="btn small secondary" data-bl-jump=".bl-guide summary">Geführter Einstieg</button></div></header>
+      ${window.BioLaborLernweg?.lesson(id, true) || ''}
       <section class="bs-panel"><h2>Das brauchst du</h2><p>${lesson.intro}</p>
         <details class="bs-hint"><summary>Lernwissen aufklappen</summary><ul>${lesson.facts.map(fact => `<li>${fact}</li>`).join('')}</ul></details>
         ${shortcuts(lesson.links)}</section>
       ${lesson.diagram ? `<section class="bs-panel"><h2>Schau genau hin</h2>${showDiagram(lesson.diagram)}</section>` : ''}
       ${window.BioLaborModelle?.has(id) ? '<section class="bm-section" data-bs-modelle></section>' : ''}
       ${lesson.matrix ? renderMatrix() : ''}
-      <section class="bs-panel"><h2>Deine Aufgaben</h2>${lesson.tasks.map((entry, index) => renderTask(entry, index, saved)).join('')}</section>
+      <section class="bs-panel"><h2 data-bl-school-tasks>Deine Aufgaben</h2>${lesson.tasks.map((entry, index) => renderTask(entry, index, saved)).join('')}</section>
       ${stationIds.includes(id) ? `<section class="bs-panel"><h2>Wie sicher bist du?</h2>
         <label class="bs-field"><span>Meine Einschätzung für den Laufzettel</span><select data-bs-rating><option value="">Auswählen</option>
           ${rating.map(level => `<option${level === saved.rating ? ' selected' : ''}>${level}</option>`).join('')}</select></label>
@@ -880,5 +899,15 @@
     }
   }
 
-  window.BioLaborSchulstoff = {mount, forTopic, forAnimal, linkCard, school};
+  function progress() {
+    const saved = readProgress();
+    return Object.entries(lessons).map(([id, lesson]) => {
+      const entry = saved[id] || {};
+      const done = lesson.tasks.filter((_, i) => entry.done?.[i]).length;
+      const started = Boolean(done || entry.rating || Object.values(entry.answers || {}).some(Boolean) ||
+        Object.values(entry.matrix || {}).some(Boolean));
+      return {id, title:lesson.title, total:lesson.tasks.length, done, started, at:entry.at, rating:entry.rating};
+    });
+  }
+  window.BioLaborSchulstoff = {mount, forTopic, forAnimal, linkCard, school, progress};
 })();

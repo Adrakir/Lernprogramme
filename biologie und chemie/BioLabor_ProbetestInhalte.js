@@ -86,79 +86,98 @@
     pfote: [
       choice('pfote', 'Auf einer Zeichnung berühren beim Gehen die Zehen den Boden. Die Ferse steht deutlich höher. Wie heißt diese Gangart?', ['Zehengang', 'Sohlengang', 'Krallengang'], 0, 'Beim Zehengang tragen die Zehen und Ballen. Die Ferse bleibt über dem Boden.'),
       choice('pfote', 'Nach einem Sprung setzt die Katze mit der Pfote auf. Welche Struktur polstert den Auftritt?', ['Die Ohren', 'Die Ballen', 'Die Schneidezähne'], 1, 'Ballen geben beim Aufsetzen nach und dämpfen so den Stoß.'),
+      choice("pfote", "Beim Gehen bleibt die Ferse eines Hundes über dem Boden. Wie nennt man seine Gangart?", ["Zehengang","Sohlengang","Flug"], 0, "Der Hund stützt sich beim Gehen auf die Zehen."),
     ],
     herkunft: [
       choice('herkunft', 'In einer Familie lernt ein Hund, auf einen Pfiff zurückzukommen. Wie nennt man das?', ['Domestikation', 'Training', 'Gezielte Zucht'], 1, 'Training verändert, was dieses einzelne Tier kann. Domestikation und Zucht wirken über Generationen.'),
       choice('herkunft', 'Menschen wählen über viele Generationen besonders kleine Hunde als Elterntiere aus. Was beschreibt das?', ['Gezielte Zucht', 'Eine Übung für einzelne Tiere', 'Einen Wechsel der Jahreszeit'], 0, 'Erbliche Merkmale können durch die wiederholte Auswahl von Elterntieren häufiger werden.'),
+      choice("herkunft", "Ein Hund lernt, auf ein bestimmtes Zeichen zu sitzen. Was erklärt dieses Verhalten?", ["Übung und Erfahrung","Eine neue Zahnform","Eine neue Rasse"], 0, "Das Reagieren auf dieses Zeichen lernt der Hund beim Training."),
     ],
     sinne: [
       choice('sinne', 'Beim Schnuppern gelangen Duftstoffe in die Nase. Wohin schicken Riechzellen ihre Signale?', ['Zu den Ballen', 'Zu den Zähnen', 'Zum Gehirn'], 2, 'Im Gehirn werden die Signale verarbeitet. So kann der Hund Gerüche unterscheiden.'),
       choice('sinne', 'Ein Spürhund erkennt einen vertrauten Geruch in der Luft. Was hilft ihm dabei?', ['Eine große Fläche mit vielen Riechzellen.', 'Eine besonders breite Kaufläche.', 'Bewegliche Krallen.'], 0, 'Die Riechzellen nehmen Duftstoffe auf. Das Gehirn verarbeitet ihre Signale.'),
+      choice("sinne", "Ein Hund schnuppert an einer Jacke. Welche Zellen erfassen Duftstoffe?", ["Riechzellen","Muskelzellen","Knochenzellen"], 0, "Riechzellen reagieren auf Duftstoffe und leiten Signale ans Gehirn."),
     ],
     koerper: [
       choice('koerper', 'Ein Hund wedelt mit der Rute, steht aber steif und knurrt. Was ist eine passende Reaktion?', ['Näher herangehen, weil er wedelt.', 'Abstand lassen und die gesamte Haltung beachten.', 'Den Hund am Halsband festhalten.'], 1, 'Wedeln allein sagt wenig aus. Steife Haltung und Knurren sind in dieser Situation wichtige Warnsignale.'),
       choice('koerper', 'Eine Katze bewegt sich mit lockerem Körper und aufrechtem Schwanz freiwillig auf eine vertraute Person zu. Was ist die plausibelste Deutung?', ['Sie möchte wahrscheinlich freundlich Kontakt aufnehmen.', 'Sie versucht gerade zu fliehen.', 'Aufrechter Schwanz bedeutet immer Drohen.'], 0, 'Freiwillige Annäherung, lockere Bewegung und der Kontext passen zu einer freundlichen Begrüßung.'),
+      choice("koerper", "Ein Hund duckt sich nach einem Geräusch und weicht zurück. Welches Merkmal hilft beim Deuten?", ["Die Bewegungsrichtung","Die Fellfarbe","Die Zahnzahl"], 0, "Das Zurückweichen passt dazu, dass der Hund Abstand sucht."),
     ],
     schulter: [
       skeleton('katze', 'shoulder', ['Becken', 'Schulterblatt', 'Oberarmknochen'], 1, 'Das Schulterblatt liegt über dem Vorderbein. Dort setzt der Oberarm an.'),
       choice('skelett', 'Beim Laufen bewegt sich ein flacher Knochen oberhalb des Vorderbeins mit. Welcher?', ['Schulterblatt','Rippen','Becken'], 0, 'Das Schulterblatt gehört zur Schulter. Muskeln halten es beweglich am Rumpf.'),
+      choice("skelett", "Welcher flache Knochen gehört zum Schultergürtel und bildet mit dem Oberarm das Schultergelenk?", ["Becken","Schulterblatt","Schienbein"], 1, "Das Schulterblatt trägt die Gelenkpfanne für den Oberarmkopf."),
     ],
     oberschenkel: [
       skeleton('hund', 'femur', ['Schulterblatt', 'Oberschenkelknochen', 'Hinterpfote'], 1, 'Der lange Knochen verbindet das Hüftgelenk mit dem Knie.'),
       choice('skelett', 'Welcher Knochen liegt zwischen Becken und Knie?', ['Oberarmknochen','Oberschenkelknochen','Rippe'], 1, 'Der Oberschenkelknochen beginnt an der Hüfte und endet am Knie.'),
+      choice("skelett", "Bei einer Katze soll der Knochen zwischen Hüfte und Knie markiert werden. Welcher ist es?", ["Elle","Oberschenkelknochen","Schienbein"], 1, "Der Oberschenkelknochen verbindet Hüfte und Knie."),
     ],
     rippen: [
       skeleton('katze', 'ribs', ['Becken','Schädel','Rippen'], 2, 'Die gebogenen Knochen bilden mit der Brustwirbelsäule und dem Brustbein den Brustkorb.'),
       choice('skelett', 'Welche gebogenen Knochen schützen Herz und Lunge?', ['Rippen','Beckenknochen','Schienbeine'], 0, 'Die Rippen umgeben die Brusthöhle.'),
+      choice("skelett", "Welche Knochen bilden zusammen mit Brustbein und Brustwirbeln den Brustkorb?", ["Rippen","Mittelfußknochen","Schulterblätter"], 0, "Die Rippen umgeben und schützen mit dem Brustkorb Herz und Lunge."),
     ],
     reisszahn: [
       teeth('hund', 'carnassial', ['Schneidezähne','Reißzähne','Eckzähne'], 1, 'Die beiden scharfkantigen Backenzähne bilden eine Schere.'),
       choice('gebiss', 'Welche Zähne gleiten beim Zubeißen aneinander vorbei, um ein Stück Fleisch abzutrennen?', ['Schneidezähne','Eckzähne','Reißzähne'], 2, 'Die Reißzähne schneiden wie Scherenklingen.'),
+      choice("gebiss", "Beim Schließen des Hundemauls gleiten zwei scharfkantige Zähne aneinander vorbei. Was tun sie?", ["Sie filtern Luft.","Sie schneiden Nahrung.","Sie halten den Unterkiefer fest."], 1, "Die Reißzähne arbeiten beim Schneiden ähnlich wie Scherenklingen."),
     ],
     fangzahn: [
       teeth('katze', 'canine', ['Eckzahn','Schneidezahn','Hinterer Backenzahn'], 0, 'Dieser lange Zahn dient zum Greifen und Festhalten.'),
       choice('gebiss', 'Ein Wolf hält Nahrung mit einem langen, spitzen Zahn fest. Welche Zahnart hilft ihm?', ['Eckzahn','Reißzahn','Schneidezahn'], 0, 'Eckzähne greifen und halten fest.'),
+      choice("gebiss", "Welche Zahnform hilft einem Hund besonders dabei, ein Stück Nahrung zu packen?", ["Ein langer spitzer Eckzahn","Ein flacher Mahlzahn","Eine breite Kaufläche"], 0, "Die Spitze des Eckzahns erleichtert das Greifen und Festhalten."),
     ],
     mahlen: [
       choice('gebiss', 'Mit welchen Zähnen zermahlst du ein Stück Brot?', ['Lange Fangzähne','Breite hintere Backenzähne','Schneidezähne'], 1, 'Die breiten Kauflächen zerkleinern die Nahrung durch Druck und Reibung.'),
       choice('gebiss', 'Welche Zahnform eignet sich besonders zum Zermahlen?', ['Eine breite Kaufläche','Eine sehr lange Spitze','Eine schmale Schneide'], 0, 'Eine breite Kaufläche kann Nahrung zerdrücken und mahlen.'),
+      choice("gebiss", "Ein Kaninchen zerreibt Pflanzenfasern. Welche Zahnfläche hilft dabei?", ["Eine breite Mahlfläche","Eine lange Fangzahnspitze","Eine einzelne scharfe Kante"], 0, "Breitere Mahlflächen zerreiben die Pflanzenteile."),
     ],
     zahnvergleich: [
       pair('gebiss', 'Ein Wolf packt ein Stück Nahrung und schneidet es in zwei Teile. Ordne die Aufgaben zu.', [['Packen und halten',1],['Schneiden',0]],
         ['Reißzähne','Eckzähne'], 'Die langen Eckzähne halten fest. Die scharfkantigen Reißzähne schneiden.'),
       choice('gebiss', 'Welche Kombination erklärt das Zerteilen eines zähen Fleischstücks beim Wolf?', ['Reißzähne halten fest und Eckzähne zermahlen.', 'Eckzähne halten fest und Reißzähne schneiden.', 'Schneidezähne übernehmen beide Aufgaben allein.'], 1, 'Eckzähne und Reißzähne haben unterschiedliche Aufgaben beim Packen und Schneiden.'),
+      choice("gebiss", "Warum eignen sich flache Backenzähne des Kaninchens und Reißzähne des Hundes für verschiedene Aufgaben?", ["Flache Zähne zerreiben, scharfe Reißzähne schneiden.","Beide dienen nur dem Festhalten.","Reißzähne zermahlen, flache Zähne schneiden."], 0, "Zahnform und Ernährungsweise hängen zusammen."),
     ],
     krallen: [
       choice('pfote', 'Warum zeigt ein typischer Katzenabdruck beim normalen Gehen oft keine Krallenspitzen?', ['Die Katze zieht ihre Krallen meist ein.','Die Katze hat keine Krallen.','Nur die Ferse berührt den Boden.'], 0, 'Eingezogene Krallen berühren den Boden meist nicht.'),
       choice('pfote', 'Eine Katzenspur im weichen Boden zeigt ausnahmsweise Krallenspitzen. Wodurch ist das möglich?', ['Beim Abstoßen waren die Krallen ausgefahren.','Katzen laufen immer mit ausgefahrenen Krallen.','Die Krallenspitzen gehören zur Ferse.'], 0, 'Die Katze kann ihre Krallen ausfahren. Bei kräftigem Abstoßen können sie Spuren hinterlassen.'),
+      choice("pfote", "Auf festem Boden sieht man bei einer Spur vier kleine Krallenabdrücke. Zu welchem Tier passt sie eher?", ["Hund","Hauskatze","Mensch"], 0, "Bei einem typischen Hundeabdruck können die Krallen Spuren hinterlassen."),
     ],
     pupillen: [
       choice('pupillen', 'Eine Katze kommt aus einem dunklen Zimmer ans helle Fenster. Wie verändert sich die Pupille?', ['Sie wird schmaler.', 'Sie wird weiter.', 'Sie bleibt gleich groß.'], 0, 'Bei heller Umgebung begrenzt eine schmale Pupille die Lichtmenge im Auge.'),
       choice('pupillen', 'Nach dem Ausschalten der Lampe bleibt schwaches Licht im Zimmer. Warum wird die Pupille der Katze weiter?', ['So kann mehr Licht ins Auge fallen.', 'So hört die Katze lauter.', 'So fallen weniger Lichtstrahlen ins Auge.'], 0, 'Die weitere Pupille lässt mehr vom vorhandenen Licht ins Auge.'),
+      choice("pupillen", "Helles Sonnenlicht fällt ins Zimmer. Warum verengt die Katze ihre Pupillen?", ["Damit weniger Licht ins Auge fällt.","Damit sie leiser auftreten kann.","Damit die Augen wärmer werden."], 0, "Die Pupille regelt, wie viel Licht ins Auge gelangt."),
     ],
     spiel: [
       choice('koerper', 'Ein Hund bewegt sich locker um einen vertrauten Hund herum, senkt die Brust und springt dann seitlich weg. Was passt?', ['Er lädt wahrscheinlich zum Spielen ein.', 'Er ist auf jeden Fall aggressiv.', 'Er schläft.'], 0, 'Die Spielverbeugung und die lockere Bewegung passen zur Einladung zum Spielen.'),
       choice('koerper', 'Woran erkennst du bei einem lockeren Hund die Spielverbeugung?', ['Vorderkörper unten und Hinterteil oben.', 'Ohren angelegt, Rute eingezogen und Rückzug.', 'Steife Haltung und tiefes Knurren.'], 0, 'Bei der Spielverbeugung sinkt der Vorderkörper, während das Hinterteil oben bleibt.'),
+      choice("koerper", "Der Hund senkt den Vorderkörper, hält das Hinterteil oben und hüpft locker weg. Welche Deutung passt?", ["Spielaufforderung","Schlaf","Starre Drohhaltung"], 0, "Eine lockere Spielverbeugung passt in dieser Situation zu einer Spieleinladung."),
     ],
     richtung: [
       choice('koerper', 'Eine Katze duckt sich am Gartentor. Welcher zusätzliche Hinweis spricht eher für Anschleichen?', ['Sie flüchtet vom Tor weg.', 'Sie bewegt sich langsam und aufmerksam auf ein Ziel zu.', 'Sie ist getigert.'], 1, 'Bei tiefer Haltung hilft die Bewegungsrichtung. Annäherung an ein Ziel passt zum Anschleichen.'),
       choice('koerper', 'Eine geduckte Katze bewegt sich nach einem Knall rasch unter ein Sofa. Welche Deutung passt?', ['Sie schleicht sich an den Knall an.', 'Sie flieht wahrscheinlich vor dem Geräusch.', 'Ihre Haltung zeigt eindeutig Freude.'], 1, 'Sie bewegt sich vom Auslöser weg und sucht Deckung.'),
+      choice("koerper", "Zwei Katzen ducken sich. Eine nähert sich einer Maus, die andere läuft nach einem Knall weg. Welcher Hinweis unterscheidet die Szenen?", ["Die Bewegungsrichtung zum Auslöser oder davon weg","Die Anzahl ihrer Pfoten","Die Größe des Raums"], 0, "Bewegungsrichtung und Anlass helfen, ähnliche Körperhaltungen zu unterscheiden."),
     ],
     wirbelsaeule: [
       choice('bewegung', 'Was liegt zwischen beweglichen Wirbelkörpern und hilft beim Abfedern?', ['Bandscheiben','Rippen','Gelenkbänder der Hand'], 0, 'Bandscheiben verteilen Druck und dämpfen Stöße zwischen Wirbeln.'),
       choice('bewegung', 'Welche Struktur verläuft geschützt im Wirbelkanal?', ['Die Rippen','Das Rückenmark','Die Oberschenkelsehne'], 1, 'Der Wirbelkanal wird von den Wirbeln gebildet und umgibt das Rückenmark.'),
+      choice("bewegung", "Was unterstützt die Wirbelsäule dabei, Belastungen zwischen beweglichen Wirbeln zu verteilen?", ["Bandscheiben","Schneidezähne","Ballen"], 0, "Die elastischen Bandscheiben verteilen Druck."),
     ],
     gelenk: [
       choice('bewegung', 'Beim Strecken eines Beins zieht ein Muskel an einem Knochen. Was überträgt den Zug?', ['Gelenkknorpel','Eine Sehne','Ein Gelenkband'], 1, 'Sehnen übertragen Muskelkraft. Bänder verbinden Knochen miteinander.'),
       choice('bewegung', 'Was überzieht die Enden der Knochen und erleichtert ihr Gleiten im Gelenk?', ['Der Gelenkknorpel','Der Bizeps','Die Sehne'], 0, 'Gelenkknorpel bildet eine glatte Schicht auf den Gelenkflächen.'),
+      choice("bewegung", "Ein Band und eine Sehne liegen in Gelenknähe. Was verbindet ein Muskel über seine Sehne?", ["Den Muskel mit dem Knochen","Zwei Knochen direkt","Zwei Wirbelkanäle"], 0, "Sehnen übertragen Muskelkraft auf den Knochen."),
     ],
     muskeln: [
       choice('bewegung', 'Ein Kind hebt eine Flasche zum Oberarm. Welcher Muskel unterstützt das Beugen?', ['Trizeps','Bizeps','Gelenkknorpel'], 1, 'Der Bizeps zieht am Unterarm und beugt den Ellenbogen.'),
       choice('bewegung', 'Ein Kind streckt den zuvor gebeugten Arm aktiv. Welcher Gegenspieler zieht nun?', ['Der Trizeps','Der Bizeps','Die Bandscheibe'], 0, 'Der Trizeps streckt den Ellenbogen.'),
+      choice("bewegung", "Du legst nach dem Beugen den Arm wieder gerade auf den Tisch. Welcher Muskel streckt den Unterarm aktiv?", ["Trizeps","Bizeps","Brustwirbel"], 0, "Der Trizeps ist ein Strecker des Ellenbogengelenks."),
     ],
     sprung: [
       choice('skelett', 'Eine Katze springt von einem niedrigen Hocker auf den Boden. Was hilft, die Landung abzufedern?', ['Harte Zähne','Ballen und sich beugende Gelenke','Die Ohrmuscheln'], 1, 'Ballen und nachgebende Gelenke dämpfen den Stoß.'),
       choice('skelett', 'Eine Katze springt auf eine Mauer. Was erzeugt vor allem den Abstoß?', ['Das Strecken der kräftigen Hinterbeine.','Das Bewegen der Ohren.','Das Einziehen des Kopfes.'], 0, 'Kräftige Muskeln strecken die Hinterbeine und übertragen den Schub auf den Körper.'),
+      choice("skelett", "Beim Landen beugt eine Katze ihre Beine. Was verändert das?", ["Die Bewegung wird über einen längeren Weg abgebremst.","Die Krallen ziehen den Brustkorb nach oben.","Der Schwanz ersetzt die Hinterbeine."], 0, "Nachgebende Gelenke und Ballen helfen, die Landung abzufedern."),
     ],
   };
 

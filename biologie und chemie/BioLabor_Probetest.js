@@ -64,7 +64,7 @@
   function examStart(active) {
     const historyItems = Object.entries(stored.completed || {});
     return heading('Interaktive Probeklassenarbeit',
-      'Wähle eine von drei Fassungen. Jede enthält Bildaufgaben, Zuordnungen und zwei kurze Erklärfragen.',
+      'Wähle eine von drei Fassungen. Plane etwa 15–20 Minuten ein. Jede Fassung enthält Bildaufgaben, Zuordnungen und zwei kurze Erklärfragen.',
       '<a href="#schulstoff">Zum Schulstoff</a><a href="#print">Arbeiten zum Drucken</a>') +
       `<section class="bs-panel bp-panel"><h2>So läuft die Arbeit ab</h2>
       <p>Du kannst Fragen überspringen, zurückgehen und Antworten ändern. Tipps und Lösungen erscheinen nach der Abgabe. Erklärtexte vergleichst du dann selbst mit den Musterantworten.</p>
@@ -275,7 +275,7 @@
     }
 
     function newRound(topics) {
-      stored.round = {topics, answers: {}, checked: {}, index: 0, variant: (stored.round?.variant ?? 1) === 0 ? 1 : 0, finished: false};
+      stored.round = {topics, answers: {}, checked: {}, index: 0, variant: ((stored.round?.variant ?? -1) + 1) % 3, finished: false};
       save();
       open('wiederholen');
     }
@@ -352,6 +352,7 @@
           render();
           break;
         case 'submit':
+          active.at = new Date().toISOString();
           active.phase = 'results';
           (stored.completed ||= {})[active.version] = active;
           save();
@@ -428,7 +429,7 @@
             <fieldset class="bp-choices"><legend>Wähle eine Deutung</legend>
             ${item.interpretations.map((option,i) => `<label><input type="radio" name="bo-choice" value="${i}"
               ${entry.choice === i ? ' checked' : ''}> <span>${option}</span></label>`).join('')}</fieldset>
-            <label class="bp-writing">Begründe mit zwei Beobachtungen<textarea data-bo-writing rows="4" maxlength="1500">${escape(entry.text)}</textarea></label>
+            <label class="bp-writing">Begründe mit zwei Beobachtungen <small>„Ich sehe … und … . In dieser Situation vermute ich deshalb …“</small><textarea data-bo-writing rows="4" maxlength="1500">${escape(entry.text)}</textarea></label>
             <div class="button-row bp-actions"><button type="button" class="btn" data-bo-check>Deutung prüfen</button></div>
             <p data-bo-notice role="status"></p>
             ${checked ? `<div class="bp-note" role="status"><p><strong>${entry.choice === item.answer ? '✓ Das passt.' : 'Schau noch einmal auf die Situation.'}</strong> ${item.reason}</p>
@@ -470,7 +471,7 @@
           root.querySelector('[data-bo-notice]').textContent = 'Wähle eine Deutung und schreibe eine kurze Begründung.';
           return;
         }
-        update({checked: true});
+        update({checked: true, at: new Date().toISOString()});
         focus = '[data-bo-check]';
       } else return;
       render();
@@ -489,5 +490,25 @@
     });
   }
 
-  window.BioLaborProbetest = {mountExam, mountObservation};
+  function progress() {
+    const entries = Object.values(stored.completed || {})
+      .filter(entry => Number.isInteger(entry?.version) && versions[entry.version] && entry.answers)
+      .map(entry => {
+        const questions = versions[entry.version];
+        const topics = [...new Set(needsPractice(entry).map(topic => retry[topic][0].skill))];
+        const strong = [...new Set(questions.filter((q, i) => !q.criteria &&
+          objectivePoints(q, entry.answers[i]) === maxPoints(q)).map(q => q.skill))]
+          .filter(skill => !topics.includes(skill)).map(skill => skills[skill][0]);
+        const compared = Object.values(entry.reviews || {}).filter(review => review.done).length;
+        const next = topics.length ? [skills[topics[0]][1], skills[topics[0]][0] + ' wiederholen']
+          : compared < questions.filter(q => q.criteria).length ? ['#probetest', 'Erklärtexte vergleichen'] : null;
+        return {version:entry.version, at:entry.at, ...examSummary(entry), compared, strong,
+          topics:topics.map(skill => skills[skill][0]), next};
+      }).sort((a,b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
+    const scenes = Object.values(stored.observation || {}).filter(entry => entry?.checked);
+    return {entries, last:entries[0], draft:stored.exam?.phase === 'work', observations:scenes.length,
+      observationAt:scenes.map(scene => scene.at).filter(Boolean).sort().at(-1)};
+  }
+
+  window.BioLaborProbetest = {mountExam, mountObservation, progress};
 })();

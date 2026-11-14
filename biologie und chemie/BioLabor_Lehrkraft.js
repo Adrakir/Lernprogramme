@@ -36,6 +36,19 @@
       'Lasst anschließend zwei Begründungen anhand des Erwartungshorizonts im Tandem vergleichen.'],
   ];
 
+  const plans = [
+    [12,'Einzelarbeit, dann Partnervergleich','Mindestens zwei gemeinsame Merkmale nennen und Domestikation mit einem eigenen Satz erklären.'],
+    [15,'Partnerarbeit','Zahnart und Funktion korrekt verknüpfen und die Scherenwirkung erklären.'],
+    [12,'Partnerarbeit','Abdruck mit einem Merkmal begründen und Zehengang am Modell zeigen.'],
+    [12,'Einzelarbeit oder Tandem','Zwei entsprechende Knochen finden und ihre Lage am Skelett beschreiben.'],
+    [10,'Einzelarbeit','Duftstoff, Riechzellen und Gehirn in eine sinnvolle Reihenfolge bringen.'],
+    [15,'Partnerarbeit','Muskel, Sehne, Knochen und Gelenk am Beispiel des Unterarms verknüpfen.'],
+    [15,'Tandem','Die Entscheidung mit zwei Kriterien und einer nachvollziehbaren Rechnung begründen.'],
+    [8,'Einzelarbeit, dann Austausch','Zwei Bildsignale beschreiben und die Deutung auf die Situation beziehen.'],
+    [20,'Einzelarbeit','Eine Fassung bearbeiten. Auswahl und Zuordnung auswerten und Texte mit Kriterien vergleichen.'],
+    [45,'Einzelarbeit','Eine Fassung bearbeiten und danach mit dem Erwartungshorizont abgleichen.']
+  ];
+
   function mount(root) {
     const codes = window.BioLaborStationsQR || {};
     root.innerHTML = `<div class="bs-school bp-root bp-teacher">
@@ -44,12 +57,15 @@
         <div class="button-row bp-no-print"><button type="button" class="btn" data-bl-print>Stationskarten drucken / PDF</button>
           <a class="btn secondary" href="#schulstoff">Zur Schulstoffübersicht</a></div>
       </header>
-      <div class="bp-teacher-grid">
-      ${stations.map(([route,title,book,goal,task]) => {
+      <div class="bl-teacher-options bp-no-print"><label>Stationskarten anzeigen <select data-bl-stations><option value="all">Alle zehn Karten</option><option value="required">Nur Pflichtstationen</option><option value="choice">Nur Wahlstationen</option></select></label>
+      <p data-bl-station-status role="status">10 Karten sichtbar</p></div><div class="bp-teacher-grid">
+      ${stations.map(([route,title,book,goal,task], index) => {
+        const [minutes, format, criterion] = plans[index];
+        const type = index < 3 ? 'required' : 'choice';
         const url = base + '#' + route;
-        return `<article class="bs-panel bp-station" data-bl-route="${route}">
+        return `<article class="bs-panel bp-station" data-bl-route="${route}" data-bl-station-type="${type}">
           <div><h2>${title}</h2><p class="bp-station-book">${book}</p></div>
-          <div class="bp-station-text"><p><strong>Lernziel</strong> ${goal}</p><p><strong>Vertiefung</strong> ${task}</p></div>
+          <div class="bp-station-text"><p class="bl-station-meta">${type === 'required' ? 'Pflichtstation' : 'Wahlstation'} · ca. ${minutes} Min. · ${format}</p><p><strong>Lernziel</strong> ${goal}</p><p><strong>Erfolgskriterium</strong> ${criterion}</p><p><strong>Vertiefung</strong> ${task}</p></div>
           <div class="bp-station-links">${codes[route] ? `<a class="bp-qr" href="${url}" aria-label="QR-Code zu ${title}">
             <svg viewBox="0 0 ${codes[route][0]} ${codes[route][0]}" role="img" aria-label="QR-Code zur Station" shape-rendering="crispEdges">
               <rect width="100%" height="100%" fill="#fff"/><path fill="#13231f" d="${codes[route][1]}"/></svg></a>` : ''}
@@ -62,6 +78,12 @@
       </div>
     </div>`;
     const content = root.firstElementChild;
+    content.querySelector('[data-bl-stations]').addEventListener('change', event => {
+      const kind = event.target.value;
+      const cards = [...content.querySelectorAll('[data-bl-station-type]')];
+      cards.forEach(card => {card.hidden = kind !== 'all' && card.dataset.blStationType !== kind;});
+      content.querySelector('[data-bl-station-status]').textContent = cards.filter(card => !card.hidden).length + ' Karten sichtbar';
+    });
     content.addEventListener('click', async event => {
       const button = event.target.closest('button');
       if (!button) return;

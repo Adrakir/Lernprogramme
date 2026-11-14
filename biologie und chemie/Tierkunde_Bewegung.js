@@ -25,7 +25,7 @@ const profiles={
  cat:{head:202, neck:283, shoulder:361, hip:700, top:223, ribs:13, headScale:.86, tailLength:159, bounce:5, spineFlex:23}
 };
 const state={species:'dog',section:'skeleton',mode:'walk',speed:1,playing:false,labels:true,silhouette:false,progress:0,frameId:0,lastTs:0,lastPaint:0,root:null,selected:'spine',zoom:false};
-const prefersReduced=()=>window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const prefersReduced=()=>document.documentElement.dataset.bioMotion==='off'||matchMedia('(prefers-reduced-motion: reduce)').matches;
 const n=(v)=>Number(v).toFixed(1).replace(/\.0$/,'');
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const frac=(v)=>v-Math.floor(v);
@@ -265,6 +265,7 @@ function mount(args){
  '<div class="rig-note">💡 <strong>Beobachtungsmodell:</strong> Die Zeichnung zeigt vereinfachte Bewegungsabläufe, keine millimetergenaue Anatomie oder reale Röntgenanimation. Zum Knochennamen tippe auf das Skelett oder nutze die beschriftete Knochenliste darunter.</div>';
  legacy.parentNode.insertBefore(container,legacy);
  attach();choose(state.mode);
+ if(document.documentElement.dataset.bioMotion==='slow'){state.speed=.5;const control=container.querySelector('#rig-speed');control.value='.5';container.querySelector('#rig-speed-val').textContent='0,5×';}
  play(!prefersReduced());
 }
 window.BioSkeletonLab={mount,stop,MODES,renderFrame:frame,getState:()=>({species:state.species,mode:state.mode,playing:state.playing,speed:state.speed,progress:state.progress})};
