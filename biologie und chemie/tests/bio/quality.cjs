@@ -55,6 +55,69 @@ module.exports = async function checkQuality(page, home) {
   await views.getByRole('button',{name:'Gesamt',exact:true}).click();
   assert.equal(await skeletonLabels.count(),23);
   assert.equal(await page.locator('#main .illust-frame svg [data-feature]:not([hidden])').count(),23);
+
+  for (const [route,regions] of [
+    ['spine',[
+      ['hals',['hals'],7],['brust',['brust','wirbelkoerper','rueckenmark','spinalnerv'],15],
+      ['lende',['lende','band'],6],['kreuz',['kreuz','steiss'],2]
+    ]],
+    ['joints',[
+      ['nah',['gelenkkopf','gelenkpfanne','knorpel','spalt','schmiere'],5],
+      ['umfeld',['kapsel','baender'],2]
+    ]]
+  ]) {
+    await open('learn/'+route);
+    const graphic = page.locator('#main .illust-frame svg').first();
+    const terms = page.getByRole('group',{name:'Begriffe im Bild'}).getByRole('button');
+    const allTerms = await terms.count();
+    for (const [region,keys,count] of regions) {
+      await page.locator(`[data-diazoom="${region}"]`).click();
+      const markers = graphic.getByRole('button');
+      assert.equal(await markers.count(),count,region);
+      assert.deepEqual(await terms.evaluateAll(nodes => nodes.map(node => node.dataset.feature).sort()),[...keys].sort(),region);
+      assert.deepEqual(await graphic.evaluate(svg => {
+        const {x,y,width,height}=svg.viewBox.baseVal;
+        const visible = el => {
+          for (let node=el;node!==svg;node=node.parentElement) {
+            if (getComputedStyle(node).display==='none') return false;
+          }
+          return true;
+        };
+        return [...svg.querySelectorAll('text,[data-feature]')].filter(visible).flatMap(el => {
+          const b=el.getBBox();
+          return b.x>=x && b.y>=y && b.x+b.width<=x+width && b.y+b.height<=y+height ? [] : [[el.getAttribute('aria-label')||el.textContent,b.x,b.y,b.width,b.height]];
+        });
+      }),[],region);
+      await terms.first().press('Enter');
+      assert.ok(await page.locator('#diagramInfo b').isVisible(),region);
+    }
+    await page.locator('[data-diazoom="all"]').click();
+    assert.equal(await terms.count(),allTerms,route);
+  }
+
+  await open('bio8');
+  await page.locator('[data-b8="tab"][data-id="atlas"]').first().click();
+  const atlas = page.locator('.b8-picture .b9-diagram').first();
+  const zoom = page.locator('#b8Zoom');
+  await zoom.press('End');
+  const atlasTerms = page.locator('.b9-plan [data-b8="part"]');
+  for (const id of ['skull','foot']) {
+    const term = atlasTerms.and(page.locator(`[data-id="${id}"]`));
+    await term.press('Enter');
+    assert.equal(await term.evaluate(el => el===document.activeElement),true,id);
+    assert.equal(await atlas.locator(`[data-id="${id}"]`).getAttribute('aria-pressed'),'true',id);
+    assert.equal(await zoom.inputValue(),'1.8',id);
+    assert.ok(await atlas.evaluate(svg => {
+      const {x,y,width,height}=svg.viewBox.baseVal;
+      return [...svg.querySelectorAll('[tabindex="0"] circle')].every(circle => {
+        const b=circle.getBBox();
+        return b.x>=x && b.y>=y && b.x+b.width<=x+width && b.y+b.height<=y+height;
+      });
+    }),id);
+  }
+  await zoom.press('Home');
+  assert.equal(await atlas.getByRole('button').count(),16);
+  assert.equal(await atlasTerms.count(),16);
   await open('home');
   await page.getByRole('button',{name:'Alle Themen', exact:true}).click();
   const directory = page.locator('.bl-directory');
