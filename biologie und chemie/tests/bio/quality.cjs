@@ -15,9 +15,12 @@ module.exports = async function checkQuality(page, home) {
   await quickTheme.selectOption('dark');
   await page.waitForFunction(() => getComputedStyle(document.body).backgroundColor==='rgb(16, 27, 35)');
   for (const region of ['body','.topbar','.sidebar','.bs-start','.modulecard']) {
-    const background = await page.locator(region).first().evaluate(el => getComputedStyle(el).backgroundColor);
-    const channels = background.match(/\d+/g)?.slice(0,3).map(Number);
-    assert.ok(channels?.every(channel => channel<90),region+' '+background);
+    await page.waitForFunction(selector => {
+      const element = document.querySelector(selector);
+      const color = element && getComputedStyle(element).backgroundColor;
+      const channels = color?.match(/\d+/g)?.slice(0,3).map(Number);
+      return channels?.length === 3 && channels.every(channel => channel < 90);
+    }, region);
   }
   for (const [route,selector] of [
     ['home','.modulecard h3'],
