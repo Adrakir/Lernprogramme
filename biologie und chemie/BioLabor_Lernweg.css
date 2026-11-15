@@ -72,9 +72,12 @@ body.tier-contrast { --bg:#fff; --card:#fff; --ink:#111; --muted:#222; --line:#5
 .bp-station[hidden] { display:none!important; }
 
 .bl-print-continuation { display:none; }
+.bl-print-task-hint { display:block; margin:1px 0; }
+.quiz-notice:empty { margin:0; }
 @media print {
   .bl-print-continuation { display:block; break-before:page; page-break-before:always; margin:0 0 8px; }
-  .bl-print-a .printcard { break-inside:avoid; }
+  .bl-print-a .printcard { break-inside:avoid; padding-block:5px; }
+  .bl-print-a .print-options { margin-block:4px; }
 }
 
 .bl-gloss-filter { display:block; margin-block:.6rem; }

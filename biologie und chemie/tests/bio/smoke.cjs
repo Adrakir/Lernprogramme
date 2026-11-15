@@ -146,6 +146,8 @@ async function run() {
     await page.getByRole('heading', {name: 'Übungsklassenarbeit 2 · Teil C', exact: true}).waitFor();
     assert.equal(await page.locator('.printpage').count(), 3);
     assert.match(await page.locator('.printpage').first().innerText(), /Gesamtpunkte:.*33/);
+    assert.equal(await page.locator('.bl-print-a .bl-print-task-hint').count(), 14);
+    assert.match(await page.locator('.bl-print-a').innerText(), /Teil A: ____ \/ 14 Punkte/);
     const sheet = page.locator('.bs-exam-sheet');
     assert.equal(await sheet.locator('.bs-exam-task').count(), 3);
     assert.match(await sheet.innerText(), /25\. Gebiss[\s\S]+26\. Geruchssinn[\s\S]+27\. Körpersprache/);
