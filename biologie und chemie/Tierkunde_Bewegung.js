@@ -283,11 +283,12 @@ function mount(args){
  const board=main.querySelector('.bone-board');
  if(!board)return;
  const oldZoom=main.querySelector('[data-action="zoom"]');
- if(oldZoom&&args.section==='skeleton')oldZoom.closest('.actionline').style.display='none';
  const legacy= document.createElement('details');legacy.className='rig-reference';
  legacy.innerHTML='<summary>📄 Vereinfachte Übersichtsgrafik anzeigen</summary>';
  const caption=board.nextElementSibling&&board.nextElementSibling.classList.contains('diagram-caption')?board.nextElementSibling:null;
- board.parentNode.insertBefore(legacy,board);legacy.appendChild(board);
+ board.parentNode.insertBefore(legacy,board);
+ if(oldZoom)legacy.appendChild(oldZoom.closest('.actionline'));
+ legacy.appendChild(board);
  if(caption)legacy.appendChild(caption);
  if(args.section==='motion'){
   const row=main.querySelector('.mood-options');if(row)row.style.display='none';

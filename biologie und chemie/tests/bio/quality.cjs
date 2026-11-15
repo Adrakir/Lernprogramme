@@ -516,7 +516,8 @@ module.exports = async function checkQuality(page, home) {
   await page.goBack();
   await page.getByRole('heading',{name:'Das Skelett des Hundes',exact:true}).waitFor();
   const reference = page.locator('.ls-reference');
-  await reference.locator('summary').first().click();
+  await reference.locator(':scope > summary').click();
+  await reference.locator('.rig-reference > summary').click();
   const referenceZoom = reference.locator('[data-action="zoom"]');
   await referenceZoom.click();
   await reference.locator('button[data-bone="spine"]').click();
