@@ -10,6 +10,7 @@ try{const s=JSON.parse(localStorage.getItem(DB)||'null');if(s&&s.dog&&s.cat)save
 const store=()=>{if(window.BioLaborLernweg.acceptsAnimalWrites()===false)return;try{localStorage.setItem(DB,JSON.stringify(saved))}catch(e){}};
 const state={animal:null,section:null,mode:'guide',step:0,task:0,answers:{},feedback:null};
 let lesson=null;
+let speechRate=['.75','.95','1.12'].includes(saved.speechRate)?saved.speechRate:'.95';
 const progress=sp=>STATIONS.filter(s=>saved[sp]&&saved[sp][s]&&saved[sp][s].finished).length;
 const record=()=>{if(!saved[state.animal][state.section])saved[state.animal][state.section]={step:0,done:[],finished:false};return saved[state.animal][state.section]};
 const completedTasks=()=>record().done.filter(Boolean).length;
@@ -72,6 +73,9 @@ function task(){
   h+='<div class="ls-order">'+list.map((v,i)=>'<div class="ls-orderitem"><span>'+(i+1)+'.</span><strong>'+esc(v)+'</strong><button aria-label="Schritt nach oben" data-ls="move" data-num="'+i+'" data-dir="-1" '+(i===0?'disabled':'')+'>↑</button><button aria-label="Schritt nach unten" data-ls="move" data-num="'+i+'" data-dir="1" '+(i===list.length-1?'disabled':'')+'>↓</button></div>').join('')+'</div>';
  }
  if(state.feedback)h+=result();
+ if(!assignment&&state.feedback&&!state.feedback.ok){
+  h+='<details class="ls-order-solution"><summary>Musterlösung anzeigen</summary><ol>'+lesson.sequence.map(step=>'<li>'+esc(step)+'</li>').join('')+'</ol></details>';
+ }
  h+='<div class="ls-actions"><button data-ls="taskPrev" '+(t===0?'disabled':'')+'>← Vorherige</button><button data-ls="taskHint">💡 Hilfe</button><button class="ls-main" data-ls="check">✓ Prüfen</button><button data-ls="taskNext" '+(t===1?'disabled':'')+'>Nächste →</button></div>';
  h+='<p class="ls-tip">Die Übungen funktionieren auch mit Touchscreen und Tastatur – ohne Drag-and-Drop.</p></article>';
  if(r.finished)h+='<div class="ls-success"><b>🏅 Station abgeschlossen!</b><p>Du hast beide Aufgaben gelöst. Wiederhole schwierige Stellen oder gehe zum nächsten Thema.</p><button data-ls="nextStation">Nächste Station →</button></div>';
@@ -95,9 +99,10 @@ function render(){
  h+='<div class="ls-tabs" role="group" aria-label="Lernmodus"><button data-ls="mode" data-mode="guide" aria-pressed="'+(state.mode==='guide')+'">📖 Geführtes Lernen</button><button data-ls="mode" data-mode="task" aria-pressed="'+(state.mode==='task')+'">✏️ Übungen</button><button data-ls="mode" data-mode="teacher" aria-pressed="'+(state.mode==='teacher')+'">👩‍🏫 Lehrerhinweise</button></div>';
  h+=state.mode==='guide'?question():state.mode==='task'?task():teacher();
  h+='<div class="ls-progress"><span><b>Übungen geschafft:</b> '+r.done.filter(Boolean).length+' von 2</span><div><i style="width:'+(r.done.filter(Boolean).length*50)+'%"></i></div></div>';
- h+='<div class="ls-voice"><button data-ls="read">🔊 Abschnitt vorlesen</button><label>Tempo <select id="ls-rate"><option value=".75">langsam</option><option value=".95" selected>normal</option><option value="1.12">schnell</option></select></label></div>';
+ h+='<div class="ls-voice"><button data-ls="read">🔊 Abschnitt vorlesen</button><label>Tempo <select id="ls-rate"><option value=".75">langsam</option><option value=".95">normal</option><option value="1.12">schnell</option></select></label></div>';
  h+='<p id="ls-note" class="ls-note" role="status" aria-live="polite"></p>';
  root.innerHTML=h;
+ root.querySelector('#ls-rate').value=speechRate;
 }
 function note(t){let el=$('#ls-note');if(el)el.textContent=t}
 function check(){
@@ -118,7 +123,7 @@ function check(){
  }else{
   const arr=orderItems();
   wrong=lesson.sequence.filter((step,i)=>step!==arr[i]).length;
-  hint='Vergleiche: '+lesson.sequence.join(' → ');
+  hint='Tipp für den nächsten Versuch: Beginne mit „'+lesson.sequence[0]+'“.';
  }
  if(!wrong){
   const r=record();r.done[t]=true;r.finished=!!r.done[0]&&!!r.done[1];store();
@@ -138,7 +143,7 @@ function read(){
   txt+=' '+taskText;
  }
  const u=new SpeechSynthesisUtterance(txt);u.lang='de-DE';
- const speed=$('#ls-rate');u.rate=speed?Number(speed.value):.95;
+ u.rate=Number(speechRate);
  const v=speech.getVoices().find(v=>v.lang&&v.lang.startsWith('de'));if(v)u.voice=v;
  speech.speak(u);
 }
@@ -190,7 +195,14 @@ function click(e){
  window.BioLaborLernweg.focus(root.querySelector(focus+':not(:disabled)')||root.querySelector('.ls-card h3'));
 }
 function change(e){
- const el=e.target.closest('[data-ls-select]'),root=$('#ls-studio');
+ const root=$('#ls-studio');
+ if(root?.contains(e.target)&&e.target.id==='ls-rate'){
+  speechRate=e.target.value;
+  saved.speechRate=speechRate;
+  store();
+  return;
+ }
+ const el=e.target.closest('[data-ls-select]');
  if(!el||!root||!root.contains(el))return;
  state.answers['r'+el.dataset.lsSelect]=el.value;
  state.feedback=null;

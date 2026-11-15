@@ -209,7 +209,30 @@
   const button = (action, label, style = '') =>
     `<button class="btn ${style}" type="button" data-bk="${action}">${label}</button>`;
 
-  function mount(root, {initialSpecies, initialTopic, getBest, saveBest}) {
+  function restoreToothTest(draft) {
+    if (!anatomy || draft?.schema !== 1 || !Array.isArray(draft.items) || !Array.isArray(draft.answers)) return null;
+    const expectedLength = speciesIds.reduce((total, species) => total + pointsFor(species, 'teeth').length, 0);
+    if (draft.items.length !== expectedLength || draft.answers.length >= expectedLength) return null;
+    const seen = new Set();
+    const questions = [];
+    for (const item of draft.items) {
+      if (!speciesIds.includes(item?.id)) return null;
+      const point = pointsFor(item.id, 'teeth').find(([key]) => key === item.key);
+      const identity = item.id + '/' + item.key;
+      if (!point || seen.has(identity)) return null;
+      const question = pointQuestion(item.id, 'teeth', point);
+      const supported = pointsFor(item.id, 'teeth').map(([key]) => termFor(item.id, 'teeth', key)[0]);
+      if (!Array.isArray(item.options) || item.options.length !== question.options.length ||
+          new Set(item.options).size !== item.options.length || !item.options.includes(question.correct) ||
+          !item.options.every(option => supported.includes(option))) return null;
+      questions.push({...question, options:item.options});
+      seen.add(identity);
+    }
+    if (!draft.answers.every((chosen, i) => questions[i].options.includes(chosen))) return null;
+    return {questions, answers:draft.answers.map((chosen,i) => ({question:questions[i],chosen,hint:false}))};
+  }
+
+  function mount(root, {initialSpecies, initialTopic, getBest, saveBest, getToothDraft, saveToothDraft}) {
     let id = speciesIds.includes(initialSpecies) ? initialSpecies : 'mensch';
     let topic = initialTopic === 'teeth' && anatomy ? 'teeth' : 'bones';
     let mode = 'discover';
@@ -222,12 +245,29 @@
     let hintUsed = false;
     let firstAnswer = '';
     let feedback = '';
+    let toothTestDraft = restoreToothTest(getToothDraft());
 
-    function start(nextMode, retryPoints) {
+    function storeToothTest() {
+      if (topic !== 'teeth' || mode !== 'test') return;
+      const draft = index >= round.length ? null : {
+        schema:1,
+        items:round.map(question => ({id:question.id,key:question.point[0],options:question.options})),
+        answers:answers.map(answer => answer.chosen),
+      };
+      saveToothDraft(draft);
+      toothTestDraft = draft ? {questions:round, answers:answers.slice()} : null;
+    }
+
+    function resumeToothTest() {
+      start('test', undefined, toothTestDraft);
+      draw('[data-bk-heading]');
+    }
+
+    function start(nextMode, retryPoints, restored) {
       mode = nextMode;
-      if (mode !== 'discover') round = newRound(mode, id, topic, retryPoints);
-      answers = [];
-      index = 0;
+      if (mode !== 'discover') round = restored?.questions ?? newRound(mode, id, topic, retryPoints);
+      answers = restored?.answers.slice() ?? [];
+      index = answers.length;
       hintOpen = false;
       hintUsed = false;
       firstAnswer = '';
@@ -332,7 +372,9 @@
       indexOpen = root.querySelector('.bk-index')?.open ?? indexOpen;
       const best = getBest(topic);
       const teeth = topic === 'teeth';
-      root.innerHTML = `${anatomy ? `<div class="bk-topics" role="group" aria-label="Thema wählen">
+      root.innerHTML = `${teeth && mode !== 'test' && toothTestDraft
+        ? '<div class="button-row">' + button('resume-tooth-test','Gebiss-Probetest fortsetzen') + '</div>' : ''}
+      ${anatomy ? `<div class="bk-topics" role="group" aria-label="Thema wählen">
         <button type="button" class="bk-word" data-bk="topic:bones" aria-pressed="${!teeth}">Skelett</button>
         <button type="button" class="bk-word" data-bk="topic:teeth" aria-pressed="${teeth}">Gebiss</button>
       </div>` : ''}<div class="bk-modes" role="group" aria-label="Lernschritt wählen">
@@ -389,7 +431,9 @@
 
       const action = target.dataset.bk;
       if (!action) return;
-      if (action.startsWith('topic:')) {
+      if (action === 'resume-tooth-test' && topic === 'teeth' && toothTestDraft) {
+        resumeToothTest();
+      } else if (action.startsWith('topic:')) {
         const nextTopic = action.slice(6);
         if (nextTopic !== topic) {
           topic = nextTopic;
@@ -400,7 +444,12 @@
       } else if (action.startsWith('mode:')) {
         const nextMode = action.slice(5);
         if (nextMode !== mode) {
+          if (nextMode === 'test' && topic === 'teeth' && toothTestDraft) {
+            resumeToothTest();
+            return;
+          }
           start(nextMode);
+          storeToothTest();
           draw(nextMode === 'test' ? '[data-bk-heading]' : `[data-bk="${action}"]`);
         }
       } else if (action.startsWith('species:')) {
@@ -420,6 +469,7 @@
       } else if (action === 'restart' || action === 'retry') {
         const review = answers.filter(a => a.chosen !== a.question.correct || a.hint);
         start(mode, action === 'retry' ? review.map(a => a.question.point) : undefined);
+        storeToothTest();
         draw('[data-bk-heading]');
       }
     });
@@ -433,6 +483,7 @@
       if (index === round.length && mode === 'test') {
         saveBest(topic, answers.filter(a => a.chosen === a.question.correct).length);
       }
+      storeToothTest();
       draw('[data-bk-heading]');
     }
 

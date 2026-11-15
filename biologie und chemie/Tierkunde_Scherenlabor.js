@@ -2,30 +2,33 @@
 (function(){
 'use strict';
 const state={animal:'dog',value:35,play:false,id:0,last:0,group:'carnassial'};
-const groups={incisor:{name:'Schneidezähne',hint:'Kleine Vorderzähne zum Abknabbern und Aufnehmen kleiner Stücke.'},canine:{name:'Fangzähne',hint:'Lange, spitze Zähne zum Ergreifen und Festhalten.'},premolar:{name:'Vordere Backenzähne',hint:'Spitze und scharfkantige Zahnhöcker zum Zerteilen von Nahrung.'},carnassial:{name:'Reißzahnpaar',hint:'Oben der vierte Prämolar (P4), unten der erste Molar (M1): Ihre Kanten schneiden beim Zubeißen wie eine Schere.'},molar:{name:'Hintere Backenzähne',hint:'Hintere Backenzähne. Hunde besitzen mehr hintere Mahl- und Quetschflächen als Katzen.'}};
+const groups={incisor:{name:'Schneidezähne',hint:'Kleine Vorderzähne zum Abknabbern und Aufnehmen kleiner Stücke.'},canine:{name:'Fangzähne',hint:'Lange, spitze Zähne zum Ergreifen und Festhalten.'},premolar:{name:'Vordere Backenzähne',hint:'Spitze und scharfkantige Zahnhöcker zum Zerteilen von Nahrung.'},carnassial:{name:'Reißzahnpaar',hint:'Oben der letzte vordere Backenzahn (P4), unten der erste hintere Backenzahn (M1): Ihre Kanten schneiden beim Zubeißen wie eine Schere.'},molar:{name:'Hintere Backenzähne',hint:'Hintere Backenzähne. Hunde besitzen mehr hintere Mahl- und Quetschflächen als Katzen.'}};
 const d=document;
 const id=s=>d.getElementById(s);
 const bg='<defs><linearGradient id="jaw-bone" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#f9ead1"/><stop offset="1" stop-color="#d9bb8c"/></linearGradient><linearGradient id="jaw-enamel" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#fffdf1"/><stop offset="1" stop-color="#e7d8b3"/></linearGradient><pattern id="jaw-grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".8" fill="#d5e2db"/></pattern></defs>';
 function tooth(x,y,w,h,kind,upper,emphasis){
  const sign=upper?1:-1,points='M'+x+' '+y+'l'+(w*.21)+' '+(sign*h*.41)+'l'+(w*.14)+' '+(sign*h*.21)+'l'+(w*.24)+' '+(sign*h*.38)+'l'+(w*.23)+' '+(-sign*h*.32)+'l'+(w*.18)+' '+(-sign*h*.34)+'Z';
  const selected=state.group===kind||state.group==='carnassial'&&emphasis;
- const fill=emphasis?'#f2b070':kind==='canine'?'#f0d9b2':'url(#jaw-enamel)';
+ const fill=emphasis?(upper?'#f5b97e':'#e99b58'):kind==='canine'?'#f0d9b2':'url(#jaw-enamel)';
  const border=selected?'#d46a32':'#927a58';
- return '<path data-dental="'+kind+'" d="'+points+'" fill="'+fill+'" stroke="'+border+'" stroke-width="'+(selected?4:2.1)+'" stroke-linejoin="round"/>';
+ return '<path data-dental="'+kind+'"'+(emphasis?' data-carnassial=""':'')+' d="'+points+'" fill="'+fill+'" stroke="'+border+'" stroke-width="'+(selected?4:2.1)+'" stroke-linejoin="round"/>';
 }
+const toothKinds={i:'incisor',f:'canine',s:'premolar',m:'molar',t:'molar'};
+const jawX=x=>131+x*1.24;
+function jawData(){return window.BioLaborAnatomie.jaws[state.animal==='cat'?'katze':'hund']}
 function teeth(upper){
- let t='';const y=upper?165:278;
- for(let i=0;i<4;i++)t+=tooth(179+i*17,y,15,18,'incisor',upper,false);
- t+=tooth(252,y,29,48,'canine',upper,false);
- for(let i=0;i<3;i++)t+=tooth(318+i*41,y,33,31,'premolar',upper,false);
- t+=tooth(441,y,47,upper?52:47,'carnassial',upper,true);
- if(state.animal==='dog'){
-  for(let i=0;i<(upper?2:3);i++)t+=tooth(504+i*34,y,32,28,'molar',upper,false);
- }else t+=tooth(504,y,31,18,'molar',upper,false);
- return t;
+ const row=upper?jawData().upper:jawData().lower;
+ return row.map(([code,x,width])=>{
+  const carnassial=code==='r';
+  const kind=carnassial?(upper?'premolar':'molar'):toothKinds[code];
+  const height=carnassial?(upper?55:70):({i:18,f:48,s:31,m:28,t:18})[code];
+  return tooth(jawX(x),upper?165:278,width*1.15,height,kind,upper,carnassial);
+ }).join('');
 }
 function picture(){
  const rad=-(1-state.value/100)*16;
+ const [,x,w]=jawData().upper.find(([code])=>code==='r');
+ const marker=jawX(x)+w*.5;
  return bg+'<rect x="0" y="0" width="790" height="370" rx="16" fill="#f6faf7"/><rect width="790" height="370" rx="16" fill="url(#jaw-grid)"/>'+
  '<g><path d="M148 114Q150 100 201 100L572 106Q620 110 655 162L655 206Q628 221 583 198L164 189Q141 185 148 114Z" fill="url(#jaw-bone)" stroke="#9c805b" stroke-width="5"/>'+
  '<path d="M171 116Q352 103 556 116" stroke="#fff5e1" stroke-width="9" stroke-linecap="round" fill="none"/>'+
@@ -40,8 +43,8 @@ function picture(){
  '<rect x="454" y="31" width="308" height="52" rx="11" fill="#fff" fill-opacity=".96"/>'+
  '<text x="471" y="51" font-size="15" fill="#215d50" font-weight="850">REISSZAHNSCHERE</text>'+
  '<text x="471" y="70" font-size="15" fill="#55756d">oben P4 + unten M1</text>'+
- '<path d="M505 97L463 159" fill="none" stroke="#d97b36" stroke-width="3" stroke-linecap="round"/>'+
- '<circle cx="462" cy="163" r="6" fill="#d97b36"/>'+
+ '<path d="M505 97L'+marker+' 159" fill="none" stroke="#d97b36" stroke-width="3" stroke-linecap="round"/>'+
+ '<circle cx="'+marker+'" cy="163" r="6" fill="#d97b36"/>'+
  '<text x="35" y="344" font-size="14" fill="#5e776f">Eigenständige Funktionsskizze · keine maßstabsgetreue Kieferanatomie</text>';
 }
 function explanation(){
@@ -49,10 +52,10 @@ function explanation(){
  if(e)e.innerHTML='<strong>'+groups[state.group].name+'</strong><p>'+groups[state.group].hint+'</p>'+
  (state.group==='carnassial'?'<p>🦴 Das obere Reißzahnblatt ist ein vorderer Backenzahn. Das untere ist ein hinterer Backenzahn. Sie gleiten gegeneinander – sie mahlen nicht flächig wie die Backenzähne eines Pflanzenfressers.</p>':'');
 }
-function redraw(){const svg=id('jaw-drawing');if(svg)svg.innerHTML=picture();const meter=id('jaw-percent');if(meter)meter.textContent=state.value<20?'Maul weit geöffnet':state.value<80?'Kiefer schließt':'Maul geschlossen';const range=id('jaw-range');if(range)range.value=state.value}
+function redraw(){const svg=id('jaw-drawing');if(svg)svg.innerHTML=picture();const meter=id('jaw-percent');if(meter)meter.textContent=state.value<20?'Maul weit geöffnet':state.value<100?'Maul teilweise geöffnet':'Maul geschlossen';const range=id('jaw-range');if(range)range.value=state.value}
 function tick(ts){
  state.id=0;if(!state.play||!id('jaw-labor'))return;
- if(state.last){state.value=50+45*Math.sin(ts/1000*1.7);redraw()}
+ if(state.last){state.value=Math.round(50+50*Math.sin(ts/1000*1.7));redraw()}
  state.last=ts;state.id=requestAnimationFrame(tick);
 }
 function stop(){if(state.id)cancelAnimationFrame(state.id);state.id=0;state.last=0;state.play=false}
@@ -67,7 +70,7 @@ function mount(args){
  '<div class="jaw-toolbar"><button id="jaw-play" type="button" aria-pressed="false">▶ Kiefer bewegen</button><button id="jaw-reset" type="button">↻ Neu starten</button><label for="jaw-range">Maul öffnen/schließen</label><input id="jaw-range" type="range" min="0" max="100" value="35" aria-label="Kieferwinkel steuern"/><output id="jaw-percent">Kiefer schließt</output></div>'+
  '<div class="jaw-select" role="group" aria-label="Zahnart untersuchen">'+Object.entries(groups).map(([k,v])=>'<button type="button" data-jaw="'+k+'" aria-pressed="'+(k===state.group)+'">'+v.name+'</button>').join('')+'</div>'+
  '<div class="jaw-explain" id="jaw-explain"></div>'+
- '<p class="jaw-safety">Modellhinweis: Die Zahnformen und Kieferbewegung sind stark vereinfacht. Wissenschaftliche anatomische Abbildungen: <a href="https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals" target="_blank" rel="noopener noreferrer">Merck Veterinary Manual – Zahnanatomie</a>.</p>';
+ '<p class="jaw-safety">Du siehst eine Seite des Gebisses. Die Zahl oben zählt beide Seiten zusammen. Die Zahnformen und die Bewegung sind vereinfacht. <a href="https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals" target="_blank" rel="noopener noreferrer">Merck Veterinary Manual – Zahnanatomie</a>.</p>';
  parent.insertBefore(box,ref||null);
  box.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;

@@ -69,8 +69,29 @@
       ${links ? '<div class="bs-links">' + links + '</div>' : ''}</header>`;
   }
 
+  function pastAttempts(version) {
+    const entries = stored.previousAttempts?.[version];
+    return Array.isArray(entries) ? entries : [];
+  }
+
+  function archiveEntry(version, attempt) {
+    return attempt ? pastAttempts(version - 1)[attempt - 1] : stored.completed?.[version - 1];
+  }
+
+  function formattedDate(entry) {
+    return Number.isFinite(Date.parse(entry.at))
+      ? new Intl.DateTimeFormat('de-DE',{dateStyle:'medium',timeStyle:'short'}).format(new Date(entry.at))
+      : 'Datum unbekannt';
+  }
+
   function examStart(active) {
-    const historyItems = Object.entries(stored.completed || {});
+    const historyItems = Object.entries(stored.completed || {}).flatMap(([version, entry]) => {
+      const previous = pastAttempts(version);
+      return [
+        {version:Number(version)+1, entry, number:previous.length+1, previous:false},
+        ...previous.map((entry,i) => ({version:Number(version)+1, entry, number:i+1, previous:true})).reverse()
+      ];
+    });
     const check = stored.followup;
     const followupReady = check && !check.done && Date.now() >= Date.parse(check.at);
     const followupActive = stored.round?.followup && !stored.round.finished;
@@ -89,10 +110,11 @@
         <h3>Arbeit ${index + 1}</h3><p>${questions.length} Aufgaben · ${questions.filter(q => !q.criteria).reduce((sum,q) => sum + maxPoints(q),0)} automatisch prüfbare Punkte</p>
         ${button('start', 'Arbeit ' + (index + 1) + ' starten', true, index)}</article>`).join('')}</div></section>` +
       (historyItems.length ? `<section class="bs-panel bp-panel"><h2>Abgegebene Arbeiten</h2><ul class="bp-answers">
-        ${historyItems.map(([version, entry]) => {
+        ${historyItems.map(({version, entry, number, previous}) => {
           const summary = examSummary(entry);
-          return `<li>Arbeit ${Number(version) + 1} · ${summary.score} von ${summary.max} automatisch geprüften Punkten
-            <a href="#probetest/archiv/${Number(version) + 1}">Auswertung zu Arbeit ${Number(version) + 1} öffnen</a>
+          return `<li>Arbeit ${version} · ${summary.score} von ${summary.max} automatisch geprüften Punkten
+            <small>Versuch ${number} · ${formattedDate(entry)}</small>
+            <a href="#probetest/archiv/${version}${previous ? '/' + number : ''}">${previous ? 'Früheren Versuch ' + number + ' zu Arbeit ' + version + ' öffnen' : 'Auswertung zu Arbeit ' + version + ' öffnen'}</a>
             <details><summary>Aufgaben und Antworten ansehen</summary>${archivedQuestions(entry)}</details></li>`;
         }).join('')}</ul></section>` : '');
   }
@@ -189,7 +211,7 @@
       '<section class="bs-panel bp-panel"><h2>Dein Ergebnis nach Themen</h2>' +
       topicSummary(versions[entry.version], entry.answers) + '</section>' +
       '<section class="bs-panel bp-panel"><h2>Aufgaben und Antworten</h2>' +
-      archivedQuestions(entry, true) + '</section>';
+      '<p>Abgegeben am ' + formattedDate(entry) + '</p>' + archivedQuestions(entry, true) + '</section>';
   }
 
   function archivedQuestions(entry, reviewEnabled = false) {
@@ -293,7 +315,7 @@
     });
   }
 
-  function mountExam(outer, section, setRoute, archiveVersion) {
+  function mountExam(outer, section, setRoute, archiveVersion, archiveAttempt) {
     const root = document.createElement('div');
     outer.replaceChildren(root);
     let screen = section || 'start';
@@ -314,7 +336,7 @@
         start: () => examStart(active),
         arbeit: () => active?.phase === 'work' ? examQuestion(active, confirm) : examStart(active),
         auswertung: () => active?.phase === 'results' ? examResults(active) : examStart(active),
-        archiv: () => archive(stored.completed?.[archiveVersion - 1]),
+        archiv: () => archive(archiveEntry(archiveVersion, archiveAttempt)),
         wiederholen: () => !round?.topics?.length || (!round.followup && active?.phase !== 'results')
           ? examStart(active) : round.finished ? practiceResults(round) : practiceRound(round),
       };
@@ -409,20 +431,26 @@
           focus = '[data-bp-action="confirm"]';
           render();
           break;
-        case 'submit':
+        case 'submit': {
+          const previous = stored.completed?.[active.version];
+          if (previous) {
+            stored.previousAttempts ||= {};
+            (stored.previousAttempts[active.version] ||= []).push(previous);
+          }
           active.at = new Date().toISOString();
           active.phase = 'results';
           (stored.completed ||= {})[active.version] = active;
           save();
           open('auswertung');
           break;
+        }
         case 'review': {
           const checkboxes = root.querySelectorAll('[data-bp-criterion^="' + value + '/"]');
-          const entry = screen === 'archiv' ? stored.completed?.[archiveVersion - 1] : active;
+          const entry = screen === 'archiv' ? archiveEntry(archiveVersion, archiveAttempt) : active;
           if (!entry) return;
           (entry.reviews ||= {})[value] = {done: true, checked: Array.from(checkboxes, box => box.checked)};
-          (stored.completed ||= {})[entry.version] = entry;
-          if (active?.phase === 'results' && active.version === entry.version && active.at === entry.at) {
+          if (screen !== 'archiv' || !archiveAttempt) (stored.completed ||= {})[entry.version] = entry;
+          if (!archiveAttempt && active?.phase === 'results' && active.version === entry.version && active.at === entry.at) {
             active.reviews = entry.reviews;
           }
           save();

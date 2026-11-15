@@ -2193,14 +2193,14 @@ if(typeof render==='function')render();
 })();
 </script>
 <script src="BioLabor_Anatomie.js?v=4"></script>
-<script src="BioLabor_Klassenarbeit.js?v=7"></script>
+<script src="BioLabor_Klassenarbeit.js?v=8"></script>
 <script src="Tierkunde_Verhaltenslabor.js?v=20261114-v5"></script>
 <script src="BioLabor_Modelle.js?v=1"></script>
 <script src="BioLabor_Lernweg.js?v=4"></script>
 <script src="BioLabor_Schulstoff.js?v=6"></script>
 <script src="BioLabor_Pruefung.js?v=1"></script>
 <script src="BioLabor_ProbetestInhalte.js?v=2"></script>
-<script src="BioLabor_Probetest.js?v=6"></script>
+<script src="BioLabor_Probetest.js?v=7"></script>
 <script src="BioLabor_StationsQR.js?v=1"></script>
 <script src="BioLabor_Lehrkraft.js?v=2"></script>
 <script src="BioLabor_Lernstand.js?v=2"></script>
@@ -2271,10 +2271,10 @@ if(typeof render==='function')render();
   };
 
   render = function () {
-    const [section, subject, animal] = ui.route.split('/');
+    const [section, subject, animal, attempt] = ui.route.split('/');
     const teeth = subject === 'gebiss';
     const learningPages = {
-      probetest: ['Interaktive Probeklassenarbeit', root => window.BioLaborProbetest?.mountExam(root, subject, to => { ui.route = to; }, Number(animal))],
+      probetest: ['Interaktive Probeklassenarbeit', root => window.BioLaborProbetest?.mountExam(root, subject, to => { ui.route = to; }, Number(animal), Number(attempt))],
       koerpersprache: ['Körpersprache beobachten', root => window.BioLaborProbetest?.mountObservation(root)],
       lehrkraft: ['Lehrkraft · Stationen', root => window.BioLaborLehrkraft?.mount(root)],
     };
@@ -2326,6 +2326,12 @@ if(typeof render==='function')render();
     window.BioLaborKlassenarbeit?.mount(document.getElementById('bio-klassenarbeit'), {
       initialSpecies: teeth ? animal : subject,
       initialTopic: teeth ? 'teeth' : 'bones',
+      getToothDraft: () => state.klassenarbeitGebissEntwurf,
+      saveToothDraft: draft => {
+        if (draft) state.klassenarbeitGebissEntwurf = draft;
+        else delete state.klassenarbeitGebissEntwurf;
+        persist();
+      },
       getBest: topic => topic === 'teeth' ? state.klassenarbeitGebissBest : state.klassenarbeitSkelettBest,
       saveBest: (topic, score) => {
         const key = topic === 'teeth' ? 'klassenarbeitGebissBest' : 'klassenarbeitSkelettBest';

@@ -387,6 +387,16 @@ module.exports = async function checkQuality(page, home) {
   await page.locator('[data-bl-stations]').selectOption('all');
   assert.equal(await page.locator('.bp-station:visible').count(),10);
 
+  await open('klassenarbeit/gebiss/katze');
+  await page.locator('.bk-modes [data-bk="mode:test"]').click();
+  await page.locator('.bk-word[data-answer]').first().click();
+  const nextPicture = await page.locator('.bk-picture svg').innerHTML();
+  const nextChoices = await page.locator('.bk-word[data-answer]').allTextContents();
+  await page.reload();
+  await page.getByRole('button',{name:'Gebiss-Probetest fortsetzen',exact:true}).click();
+  assert.equal(await page.locator('.bk-picture svg').innerHTML(),nextPicture);
+  assert.deepEqual(await page.locator('.bk-word[data-answer]').allTextContents(),nextChoices);
+
   const animal = new URL('BioLabor_Hund_Katze.html',home).href;
   await quickTheme.selectOption('dark');
   await page.goto(animal + '#dog/teeth');
@@ -396,12 +406,28 @@ module.exports = async function checkQuality(page, home) {
   await page.reload();
   assert.equal(await animalTheme.getAttribute('aria-pressed'),'false');
   assert.match(await page.locator('.ls-species-note').innerText(),/Welpen.*28.*Zahnwechsel.*erwachsener Hund.*42/);
+  for (const [species,upper,lower] of [['dog',10,11],['cat',8,7]]) {
+    await page.goto(animal + '#'+species+'/teeth');
+    const jaw = page.locator('#jaw-drawing');
+    assert.equal(await jaw.locator('g').first().locator('[data-dental]').count(),upper);
+    assert.equal(await jaw.locator('#jaw-movable [data-dental]').count(),lower);
+    await page.locator('#jaw-range').fill('100');
+    assert.equal(await page.locator('#jaw-percent').innerText(),'Maul geschlossen');
+    const [upperTooth,lowerTooth] = await jaw.locator('[data-carnassial]').evaluateAll(teeth =>
+      teeth.map(tooth => {const {top,bottom} = tooth.getBoundingClientRect(); return {top,bottom};}));
+    assert.ok(upperTooth.bottom>lowerTooth.top);
+  }
+  await page.goto(animal + '#dog/teeth');
   const firstChoice = page.locator('[data-ls="answer"][data-num="0"]');
+  const speechRate = page.locator('#ls-rate');
+  await speechRate.selectOption('.75');
   await firstChoice.press('Enter');
+  assert.equal(await speechRate.inputValue(),'.75');
   assert.equal(await firstChoice.evaluate(el => el === document.activeElement),true);
   await page.locator('[data-ls="next"]').press('Enter');
   await page.reload();
   assert.equal(await page.locator('.ls-card h3').innerText(),'Verstehen');
+  assert.equal(await speechRate.inputValue(),'.75');
   assert.match(await page.locator('.ls-card').innerText(),/letzte vordere Backenzahn \(P4\)/);
   await page.locator('[data-ls="mode"][data-mode="task"]').click();
   const pairs = page.locator('[data-ls-select]');
@@ -413,6 +439,11 @@ module.exports = async function checkQuality(page, home) {
   await page.locator('[data-ls="check"]').click();
   assert.match(await page.locator('.ls-feedback').innerText(),/Schneidezähne.*ganz vorn.*Fangzähne/);
   await page.locator('[data-ls="taskNext"]').press('Enter');
+  await page.locator('[data-ls="check"]').click();
+  const solution = page.locator('.ls-order-solution');
+  assert.equal(await solution.locator('li:visible').count(),0);
+  await solution.locator('summary').click();
+  assert.equal(await solution.locator('li:visible').count(),3);
   await page.locator('.ls-orderitem').first().getByRole('button',{name:'Schritt nach unten'}).click();
   const order = await page.locator('.ls-orderitem strong').allTextContents();
   await page.evaluate(() => {
