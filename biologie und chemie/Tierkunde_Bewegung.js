@@ -24,7 +24,7 @@ const profiles={
  dog:{head:200, neck:288, shoulder:364, hip:719, top:217, ribs:13, headScale:1, tailLength:132, bounce:6, spineFlex:7},
  cat:{head:202, neck:283, shoulder:361, hip:700, top:223, ribs:13, headScale:.86, tailLength:159, bounce:5, spineFlex:23}
 };
-const state={species:'dog',section:'skeleton',mode:'walk',speed:1,playing:false,labels:true,silhouette:false,progress:0,frameId:0,lastTs:0,lastPaint:0,root:null,selected:'spine',zoom:false};
+const state={species:'dog',section:null,mode:'walk',speed:1,playing:false,labels:true,silhouette:false,progress:0,frameId:0,lastTs:0,lastPaint:0,selected:'spine',zoom:false};
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const motionSetting=()=>document.documentElement.dataset.bioMotion;
 const prefersReduced=()=>motionSetting()==='off'||(motionSetting()==='system'&&reducedMotion.matches);
@@ -68,7 +68,7 @@ function legPose(kind,far,root,floor,progress,mode,profile){
  let f=frac(progress+(offsets[code]||0)),stride=mode==='sneak'?45:mode==='walk'?69:mode==='trot'?83:mode==='gallop'?111:61;
  let lift=0,shift=0,bodyLift=0;
  if(mode==='jump'){
-   const t=frac(progress);
+   const t=progress;
    bodyLift=t<.20?0:t<.48?ease((t-.20)/.28)*106:t<.72?106:t<.95?106*(1-ease((t-.72)/.23)):0;
    lift=bodyLift*.82 + (t>.26&&t<.88?(kind==='hind'?11:22):0);
    shift=kind==='front'?-16:30;
@@ -114,15 +114,16 @@ function poseScene(){
  const vertebraCount=20; // 13 Brust- und 7 Lendenwirbel (Halswirbel separat)
  let ribs='',spineNodes='';
  const thorX=shoulder.x+12,lumX=hip.x-16,hipDy=hip.y-45,baseBack=shoulder.y-44;
+ const vertebraX=i=>thorX+i*(lumX-thorX)/(vertebraCount-1);
  function back(x){
    const t=clamp((x-thorX)/(lumX-thorX),0,1);
    return baseBack+(hipDy-baseBack)*t+Math.sin(t*Math.PI)*(sp.bend-3);
  }
- for(let i=0;i<vertebraCount;i++){const x=thorX+i*(lumX-thorX)/(vertebraCount-1),y=back(x);
+ for(let i=0;i<vertebraCount;i++){const x=vertebraX(i),y=back(x);
   spineNodes+='<g transform="translate('+n(x)+' '+n(y)+')"><rect x="-8" y="-7" width="16" height="14" rx="4" fill="'+(i<13?'#f5dfac':'#b8ded4')+'" stroke="'+(i<13?'#9d8762':'#48897a')+'" stroke-width="2"/><path d="M0 -7v-10" stroke="#bb9d72" stroke-width="4" stroke-linecap="round"/></g>';
  }
  for(let i=0;i<p.ribs;i++){
-   const x=thorX+13+i*14.4,y=back(x),endX=x+8,endY=y+116-Math.sin(i/(p.ribs-1)*Math.PI)*11;
+   const x=vertebraX(i),y=back(x),endX=x+8,endY=y+116-Math.sin(i/(p.ribs-1)*Math.PI)*11;
    ribs+='<path d="M'+n(x)+' '+n(y)+' Q'+n(x+35)+' '+n(y+70)+' '+n(endX)+' '+n(endY)+'" stroke="#9e8661" stroke-width="8" fill="none" stroke-linecap="round"/>'+
    '<path d="M'+n(x)+' '+n(y)+' Q'+n(x+35)+' '+n(y+70)+' '+n(endX)+' '+n(endY)+'" stroke="#eedbb1" stroke-width="5.5" fill="none"/>';
  }
@@ -130,7 +131,7 @@ function poseScene(){
  let neck='',skull='',pelvis='',tail='';
  const neckStart={x:shoulder.x-3,y:baseBack+4},neckEnd={x:sp.headX+55,y:sp.headY+21};
  neck=drawBone(neckStart.x,neckStart.y,neckEnd.x,neckEnd.y,12);
- for(let i=1;i<7;i++){let t=i/7;neck+=joint(neckStart.x+(neckEnd.x-neckStart.x)*t,neckStart.y+(neckEnd.y-neckStart.y)*t,5)}
+ for(let i=0;i<7;i++){const t=(i+1)/8;neck+=joint(neckStart.x+(neckEnd.x-neckStart.x)*t,neckStart.y+(neckEnd.y-neckStart.y)*t,5)}
  const ox=sp.headX,oy=sp.headY,s=p.headScale;
  skull='<g transform="translate('+n(ox)+' '+n(oy)+') scale('+s+')">'+
   '<path d="M-33 -21Q-9 -49 24 -30Q60 -9 49 27Q23 48 -12 36Q-35 24 -33 -21Z" fill="#f4e3c2" stroke="#8c795a" stroke-width="4"/>'+
@@ -161,9 +162,10 @@ function poseScene(){
  '<text x="50" y="528" font-size="14" fill="#55756c">Pfeile / Zahlen sind vereinfachte Lernhilfen · Modell, kein Röntgenbild</text></g>':'';
  // Gelenke und Kraftrichtungen zeigen, ohne eine biomechanische Messung vorzutäuschen.
  const phaseCaption=phaseName(phase);
- const force=(m==='jump'||m==='gallop')?
- '<path d="M'+n(hip.x+13)+' '+n(hip.y+37)+'l35 -59" fill="none" stroke="#cf7041" stroke-width="6" stroke-linecap="round" marker-end="url(#rig-force-head)"/>'+
- '<text x="'+n(hip.x+58)+'" y="'+n(hip.y+2)+'" fill="#ab4e2c" font-size="17" font-weight="900">Abstoß</text>':
+ const thrust=(m==='jump'&&phase>=.20&&phase<.48)||(m==='gallop'&&phase<.25);
+ const force=thrust?
+ '<path data-rig-thrust d="M'+n(hip.x+17)+' '+n(hip.y+51)+'l-38 -55" fill="none" stroke="#cf7041" stroke-width="6" stroke-linecap="round" marker-end="url(#rig-force-head)"/>'+
+ '<text x="'+n(hip.x+27)+'" y="'+n(hip.y+38)+'" fill="#ab4e2c" font-size="17" font-weight="900">Abstoß</text>':
  m==='sneak'?'<path d="M'+n(shoulder.x-17)+' '+n(shoulder.y+52)+'l-37 0" fill="none" stroke="#cc8740" stroke-width="6" stroke-linecap="round" marker-end="url(#rig-force-head)"/>':'';
  const stageOverlay='<rect x="777" y="35" width="176" height="59" rx="13" fill="#fff" fill-opacity=".93" stroke="#c7dfd4"/>'+
  '<text x="792" y="58" fill="#3d7c69" font-weight="800" font-size="14">BEWEGUNGSPHASE</text>'+
@@ -201,7 +203,7 @@ function frame(){
 function loop(time){
  state.frameId=0;
  if(!state.playing || !document.getElementById('rig-studio'))return;
- if(state.lastTs)state.progress+=(Math.min(90,time-state.lastTs)/1000)*MODES[state.mode].speed*state.speed;
+ if(state.lastTs)state.progress=frac(state.progress+(Math.min(90,time-state.lastTs)/1000)*MODES[state.mode].speed*state.speed);
  state.lastTs=time;
 // Auf schwächeren Tablets nicht jeden Bildschirm-Refresh mit 20 kB SVG neu zeichnen.
  if(!state.lastPaint||time-state.lastPaint>=30){frame();state.lastPaint=time}
@@ -213,9 +215,8 @@ function play(flag){
  const b=id('rig-play');if(b){b.textContent=flag?'⏸ Pause':'▶ Abspielen';b.setAttribute('aria-pressed',String(flag))}
  if(flag)state.frameId=requestAnimationFrame(loop);
 }
-function choose(mode){
- if(!MODES[mode])return;
- state.mode=mode;state.progress=0;
+function updateModeControls(){
+ const mode=state.mode;
  document.querySelectorAll('[data-rig-mode]').forEach(b=>{
   const active=b.dataset.rigMode===mode;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));
  });
@@ -224,6 +225,7 @@ function choose(mode){
 function attach(){
  const lab=id('rig-studio');if(!lab)return;
  const selectBone=(key,restoreFocus)=>{
+  if(state.playing)play(false);
   state.selected=key;
   lab.querySelector('.rig-selected-bone p').textContent=BONE_NAMES[key];
   frame();
@@ -233,10 +235,20 @@ function attach(){
  const picked=e.target.closest('.rig-bone');
  if(picked){selectBone(picked.dataset.bone,picked===document.activeElement);return}
  const target=e.target.closest('button');if(!target)return;
- if(target.dataset.rigMode){choose(target.dataset.rigMode);return}
+ if(target.dataset.rigMode){
+  const mode=target.dataset.rigMode;
+  if(mode!==state.mode){state.mode=mode;state.progress=0;updateModeControls()}
+  return;
+ }
  if(target.id==='rig-play'){play(!state.playing);return}
  if(target.id==='rig-reset'){state.progress=0;play(false);frame();return}
- if(target.id==='rig-step'){play(false);state.progress=state.progress>=1?0:(state.progress+1/24>=1-1e-9?1:state.progress+1/24);frame();return}
+ if(target.id==='rig-step'){
+  play(false);
+  const phase=visiblePhase();
+  state.progress=phase===1?0:Math.min(1,phase+1/24);
+  frame();
+  return;
+ }
  if(target.id==='rig-labels'){state.labels=!state.labels;target.setAttribute('aria-pressed',String(state.labels));target.textContent=state.labels?'🏷 Beschriftung an':'🏷 Beschriftung aus';frame();return}
  if(target.id==='rig-overlay'){state.silhouette=!state.silhouette;target.setAttribute('aria-pressed',String(state.silhouette));target.textContent=state.silhouette?'👁 Körperumriss an':'👁 Körperumriss aus';frame();return}
  if(target.id==='rig-zoom'){state.zoom=!state.zoom;lab.classList.toggle('rig-zoomed',state.zoom);target.setAttribute('aria-pressed',String(state.zoom));target.textContent=state.zoom?'🔎 Verkleinern':'🔎 Vergrößern';return}
@@ -276,10 +288,12 @@ document.addEventListener('biolab-motion-change',syncMotion);
 reducedMotion.addEventListener('change',syncMotion);
 function mount(args){
  stop();const main=id('content');if(!main)return;
- state.species=args.animal==='cat'?'cat':'dog';state.section=args.section;state.selected=args.bone||'spine';
- 
- state.zoom=false;
- if(!['skeleton','motion'].includes(args.section))return;
+ const species=args.animal==='cat'?'cat':'dog';
+ const sameView=state.species===species&&state.section===args.section;
+ const shouldPlay=sameView?state.playing:!prefersReduced();
+ state.species=species;state.section=args.section;state.selected=args.bone||'spine';
+ if(!sameView){state.zoom=false;state.progress=0}
+ if(!['skeleton','motion'].includes(args.section)){state.playing=false;return}
  const board=main.querySelector('.bone-board');
  if(!board)return;
  const oldZoom=main.querySelector('[data-action="zoom"]');
@@ -293,7 +307,7 @@ function mount(args){
  if(args.section==='motion'){
   const row=main.querySelector('.mood-options');if(row)row.style.display='none';
  }
- const container=document.createElement('section');container.className='rig-studio';container.id='rig-studio';
+ const container=document.createElement('section');container.className=state.zoom?'rig-studio rig-zoomed':'rig-studio';container.id='rig-studio';
  container.setAttribute('aria-label','Animiertes Skelett von '+(state.species==='cat'?'Katze':'Hund'));
  container.innerHTML=
  '<div class="rig-head"><div><span class="rig-eyebrow">INTERAKTIVES BEWEGUNGS-LABOR · '+(state.species==='cat'?'KATZE':'HUND')+'</span><h2>🦴 So bewegt sich das Skelett</h2><p>Sieh dir an, wie Knochen und Gelenke beim Laufen, Springen und Anschleichen zusammenspielen.</p></div><span class="rig-chip">6 Bewegungen</span></div>'+
@@ -309,16 +323,16 @@ function mount(args){
  '<div class="rig-scrub"><label for="rig-timeline">Bewegungsschritt</label><input type="range" id="rig-timeline" min="0" max="100" value="0" step="1" aria-label="Animation vor und zurück spulen"/><output id="rig-phase">0 %</output></div>'+
  '<div class="rig-visual-options"><button type="button" id="rig-labels" aria-pressed="'+state.labels+'">🏷 Beschriftung '+(state.labels?'an':'aus')+'</button>'+
  '<button type="button" id="rig-overlay" aria-pressed="'+state.silhouette+'">👁 Körperumriss '+(state.silhouette?'an':'aus')+'</button>'+
- '<button type="button" id="rig-zoom" aria-pressed="false">🔎 Vergrößern</button></div>'+
+ '<button type="button" id="rig-zoom" aria-pressed="'+state.zoom+'">'+(state.zoom?'🔎 Verkleinern':'🔎 Vergrößern')+'</button></div>'+
  '<div id="rig-explain" class="rig-explain" aria-live="polite"></div>'+
 // Genau den aktuell angewählten Knochen in Sichtweite der Animation erklären.
  '<div class="rig-selected-bone" aria-live="polite"><span class="rig-selected-symbol">🦴</span><div><strong>Ausgewählter Knochenbereich</strong><p>'+BONE_NAMES[state.selected]+'</p></div></div>'+
  '<div class="rig-note">💡 <strong>Beobachtungsmodell:</strong> Die Zeichnung zeigt vereinfachte Bewegungsabläufe, keine millimetergenaue Anatomie oder reale Röntgenanimation. Zum Knochennamen tippe auf das Skelett oder nutze die beschriftete Knochenliste darunter.</div>';
  legacy.parentNode.insertBefore(container,legacy);
- attach();choose(state.mode);
+ attach();updateModeControls();
  setSpeed(state.speed);
  syncMotion();
- play(!prefersReduced());
+ play(shouldPlay&&!prefersReduced());
 }
 window.BioSkeletonLab={mount,stop,MODES,renderFrame:frame,getState:()=>({species:state.species,mode:state.mode,playing:state.playing,speed:state.speed,progress:state.progress})};
 if(['skeleton','motion'].includes((window.BioLaborLernweg.animalRoute()[1]||'skeleton'))){

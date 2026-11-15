@@ -126,6 +126,8 @@
 .pose-play.pose-cat .pose-front { animation: pose-tap 2.8s ease-in-out infinite; }
 .pose-play.pose-cat .pose-toy { animation: pose-toy 2.8s ease-in-out infinite; }
 .behavior-lab.behavior-paused .behavior-stage * { animation-play-state: paused; }
+html[data-bio-motion="off"] .behavior-lab * { animation: none; }
+html[data-bio-motion="off"] .behavior-tools [data-behavior-tool="motion"] { display: none; }
 
 @keyframes pose-wag { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
 @keyframes pose-tail-tip { 0%, 100% { transform: rotate(-2deg); } 55% { transform: rotate(4deg); } }
