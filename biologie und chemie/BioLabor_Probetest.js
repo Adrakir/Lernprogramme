@@ -84,6 +84,11 @@
       : 'Datum unbekannt';
   }
 
+  function unfinishedRound(followup) {
+    return [stored.round, stored.pausedRound].find(round => round &&
+      Boolean(round.followup) === followup && !round.finished);
+  }
+
   function examStart(active) {
     const historyItems = Object.entries(stored.completed || {}).flatMap(([version, entry]) => {
       const previous = pastAttempts(version);
@@ -94,7 +99,8 @@
     });
     const check = stored.followup;
     const followupReady = check && !check.done && Date.now() >= Date.parse(check.at);
-    const followupActive = stored.round?.followup && !stored.round.finished;
+    const followupActive = unfinishedRound(true);
+    const practiceActive = unfinishedRound(false);
     return heading('Interaktive Probeklassenarbeit',
       'Wähle eine von drei Fassungen. Plane etwa 15–20 Minuten ein. Jede Fassung enthält Bildaufgaben, Zuordnungen und zwei kurze Erklärfragen.',
       '<a href="#schulstoff">Zum Schulstoff</a><a href="#print">Arbeiten zum Drucken</a>') +
@@ -106,6 +112,7 @@
         (followupReady ? 'Prüfe mit neuen Beispielen, was du behalten hast.'
           : 'Der Lerncheck ist ab ' + new Intl.DateTimeFormat('de-DE',{dateStyle:'medium'}).format(new Date(check.at)) + ' verfügbar.') +
         '</p>' + (followupReady ? button('followup',followupActive ? 'Lerncheck fortsetzen' : 'Lerncheck starten') : '') + '</div>' : ''}
+      ${practiceActive ? '<div class="button-row">' + button('retry', 'Wiederholung fortsetzen', true) + '</div>' : ''}
       <div class="bp-versions">${versions.map((questions, index) => `<article class="bs-card">
         <h3>Arbeit ${index + 1}</h3><p>${questions.length} Aufgaben · ${questions.filter(q => !q.criteria).reduce((sum,q) => sum + maxPoints(q),0)} automatisch prüfbare Punkte</p>
         ${button('start', 'Arbeit ' + (index + 1) + ' starten', true, index)}</article>`).join('')}</div></section>` +
@@ -251,16 +258,23 @@
     const compared = Object.values(active.reviews || {}).filter(review => review.done).length;
     const topics = needsPractice(active);
     const links = [...new Set(topics.map(topic => retry[topic][0].skill))];
+    const pendingReview = questions.findIndex((question, index) =>
+      question.criteria && hasAnswer(question, active.answers[index]) && !active.reviews?.[index]?.done);
+    const practiceActive = unfinishedRound(false);
     return heading('Auswertung · Arbeit ' + (active.version + 1),
       'Automatisch geprüft: ' + score + ' von ' + max + ' Punkten. Erklärtexte verglichen: ' + compared + ' von ' + writingCount + '.') +
       `<section class="bs-panel bp-panel"><h2>Dein Ergebnis nach Themen</h2>
       ${topicSummary(questions, active.answers)}</section>
       <section class="bs-panel bp-panel"><h2>Das kannst du wiederholen</h2>
       ${topics.length ? '<div class="bs-links">' + links.map(skill => `<a href="${skills[skill][1]}">${skills[skill][0]}</a>`).join('') + '</div>'
-        : '<p>Bei den abgegebenen und ausgewerteten Aufgaben gibt es gerade keinen offenen Übungsschwerpunkt.</p>'}
+        : pendingReview >= 0
+          ? '<p>Die automatisch geprüften Aufgaben sind richtig. Prüfe jetzt deine Erklärtexte.</p>'
+          : '<p>Bei den abgegebenen und ausgewerteten Aufgaben gibt es gerade keinen offenen Übungsschwerpunkt.</p>'}
       <p>Beim Selbstvergleich kannst du abhaken, welche Punkte in deinen Erklärungen vorkommen.</p>
-      <div class="button-row">${topics.length ? button('retry', 'Fehler gezielt wiederholen') : ''}
-        ${stored.round ? '<a class="btn secondary" href="#probetest/wiederholen">' + (stored.round.finished ? 'Letzte Wiederholung ansehen' : 'Wiederholung fortsetzen') + '</a>' : ''}
+      <div class="button-row">${pendingReview >= 0 ? button('jump-review', 'Zum nächsten offenen Selbstvergleich', true, pendingReview) : ''}
+        ${practiceActive ? button('retry', 'Wiederholung fortsetzen', true) : topics.length ? button('retry', 'Fehler gezielt wiederholen') : ''}
+        ${stored.round?.finished ? '<a class="btn secondary" href="#probetest/wiederholen">' +
+          (stored.round.followup ? 'Letzten Lerncheck ansehen' : 'Letzte Wiederholung ansehen') + '</a>' : ''}
         ${button('home', 'Zu den drei Arbeiten', true)}</div>
       </section><section class="bs-panel bp-panel"><h2>Antworten und Lösungen</h2>
       ${questions.map((question, index) => {
@@ -281,8 +295,9 @@
     const answer = round.answers[round.index];
     const checked = round.checked[round.index] === true;
     const correct = objectivePoints(question, answer) === maxPoints(question);
-    return heading('Fehler gezielt wiederholen', 'Aufgabe ' + (round.index + 1) + ' von ' + round.topics.length + ' · ' + skills[skill][0],
-      '<a href="#probetest/auswertung">Zur Auswertung</a>') +
+    return heading(round.followup ? 'Kurzer Lerncheck' : 'Fehler gezielt wiederholen',
+      'Aufgabe ' + (round.index + 1) + ' von ' + round.topics.length + ' · ' + skills[skill][0],
+      round.followup || stored.exam?.phase !== 'results' ? '<a href="#probetest">Zu den Probearbeiten</a>' : '<a href="#probetest/auswertung">Zur Auswertung</a>') +
       `<section class="bs-panel bp-panel"><h2 tabindex="-1">${question.prompt}</h2>
         <div class="bl-task-reading">${readQuestion(question)}</div>
         ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
@@ -299,9 +314,9 @@
   function practiceResults(round) {
     const open = missedTopics(round);
     const links = [...new Set(open.map(topic => retry[topic][round.variant].skill))];
-    return heading('Deine Wiederholungsrunde',
+    return heading(round.followup ? 'Ergebnis deines Lernchecks' : 'Deine Wiederholungsrunde',
       (round.topics.length - open.length) + ' von ' + round.topics.length + ' Aufgaben in einem neuen Beispiel richtig gelöst.',
-      round.followup ? '<a href="#probetest">Zu den Probearbeiten</a>' : '<a href="#probetest/auswertung">Zur Auswertung der Arbeit</a>') +
+      round.followup || stored.exam?.phase !== 'results' ? '<a href="#probetest">Zu den Probearbeiten</a>' : '<a href="#probetest/auswertung">Zur Auswertung der Arbeit</a>') +
       `<section class="bs-panel bp-panel"><h2>${open.length ? 'Diese Themen bleiben offen' : 'Alle Themen dieser Runde gelöst'}</h2>
         <div class="bs-links">${links.map(skill => `<a href="${skills[skill][1]}">${skills[skill][0]}</a>`).join('')}</div>
         ${open.length ? '<div class="button-row bp-actions">' + button('retry-again', 'Offene Themen erneut üben') + '</div>' : ''}
@@ -337,7 +352,7 @@
         arbeit: () => active?.phase === 'work' ? examQuestion(active, confirm) : examStart(active),
         auswertung: () => active?.phase === 'results' ? examResults(active) : examStart(active),
         archiv: () => archive(archiveEntry(archiveVersion, archiveAttempt)),
-        wiederholen: () => !round?.topics?.length || (!round.followup && active?.phase !== 'results')
+        wiederholen: () => !round?.topics?.length
           ? examStart(active) : round.finished ? practiceResults(round) : practiceRound(round),
       };
       root.innerHTML = '<div class="bs-school bp-root">' + (Object.hasOwn(views, screen) ? views[screen]() : examStart(active)) + '</div>';
@@ -354,8 +369,15 @@
       render();
     }
 
-    function newRound(topics, followup = false) {
-      stored.round = {topics, followup, answers: {}, checked: {}, index: 0, variant: ((stored.round?.variant ?? -1) + 1) % 3, finished: false};
+    function openRound(topics, followup = false) {
+      const current = stored.round;
+      const pending = unfinishedRound(followup);
+      if (pending !== current) {
+        if (pending === stored.pausedRound) delete stored.pausedRound;
+        if (current && !current.finished) stored.pausedRound = current;
+      }
+      stored.round = pending || {topics, followup, answers: {}, checked: {}, index: 0,
+        variant: ((current?.variant ?? -1) + 1) % 3, finished: false};
       save();
       open('wiederholen');
     }
@@ -407,7 +429,6 @@
         case 'start':
           if (active?.phase === 'work' && !window.confirm('Eine Arbeit ist noch offen. Möchtest du den Entwurf durch eine neue Arbeit ersetzen?')) return;
           stored.exam = {version: value, index: 0, answers: {}, reviews: {}, phase: 'work'};
-          delete stored.round;
           save();
           open('arbeit');
           break;
@@ -463,13 +484,22 @@
           root.querySelector('[data-bp-action="review"][data-bp-value="' + value + '"]').focus({preventScroll:true});
           break;
         }
-        case 'retry': newRound(needsPractice(active)); break;
+        case 'jump-review': {
+          const panel = root.querySelector('[data-bp-review="' + value + '"]');
+          if (panel) {
+            panel.open = true;
+            window.BioLaborLernweg.focus(panel.querySelector('summary'), true);
+          }
+          break;
+        }
+        case 'retry':
+          openRound(active?.phase === 'results' ? needsPractice(active) : []);
+          break;
         case 'followup':
-          if (round?.followup && !round.finished) open('wiederholen');
-          else if (stored.followup?.topics?.length && Date.now() >= Date.parse(stored.followup.at)) newRound(stored.followup.topics, true);
+          if (stored.followup?.topics?.length && Date.now() >= Date.parse(stored.followup.at)) openRound(stored.followup.topics, true);
           break;
         case 'retry-again':
-          newRound(missedTopics(round), round.followup);
+          openRound(missedTopics(round), Boolean(round.followup));
           break;
         case 'retry-check':
           if (!hasAnswer(retry[round.topics[round.index]][round.variant], round.answers[round.index])) {
@@ -491,7 +521,7 @@
             };
             if (!openTopics.length) {
               if (round.followup) stored.followup.done = true;
-              else {
+              else if (!unfinishedRound(true)) {
                 const tomorrow = new Date();
                 tomorrow.setHours(24,0,0,0);
                 stored.followup = {at:tomorrow.toISOString(), topics:round.topics.slice(0,3), done:false};

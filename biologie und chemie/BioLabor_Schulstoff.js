@@ -529,7 +529,8 @@
         <p><b>${size}</b></p><p>${note}</p><p>${health}</p></article>`).join('')}</div>
       <h2>Bewertungstabelle</h2>
       <div class="bs-links"><button type="button" class="bs-action" data-bs-matrix="example">Rechenbeispiel laden</button>
-        <button type="button" class="bs-action bs-secondary" data-bs-matrix="clear">Tabelle leeren</button></div>
+        <button type="button" class="bs-action bs-secondary" data-bs-matrix="clear">Tabelle leeren</button>
+        <button type="button" class="bs-action bs-secondary" data-bs-matrix="undo" disabled>Letzte Aktion rückgängig</button></div>
       <div class="bs-table-wrap" role="region" aria-label="Hunderassen bewerten">
       <table class="bs-table" role="table"><thead role="rowgroup"><tr role="row"><th scope="col">Merkmal</th><th scope="col">Gewicht<br>1–3</th>
       ${breeds.map(([name]) => `<th scope="col">${name}<br>Punkte · Wert</th>`).join('')}</tr></thead>
@@ -543,7 +544,7 @@
       <p class="bs-result" data-bs-matrix-result role="status"></p>
       <section class="bs-matrix-chart" aria-label="Punktesummen im Vergleich">
         ${breeds.map(([name], i) => `<div><b>${name}</b><div class="bs-bar-track" aria-hidden="true"><span data-bs-bar="${i}"></span></div>
-          <output data-bs-bar-value="${i}">–</output></div>`).join('')}
+          <output data-bs-bar-value="${i}">–</output><small data-bs-count="${i}"></small></div>`).join('')}
       </section>
     </section>`;
   }
@@ -551,6 +552,8 @@
   function bindMatrix(root, saved, save) {
     const fields = [...root.querySelectorAll('[data-bs-cell]')];
     const rows = criteria.map((_, i) => fields.slice(i * 4, (i + 1) * 4));
+    const undo = root.querySelector('[data-bs-matrix="undo"]');
+    let previous;
     fields.forEach(field => { field.value = saved.matrix?.[field.dataset.bsCell] || ''; });
     function update() {
       const sums = [0, 0, 0];
@@ -566,6 +569,7 @@
         const value = completed[i] ? sum : '–';
         root.querySelector('[data-bs-sum="' + (i + 1) + '"]').textContent = value;
         root.querySelector('[data-bs-bar-value="' + i + '"]').textContent = value;
+        root.querySelector('[data-bs-count="' + i + '"]').textContent = completed[i] + ' von ' + criteria.length + ' Merkmalen bewertet';
         root.querySelector('[data-bs-bar="' + i + '"]').style.width = (sum / (criteria.length * 3 * 4) * 100) + '%';
       });
       const result = root.querySelector('[data-bs-matrix-result]');
@@ -577,11 +581,30 @@
       }
     }
     update();
-    fields.forEach(field => field.addEventListener('change', () => { update(); save(); }));
+    fields.forEach(field => field.addEventListener('change', () => {
+      previous = undefined;
+      undo.disabled = true;
+      update();
+      save();
+    }));
     root.querySelectorAll('[data-bs-matrix]').forEach(button => button.addEventListener('click', () => {
-      rows.forEach((row, i) => row.forEach((field, j) => {
-        field.value = button.dataset.bsMatrix === 'example' ? examples[i][j] : '';
-      }));
+      const action = button.dataset.bsMatrix;
+      if (action === 'undo') {
+        if (!previous) return;
+        fields.forEach((field, index) => { field.value = previous[index]; });
+        previous = undefined;
+        undo.disabled = true;
+        root.querySelector('[data-bs-matrix="clear"]').focus();
+      } else {
+        const current = fields.map(field => field.value);
+        rows.forEach((row, i) => row.forEach((field, j) => {
+          field.value = action === 'example' ? examples[i][j] : '';
+        }));
+        if (fields.some((field, index) => field.value !== current[index])) {
+          previous = current;
+          undo.disabled = false;
+        }
+      }
       update();
       save();
     }));

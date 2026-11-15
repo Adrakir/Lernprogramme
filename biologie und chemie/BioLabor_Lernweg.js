@@ -135,6 +135,8 @@
   }
 
   const profileKey = 'lerncockpit-bio-2026';
+  const standaloneFontKey = 'biolab5-tierkunde-2026-font';
+  const animalFontSizes = {normal: '1', large: '1.125', xl: '1.25'};
   const standaloneThemeKey = 'biolab5-tierkunde-2026-theme';
   const darkPreference = matchMedia('(prefers-color-scheme: dark)');
 
@@ -163,16 +165,44 @@
   function animalSettings() {
     let settings;
     let standaloneTheme;
+    let standaloneFont;
     try {
       const state = readProfileState();
       settings = state?.profiles?.[state.active]?.settings;
       standaloneTheme = localStorage.getItem(standaloneThemeKey);
+      standaloneFont = localStorage.getItem(standaloneFontKey);
     } catch {}
     const root = document.documentElement;
-    root.dataset.bioMotion = settings?.motion || 'system';
-    if (settings?.font) root.style.setProperty('--scale', {normal:'1', large:'1.125', xl:'1.25'}[settings.font] || '1');
+    const motion = settings?.motion || 'system';
+    if (root.dataset.bioMotion !== motion) {
+      root.dataset.bioMotion = motion;
+      document.dispatchEvent(new Event('biolab-motion-change'));
+    }
+    applyAnimalFont(settings?.font || standaloneFont || 'normal');
     applyAnimalTheme(settings?.theme || standaloneTheme || 'system');
     return settings || {};
+  }
+
+  function applyAnimalFont(font) {
+    const root = document.documentElement;
+    root.dataset.bioFont = Object.hasOwn(animalFontSizes, font) ? font : 'normal';
+    root.style.setProperty('--scale', animalFontSizes[root.dataset.bioFont]);
+  }
+
+  function setAnimalFont(font) {
+    if (!acceptsAnimalWrites()) return false;
+    applyAnimalFont(font);
+    try {
+      const state = readProfileState();
+      const settings = state?.profiles?.[state.active]?.settings;
+      if (settings) {
+        settings.font = font;
+        localStorage.setItem(profileKey, JSON.stringify(state));
+      } else {
+        localStorage.setItem(standaloneFontKey, font);
+      }
+    } catch {}
+    return true;
   }
 
   function setAnimalTheme(theme) {
@@ -197,7 +227,7 @@
     };
     window.addEventListener('pageshow', syncProfile);
     window.addEventListener('storage', event => {
-      if (event.key === profileKey || event.key === standaloneThemeKey || event.key === null) syncProfile();
+      if (event.key === profileKey || event.key === standaloneThemeKey || event.key === standaloneFontKey || event.key === null) syncProfile();
     });
     darkPreference.addEventListener('change', animalSettings);
   }
@@ -207,5 +237,5 @@
     catch { return []; }
   }
 
-  window.BioLaborLernweg = {animalRoute, lesson, directory, focus, bindMain, animalSettings, setAnimalTheme, acceptsAnimalWrites, readAloud, readQuestion};
+  window.BioLaborLernweg = {animalRoute, lesson, directory, focus, bindMain, animalSettings, setAnimalTheme, setAnimalFont, acceptsAnimalWrites, readAloud, readQuestion};
 })();

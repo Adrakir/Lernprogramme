@@ -9,8 +9,12 @@
   const options = (label, key, values, current) => `<div class="bm-options" role="group" aria-label="${label}">
     ${values.map(([id, name]) => `<button type="button" data-bm-key="${key}" data-bm-value="${id}"
       aria-pressed="${id === current}">${name}</button>`).join('')}</div>`;
-  const range = (label, value) => `<label class="bm-range">${label}
-    <input type="range" min="0" max="100" value="${value}" data-bm-range></label>`;
+  const range = (label, value, description) => ({
+    markup: `<label class="bm-range">${label}
+      <input type="range" min="0" max="100" value="${value}" aria-valuetext="${value} Prozent ${description}" data-bm-range>
+      <span data-bm-range-value aria-hidden="true">${value} % ${description}</span></label>`,
+    description,
+  });
   const note = (title, description) => `<div class="bm-reading"><h3>${title}</h3><p>${description}</p></div>`;
   const left = '#235f54', bone = '#e5c68e', violet = '#6865a1', orange = '#ac5632';
 
@@ -72,7 +76,7 @@
       line('M472 199v-44m-8 10l8-10 8 10', left, 4);
     return {
       image: art('Zwei scharfkantige Reißzähne in Seitenansicht. Der untere Zahn bewegt sich zum oberen.', body),
-      slider: range('Unterkiefer schließen', value),
+      slider: range('Unterkiefer schließen', value, 'geschlossen'),
       reading: note(value < 40 ? 'Maul geöffnet' : value < 80 ? 'Zähne nähern sich' : 'Die Zahnkanten gleiten aneinander vorbei',
         'Bei Hund und Katze bilden zwei Backenzähne pro Seite eine Schere. Der obere Reißzahn ist der letzte vordere Backenzahn. Der untere ist der erste hintere Backenzahn. Die Kanten schneiden Fleisch beim Schließen des Kiefers.'),
     };
@@ -121,8 +125,8 @@
         <circle cx="${x - 16}" cy="131" r="9" fill="#fff" opacity=".88"/></g>`).join('') +
       '<path d="M286 207l28 0-14 13Z" fill="#864b4c"/>';
     return {
-      image: art('Katzenaugen im Modell. Die dunklen Pupillen ändern ihre Breite mit dem Licht.', body),
-      slider: range('Lichtmenge im Modell', value),
+      image: art('Katzenaugen im Modell. ' + (light > 70 ? 'Schmale Pupillen bei hellem Licht.' : light < 32 ? 'Weite Pupillen bei schwachem Licht.' : 'Pupillen bei mittlerer Helligkeit.'), body),
+      slider: range('Lichtmenge im Modell', value, 'im Lichtmodell'),
       reading: note(light > 70 ? 'Helles Licht · schmale Pupille' : light < 32 ? 'Schwaches Licht · weite Pupille' : 'Mittlere Helligkeit',
         'Bei wenig Licht öffnet sich die Pupille weiter. So gelangt mehr Licht ins Auge. Bei hellem Licht wird die Pupille schmal. In völliger Dunkelheit helfen der Katze ihr Gehör und ihre Tasthaare.'),
     };
@@ -141,7 +145,7 @@
       line(dog ? 'M344 134l43-71h103' : 'M348 153l39-90h103',left) + text(362, 50, 'Riechschleimhaut') +
       text(67, 256, 'Luft mit Duftstoffen') + line('M132 234l-26-29',left);
     return {
-      image: art('Vereinfachter Nasenquerschnitt. Grün markiert ist die Riechschleimhaut.', body),
+      image: art('Vereinfachter Nasenquerschnitt ' + (dog ? 'des Hundes' : 'des Menschen') + '. Grün markiert ist die Riechschleimhaut.', body),
       controls: options('Nase vergleichen', 'species', [['dog','Hund'], ['human','Mensch']], species),
       reading: note(dog ? 'Viel Platz für Riechzellen' : 'Auch Menschen riechen mit Riechzellen',
         dog ? 'Beim Hund ist die Fläche der Riechschleimhaut größer. Dort reagieren viele Riechzellen auf Duftstoffe und senden Signale ans Gehirn. Ein trainierter Hund kann bestimmte Gerüche finden und anzeigen.'
@@ -247,7 +251,7 @@
       text(60, 221, 'Ellenbogengelenk') + line('M207 215l66-13',violet);
     return {
       image: art('Oberarm und Unterarm mit Ellenbogengelenk, Bizeps und Trizeps. Der Unterarm bewegt sich mit dem Regler.', body),
-      slider: range('Unterarm beugen', value),
+      slider: range('Unterarm beugen', value, 'des gezeigten Bewegungswegs'),
       reading: note(value >= 55 ? 'Der Arm ist gebeugt' : 'Der Arm ist eher gestreckt',
         'Beim Beugen zieht sich der Bizeps zusammen. Seine Sehne überträgt den Zug auf den Unterarm. Beim aktiven Strecken zieht vor allem der Trizeps. Muskeln können ziehen. Für die Gegenbewegung brauchen sie Gegenspieler.'),
     };
@@ -323,28 +327,44 @@
     reading.setAttribute('aria-live','polite');
     const challenge = root.querySelector('[data-bm-challenge]');
     let challengeKey;
+    const attempts = new Map();
 
     function renderCheck(view) {
       const state = states[active];
       const scene = state.scene;
       const key = active + '/' + (scene || '');
       if (key === challengeKey) return;
+      if (challengeKey !== undefined) {
+        attempts.get(challengeKey).open = challenge.querySelector('details').open;
+      }
       challengeKey = key;
+      if (!attempts.has(key)) attempts.set(key, {open:false, selected:null});
+      const attempt = attempts.get(key);
       const behavior = scene && window.BioBehaviorLab.SCENES[scene];
       const check = behavior
         ? [behavior.question, behavior.choices, 0, [behavior.explanation, behavior.explanation, behavior.explanation]]
         : checks[view.name];
       const [prompt, answers, correct, reasons] = check;
-      const isOpen = challenge.querySelector('details')?.open;
-      challenge.innerHTML = `<details class="bm-challenge"${isOpen ? ' open' : ''}>
+      const offset = behavior ? (Object.keys(window.BioBehaviorLab.SCENES).indexOf(scene) + 1) % answers.length : 0;
+      const order = answers.map((_, index) => (index + offset) % answers.length);
+      challenge.innerHTML = `<details class="bm-challenge"${attempt.open ? ' open' : ''}>
         <summary>Beobachtung prüfen</summary><p>${prompt}</p>
-        <div class="bm-options" role="group" aria-label="Antwort auswählen">${answers.map((answer, i) =>
-          `<button type="button" data-bm-answer="${i}" aria-pressed="false">${answer}</button>`).join('')}</div>
+        <div class="bm-options" role="group" aria-label="Antwort auswählen">${order.map(i =>
+          `<button type="button" data-bm-answer="${i}" aria-pressed="${i === attempt.selected}">${answers[i]}</button>`).join('')}</div>
         <p role="status"></p></details>`;
-      challenge.querySelectorAll('[data-bm-answer]').forEach(button => button.addEventListener('click', () => {
-        const selected = Number(button.dataset.bmAnswer);
-        challenge.querySelectorAll('[data-bm-answer]').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
-        challenge.querySelector('[role="status"]').textContent = (selected === correct ? '✓ ' : '↗ ') + reasons[selected];
+      const feedback = challenge.querySelector('[role="status"]');
+      const buttons = [...challenge.querySelectorAll('[data-bm-answer]')];
+      function updateAnswer() {
+        if (attempt.selected === null) return;
+        const right = attempt.selected === correct;
+        const explanation = behavior && !right ? 'Passender ist: ' + answers[correct] + ' ' : '';
+        feedback.textContent = (right ? 'Richtig. ' : 'Noch nicht richtig. ') + explanation + reasons[attempt.selected];
+        buttons.forEach(option => option.setAttribute('aria-pressed', String(Number(option.dataset.bmAnswer) === attempt.selected)));
+      }
+      updateAnswer();
+      buttons.forEach(button => button.addEventListener('click', () => {
+        attempt.selected = Number(button.dataset.bmAnswer);
+        updateAnswer();
       }));
     }
 
@@ -354,11 +374,16 @@
       const focus = root.contains(document.activeElement) ? document.activeElement.dataset.bmKey : null;
       image.innerHTML = result.image;
       if (reading.innerHTML !== result.reading) reading.innerHTML = result.reading;
-      if (input) return;
+      if (input) {
+        const value = states[active].value;
+        slider.querySelector('[data-bm-range]').setAttribute('aria-valuetext', value + ' Prozent ' + result.slider.description);
+        slider.querySelector('[data-bm-range-value]').textContent = value + ' % ' + result.slider.description;
+        return;
+      }
       if (available.length > 1) tabs.innerHTML = options('Modell auswählen','tab',available.map(([name],i) => [String(i),name]),String(active));
       title.textContent = heading;
       controls.innerHTML = result.controls || '';
-      slider.innerHTML = result.slider || '';
+      slider.innerHTML = result.slider?.markup || '';
       renderCheck(view);
       if (focus) root.querySelector('[data-bm-key="' + focus + '"][aria-pressed="true"]')?.focus({preventScroll:true});
     }

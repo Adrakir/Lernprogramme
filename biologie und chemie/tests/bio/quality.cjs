@@ -320,7 +320,8 @@ module.exports = async function checkQuality(page, home) {
   await page.reload();
   await page.getByRole('button',{name:'Lerncheck starten',exact:true}).click();
   const exercise = page.locator('.bp-root');
-  await exercise.getByRole('heading',{name:'Fehler gezielt wiederholen',exact:true}).waitFor();
+  await exercise.getByRole('heading',{name:'Kurzer Lerncheck',exact:true}).waitFor();
+  assert.equal(await exercise.getByRole('link',{name:'Zu den Probearbeiten'}).getAttribute('href'), '#probetest');
   assert.ok(await exercise.getByRole('radio',{name:'Schulterblatt'}).isVisible());
   await exercise.getByRole('radio',{name:'Schulterblatt'}).check();
   await exercise.getByRole('button',{name:'Antwort prüfen'}).click();

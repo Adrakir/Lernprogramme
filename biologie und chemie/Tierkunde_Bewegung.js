@@ -25,7 +25,22 @@ const profiles={
  cat:{head:202, neck:283, shoulder:361, hip:700, top:223, ribs:13, headScale:.86, tailLength:159, bounce:5, spineFlex:23}
 };
 const state={species:'dog',section:'skeleton',mode:'walk',speed:1,playing:false,labels:true,silhouette:false,progress:0,frameId:0,lastTs:0,lastPaint:0,root:null,selected:'spine',zoom:false};
-const prefersReduced=()=>document.documentElement.dataset.bioMotion==='off'||matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+const motionSetting=()=>document.documentElement.dataset.bioMotion;
+const prefersReduced=()=>motionSetting()==='off'||(motionSetting()==='system'&&reducedMotion.matches);
+const visiblePhase=()=>state.progress===1?1:frac(state.progress);
+const phaseNames={
+ walk:['Abstützen','Pfote anheben','Vorschwingen','Wieder aufsetzen'],
+ trot:['Diagonale A','Gewichtswechsel','Diagonale B','Gewichtswechsel'],
+ gallop:['Abstoßen','Strecken','Vorschwingen','Abfangen'],
+ jump:['Vorbereitung','Absprung','Flugphase','Landung'],
+ sneak:['Gewicht verlagern','Vorsichtig heben','Pfote führen','Leise absetzen'],
+ stretch:['Beugen','Strecken','Beugen','Strecken']
+};
+function phaseName(phase){
+ const index=state.mode==='jump'?(phase<.20?0:phase<.48?1:phase<.72?2:3):Math.min(3,Math.floor(phase*4));
+ return phaseNames[state.mode][index];
+}
 const n=(v)=>Number(v).toFixed(1).replace(/\.0$/,'');
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const frac=(v)=>v-Math.floor(v);
@@ -92,7 +107,7 @@ function spinePoints(species,phase,mode){
  return {p,bob,crouch,bend,shoulder:{x:p.shoulder,y:shoulderY},hip:{x:p.hip+bend*.18,y:hipY},chestY:p.top+41+bob+crouch,headX:p.head+(mode==='gallop'?Math.sin(phase*2*Math.PI)*7:0),headY:p.top+2+bob+crouch*.52};
 }
 function poseScene(){
- const phase=frac(state.progress);
+ const phase=visiblePhase();
  const m=state.mode,p=profiles[state.species],sp=spinePoints(state.species,phase,m),
  shoulder=sp.shoulder,hip=sp.hip;
  const ground=496;
@@ -145,9 +160,7 @@ function poseScene(){
  '<text x="'+n(hip.x-33)+'" y="'+n(hip.y-110)+'" class="rig-tiny">Becken</text><path d="M'+n(hip.x)+' '+n(hip.y-98)+'l0 36" class="rig-pointer"/>'+
  '<text x="50" y="528" font-size="14" fill="#55756c">Pfeile / Zahlen sind vereinfachte Lernhilfen · Modell, kein Röntgenbild</text></g>':'';
  // Gelenke und Kraftrichtungen zeigen, ohne eine biomechanische Messung vorzutäuschen.
- const phaseIndex=Math.min(3,Math.floor(phase*4));
- const labels={walk:['Abstützen','Pfote anheben','Vorschwingen','Wieder aufsetzen'],trot:['Diagonale A','Gewichtswechsel','Diagonale B','Gewichtswechsel'],gallop:['Abstoßen','Strecken','Vorschwingen','Abfangen'],jump:['Vorbereiten','Absprung','Flugphase','Landung'],sneak:['Gewicht verlagern','Vorsichtig heben','Pfote führen','Leise absetzen'],stretch:['Beugen','Strecken','Beugen','Strecken']};
- const phaseCaption=labels[m][phaseIndex];
+ const phaseCaption=phaseName(phase);
  const force=(m==='jump'||m==='gallop')?
  '<path d="M'+n(hip.x+13)+' '+n(hip.y+37)+'l35 -59" fill="none" stroke="#cf7041" stroke-width="6" stroke-linecap="round" marker-end="url(#rig-force-head)"/>'+
  '<text x="'+n(hip.x+58)+'" y="'+n(hip.y+2)+'" fill="#ab4e2c" font-size="17" font-weight="900">Abstoß</text>':
@@ -174,10 +187,14 @@ function explainMode(){
 function frame(){
  const svg=id('rig-scene');
  if(svg)svg.innerHTML=poseScene();
- const bar=id('rig-timeline'),phase=frac(state.progress);
- if(bar)bar.value=String(Math.round(phase*100));
+ const bar=id('rig-timeline'),phase=visiblePhase();
+ const caption=phaseName(phase);
+ if(bar){
+  bar.value=String(Math.round(phase*100));
+  bar.setAttribute('aria-valuetext',bar.value+' Prozent, '+caption);
+ }
  const phaseStep=id('rig-phasestep');
- if(phaseStep){const names={jump:['Vorbereitung','Abstoßen','Flugphase','Landung'],walk:['Abstützen','Anheben','Schwingen','Aufsetzen'],trot:['Diagonal A','Wechsel','Diagonal B','Wechsel'],gallop:['Abstoßen','Strecken','Flug','Abfangen'],sneak:['Belasten','Anheben','Führen','Absetzen'],stretch:['Beugen','Strecken','Beugen','Strecken']};phaseStep.textContent=names[state.mode][Math.min(3,Math.floor(phase*4))]}
+ if(phaseStep)phaseStep.textContent=caption;
  const phaseLabel=id('rig-phase');
  if(phaseLabel)phaseLabel.textContent=Math.round(phase*100)+' %';
 }
@@ -219,14 +236,14 @@ function attach(){
  if(target.dataset.rigMode){choose(target.dataset.rigMode);return}
  if(target.id==='rig-play'){play(!state.playing);return}
  if(target.id==='rig-reset'){state.progress=0;play(false);frame();return}
- if(target.id==='rig-step'){play(false);state.progress=frac(state.progress+.04166);frame();return}
+ if(target.id==='rig-step'){play(false);state.progress=state.progress>=1?0:(state.progress+1/24>=1-1e-9?1:state.progress+1/24);frame();return}
  if(target.id==='rig-labels'){state.labels=!state.labels;target.setAttribute('aria-pressed',String(state.labels));target.textContent=state.labels?'🏷 Beschriftung an':'🏷 Beschriftung aus';frame();return}
  if(target.id==='rig-overlay'){state.silhouette=!state.silhouette;target.setAttribute('aria-pressed',String(state.silhouette));target.textContent=state.silhouette?'👁 Körperumriss an':'👁 Körperumriss aus';frame();return}
  if(target.id==='rig-zoom'){state.zoom=!state.zoom;lab.classList.toggle('rig-zoomed',state.zoom);target.setAttribute('aria-pressed',String(state.zoom));target.textContent=state.zoom?'🔎 Verkleinern':'🔎 Vergrößern';return}
  });
  lab.addEventListener('input',e=>{
- if(e.target.id==='rig-speed'){state.speed=Number(e.target.value);id('rig-speed-val').textContent=state.speed.toLocaleString('de-DE')+'×';}
- if(e.target.id==='rig-timeline'){state.progress=Number(e.target.value)/100;frame();}
+ if(e.target.id==='rig-speed')setSpeed(Number(e.target.value));
+ if(e.target.id==='rig-timeline'){play(false);state.progress=Number(e.target.value)/100;frame();}
  });
  lab.addEventListener('focusin',e=>{
   if(state.playing&&e.target.matches('.rig-bone'))play(false);
@@ -239,6 +256,24 @@ function attach(){
  }
  });
 }
+function setSpeed(speed){
+ state.speed=speed;
+ id('rig-speed').value=String(speed);
+ id('rig-speed').setAttribute('aria-valuetext',speed.toLocaleString('de-DE')+'-fache Geschwindigkeit');
+ id('rig-speed-val').textContent=speed.toLocaleString('de-DE')+'×';
+}
+let appliedMotion;
+function syncMotion(){
+ if(!id('rig-studio'))return;
+ const motion=motionSetting();
+ if(motion!==appliedMotion){
+  if(motion==='slow'||appliedMotion==='slow')setSpeed(motion==='slow'?.5:1);
+  appliedMotion=motion;
+ }
+ if(prefersReduced())play(false);
+}
+document.addEventListener('biolab-motion-change',syncMotion);
+reducedMotion.addEventListener('change',syncMotion);
 function mount(args){
  stop();const main=id('content');if(!main)return;
  state.species=args.animal==='cat'?'cat':'dog';state.section=args.section;state.selected=args.bone||'spine';
@@ -280,7 +315,8 @@ function mount(args){
  '<div class="rig-note">💡 <strong>Beobachtungsmodell:</strong> Die Zeichnung zeigt vereinfachte Bewegungsabläufe, keine millimetergenaue Anatomie oder reale Röntgenanimation. Zum Knochennamen tippe auf das Skelett oder nutze die beschriftete Knochenliste darunter.</div>';
  legacy.parentNode.insertBefore(container,legacy);
  attach();choose(state.mode);
- if(document.documentElement.dataset.bioMotion==='slow'){state.speed=.5;const control=container.querySelector('#rig-speed');control.value='.5';container.querySelector('#rig-speed-val').textContent='0,5×';}
+ setSpeed(state.speed);
+ syncMotion();
  play(!prefersReduced());
 }
 window.BioSkeletonLab={mount,stop,MODES,renderFrame:frame,getState:()=>({species:state.species,mode:state.mode,playing:state.playing,speed:state.speed,progress:state.progress})};

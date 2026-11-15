@@ -375,6 +375,7 @@ function updateControls(){
  }
 }
 function render(focus){
+ if(focus)window.speechSynthesis?.cancel();
  updateControls();
  const views={skeleton:skeletonPage,origin:originPage,teeth:teethPage,hunt:huntPage,motion:motionPage,signals:signalsPage,compare:comparePage,quiz:quizPage};
  $('#content').innerHTML=(views[section]||skeletonPage)();
@@ -438,11 +439,35 @@ $('a.skip').addEventListener('click',event=>{
  window.BioLaborLernweg.focus($('#content'),true);
 });
 $('#theme').addEventListener('click',()=>{window.BioLaborLernweg.setAnimalTheme(document.body.classList.contains('dark')?'light':'dark')});
-$('#font').addEventListener('click',()=>{const n=Number(document.documentElement.style.getPropertyValue('--scale')||1);document.documentElement.style.setProperty('--scale',String(n>=1.25?1:n+.125));toast('Schriftgröße angepasst')});
-$('#speak').addEventListener('click',()=>{if(!('speechSynthesis' in window)){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}if(speechSynthesis.speaking){speechSynthesis.cancel();toast('Vorlesen beendet');return}const t=new SpeechSynthesisUtterance($('#content').innerText);t.lang='de-DE';t.rate=Number(animalSettings.rate)||.89;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.voiceURI===animalSettings.voice)||voices.find(x=>x.lang.toLowerCase().startsWith('de'));if(v)t.voice=v;speechSynthesis.speak(t);toast('Vorlesen gestartet · erneut tippen zum Stoppen')});
+$('#font').addEventListener('click',()=>{
+ const sizes={normal:['large','Groß'],large:['xl','Sehr groß'],xl:['normal','Normal']};
+ const [font,label]=sizes[document.documentElement.dataset.bioFont]||sizes.normal;
+ if(window.BioLaborLernweg.setAnimalFont(font))toast('Schriftgröße: '+label);
+});
+$('#speak').addEventListener('click',()=>{
+ const synth=window.speechSynthesis;
+ if(!synth){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}
+ if(synth.speaking || synth.pending){synth.cancel();toast('Vorlesen beendet');return}
+ const settings=window.BioLaborLernweg.animalSettings();
+ const utterance=new SpeechSynthesisUtterance($('#content').innerText);
+ utterance.lang='de-DE';
+ utterance.rate=Number(settings.rate)||.89;
+ const voices=synth.getVoices();
+ const voice=voices.find(item=>item.voiceURI===settings.voice)||voices.find(item=>item.lang.toLowerCase().startsWith('de'));
+ if(voice)utterance.voice=voice;
+ utterance.onerror=event=>{
+  if(!['canceled','interrupted'].includes(event.error))toast('Die Sprachausgabe konnte den Text nicht vorlesen.');
+ };
+ try{
+  synth.speak(utterance);
+  toast('Vorlesen gestartet · erneut tippen zum Stoppen');
+ }catch{
+  toast('Die Sprachausgabe konnte den Text nicht vorlesen.');
+ }
+});
 $('#print').addEventListener('click',()=>window.print());
 window.addEventListener('hashchange',()=>{const p=window.BioLaborLernweg.animalRoute();if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){if(animal===p[0]&&section===p[1])return;if(animal!==p[0]){animal=p[0];resetQuiz(true)}section=p[1];render(true)}});
-const animalSettings=window.BioLaborLernweg?.animalSettings() || {};
+window.BioLaborLernweg.animalSettings();
 const initial=window.BioLaborLernweg.animalRoute();
 if(!initial[0])$('#tier-intro').open=true;
 if(SPECIES[initial[0]])animal=initial[0];

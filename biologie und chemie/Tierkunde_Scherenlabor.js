@@ -1,7 +1,7 @@
 /* BioLabor 5 – interaktives Reißzahnscheren-Labor; alle Illustrationen eigenständig */
 (function(){
 'use strict';
-const state={animal:'dog',value:35,play:false,id:0,last:0,group:'carnassial'};
+const state={animal:'dog',value:35,play:false,id:0,last:null,phase:0,group:'carnassial'};
 const groups={incisor:{name:'Schneidezähne',hint:'Kleine Vorderzähne zum Abknabbern und Aufnehmen kleiner Stücke.'},canine:{name:'Fangzähne',hint:'Lange, spitze Zähne zum Ergreifen und Festhalten.'},premolar:{name:'Vordere Backenzähne',hint:'Spitze und scharfkantige Zahnhöcker zum Zerteilen von Nahrung.'},carnassial:{name:'Reißzahnpaar',hint:'Oben der letzte vordere Backenzahn (P4), unten der erste hintere Backenzahn (M1): Ihre Kanten schneiden beim Zubeißen wie eine Schere.'},molar:{name:'Hintere Backenzähne',hint:'Hintere Backenzähne. Hunde besitzen mehr hintere Mahl- und Quetschflächen als Katzen.'}};
 const d=document;
 const id=s=>d.getElementById(s);
@@ -52,14 +52,36 @@ function explanation(){
  if(e)e.innerHTML='<strong>'+groups[state.group].name+'</strong><p>'+groups[state.group].hint+'</p>'+
  (state.group==='carnassial'?'<p>🦴 Das obere Reißzahnblatt ist ein vorderer Backenzahn. Das untere ist ein hinterer Backenzahn. Sie gleiten gegeneinander – sie mahlen nicht flächig wie die Backenzähne eines Pflanzenfressers.</p>':'');
 }
-function redraw(){const svg=id('jaw-drawing');if(svg)svg.innerHTML=picture();const meter=id('jaw-percent');if(meter)meter.textContent=state.value<20?'Maul weit geöffnet':state.value<100?'Maul teilweise geöffnet':'Maul geschlossen';const range=id('jaw-range');if(range)range.value=state.value}
+function redraw(){
+ const svg=id('jaw-drawing');
+ if(svg)svg.innerHTML=picture();
+ const position=state.value<20?'Maul weit geöffnet':state.value<100?'Maul teilweise geöffnet':'Maul geschlossen';
+ const meter=id('jaw-percent');
+ if(meter)meter.textContent=position;
+ const range=id('jaw-range');
+ if(range){
+  range.value=state.value;
+  range.setAttribute('aria-valuetext',position+', '+state.value+' Prozent geschlossen');
+ }
+}
 function tick(ts){
  state.id=0;if(!state.play||!id('jaw-labor'))return;
- if(state.last){state.value=Math.round(50+50*Math.sin(ts/1000*1.7));redraw()}
+ if(state.last!==null){
+  const speed=document.documentElement.dataset.bioMotion==='slow'?.85:1.7;
+  state.phase+=Math.min(90,ts-state.last)/1000*speed;
+  state.value=Math.round(50+50*Math.sin(state.phase));
+  redraw();
+ }
  state.last=ts;state.id=requestAnimationFrame(tick);
 }
-function stop(){if(state.id)cancelAnimationFrame(state.id);state.id=0;state.last=0;state.play=false}
-function play(yes){stop();state.play=yes;const btn=id('jaw-play');if(btn){btn.textContent=yes?'⏸ Pausieren':'▶ Kiefer bewegen';btn.setAttribute('aria-pressed',String(yes))}if(yes)state.id=requestAnimationFrame(tick)}
+function stop(){if(state.id)cancelAnimationFrame(state.id);state.id=0;state.last=null;state.play=false}
+function play(yes){stop();state.play=yes;const btn=id('jaw-play');if(btn){btn.textContent=yes?'⏸ Pausieren':'▶ Kiefer bewegen';btn.setAttribute('aria-pressed',String(yes))}if(yes){
+ state.phase=Math.asin(state.value/50-1);
+ state.id=requestAnimationFrame(tick);
+}}
+document.addEventListener('biolab-motion-change',()=>{
+ if(document.documentElement.dataset.bioMotion==='off'&&id('jaw-labor'))play(false);
+});
 function mount(args){
  stop();if(args.section!=='teeth')return;
  state.animal=args.animal==='cat'?'cat':'dog';
