@@ -55,7 +55,8 @@
       <header class="bs-heading bp-heading"><h1>Lehrkraft · Stationen und Material</h1>
         <p>Öffne eine Station über den Link oder scanne ihren QR-Code. Jede Karte enthält ein Lernziel und eine Vertiefung.</p>
         <div class="button-row bp-no-print"><button type="button" class="btn" data-bl-print>Stationskarten drucken / PDF</button>
-          <a class="btn secondary" href="#schulstoff">Zur Schulstoffübersicht</a></div>
+          <a class="btn secondary" href="#schulstoff">Zur Schulstoffübersicht</a>
+          <button type="button" class="btn secondary" data-bl-cockpit="lehrkraft">Lernprofile vergleichen</button></div>
       </header>
       <div class="bl-teacher-options bp-no-print"><label>Stationskarten anzeigen <select data-bl-stations><option value="all">Alle zehn Karten</option><option value="required">Nur Pflichtstationen</option><option value="choice">Nur Wahlstationen</option></select></label>
       <p data-bl-station-status role="status">10 Karten sichtbar</p></div><div class="bp-teacher-grid">
