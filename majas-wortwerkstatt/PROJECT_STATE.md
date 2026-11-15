@@ -4,6 +4,13 @@
 
 > **Wichtig:** Diese Datei ist die Übergabestelle zwischen ChatGPT, GitHub Copilot und anderen KI-Assistenten. Aussagen über "fertig" beziehen sich auf gespeicherten Code, **nicht automatisch** auf browsergetestete oder öffentlich ausgerollte Funktion. Ein neuer Bearbeiter überprüft immer den aktuellen HEAD.
 
+### Sterns Geschichtenwerkstatt (15.11.2026)
+
+- Stern ist Majas und Bärlis Freund. Seine Geschichtenwerkstatt `#stern` ist von Start- und Schreibwerkstatt aus erreichbar. Seine aquarellartige Kinderbuchillustration ist als `stern/stern.webp` hinterlegt. Die Vorlagen waren Fotos des Kuschellamms. Die Seiten des geöffneten Buchs sind Stern zugewandt.
+- „Das Buch, das sich Geschichten wünschte“ lässt sich lesen oder mit deutscher Gerätestimme vorlesen, auch langsam. Die vier Geschichtenideen enthalten Figur, Ort, Gegenstand und eine Wendung. Jede öffnet einen eigenen Auftrag in der bestehenden Schreibwerkstatt. Entwürfe werden unter dem vorhandenen Lernstandsschlüssel gespeichert und können bei Stern weiterbearbeitet werden.
+- Router, Portrait und Styles sind in Cache v17 enthalten. Tests decken Navigation, Bild, Hörsteuerung mit simulierter Stimme, getrennte Schreibentwürfe, Offline-Zugriff und Barrierefreiheit ab. Die Hörbarkeit echter Gerätestimmen bleibt Teil der Geräteabnahme (#22).
+- Ausgangsstand: `ca8ab91e`. Die Implementierung und die Prüfungen sind im Commit mit diesem Eintrag enthalten.
+
 ### Prüfungsvorbereitung, Hörbedienung und Baumhaus (15.11.2026)
 
 - Startseite mit „Hier weitermachen“ für offene Durchgänge, inklusive Aufgabenposition, Entwurf und geöffneten Tipps. Die drei Lern- und vier Bildkacheln sind weiterhin direkt erreichbar. Prüfungstermine stehen zentral in `prepTopics`; nach dem Termin führen dieselben Links zu den Übungen. Der Kombitest verlinkt auf die Abschlusstests.

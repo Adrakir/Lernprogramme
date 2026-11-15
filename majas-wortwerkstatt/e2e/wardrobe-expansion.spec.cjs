@@ -118,8 +118,8 @@ test('Visuelle Artikelmatrix: alle 39 Saisonartikel und vier Outfitkombinationen
   await page.goto(route('baerli/schrank/'+item.season+'/'+item.id),{waitUntil:'domcontentloaded'});
   await expect(page.locator('.bw-figure')).toHaveAttribute('data-preview-id',item.id);
   await expect(page.locator('.bw-focus img')).toBeVisible();
-  const noBroken=await page.locator('.bw-focus img').evaluate(el=>el.complete&&el.naturalWidth>0);
-  expect(noBroken,'Bärli-Hintergrund bei '+item.title+' fehlt').toBeTruthy();
+  await expect.poll(()=>page.locator('.bw-focus img').evaluate(el=>el.complete&&el.naturalWidth>0),
+    {message:'Bärli-Hintergrund bei '+item.title+' fehlt'}).toBeTruthy();
   const clip=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
   expect(clip,item.id+' verursacht horizontales Scrollen').toBeLessThanOrEqual(2);
   await page.locator('.bw-focus').screenshot({path:path.join(folder,item.id+'.png'),animations:'disabled'});

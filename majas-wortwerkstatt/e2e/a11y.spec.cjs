@@ -14,7 +14,8 @@ const PAGES=[
   ['Kleiderschrank','baerli/schrank'],
   ['Hörverstehen üben','pruefung/hoeren/ueben/1'],
   ['Elternansicht','erwachsene'],
-  ['Einstellungen','einstellungen']
+  ['Einstellungen','einstellungen'],
+  ['Sterns Geschichtenwerkstatt','stern']
 ];
 for(const [name,hash] of PAGES){
   test('axe: keine schweren Barrieren auf '+name,async ({page},testInfo)=>{

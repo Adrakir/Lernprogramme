@@ -424,6 +424,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
 <link rel="stylesheet" href="./mobile-start.css?v=20261115b">
+<link rel="stylesheet" href="./stern.css?v=20261115a">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109d">
 <link rel="stylesheet" href="./baerli-baumhaus.css?v=20261115a">
 <link rel="stylesheet" href="./baerli-advent.css?v=20261109b">
@@ -440,7 +441,7 @@ legend{font-weight:700;padding:0 7px}
  <div id="app"></div>
  <noscript>Schalte JavaScript im Browser ein, damit du in der Wortwerkstatt üben kannst.</noscript>
 </main>
-<footer class="shell footer"><span>Mit Maja, Fuji und Minka</span><span>Dein Lernstand bleibt in diesem Browser.</span></footer>
+<footer class="shell footer"><span>Mit Maja, Bärli, Stern, Fuji und Minka</span><span>Dein Lernstand bleibt in diesem Browser.</span></footer>
 <div id="scene-source" hidden><svg viewBox="0 0 560 306" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Maja liest im Herbstpark mit Fuji, dem Hund, und Minka, der Katze">
 <defs>
  <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.3" fill="#549784" opacity=".23"/></pattern>
@@ -3066,6 +3067,7 @@ function showAnnaWriting(part){
 <script src="./comic-studio.js?v=20261108c"></script>
 <script src="./comic-bubbles.js?v=20261108d"></script>
 <script src="./figurenstimmen.js?v=20261115b"></script>
+<script src="./stern.js?v=20261115a"></script>
 <script src="./baerli-baumhaus.js?v=20261115a"></script>
 <script>const iconPaths = {
  comic:'<rect x="2.5" y="3.5" width="19" height="17" rx="2"/><path d="M12 3.5v17M3 12h9M15 7h4m-4 4h3m-3 4h4m-13-8h3v2H6l-1 2Z"/>',
@@ -3302,6 +3304,7 @@ function showHome(){
         <a href="#baerli/schrank" class="maja-quick-option"><span class="maja-option-icon maja-option-photo" aria-hidden="true"><img src="./baerli/kostuemkiste.webp" alt="" loading="lazy" width="96" height="96"></span><span><strong>Bärlis Kleidung</strong><small>${starBalance()} ★ im Beutel</small></span></a>
       </nav>
     </section>
+    ${window.MajaStern.entry()}
     <a class="maja-advent-highlight" href="#advent" aria-label="Bärlis Adventskalender mit 24 Geschichten und Überraschungen öffnen">
       <img src="./baerli/baerli.webp" alt="" width="79" height="79" loading="lazy">
       <span><strong>🎄 Bärlis Adventskalender</strong><small>24 Geschichten, Geschenke und kleine Spiele</small></span>
@@ -4673,7 +4676,7 @@ const writingTasks=[
  {id:'brief',title:'Eine Bitte als Brief',goal:'Bitte Frau Burger um Zeit für eine Buchvorstellung.',plan:'Wen sprichst du an? Was wünschst du dir und warum? Welchen Vorschlag machst du?',words:['Liebe Frau Burger','wir möchten','weil','Viele Grüße'],model:'Liebe Frau Burger, wir möchten am Freitag unsere Lieblingsbücher vorstellen, weil wir neue Lesetipps sammeln wollen. Können wir dafür die letzte Viertelstunde nutzen? Jedes Kind würde etwa zwei Minuten sprechen. Viele Grüße, Maja und Nele',criteria:['Meine Anrede passt zur Empfängerin.','Ich erkläre Wunsch und Grund.','Gruß und Absender schließen den Brief ab.']}
 ];
 function findWritingTask(id){
- const standard=writingTasks.find(task=>task.id===id);
+ const standard=writingTasks.find(task=>task.id===id)||window.MajaStern.writingTask(id);
  if(standard)return standard;
  const comic=comicLearning.find(row=>'comic-'+row[0]===id);
  if(comic)return {id,title:'Comic weitergestalten',goal:comic[8],plan:'Wer spricht? Was passiert nach der letzten Szene? Welche Figur sagt welchen Satz?',words:['Maja fragt','Bärli flüstert','Danach','Zum Schluss'],model:'Maja fragte: „Was machen wir als Nächstes?“ Bärli klappte sein kleines Heft auf. „Erst sammeln wir Ideen“, antwortete er. Gemeinsam zeichneten sie einen Plan.',criteria:['Meine neue Szene passt zum Comic.','Man erkennt, welche Figur spricht.','Ich habe meine Sätze und Redezeichen geprüft.']};
@@ -4681,11 +4684,11 @@ function findWritingTask(id){
 function writingWorkshop(id){
  const task=findWritingTask(id);
  if(!task){
-  app.innerHTML=learningHeader('Schreibwerkstatt','Planen, schreiben und überarbeiten. Maja und Bärli begleiten dich.')+
-  `<section class="panel"><h2>Wähle deinen Schreibauftrag</h2><ul class="progress-list">${writingTasks.map(task=>`<li><a href="#schreibwerkstatt/${task.id}">${escapeHtml(task.title)}</a><span>${learning.writing[task.id]?.reviewed?'Selbst geprüft':learning.writing[task.id]?.draft?'Entwurf gespeichert':'Neu'}</span></li>`).join('')}</ul><p>Du kannst zunächst auf Papier schreiben. Nutze die Schritte zum Planen und kontrolliere später deinen Text mit einer erwachsenen Person.</p></section></div>`;return;
+  app.innerHTML=learningHeader('Schreibwerkstatt','Planen, schreiben und überarbeiten. Maja, Bärli und Stern begleiten dich.')+
+  `${window.MajaStern.entry()}<section class="panel"><h2>Wähle deinen Schreibauftrag</h2><ul class="progress-list">${writingTasks.map(task=>`<li><a href="#schreibwerkstatt/${task.id}">${escapeHtml(task.title)}</a><span>${learning.writing[task.id]?.reviewed?'Selbst geprüft':learning.writing[task.id]?.draft?'Entwurf gespeichert':'Neu'}</span></li>`).join('')}</ul><p>Du kannst zunächst auf Papier schreiben. Nutze die Schritte zum Planen und kontrolliere später deinen Text mit einer erwachsenen Person.</p></section></div>`;return;
  }
  const draft=learning.writing[task.id]||{};
- app.innerHTML=learningHeader(task.title,task.goal)+`<section class="panel">
+ app.innerHTML=learningHeader(task.title,task.goal)+`${task.id.startsWith('stern-')?'<a class="crumb" href="#stern">Zurück zu Stern</a>':''}<section class="panel">
  <form id="writing-form">
  <h2>1. Ideen und Reihenfolge</h2><p>${escapeHtml(task.plan)}</p><label class="field" for="writing-plan">Meine Stichwörter</label><textarea class="answer" id="writing-plan" name="plan" rows="3">${escapeHtml(draft.plan||'')}</textarea>
  <p>Wortschatzhilfe · ${task.words.map(escapeHtml).join(' · ')}</p>
@@ -5440,6 +5443,7 @@ function render(initial=false){
   else if(page==='lernweg')showLearningPlan();
   else if(page==='lesetraining')readingTraining(index);
   else if(page==='schreibwerkstatt')writingWorkshop(index);
+  else if(page==='stern')window.MajaStern.show();
   else if(page==='sprechwerkstatt')speakingWorkshop(index);
   else if(page==='lernuebersicht'||page==='erwachsene')showLearningOverview(page==='erwachsene');
   else if(page==='fortschritt')showProgress();

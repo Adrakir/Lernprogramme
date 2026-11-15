@@ -1,0 +1,78 @@
+.stern-entry{
+ display:flex;
+ align-items:center;
+ gap:13px;
+ margin:12px 0;
+ padding:10px;
+ min-height:68px;
+ border:1px solid #bda7c4;
+ border-radius:16px;
+ background:#f4ebf8;
+ color:#403049;
+ text-decoration:none;
+}
+.stern-entry:hover{background:#eadcf0}
+.stern-entry img{width:62px;height:62px;flex:none;border-radius:10px}
+.stern-entry strong,.stern-entry small{display:block}
+.stern-entry small{color:#54475b}
+.stern-entry .ico{margin-inline-start:auto}
+.stern-hero{
+ display:grid;
+ grid-template-columns:minmax(0,180px) minmax(0,1fr);
+ align-items:center;
+ gap:22px;
+ margin-bottom:16px;
+ padding:14px;
+ border:1px solid #c9b8cf;
+ border-radius:22px;
+ background:#f5edf6;
+ color:#403049;
+}
+.stern-hero img{display:block;width:100%;height:auto;border-radius:14px;grid-row:1/3}
+.stern-hero h1{margin:0;font-size:clamp(1.6rem,4.1vw,2.45rem);overflow-wrap:anywhere}
+.stern-intro{align-self:start;margin:0}
+.stern-panel{margin-bottom:15px}
+.stern-panel details{margin:14px 0 0}
+.stern-panel summary{display:list-item;cursor:pointer;padding-block:.3rem}
+.stern-panel details p:last-child,.stern-tips{margin-bottom:0}
+.stern-audio{align-items:center}
+.stern-audio label{display:inline-flex;align-items:center;gap:7px;font-weight:750}
+.stern-audio select{
+ border:1px solid #a38bae;
+ border-radius:8px;
+ background:white;
+ color:var(--ink);
+ padding:7px 9px;
+ min-height:44px;
+ max-width:100%;
+}
+#stern-audio-status:empty{display:none}
+.stern-story-idea{
+ background:#f4ebf8;
+ border-left:4px solid #82648f;
+ border-radius:13px;
+ padding:13px;
+ color:#403049;
+}
+.stern-story-idea dl{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:12px;
+ margin:12px 0;
+}
+.stern-story-idea dt{font-weight:850}
+.stern-story-idea dd{margin:0}
+.stern-story-idea p:last-child{margin-bottom:0}
+.stern-tips{padding-inline-start:20px}
+.stern-tips li{margin-bottom:.45rem}
+.stern-drafts{margin-bottom:0;padding-inline-start:20px}
+.stern-drafts a{display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:600px){
+ .stern-hero{grid-template-columns:minmax(78px,30%) minmax(0,1fr);gap:10px;padding:12px}
+ .stern-hero .kicker{margin-bottom:.3rem;font-size:.68rem}
+ .stern-hero h1{font-size:1.25rem}
+ .stern-hero img{grid-row:auto}
+ .stern-intro{grid-column:1/-1;font-size:.94rem}
+ .stern-story-idea dl{grid-template-columns:1fr;gap:5px}
+ .stern-story-idea dl div{display:grid;grid-template-columns:3.25rem minmax(0,1fr);gap:5px}
+}

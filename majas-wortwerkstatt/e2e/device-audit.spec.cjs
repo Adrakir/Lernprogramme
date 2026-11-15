@@ -24,6 +24,7 @@ test.afterEach(async()=>{
 test('Start, Hören, Comics, Schrank, Baumhaus und Advent ohne horizontales Scrollen',async({page},info)=>{
  const samples=[
   ['', '.maja-advent-highlight','start'],
+  ['stern', '.stern-story-idea','stern'],
   ['pruefung/hoeren/ueben/1','#prep-play','hoeren'],
   ['tagescomic/melody-und-die-hausaufgaben/1','.kino-controls','comic'],
   ['baerli/schrank/saison','.bw-category-grid','saison'],

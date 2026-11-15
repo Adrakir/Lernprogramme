@@ -143,7 +143,7 @@ test('Offline-Update erhält fremden Cache, Lernstand, Kauf und Prüfungsaufnahm
   });
   await load(page);
   await expect.poll(()=>page.evaluate(()=>Boolean(navigator.serviceWorker.controller))).toBeTruthy();
-  expect(await page.evaluate(()=>caches.keys())).toEqual(expect.arrayContaining(['andere-lernapp','majas-wortwerkstatt-v16']));
+  expect(await page.evaluate(()=>caches.keys())).toEqual(expect.arrayContaining(['andere-lernapp','majas-wortwerkstatt-v17']));
   expect(await page.evaluate(()=>caches.keys())).not.toContain('majas-wortwerkstatt-v14');
   await context.setOffline(true);
   await load(page,'pruefung/hoeren/test/1');
@@ -157,4 +157,61 @@ test('Offline-Update erhält fremden Cache, Lernstand, Kauf und Prüfungsaufnahm
   await page.locator('#prep-stop').click();
   const actual=await page.evaluate(keys=>Object.fromEntries(keys.map(key=>[key,JSON.parse(localStorage.getItem(key))])),Object.keys(preserved));
   expect(actual).toMatchObject(preserved);
+  await load(page,'stern');
+  await expect.poll(()=>page.locator('.stern-hero img').evaluate(image=>image.naturalWidth)).toBe(768);
+  await page.getByRole('button',{name:'Nächste Idee'}).click();
+  await expect(page.locator('#stern-idea h3')).toHaveText('Der fliegende Regenschirm');
+});
+
+test('Sterns Figurenbild, Geschichte und Ideen gehen in die vorhandene Schreibwerkstatt über',async ({page})=>{
+  await load(page);
+  await page.getByRole('link',{name:/Sterns Geschichtenwerkstatt/}).click();
+  await expect(page).toHaveURL(/#stern$/);
+  await expect(page.getByRole('heading',{name:'Sterns Geschichtenwerkstatt'})).toBeVisible();
+  await expect.poll(()=>page.locator('.stern-hero img').evaluate(image=>image.naturalWidth)).toBe(768);
+  await page.getByText('Geschichte lesen',{exact:true}).click();
+  await expect(page.getByText(/Maja, Bärli und Stern ins Baumhaus/)).toBeVisible();
+  const idea=page.locator('#stern-idea h3');
+  for(const title of ['Der Schlüssel ohne Tür','Der fliegende Regenschirm','Das flüsternde Buch','Das Boot mit der Nachricht']){
+    await expect(idea).toHaveText(title);
+    await page.getByRole('button',{name:'Nächste Idee'}).click();
+  }
+  await expect(idea).toHaveText('Der Schlüssel ohne Tür');
+  await page.getByRole('button',{name:'Nächste Idee'}).click();
+  await page.getByRole('link',{name:'Mit dieser Idee schreiben'}).click();
+  await expect(page.getByRole('heading',{name:'Der fliegende Regenschirm'})).toBeVisible();
+  await expect(page.getByText(/Der Schirm hebt ab, obwohl es windstill ist/)).toBeVisible();
+  await page.getByLabel('Schreibe deinen Text').fill('Bärli sah einen roten Schirm.');
+  await page.reload({waitUntil:'domcontentloaded'});
+  await expect(page.getByLabel('Schreibe deinen Text')).toHaveValue('Bärli sah einen roten Schirm.');
+  await page.getByRole('link',{name:'Zurück zu Stern'}).click();
+  await expect(page.getByRole('link',{name:'Der fliegende Regenschirm weiterbearbeiten'})).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width+1);
+  await page.getByRole('link',{name:'Zur Schreibwerkstatt'}).click();
+  await expect(page.getByRole('link',{name:'Ein Erlebnis erzählen'})).toBeVisible();
+  await expect(page.getByRole('link',{name:/Sterns Geschichtenwerkstatt/})).toBeVisible();
+});
+
+test('Sterns Gerätestimme erhält Deutsch und Tempo und stoppt beim Verlassen',async({page})=>{
+  await page.addInitScript(()=>{
+    window.SpeechSynthesisUtterance=class {constructor(text){this.text=text;}};
+    const audio={speech:null,cancels:0};
+    const voice={lang:'de-DE',localService:true};
+    Object.defineProperty(window,'speechSynthesis',{value:{
+      getVoices:()=>[voice],speak:utterance=>{audio.speech=utterance;},cancel:()=>{audio.cancels++;audio.speech=null;}
+    }});
+    window.sternAudio=audio;
+  });
+  await load(page,'stern');
+  await page.getByLabel('Tempo').selectOption('0.8');
+  await page.getByRole('button',{name:'Vorlesen',exact:true}).click();
+  await expect(page.locator('#stern-audio-status')).toContainText('liest vor');
+  const played=await page.evaluate(()=>({lang:window.sternAudio.speech.lang,rate:window.sternAudio.speech.rate,text:window.sternAudio.speech.text}));
+  expect(played).toEqual({lang:'de-DE',rate:.8,text:expect.stringContaining('Maja, Bärli und Stern')});
+  await page.evaluate(()=>window.sternAudio.speech.onend());
+  expect(await page.evaluate(()=>window.sternAudio.speech.text)).toContain('Regentropfen');
+  const before=await page.evaluate(()=>window.sternAudio.cancels);
+  await page.getByRole('link',{name:'Zur Schreibwerkstatt'}).click();
+  await expect.poll(()=>page.evaluate(()=>window.sternAudio.speech===null)).toBeTruthy();
+  expect(await page.evaluate(()=>window.sternAudio.cancels)).toBeGreaterThan(before);
 });
