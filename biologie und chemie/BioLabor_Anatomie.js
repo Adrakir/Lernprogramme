@@ -82,12 +82,12 @@
       upper: [['i',68,25],['i',101,25],['c',138,27],['p',178,31],['p',220,31],['m',265,42],['m',318,43],['m',372,38]],
       lower: [['i',68,25],['i',101,25],['c',138,27],['p',178,31],['p',220,31],['m',265,42],['m',318,43],['m',372,38]],
       marks: [['incisor',80,96,59,30],['canine',151,99,156,30],['premolar',193,101,254,30],['molar',286,169,365,226]]},
-    katze: {count: '30 bleibende Zähne',
+    katze: {count: '30 Zähne im vollständigen bleibenden Gebiss',
       upper: [['i',54,15],['i',75,15],['i',96,15],['f',126,30],['s',193,24],['s',235,37],['r',288,70],['t',366,25]],
       lower: [['i',55,14],['i',76,14],['i',97,14],['f',135,29],['s',212,30],['s',257,36],['r',306,64]],
       marks: [['incisor',82,96,52,30],['canine',141,107,141,30],['premolar',250,100,230,30],
         ['molar',379,91,396,30],['carnassial',326,104,397,226,[344,172]]]},
-    hund: {count: '42 bleibende Zähne',
+    hund: {count: '42 Zähne im vollständigen bleibenden Gebiss',
       upper: [['i',42,15],['i',62,15],['i',82,17],['f',108,29],['s',153,19],['s',184,25],['s',221,34],['r',267,58],['m',331,41],['t',379,25]],
       lower: [['i',44,15],['i',64,15],['i',84,17],['f',115,28],['s',152,17],['s',180,23],['s',213,27],['s',250,29],['r',288,55],['m',349,30],['t',385,22]],
       marks: [['incisor',70,96,49,30],['canine',122,107,139,30],['premolar',237,99,227,30],
@@ -121,13 +121,13 @@
        aria-label="${i + 1}. ${toothLabels[key]}" style="--x:${x / 4.6}%;--y:${y / 2.6}%">${i + 1}</button>`).join('') : '';
     return `<figure class="bk-figure bk-dentition">
       <div class="bk-picture" style="aspect-ratio:460/260"><svg viewBox="0 0 460 260" role="img"
-       aria-label="Schematische Seitenansicht einer Kieferhälfte, vorn links">
+       aria-label="Gebiss von ${specimenNames[id]}, schematische Seitenansicht einer Gebissseite, vorn links${showMarker && selection ? ', eine Zahngruppe ist markiert' : ''}">
         <path class="bk-gum" d="M31 79Q140 47 250 56L422 59L420 79Z M31 189L420 189L421 208L249 213Q143 219 31 189Z"/>
         ${row(jaw.upper, 77, false)}${row(jaw.lower, 191, true)}
         ${showMarker && selection ? line(px,py) + (second ? line(...second) : '') : ''}
         ${showMarker && !interactive && selection ? `<circle class="bk-start" cx="${mx}" cy="${my}" r="10"/>` : ''}
       </svg>${markers}</div>
-      <figcaption>Vorn links · Oberkiefer oben</figcaption>
+      <figcaption>${specimenNames[id]} · Vorn links · Oberkiefer oben</figcaption>
     </figure>`;
   }
 

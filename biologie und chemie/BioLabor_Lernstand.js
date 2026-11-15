@@ -64,7 +64,8 @@
       (rows.length ? '<h4>' + (family?'Zuletzt bearbeitet':'Bearbeitete Inhalte') + '</h4><ul>' + rows.map(r =>
         '<li data-bl-result-topic="' + r.kind + '"><a href="' + r.url + '">' + escape(r.label) + '</a> · ' +
         formatDate(r.at) + '<br>' + escape(r.result) + '</li>').join('') + '</ul>'
-        : '<p>Noch keine Stations- oder Probearbeitsergebnisse gespeichert.</p>') +
+        : exams.draft ? '<p>Ein Entwurf ist gespeichert. Ergebnisse erscheinen nach der Abgabe.</p>'
+          : '<p>Noch keine Stations- oder Probearbeitsergebnisse gespeichert.</p>') +
       (family ? '<p><a href="#lehrkraft">Stationsübersicht und Druckmaterial</a></p>' : '') + '</section>';
   }
 

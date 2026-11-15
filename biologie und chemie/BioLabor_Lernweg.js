@@ -87,20 +87,48 @@
       '</div></details>';
   }
 
+  let directoryQuery = '';
+
+  const normalize = text => text.toLocaleLowerCase('de').normalize('NFC');
+  const plain = text => normalize(text).normalize('NFD').replace(/\p{M}/gu, '').replaceAll('ß', 'ss');
+  const searchTokens = text => normalize(text).match(/[\p{L}\p{N}]+/gu) || [];
+
+  function matchesDirectory(text, tokens) {
+    const original = normalize(text);
+    const expanded = original.replace(/[äöüß]/g, char => ({ä:'ae', ö:'oe', ü:'ue', ß:'ss'}[char]));
+    const simplified = plain(text);
+    return tokens.every(term => expanded.includes(term) || simplified.includes(plain(term)));
+  }
+
+  function searchSummary(tokens, count) {
+    if (!tokens.length) return '';
+    return count === 0 ? 'Kein passendes Thema gefunden.' : count + (count === 1 ? ' passender Eintrag' : ' passende Einträge');
+  }
+
   function directory(items) {
     const direct = [
       ['#schulstoff/gebiss', 'Gebisse vergleichen · Hund, Katze, Mensch und Kaninchen'],
+      ['#klassenarbeit/gebiss/mensch', 'Gebiss beschriften und Gebiss-Probetest'],
+      ['#klassenarbeit/mensch', 'Skelett beschriften und Skelett-Probetest'],
+      ['#probetest/archiv', 'Archiv der Probeklassenarbeiten'],
       ['#schulstoff/katze', 'Körperbau und Gebiss der Katze'],
       ['#schulstoff/pfote', 'Pfote, Skelett und Zehengang'],
       ['#schulstoff/haustier', 'Ein Hund als Haustier? Hunderassen vergleichen'],
       ['BioLabor_Hund_Katze.html#dog/skeleton', 'Hund erforschen'],
       ['BioLabor_Hund_Katze.html#cat/skeleton', 'Katze erforschen'],
     ];
+    const tokens = searchTokens(directoryQuery);
+    let shown = 0;
+    const links = [...items.map(item => ['#' + item.id, item.title]), ...direct].map(([url, label]) => {
+      const visible = matchesDirectory(label, tokens);
+      shown += Number(visible);
+      return '<li' + (visible ? '' : ' hidden') + '><a href="' + escape(url) + '">' + escape(label) + '</a></li>';
+    }).join('');
     return '<section class="panel bl-directory" id="bio-themen" tabindex="-1"><h2>Alle Themen und Funktionen</h2>' +
-      '<label>Inhalte suchen <input type="search" data-bl-search placeholder="z. B. Wirbelsäule, Spiele oder Druck"></label>' +
-      '<p role="status" data-bl-search-status></p><ul>' +
-      [...items.map(item => ['#' + item.id, item.title]), ...direct].map(([url, label]) =>
-        '<li><a href="' + escape(url) + '">' + escape(label) + '</a></li>').join('') + '</ul></section>';
+      '<div class="bl-directory-controls"><label>Inhalte suchen <input type="search" data-bl-search placeholder="z. B. Wirbelsäule, Spiele oder Druck" value="' +
+      escape(directoryQuery) + '"></label><button type="button" class="btn small secondary" data-bl-search-clear' +
+      (directoryQuery ? '' : ' hidden') + '>Suche löschen</button></div>' +
+      '<p role="status" data-bl-search-status>' + searchSummary(tokens, shown) + '</p><ul>' + links + '</ul></section>';
   }
 
   function focus(target, scroll = false) {
@@ -126,21 +154,31 @@
   function bindMain() {
     const root = document.getElementById('main');
     root.addEventListener('click', event => {
-      const button = event.target.closest('[data-bl-jump],[data-bl-cockpit]');
-      if (button?.dataset.blJump) focus(root.querySelector(button.dataset.blJump), true);
+      const button = event.target.closest('[data-bl-jump],[data-bl-cockpit],[data-bl-search-clear]');
+      if (button?.dataset.blJump) {
+        const target = root.querySelector(button.dataset.blJump);
+        if (button.hasAttribute('data-bl-open-details') && target?.parentElement.matches('details')) {
+          target.parentElement.open = true;
+        }
+        focus(target, true);
+      }
       if (button?.dataset.blCockpit) window.LernCockpit?.open(button.dataset.blCockpit);
+      if (button?.hasAttribute('data-bl-search-clear')) {
+        const input = button.closest('.bl-directory').querySelector('[data-bl-search]');
+        input.value = '';
+        input.dispatchEvent(new Event('input', {bubbles:true}));
+        input.focus();
+      }
     });
-    const normalize = text => text.toLocaleLowerCase('de').replace(/[äöüß]/g, char =>
-      ({ä:'ae', ö:'oe', ü:'ue', ß:'ss'}[char]));
     root.addEventListener('input', event => {
       if (!event.target.matches('[data-bl-search]')) return;
       const section = event.target.closest('.bl-directory');
-      const terms = normalize(event.target.value).trim().split(/\s+/).filter(Boolean);
+      directoryQuery = event.target.value;
+      const tokens = searchTokens(directoryQuery);
       const items = [...section.querySelectorAll('li')];
-      items.forEach(item => {item.hidden = !terms.every(term => normalize(item.textContent).includes(term));});
-      const hits = items.filter(item => !item.hidden).length;
-      section.querySelector('[data-bl-search-status]').textContent = !terms.length ? '' :
-        hits === 0 ? 'Kein passendes Thema gefunden.' : hits + (hits === 1 ? ' passender Eintrag' : ' passende Einträge');
+      items.forEach(item => {item.hidden = !matchesDirectory(item.textContent, tokens);});
+      section.querySelector('[data-bl-search-clear]').hidden = !directoryQuery;
+      section.querySelector('[data-bl-search-status]').textContent = searchSummary(tokens, items.filter(item => !item.hidden).length);
     });
   }
 

@@ -75,7 +75,9 @@
   }
 
   function archiveEntry(version, attempt) {
-    return attempt ? pastAttempts(version - 1)[attempt - 1] : stored.completed?.[version - 1];
+    const previous = pastAttempts(version - 1);
+    if (!attempt || attempt === previous.length + 1) return stored.completed?.[version - 1];
+    return previous[attempt - 1];
   }
 
   function formattedDate(entry) {
@@ -97,7 +99,7 @@
       return [...previous, latest].flatMap((entry, index) => {
         if (!entry || entry.version !== version || !entry.answers) return [];
         const archived = index < previous.length;
-        const url = '#probetest/archiv/' + (version + 1) + (archived ? '/' + (index + 1) : '');
+        const url = '#probetest/archiv/' + (version + 1) + '/' + (index + 1);
         return [{version, entry, number:index+1, archived, url}];
       });
     }).sort((a,b) => (Date.parse(b.entry.at) || 0) - (Date.parse(a.entry.at) || 0));
@@ -114,7 +116,7 @@
     return {compared, pending};
   }
 
-  function examStart(active) {
+  function examStart(active, notice = '') {
     const historyItems = examHistory();
     const check = stored.followup;
     const due = Date.parse(check?.at);
@@ -124,7 +126,8 @@
     return heading('Interaktive Probeklassenarbeit',
       'Wähle eine von drei Fassungen. Plane etwa 15–20 Minuten ein. Jede Fassung enthält Bildaufgaben, Zuordnungen und zwei kurze Erklärfragen.',
       '<a href="#schulstoff">Zum Schulstoff</a><a href="#print">Arbeiten zum Drucken</a>') +
-      `<section class="bs-panel bp-panel"><h2>So läuft die Arbeit ab</h2>
+      `${notice ? '<p class="bp-note" role="status">' + notice + '</p>' : ''}
+      <section class="bs-panel bp-panel"><h2>So läuft die Arbeit ab</h2>
       <p>Du kannst Fragen überspringen, zurückgehen und Antworten ändern. Tipps und Lösungen erscheinen nach der Abgabe. Erklärtexte vergleichst du dann selbst mit den Musterantworten.</p>
       ${active ? `<p class="bp-status">Arbeit ${active.version + 1} ist ${active.phase === 'results' ? 'abgegeben' : 'noch offen'}.</p>
         <div class="button-row">${button('resume', active.phase === 'results' ? 'Letzte Auswertung öffnen' : 'Arbeit fortsetzen')}</div>` : ''}
@@ -137,7 +140,7 @@
         <h3>Arbeit ${index + 1}</h3><p>${questions.length} Aufgaben · ${questions.filter(q => !q.criteria).reduce((sum,q) => sum + maxPoints(q),0)} automatisch prüfbare Punkte</p>
         ${active?.phase === 'work' && active.version === index ? button('resume', 'Arbeit ' + (index + 1) + ' fortsetzen', true)
           : button('start', 'Arbeit ' + (index + 1) + ' starten', true, index)}</article>`).join('')}</div></section>` +
-      (historyItems.length ? `<section class="bs-panel bp-panel"><h2>Abgegebene Arbeiten</h2><ul class="bp-answers">
+      (historyItems.length ? `<section class="bs-panel bp-panel"><h2 id="bp-history" tabindex="-1">Abgegebene Arbeiten</h2><ul class="bp-answers">
         ${historyItems.map(({version, entry, number, archived, url}) => {
           const summary = examSummary(entry);
           return `<li>Arbeit ${version + 1} · ${summary.score} von ${summary.max} automatisch geprüften Punkten
@@ -235,7 +238,7 @@
   }
 
   function archive(entry) {
-    if (!entry) return examStart(stored.exam);
+    if (!entry) return examStart(stored.exam, 'Diese Auswertung ist in diesem Profil nicht gespeichert.');
     const {score, max, writingCount} = examSummary(entry);
     const {compared, pending} = reviewProgress(entry);
     return heading('Auswertung · Arbeit ' + (entry.version + 1),
@@ -376,7 +379,9 @@
         start: () => examStart(active),
         arbeit: () => active?.phase === 'work' ? examQuestion(active, confirm) : examStart(active),
         auswertung: () => active?.phase === 'results' ? examResults(active) : examStart(active),
-        archiv: () => archive(archiveEntry(archiveVersion, archiveAttempt)),
+        archiv: () => Number.isInteger(archiveVersion)
+          ? archive(archiveEntry(archiveVersion, archiveAttempt))
+          : examStart(active, examHistory().length ? '' : 'In diesem Profil wurde noch keine Arbeit abgegeben.'),
         wiederholen: () => !round?.topics?.length
           ? examStart(active) : round.finished ? practiceResults(round) : practiceRound(round),
       };
@@ -412,6 +417,7 @@
     if (screen === 'uebungsentwurf' && unfinishedRound(false)) {
       openRound([], false, true);
     } else {
+      if (screen === 'archiv' && !Number.isInteger(archiveVersion)) focus = '#bp-history';
       render();
     }
 
@@ -440,9 +446,10 @@
     }
 
     function saveReview(entry) {
-      if (screen !== 'archiv' || !archiveAttempt) (stored.completed ||= {})[entry.version] = entry;
+      const isLatest = screen !== 'archiv' || stored.completed?.[entry.version] === entry;
+      if (isLatest) (stored.completed ||= {})[entry.version] = entry;
       const active = stored.exam;
-      if (!archiveAttempt && active?.phase === 'results' && active.version === entry.version && active.at === entry.at) {
+      if (isLatest && active?.phase === 'results' && active.version === entry.version && active.at === entry.at) {
         active.reviews = entry.reviews;
       }
       save();
@@ -724,7 +731,7 @@
   }
 
   function progress() {
-    const entries = examHistory().map(({entry, number, archived, url: archiveUrl}) => {
+    const entries = examHistory().map(({entry, number, url: archiveUrl}) => {
         const questions = versions[entry.version];
         const topics = needsPractice(entry);
         const practiceSkills = [...new Set(topics.map(topic => retry[topic][0].skill))];
@@ -732,9 +739,7 @@
           objectivePoints(q, entry.answers[i]) === maxPoints(q)).map(q => q.skill))]
           .filter(skill => !practiceSkills.includes(skill)).map(skill => skills[skill][0]);
         const {compared, pending} = reviewProgress(entry);
-        const current = !archived && stored.exam?.version === entry.version && stored.exam.phase === 'results' &&
-          stored.exam.at === entry.at;
-        const url = current ? '#probetest/auswertung' : archiveUrl;
+        const url = archiveUrl;
         const practiceLinks = practiceSkills.map(skill => [
           skills[skill][0], skills[skill][1], topics.filter(topic => retry[topic][0].skill === skill),
         ]);
