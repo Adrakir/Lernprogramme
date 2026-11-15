@@ -86,4 +86,77 @@ module.exports = async function checkFollowup(page, home) {
   await page.locator('[data-scene="relax"]').click();
   await page.locator('[data-scene="greet"]').click();
   assert.equal(await page.locator('[data-behavior-answer="0"]').getAttribute('aria-pressed'), 'true');
+
+  await page.goto(home + '#home');
+  const search = page.locator('[data-bl-search]');
+  await search.fill('korper');
+  assert.equal(await page.locator('#bio-themen a[href="#schulstoff/katze"]').isVisible(), true);
+  await search.fill('skelett, probetest');
+  const skeletonLink = page.locator('#bio-themen a[href="#klassenarbeit/mensch"]');
+  await skeletonLink.click();
+  const work = page.locator('#bio-klassenarbeit');
+  await work.locator('[data-bk="mode:test"]').click();
+  assert.equal(await work.locator('progress').getAttribute('value'), '0');
+  await work.locator('[data-answer]').first().click();
+  const nextChoices = await work.locator('[data-answer]').allTextContents();
+  const diagram = await work.locator('.bk-picture svg').innerHTML();
+  await page.reload();
+  await work.getByRole('button', {name:'Skelett-Probetest fortsetzen', exact:true}).click();
+  assert.equal(await work.locator('progress').getAttribute('value'),'1');
+  assert.deepEqual(await work.locator('[data-answer]').allTextContents(),nextChoices);
+  assert.equal(await work.locator('.bk-picture svg').innerHTML(),diagram);
+  await work.locator('[data-bk="mode:practice"]').click();
+  const practice = await work.locator('.bk-picture svg').innerHTML();
+  await work.locator('.bk-image-text > summary').click();
+  await work.locator('[data-bk="hint"]').click();
+  assert.equal(await work.locator('[data-bk="hint"]').getAttribute('aria-expanded'),'true');
+  assert.equal(await work.locator('.bk-image-text').evaluate(node=>node.open),true);
+  await work.locator('[data-bk="species:katze"]').click();
+  assert.equal(new URL(page.url()).hash,'#klassenarbeit/katze');
+  await work.locator('[data-bk="species:mensch"]').click();
+  assert.equal(await work.locator('.bk-picture svg').innerHTML(),practice);
+  assert.equal(await work.locator('[data-bk="hint"]').getAttribute('aria-expanded'),'true');
+  await work.locator('[data-bk="topic:teeth"]').click();
+  assert.equal(new URL(page.url()).hash,'#klassenarbeit/gebiss/mensch');
+  assert.match(await work.locator('.bk-picture svg').getAttribute('aria-label'),/Gebiss von Mensch/);
+  await page.goto(home + '#home');
+  await search.fill('skelett, probetest');
+  await page.goto(home + '#schulstoff/wolf');
+  await page.getByRole('button',{name:'Geführter Einstieg',exact:true}).click();
+  assert.equal(await page.locator('.bl-guide').evaluate(node=>node.open),true);
+  await page.goto(home + '#home');
+  assert.equal(await search.inputValue(),'skelett, probetest');
+  await page.locator('[data-bl-search-clear]').click();
+  assert.equal(await search.inputValue(),'');
+
+  const storageKey = 'biolab5-probetest-1';
+  const older = {version:0,phase:'results',at:'2026-10-01T10:00:00Z',answers:{7:'Text aus dem ersten Versuch.'}};
+  await page.evaluate(({key,entry}) => localStorage.setItem(key,JSON.stringify({completed:{0:entry}})),
+    {key:storageKey,entry:older});
+  await page.goto(home + '#probetest/archiv');
+  await page.reload();
+  const archiveLink = page.getByRole('link',{name:'Auswertung zu Arbeit 1 öffnen',exact:true});
+  assert.equal(await archiveLink.getAttribute('href'),'#probetest/archiv/1/1');
+  await archiveLink.click();
+  const archivePanel = page.locator('[data-bp-review="7"]');
+  await archivePanel.locator('summary').click();
+  assert.match(await archivePanel.innerText(),/Text aus dem ersten Versuch/);
+  await page.evaluate(({key,entry}) => {
+    localStorage.setItem(key,JSON.stringify({
+      previousAttempts:{0:[entry]},
+      completed:{0:{...entry,at:'2026-10-02T10:00:00Z',answers:{7:'Text aus dem zweiten Versuch.'}}}
+    }));
+  }, {key:storageKey,entry:older});
+  await page.reload();
+  await archivePanel.locator('summary').click();
+  assert.match(await archivePanel.innerText(),/Text aus dem ersten Versuch/);
+  await page.goto(home + '#probetest/archiv/1/999');
+  await page.getByText('Diese Auswertung ist in diesem Profil nicht gespeichert.',{exact:true}).waitFor();
+
+  await page.goto(home + '#games');
+  await page.locator('[data-action="gameTab"][data-id="skeleton"]').click();
+  await page.locator('[data-action="skeletonPick"]').first().press('Enter');
+  const gameFeedback = page.locator('#main .feedback');
+  assert.equal(await gameFeedback.evaluate(node=>node===document.activeElement),true);
+  assert.match(await gameFeedback.innerText(), /Richtig ist: Schädel/);
 };

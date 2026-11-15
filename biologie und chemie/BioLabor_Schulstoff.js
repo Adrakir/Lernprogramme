@@ -956,7 +956,7 @@
     const rating = ['🟢 Kann ich erklären', '🟡 Ich bin noch unsicher', '🔴 Das übe ich noch'];
     root.innerHTML = `<div class="bs-school"><header class="bs-heading"><a href="#schulstoff">← Zum Laufzettel</a>
       <h1>${lesson.title}</h1><p>${lesson.source}</p><div class="bl-actions"><button type="button" class="btn small" data-bl-jump="[data-bl-school-tasks]">Zu den Aufgaben</button>
-      <button type="button" class="btn small secondary" data-bl-jump=".bl-guide summary">Geführter Einstieg</button></div></header>
+      <button type="button" class="btn small secondary" data-bl-jump=".bl-guide summary" data-bl-open-details>Geführter Einstieg</button></div></header>
       ${window.BioLaborLernweg?.lesson(id, true) || ''}
       <section class="bs-panel"><h2>Das brauchst du</h2><p>${lesson.intro}</p>
         <div class="bl-task-reading">${window.BioLaborLernweg?.readAloud('Lernwissen vorlesen', lesson.facts.join(' ')) || ''}</div>

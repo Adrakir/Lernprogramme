@@ -1,5 +1,8 @@
 .bl-actions { display:flex; flex-wrap:wrap; gap:.55rem; margin-block:.6rem; }
 .bl-actions > * { min-height:44px; }
+.bl-directory-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap}
+.bl-directory-controls label{flex:1 1 210px}
+.bl-directory-controls [hidden]{display:none}
 .bl-directory,.bl-guide,[data-bl-school-tasks],[data-bs-task-index] h3,.bp-review summary,#content .page-title { scroll-margin-top:80px; }
 .bl-directory ul { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr)); list-style:none; gap:7px; margin:0; padding:0; }
 .bl-directory a { display:block; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:10px; }
