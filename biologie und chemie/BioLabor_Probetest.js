@@ -518,8 +518,15 @@
             <label class="bp-writing">Begründe mit zwei Beobachtungen <small>„Ich sehe … und … . In dieser Situation vermute ich deshalb …“</small><textarea data-bo-writing rows="4" maxlength="1500">${escape(entry.text)}</textarea></label>
             <div class="button-row bp-actions"><button type="button" class="btn" data-bo-check>Deutung prüfen</button></div>
             <p data-bo-notice role="status"></p>
-            ${checked ? `<div class="bp-note" role="status" tabindex="-1"><p><strong>${entry.choice === item.answer ? '✓ Das passt.' : 'Schau noch einmal auf die Situation.'}</strong> ${item.reason}</p>
-              <p><strong>Beispiel für eine Begründung:</strong> ${item.sample}</p></div>` : ''}
+            ${checked ? `<div class="bp-note" role="status" tabindex="-1"><p><strong>${entry.choice === item.answer ? '✓ Das passt als Deutung.' : 'Prüfe deine Deutung noch einmal.'}</strong> ${item.reason}</p>
+              <p><strong>Beispiel für eine Begründung:</strong> ${item.sample}</p>
+              <fieldset class="bp-criteria"><legend>Vergleiche deine Begründung selbst</legend>
+                <p>Ob dein Text passt, prüfst du anhand dieser beiden Punkte.</p>
+                <label><input type="checkbox" data-bo-review="0" ${entry.review?.[0] ? 'checked' : ''}>
+                  Ich habe zwei verschiedene, sichtbare Signale beschrieben.</label>
+                <label><input type="checkbox" data-bo-review="1" ${entry.review?.[1] ? 'checked' : ''}>
+                  Ich habe erklärt, wie die Signale in dieser Situation zu meiner Deutung passen.</label>
+              </fieldset></div>` : ''}
             ` : ''}
         </section></div>`;
       if (focus) root.querySelector(focus)?.focus({preventScroll: focus !== '.bp-note'});
@@ -551,7 +558,7 @@
         const markers = new Set(entry.markers || []);
         if (markers.has(part)) markers.delete(part);
         else markers.add(part);
-        update({markers: [...markers], checked: false});
+        update({markers: [...markers], checked: false, review: []});
         focus = (viaList ? '[data-bo-text-marker="' : '[data-bo-marker="') + part + '"]';
       } else if (control.hasAttribute('data-bo-check')) {
         if (!Number.isInteger(entry.choice) || !entry.text?.trim()) {
@@ -565,14 +572,20 @@
     });
 
     root.addEventListener('change', event => {
+      if (event.target.matches('[data-bo-review]')) {
+        const review = [...(stored.observation[index]?.review || [])];
+        review[Number(event.target.dataset.boReview)] = event.target.checked;
+        update({review});
+        return;
+      }
       if (!event.target.matches('input[name="bo-choice"]')) return;
-      update({choice: Number(event.target.value), checked: false});
+      update({choice: Number(event.target.value), checked: false, review: []});
       focus = 'input[name="bo-choice"]:checked';
       render();
     });
     root.addEventListener('input', event => {
       if (!event.target.matches('[data-bo-writing]')) return;
-      update({text: event.target.value, checked: false});
+      update({text: event.target.value, checked: false, review: []});
       root.querySelector('.bp-note')?.remove();
     });
   }

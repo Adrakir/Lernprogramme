@@ -310,24 +310,50 @@ function comparePage(){
  '<div class="panel spaced"><h3>Fachliche Quellen zum Nachlesen</h3><ul class="list"><li><a href="https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals" target="_blank" rel="noopener">Merck Veterinary Manual – Tiergebisse</a></li><li><a href="https://vet.ucalgary.ca/summercamps/anatomy/monday/small-animal" target="_blank" rel="noopener">University of Calgary – Skelettanatomie</a></li><li><a href="https://www.rspca.org.uk/adviceandwelfare/pets/dogs/behaviour/understanding" target="_blank" rel="noopener">RSPCA – Körpersprache beim Hund</a> und <a href="https://www.rspca.org.uk/adviceandwelfare/pets/cats/behaviour" target="_blank" rel="noopener">bei der Katze</a></li><li><a href="https://www.loc.gov/everyday-mysteries/categories/zoology/item/how-did-cats-become-domesticated/" target="_blank" rel="noopener">Library of Congress – Herkunft der Hauskatze</a></li><li><a href="https://www.si.edu/stories/your-dog-little-wolfy" target="_blank" rel="noopener">Smithsonian – Herkunft des Hundes</a></li></ul></div>'+
  navLine('quiz','Weiter: Wissenstest starten');
 }
-function resetQuiz(){
- quiz=Q.filter(x=>x.animal===animal||x.animal==='both').sort((a,b)=>Q.indexOf(a)-Q.indexOf(b));
+function quizState(){
+ try{return JSON.parse(localStorage.getItem(KEY))||{}}catch{return {}}
+}
+function saveQuiz(){
+ const saved=quizState();
+ const previous=saved.best?.[animal]||0;
+ best[animal]=Math.max(previous,best[animal],qi===quiz.length?score:0);
+ try{
+  localStorage.setItem(KEY,JSON.stringify({
+   ...saved,best:{...saved.best,[animal]:best[animal]},
+   drafts:{...saved.drafts,[animal]:{qi,chosen,checked,hints,score}}
+  }));
+ }catch{}
+}
+function resetQuiz(resume=false){
+ quiz=Q.filter(x=>x.animal===animal||x.animal==='both');
  qi=0;chosen=null;checked=false;hints=0;score=0;
+ if(!resume)return;
+ const draft=quizState().drafts?.[animal];
+ if(!Number.isInteger(draft?.qi)||draft.qi<0||draft.qi>quiz.length)return;
+ qi=draft.qi;
+ if(Number.isInteger(draft.chosen)&&quiz[qi]?.a[draft.chosen]!==undefined)chosen=draft.chosen;
+ checked=chosen!==null&&draft.checked===true;
+ hints=Number.isInteger(draft.hints)?Math.max(0,Math.min(2,draft.hints)):0;
+ score=Number.isInteger(draft.score)?Math.max(0,Math.min(qi+Number(checked),draft.score)):0;
+}
+function renderQuizAt(selector){
+ saveQuiz();
+ render(false);
+ window.BioLaborLernweg.focus($(selector) || $('.page-title h1'));
 }
 function quizPage(){
  if(!quiz.length)resetQuiz();
  if(qi>=quiz.length){
  const pct=Math.round(score/quiz.length*100);
- if(score>best[animal]){best[animal]=score;try{localStorage.setItem(KEY,JSON.stringify({best:best}))}catch(e){}}
  return pageTitle('08','Wissenstest abgeschlossen','Dein Ergebnis wird nur auf diesem Gerät gespeichert.')+
  '<div class="panel white"><span class="kicker">DEIN ERGEBNIS</span><div class="score">'+score+' / '+quiz.length+'</div><h2>'+(pct>=85?'🏆 Tierforscher-Profi!':pct>=60?'🌱 Schon viel verstanden!':'🔍 Nächste Runde wird besser!')+'</h2><p>Du hast '+pct+' % der Fragen richtig beantwortet. '+(pct>=85?'Du kannst Skelett, Gebiss und Verhalten sehr gut erklären.':'Schau dir die Erklärungen noch einmal an und versuche es erneut.')+'</p><p>Dein bisheriges bestes Ergebnis für '+A().name+': '+best[animal]+' von '+quiz.length+'.</p><div class="actionline"><button class="btn" data-action="restart">Erneut üben</button><button class="btn secondary" data-section="skeleton">Skelett wiederholen</button></div></div>';
  }
  const q=quiz[qi],percent=Math.round(qi/quiz.length*100),letters=['A','B','C','D'];
  return pageTitle('08','Wissenstest · '+A().name,'Teste dein Wissen über Knochen, Zähne, Jagd, Bewegung und Körpersprache. Jede Antwort wird erklärt.')+
- '<div class="panel white"><div class="quiz-head"><span class="kicker">FRAGE '+(qi+1)+' VON '+quiz.length+'</span><span class="mini-tag">⭐ '+score+' richtig</span></div><div class="meter" role="progressbar" aria-label="Fortschritt im Wissenstest" aria-valuenow="'+percent+'"><span style="width:'+percent+'%"></span></div><h2 style="font-size:1.25rem">'+escapeHtml(q.q)+'</h2>'+
- '<div class="answers">'+q.a.map((a,i)=>'<button type="button" data-answer="'+i+'" class="answer '+(chosen===i?'chosen ':'')+(checked&&i===q.c?'correct ':checked&&chosen===i?'wrong ':'')+'" '+(checked?'disabled':'')+'><strong>'+letters[i]+'.</strong> '+escapeHtml(a)+'</button>').join('')+'</div>'+
+ '<div class="panel white"><div class="quiz-head"><span class="kicker">FRAGE '+(qi+1)+' VON '+quiz.length+'</span><span class="mini-tag">⭐ '+score+' richtig</span></div><div class="meter" role="progressbar" aria-label="Fortschritt im Wissenstest" aria-valuenow="'+percent+'"><span style="width:'+percent+'%"></span></div><h2 tabindex="-1" style="font-size:1.25rem">'+escapeHtml(q.q)+'</h2>'+
+ '<div class="answers">'+q.a.map((a,i)=>'<button type="button" data-answer="'+i+'" aria-pressed="'+(chosen===i)+'" class="answer '+(chosen===i?'chosen ':'')+(checked&&i===q.c?'correct ':checked&&chosen===i?'wrong ':'')+'" '+(checked?'disabled':'')+'><strong>'+letters[i]+'.</strong> '+escapeHtml(a)+'</button>').join('')+'</div>'+
  (hints>0&&!checked?'<div class="callout"><strong>💡 Hinweis '+hints+'</strong><p>'+(hints===1?escapeHtml(q.hint):'Überlege, welche Funktion das Merkmal wirklich erfüllt. Streiche Antworten, die biologisch nicht passen.')+'</p></div>':'')+
- (checked?'<div class="feedback '+(chosen===q.c?'':'bad')+'" role="status"><strong>'+(chosen===q.c?'✓ Richtig!':'↗ Noch nicht richtig.')+'</strong><p><b>Richtige Antwort:</b> '+escapeHtml(q.a[q.c])+'</p><p>'+escapeHtml(q.why)+'</p>'+(chosen!==q.c?'<small>Warum deine Wahl nicht passt: Diese Aussage erfüllt die in der Erklärung beschriebene Funktion nicht.</small>':'')+'</div>':'')+
+ (checked?'<div class="feedback '+(chosen===q.c?'':'bad')+'" role="status" tabindex="-1"><strong>'+(chosen===q.c?'✓ Richtig!':'↗ Noch nicht richtig.')+'</strong><p><b>Richtige Antwort:</b> '+escapeHtml(q.a[q.c])+'</p><p>'+escapeHtml(q.why)+'</p>'+(chosen!==q.c?'<small>Warum deine Wahl nicht passt: Diese Aussage erfüllt die in der Erklärung beschriebene Funktion nicht.</small>':'')+'</div>':'')+
  '<div class="actionline">'+(!checked?'<button class="btn" data-action="check" '+(chosen===null?'disabled':'')+'>Antwort prüfen</button><button class="btn secondary" data-action="hint" '+(hints>=2?'disabled':'')+'>💡 Hilfe '+hints+'/2</button>':
  '<button class="btn" data-action="next">'+(qi+1===quiz.length?'Ergebnis anzeigen':'Nächste Frage')+' →</button>')+'<button class="btn secondary" data-action="restart">Neu starten</button></div></div>'+
  '<p class="smallnote">Lernen statt Raten: Bei falschen Antworten wird die richtige Begründung angezeigt. Tipps sind zum Lernen gedacht.</p>';
@@ -361,7 +387,7 @@ function render(focus){
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}
 function chooseSection(v){section=v;location.hash=animal+'/'+section;render(true)}
-function chooseAnimal(v){animal=v;bone='spine';tooth='canine';mood='relax';gait='walk';resetQuiz();location.hash=animal+'/'+section;render(true)}
+function chooseAnimal(v){if(v===animal)return;animal=v;bone='spine';tooth='canine';mood='relax';gait='walk';resetQuiz(true);location.hash=animal+'/'+section;render(true)}
 document.addEventListener('click',function(e){
  const diagramBone=e.target.closest('[data-bone]');
  if(diagramBone&&!diagramBone.matches('button')){bone=diagramBone.dataset.bone;render(false);return}
@@ -372,26 +398,25 @@ document.addEventListener('click',function(e){
  if(b.dataset.tooth){tooth=b.dataset.tooth;render(false);return}
  if(b.dataset.mood){mood=b.dataset.mood;render(false);return}
  if(b.dataset.gait){gait=b.dataset.gait;render(false);return}
- if(b.dataset.answer!==undefined&&!checked){chosen=Number(b.dataset.answer);render(false);return}
+ if(b.dataset.answer!==undefined&&!checked){chosen=Number(b.dataset.answer);renderQuizAt('[data-answer="'+chosen+'"]');return}
  if(b.dataset.action==='zoom'){const frame=document.querySelector('.bone-board');if(frame){frame.classList.toggle('zoomed');b.textContent=frame.classList.contains('zoomed')?'🔎 Wieder verkleinern':'🔎 Skelett vergrößern';}return}
- if(b.dataset.action==='hint'&&!checked){hints=Math.min(2,hints+1);render(false);return}
- if(b.dataset.action==='check'&&chosen!==null&&!checked){checked=true;if(chosen===quiz[qi].c)score++;render(false);return}
- if(b.dataset.action==='next'&&checked){qi++;checked=false;chosen=null;hints=0;render(false);return}
- if(b.dataset.action==='restart'){resetQuiz();render(false);return}
+ if(b.dataset.action==='hint'&&!checked){hints=Math.min(2,hints+1);renderQuizAt(hints<2?'[data-action="hint"]':'.quiz-head ~ h2');return}
+ if(b.dataset.action==='check'&&chosen!==null&&!checked){checked=true;if(chosen===quiz[qi].c)score++;renderQuizAt('.feedback');return}
+ if(b.dataset.action==='next'&&checked){qi++;checked=false;chosen=null;hints=0;renderQuizAt(qi===quiz.length?'.page-title h1':'.quiz-head ~ h2');return}
+ if(b.dataset.action==='restart'){resetQuiz();renderQuizAt('.quiz-head ~ h2');return}
 });
 $('#content').addEventListener('keydown',function(e){const g=e.target.closest('[data-bone]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();bone=g.dataset.bone;render(false)}});
-$('#theme').addEventListener('click',()=>{document.body.classList.toggle('dark');try{localStorage.setItem(KEY+'-theme',document.body.classList.contains('dark')?'dark':'light')}catch(e){}});
+$('#theme').addEventListener('click',()=>{window.BioLaborLernweg.setAnimalTheme(document.body.classList.contains('dark')?'light':'dark')});
 $('#font').addEventListener('click',()=>{const n=Number(document.documentElement.style.getPropertyValue('--scale')||1);document.documentElement.style.setProperty('--scale',String(n>=1.25?1:n+.125));toast('Schriftgröße angepasst')});
 $('#speak').addEventListener('click',()=>{if(!('speechSynthesis' in window)){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}if(speechSynthesis.speaking){speechSynthesis.cancel();toast('Vorlesen beendet');return}const t=new SpeechSynthesisUtterance($('#content').innerText);t.lang='de-DE';t.rate=Number(animalSettings.rate)||.89;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.voiceURI===animalSettings.voice)||voices.find(x=>x.lang.toLowerCase().startsWith('de'));if(v)t.voice=v;speechSynthesis.speak(t);toast('Vorlesen gestartet · erneut tippen zum Stoppen')});
 $('#print').addEventListener('click',()=>window.print());
-window.addEventListener('hashchange',()=>{const p=decodeURIComponent(location.hash.slice(1)).split('/');if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){if(animal===p[0]&&section===p[1])return;animal=p[0];section=p[1];if(section==='quiz')resetQuiz();render(true)}});
-try{if(localStorage.getItem(KEY+'-theme')==='dark')document.body.classList.add('dark')}catch(e){}
+window.addEventListener('hashchange',()=>{const p=decodeURIComponent(location.hash.slice(1)).split('/');if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){if(animal===p[0]&&section===p[1])return;if(animal!==p[0]){animal=p[0];resetQuiz(true)}section=p[1];render(true)}});
 const animalSettings=window.BioLaborLernweg?.animalSettings() || {};
 const initial=decodeURIComponent(location.hash.slice(1)).split('/');
 if(!initial[0])$('#tier-intro').open=true;
 if(SPECIES[initial[0]])animal=initial[0];
 if(['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(initial[1]))section=initial[1];
-resetQuiz();render(false);
+resetQuiz(true);render(false);
 if(SPECIES[initial[0]]&&initial[1])window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
 window.BioTierkundeSelfTest=function(){return BONES.length===9&&DENTAL.length===4&&Q.filter(x=>x.animal==='dog').length>=10&&Q.filter(x=>x.animal==='cat').length>=10&&!!$('#content')&&!!$('.skeleton-svg')||section!=='skeleton'};
 })();

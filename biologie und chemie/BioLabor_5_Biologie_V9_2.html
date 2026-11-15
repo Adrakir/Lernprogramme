@@ -163,6 +163,13 @@ body.highcontrast .v5-statement{color:#000;background:#e6f4f0}
  body.lc-theme-dark #main :is(.v7-home-highlight,.b8-hero){
   background:linear-gradient(120deg,#224144,#26364b);border-color:var(--line);
  }
+ body.lc-theme-dark .keynote > b{color:#ffdc9f}
+ body.lc-theme-dark .biotiere-promo > p{color:var(--muted)}
+ body.lc-theme-dark #main :is(.quickcheck,.b8-root summary,.b8-options button,.badgecard,.v6-learning-card){
+  background:var(--paper);color:var(--ink);border-color:var(--line);
+ }
+ body.lc-theme-dark #main .b8-options button:is(:hover,:focus-visible){background:var(--mint);border-color:var(--teal)}
+ body.lc-theme-dark #main .bs-exam-sheet .bs-exam-task > p{color:var(--ink)}
  body.lc-theme-dark .hero{background:linear-gradient(120deg,#224144,#26364b);color:var(--ink)}
  body.lc-theme-dark :is(.navitem.active,.navitem:hover,.tab.active,.answer.selected,.token.active,.v5-level.active){
   background:var(--mint);color:var(--deep);border-color:var(--teal);
@@ -1532,7 +1539,11 @@ const put=(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false}}
 const rawNative=()=>{const o={};NATIVE.forEach(k=>{const v=get(k);if(v!==null)o[k]=v});return o};
 const loadNative=(o)=>NATIVE.forEach(k=>{try{if(Object.prototype.hasOwnProperty.call(o||{},k))localStorage.setItem(k,o[k]);else localStorage.removeItem(k)}catch(e){console.warn('Lernstand konnte nicht gespeichert werden:',e)}});
 let store;try{store=JSON.parse(get(HUBKEY)||'null')}catch(e){console.warn('Lernstand konnte nicht gespeichert werden:',e)};
-if(!store||store.subject!==APP||!store.profiles||!store.active||!store.profiles[store.active])store={schema:2,subject:APP,active:'Standard',profiles:{Standard:emptyProfile()}};
+if(!store||store.subject!==APP||!store.profiles||!store.active||!store.profiles[store.active]){
+ store={schema:2,subject:APP,active:'Standard',profiles:{Standard:emptyProfile()}};
+ const tierTheme=get('biolab5-tierkunde-2026-theme');
+ if(tierTheme==='light'||tierTheme==='dark')store.profiles.Standard.settings.theme=tierTheme;
+}
 const profile=()=>store.profiles[store.active];
 profile().settings={...defaultSettings(),...(profile().settings||{})};
 const save=()=>{profile().native=rawNative();return put(HUBKEY,JSON.stringify(store))};
@@ -1702,6 +1713,20 @@ quickTheme.addEventListener('change',()=>{
  save();
  apply();
 });
+function syncStoredTheme(){
+ try{
+  const saved=JSON.parse(get(HUBKEY)||'null');
+  if(saved?.active!==store.active)return;
+  const theme=saved.profiles[store.active]?.settings?.theme;
+  if(['system','light','dark','contrast'].includes(theme)&&theme!==profile().settings.theme){
+   profile().settings.theme=theme;
+   apply();
+   if(!modal.hidden&&tab==='einstellungen')draw();
+  }
+ }catch{}
+}
+window.addEventListener('pageshow',syncStoredTheme);
+window.addEventListener('storage',event=>{if(event.key===HUBKEY)syncStoredTheme()});
 darkPreference.addEventListener('change',apply);
 apply();
 })();</script><script>
@@ -2150,11 +2175,11 @@ if(typeof render==='function')render();
 <script src="BioLabor_Klassenarbeit.js?v=7"></script>
 <script src="Tierkunde_Verhaltenslabor.js?v=20261114-v5"></script>
 <script src="BioLabor_Modelle.js?v=1"></script>
-<script src="BioLabor_Lernweg.js?v=2"></script>
+<script src="BioLabor_Lernweg.js?v=3"></script>
 <script src="BioLabor_Schulstoff.js?v=6"></script>
 <script src="BioLabor_Pruefung.js?v=1"></script>
 <script src="BioLabor_ProbetestInhalte.js?v=2"></script>
-<script src="BioLabor_Probetest.js?v=4"></script>
+<script src="BioLabor_Probetest.js?v=5"></script>
 <script src="BioLabor_StationsQR.js?v=1"></script>
 <script src="BioLabor_Lehrkraft.js?v=2"></script>
 <script src="BioLabor_Lernstand.js?v=2"></script>

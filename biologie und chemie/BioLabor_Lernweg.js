@@ -134,22 +134,54 @@
     });
   }
 
+  const profileKey = 'lerncockpit-bio-2026';
+  const standaloneThemeKey = 'biolab5-tierkunde-2026-theme';
+  const darkPreference = matchMedia('(prefers-color-scheme: dark)');
+
+  function applyAnimalTheme(theme) {
+    const dark = theme === 'dark' || (theme === 'system' && darkPreference.matches);
+    document.body.classList.toggle('dark', dark);
+    document.body.classList.toggle('tier-contrast', theme === 'contrast');
+    const control = document.getElementById('theme');
+    if (control) control.setAttribute('aria-pressed', String(dark));
+  }
+
   function animalSettings() {
     let settings;
+    let standaloneTheme;
     try {
-      const state = JSON.parse(localStorage.getItem('lerncockpit-bio-2026'));
+      const state = JSON.parse(localStorage.getItem(profileKey));
       settings = state?.profiles?.[state.active]?.settings;
+      standaloneTheme = localStorage.getItem(standaloneThemeKey);
     } catch {}
     const root = document.documentElement;
     root.dataset.bioMotion = settings?.motion || 'system';
     if (settings?.font) root.style.setProperty('--scale', {normal:'1', large:'1.125', xl:'1.25'}[settings.font] || '1');
-    if (settings?.theme) {
-      document.body.classList.toggle('dark', settings.theme === 'dark' ||
-        (settings.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches));
-      document.body.classList.toggle('tier-contrast', settings.theme === 'contrast');
-    }
+    applyAnimalTheme(settings?.theme || standaloneTheme || 'system');
     return settings || {};
   }
 
-  window.BioLaborLernweg = {lesson, directory, focus, bindMain, animalSettings, readAloud, readQuestion};
+  function setAnimalTheme(theme) {
+    applyAnimalTheme(theme);
+    try {
+      const state = JSON.parse(localStorage.getItem(profileKey));
+      const settings = state?.profiles?.[state.active]?.settings;
+      if (settings) {
+        settings.theme = theme;
+        localStorage.setItem(profileKey, JSON.stringify(state));
+      } else {
+        localStorage.setItem(standaloneThemeKey, theme);
+      }
+    } catch {}
+  }
+
+  if (document.getElementById('theme')) {
+    window.addEventListener('pageshow', animalSettings);
+    window.addEventListener('storage', event => {
+      if (event.key === profileKey || event.key === standaloneThemeKey) animalSettings();
+    });
+    darkPreference.addEventListener('change', animalSettings);
+  }
+
+  window.BioLaborLernweg = {lesson, directory, focus, bindMain, animalSettings, setAnimalTheme, readAloud, readQuestion};
 })();

@@ -21,7 +21,12 @@ module.exports = async function checkQuality(page, home) {
   }
   for (const [route,selector] of [
     ['home','.modulecard h3'],
+    ['home','.keynote > b'],
     ['learn/joints','.panel h2'],
+    ['learn/spine','#animalCheck'],
+    ['bio8','.b8-options button'],
+    ['print','.bs-exam-sheet .bs-exam-task > p'],
+    ['progress','.badgecard b'],
     ['schulstoff/gebiss','.bm-top h2'],
     ['schulstoff/gebiss','.bm-reading h3']
   ]) {
@@ -374,4 +379,46 @@ module.exports = async function checkQuality(page, home) {
   assert.equal(await page.getByText('Erfolgskriterium',{exact:true}).filter({visible:true}).count(),3);
   await page.locator('[data-bl-stations]').selectOption('all');
   assert.equal(await page.locator('.bp-station:visible').count(),10);
+
+  const animal = new URL('BioLabor_Hund_Katze.html',home).href;
+  await quickTheme.selectOption('dark');
+  await page.goto(animal + '#dog/teeth');
+  const animalTheme = page.locator('#theme');
+  assert.equal(await animalTheme.getAttribute('aria-pressed'),'true');
+  await animalTheme.click();
+  await page.reload();
+  assert.equal(await animalTheme.getAttribute('aria-pressed'),'false');
+  assert.match(await page.locator('.ls-species-note').innerText(),/Welpen.*28.*Zahnwechsel.*erwachsener Hund.*42/);
+  await page.locator('[data-ls="mode"][data-mode="task"]').click();
+  const pairs = page.locator('[data-ls-select]');
+  assert.notDeepEqual(await pairs.first().locator('option:not(:first-child)').allTextContents(),
+    ['Abknabbern','Festhalten','Scherenartig schneiden']);
+  for (const [index,answer] of ['Festhalten','Abknabbern','Scherenartig schneiden'].entries()) {
+    await pairs.nth(index).selectOption(answer);
+  }
+  await page.locator('[data-ls="check"]').click();
+  assert.match(await page.locator('.ls-feedback').innerText(),/Schneidezähne.*ganz vorn.*Fangzähne/);
+
+  await page.locator('#sections [data-section="quiz"]').click();
+  const firstAnswer = page.locator('[data-answer="0"]');
+  await firstAnswer.press('Enter');
+  assert.equal(await firstAnswer.evaluate(el => el === document.activeElement),true);
+  await page.locator('[data-action="check"]').press('Enter');
+  assert.equal(await page.locator('.feedback').evaluate(el => el === document.activeElement),true);
+  await page.locator('[data-action="next"]').press('Enter');
+  const positionInTierQuiz = page.locator('.quiz-head .kicker');
+  assert.match(await positionInTierQuiz.innerText(),/FRAGE 2 VON/);
+  await page.reload();
+  assert.match(await positionInTierQuiz.innerText(),/FRAGE 2 VON/);
+  await page.locator('[data-species="cat"]').click();
+  assert.match(await positionInTierQuiz.innerText(),/FRAGE 1 VON/);
+  await page.locator('[data-species="dog"]').click();
+  assert.match(await positionInTierQuiz.innerText(),/FRAGE 2 VON/);
+  await page.locator('[data-action="restart"]').press('Enter');
+  await page.reload();
+  assert.match(await positionInTierQuiz.innerText(),/FRAGE 1 VON/);
+
+  await open('home');
+  assert.equal(await quickTheme.inputValue(),'light');
+  await quickTheme.selectOption(originalTheme);
 };

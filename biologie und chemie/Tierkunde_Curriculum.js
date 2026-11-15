@@ -68,12 +68,12 @@ const data={
 };
 const extra={
  dog:{origin:'Die Vorfahren der Hunde gehörten zu früheren Wolfspopulationen. Zeitpunkt und Ort der Domestikation werden noch erforscht.',
- teeth:'Der erwachsene Hund hat gewöhnlich 42 bleibende und 28 Milchzähne.',
+ teeth:'Das Milchgebiss eines Welpen hat gewöhnlich 28 Zähne. Beim Zahnwechsel fallen die Milchzähne aus. Ein erwachsener Hund hat normalerweise 42 bleibende Zähne.',
  hunt:'Viele Hunde können Duftspuren verfolgen. Jagdverhalten unterscheidet sich zwischen Rassen und Individuen.',
  motion:'Viele Hunde können ausdauernd laufen; die genaue Gangart hängt auch von Größe und Körperbau ab.',
  compare:'Hunde besitzen 42 bleibende Zähne und meist nicht einziehbare Krallen.'},
  cat:{origin:'Die Hauskatze stammt hauptsächlich von der afrikanisch-vorderasiatischen Wildkatze ab. Mäuse an Getreidespeichern begünstigten die Nähe zu Menschen.',
- teeth:'Die erwachsene Katze hat gewöhnlich 30 bleibende und 26 Milchzähne.',
+ teeth:'Das Milchgebiss einer jungen Katze hat gewöhnlich 26 Zähne. Beim Zahnwechsel fallen die Milchzähne aus. Eine erwachsene Katze hat normalerweise 30 bleibende Zähne.',
  hunt:'Katzen können sich tief anschleichen, lauern und über kurze Strecken schnell springen.',
  motion:'Die biegsame Lendenwirbelsäule hilft Katzen beim Sprinten und Springen.',
  compare:'Katzen besitzen 30 bleibende Zähne und meist einziehbare Krallen.'}

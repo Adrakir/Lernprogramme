@@ -87,12 +87,19 @@ module.exports = async function checkInteractive(page, home, {capture = false} =
   await getButton('Deutung prüfen').click();
   assert.match(await root.locator('[data-bo-notice]').innerText(), /kurze Begründung/);
   await root.getByText('Die Katze wirkt unsicher und sucht Abstand.', {exact:true}).click();
+  await root.locator('[data-bo-writing]').fill('abc');
+  await getButton('Deutung prüfen').click();
+  assert.match(await root.locator('.bp-note').innerText(), /Das passt als Deutung/);
+  assert.equal(await root.getByRole('group',{name:'Vergleiche deine Begründung selbst'}).count(),1);
   await root.locator('[data-bo-writing]').fill('Die Ohren liegen an und die Rute ist tief.');
   await getButton('Deutung prüfen').click();
   assert.match(await root.locator('.bp-note').innerText(), /Das passt/);
+  const review = root.locator('[data-bo-review="0"]');
+  await review.check();
   if (capture) await page.locator('.bp-observation-image').screenshot({path:'bio-beobachtung-mobile.png'});
   await page.reload();
   assert.match(await root.locator('.bp-note').innerText(), /Das passt/);
+  assert.equal(await review.isChecked(),true);
 
   async function openProfiles() {
     await page.locator('#lcOpen').click();

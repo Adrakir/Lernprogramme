@@ -40,13 +40,28 @@ function diagram(){
  '<g class="ls-marker"><circle cx="362" cy="72" r="19"/><text x="362" y="78">C</text></g></svg>'+
  '<figcaption>A = Kopf · B = Brust · C = Rücken. Vereinfachte Orientierungsskizze.</figcaption></figure>';
 }
+function assignmentOptions(){
+ const answers=lesson.pairs.map(pair=>pair[1]);
+ const order=answers.slice();
+ for(let i=order.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [order[i],order[j]]=[order[j],order[i]];
+ }
+ if(order.every((answer,i)=>answer===answers[i]))order.push(order.shift());
+ return order;
+}
+const toothHints={
+ 'Schneidezähne':'Denke an die kleinen Zähne ganz vorn. Was tun sie mit kleinen Futterstücken?',
+ 'Fangzähne':'Denke an die langen, spitzen Eckzähne. Wofür braucht das Tier einen festen Griff?',
+ 'Reißzähne':'Achte darauf, wie die scharfen Kanten beim Schließen des Mauls aneinander vorbeigleiten.'
+};
 function task(){
  const r=record(),t=state.task,assignment=t===0;
  let h='<article class="ls-card"><small>FORSCHERAUFGABE '+(t+1)+' VON 2</small><h3>'+(assignment?'🧩 Zuordnen und Beschriften':'🔢 Reihenfolge herstellen')+'</h3>';
  h+='<p>'+(assignment?esc(lesson.pairHint):'Ordne die Schritte mit den Pfeilen. Der erste steht oben.')+'</p>';
  if(assignment){
   if(state.section==='skeleton')h+=diagram();
-  const opts=state.section==='compare'?lesson.pairs.map(p=>p[1]):lesson.pairs.map(p=>p[1]);
+  const opts=state.answers.options ||= assignmentOptions();
   h+='<div class="ls-assign">'+lesson.pairs.map((p,i)=>'<label><strong>'+esc(p[0])+'</strong><select data-ls-select="'+i+'" aria-label="'+esc(p[0])+' zuordnen"><option value="">Bitte auswählen</option>'+
   opts.map(v=>'<option value="'+esc(v)+'" '+(state.answers['r'+i]===v?'selected':'')+'>'+esc(v)+'</option>').join('')+
   '</select></label>').join('')+'</div>';
@@ -84,18 +99,31 @@ function render(){
 }
 function note(t){let el=$('#ls-note');if(el)el.textContent=t}
 function check(){
- const t=state.task;let wrong=0,solution=[];
+ const t=state.task;
+ let wrong=0,hint='';
  if(t===0){
-  lesson.pairs.forEach((p,i)=>{if(state.answers['r'+i]!==p[1])wrong++;solution.push(p[0]+' = '+p[1])})
+  if(lesson.pairs.some((_,i)=>!state.answers['r'+i])){
+   note('Wähle in jeder Liste eine Antwort aus.');
+   return;
+  }
+  const missed=lesson.pairs.filter((pair,i)=>state.answers['r'+i]!==pair[1]);
+  wrong=missed.length;
+  if(wrong){
+   hint=state.section==='teeth'
+    ? missed.map(([name])=>name+': '+toothHints[name]).join(' ')
+    : 'Schau dir diese Begriffe noch einmal an: '+missed.map(([label])=>label).join(', ')+'. '+lesson.pairHint;
+  }
  }else{
   const arr=state.answers.order||lesson.sequence.slice().reverse();
-  lesson.sequence.forEach((v,i)=>{if(v!==arr[i])wrong++});solution=lesson.sequence;
+  wrong=lesson.sequence.filter((step,i)=>step!==arr[i]).length;
+  hint='Vergleiche: '+lesson.sequence.join(' → ');
  }
  if(!wrong){
   const r=record();r.done[t]=true;r.finished=!!r.done[0]&&!!r.done[1];store();
   state.feedback={ok:true,text:'Alle Lösungen passen. '+lesson.pairHint};
- }else state.feedback={ok:false,text:wrong+' '+(wrong===1?'Antwort ist':'Antworten sind')+' noch nicht passend. Vergleiche: '+solution.join(' → ')};
+ }else state.feedback={ok:false,text:wrong+' '+(wrong===1?'Antwort ist':'Antworten sind')+' noch nicht passend. '+hint};
  render();
+ $('#ls-studio [data-ls="check"]')?.focus({preventScroll:true});
 }
 function read(){
  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){note('Vorlesen in diesem Browser nicht verfügbar.');return}
