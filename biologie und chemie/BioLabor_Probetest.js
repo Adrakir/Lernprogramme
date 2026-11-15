@@ -776,8 +776,8 @@
     const latest = examHistory(data)[0];
     if (!latest) return null;
     const {entry, url} = latest;
-    const topics = topicResults(versions[entry.version], entry.answers).map(([id, result]) => ({
-      id, title:skills[id][0], ...result,
+    const topics = topicResults(versions[entry.version], entry.answers).map(([id, {points, max}]) => ({
+      id, title:skills[id][0], score:points, max,
     }));
     const explanations = versions[entry.version].flatMap((question, index) => {
       if (!question.criteria) return [];
