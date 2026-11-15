@@ -2,7 +2,7 @@
 (function(){
 'use strict';
 const DB='biolab5-tierstudio-2026';
-const OPTIONS=['dog','cat'],STATIONS=window.BioTierwissen.sections;
+const STATIONS=window.BioTierwissen.sections;
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $=s=>document.querySelector(s);
 let saved={dog:{},cat:{}};
@@ -13,7 +13,23 @@ let lesson=null;
 let speechRate=['.75','.95','1.12'].includes(saved.speechRate)?saved.speechRate:'.95';
 const progress=sp=>STATIONS.filter(s=>saved[sp]&&saved[sp][s]&&saved[sp][s].finished).length;
 const record=()=>{if(!saved[state.animal][state.section])saved[state.animal][state.section]={step:0,done:[],finished:false};return saved[state.animal][state.section]};
-const completedTasks=()=>record().done.filter(Boolean).length;
+function restoreAnswers(){
+ const entry=record();
+ if(state.mode==='guide'){
+  const choice=entry.guideAnswers?.[state.step];
+  const step=lesson.steps[state.step];
+  state.answers=Number.isInteger(choice)?{choice}:{};
+  state.feedback=Number.isInteger(choice)?{ok:choice===step[4],text:step[5]}:null;
+ }else{
+  state.answers=state.mode==='task'?(entry.drafts?.[state.task]||{}):{};
+  state.feedback=null;
+ }
+}
+function saveTaskDraft(){
+ const entry=record();
+ (entry.drafts ||= {})[state.task]=state.answers;
+ store();
+}
 function question(){
  const step=lesson.steps[state.step],q=step[2],answers=step[3];
  let h='<div class="ls-stepbuttons" role="group" aria-label="Lernschritte">';
@@ -21,7 +37,7 @@ function question(){
  h+='</div><article class="ls-card"><small>SCHRITT '+(state.step+1)+' VON '+lesson.steps.length+'</small><h3>'+esc(step[0])+'</h3><p>'+esc(step[1])+'</p>';
  if(lesson.detail)h+='<p class="ls-species-note">🐾 '+esc(lesson.detail)+'</p>';
  h+='<div class="ls-question"><strong>🔎 Denkfrage</strong><p>'+esc(q)+'</p><div class="ls-options">';
- h+=answers.map((v,i)=>'<button data-ls="answer" data-num="'+i+'" class="'+(state.answers.choice===i?'ls-choosen':'')+'">'+esc(v)+'</button>').join('');
+ h+=answers.map((v,i)=>'<button data-ls="answer" data-num="'+i+'" aria-pressed="'+(state.answers.choice===i)+'" class="'+(state.answers.choice===i?'ls-choosen':'')+'">'+esc(v)+'</button>').join('');
  h+='</div></div>';
  if(state.feedback)h+=result();
  h+='<div class="ls-actions"><button data-ls="prev" '+(state.step===0?'disabled':'')+'>← Zurück</button><button data-ls="hint">💡 Hinweis</button><button class="ls-main" data-ls="next">'+(state.step===lesson.steps.length-1?'Zu den Übungen →':'Weiter →')+'</button></div></article>';
@@ -31,10 +47,10 @@ function result(){
  return '<div role="status" class="ls-feedback '+(state.feedback.ok?'good':'bad')+'"><b>'+(state.feedback.ok?'✓ Richtig!':'↗ Noch nicht richtig.')+'</b><p>'+esc(state.feedback.text)+'</p></div>';
 }
 function diagram(){
- return '<figure class="ls-figure"><svg viewBox="0 0 610 200" role="img" aria-label="Vereinfachtes Skelett mit den Zielpunkten A B und C">'+
+ return '<figure class="ls-figure"><svg viewBox="0 0 610 200" role="img" aria-label="Orientierungsskizze. A am Kopf, B am Brustkorb, C am Rücken.">'+
  '<path d="M112 68Q85 45 49 73L21 99L87 116L158 86L193 75Q277 49 405 74L454 87Q474 90 505 116" stroke="#b5946c" stroke-width="12" stroke-linecap="round" fill="none"/>'+
  '<path d="M140 91L156 160L151 187M174 91L186 159L186 190M411 89L444 150L465 190M433 92L467 150L496 188" stroke="#c7aa82" stroke-width="11" fill="none" stroke-linecap="round"/>'+
- Array.from({length:11},(_,i)=>'<path d="M'+(197+i*17)+' 75Q'+(218+i*17)+' 144 '+(205+i*17)+' 150" stroke="#cbb18c" stroke-width="5" fill="none"/>').join('')+
+ Array.from({length:13},(_,i)=>'<path d="M'+(197+i*14)+' 75Q'+(218+i*14)+' 144 '+(205+i*14)+' 150" stroke="#cbb18c" stroke-width="5" fill="none"/>').join('')+
  '<path d="M467 84Q539 21 585 63" fill="none" stroke="#b5946c" stroke-width="8"/>'+
  '<g class="ls-marker"><circle cx="72" cy="80" r="19"/><text x="72" y="86">A</text></g>'+
  '<g class="ls-marker"><circle cx="270" cy="122" r="19"/><text x="270" y="128">B</text></g>'+
@@ -134,14 +150,15 @@ function check(){
 }
 function read(){
  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){note('Vorlesen in diesem Browser nicht verfügbar.');return}
- const speech=window.speechSynthesis;if(speech.speaking){speech.cancel();return}
+ const speech=window.speechSynthesis;if(speech.speaking||speech.pending){speech.cancel();return}
  let txt=lesson.goal;
  if(state.mode==='guide'){
   const [title,intro,question,answers]=lesson.steps[state.step];
   txt+=' '+title+'. '+intro+' '+question+' '+answers.map((answer,i)=>(i+1)+'. '+answer).join('. ');
  }
  if(state.mode==='task'){
-  const taskText=state.task===0?lesson.pairHint
+  const taskText=state.task===0?lesson.pairHint+' Ordne diese Begriffe zu: '+
+   lesson.pairs.map(([label])=>label).join(', ')+'. Zur Auswahl: '+(state.answers.options||[]).join(', ')+'.'
    :orderInstruction+' Aktuelle Reihenfolge: '+orderItems().map((step,i)=>(i+1)+'. '+step).join(' ');
   txt+=' '+taskText;
  }
@@ -157,32 +174,50 @@ function click(e){
  let focus='[data-ls="'+a+'"]';
  if(b.dataset.mode)focus+='[data-mode="'+b.dataset.mode+'"]';
  if(b.dataset.num)focus+='[data-num="'+b.dataset.num+'"]';
- if(a==='mode'){state.mode=b.dataset.mode;state.feedback=null;state.answers={}}
- else if(a==='step'){state.step=Number(b.dataset.num);state.feedback=null;state.answers={}}
- else if(a==='prev'){state.step=Math.max(0,state.step-1);state.feedback=null;state.answers={}}
+ if(a==='mode'){
+  if(state.mode===b.dataset.mode)return;
+  state.mode=b.dataset.mode;restoreAnswers();
+ }
+ else if(a==='step'){
+  const next=Number(b.dataset.num);
+  if(state.step===next)return;
+  state.step=next;restoreAnswers();
+ }
+ else if(a==='prev'){state.step=Math.max(0,state.step-1);restoreAnswers()}
  else if(a==='answer'){
   const st=lesson.steps[state.step],v=Number(b.dataset.num);
-  state.answers.choice=v;state.feedback={ok:v===st[4],text:st[5]}
+  (record().guideAnswers ||= {})[state.step]=v;
+  store();
+  state.answers.choice=v;state.feedback={ok:v===st[4],text:st[5]};
  }
  else if(a==='next'){
   if(!state.feedback||!state.feedback.ok){note('Bitte beantworte erst die Denkfrage richtig.');return}
   if(state.step===2){state.mode='task';state.task=0}else state.step++;
   record().step=Math.max(record().step,state.step+1);
   focus='.ls-card h3';
-  state.feedback=null;state.answers={};
+  restoreAnswers();
  }
  else if(a==='hint'){note(lesson.steps[state.step][5]);return}
- else if(a==='taskPrev'||a==='taskNext'){state.task=Math.max(0,Math.min(1,state.task+(a==='taskNext'?1:-1)));state.feedback=null;state.answers={}}
+ else if(a==='taskPrev'||a==='taskNext'){
+  state.task=a==='taskNext'?1:0;
+  restoreAnswers();
+  focus='.ls-card h3';
+ }
  else if(a==='move'){
   const arr=orderItems(),i=Number(b.dataset.num),j=i+Number(b.dataset.dir);
   if(j>=0&&j<arr.length){
    [arr[i],arr[j]]=[arr[j],arr[i]];
    state.answers.order=arr;
-   focus='[data-ls="move"][data-num="'+j+'"][data-dir="'+b.dataset.dir+'"]';
+   saveTaskDraft();
+   const direction=j===0?1:j===arr.length-1?-1:Number(b.dataset.dir);
+   focus='[data-ls="move"][data-num="'+j+'"][data-dir="'+direction+'"]';
   }
   state.feedback=null;
  }
- else if(a==='taskHint'){note(lesson.pairHint);return}
+ else if(a==='taskHint'){
+  note(state.task===0?lesson.pairHint:'Beginne mit „'+lesson.sequence[0]+'“. '+orderInstruction);
+  return;
+ }
  else if(a==='check'){check();return}
  else if(a==='read'){read();return}
  else if(a==='print'){window.print();return}
@@ -208,7 +243,10 @@ function change(e){
  const el=e.target.closest('[data-ls-select]');
  if(!el||!root||!root.contains(el))return;
  state.answers['r'+el.dataset.lsSelect]=el.value;
+ saveTaskDraft();
  state.feedback=null;
+ root.querySelector('.ls-feedback')?.remove();
+ note('');
 }
 function mount(args){
  const main=$('#content');if(!main||!args||!STATIONS.includes(args.section))return;
@@ -221,9 +259,9 @@ function mount(args){
   const step=view?.step ?? previous.step-1;
   state.step=Number.isInteger(step)?Math.max(0,Math.min(2,step)):0;
   state.task=view?.task===1?1:0;
-  state.feedback=null;state.answers={};
+  lesson=window.BioTierwissen.get(state.animal,state.section);
+  restoreAnswers();
  }
- lesson=window.BioTierwissen.get(state.animal,state.section);
  const title=main.querySelector('.page-title');
  const box=document.createElement('section');box.className='ls-studio';box.id='ls-studio';box.setAttribute('aria-label','Geführte Tierkunde: '+lesson.title);
  main.insertBefore(box,title?title.nextSibling:main.firstChild);
@@ -238,5 +276,6 @@ document.addEventListener('click',click);
 document.addEventListener('change',change);
 window.BioLernstudio={mount,getProgress:()=>JSON.parse(JSON.stringify(saved)),complete:progress,selfTest:()=>window.BioTierwissen.selfTest()&&STATIONS.length===7};
 const init=window.BioLaborLernweg.animalRoute();
-if(STATIONS.includes(init[1]||'skeleton'))mount({animal:init[0]==='cat'?'cat':'dog',section:init[1]||'skeleton'});
+const section=STATIONS.includes(init[1])?init[1]:'skeleton';
+if(init[1]!=='quiz')mount({animal:init[0]==='cat'?'cat':'dog',section});
 })();

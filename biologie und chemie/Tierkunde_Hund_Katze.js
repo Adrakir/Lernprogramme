@@ -5,6 +5,8 @@ const SPECIES={
  dog:{name:'Hund',emoji:'🐕',latin:'Canis lupus familiaris',teeth:42,milk:28,ancestry:'Grauwolf',story:'Hunde stammen von früheren Wolfspopulationen ab. Über viele Generationen lebten manche Wölfe näher bei Menschen. Aus ihren Nachkommen entwickelten sich Haushunde. Wann und wo genau dies begann, wird weiter erforscht.',fit:'Laufbeine, belastbare Pfoten und ein kräftiger Körper helfen vielen Hunden beim ausdauernden Laufen, Suchen und Verfolgen. Hunderassen unterscheiden sich jedoch stark.',diet:'Hunde können tierische und pflanzliche Nährstoffe verwerten; ihr Gebiss ist trotzdem typisch für ein Raubtier.'},
  cat:{name:'Katze',emoji:'🐈',latin:'Felis catus',teeth:30,milk:26,ancestry:'Afrikanisch-vorderasiatische Wildkatze',story:'Die Vorfahren unserer Hauskatzen waren Wildkatzen der Unterart Felis silvestris lybica. Als Menschen Getreide lagerten, kamen Mäuse. Wildkatzen fanden dort Beute; einige lebten immer näher bei Menschen.',fit:'Eine sehr bewegliche Wirbelsäule, kräftige Hinterbeine, leise Pfoten und ein langer Schwanz helfen Katzen beim Anschleichen, Springen und Balancieren.',diet:'Katzen sind auf tierische Nahrung spezialisiert: Sie sind obligate Fleischfresser.'}
 };
+const DEFAULT_VIEW = {animal:'dog', section:'skeleton'};
+const SECTIONS = ['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'];
 const BONES=[
 {id:'skull',label:'Schädel & Kiefer',why:'Schützt das Gehirn. Der Kiefer trägt die Zähne. Große Augenhöhlen schaffen Platz für die Augen.',dog:'Der Schädel kann je nach Hunderasse sehr unterschiedlich geformt sein. Der Kiefer trägt kräftige Fang- und Reißzähne.',cat:'Der vergleichsweise kurze Schädel trägt große Augenhöhlen. Kiefer und scharfe Reißzähne sind auf das Zerteilen tierischer Nahrung ausgerichtet.'},
 {id:'spine',label:'Wirbelsäule',why:'Viele Wirbel bilden eine bewegliche, tragende Achse und schützen das Rückenmark. Zwischen den beweglichen Wirbeln liegen Bandscheiben.',dog:'Hals-, Brust-, Lenden-, Kreuz- und Schwanzwirbel stützen den Körper und wirken bei der Fortbewegung mit.',cat:'Die besonders bewegliche Lendenwirbelsäule kann sich stark beugen und strecken. So vergrößert die Katze bei Sprüngen und schnellen Läufen ihre Schrittlänge.'},
@@ -12,7 +14,7 @@ const BONES=[
 {id:'shoulder',label:'Schulterblatt',why:'Das Schulterblatt ist Ansatzstelle für viele Muskeln und hilft, die Vorderbeine zu bewegen.',dog:'Die Vordergliedmaßen sind über Muskeln am Rumpf aufgehängt. Eine durchgehende knöcherne Verbindung wie unser Schlüsselbein fehlt.',cat:'Die Katze hat nur ein kleines, nicht mit dem übrigen Skelett gelenkig verbundenes Schlüsselbein. Die bewegliche Schulter hilft beim Klettern und Greifen.'},
 {id:'foreleg',label:'Vorderbein',why:'Oberarmknochen, Elle und Speiche sowie Handknochen bilden die Vordergliedmaße. Gelenke und Muskeln ermöglichen Bewegung.',dog:'Die Vorderbeine stützen einen großen Teil des Gewichts und federn die Landung beim Laufen ab.',cat:'Bewegliche Vorderbeine greifen, halten und bremsen bei der Landung. Die Krallen unterstützen das Festhalten.'},
 {id:'pelvis',label:'Becken',why:'Das Becken verbindet die Hinterbeine mit dem Rumpf, überträgt Kräfte und schützt Teile der inneren Organe.',dog:'Kräftige Becken- und Hinterbeinmuskeln treiben den Körper vorwärts.',cat:'Das Becken leitet die starke Sprungkraft der Hinterbeine an den Körper weiter.'},
-{id:'hindleg',label:'Hinterbein',why:'Oberschenkelknochen, Schien- und Wadenbein, Sprunggelenk und Fußknochen wirken wie ein Hebelsystem.',dog:'Die Hinterbeine erzeugen Vortrieb. Das hoch stehende Sprunggelenk wirkt wie ein Hebel.',cat:'Lange, kräftige Hinterbeine speichern und übertragen Muskelkraft – ideal zum Absprung.'},
+{id:'hindleg',label:'Hinterbein',why:'Oberschenkelknochen, Schien- und Wadenbein, Sprunggelenk und Fußknochen wirken wie ein Hebelsystem.',dog:'Die Hinterbeine erzeugen Vortrieb. Das hoch stehende Sprunggelenk wirkt wie ein Hebel.',cat:'Die Muskeln der Hinterbeine erzeugen die Kraft für den Absprung. Sehnen übertragen sie auf die Knochen.'},
 {id:'feet',label:'Pfoten & Zehen',why:'Hund und Katze sind Zehengänger. Sie setzen vor allem die Zehenballen auf, nicht die ganze Fußsohle wie wir.',dog:'Krallen sind normalerweise nicht einziehbar. Pfotenballen polstern Schritte und geben Halt.',cat:'Krallen können meist in Hauttaschen zurückgezogen werden. So bleiben sie scharf und die Katze kann beim Anschleichen oft leiser auftreten.'},
 {id:'tail',label:'Schwanzwirbel',why:'Der Schwanz enthält viele kleine Wirbel und Muskeln. Er hilft bei Bewegung und Verständigung.',dog:'Die Stellung des Schwanzes gehört zur Körpersprache und kann beim Balancieren helfen.',cat:'Der bewegliche Schwanz unterstützt das Balancieren und vermittelt zusammen mit Ohren und Körperhaltung Gefühle.'}
 ];
@@ -84,7 +86,7 @@ const Q=[
 ];
 const $=s=>document.querySelector(s);
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let animal='dog',section='skeleton',bone='spine',tooth='canine',mood='relax',gait='walk',quiz=[],qi=0,chosen=null,checked=false,hints=0,score=0,best={dog:0,cat:0};
+let animal=DEFAULT_VIEW.animal,section=DEFAULT_VIEW.section,bone='spine',tooth='canine',mood='relax',gait='walk',zoomed=false,quiz=[],qi=0,chosen=null,checked=false,hints=0,score=0,best={dog:0,cat:0};
 try{best=Object.assign(best,JSON.parse(localStorage.getItem(KEY)||'{}').best||{})}catch(e){}
 const A=()=>SPECIES[animal];
 function pageTitle(id,title,subtitle,action=''){return '<div class="page-title"><div><span class="kicker">FORSCHERSTATION '+id+' · '+A().name.toUpperCase()+'</span><h1>'+title+'</h1><p>'+subtitle+'</p>'+action+'</div><span class="mini-tag">'+A().emoji+' '+A().name+'</span></div>'}
@@ -120,7 +122,7 @@ function skeletonPage(){
  const b=BONES.find(x=>x.id===bone);
  const practiceLink='<a class="btn secondary" href="BioLabor_5_Biologie_V9_2.html#klassenarbeit/'+(animal==='dog'?'hund':'katze')+'">Skelett selbst beschriften</a>';
  return pageTitle('01',animal==='dog'?'Das Skelett des Hundes':'Das Skelett der Katze','Tippe auf die nummerierten Knochen. Erfahre, welche Aufgabe sie haben und warum der Körperbau zur Lebensweise passt.',practiceLink)+
- '<div class="actionline"><button type="button" class="btn secondary" data-action="zoom">🔎 Skelett vergrößern</button></div><div class="bone-board">'+skeletonSvg()+'</div><p class="diagram-caption">Neun anklickbare Knochenbereiche. Die Zeichnung ist ein wissenschaftlich orientiertes, aber vereinfachtes Lernschema – nicht jede einzelne Rippe oder Zehe ist dargestellt.</p>'+
+ '<div class="actionline"><button type="button" class="btn secondary" data-action="zoom" aria-pressed="' + zoomed + '">' + (zoomed ? '🔎 Wieder verkleinern' : '🔎 Skelett vergrößern') + '</button></div><div class="bone-board' + (zoomed ? ' zoomed' : '') + '">'+skeletonSvg()+'</div><p class="diagram-caption">Neun anklickbare Knochenbereiche. Die Zeichnung ist ein wissenschaftlich orientiertes, aber vereinfachtes Lernschema – nicht jede einzelne Rippe oder Zehe ist dargestellt.</p>'+
  '<div class="chips" aria-label="Knochen auswählen">'+BONES.map((x,i)=>'<button type="button" data-bone="'+x.id+'" aria-pressed="'+(bone===x.id)+'" class="chip '+(x.id===bone?'active':'')+'">'+(i+1)+'. '+x.label+'</button>').join('')+'</div>'+
  '<div class="detail" aria-live="polite"><h3>🦴 '+b.label+'</h3><p><b>Was ist das?</b> '+b.why+'</p><p style="margin-top:9px"><b>Warum gerade bei '+A().name+'?</b> '+b[animal]+'</p></div>'+
  callout('Der wichtigste Zusammenhang','Das Skelett gibt Halt, schützt Organe und bildet mit Muskeln und Gelenken ein Bewegungssystem. Die Knochen selbst ziehen nicht – Muskeln bewegen sie über Sehnen.')+
@@ -200,7 +202,7 @@ function gaitSvg(){
  run?'<path d="M294 '+(y+80)+'L255 '+(y+144)+'L205 '+(y+150)+' M508 '+(y+78)+'L562 '+(y+144)+'L610 '+(y+150)+'" />':
  '<path d="M295 '+(y+78)+'L282 '+(y+144)+'L259 '+(y+170)+' M502 '+(y+80)+'L524 '+(y+146)+'L497 '+(y+170)+'" />';
  const tail=isCat?'M536 '+(y+15)+'Q603 '+(y-45)+' 643 '+(y-13)+'Q665 '+(y+10)+' 649 '+(y+30):'M530 '+(y+10)+'Q617 '+(y-10)+' 658 '+(y-45);
- return '<svg class="gait-svg" viewBox="0 0 760 340" aria-label="Schematische Bewegungsdarstellung: '+A().name+' '+gait+'" role="img"><rect width="760" height="340" fill="#f6faf5"/><path d="M30 302H726" stroke="#b3d7c6" stroke-width="3" stroke-dasharray="7 7"/><path d="'+back+'" stroke="#4b8279" stroke-width="7" fill="none"/><ellipse cx="397" cy="'+(y+58)+'" rx="139" ry="74" fill="#a5cbb6" stroke="#4b8279" stroke-width="4"/><path d="'+tail+'" stroke="#5c9885" stroke-width="19" fill="none" stroke-linecap="round"/><path d="'+legs+'" stroke="#4b8279" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="228" cy="'+(y+26)+'" r="'+(isCat?47:52)+'" fill="#a5cbb6" stroke="#4b8279" stroke-width="4"/><path d="M189 '+(y-2)+'L190 '+(y-54)+'L211 '+(y-28)+'L238 '+(y-53)+'L252 '+(y+10)+'" fill="#a5cbb6" stroke="#4b8279" stroke-width="4"/><path d="M189 '+(y+38)+'Q150 '+(y+43)+' 138 '+(y+15)+'" stroke="#4b8279" fill="#a5cbb6" stroke-width="15" stroke-linecap="round"/><circle cx="204" cy="'+(y+20)+'" r="6" fill="#284b46"/><path d="M126 '+(y+10)+'Q130 '+(y+18)+' 143 '+(y+16)+'" stroke="#284b46" fill="none" stroke-width="3"/><path d="M35 '+(y+40)+'h85m-19 -12l19 12l-19 12" stroke="#db9350" stroke-width="5" fill="none"/><text x="40" y="45" font-size="20" font-weight="850" fill="#32655a">'+(jump?'Absprung':run?'Schneller Lauf':sneak?'Anschleichen':'Gehen')+'</text><text x="40" y="75" font-size="14" fill="#577c72">Vereinfachtes Bewegungsmodell</text></svg>'
+ return '<svg class="gait-svg" viewBox="0 0 760 340" aria-label="Schematische Bewegungsdarstellung: '+A().name+', '+({walk:'Gehen',run:'schneller Lauf',sneak:animal==='cat'?'Anschleichen':'Spur suchen',jump:'Absprung'}[gait])+'" role="img"><rect width="760" height="340" fill="#f6faf5"/><path d="M30 302H726" stroke="#b3d7c6" stroke-width="3" stroke-dasharray="7 7"/><path d="'+back+'" stroke="#4b8279" stroke-width="7" fill="none"/><ellipse cx="397" cy="'+(y+58)+'" rx="139" ry="74" fill="#a5cbb6" stroke="#4b8279" stroke-width="4"/><path d="'+tail+'" stroke="#5c9885" stroke-width="19" fill="none" stroke-linecap="round"/><path d="'+legs+'" stroke="#4b8279" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="228" cy="'+(y+26)+'" r="'+(isCat?47:52)+'" fill="#a5cbb6" stroke="#4b8279" stroke-width="4"/><path d="M189 '+(y-2)+'L190 '+(y-54)+'L211 '+(y-28)+'L238 '+(y-53)+'L252 '+(y+10)+'" fill="#a5cbb6" stroke="#4b8279" stroke-width="4"/><path d="M189 '+(y+38)+'Q150 '+(y+43)+' 138 '+(y+15)+'" stroke="#4b8279" fill="#a5cbb6" stroke-width="15" stroke-linecap="round"/><circle cx="204" cy="'+(y+20)+'" r="6" fill="#284b46"/><path d="M126 '+(y+10)+'Q130 '+(y+18)+' 143 '+(y+16)+'" stroke="#284b46" fill="none" stroke-width="3"/><path d="M120 '+(y+40)+'H35m19 -12l-19 12l19 12" stroke="#db9350" stroke-width="5" fill="none"/><text x="40" y="45" font-size="20" font-weight="850" fill="#32655a">'+(jump?'Absprung':run?'Schneller Lauf':sneak?'Anschleichen':'Gehen')+'</text><text x="40" y="75" font-size="14" fill="#577c72">Vereinfachtes Bewegungsmodell</text></svg>'
 }
 function motionPage(){
  const items=animal==='dog'?[
@@ -393,24 +395,52 @@ function render(focus){
  if(focus)window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
 }
 function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show');clearTimeout(toast.id);toast.id=setTimeout(()=>t.classList.remove('show'),2300)}
-function chooseSection(v){section=v;location.hash=animal+'/'+section;render(true)}
-function chooseAnimal(v){if(v===animal)return;animal=v;bone='spine';tooth='canine';mood='relax';gait='walk';resetQuiz(true);location.hash=animal+'/'+section;render(true)}
+function showRoute(nextAnimal, nextSection, focus) {
+ if(nextAnimal!==animal){
+  animal=nextAnimal;
+  bone='spine';tooth='canine';mood='relax';gait='walk';zoomed=false;
+  resetQuiz(true);
+ }
+ section=nextSection;
+ render(focus);
+}
+function chooseView(nextAnimal, nextSection) {
+ const hash='#'+nextAnimal+'/'+nextSection;
+ if(location.hash===hash)return;
+ location.hash=hash;
+ showRoute(nextAnimal,nextSection,true);
+}
+function currentRoute() {
+ const [nextAnimal,nextSection]=window.BioLaborLernweg.animalRoute();
+ return [Object.hasOwn(SPECIES,nextAnimal)?nextAnimal:DEFAULT_VIEW.animal,
+  SECTIONS.includes(nextSection)?nextSection:DEFAULT_VIEW.section];
+}
 document.addEventListener('click',function(e){
  const diagramBone=e.target.closest('#content .skeleton-svg [data-bone]');
  if(diagramBone&&!diagramBone.matches('button')){chooseFeature(diagramBone);return}
  const b=e.target.closest('button');if(!b)return;
- if(b.dataset.species){chooseAnimal(b.dataset.species);return}
- if(b.dataset.section){chooseSection(b.dataset.section);return}
+ if(b.dataset.species){chooseView(b.dataset.species,section);return}
+ if(b.dataset.section){chooseView(animal,b.dataset.section);return}
  if(b.dataset.bone){chooseFeature(b);return}
  if(b.dataset.tooth){chooseFeature(b);return}
  if(b.dataset.mood){chooseFeature(b);return}
  if(b.dataset.gait){chooseFeature(b);return}
  if(b.dataset.answer!==undefined&&!checked){chosen=Number(b.dataset.answer);renderQuizAt('[data-answer="'+chosen+'"]');return}
- if(b.dataset.action==='zoom'){const frame=document.querySelector('.bone-board');if(frame){frame.classList.toggle('zoomed');b.textContent=frame.classList.contains('zoomed')?'🔎 Wieder verkleinern':'🔎 Skelett vergrößern';}return}
+ if(b.dataset.action==='zoom'){
+  zoomed=$('#content .skeleton-svg').closest('.bone-board').classList.toggle('zoomed');
+  b.setAttribute('aria-pressed',String(zoomed));
+  b.textContent=zoomed?'🔎 Wieder verkleinern':'🔎 Skelett vergrößern';
+  return;
+ }
  if(b.dataset.action==='hint'&&!checked){hints=Math.min(2,hints+1);renderQuizAt(hints<2?'[data-action="hint"]':'.quiz-head ~ h2');return}
  if(b.dataset.action==='check'&&chosen!==null&&!checked){checked=true;if(chosen===quiz[qi].c)score++;renderQuizAt('.feedback');return}
  if(b.dataset.action==='next'&&checked){qi++;checked=false;chosen=null;hints=0;renderQuizAt(qi===quiz.length?'.page-title h1':'.quiz-head ~ h2');return}
- if(b.dataset.action==='restart'){resetQuiz();renderQuizAt('.quiz-head ~ h2');return}
+ if(b.dataset.action==='restart'){
+  const unfinished=qi<quiz.length&&(qi>0||chosen!==null||hints>0);
+  if(unfinished&&!window.confirm('Möchtest du diesen Versuch verwerfen und den Wissenstest neu starten?'))return;
+  resetQuiz();
+  renderQuizAt('.quiz-head ~ h2');
+ }
 });
 function chooseFeature(control){
  const {bone:nextBone,tooth:nextTooth,mood:nextMood,gait:nextGait}=control.dataset;
@@ -446,7 +476,7 @@ $('#font').addEventListener('click',()=>{
 });
 $('#speak').addEventListener('click',()=>{
  const synth=window.speechSynthesis;
- if(!synth){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}
+ if(!synth||!window.SpeechSynthesisUtterance){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}
  if(synth.speaking || synth.pending){synth.cancel();toast('Vorlesen beendet');return}
  const settings=window.BioLaborLernweg.animalSettings();
  const utterance=new SpeechSynthesisUtterance($('#content').innerText);
@@ -466,13 +496,14 @@ $('#speak').addEventListener('click',()=>{
  }
 });
 $('#print').addEventListener('click',()=>window.print());
-window.addEventListener('hashchange',()=>{const p=window.BioLaborLernweg.animalRoute();if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){if(animal===p[0]&&section===p[1])return;if(animal!==p[0]){animal=p[0];resetQuiz(true)}section=p[1];render(true)}});
+window.addEventListener('hashchange',()=>{
+ const [nextAnimal,nextSection]=currentRoute();
+ if(animal!==nextAnimal||section!==nextSection)showRoute(nextAnimal,nextSection,true);
+});
 window.BioLaborLernweg.animalSettings();
-const initial=window.BioLaborLernweg.animalRoute();
-if(!initial[0])$('#tier-intro').open=true;
-if(SPECIES[initial[0]])animal=initial[0];
-if(['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(initial[1]))section=initial[1];
+if(!location.hash)$('#tier-intro').open=true;
+[animal,section]=currentRoute();
 resetQuiz(true);render(false);
-if(SPECIES[initial[0]]&&initial[1])window.BioLaborLernweg?.focus($('#content .page-title h1') || $('#content'),true);
+if(location.hash)window.BioLaborLernweg.focus($('#content .page-title h1') || $('#content'),true);
 window.BioTierkundeSelfTest=function(){return BONES.length===9&&DENTAL.length===4&&Q.filter(x=>x.animal==='dog').length>=10&&Q.filter(x=>x.animal==='cat').length>=10&&!!$('#content')&&!!$('.skeleton-svg')||section!=='skeleton'};
 })();
