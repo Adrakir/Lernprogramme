@@ -423,7 +423,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-studio.css?v=20261108c">
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
-<link rel="stylesheet" href="./mobile-start.css?v=20261115a">
+<link rel="stylesheet" href="./mobile-start.css?v=20261115b">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109d">
 <link rel="stylesheet" href="./baerli-baumhaus.css?v=20261115a">
 <link rel="stylesheet" href="./baerli-advent.css?v=20261109b">
@@ -3065,7 +3065,7 @@ function showAnnaWriting(part){
 <script src="./comic-kino.js?v=20261109e"></script>
 <script src="./comic-studio.js?v=20261108c"></script>
 <script src="./comic-bubbles.js?v=20261108d"></script>
-<script src="./figurenstimmen.js?v=20261110a"></script>
+<script src="./figurenstimmen.js?v=20261115b"></script>
 <script src="./baerli-baumhaus.js?v=20261115a"></script>
 <script>const iconPaths = {
  comic:'<rect x="2.5" y="3.5" width="19" height="17" rx="2"/><path d="M12 3.5v17M3 12h9M15 7h4m-4 4h3m-3 4h4m-13-8h3v2H6l-1 2Z"/>',
@@ -5050,7 +5050,10 @@ function prepReward(topic,mode,n,score){
  const next=structuredClone(current);next.rewards[id]={amount,day:starDay()};
  return starCommit(next)?'+'+(amount-old)+' '+((amount-old)===1?'Stern':'Sterne')+' für deinen Lernweg.':'Die Sterne konnten gerade nicht gespeichert werden.';
 }
-function prepHeader(topic,title){const date=prepDate(topic);return `<div class="route">${homeLink()}<div class="unit-head ${topic==='hoeren'?'sky':'mint'}"><span class="icon-box">${icon(topic==='hoeren'?'audio':'book')}</span><div><p class="kicker">${date?'Klassenarbeit · '+date:'Deutsch üben'}</p><h1 tabindex="-1">${title}</h1></div></div>`;}
+function prepHeader(topic,title,hearingRun=false){
+ const date=prepDate(topic);
+ const nav=hearingRun?`<nav class="prep-hearing-nav" aria-label="Hörübung verlassen">${homeLink()}<a class="crumb" href="#pruefung/hoeren">Zum Lernweg</a></nav>`:homeLink();
+ return `<div class="route${hearingRun?' prep-hearing-route':''}">${nav}<div class="unit-head ${topic==='hoeren'?'sky':'mint'}"><span class="icon-box">${icon(topic==='hoeren'?'audio':'book')}</span><div><p class="kicker">${date?'Klassenarbeit · '+date:'Deutsch üben'}</p><h1 tabindex="-1">${title}</h1></div></div>`;}
 function showPrep(topic,mode){
  if(!Object.hasOwn(prepTopics,topic)){
   const upcoming=Object.keys(prepTopics).some(id=>prepDate(id));
@@ -5082,7 +5085,8 @@ function runPrep(topic,mode,n){
  function save(){return prepWrite({...prepRead(),[key]:session});}
  if(!session.done){session.lastOpened=Date.now();save();}
  const title=(guided?'Mit Bärli lernen':test?'Abschlusstest '+n:'Übung '+n)+' · '+prepTopics[topic].title;
- app.innerHTML=prepHeader(topic,title)+`<a class="crumb" href="#pruefung/${topic}">${icon('back')} Zum Lernweg</a>
+ const hearing=topic==='hoeren';
+ app.innerHTML=prepHeader(topic,title,hearing)+`${hearing?'':`<a class="crumb" href="#pruefung/${topic}">${icon('back')} Zum Lernweg</a>`}
  ${guided&&topic!=='hoeren'?'<section class="panel maja-voice-intro"><h2>Bärli begrüßt dich</h2><p>Ein kurzer Mutmacher vor dem Lernen.</p><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärli begrüßt Maja"></audio></section>':''}
  ${topic==='hoeren'?`<section class="panel prep-audio prep-audio-compact">
    <h2>🎧 ${escapeHtml(story.title)}</h2>
@@ -5114,13 +5118,13 @@ function runPrep(topic,mode,n){
    </details>
    <audio id="prep-audio" preload="metadata" src="./anna-audio/${audioTrack}.mp3" aria-label="Aufgenommene Geschichte"></audio>
    <p id="prep-audio-message" class="inline-status" role="status" aria-live="polite"></p>
-   ${test?'<p class="prep-exam-note">Im Abschlusstest ist der Hörtext nicht sichtbar. Höre die Geschichte so oft an, wie du möchtest. Die Lösungen erscheinen erst nach Abgabe.</p>':`<details id="prep-reading" class="prep-reading-extra">
+  </section>`:''}
+  <section class="panel" id="prep-question"></section><section id="prep-result" hidden></section>
+  ${hearing?`<div class="prep-hearing-tools">${test?'<p class="prep-exam-note">Im Abschlusstest ist der Hörtext nicht sichtbar. Du kannst die Geschichte wiederholen. Die Lösungen siehst du nach der letzten Antwort.</p>':`<details id="prep-reading" class="prep-reading-extra">
       <summary>Ich brauche eine Lesehilfe</summary>
       <p class="subtle">Mit geöffnetem Text wird das Ergebnis als „mit Lesehilfe“ gespeichert.</p>
       ${story.paragraphs.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}
-   </details>`}
-  </section>`:''}
-  <section class="panel" id="prep-question"></section><section id="prep-result" hidden></section></div>`;
+   </details>`}</div>`:''}</div>`;
  const root=document.querySelector('#prep-question'),result=document.querySelector('#prep-result'),audio=document.querySelector('#prep-audio');let stopFireworks=()=>{};
  let stopComputer=()=>{},detachVoices=()=>{},stopAudioEvents=()=>{},stopPlayback=()=>{},resetCue=()=>{},drawnStep=-1;
  extraCleanup=()=>{audio?.pause();stopComputer();detachVoices();stopAudioEvents();stopFireworks();};
@@ -5131,7 +5135,7 @@ function runPrep(topic,mode,n){
    coach.className='prep-cue-coach';
    coach.setAttribute('aria-label','Hörtraining in Abschnitten');
    coach.innerHTML=`<details><summary>🎧 Noch einmal einen Abschnitt anhören</summary><p>Höre die Geschichte abschnittsweise und achte auf Wer? Wo? Was? Warum?</p><div class="actions">${cues.map((cue,i)=>`<button type="button" class="secondary" data-cue-index="${i}">▶ Abschnitt ${i+1}</button>`).join('')}</div><label class="field" for="prep-hearing-notes">Meine Hörnotizen (freiwillig)</label><textarea id="prep-hearing-notes" class="answer" rows="2" placeholder="Wer? Wo? Was?"></textarea></details>`;
-   audio.parentElement.appendChild(coach);
+   app.querySelector('.prep-hearing-tools').prepend(coach);
    const notes=coach.querySelector('#prep-hearing-notes');notes.value=String(session.hearingNotes||'');
    notes.oninput=()=>{session.hearingNotes=notes.value;save();};
    let cueEnd=null;

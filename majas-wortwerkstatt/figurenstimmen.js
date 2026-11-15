@@ -72,7 +72,7 @@
     const link=document.createElement("div");
     link.className="actions fs-mini-link";
     link.innerHTML='<a class="secondary" href="#figurenstimmen">🐻 Bärli und Majas kurze Stimmen kennenlernen →</a>';
-    player.insertAdjacentElement("afterend",link);
+    app.querySelector(".prep-hearing-tools")?.append(link);
    }
    return;
   }

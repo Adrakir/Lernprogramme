@@ -155,9 +155,13 @@
 .prep-listen-toolbar select{width:100%;min-height:44px;padding:9px;border:1.5px solid #729384;border-radius:10px;background:#fffdf8;color:#203741;font-size:.96rem}
 .prep-play-buttons{margin:10px 0 4px;gap:9px}
 .prep-play-buttons button{min-height:44px}
-.prep-audio-compact .prep-reading-extra{margin-top:9px;font-size:.83rem}
-.prep-audio-compact .prep-reading-extra summary{cursor:pointer;color:#55665f;text-decoration:underline}
-.prep-audio-details summary{cursor:pointer;color:var(--forest);padding-block:9px;min-height:40px}
+.prep-hearing-nav{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.prep-hearing-nav .crumb{margin:0 0 6px;min-height:44px}
+.prep-hearing-tools{margin-top:12px}
+.prep-hearing-tools .prep-exam-note{font-size:.86rem;color:var(--muted)}
+.prep-reading-extra summary{cursor:pointer;color:#55665f;text-decoration:underline}
+.prep-audio-compact .prep-audio-details{padding:0;margin:2px 0 0;border:0;background:transparent}
+.prep-audio-details summary{cursor:pointer;color:var(--forest);padding-block:9px;min-height:44px}
 .prep-audio-details[open] .prep-listen-toolbar{margin-block:4px 12px}
 .prep-play-buttons #prep-slow[aria-pressed="true"]{background:var(--forest);color:white}
 .prep-audio-compact .inline-status:empty{display:none}
@@ -172,6 +176,11 @@
 #prep-question .options{display:grid;gap:8px}
 #prep-question .options button{min-height:48px;text-align:left;font-size:1.03rem;border-radius:12px}
 @media(max-width:600px){
+ .prep-hearing-route{padding-top:4px}
+ .prep-hearing-route .unit-head{padding:10px 12px;margin-bottom:10px;gap:9px;align-items:center}
+ .prep-hearing-route .unit-head h1{font-size:clamp(1.25rem,5.5vw,1.55rem);line-height:1.17;margin:0}
+ .prep-hearing-route .unit-head .kicker{margin-bottom:3px;font-size:.67rem}
+ .prep-hearing-route #prep-question .options{grid-template-columns:1fr}
  .prep-audio-compact{padding:12px}
  .prep-listen-toolbar{grid-template-columns:1fr 1fr;gap:8px}
  .prep-listen-toolbar #prep-voice-row{grid-column:1/-1}

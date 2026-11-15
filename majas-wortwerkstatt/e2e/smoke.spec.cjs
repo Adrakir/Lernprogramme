@@ -25,6 +25,10 @@ test('Hörverstehen: rote Frage, Computerstimme und Tempo bleiben gespeichert',a
   await load(page,'pruefung/hoeren/ueben/1');
   await expect(page.locator('.prep-question-highlight h2')).toBeVisible();
   await expect(page.locator('[data-prep-option]')).toHaveCount(3);
+  if(page.viewportSize().width<=600){
+    await expect(page.locator('[data-prep-option]').first()).toBeInViewport();
+    await expect(page.locator('#prep-question .options')).toHaveCSS('grid-template-columns',/^\d+(\.\d+)?px$/);
+  }
   await expect(page.locator('.prep-audio-details')).not.toHaveAttribute('open','');
   await page.locator('.prep-audio-details summary').click();
   await expect(page.locator('#prep-playback-mode')).toBeVisible();
@@ -139,7 +143,7 @@ test('Offline-Update erhält fremden Cache, Lernstand, Kauf und Prüfungsaufnahm
   });
   await load(page);
   await expect.poll(()=>page.evaluate(()=>Boolean(navigator.serviceWorker.controller))).toBeTruthy();
-  expect(await page.evaluate(()=>caches.keys())).toEqual(expect.arrayContaining(['andere-lernapp','majas-wortwerkstatt-v15']));
+  expect(await page.evaluate(()=>caches.keys())).toEqual(expect.arrayContaining(['andere-lernapp','majas-wortwerkstatt-v16']));
   expect(await page.evaluate(()=>caches.keys())).not.toContain('majas-wortwerkstatt-v14');
   await context.setOffline(true);
   await load(page,'pruefung/hoeren/test/1');
