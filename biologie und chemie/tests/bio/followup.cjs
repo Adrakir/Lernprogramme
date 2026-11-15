@@ -155,7 +155,8 @@ module.exports = async function checkFollowup(page, home) {
 
   await page.goto(home + '#games');
   await page.locator('[data-action="gameTab"][data-id="skeleton"]').click();
-  await page.locator('[data-action="skeletonPick"]').first().press('Enter');
+  await page.getByRole('button', {name:'Brustkorb', exact:true})
+    .and(page.locator('[data-action="skeletonPick"]')).press('Enter');
   const gameFeedback = page.locator('#main .feedback');
   assert.equal(await gameFeedback.evaluate(node=>node===document.activeElement),true);
   assert.match(await gameFeedback.innerText(), /Richtig ist: Schädel/);
