@@ -68,7 +68,7 @@ function render(){
  if(state.showHint)html+='<p class="ft-hint">💡 '+esc(c.hint)+'</p>';
  if(state.answerChecked){
   const good=state.selected===c.correct;
-  html+='<div class="ft-result '+(good?'good':'bad')+'" role="status" aria-live="polite"><strong>'+(good?'✓ Richtig – sehr gut begründet!':'Noch nicht richtig – schau genauer hin.')+'</strong><p>'+(good?esc(c.why):esc(c.wrong[state.selected]||c.hint))+'</p>'+(good?'<p><b>Forscherauftrag:</b> '+esc(c.observe)+'</p>':'<p>Wähle eine andere Antwort und prüfe erneut. Du kannst auch den Denkhinweis verwenden.</p>')+'</div>';
+  html+='<div class="ft-result '+(good?'good':'bad')+'" role="status" aria-live="polite"><strong>'+(good?'✓ Die ausgewählte Antwort passt.':'Noch nicht richtig – schau genauer hin.')+'</strong><p>'+(good?esc(c.why):esc(c.wrong[state.selected]||c.hint))+'</p>'+(good?'<p><b>Forscherauftrag:</b> '+esc(c.observe)+'</p>':'<p>Wähle eine andere Antwort und prüfe erneut. Du kannst auch den Denkhinweis verwenden.</p>')+'</div>';
  }
  if(answered)html+='<div class="ft-success"><strong>🏅 Diesen Forscherfall hast du gelöst.</strong><span> '+doneCount(state.animal)+' von 7 Fällen für '+(state.animal==='cat'?'Katze':'Hund')+' abgeschlossen.</span></div>';
  html+='<div class="ft-footer"><span>Die Zeichnung erklärt die Funktion vereinfacht. Für genaue Anatomie nutze den Schulstoff und die verlinkten veterinärmedizinischen Quellen.</span><button type="button" data-ft="next">Nächste Station →</button></div>';
@@ -107,8 +107,10 @@ document.addEventListener('click',function(event){
   if(nav){nav.click();return;}
  }
  render();
+ const selector=action==='select'?'[data-ft="select"][data-num="'+state.selected+'"]':'[data-ft="'+action+'"]';
+ window.BioLaborLernweg.focus(root.querySelector(selector));
 });
 window.BioTransferLab={mount,getProgress:()=>JSON.parse(JSON.stringify(saved)),selfTest:function(){return SECTIONS.length===7&&['dog','cat'].every(a=>SECTIONS.every(s=>CASES[a]&&CASES[a][s]&&CASES[a][s].options.length===3&&Number.isInteger(CASES[a][s].correct)&&CASES[a][s].correct>=0&&CASES[a][s].correct<3))}};
-const route=decodeURIComponent(location.hash.slice(1)).split('/');
-mount({animal:route[0]==='cat'?'cat':'dog',section:SECTIONS.includes(route[1])?route[1]:'skeleton'});
+const route=window.BioLaborLernweg.animalRoute();
+mount({animal:route[0]==='cat'?'cat':'dog',section:route[1]||'skeleton'});
 })();

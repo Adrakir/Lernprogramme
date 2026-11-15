@@ -163,7 +163,9 @@
   const specimenNames = {mensch:'Mensch', hund:'Hund', katze:'Katze'};
 
   function describeMark(type, species, part) {
-    const location = markLocations[type]?.[part];
+    const location = type === 'teeth' && species === 'katze' && part === 'molar'
+      ? 'Die Linie endet an einem kleinen Zahn ganz hinten im Oberkiefer. Davor liegt ein größerer Zahn mit scharfer Kante.'
+      : markLocations[type]?.[part];
     if (!location) return '';
     const label = type === 'bones' ? 'Skelett von ' : 'Gebiss von ';
     return label + specimenNames[species] + '. ' + location;

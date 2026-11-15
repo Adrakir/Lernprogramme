@@ -82,6 +82,6 @@ function mount(args){
  redraw();explanation();
 }
 window.BioDentalLab={mount,stop,render:picture,getState:()=>({animal:state.animal,value:state.value,group:state.group,play:state.play})};
-const init=decodeURIComponent(location.hash.slice(1)).split('/');
+const init=window.BioLaborLernweg.animalRoute();
 if((init[1]||'skeleton')==='teeth')mount({animal:init[0]==='cat'?'cat':'dog',section:'teeth'});
 })();

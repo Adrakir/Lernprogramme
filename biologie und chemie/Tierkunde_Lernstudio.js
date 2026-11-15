@@ -136,7 +136,10 @@ function read(){
  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){note('Vorlesen in diesem Browser nicht verfügbar.');return}
  const speech=window.speechSynthesis;if(speech.speaking){speech.cancel();return}
  let txt=lesson.goal;
- if(state.mode==='guide'){const st=lesson.steps[state.step];txt+=' '+st[0]+'. '+st[1]+'. '+st[2]}
+ if(state.mode==='guide'){
+  const [title,intro,question,answers]=lesson.steps[state.step];
+  txt+=' '+title+'. '+intro+' '+question+' '+answers.map((answer,i)=>(i+1)+'. '+answer).join('. ');
+ }
  if(state.mode==='task'){
   const taskText=state.task===0?lesson.pairHint
    :orderInstruction+' Aktuelle Reihenfolge: '+orderItems().map((step,i)=>(i+1)+'. '+step).join(' ');
@@ -234,6 +237,6 @@ function mount(args){
 document.addEventListener('click',click);
 document.addEventListener('change',change);
 window.BioLernstudio={mount,getProgress:()=>JSON.parse(JSON.stringify(saved)),complete:progress,selfTest:()=>window.BioTierwissen.selfTest()&&STATIONS.length===7};
-const init=decodeURIComponent(location.hash.slice(1)).split('/');
+const init=window.BioLaborLernweg.animalRoute();
 if(STATIONS.includes(init[1]||'skeleton'))mount({animal:init[0]==='cat'?'cat':'dog',section:init[1]||'skeleton'});
 })();

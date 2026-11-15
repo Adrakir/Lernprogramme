@@ -581,8 +581,34 @@ function randomShuffle(a){const out=[...a];for(let i=out.length-1;i>0;i--){const
 function seededNum(s){return [...s].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,13)}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('visible');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('visible'),3200)}
 function addStars(n){state.stars+=n;persist();document.getElementById('starcount').textContent=state.stars}
-function openDialog(title,html){document.getElementById('dialogTitle').textContent=title;document.getElementById('dialogContent').innerHTML=html;document.getElementById('dialogOverlay').hidden=false;document.getElementById('dialogClose').focus()}
-function closeDialog(){document.getElementById('dialogOverlay').hidden=true}
+let dialogReturnFocus, dialogBackground=[];
+const settingsOverlay=document.getElementById('dialogOverlay');
+function openDialog(title,html){
+ if(settingsOverlay.hidden){
+  dialogReturnFocus=document.activeElement;
+  dialogBackground=[...document.body.children].filter(el=>el!==settingsOverlay&&!el.inert&&el.matches('a,button,div,section'));
+  dialogBackground.forEach(el=>{el.inert=true});
+ }
+ document.getElementById('dialogTitle').textContent=title;
+ document.getElementById('dialogContent').innerHTML=html;
+ settingsOverlay.hidden=false;
+ document.getElementById('dialogClose').focus();
+}
+function closeDialog(){
+ if(settingsOverlay.hidden)return;
+ settingsOverlay.hidden=true;
+ dialogBackground.forEach(el=>{el.inert=false});
+ dialogBackground=[];
+ if(dialogReturnFocus?.isConnected)dialogReturnFocus.focus({preventScroll:true});
+}
+settingsOverlay.addEventListener('keydown',event=>{
+ if(event.key!=='Tab')return;
+ const controls=[...settingsOverlay.querySelectorAll('button,input,select,textarea,a[href]')]
+  .filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length);
+ const first=controls[0],last=controls.at(-1);
+ if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+ else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+});
 function speak(text){if(!window.speechSynthesis){toast('Vorlesen wird von diesem Browser nicht unterstützt.');return}window.speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(text.replace(/<[^>]*>/g,''));utter.lang='de-DE';utter.rate=Number(window.LernCockpit?.settings()?.rate)||.89;const voiceUri=window.LernCockpit?.settings()?.voice;const v=voices.find(v=>v.voiceURI===voiceUri)||voices.find(v=>v.lang?.toLowerCase().startsWith('de'));if(v)utter.voice=v;window.speechSynthesis.speak(utter)}
 function stopSpeech(){if(window.speechSynthesis)window.speechSynthesis.cancel()}
 if(window.speechSynthesis){voices=speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>voices=speechSynthesis.getVoices()}
@@ -597,7 +623,9 @@ function closeMenu(restore=false){
  toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label','Lernmenü öffnen');
  if(restore)toggle.focus();
 }
-function onHash(){if(location.hash==='#main'){history.replaceState(null,'','#'+ui.route);document.getElementById('main').focus();return}stopSpeech();ui.route=decodeURIComponent(location.hash.slice(1)||'home');ui.tab='discover';ui.selectedFeature=null;render();closeMenu();window.scrollTo({top:0,behavior:'instant'})}
+function onHash(){if(location.hash==='#main'){history.replaceState(null,'','#'+ui.route);document.getElementById('main').focus();return}stopSpeech();try{ui.route=decodeURIComponent(location.hash.slice(1)||'home')}
+ catch{ui.route='home';history.replaceState(history.state,'','#home')}
+ ui.tab='discover';ui.selectedFeature=null;render();closeMenu();window.scrollTo({top:0,behavior:'instant'})}
 function render(){applySettings();updateNav();let html='';const r=ui.route.split('/');if(r[0]==='home')html=home();else if(r[0]==='learn'&&topicById(r[1])){ui.topic=r[1];html=learn()}else if(r[0]==='practice'){ui.topic=topicById(r[1])?r[1]:'spine';if(!ui.quiz||ui.quiz.route!==ui.route){ui.quiz=restoreTrainingDraft(ui.topic);if(!ui.quiz)startQuiz('topic',ui.topic,false)}html=quizPage()}else if(r[0]==='assess'||r[0]==='daily'||r[0]==='mix'||r[0]==='weak'){if(!ui.quiz||ui.quiz.route!==ui.route)startQuiz(r[0],null,false);html=quizPage()}else if(r[0]==='games')html=games();else if(r[0]==='progress')html=progress();else if(r[0]==='print')html=printPage();else html=home();document.getElementById('main').innerHTML=html;const slide=document.getElementById('forceArm');if(slide)recalcLever();if(document.getElementById('plantStage'))updatePlant();if(document.getElementById('modelLoad'))updateModel();}
 function moduleCard(m){return `<article class="card modulecard card-click"><div class="moduleIcon" style="background:${m.color}">${m.icon}</div><h3>${esc(m.title)}</h3><p>${esc(m.short)}</p><div class="progressbar" role="progressbar" aria-label="Gelernte Aufgaben: ${esc(m.title)}" aria-valuenow="${moduleProgress(m.id)}"><span style="width:${moduleProgress(m.id)}%"></span></div><div class="tag">${moduleProgress(m.id)} % geübt · ca. ${m.duration} Min.</div><button type="button" class="btn small secondary" data-go="learn/${m.id}">Lernbereich öffnen →</button></article>`}
 function home(){let last=state.results.at(-1);return `<section class="hero"><div class="hero-content"><span class="kicker">Dein interaktives Lernlabor · Klasse 5</span><h1>Biologie wird<br><span style="color:var(--teal)">lebendig.</span></h1><p>Erforsche Lebewesen, das Skelett, Knochen, Gelenke, Muskeln und die Wirbelsäule. Entdecke die Bewegung von Gelenken, erforsche Pflanzen und prüfe Modelle am Bildschirm.</p><div class="button-row"><button class="btn" data-go="learn/life">Mit dem Lernen starten →</button><button class="btn secondary" data-go="assess">Lernstand prüfen</button></div></div><div class="hero-art float">${heroSvg()}</div></section><div class="statrow"><div class="stat"><small>DEINE STERNE</small><b>⭐ ${state.stars}</b></div><div class="stat"><small>BEHERRSCHTE AUFGABEN</small><b>${masteredCount()} <span style="font-size:.8rem;color:var(--muted)">/ ${questions.length}</span></b></div><div class="stat"><small>ÜBUNGSFORTSCHRITT</small><b>${masteryPercent()} %</b></div></div><div class="sectiontop"><h2>Deine sieben Biologie-Lernwelten</h2><span class="pill">🧭 Freie Reihenfolge</span></div><div class="grid">${modules.map(moduleCard).join('')}</div><div class="sectiontop"><h2>Heute schon geforscht?</h2></div><div class="two-col equal"><div class="card"><span class="eyebrow">⭐ Tages-Challenge</span><h3>4 Fragen – jeden Tag neu</h3><p>Eine kleine Mischung aus den Themen. Mit Rückmeldung und Sternen zum Sammeln.</p><button class="btn small" data-go="daily">Challenge starten →</button></div><div class="card"><span class="eyebrow">🧠 Persönliche Übung</span><h3>Übe genau das, was noch schwerfällt</h3><p>${last?'Dein letzter Test ist gespeichert. Schau dir die Rückmeldung an.':'Mache zunächst den Lernstandstest. Danach bekommst du gezielte Übungsvorschläge.'}</p><button class="btn small secondary" data-go="${last?'progress':'assess'}">${last?'Fortschritt ansehen':'Lernstandstest starten'} →</button></div></div><div class="keynote"><b>Hinweis:</b> Die App läuft nach dem Speichern auch ohne Internet. Fortschritt wird – sofern vom Browser erlaubt – auf diesem Gerät gespeichert. Die Bilder sind eigene vereinfachte Lernschemata, keine medizinisch maßstabsgetreuen Zeichnungen.</div>`}
@@ -913,8 +941,9 @@ function errorGame(){let i=ui.errorIndex,done=i>=errorRounds.length;const q=erro
 const oldGames=games;
 games=function(){if(!ui.gameTab)ui.gameTab='skeleton';const menu=[['skeleton','Skelett-Detektiv'],['joints','Gelenk-Quiz'],['spine','Wirbelsäulen-Quiz'],['puzzle','Anatomie-Puzzle'],['builder','Skelett bauen'],['errors','Fehlerforscher']];
  return `<div class="learninghead"><div><span class="kicker">Lernen durch Entdecken</span><h1>🎮 Bio-Detektive</h1><p>Sechs Spiele zum Zuordnen, Zusammensetzen, Prüfen und Erklären – ohne Zeitdruck.</p></div><button class="btn secondary small" data-go="home">← Zur Übersicht</button></div><div class="tabs">${menu.map(([id,text])=>`<button class="tab ${ui.gameTab===id?'active':''}" data-action="gameTab" data-id="${id}">${text}</button>`).join('')}</div>${ui.gameTab==='puzzle'?puzzleGame():ui.gameTab==='builder'?buildGame():ui.gameTab==='errors'?errorGame():ui.gameTab==='skeleton'?skeletonGame():bioMatchGame()}`};
-function glossaryView(){const set=modules.flatMap(m=>m.terms.map(([term,explanation])=>({term,explanation,topic:m.id,title:m.title}))).sort((a,b)=>a.term.localeCompare(b.term,'de'));return `<div class="learninghead"><div><span class="kicker">Mit Bildern und Beispielen lernen</span><h1>📚 Dein Biologie-Glossar</h1><p>Nachschlagewerk für wichtige Fachwörter. Wähle bei Bedarf die Vorlesefunktion.</p></div><button class="btn secondary small" data-go="home">← Übersicht</button></div><label class="smallnote" for="glossarySearch">Fachwort suchen</label><input id="glossarySearch" class="textinput" type="search" value="${esc(ui.glossaryText)}" placeholder="z. B. Knochenmark" autocomplete="off"><label class="bl-gloss-filter">Thema <select id="glossaryTopic"><option value="">Alle Themen</option>${modules.map(m=>`<option value="${m.id}"${ui.glossaryTopic===m.id?' selected':''}>${esc(m.title)}</option>`).join('')}</select></label><p class="smallnote">${set.length} Erklärungen aus sieben Themenbereichen</p><div id="glossaryResults" class="v5-gloss-grid">${glossaryItems(set)}</div>`}
-function glossaryItems(set){const search=norm(ui.glossaryText);const filtered=set.filter(x=>(!ui.glossaryTopic||x.topic===ui.glossaryTopic)&&(!search||norm(x.term+' '+x.explanation+' '+x.title).includes(search)));return filtered.length?filtered.map(x=>`<article class="panel v5-gloss-entry"><small>${esc(x.title)}</small><h2>${esc(x.term)}</h2><p>${esc(x.explanation)}</p><div class="button-row"><button class="btn secondary small" data-action="speak" data-text="${esc(x.term+' '+x.explanation)}">🔊 Vorlesen</button><button class="btn plain small" data-go="learn/${x.topic}">Lernwelt →</button></div></article>`).join(''):'<div class="panel">Kein Fachwort gefunden. Versuche einen kürzeren Suchbegriff.</div>'}
+function glossaryView(){const set=modules.flatMap(m=>m.terms.map(([term,explanation])=>({term,explanation,topic:m.id,title:m.title}))).sort((a,b)=>a.term.localeCompare(b.term,'de'));return `<div class="learninghead"><div><span class="kicker">Mit Bildern und Beispielen lernen</span><h1>📚 Dein Biologie-Glossar</h1><p>Nachschlagewerk für wichtige Fachwörter. Wähle bei Bedarf die Vorlesefunktion.</p></div><button class="btn secondary small" data-go="home">← Übersicht</button></div><label class="smallnote" for="glossarySearch">Fachwort suchen</label><input id="glossarySearch" class="textinput" type="search" value="${esc(ui.glossaryText)}" placeholder="z. B. Knochenmark" autocomplete="off"><label class="bl-gloss-filter">Thema <select id="glossaryTopic"><option value="">Alle Themen</option>${modules.map(m=>`<option value="${m.id}"${ui.glossaryTopic===m.id?' selected':''}>${esc(m.title)}</option>`).join('')}</select></label><p id="glossaryCount" class="smallnote" role="status">${glossaryMatches(set).length} von ${set.length} Fachwörtern</p><div id="glossaryResults" class="v5-gloss-grid">${glossaryItems(glossaryMatches(set))}</div>`}
+function glossaryMatches(set){const search=norm(ui.glossaryText);return set.filter(x=>(!ui.glossaryTopic||x.topic===ui.glossaryTopic)&&(!search||norm(x.term+' '+x.explanation+' '+x.title).includes(search)))}
+function glossaryItems(filtered){return filtered.length?filtered.map(x=>`<article class="panel v5-gloss-entry"><small>${esc(x.title)}</small><h2>${esc(x.term)}</h2><p>${esc(x.explanation)}</p><div class="button-row"><button class="btn secondary small" data-action="speak" data-text="${esc(x.term+' '+x.explanation)}">🔊 Vorlesen</button><button class="btn plain small" data-go="learn/${x.topic}">Lernwelt →</button></div></article>`).join(''):'<div class="panel">Kein Fachwort gefunden. Versuche einen kürzeren Suchbegriff.</div>'}
 const oldSpeak=speak;
 speak=function(txt){if(!window.speechSynthesis){toast('Keine Vorlesefunktion im Browser verfügbar.');return;}try{speechSynthesis.cancel();const utter=new SpeechSynthesisUtterance(String(txt).replace(/<[^>]*>/g,''));utter.lang='de-DE';const choices=window.LernCockpit?.settings();utter.rate=Math.min(1.2,Math.max(.65,Number(choices?.rate===1?state.settings.speed:choices?.rate)||.9));const pool=speechSynthesis.getVoices();utter.voice=pool.find(v=>v.voiceURI===(choices?.voice||state.settings.voiceURI))||pool.find(v=>v.lang?.toLowerCase().startsWith('de'))||null;speechSynthesis.speak(utter)}catch(e){toast('Vorlesen konnte nicht gestartet werden.')}};
 const oldSettingsDialog=settingsDialog;
@@ -967,7 +996,7 @@ const oldSetFeature2=setFeature;
 setFeature=function(id){if(ui.route==='games'&&ui.gameTab==='puzzle'&&ui.puzzleChoice===null&&ui.puzzleIndex<puzzleParts.length){ui.puzzleChoice=id;if(puzzleParts[ui.puzzleIndex].id===id)ui.puzzleHits++;render();return;}oldSetFeature2(id)};
 // Neue Regler und Suchfelder arbeiten ohne Seitenneuladen.
 document.addEventListener('input',e=>{
- if(e.target.id==='glossarySearch'){ui.glossaryText=e.target.value;const results=document.getElementById('glossaryResults');if(results){const list=modules.flatMap(m=>m.terms.map(([term,explanation])=>({term,explanation,topic:m.id,title:m.title}))).sort((a,b)=>a.term.localeCompare(b.term,'de'));results.innerHTML=glossaryItems(list)}}
+ if(e.target.id==='glossarySearch'){ui.glossaryText=e.target.value;const results=document.getElementById('glossaryResults');if(results){const list=modules.flatMap(m=>m.terms.map(([term,explanation])=>({term,explanation,topic:m.id,title:m.title}))).sort((a,b)=>a.term.localeCompare(b.term,'de'));const matches=glossaryMatches(list);results.innerHTML=glossaryItems(matches);document.getElementById('glossaryCount').textContent=matches.length+' von '+list.length+' Fachwörtern'}}
  if(e.target.id==='voiceSpeed'){state.settings.speed=Number(e.target.value);document.getElementById('voiceSpeedText').textContent=state.settings.speed.toFixed(2);persist();}
  if(e.target.id==='spinePressure'){ui.spineLoad=Number(e.target.value);updatePressure();const parent=document.getElementById('spinePressure')?.closest('.panel');if(parent){const part=parent.querySelector('svg rect[fill="#81b3c6"]');if(part){const gap=12-ui.spineLoad*.065;part.setAttribute('y',String(122-gap/2));part.setAttribute('height',String(gap+14));}}}
  if(e.target.id==='muscleAngle'){ui.muscleDegrees=Number(e.target.value);updateMuscleSlider();}
@@ -2192,11 +2221,11 @@ updateNav=function(){
 if(typeof render==='function')render();
 })();
 </script>
-<script src="BioLabor_Anatomie.js?v=4"></script>
+<script src="BioLabor_Anatomie.js?v=5"></script>
 <script src="BioLabor_Klassenarbeit.js?v=8"></script>
-<script src="Tierkunde_Verhaltenslabor.js?v=20261114-v5"></script>
+<script src="Tierkunde_Verhaltenslabor.js?v=20261115d"></script>
 <script src="BioLabor_Modelle.js?v=1"></script>
-<script src="BioLabor_Lernweg.js?v=4"></script>
+<script src="BioLabor_Lernweg.js?v=5"></script>
 <script src="BioLabor_Schulstoff.js?v=6"></script>
 <script src="BioLabor_Pruefung.js?v=1"></script>
 <script src="BioLabor_ProbetestInhalte.js?v=2"></script>

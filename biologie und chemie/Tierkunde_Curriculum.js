@@ -51,7 +51,7 @@ const data={
  steps:[
  ['Entdecken','Augen, Ohren, Körperhaltung, Schwanz und Situation gehören zusammen.','Was muss man betrachten?',['Das Gesamtbild','Nur die Schwanzspitze','Nur die Fellfarbe'],0,'Ein einzelnes Signal ist nicht eindeutig.'],
  ['Verstehen','Ein ängstliches Tier kann sich ducken, ausweichen oder erstarren.','Was ist sicher?',['Rückzug ermöglichen','Hinterherlaufen','Schnell anfassen'],0,'Abstand hilft, eine Bedrohung zu vermeiden.'],
- ['Anwenden','Knurren, Fauchen und angespannte Körperhaltung können warnen.','Was bedeutet Schwanzwedeln immer?',['Nicht zwangsläufig Freude','Immer Freude','Immer Hunger'],0,'Die Bedeutung hängt vom Zusammenhang ab.']
+ ['Anwenden','Knurren, Fauchen und angespannte Körperhaltung können warnen.','Was kannst du aus Schwanzwedeln allein schließen?',['Ich brauche weitere Signale, um es zu deuten.','Das Tier ist immer freundlich.','Das Tier ist immer hungrig.'],0,'Die Bedeutung hängt vom Zusammenhang ab.']
  ],
  pairs:[['Tier duckt sich','Abstand lassen'],['Tier wirkt entspannt','Ruhig beobachten'],['Tier droht','Nicht bedrängen']],
  seq:['Haltung und Umgebung beobachten.','Gefahr erkennen und Abstand halten.','Dem Tier einen Rückzugsweg lassen.'],

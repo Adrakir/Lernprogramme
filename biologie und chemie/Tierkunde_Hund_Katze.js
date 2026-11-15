@@ -8,7 +8,7 @@ const SPECIES={
 const BONES=[
 {id:'skull',label:'Schädel & Kiefer',why:'Schützt das Gehirn. Der Kiefer trägt die Zähne. Große Augenhöhlen schaffen Platz für die Augen.',dog:'Der Schädel kann je nach Hunderasse sehr unterschiedlich geformt sein. Der Kiefer trägt kräftige Fang- und Reißzähne.',cat:'Der vergleichsweise kurze Schädel trägt große Augenhöhlen. Kiefer und scharfe Reißzähne sind auf das Zerteilen tierischer Nahrung ausgerichtet.'},
 {id:'spine',label:'Wirbelsäule',why:'Viele Wirbel bilden eine bewegliche, tragende Achse und schützen das Rückenmark. Zwischen den beweglichen Wirbeln liegen Bandscheiben.',dog:'Hals-, Brust-, Lenden-, Kreuz- und Schwanzwirbel stützen den Körper und wirken bei der Fortbewegung mit.',cat:'Die besonders bewegliche Lendenwirbelsäule kann sich stark beugen und strecken. So vergrößert die Katze bei Sprüngen und schnellen Läufen ihre Schrittlänge.'},
-{id:'ribs',label:'Rippen & Brustkorb',why:'Rippen, Brustwirbel und Brustbein bilden den Brustkorb. Er schützt unter anderem Herz und Lunge und bewegt sich beim Atmen.',dog:'Der Brustkorb bietet Schutz und Platz für Herz und Lunge, die beim Laufen viel Sauerstoff liefern.',cat:'Auch der Katzenbrustkorb schützt die inneren Organe. Seine Rippen lassen die Atembewegungen zu.'},
+{id:'ribs',label:'Rippen & Brustkorb',why:'Rippen, Brustwirbel und Brustbein bilden den Brustkorb. Er schützt unter anderem Herz und Lunge und bewegt sich beim Atmen.',dog:'Der Brustkorb schützt Herz und Lunge. In der Lunge gelangt Sauerstoff aus der eingeatmeten Luft ins Blut. Das Herz pumpt dieses Blut zu den Muskeln.',cat:'Auch der Katzenbrustkorb schützt die inneren Organe. Seine Rippen lassen die Atembewegungen zu.'},
 {id:'shoulder',label:'Schulterblatt',why:'Das Schulterblatt ist Ansatzstelle für viele Muskeln und hilft, die Vorderbeine zu bewegen.',dog:'Die Vordergliedmaßen sind über Muskeln am Rumpf aufgehängt. Eine durchgehende knöcherne Verbindung wie unser Schlüsselbein fehlt.',cat:'Die Katze hat nur ein kleines, nicht mit dem übrigen Skelett gelenkig verbundenes Schlüsselbein. Die bewegliche Schulter hilft beim Klettern und Greifen.'},
 {id:'foreleg',label:'Vorderbein',why:'Oberarmknochen, Elle und Speiche sowie Handknochen bilden die Vordergliedmaße. Gelenke und Muskeln ermöglichen Bewegung.',dog:'Die Vorderbeine stützen einen großen Teil des Gewichts und federn die Landung beim Laufen ab.',cat:'Bewegliche Vorderbeine greifen, halten und bremsen bei der Landung. Die Krallen unterstützen das Festhalten.'},
 {id:'pelvis',label:'Becken',why:'Das Becken verbindet die Hinterbeine mit dem Rumpf, überträgt Kräfte und schützt Teile der inneren Organe.',dog:'Kräftige Becken- und Hinterbeinmuskeln treiben den Körper vorwärts.',cat:'Das Becken leitet die starke Sprungkraft der Hinterbeine an den Körper weiter.'},
@@ -64,7 +64,7 @@ const Q=[
 {animal:'dog',q:'Welche Aussage über die Hundekrallen stimmt meistens?',a:['Sie sind wie bei Katzen vollständig einziehbar','Sie helfen zusammen mit Pfotenballen beim Halt','Sie haben keine Funktion','Sie bestehen aus Knochen'],c:1,why:'Hundekrallen bestehen aus Horn und sind gewöhnlich nicht einziehbar. Sie unterstützen den Halt.',hint:'Denke an den Boden beim schnellen Laufen.'},
 {animal:'dog',q:'Ein Hund hat einen steifen Körper, starrt dich an und knurrt. Was ist sinnvoll?',a:['Ihn sofort umarmen','Ruhig Abstand schaffen und ihn nicht bedrängen','Auf ihn zulaufen','Ihn am Schwanz anfassen'],c:1,why:'Das können deutliche Warnsignale sein. Abstand halten schützt Mensch und Tier.',hint:'Welche Reaktion gibt dem Tier Raum?'},
 {animal:'dog',q:'Welche Zähne können Nahrung scherenartig zerteilen?',a:['Reißzähne','Nur Schneidezähne','Milchzähne als Gruppe','Keine Zähne'],c:0,why:'Bestimmte obere und untere Backenzähne greifen scherenartig ineinander. Beim Hund sind das besonders der obere vierte Prämolar und der untere erste Molar.',hint:'Der Name klingt nach Reißen.'},
-{animal:'dog',q:'Woran erkennst du nicht sicher, dass ein Hund freundlich ist?',a:['An einem einzelnen Schwanzwedeln','An einem insgesamt lockeren Körper','An der entspannten Mimik zusammen mit Bewegungen','An der gesamten Situation'],c:0,why:'Ein wedelnder Schwanz allein beweist keine Freundlichkeit. Immer Haltung, Gesicht, Umgebung und Verhalten zusammen betrachten.',hint:'Ein einzelnes Signal kann täuschen.'},
+{animal:'dog',q:'Welcher Schluss aus der Körpersprache eines Hundes ist zu voreilig?',a:['Er wedelt. Also ist er sicher freundlich.','Ich achte auf die ganze Körperhaltung.','Ich beobachte auch Blick und Bewegung.','Ich berücksichtige, was gerade passiert.'],c:0,why:'Ein wedelnder Schwanz allein beweist keine Freundlichkeit. Immer Haltung, Gesicht, Umgebung und Verhalten zusammen betrachten.',hint:'Ein einzelnes Signal kann täuschen.'},
 {animal:'dog',q:'Wie stehen Hunde beim Laufen vor allem auf dem Boden?',a:['Auf der ganzen Fußsohle','Auf Zehen und Ballen','Auf den Knien','Nur auf den Fersen'],c:1,why:'Hunde sind Zehengänger. Was wie ein rückwärts gerichtetes Knie aussieht, ist am Hinterbein das hoch stehende Sprunggelenk.',hint:'Achte auf die Pfoten.'},
 {animal:'dog',q:'Was zeigt die Spielverbeugung eines Hundes häufig?',a:['Einladung zum Spiel','Sicher eine schwere Krankheit','Immer Jagd auf Menschen','Dass er schlafen muss'],c:0,why:'Vorderkörper tief und Hinterteil hoch können eine Spielaufforderung sein. Die übrigen Signale bleiben wichtig.',hint:'Dabei ist der Hinterkörper meist oben.'},
 {animal:'cat',q:'Welche Wildkatzen-Unterart ist die wichtigste Vorfahrin unserer Hauskatze?',a:['Afrikanisch-vorderasiatische Wildkatze','Tiger','Luchs','Schneeleopard'],c:0,why:'Genetische Befunde führen die Hauskatze auf Felis silvestris lybica zurück.',hint:'Diese Wildkatze lebte in Gebieten früher Landwirtschaft.'},
@@ -91,7 +91,7 @@ function pageTitle(id,title,subtitle,action=''){return '<div class="page-title">
 function card(icon,name,txt){return '<article class="fact"><span class="emoji">'+icon+'</span><h3>'+name+'</h3><p>'+txt+'</p></article>'}
 function callout(title,body){return '<div class="callout"><strong>'+title+'</strong><p>'+body+'</p></div>'}
 function navLine(next,label){return '<div class="actionline spaced"><button type="button" data-section="'+next+'" class="btn">'+label+' →</button><button type="button" data-section="quiz" class="btn secondary">🧠 Jetzt testen</button></div>'}
-function bonePart(id,svg){return '<g class="bone '+(bone===id?'selected':'')+'" data-bone="'+id+'" role="button" tabindex="0" aria-label="'+BONES.find(b=>b.id===id).label+' auswählen">'+svg+'</g>'}
+function bonePart(id,svg){return '<g class="bone '+(bone===id?'selected':'')+'" data-bone="'+id+'" role="button" tabindex="0" aria-pressed="'+(bone===id)+'" aria-label="'+BONES.find(b=>b.id===id).label+' auswählen">'+svg+'</g>'}
 function node(x,y,num){return '<circle class="bone-node" cx="'+x+'" cy="'+y+'" r="12"/><text class="bone-node-text" x="'+x+'" y="'+(y+4)+'">'+num+'</text>'}
 function skeletonSvg(){
  const cat=animal==='cat';
@@ -121,7 +121,7 @@ function skeletonPage(){
  const practiceLink='<a class="btn secondary" href="BioLabor_5_Biologie_V9_2.html#klassenarbeit/'+(animal==='dog'?'hund':'katze')+'">Skelett selbst beschriften</a>';
  return pageTitle('01',animal==='dog'?'Das Skelett des Hundes':'Das Skelett der Katze','Tippe auf die nummerierten Knochen. Erfahre, welche Aufgabe sie haben und warum der Körperbau zur Lebensweise passt.',practiceLink)+
  '<div class="actionline"><button type="button" class="btn secondary" data-action="zoom">🔎 Skelett vergrößern</button></div><div class="bone-board">'+skeletonSvg()+'</div><p class="diagram-caption">Neun anklickbare Knochenbereiche. Die Zeichnung ist ein wissenschaftlich orientiertes, aber vereinfachtes Lernschema – nicht jede einzelne Rippe oder Zehe ist dargestellt.</p>'+
- '<div class="chips" aria-label="Knochen auswählen">'+BONES.map((x,i)=>'<button type="button" data-bone="'+x.id+'" class="chip '+(x.id===bone?'active':'')+'">'+(i+1)+'. '+x.label+'</button>').join('')+'</div>'+
+ '<div class="chips" aria-label="Knochen auswählen">'+BONES.map((x,i)=>'<button type="button" data-bone="'+x.id+'" aria-pressed="'+(bone===x.id)+'" class="chip '+(x.id===bone?'active':'')+'">'+(i+1)+'. '+x.label+'</button>').join('')+'</div>'+
  '<div class="detail" aria-live="polite"><h3>🦴 '+b.label+'</h3><p><b>Was ist das?</b> '+b.why+'</p><p style="margin-top:9px"><b>Warum gerade bei '+A().name+'?</b> '+b[animal]+'</p></div>'+
  callout('Der wichtigste Zusammenhang','Das Skelett gibt Halt, schützt Organe und bildet mit Muskeln und Gelenken ein Bewegungssystem. Die Knochen selbst ziehen nicht – Muskeln bewegen sie über Sehnen.')+
  '<div class="panel white spaced anatomy-atlas"><h3>🔎 Anatomie-Lexikon: 23 Knochen und Bauteile</h3><p class="smallnote">Du kannst jeden Begriff öffnen. So erfährst du mehr als die neun Bereiche der großen Zeichnung zeigen.</p><div class="atlas-grid">'+ATLAS.map((x,i)=>'<details><summary>'+(i+1)+'. '+x[0]+'</summary><p>'+x[1]+'</p></details>').join('')+'</div></div>'+
@@ -153,21 +153,21 @@ function toothSketch(){
  const colors={incisor:'#7eb6b8',canine:'#e5a55d',premolar:'#9d8dcf',molar:'#82a87c'};
  const top='<path d="M65 123Q149 87 287 96L654 105Q688 135 684 155L673 185L74 185Z" fill="#e8cfb1" stroke="#ac8c6f" stroke-width="5"/>';
  const bottom='<path d="M75 238Q158 249 297 254L660 243L678 277Q580 316 302 316Q146 307 70 272Z" fill="#e8cfb1" stroke="#ac8c6f" stroke-width="5"/>';
- const teeth=[];
- const sequence=animal==='dog'?['incisor','incisor','incisor','canine','premolar','premolar','premolar','premolar','molar','molar']:['incisor','incisor','incisor','canine','premolar','premolar','premolar','molar'];
- const start=96,spacing=animal==='dog'?57:72;
- sequence.forEach((k,i)=>{const x=start+i*spacing;
-   const size=k==='canine'?51:k==='incisor'?25:k==='molar'?30:40;
-   teeth.push('<path d="M'+(x-18)+' 185L'+(x-15)+' '+(185+size)+'L'+x+' '+(195+size*1.13)+'L'+(x+17)+' 185Z" fill="'+colors[k]+'" stroke="#6d776b" stroke-width="2.5" opacity="'+(tooth===k?'1':'.76')+'"/>');
-   teeth.push('<path d="M'+(x-18)+' 239L'+(x-14)+' '+(239-size*.63)+'L'+x+' '+(239-size*.86)+'L'+(x+18)+' 239Z" fill="'+colors[k]+'" stroke="#6d776b" stroke-width="2.5" opacity="'+(tooth===k?'1':'.76')+'"/>');
- });
- return '<svg class="tooth-svg" viewBox="0 0 760 360" role="img" aria-label="Schematische Seitenansicht der oberen und unteren Zahnreihe mit farbigen Zahntypen"><rect width="760" height="360" fill="#faf7f0"/><text x="30" y="39" font-size="25" font-weight="850" fill="#395a57">'+A().name+' · Zahntypen</text><text x="30" y="69" font-size="14" fill="#627775">Beispielhafte Seitenansicht, nicht alle '+A().teeth+' Zähne abgebildet</text>'+top+bottom+teeth.join('')+'<text x="65" y="342" font-size="14" fill="#587772">Oben: Oberkiefer · Unten: Unterkiefer · Farben = unterschiedliche Aufgaben</text></svg>'
+ const jaw=window.BioLaborAnatomie.jaws[animal==='dog'?'hund':'katze'];
+ const kinds={i:'incisor',f:'canine',s:'premolar',m:'molar',t:'molar'};
+ const teeth=[jaw.upper,jaw.lower].flatMap((row,j)=>row.map(([code,pos,width])=>{
+   const kind=code==='r'?(j?'molar':'premolar'):kinds[code];
+   const x=53+pos*1.5,w=width*1.45,y=j?245:185;
+   const height=(kind==='canine'?46:kind==='incisor'?20:code==='t'?13:29)*(j?-1:1);
+   return '<path data-color-tooth="'+kind+'" d="M'+x+' '+y+'l'+w+' 0l'+(-w*.28)+' '+(height*.56)+'l'+(-w*.2)+' '+(height*.44)+'Z" fill="'+colors[kind]+'" stroke="#6d776b" stroke-width="'+(tooth===kind?4:2)+'"/>';
+ }));
+ return '<svg class="tooth-svg" viewBox="0 0 760 360" role="img" aria-label="Schematische Seitenansicht der oberen und unteren Zahnreihe mit farbigen Zahntypen"><rect width="760" height="360" fill="#faf7f0"/><text x="30" y="39" font-size="25" font-weight="850" fill="#395a57">'+A().name+' · Zahntypen</text><text x="30" y="69" font-size="14" fill="#627775">Eine Seite: oben '+jaw.upper.length+' Zähne · unten '+jaw.lower.length+' Zähne</text>'+top+bottom+teeth.join('')+'<text x="65" y="342" font-size="14" fill="#587772">Oben: Oberkiefer · Unten: Unterkiefer · Farben = unterschiedliche Aufgaben</text></svg>'
 }
 function teethPage(){
  const d=DENTAL.find(x=>x.id===tooth);
  const data=animal==='dog'?['12','4','16','10']:['12','4','10','4'];
- return pageTitle('03',animal==='dog'?'Das Gebiss des Hundes':'Das Gebiss der Katze','Warum haben Raubtiere keine breiten Mahlzähne wie Kühe? Wähle die Zahntypen und erfahre, was sie können.')+
- '<div class="two"><div><div class="bone-board">'+toothSketch()+'</div><p class="diagram-caption">Farbschema einer Seitenansicht. Die genaue Zahnanzahl gilt für das ganze Gebiss, nicht nur für diese Zeichnung.</p><div class="tooth-key">'+DENTAL.map((d,i)=>'<button type="button" data-tooth="'+d.id+'" class="'+(tooth===d.id?'active':'')+'"><span class="dot" style="background:'+d.color+'"></span>'+d.label+'<br><strong>'+data[i]+' Zähne</strong></button>').join('')+'</div><div class="detail"><h3>🦷 '+d.label+'</h3><p>'+d[animal]+'</p></div></div>'+
+ return pageTitle('03',animal==='dog'?'Das Gebiss des Hundes':'Das Gebiss der Katze','Wie unterscheiden sich die Zähne von Hund und Katze? Vergleiche harte Schneidkanten und breitere Kauflächen.')+
+ '<div class="two"><div><div class="bone-board">'+toothSketch()+'</div><p class="diagram-caption">Farbschema einer Seitenansicht. Die genaue Zahnanzahl gilt für das ganze Gebiss, nicht nur für diese Zeichnung.</p><div class="tooth-key">'+DENTAL.map((d,i)=>'<button type="button" data-tooth="'+d.id+'" aria-pressed="'+(tooth===d.id)+'" class="'+(tooth===d.id?'active':'')+'"><span class="dot" style="background:'+d.color+'"></span>'+d.label+'<br><strong>'+data[i]+' Zähne</strong></button>').join('')+'</div><div class="detail"><h3>🦷 '+d.label+'</h3><p>'+d[animal]+'</p></div></div>'+
  '<aside class="panel"><div class="big-icon">🦷</div><h3>Das vollständige bleibende Gebiss</h3><div class="score">'+A().teeth+'</div><p><b>'+A().name+': '+A().teeth+' bleibende Zähne.</b> Das Milchgebiss hat normalerweise '+A().milk+' Zähne.</p><p>'+A().diet+'</p><h3>Was sind Reißzähne?</h3><p>Ein oberer und ein unterer Backenzahn bilden zusammen eine scharfe „Schere“. Sie schneiden Fleisch und anderes Futter in Stücke.</p></aside></div>'+
  '<div class="info-cards spaced">'+card('✂️','Schneiden statt Mahlen','Fangzähne halten fest. Reißzähne schneiden. Der Hund hat außerdem mehr hintere Backenzähne, mit denen er auch Nahrung zerdrücken kann.')+card('🥩','Zusammenhang mit Nahrung','Die Zahnform passt zur ursprünglichen Lebensweise als Raubtier. Pflanzenfresser besitzen dagegen oft große Kauflächen zum Zerreiben faserreicher Nahrung.')+'</div>'+
  callout('Warum sind Hund und Katze verschieden?','Der Hund verwertet auch verschiedene pflanzliche Nahrungsbestandteile. Die Katze ist stärker auf tierische Beute spezialisiert und hat weniger Backenzähne mit Mahlflächen.')+
@@ -215,7 +215,7 @@ function motionPage(){
  ['jump','🦘','Springen','Kräftige Hinterbeine stoßen ab, Rücken streckt sich, Vorderpfoten fangen die Landung ab.']
  ];
  return pageTitle('05','Fortbewegung: Knochen als Hebel','Muskeln ziehen an Knochen, Gelenke ermöglichen Bewegung. Wähle eine Bewegungsart – und überlege, welche Knochen und Muskeln dabei gebraucht werden.')+
- '<div class="mood-options">'+items.map(x=>'<button type="button" class="mood-option '+(gait===x[0]?'active':'')+'" data-gait="'+x[0]+'">'+x[1]+' '+x[2]+'</button>').join('')+'</div>'+
+ '<div class="mood-options">'+items.map(x=>'<button type="button" class="mood-option '+(gait===x[0]?'active':'')+'" data-gait="'+x[0]+'" aria-pressed="'+(gait===x[0])+'">'+x[1]+' '+x[2]+'</button>').join('')+'</div>'+
  '<div class="two"><div class="bone-board">'+gaitSvg()+'</div><section class="panel"><h3>'+items.find(x=>x[0]===gait)[1]+' '+items.find(x=>x[0]===gait)[2]+'</h3><p>'+items.find(x=>x[0]===gait)[3]+'</p><p><strong>Was bewegt die Knochen?</strong> Muskeln ziehen sich zusammen und übertragen die Kraft über Sehnen. Gelenke geben die Bewegungsrichtung vor.</p></section></div>'+
  '<div class="cols spaced">'+card('🦶','Zehengänger','Hund und Katze setzen vor allem Zehen und Ballen auf. Das scheinbar rückwärts gerichtete Knie am Hinterbein ist das Sprunggelenk.')+
  card('🦴','Wirbelsäule','Sie stützt den Körper und ist beweglich. Besonders bei der Katze hilft die starke Biegsamkeit beim Springen und Sprinten.')+
@@ -243,7 +243,7 @@ function moodSvg(){
 function signalsPage(){
  const m=MOODS[mood];
  return pageTitle('06','Körpersprache richtig lesen','Ein Tier zeigt Gefühle und Absichten durch Haltung, Bewegung, Augen, Ohren und Schwanz. Entscheidend ist das Gesamtbild.')+
- '<div class="mood-options">'+Object.entries(MOODS).map(([k,x])=>'<button type="button" data-mood="'+k+'" class="mood-option '+(mood===k?'active':'')+'">'+x.icon+' '+x.title+'</button>').join('')+'</div>'+
+ '<div class="mood-options">'+Object.entries(MOODS).map(([k,x])=>'<button type="button" data-mood="'+k+'" aria-pressed="'+(mood===k)+'" class="mood-option '+(mood===k?'active':'')+'">'+x.icon+' '+x.title+'</button>').join('')+'</div>'+
  '<div class="two"><div class="bone-board">'+moodSvg()+'</div><div class="panel"><span class="kicker">WAS KÖNNTE DAS TIER ZEIGEN?</span><h3>'+m.icon+' '+m.title+'</h3><p>'+m[animal]+'</p><div class="signal-points">'+m.features.map(f=>'<div class="fact"><strong>'+f+'</strong></div>').join('')+'</div></div></div>'+
  callout('So verhältst du dich sicher',m.notice)+
  '<div class="info-cards">'+card('🔎','Nicht nur auf den Schwanz schauen','Schwanzwedeln bedeutet nicht immer Freundlichkeit. Auch aufgerichtetes Fell oder angelegte Ohren müssen zusammen mit der ganzen Situation betrachtet werden.')+
@@ -362,7 +362,12 @@ function quizPage(){
 function updateControls(){
  document.querySelectorAll('[data-species]').forEach(x=>{x.classList.toggle('active',x.dataset.species===animal);x.setAttribute('aria-pressed',String(x.dataset.species===animal))});
  const stations=$('#sections');
- stations.querySelectorAll('[data-section]').forEach(x=>x.classList.toggle('active',x.dataset.section===section));
+ stations.querySelectorAll('[data-section]').forEach(button=>{
+  const active=button.dataset.section===section;
+  button.classList.toggle('active',active);
+  if(active)button.setAttribute('aria-current','page');
+  else button.removeAttribute('aria-current');
+ });
  const active=stations.querySelector('.active');
  if(active&&stations.scrollWidth>stations.clientWidth){
   const item=active.getBoundingClientRect(),menu=stations.getBoundingClientRect();
@@ -390,15 +395,15 @@ function toast(txt){const t=$('#toast');t.textContent=txt;t.classList.add('show'
 function chooseSection(v){section=v;location.hash=animal+'/'+section;render(true)}
 function chooseAnimal(v){if(v===animal)return;animal=v;bone='spine';tooth='canine';mood='relax';gait='walk';resetQuiz(true);location.hash=animal+'/'+section;render(true)}
 document.addEventListener('click',function(e){
- const diagramBone=e.target.closest('[data-bone]');
- if(diagramBone&&!diagramBone.matches('button')){bone=diagramBone.dataset.bone;render(false);return}
+ const diagramBone=e.target.closest('#content .skeleton-svg [data-bone]');
+ if(diagramBone&&!diagramBone.matches('button')){chooseFeature(diagramBone);return}
  const b=e.target.closest('button');if(!b)return;
  if(b.dataset.species){chooseAnimal(b.dataset.species);return}
  if(b.dataset.section){chooseSection(b.dataset.section);return}
- if(b.dataset.bone){bone=b.dataset.bone;render(false);return}
- if(b.dataset.tooth){tooth=b.dataset.tooth;render(false);return}
- if(b.dataset.mood){mood=b.dataset.mood;render(false);return}
- if(b.dataset.gait){gait=b.dataset.gait;render(false);return}
+ if(b.dataset.bone){chooseFeature(b);return}
+ if(b.dataset.tooth){chooseFeature(b);return}
+ if(b.dataset.mood){chooseFeature(b);return}
+ if(b.dataset.gait){chooseFeature(b);return}
  if(b.dataset.answer!==undefined&&!checked){chosen=Number(b.dataset.answer);renderQuizAt('[data-answer="'+chosen+'"]');return}
  if(b.dataset.action==='zoom'){const frame=document.querySelector('.bone-board');if(frame){frame.classList.toggle('zoomed');b.textContent=frame.classList.contains('zoomed')?'🔎 Wieder verkleinern':'🔎 Skelett vergrößern';}return}
  if(b.dataset.action==='hint'&&!checked){hints=Math.min(2,hints+1);renderQuizAt(hints<2?'[data-action="hint"]':'.quiz-head ~ h2');return}
@@ -406,14 +411,39 @@ document.addEventListener('click',function(e){
  if(b.dataset.action==='next'&&checked){qi++;checked=false;chosen=null;hints=0;renderQuizAt(qi===quiz.length?'.page-title h1':'.quiz-head ~ h2');return}
  if(b.dataset.action==='restart'){resetQuiz();renderQuizAt('.quiz-head ~ h2');return}
 });
-$('#content').addEventListener('keydown',function(e){const g=e.target.closest('[data-bone]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();bone=g.dataset.bone;render(false)}});
+function chooseFeature(control){
+ const {bone:nextBone,tooth:nextTooth,mood:nextMood,gait:nextGait}=control.dataset;
+ if(nextBone)bone=nextBone;
+ if(nextTooth)tooth=nextTooth;
+ if(nextMood)mood=nextMood;
+ if(nextGait)gait=nextGait;
+ const key=['bone','tooth','mood','gait'].find(item=>control.dataset[item]);
+ const reference=control.closest('.ls-reference');
+ const openDetails=reference?.open ? [...reference.querySelectorAll('details')].map(detail=>detail.open) : null;
+ render(false);
+ if(openDetails){
+  const current=$('#content .ls-reference');
+  current.open=true;
+  current.querySelectorAll('details').forEach((detail,index)=>{detail.open=Boolean(openDetails[index])});
+ }
+ const tag=control.matches('button')?'button':'.skeleton-svg g';
+ window.BioLaborLernweg.focus($('#content '+tag+'[data-'+key+'="'+control.dataset[key]+'"]'));
+}
+$('#content').addEventListener('keydown',e=>{
+ const boneControl=e.target.closest('.skeleton-svg [data-bone]');
+ if(boneControl&&(e.key==='Enter'||e.key===' ')){e.preventDefault();chooseFeature(boneControl)}
+});
+$('a.skip').addEventListener('click',event=>{
+ event.preventDefault();
+ window.BioLaborLernweg.focus($('#content'),true);
+});
 $('#theme').addEventListener('click',()=>{window.BioLaborLernweg.setAnimalTheme(document.body.classList.contains('dark')?'light':'dark')});
 $('#font').addEventListener('click',()=>{const n=Number(document.documentElement.style.getPropertyValue('--scale')||1);document.documentElement.style.setProperty('--scale',String(n>=1.25?1:n+.125));toast('Schriftgröße angepasst')});
 $('#speak').addEventListener('click',()=>{if(!('speechSynthesis' in window)){toast('Vorlesen ist in diesem Browser nicht verfügbar.');return}if(speechSynthesis.speaking){speechSynthesis.cancel();toast('Vorlesen beendet');return}const t=new SpeechSynthesisUtterance($('#content').innerText);t.lang='de-DE';t.rate=Number(animalSettings.rate)||.89;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.voiceURI===animalSettings.voice)||voices.find(x=>x.lang.toLowerCase().startsWith('de'));if(v)t.voice=v;speechSynthesis.speak(t);toast('Vorlesen gestartet · erneut tippen zum Stoppen')});
 $('#print').addEventListener('click',()=>window.print());
-window.addEventListener('hashchange',()=>{const p=decodeURIComponent(location.hash.slice(1)).split('/');if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){if(animal===p[0]&&section===p[1])return;if(animal!==p[0]){animal=p[0];resetQuiz(true)}section=p[1];render(true)}});
+window.addEventListener('hashchange',()=>{const p=window.BioLaborLernweg.animalRoute();if(SPECIES[p[0]]&&['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(p[1])){if(animal===p[0]&&section===p[1])return;if(animal!==p[0]){animal=p[0];resetQuiz(true)}section=p[1];render(true)}});
 const animalSettings=window.BioLaborLernweg?.animalSettings() || {};
-const initial=decodeURIComponent(location.hash.slice(1)).split('/');
+const initial=window.BioLaborLernweg.animalRoute();
 if(!initial[0])$('#tier-intro').open=true;
 if(SPECIES[initial[0]])animal=initial[0];
 if(['skeleton','origin','teeth','hunt','motion','signals','compare','quiz'].includes(initial[1]))section=initial[1];

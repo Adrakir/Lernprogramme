@@ -303,6 +303,6 @@
   }
 
   window.BioBehaviorLab = {mount, SCENES, figure};
-  const [, section] = decodeURIComponent(location.hash.slice(1)).split('/');
+  const [, section] = window.BioLaborLernweg?.animalRoute() ?? [];
   mount({section});
 })();

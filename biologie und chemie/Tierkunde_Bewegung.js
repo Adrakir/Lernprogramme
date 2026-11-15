@@ -37,7 +37,7 @@ function drawBone(x1,y1,x2,y2,w=12){
  '<path d="M'+n(x1)+' '+n(y1)+'L'+n(x2)+' '+n(y2)+'" fill="none" stroke="#fff8e6" stroke-width="'+n(Math.max(2,w*.21))+'" opacity=".65" stroke-linecap="round"/>';
 }
 function joint(x,y,r=9){return '<circle cx="'+n(x)+'" cy="'+n(y)+'" r="'+r+'" fill="#dbc191" stroke="#826b4b" stroke-width="2.7"/><circle cx="'+n(x)+'" cy="'+n(y)+'" r="'+n(r*.35)+'" fill="#fff8e5"/>'}
-function wrapBone(k,content,opacity=1){const isSel=state.selected===k;return '<g class="rig-bone'+(isSel?' rig-selected':'')+'" tabindex="0" role="button" data-bone="'+k+'" aria-label="'+k+': '+BONE_NAMES[k].replace(/"/g,'')+'" opacity="'+opacity+'">'+content+'</g>'}
+function wrapBone(k,content,opacity=1){const isSel=state.selected===k;return '<g class="rig-bone'+(isSel?' rig-selected':'')+'" tabindex="0" role="button" data-bone="'+k+'" aria-pressed="'+isSel+'" aria-label="'+BONE_NAMES[k].replace(/"/g,'')+'" opacity="'+opacity+'">'+content+'</g>'}
 function solveIK(a,b,L1,L2,dir){
  const vx=b.x-a.x,vy=b.y-a.y,d=Math.max(1,Math.hypot(vx,vy)),q=clamp(d,Math.abs(L1-L2)+1,L1+L2-2);
  const ux=vx/d,uy=vy/d,along=(L1*L1-L2*L2+q*q)/(2*q),side=Math.sqrt(Math.max(0,L1*L1-along*along));
@@ -206,9 +206,17 @@ function choose(mode){
 }
 function attach(){
  const lab=id('rig-studio');if(!lab)return;
+ const selectBone=(key,restoreFocus)=>{
+  state.selected=key;
+  lab.querySelector('.rig-selected-bone p').textContent=BONE_NAMES[key];
+  frame();
+  if(restoreFocus)window.BioLaborLernweg.focus(lab.querySelector('[data-bone="'+key+'"]'));
+ };
  lab.addEventListener('click',e=>{
+ const picked=e.target.closest('.rig-bone');
+ if(picked){selectBone(picked.dataset.bone,picked===document.activeElement);return}
  const target=e.target.closest('button');if(!target)return;
- if(target.dataset.rigMode){choose(target.dataset.rigMode);if(!state.playing)play(true);return}
+ if(target.dataset.rigMode){choose(target.dataset.rigMode);return}
  if(target.id==='rig-play'){play(!state.playing);return}
  if(target.id==='rig-reset'){state.progress=0;play(false);frame();return}
  if(target.id==='rig-step'){play(false);state.progress=frac(state.progress+.04166);frame();return}
@@ -220,8 +228,15 @@ function attach(){
  if(e.target.id==='rig-speed'){state.speed=Number(e.target.value);id('rig-speed-val').textContent=state.speed.toLocaleString('de-DE')+'×';}
  if(e.target.id==='rig-timeline'){state.progress=Number(e.target.value)/100;frame();}
  });
+ lab.addEventListener('focusin',e=>{
+  if(state.playing&&e.target.matches('.rig-bone'))play(false);
+ });
  lab.addEventListener('keydown',e=>{
- const g=e.target.closest('[data-bone]');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();g.click();}
+ const picked=e.target.closest('.rig-bone');
+ if(picked&&(e.key==='Enter'||e.key===' ')){
+  e.preventDefault();
+  selectBone(picked.dataset.bone,true);
+ }
  });
 }
 function mount(args){
@@ -269,8 +284,8 @@ function mount(args){
  play(!prefersReduced());
 }
 window.BioSkeletonLab={mount,stop,MODES,renderFrame:frame,getState:()=>({species:state.species,mode:state.mode,playing:state.playing,speed:state.speed,progress:state.progress})};
-if(['skeleton','motion'].includes((decodeURIComponent(location.hash.slice(1)).split('/')[1]||'skeleton'))){
- const p=decodeURIComponent(location.hash.slice(1)).split('/');
+if(['skeleton','motion'].includes((window.BioLaborLernweg.animalRoute()[1]||'skeleton'))){
+ const p=window.BioLaborLernweg.animalRoute();
  mount({animal:p[0]==='cat'?'cat':'dog',section:p[1]||'skeleton',bone:'spine',gait:'walk'});
 }
 })();

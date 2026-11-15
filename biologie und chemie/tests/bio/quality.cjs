@@ -279,6 +279,8 @@ module.exports = async function checkQuality(page, home) {
   await page.locator('#glossaryTopic').selectOption('spine');
   assert.match(await page.locator('#glossaryResults').innerText(), /Bandscheibe/);
   assert.doesNotMatch(await page.locator('#glossaryResults').innerText(), /Knochenmark/);
+  await page.locator('#glossarySearch').fill('kein Treffer xyz');
+  assert.match(await page.locator('#glossaryCount').innerText(), /^0 von/);
 
   await open('schulstoff/haustier');
   await page.getByRole('button',{name:'Rechenbeispiel laden'}).click();
@@ -473,6 +475,14 @@ module.exports = async function checkQuality(page, home) {
   await page.locator('[data-action="restart"]').press('Enter');
   await page.reload();
   assert.match(await positionInTierQuiz.innerText(),/FRAGE 1 VON/);
+  assert.equal(await page.locator('#ft-lab').count(),0);
+  assert.equal(await page.locator('#sections [aria-current="page"]').getAttribute('data-section'),'quiz');
+  await page.locator('a.skip').press('Enter');
+  assert.equal(new URL(page.url()).hash,'#dog/quiz');
+  await page.goto(animal+'#%E0%A4%A');
+  await page.locator('#content h1').waitFor();
+  await page.goto(home+'#%E0%A4%A');
+  await page.waitForURL(url => url.hash==='#home');
 
   await open('home');
   assert.equal(await quickTheme.inputValue(),'light');

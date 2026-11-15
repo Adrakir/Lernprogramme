@@ -202,5 +202,10 @@
     darkPreference.addEventListener('change', animalSettings);
   }
 
-  window.BioLaborLernweg = {lesson, directory, focus, bindMain, animalSettings, setAnimalTheme, acceptsAnimalWrites, readAloud, readQuestion};
+  function animalRoute() {
+    try { return decodeURIComponent(location.hash.slice(1)).split('/'); }
+    catch { return []; }
+  }
+
+  window.BioLaborLernweg = {animalRoute, lesson, directory, focus, bindMain, animalSettings, setAnimalTheme, acceptsAnimalWrites, readAloud, readQuestion};
 })();
