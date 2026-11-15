@@ -75,6 +75,16 @@ module.exports = async function checkQuality(page, home) {
   assert.ok(quickThemeBox.x+quickThemeBox.width<=320);
   assert.ok(quickThemeBox.height>=44);
   await page.emulateMedia({colorScheme:null});
+  await open('schulstoff/haustier');
+  const matrixAction = action => page.locator('[data-bs-matrix="' + action + '"]');
+  const weight = page.locator('[data-bs-cell="0-0"]');
+  await matrixAction('example').click();
+  assert.deepEqual(await page.locator('[data-bs-sum]').allTextContents(), ['43','37','30']);
+  await weight.selectOption('3');
+  assert.notDeepEqual(await page.locator('[data-bs-sum]').allTextContents(), ['43','37','30']);
+  await matrixAction('undo').click();
+  assert.equal(await weight.inputValue(),'2');
+  assert.deepEqual(await page.locator('[data-bs-sum]').allTextContents(), ['43','37','30']);
   await open('practice/skeleton');
   const quiz = page.locator('.quizframe');
   const position = quiz.locator('.quiz-position');
@@ -348,6 +358,12 @@ module.exports = async function checkQuality(page, home) {
   await page.reload();
   await archivedWriting.locator('summary').click();
   assert.equal(await archivedWriting.locator('[data-bp-criterion]').first().isChecked(),true);
+  await archivedWriting.locator('[data-bp-criterion]').first().uncheck();
+  await page.reload();
+  assert.match(await archivedWriting.locator('summary').innerText(),/Selbstvergleich offen/);
+  await archivedWriting.locator('summary').click();
+  await archivedWriting.locator('[data-bp-criterion]').first().check();
+  await archivedWriting.getByRole('button',{name:'Selbstvergleich speichern',exact:true}).click();
 
   await open('probetest/arbeit');
   await page.getByRole('button',{name:'Aufgabe 1, offen',exact:true}).click();
@@ -425,12 +441,16 @@ module.exports = async function checkQuality(page, home) {
   const speechRate = page.locator('#ls-rate');
   await speechRate.selectOption('.75');
   await firstChoice.press('Enter');
+  assert.equal(await firstChoice.getAttribute('aria-pressed'),'true');
   assert.equal(await speechRate.inputValue(),'.75');
   assert.equal(await firstChoice.evaluate(el => el === document.activeElement),true);
   await page.locator('[data-ls="next"]').press('Enter');
   await page.reload();
   assert.equal(await page.locator('.ls-card h3').innerText(),'Verstehen');
   assert.equal(await speechRate.inputValue(),'.75');
+  await page.locator('[data-ls="prev"]').click();
+  assert.equal(await firstChoice.getAttribute('aria-pressed'),'true');
+  await page.locator('[data-ls="next"]').click();
   assert.match(await page.locator('.ls-card').innerText(),/letzte vordere Backenzahn \(P4\)/);
   await page.locator('[data-ls="mode"][data-mode="task"]').click();
   const pairs = page.locator('[data-ls-select]');
@@ -442,6 +462,11 @@ module.exports = async function checkQuality(page, home) {
   await page.locator('[data-ls="check"]').click();
   assert.match(await page.locator('.ls-feedback').innerText(),/Schneidezähne.*ganz vorn.*Fangzähne/);
   await page.locator('[data-ls="taskNext"]').press('Enter');
+  await page.locator('[data-ls="taskHint"]').click();
+  assert.match(await page.locator('#ls-note').innerText(),/Beginne mit/);
+  await page.locator('[data-ls="taskPrev"]').click();
+  assert.equal(await pairs.first().inputValue(),'Festhalten');
+  await page.locator('[data-ls="taskNext"]').click();
   await page.locator('[data-ls="check"]').click();
   const solution = page.locator('.ls-order-solution');
   assert.equal(await solution.locator('li:visible').count(),0);
@@ -449,6 +474,8 @@ module.exports = async function checkQuality(page, home) {
   assert.equal(await solution.locator('li:visible').count(),3);
   await page.locator('.ls-orderitem').first().getByRole('button',{name:'Schritt nach unten'}).click();
   const order = await page.locator('.ls-orderitem strong').allTextContents();
+  await page.reload();
+  assert.deepEqual(await page.locator('.ls-orderitem strong').allTextContents(),order);
   await page.evaluate(() => {
     const synth = window.speechSynthesis || {getVoices:() => []};
     window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
@@ -473,6 +500,10 @@ module.exports = async function checkQuality(page, home) {
   assert.match(await positionInTierQuiz.innerText(),/FRAGE 1 VON/);
   await page.locator('[data-species="dog"]').click();
   assert.match(await positionInTierQuiz.innerText(),/FRAGE 2 VON/);
+  page.once('dialog', dialog => dialog.dismiss());
+  await page.locator('[data-action="restart"]').press('Enter');
+  assert.match(await positionInTierQuiz.innerText(),/FRAGE 2 VON/);
+  page.once('dialog', dialog => dialog.accept());
   await page.locator('[data-action="restart"]').press('Enter');
   await page.reload();
   assert.match(await positionInTierQuiz.innerText(),/FRAGE 1 VON/);
@@ -480,6 +511,17 @@ module.exports = async function checkQuality(page, home) {
   assert.equal(await page.locator('#sections [aria-current="page"]').getAttribute('data-section'),'quiz');
   await page.locator('a.skip').press('Enter');
   assert.equal(new URL(page.url()).hash,'#dog/quiz');
+  await page.goto(animal);
+  await page.locator('#sections [data-section="teeth"]').click();
+  await page.goBack();
+  await page.getByRole('heading',{name:'Das Skelett des Hundes',exact:true}).waitFor();
+  const reference = page.locator('.ls-reference');
+  await reference.locator('summary').first().click();
+  const referenceZoom = reference.locator('[data-action="zoom"]');
+  await referenceZoom.click();
+  await reference.locator('button[data-bone="spine"]').click();
+  assert.equal(await referenceZoom.getAttribute('aria-pressed'),'true');
+  assert.equal(await reference.locator('.bone-board').evaluate(node => node.classList.contains('zoomed')),true);
   await page.goto(animal+'#%E0%A4%A');
   await page.locator('#content h1').waitFor();
   await page.goto(home+'#%E0%A4%A');

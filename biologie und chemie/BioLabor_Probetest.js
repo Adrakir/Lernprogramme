@@ -103,12 +103,14 @@
     }).sort((a,b) => (Date.parse(b.entry.at) || 0) - (Date.parse(a.entry.at) || 0));
   }
 
+  const reviewIsSaved = review => review?.done === true && !review.draft;
+
   function reviewProgress(entry) {
     const questions = versions[entry.version];
     const compared = questions.filter((question, i) => question.criteria &&
-      hasAnswer(question, entry.answers[i]) && entry.reviews?.[i]?.done).length;
+      hasAnswer(question, entry.answers[i]) && reviewIsSaved(entry.reviews?.[i])).length;
     const pending = questions.findIndex((question, i) => question.criteria &&
-      hasAnswer(question, entry.answers[i]) && !entry.reviews?.[i]?.done);
+      hasAnswer(question, entry.answers[i]) && !reviewIsSaved(entry.reviews?.[i]));
     return {compared, pending};
   }
 
@@ -261,7 +263,7 @@
 
   function questionStatus(question, answer, review) {
     if (!hasAnswer(question, answer)) return question.rows && Object.keys(answer || {}).length ? 'Teilweise beantwortet' : 'Offen';
-    if (question.criteria) return review?.done ? 'Selbst verglichen' : 'Selbstvergleich offen';
+    if (question.criteria) return reviewIsSaved(review) ? 'Selbst verglichen' : 'Selbstvergleich offen';
     return objectivePoints(question, answer) === maxPoints(question) ? 'Richtig' : 'Noch üben';
   }
 
@@ -395,6 +397,7 @@
     function openRound(topics, followup = false, redirect = false) {
       const current = stored.round;
       const pending = unfinishedRound(followup);
+      if (!pending && !topics.length) return;
       if (pending !== current) {
         if (pending === stored.pausedRound) delete stored.pausedRound;
         if (current && !current.finished) stored.pausedRound = current;
@@ -471,6 +474,7 @@
       } else return;
       save();
       if (!round) updateProgress();
+      else root.querySelector('[data-bp-notice]').textContent = '';
     });
 
     root.addEventListener('click', event => {
@@ -543,7 +547,12 @@
           openRound(active?.phase === 'results' ? needsPractice(active) : []);
           break;
         case 'followup':
-          if (stored.followup?.topics?.length && Date.now() >= Date.parse(stored.followup.at)) openRound(stored.followup.topics, true);
+          if (stored.followup?.topics?.length && Date.now() >= Date.parse(stored.followup.at)) {
+            const check = stored.followup;
+            const prior = stored.checkResult;
+            const solved = Date.parse(prior?.at) >= Date.parse(check.at) ? prior.topics : [];
+            openRound(check.topics.filter(topic => !solved.includes(topic)), true);
+          }
           break;
         case 'retry-again':
           openRound(missedTopics(round), Boolean(round.followup));
@@ -551,6 +560,9 @@
         case 'retry-check':
           if (!hasAnswer(retry[round.topics[round.index]][round.variant], round.answers[round.index])) {
             root.querySelector('[data-bp-notice]').textContent = 'Beantworte zuerst die Aufgabe.';
+            const field = [...root.querySelectorAll('[data-bp-row]')].find(select => !select.value)
+              || root.querySelector('input[name="bp-answer"]');
+            field?.focus();
             return;
           }
           round.checked[round.index] = true;
@@ -562,13 +574,18 @@
           if (round.index + 1 === round.topics.length) {
             round.finished = true;
             const openTopics = missedTopics(round);
-            if (round.followup) stored.checkResult = {
-              at:new Date().toISOString(), right:round.topics.length - openTopics.length, total:round.topics.length,
-              topics:round.topics.filter(topic => !openTopics.includes(topic)),
-            };
-            if (!openTopics.length) {
-              if (round.followup) stored.followup.done = true;
-              else if (!unfinishedRound(true)) {
+            if (round.followup) {
+              const check = stored.followup;
+              const prior = stored.checkResult;
+              const sameCheck = Date.parse(prior?.at) >= Date.parse(check.at);
+              const solved = new Set(sameCheck ? prior?.topics : []);
+              round.topics.filter(topic => !openTopics.includes(topic)).forEach(topic => solved.add(topic));
+              const topics = check.topics.filter(topic => solved.has(topic));
+              stored.checkResult = {at:new Date().toISOString(), right:topics.length, total:check.topics.length, topics};
+              check.done = topics.length === check.topics.length;
+            }
+            if (!openTopics.length && !round.followup) {
+              if ((!stored.followup || stored.followup.done) && !unfinishedRound(true)) {
                 const tomorrow = new Date();
                 tomorrow.setHours(24,0,0,0);
                 stored.followup = {at:tomorrow.toISOString(), topics:round.topics.slice(0,3), done:false};
@@ -640,7 +657,7 @@
               </fieldset></div>` : ''}
             ` : ''}
         </section></div>`;
-      if (focus) root.querySelector(focus)?.focus({preventScroll: focus !== '.bp-note'});
+      if (focus) root.querySelector(focus)?.focus({preventScroll: focus !== '.bp-note' && focus !== '.bp-panel h2'});
       focus = undefined;
     }
 
@@ -662,7 +679,7 @@
         index = Number(control.dataset.boScene);
         stored.observation.index = index;
         save();
-        focus = '[data-bo-scene="' + index + '"]';
+        focus = '.bp-panel h2';
       } else if (control.dataset.boMarker !== undefined || control.dataset.boTextMarker !== undefined) {
         const viaList = control.dataset.boTextMarker !== undefined;
         const part = Number(control.dataset.boTextMarker ?? control.dataset.boMarker);

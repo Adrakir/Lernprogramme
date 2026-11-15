@@ -153,7 +153,7 @@
       intro: 'Übertrage zwölf Markierungen vom Hund auf die Katze. Erkläre dann, welche Merkmale beim Anschleichen, Springen und Fressen helfen.',
       facts: [
         'Hund und Katze haben denselben Grundbauplan. Am Vorderbein folgen auf das Schulterblatt der Oberarm, Elle und Speiche und die Vorderpfote. Am Hinterbein folgen auf das Becken Oberschenkel, Schien- und Wadenbein und die Hinterpfote.',
-        'Die Hauskatze stammt von der Falbkatze ab. In der Nähe früher Siedlungen fanden diese Wildkatzen Beutetiere wie Mäuse. Katzenjunge sind Nesthocker. Sie werden mit geschlossenen Augen geboren und sind zunächst auf die Mutter angewiesen.',
+        'Die Hauskatze stammt von der Falbkatze ab, einer Wildkatze aus Nordafrika und Südwestasien. Getreidevorräte zogen Mäuse an. Das könnte erklären, warum sich diese Wildkatzen frühen Siedlungen näherten. Katzenjunge sind Nesthocker. Sie werden mit geschlossenen Augen geboren und sind zunächst auf die Mutter angewiesen.',
         'Eine Katze jagt meist allein. Sie ortet Beute mit beweglichen Ohren, schleicht auf gepolsterten Pfoten und springt aus kurzer Entfernung. Kräftige Hinterbeine und die bewegliche Wirbelsäule helfen beim Sprung. Einziehbare Krallen bleiben beim Gehen geschont und können beim Festhalten ausgefahren werden.',
         'Bei schwachem Licht weiten sich die Pupillen. So gelangt mehr Licht ins Auge. In völliger Dunkelheit helfen Gehör und Tasthaare bei der Orientierung. Hund und Wolf können bei der Verfolgung ihre Laufleistung und ihren Geruchssinn nutzen.',
       ],
@@ -236,9 +236,9 @@
             ['Abschnitt 4', 'Kreuzbein'],
             ['Abschnitt 5 · ganz unten', 'Steißbein'],
           ], [3, 2, 0, 4, 1]),
-          choice('Welcher Wirbeltyp ist in der Buchzeichnung B dargestellt?', 'Halswirbel', 'Brustwirbel', 'Lendenwirbel', 'Halswirbel'),
-          choice('Welcher Wirbeltyp ist in der Buchzeichnung C dargestellt?', 'Brustwirbel', 'Lendenwirbel', 'Brustwirbel', 'Halswirbel'),
-          choice('Welcher Wirbeltyp ist in der Buchzeichnung A dargestellt?', 'Lendenwirbel', 'Lendenwirbel', 'Brustwirbel', 'Halswirbel'),
+          choice('Buchzeichnung B: Welcher Wirbeltyp hat kleine Öffnungen in den seitlichen Fortsätzen?', 'Halswirbel', 'Brustwirbel', 'Lendenwirbel', 'Halswirbel'),
+          choice('Buchzeichnung C: An welchem Wirbeltyp setzen Rippen an?', 'Brustwirbel', 'Lendenwirbel', 'Brustwirbel', 'Halswirbel'),
+          choice('Buchzeichnung A: Welcher Wirbeltyp hat im unteren beweglichen Rücken besonders kräftige Wirbelkörper?', 'Lendenwirbel', 'Lendenwirbel', 'Brustwirbel', 'Halswirbel'),
         ], 'In der Buchzeichnung auf S. 233 hat B Öffnungen in den Querfortsätzen. A ist kräftig gebaut. C gehört zu den Wirbeln, an denen Rippen ansetzen.'),
         task('Gelenke, Knochen und Muskeln', [
           ...map([
@@ -414,7 +414,7 @@
     'Die Knochen liegen zwischen Knie und Sprunggelenk. Das kräftigere Schienbein trägt den größeren Teil der Last.',
     'Die gebogenen Rippen bilden zusammen mit anderen Knochen den Brustkorb und schützen Herz und Lunge.',
     'Zehen und Ballen stützen das Tier. Die Vorderbeine nehmen bei der Landung einen großen Teil der Belastung auf.',
-    'Elle und Speiche verbinden Ellenbogen und Vorderpfote. Sie stützen den Körper über die Vorderbeine.',
+    'Elle und Speiche bilden den Unterarm zwischen Ellenbogen und Vorderfußwurzel. Sie stützen den Körper über die Vorderbeine.',
     'Der Oberarmknochen liegt zwischen Schulter und Ellenbogen. Beide Gelenke verändern beim Laufen den Winkel des Vorderbeins.',
   ];
 
@@ -500,7 +500,7 @@
         <div class="bl-task-reading">${reader}</div><label class="bs-write">${entry.prompt}<textarea name="${prefix}" rows="3">${escape(saved.answers[prefix] || '')}</textarea></label>
         <details class="bs-hint"><summary>Musterantwort zum Vergleichen</summary><p>${entry.sample}</p></details>
         <label class="bs-check"><input type="checkbox" data-bs-written="${index}"${saved.done[index] ? ' checked' : ''}>
-          Antwort mit der Musterlösung verglichen</label><p class="bs-result" data-bs-written-status role="status"></p></section>`;
+          Antwort mit der Musterlösung verglichen</label><p class="bs-result" data-bs-written-status role="status">${saved.done[index] ? '✓ Mit der Musterlösung verglichen.' : ''}</p></section>`;
     }
     const field = (question, name, prompt) => `<div class="bs-field">
       <label for="${name}"><span>${escape(prompt)}</span></label>
@@ -582,8 +582,8 @@
     }
     update();
     fields.forEach(field => field.addEventListener('change', () => {
-      previous = undefined;
-      undo.disabled = true;
+      previous = fields.map(peer => saved.matrix[peer.dataset.bsCell]);
+      undo.disabled = false;
       update();
       save();
     }));
@@ -591,10 +591,12 @@
       const action = button.dataset.bsMatrix;
       if (action === 'undo') {
         if (!previous) return;
+        const before = fields.map(field => field.value);
         fields.forEach((field, index) => { field.value = previous[index]; });
         previous = undefined;
         undo.disabled = true;
-        root.querySelector('[data-bs-matrix="clear"]').focus();
+        const changed = fields.filter((field, index) => field.value !== before[index]);
+        (changed.length === 1 ? changed[0] : root.querySelector('[data-bs-matrix="clear"]')).focus();
       } else {
         const current = fields.map(field => field.value);
         rows.forEach((row, i) => row.forEach((field, j) => {
@@ -896,6 +898,7 @@
         const completed = allCorrect ? {done: {[index]: true}, ...(entry.word ? {word: true} : {})} : {};
         save({answers, ...completed});
         const result = form.querySelector('.bs-result');
+        if (!allCorrect) inputs.find(field => field.getAttribute('aria-invalid') === 'true')?.focus();
         result.textContent = allCorrect ? '✓ ' + entry.reason + (entry.word ? ' Der Laufzettel zeigt dein Lösungswort.' : '') :
           right + ' von ' + expected.length + ' richtig. ' +
           (unanswered ? 'Ergänze die offenen Felder und prüfe erneut.' : 'Sieh dir die markierten Felder noch einmal an.');
