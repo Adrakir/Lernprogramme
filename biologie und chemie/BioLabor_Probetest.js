@@ -69,8 +69,8 @@
       ${links ? '<div class="bs-links">' + links + '</div>' : ''}</header>`;
   }
 
-  function pastAttempts(version) {
-    const entries = stored.previousAttempts?.[version];
+  function pastAttempts(version, data = stored) {
+    const entries = data.previousAttempts?.[version];
     return Array.isArray(entries) ? entries : [];
   }
 
@@ -91,11 +91,11 @@
       Boolean(round.followup) === followup && !round.finished);
   }
 
-  function examHistory() {
-    return Object.entries(stored.completed || {}).flatMap(([key, latest]) => {
+  function examHistory(data = stored) {
+    return Object.entries(data.completed || {}).flatMap(([key, latest]) => {
       const version = Number(key);
       if (!versions[version]) return [];
-      const previous = pastAttempts(version);
+      const previous = pastAttempts(version, data);
       return [...previous, latest].flatMap((entry, index) => {
         if (!entry || entry.version !== version || !entry.answers) return [];
         const archived = index < previous.length;
@@ -270,7 +270,7 @@
     return objectivePoints(question, answer) === maxPoints(question) ? 'Richtig' : 'Noch üben';
   }
 
-  function topicSummary(questions, answers) {
+  function topicResults(questions, answers) {
     const groups = {};
     questions.forEach((question, i) => {
       if (question.criteria) return;
@@ -278,7 +278,11 @@
       row.points += objectivePoints(question, answers[i]);
       row.max += maxPoints(question);
     });
-    return '<ul class="bp-topic-results">' + Object.entries(groups).map(([skill, row]) =>
+    return Object.entries(groups);
+  }
+
+  function topicSummary(questions, answers) {
+    return '<ul class="bp-topic-results">' + topicResults(questions, answers).map(([skill, row]) =>
       '<li><span>' + skills[skill][0] + '</span><b>' + row.points + ' von ' + row.max + ' Punkten</b></li>').join('') + '</ul>';
   }
 
@@ -763,5 +767,26 @@
       observationAt:scenes.map(scene => scene.at).filter(Boolean).sort().at(-1)};
   }
 
-  window.BioLaborProbetest = {mountExam, mountObservation, progress};
+  function comparisonReport(snapshot) {
+    let data = stored;
+    if (snapshot !== undefined) {
+      try { data = JSON.parse(snapshot) || {}; }
+      catch { data = {}; }
+    }
+    const latest = examHistory(data)[0];
+    if (!latest) return null;
+    const {entry, url} = latest;
+    const topics = topicResults(versions[entry.version], entry.answers).map(([id, {points, max}]) => ({
+      id, title:skills[id][0], score:points, max,
+    }));
+    const explanations = versions[entry.version].flatMap((question, index) => {
+      if (!question.criteria) return [];
+      const review = entry.reviews?.[index];
+      return hasAnswer(question, entry.answers[index]) && reviewIsSaved(review) &&
+        question.criteria.every((_, i) => review.checked?.[i]) ? [] : [skills[question.skill][0]];
+    });
+    return {at:entry.at, url, topics, explanations:[...new Set(explanations)]};
+  }
+
+  window.BioLaborProbetest = {mountExam, mountObservation, progress, comparisonReport};
 })();
