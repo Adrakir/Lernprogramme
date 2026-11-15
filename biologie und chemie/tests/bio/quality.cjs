@@ -338,6 +338,13 @@ module.exports = async function checkQuality(page, home) {
   const archivedPicture = page.locator('.bp-review[open] .bk-image-text');
   await archivedPicture.getByText('Bildbeschreibung',{exact:true}).click();
   assert.match(await archivedPicture.innerText(),/dreieckigen Knochenplatte/);
+  const archivedWriting = page.locator('.bp-review').nth(7);
+  await archivedWriting.locator('summary').click();
+  await archivedWriting.locator('[data-bp-criterion]').first().check();
+  await archivedWriting.getByRole('button',{name:'Selbstvergleich speichern',exact:true}).click();
+  await page.reload();
+  await archivedWriting.locator('summary').click();
+  assert.equal(await archivedWriting.locator('[data-bp-criterion]').first().isChecked(),true);
 
   await open('probetest/arbeit');
   await page.getByRole('button',{name:'Aufgabe 1, offen',exact:true}).click();
@@ -389,6 +396,13 @@ module.exports = async function checkQuality(page, home) {
   await page.reload();
   assert.equal(await animalTheme.getAttribute('aria-pressed'),'false');
   assert.match(await page.locator('.ls-species-note').innerText(),/Welpen.*28.*Zahnwechsel.*erwachsener Hund.*42/);
+  const firstChoice = page.locator('[data-ls="answer"][data-num="0"]');
+  await firstChoice.press('Enter');
+  assert.equal(await firstChoice.evaluate(el => el === document.activeElement),true);
+  await page.locator('[data-ls="next"]').press('Enter');
+  await page.reload();
+  assert.equal(await page.locator('.ls-card h3').innerText(),'Verstehen');
+  assert.match(await page.locator('.ls-card').innerText(),/letzte vordere Backenzahn \(P4\)/);
   await page.locator('[data-ls="mode"][data-mode="task"]').click();
   const pairs = page.locator('[data-ls-select]');
   assert.notDeepEqual(await pairs.first().locator('option:not(:first-child)').allTextContents(),
@@ -398,6 +412,17 @@ module.exports = async function checkQuality(page, home) {
   }
   await page.locator('[data-ls="check"]').click();
   assert.match(await page.locator('.ls-feedback').innerText(),/Schneidezähne.*ganz vorn.*Fangzähne/);
+  await page.locator('[data-ls="taskNext"]').press('Enter');
+  await page.locator('.ls-orderitem').first().getByRole('button',{name:'Schritt nach unten'}).click();
+  const order = await page.locator('.ls-orderitem strong').allTextContents();
+  await page.evaluate(() => {
+    const synth = window.speechSynthesis || {getVoices:() => []};
+    window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
+    synth.speak = utterance => {window.__spoken = utterance.text;};
+    if (!window.speechSynthesis) window.speechSynthesis = synth;
+  });
+  await page.locator('[data-ls="read"]').click();
+  assert.ok((await page.evaluate(() => window.__spoken)).includes(order.map((step,i) => (i+1)+'. '+step).join(' ')));
 
   await page.locator('#sections [data-section="quiz"]').click();
   const firstAnswer = page.locator('[data-answer="0"]');
@@ -420,5 +445,38 @@ module.exports = async function checkQuality(page, home) {
 
   await open('home');
   assert.equal(await quickTheme.inputValue(),'light');
+  const animalTab = await page.context().newPage();
+  try {
+    const animalPosition = animalTab.locator('.quiz-head .kicker');
+    await animalTab.goto(animal + '#dog/quiz');
+    await animalTab.locator('[data-answer="1"]').click();
+    await animalTab.locator('[data-action="check"]').click();
+    await animalTab.locator('[data-action="next"]').click();
+    const profiles = async () => {
+      await page.locator('#lcOpen').click();
+      await page.locator('#lcTabs [data-tab="profile"]').click();
+    };
+    const switchProfile = async name => {
+      await profiles();
+      await page.locator('#lcProfile').selectOption(name);
+      await Promise.all([page.waitForEvent('load'),page.getByRole('button',{name:'Profil wechseln',exact:true}).click()]);
+    };
+    await switchProfile('Testprofil');
+    await animalTab.getByText('FRAGE 1 VON 14',{exact:true}).waitFor();
+    await profiles();
+    const pending = page.waitForEvent('download');
+    await page.getByRole('button',{name:'Sicherung als JSON',exact:true}).click();
+    const chunks = [];
+    for await (const chunk of await (await pending).createReadStream()) chunks.push(chunk);
+    const {store} = JSON.parse(Buffer.concat(chunks));
+    const key = 'biolab5-tierkunde-2026';
+    assert.equal(store.profiles.Testprofil.native[key],undefined);
+    assert.equal(JSON.parse(store.profiles.Standard.native[key]).drafts.dog.qi,1);
+    assert.ok(store.profiles.Standard.native['biolab5-tierstudio-2026']);
+    await page.locator('#lcClose').click();
+    await switchProfile('Standard');
+    await animalTab.getByText('FRAGE 2 VON 14',{exact:true}).waitFor();
+    assert.match(await animalPosition.innerText(),/FRAGE 2 VON/);
+  } finally {await animalTab.close();}
   await quickTheme.selectOption(originalTheme);
 };

@@ -314,6 +314,7 @@ function quizState(){
  try{return JSON.parse(localStorage.getItem(KEY))||{}}catch{return {}}
 }
 function saveQuiz(){
+ if(window.BioLaborLernweg.acceptsAnimalWrites()===false)return;
  const saved=quizState();
  const previous=saved.best?.[animal]||0;
  best[animal]=Math.max(previous,best[animal],qi===quiz.length?score:0);

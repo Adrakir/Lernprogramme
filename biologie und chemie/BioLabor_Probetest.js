@@ -189,19 +189,19 @@
       '<section class="bs-panel bp-panel"><h2>Dein Ergebnis nach Themen</h2>' +
       topicSummary(versions[entry.version], entry.answers) + '</section>' +
       '<section class="bs-panel bp-panel"><h2>Aufgaben und Antworten</h2>' +
-      archivedQuestions(entry) + '</section>';
+      archivedQuestions(entry, true) + '</section>';
   }
 
-  function archivedQuestions(entry) {
+  function archivedQuestions(entry, reviewEnabled = false) {
     return versions[entry.version].map((question, i) => {
       const answer = entry.answers[i];
       const status = questionStatus(question, answer, entry.reviews?.[i]);
       return `<details class="bp-review"><summary>Aufgabe ${i + 1} · ${skills[question.skill][0]} · ${status}</summary>
         <p><strong>${question.prompt}</strong></p>
         ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
-        ${question.criteria
+        ${question.criteria && !reviewEnabled
           ? '<p><strong>Dein Text:</strong> ' + (answer?.trim() ? escape(answer) : 'Keine Antwort') + '</p><p><strong>Musterantwort:</strong> ' + question.sample + '</p>'
-          : reviewResult(question, answer)}</details>`;
+          : reviewResult(question, answer, entry, i)}</details>`;
     }).join('');
   }
 
@@ -418,8 +418,13 @@
           break;
         case 'review': {
           const checkboxes = root.querySelectorAll('[data-bp-criterion^="' + value + '/"]');
-          active.reviews[value] = {done: true, checked: Array.from(checkboxes, box => box.checked)};
-          (stored.completed ||= {})[active.version] = active;
+          const entry = screen === 'archiv' ? stored.completed?.[archiveVersion - 1] : active;
+          if (!entry) return;
+          (entry.reviews ||= {})[value] = {done: true, checked: Array.from(checkboxes, box => box.checked)};
+          (stored.completed ||= {})[entry.version] = entry;
+          if (active?.phase === 'results' && active.version === entry.version && active.at === entry.at) {
+            active.reviews = entry.reviews;
+          }
           save();
           // Preserve any other open panels and unfinished self-comparisons.
           const states = [...root.querySelectorAll('.bp-review')].map(panel => panel.open);

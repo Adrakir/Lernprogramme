@@ -23,7 +23,7 @@ const data={
  teeth:{title:'Das Gebiss',icon:'🦷',goal:'Zahnarten erkennen und die Funktion der Reißzähne erklären.',
  steps:[
  ['Entdecken','Schneidezähne, Fangzähne und Backenzähne übernehmen verschiedene Aufgaben.','Was machen Fangzähne?',['Festhalten','Atmen','Hören'],0,'Die langen Fangzähne helfen beim Packen und Festhalten.'],
- ['Verstehen','Die obere vierte Prämolare und der untere erste Molar wirken beim Raubtier als Reißzahnschere.','Was macht diese Schere?',['Nahrung zerschneiden','Gras zermahlen','Gerüche erkennen'],0,'Scharfe Kanten gleiten wie eine Schere aneinander vorbei.'],
+ ['Verstehen','Bei Hund und Katze bilden zwei Backenzähne pro Seite eine Reißzahnschere: oben der letzte vordere Backenzahn (P4), unten der erste hintere Backenzahn (M1).','Was macht diese Schere?',['Nahrung zerschneiden','Gras zermahlen','Gerüche erkennen'],0,'Scharfe Kanten gleiten wie eine Schere aneinander vorbei.'],
  ['Anwenden','Zahnform und Ernährung hängen zusammen.','Warum haben Raubtiere scharfe Schneidekanten?',['Zum Zerteilen von Nahrung','Für das Klettern','Um besser zu hören'],0,'Scharfe Kanten sind zum Zerschneiden geeignet.']
  ],
  pairs:[['Schneidezähne','Abknabbern'],['Fangzähne','Festhalten'],['Reißzähne','Scherenartig schneiden']],

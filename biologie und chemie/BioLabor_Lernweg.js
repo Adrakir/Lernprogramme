@@ -138,6 +138,20 @@
   const standaloneThemeKey = 'biolab5-tierkunde-2026-theme';
   const darkPreference = matchMedia('(prefers-color-scheme: dark)');
 
+  function readProfileState() {
+    try { return JSON.parse(localStorage.getItem(profileKey)); }
+    catch { return null; }
+  }
+
+  function profileIdentity(state) {
+    return JSON.stringify([state?.active || 'Standard', state?.nativeRevision || 0]);
+  }
+
+  const openedProfile = profileIdentity(readProfileState());
+  function acceptsAnimalWrites() {
+    return profileIdentity(readProfileState()) === openedProfile;
+  }
+
   function applyAnimalTheme(theme) {
     const dark = theme === 'dark' || (theme === 'system' && darkPreference.matches);
     document.body.classList.toggle('dark', dark);
@@ -150,7 +164,7 @@
     let settings;
     let standaloneTheme;
     try {
-      const state = JSON.parse(localStorage.getItem(profileKey));
+      const state = readProfileState();
       settings = state?.profiles?.[state.active]?.settings;
       standaloneTheme = localStorage.getItem(standaloneThemeKey);
     } catch {}
@@ -162,9 +176,10 @@
   }
 
   function setAnimalTheme(theme) {
+    if (!acceptsAnimalWrites()) return;
     applyAnimalTheme(theme);
     try {
-      const state = JSON.parse(localStorage.getItem(profileKey));
+      const state = readProfileState();
       const settings = state?.profiles?.[state.active]?.settings;
       if (settings) {
         settings.theme = theme;
@@ -176,12 +191,16 @@
   }
 
   if (document.getElementById('theme')) {
-    window.addEventListener('pageshow', animalSettings);
+    const syncProfile = () => {
+      if (!acceptsAnimalWrites()) location.reload();
+      else animalSettings();
+    };
+    window.addEventListener('pageshow', syncProfile);
     window.addEventListener('storage', event => {
-      if (event.key === profileKey || event.key === standaloneThemeKey) animalSettings();
+      if (event.key === profileKey || event.key === standaloneThemeKey || event.key === null) syncProfile();
     });
     darkPreference.addEventListener('change', animalSettings);
   }
 
-  window.BioLaborLernweg = {lesson, directory, focus, bindMain, animalSettings, setAnimalTheme, readAloud, readQuestion};
+  window.BioLaborLernweg = {lesson, directory, focus, bindMain, animalSettings, setAnimalTheme, acceptsAnimalWrites, readAloud, readQuestion};
 })();
