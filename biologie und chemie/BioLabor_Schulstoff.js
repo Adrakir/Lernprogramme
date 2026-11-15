@@ -372,9 +372,9 @@
         <div class="bs-cards">
           ${stationIds.map(id => {
             const entry = progress[id] || {};
-            const done = Object.values(entry.done || {}).filter(Boolean).length;
+            const done = lessons[id].tasks.filter((_, i) => entry.done?.[i]).length;
             return `<article class="bs-card"><small>${badges[id]}</small><h3><a href="#schulstoff/${id}">${lessons[id].title}</a></h3>
-              <p>${done} von 4 Aufgaben bearbeitet</p>
+              <p>${done} von ${lessons[id].tasks.length} Aufgaben bearbeitet</p>
               <p>${entry.word ? 'Lösungswort: <b>' + lessons[id].tasks[2].word + '</b>' : 'Lösungswort offen'}
               ${entry.rating ? ' · ' + escape(entry.rating) : ''}</p></article>`;
           }).join('')}
@@ -496,17 +496,17 @@
       : entry.prompt;
     const reader = window.BioLaborLernweg?.readAloud('Aufgabe ' + (index + 1) + ' vorlesen', entry.title + '. ' + readText) || '';
     if (!entry.questions) {
-      return `<section class="bs-task"><h3>${index + 1}. ${entry.title}</h3>
+      return `<section class="bs-task" data-bs-task-index="${index}"><h3>${index + 1}. ${entry.title}</h3>
         <div class="bl-task-reading">${reader}</div><label class="bs-write">${entry.prompt}<textarea name="${prefix}" rows="3">${escape(saved.answers[prefix] || '')}</textarea></label>
         <details class="bs-hint"><summary>Musterantwort zum Vergleichen</summary><p>${entry.sample}</p></details>
         <label class="bs-check"><input type="checkbox" data-bs-written="${index}"${saved.done[index] ? ' checked' : ''}>
-          Antwort mit der Musterlösung verglichen</label></section>`;
+          Antwort mit der Musterlösung verglichen</label><p class="bs-result" data-bs-written-status role="status"></p></section>`;
     }
     const field = (question, name, prompt) => `<div class="bs-field">
       <label for="${name}"><span>${escape(prompt)}</span></label>
       ${input(question, name, saved.answers[name])}<small id="${name}-feedback"></small></div>`;
     const fields = entry.questions.map((question, i) => field(question, prefix + '-' + i, question.prompt)).join('');
-    return `<form class="bs-task" data-bs-task="${index}"><h3>${index + 1}. ${entry.title}</h3>
+    return `<form class="bs-task" data-bs-task="${index}" data-bs-task-index="${index}"><h3>${index + 1}. ${entry.title}</h3>
       <div class="bl-task-reading">${reader}</div><div class="bs-fields${entry.table ? ' bs-counts' : ''}">${fields}
       ${entry.word ? field({}, prefix + '-word', 'Lösungswort aus den Buchstaben') : ''}</div>
       ${entry.hint ? `<details class="bs-hint"><summary>Tipp anzeigen</summary><p>${entry.hint}</p></details>` : ''}
@@ -901,14 +901,36 @@
           (unanswered ? 'Ergänze die offenen Felder und prüfe erneut.' : 'Sieh dir die markierten Felder noch einmal an.');
       });
     });
-    root.querySelectorAll('textarea').forEach(field => field.addEventListener('input', () => {
-      saved.answers[field.name] = field.value;
-      save({answers: {[field.name]: field.value}});
-    }));
-    root.querySelectorAll('[data-bs-written]').forEach(box => box.addEventListener('change', () => {
-      saved.done[box.dataset.bsWritten] = box.checked;
-      save({done: {[box.dataset.bsWritten]: box.checked}});
-    }));
+    root.querySelectorAll('[data-bs-written]').forEach(box => {
+      const section = box.closest('.bs-task');
+      const field = section.querySelector('textarea');
+      const status = section.querySelector('[data-bs-written-status]');
+      const index = box.dataset.bsWritten;
+      field.addEventListener('input', () => {
+        const changed = field.value.trim() !== (saved.answers[field.name] || '').trim();
+        saved.answers[field.name] = field.value;
+        const answers = {[field.name]: field.value};
+        if (changed && box.checked) {
+          box.checked = false;
+          saved.done[index] = false;
+          status.textContent = 'Du hast deine Antwort geändert. Vergleiche sie erneut mit der Musterlösung.';
+          save({answers, done: {[index]: false}});
+        } else {
+          save({answers});
+        }
+      });
+      box.addEventListener('change', () => {
+        if (box.checked && !field.value.trim()) {
+          box.checked = false;
+          status.textContent = 'Schreibe zuerst deine eigene Antwort.';
+          field.focus();
+          return;
+        }
+        status.textContent = box.checked ? 'Selbstvergleich im Lernstand gespeichert.' : '';
+        saved.done[index] = box.checked;
+        save({done: {[index]: box.checked}});
+      });
+    });
     root.querySelector('[data-bs-rating]')?.addEventListener('change', event => {
       saved.rating = event.target.value;
       save({rating: saved.rating});
@@ -951,13 +973,13 @@
     bindSkeleton(root);
     bindMovement(root);
     window.BioLaborModelle?.mount(root.querySelector('[data-bs-modelle]'), id);
-    if (id === 'bewegung' && Object.hasOwn(movementTasks, target)) {
-      const exercise = root.querySelector('[data-bs-task="' + movementTasks[target] + '"] h3');
-      exercise.tabIndex = -1;
-      requestAnimationFrame(() => {
-        if (exercise.isConnected) exercise.focus();
-      });
-    }
+    const taskLink = /^aufgabe-(\d+)$/.exec(target || '');
+    const taskIndex = taskLink ? Number(taskLink[1]) - 1
+      : id === 'bewegung' && Object.hasOwn(movementTasks, target) ? movementTasks[target] : -1;
+    const exercise = root.querySelector('[data-bs-task-index="' + taskIndex + '"] h3');
+    if (exercise) requestAnimationFrame(() => {
+      if (exercise.isConnected) window.BioLaborLernweg.focus(exercise, true);
+    });
   }
 
   function progress() {
@@ -967,7 +989,8 @@
       const done = lesson.tasks.filter((_, i) => entry.done?.[i]).length;
       const started = Boolean(done || entry.rating || Object.values(entry.answers || {}).some(Boolean) ||
         Object.values(entry.matrix || {}).some(Boolean));
-      return {id, title:lesson.title, total:lesson.tasks.length, done, started, at:entry.at, rating:entry.rating};
+      const nextTask = lesson.tasks.findIndex((_, i) => !entry.done?.[i]);
+      return {id, title:lesson.title, total:lesson.tasks.length, done, started, nextTask, at:entry.at, rating:entry.rating};
     });
   }
   window.BioLaborSchulstoff = {mount, forTopic, forAnimal, linkCard, school, progress};

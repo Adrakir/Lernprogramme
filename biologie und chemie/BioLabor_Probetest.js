@@ -89,16 +89,34 @@
       Boolean(round.followup) === followup && !round.finished);
   }
 
-  function examStart(active) {
-    const historyItems = Object.entries(stored.completed || {}).flatMap(([version, entry]) => {
+  function examHistory() {
+    return Object.entries(stored.completed || {}).flatMap(([key, latest]) => {
+      const version = Number(key);
+      if (!versions[version]) return [];
       const previous = pastAttempts(version);
-      return [
-        {version:Number(version)+1, entry, number:previous.length+1, previous:false},
-        ...previous.map((entry,i) => ({version:Number(version)+1, entry, number:i+1, previous:true})).reverse()
-      ];
-    });
+      return [...previous, latest].flatMap((entry, index) => {
+        if (!entry || entry.version !== version || !entry.answers) return [];
+        const archived = index < previous.length;
+        const url = '#probetest/archiv/' + (version + 1) + (archived ? '/' + (index + 1) : '');
+        return [{version, entry, number:index+1, archived, url}];
+      });
+    }).sort((a,b) => (Date.parse(b.entry.at) || 0) - (Date.parse(a.entry.at) || 0));
+  }
+
+  function reviewProgress(entry) {
+    const questions = versions[entry.version];
+    const compared = questions.filter((question, i) => question.criteria &&
+      hasAnswer(question, entry.answers[i]) && entry.reviews?.[i]?.done).length;
+    const pending = questions.findIndex((question, i) => question.criteria &&
+      hasAnswer(question, entry.answers[i]) && !entry.reviews?.[i]?.done);
+    return {compared, pending};
+  }
+
+  function examStart(active) {
+    const historyItems = examHistory();
     const check = stored.followup;
-    const followupReady = check && !check.done && Date.now() >= Date.parse(check.at);
+    const due = Date.parse(check?.at);
+    const followupReady = check && !check.done && Number.isFinite(due) && Date.now() >= due;
     const followupActive = unfinishedRound(true);
     const practiceActive = unfinishedRound(false);
     return heading('Interaktive Probeklassenarbeit',
@@ -108,20 +126,21 @@
       <p>Du kannst Fragen überspringen, zurückgehen und Antworten ändern. Tipps und Lösungen erscheinen nach der Abgabe. Erklärtexte vergleichst du dann selbst mit den Musterantworten.</p>
       ${active ? `<p class="bp-status">Arbeit ${active.version + 1} ist ${active.phase === 'results' ? 'abgegeben' : 'noch offen'}.</p>
         <div class="button-row">${button('resume', active.phase === 'results' ? 'Letzte Auswertung öffnen' : 'Arbeit fortsetzen')}</div>` : ''}
-      ${check && !check.done ? '<div class="bp-note"><strong>Kurzer Lerncheck</strong><p>' +
+      ${check && !check.done && Number.isFinite(due) ? '<div class="bp-note"><strong>Kurzer Lerncheck</strong><p>' +
         (followupReady ? 'Prüfe mit neuen Beispielen, was du behalten hast.'
           : 'Der Lerncheck ist ab ' + new Intl.DateTimeFormat('de-DE',{dateStyle:'medium'}).format(new Date(check.at)) + ' verfügbar.') +
         '</p>' + (followupReady ? button('followup',followupActive ? 'Lerncheck fortsetzen' : 'Lerncheck starten') : '') + '</div>' : ''}
       ${practiceActive ? '<div class="button-row">' + button('retry', 'Wiederholung fortsetzen', true) + '</div>' : ''}
       <div class="bp-versions">${versions.map((questions, index) => `<article class="bs-card">
         <h3>Arbeit ${index + 1}</h3><p>${questions.length} Aufgaben · ${questions.filter(q => !q.criteria).reduce((sum,q) => sum + maxPoints(q),0)} automatisch prüfbare Punkte</p>
-        ${button('start', 'Arbeit ' + (index + 1) + ' starten', true, index)}</article>`).join('')}</div></section>` +
+        ${active?.phase === 'work' && active.version === index ? button('resume', 'Arbeit ' + (index + 1) + ' fortsetzen', true)
+          : button('start', 'Arbeit ' + (index + 1) + ' starten', true, index)}</article>`).join('')}</div></section>` +
       (historyItems.length ? `<section class="bs-panel bp-panel"><h2>Abgegebene Arbeiten</h2><ul class="bp-answers">
-        ${historyItems.map(({version, entry, number, previous}) => {
+        ${historyItems.map(({version, entry, number, archived, url}) => {
           const summary = examSummary(entry);
-          return `<li>Arbeit ${version} · ${summary.score} von ${summary.max} automatisch geprüften Punkten
+          return `<li>Arbeit ${version + 1} · ${summary.score} von ${summary.max} automatisch geprüften Punkten
             <small>Versuch ${number} · ${formattedDate(entry)}</small>
-            <a href="#probetest/archiv/${version}${previous ? '/' + number : ''}">${previous ? 'Früheren Versuch ' + number + ' zu Arbeit ' + version + ' öffnen' : 'Auswertung zu Arbeit ' + version + ' öffnen'}</a>
+            <a href="${url}">${archived ? 'Früheren Versuch ' + number + ' zu Arbeit ' + (version + 1) + ' öffnen' : 'Auswertung zu Arbeit ' + (version + 1) + ' öffnen'}</a>
             <details><summary>Aufgaben und Antworten ansehen</summary>${archivedQuestions(entry)}</details></li>`;
         }).join('')}</ul></section>` : '');
   }
@@ -177,14 +196,19 @@
   function reviewResult(question, answer, active, index) {
     if (question.criteria) {
       const review = active.reviews?.[index] || {};
-      return `<p><strong>Dein Text:</strong> ${answer?.trim() ? escape(answer) : 'Keine Antwort'}</p>
-        <p><strong>Musterantwort:</strong> ${question.sample}</p>
+      const sample = '<p><strong>Musterantwort:</strong> ' + question.sample + '</p>';
+      if (!hasAnswer(question, answer)) {
+        return '<p><strong>Dein Text:</strong> Keine Antwort</p>' + sample +
+          '<p>Überlege beim Lesen, welche Punkte du in einer eigenen Erklärung nennen würdest.</p>';
+      }
+      return `<p><strong>Dein Text:</strong> ${escape(answer)}</p>${sample}
         <fieldset class="bp-criteria"><legend>Vergleiche deinen Text mit diesen Kriterien</legend>
           ${question.criteria.map((criterion, i) => `<label><input type="checkbox" data-bp-criterion="${index}/${i}"
-            ${review.checked?.[i] ? ' checked' : ''}> ${criterion}</label>`).join('')}
+            ${(review.draft ?? review.checked)?.[i] ? ' checked' : ''}> ${criterion}</label>`).join('')}
         </fieldset>
         <div class="button-row">${button('review', 'Selbstvergleich speichern', true, index)}
-          ${review.done ? '<span class="bp-status">Selbstvergleich gespeichert</span>' : ''}</div>`;
+          <span class="bp-status" data-bp-review-status role="status">${review.draft ? 'Auswahl vorgemerkt. Speichere den Selbstvergleich, wenn du fertig bist.'
+            : review.done ? 'Selbstvergleich gespeichert' : ''}</span></div>`;
     }
     const items = question.rows
       ? question.rows.map(([label, correct], i) => [label, correct, answer?.[i]])
@@ -211,13 +235,14 @@
   function archive(entry) {
     if (!entry) return examStart(stored.exam);
     const {score, max, writingCount} = examSummary(entry);
-    const compared = Object.values(entry.reviews || {}).filter(review => review.done).length;
+    const {compared, pending} = reviewProgress(entry);
     return heading('Auswertung · Arbeit ' + (entry.version + 1),
       'Automatisch geprüft: ' + score + ' von ' + max + ' Punkten. Erklärtexte verglichen: ' + compared + ' von ' + writingCount + '.',
       '<a href="#probetest">Zu den Probearbeiten</a>') +
       '<section class="bs-panel bp-panel"><h2>Dein Ergebnis nach Themen</h2>' +
-      topicSummary(versions[entry.version], entry.answers) + '</section>' +
-      '<section class="bs-panel bp-panel"><h2>Aufgaben und Antworten</h2>' +
+      topicSummary(versions[entry.version], entry.answers) +
+      (pending >= 0 ? '<div class="button-row">' + button('jump-review', 'Zum nächsten offenen Selbstvergleich', true, pending) + '</div>' : '') +
+      '</section><section class="bs-panel bp-panel"><h2>Aufgaben und Antworten</h2>' +
       '<p>Abgegeben am ' + formattedDate(entry) + '</p>' + archivedQuestions(entry, true) + '</section>';
   }
 
@@ -225,7 +250,7 @@
     return versions[entry.version].map((question, i) => {
       const answer = entry.answers[i];
       const status = questionStatus(question, answer, entry.reviews?.[i]);
-      return `<details class="bp-review"><summary>Aufgabe ${i + 1} · ${skills[question.skill][0]} · ${status}</summary>
+      return `<details class="bp-review"${reviewEnabled ? ' data-bp-review="' + i + '"' : ''}><summary>Aufgabe ${i + 1} · ${skills[question.skill][0]} · ${status}</summary>
         <p><strong>${question.prompt}</strong></p>
         ${question.picture ? '<div class="bp-picture">' + picture(question.picture) + '</div>' : ''}
         ${question.criteria && !reviewEnabled
@@ -255,11 +280,9 @@
   function examResults(active) {
     const questions = versions[active.version];
     const {score, max, writingCount} = examSummary(active);
-    const compared = Object.values(active.reviews || {}).filter(review => review.done).length;
+    const {compared, pending: pendingReview} = reviewProgress(active);
     const topics = needsPractice(active);
     const links = [...new Set(topics.map(topic => retry[topic][0].skill))];
-    const pendingReview = questions.findIndex((question, index) =>
-      question.criteria && hasAnswer(question, active.answers[index]) && !active.reviews?.[index]?.done);
     const practiceActive = unfinishedRound(false);
     return heading('Auswertung · Arbeit ' + (active.version + 1),
       'Automatisch geprüft: ' + score + ' von ' + max + ' Punkten. Erklärtexte verglichen: ' + compared + ' von ' + writingCount + '.') +
@@ -369,7 +392,7 @@
       render();
     }
 
-    function openRound(topics, followup = false) {
+    function openRound(topics, followup = false, redirect = false) {
       const current = stored.round;
       const pending = unfinishedRound(followup);
       if (pending !== current) {
@@ -379,10 +402,15 @@
       stored.round = pending || {topics, followup, answers: {}, checked: {}, index: 0,
         variant: ((current?.variant ?? -1) + 1) % 3, finished: false};
       save();
+      if (redirect) history.replaceState(null, '', '#probetest/wiederholen');
       open('wiederholen');
     }
 
-    render();
+    if (screen === 'uebungsentwurf' && unfinishedRound(false)) {
+      openRound([], false, true);
+    } else {
+      render();
+    }
 
     function updateProgress() {
       const {answers, index, version} = stored.exam;
@@ -403,8 +431,34 @@
       updateProgress();
     });
 
+    function currentReview() {
+      return screen === 'archiv' ? archiveEntry(archiveVersion, archiveAttempt)
+        : screen === 'auswertung' ? stored.exam : undefined;
+    }
+
+    function saveReview(entry) {
+      if (screen !== 'archiv' || !archiveAttempt) (stored.completed ||= {})[entry.version] = entry;
+      const active = stored.exam;
+      if (!archiveAttempt && active?.phase === 'results' && active.version === entry.version && active.at === entry.at) {
+        active.reviews = entry.reviews;
+      }
+      save();
+    }
+
     root.addEventListener('change', event => {
       const target = event.target;
+      if (target.matches('[data-bp-criterion]')) {
+        const entry = currentReview();
+        if (!entry) return;
+        const [index] = target.dataset.bpCriterion.split('/');
+        const review = (entry.reviews ||= {})[index] ||= {};
+        const fields = target.closest('fieldset').querySelectorAll('[data-bp-criterion]');
+        review.draft = Array.from(fields, box => box.checked);
+        target.closest('.bp-review').querySelector('[data-bp-review-status]').textContent =
+          'Auswahl vorgemerkt. Speichere den Selbstvergleich, wenn du fertig bist.';
+        saveReview(entry);
+        return;
+      }
       const round = screen === 'wiederholen' ? stored.round : null;
       if (screen !== 'arbeit' && !round) return;
       const {answers, index} = round || stored.exam;
@@ -467,20 +521,13 @@
         }
         case 'review': {
           const checkboxes = root.querySelectorAll('[data-bp-criterion^="' + value + '/"]');
-          const entry = screen === 'archiv' ? archiveEntry(archiveVersion, archiveAttempt) : active;
-          if (!entry) return;
+          const entry = currentReview();
+          if (!entry || !checkboxes.length) return;
           (entry.reviews ||= {})[value] = {done: true, checked: Array.from(checkboxes, box => box.checked)};
-          if (screen !== 'archiv' || !archiveAttempt) (stored.completed ||= {})[entry.version] = entry;
-          if (!archiveAttempt && active?.phase === 'results' && active.version === entry.version && active.at === entry.at) {
-            active.reviews = entry.reviews;
-          }
-          save();
-          // Preserve any other open panels and unfinished self-comparisons.
+          saveReview(entry);
           const states = [...root.querySelectorAll('.bp-review')].map(panel => panel.open);
-          const drafts = [...root.querySelectorAll('[data-bp-criterion]')].map(box => box.checked);
           render();
           root.querySelectorAll('.bp-review').forEach((panel,i) => { panel.open = states[i]; });
-          root.querySelectorAll('[data-bp-criterion]').forEach((box,i) => { box.checked = drafts[i]; });
           root.querySelector('[data-bp-action="review"][data-bp-value="' + value + '"]').focus({preventScroll:true});
           break;
         }
@@ -542,7 +589,8 @@
 
   function mountObservation(root) {
     stored.observation ||= {};
-    let index = stored.observation.index ?? 0;
+    let index = Number.isInteger(stored.observation.index) && observations[stored.observation.index]
+      ? stored.observation.index : 0;
     let focus;
     function render() {
       window.speechSynthesis?.cancel();
@@ -625,7 +673,11 @@
         focus = (viaList ? '[data-bo-text-marker="' : '[data-bo-marker="') + part + '"]';
       } else if (control.hasAttribute('data-bo-check')) {
         if (!Number.isInteger(entry.choice) || !entry.text?.trim()) {
-          root.querySelector('[data-bo-notice]').textContent = 'Wähle eine Deutung und schreibe eine kurze Begründung.';
+          const missingChoice = !Number.isInteger(entry.choice);
+          const notice = root.querySelector('[data-bo-notice]');
+          notice.textContent = missingChoice && !entry.text?.trim() ? 'Wähle eine Deutung und schreibe eine kurze Begründung.'
+            : missingChoice ? 'Wähle zuerst eine Deutung.' : 'Schreibe zuerst eine kurze Begründung.';
+          window.BioLaborLernweg.focus(root.querySelector(missingChoice ? '[name="bo-choice"]' : '[data-bo-writing]'));
           return;
         }
         update({checked: true, at: new Date().toISOString()});
@@ -643,38 +695,48 @@
       }
       if (!event.target.matches('input[name="bo-choice"]')) return;
       update({choice: Number(event.target.value), checked: false, review: []});
-      focus = 'input[name="bo-choice"]:checked';
-      render();
+      root.querySelector('.bp-note')?.remove();
+      root.querySelector('[data-bo-notice]').textContent = '';
     });
     root.addEventListener('input', event => {
       if (!event.target.matches('[data-bo-writing]')) return;
       update({text: event.target.value, checked: false, review: []});
       root.querySelector('.bp-note')?.remove();
+      root.querySelector('[data-bo-notice]').textContent = '';
     });
   }
 
   function progress() {
-    const entries = Object.values(stored.completed || {})
-      .filter(entry => Number.isInteger(entry?.version) && versions[entry.version] && entry.answers)
-      .map(entry => {
+    const entries = examHistory().map(({entry, number, archived, url: archiveUrl}) => {
         const questions = versions[entry.version];
-        const topics = [...new Set(needsPractice(entry).map(topic => retry[topic][0].skill))];
+        const topics = needsPractice(entry);
+        const practiceSkills = [...new Set(topics.map(topic => retry[topic][0].skill))];
         const strong = [...new Set(questions.filter((q, i) => !q.criteria &&
           objectivePoints(q, entry.answers[i]) === maxPoints(q)).map(q => q.skill))]
-          .filter(skill => !topics.includes(skill)).map(skill => skills[skill][0]);
-        const compared = Object.values(entry.reviews || {}).filter(review => review.done).length;
-        const next = topics.length ? [skills[topics[0]][1], skills[topics[0]][0] + ' wiederholen']
-          : compared < questions.filter(q => q.criteria).length ? ['#probetest', 'Erklärtexte vergleichen'] : null;
-        const current = stored.exam?.version === entry.version && stored.exam.phase === 'results';
-        return {version:entry.version, url:current ? '#probetest/auswertung' : '#probetest/archiv/' + (entry.version + 1),
-          at:entry.at, ...examSummary(entry), compared, strong,
-          topics:topics.map(skill => skills[skill][0]), next};
-      }).sort((a,b) => (Date.parse(b.at) || 0) - (Date.parse(a.at) || 0));
-    const scenes = Object.values(stored.observation || {}).filter(entry => entry?.checked);
+          .filter(skill => !practiceSkills.includes(skill)).map(skill => skills[skill][0]);
+        const {compared, pending} = reviewProgress(entry);
+        const current = !archived && stored.exam?.version === entry.version && stored.exam.phase === 'results' &&
+          stored.exam.at === entry.at;
+        const url = current ? '#probetest/auswertung' : archiveUrl;
+        const practiceLinks = practiceSkills.map(skill => [
+          skills[skill][0], skills[skill][1], topics.filter(topic => retry[topic][0].skill === skill),
+        ]);
+        const reviewLink = pending >= 0 ? [url, 'Erklärtexte vergleichen'] : null;
+        return {version:entry.version, number, url, at:entry.at, ...examSummary(entry), compared, strong,
+          practiceLinks, reviewLink};
+      });
+    const scenes = observations.flatMap((item, i) => {
+      const entry = stored.observation?.[i];
+      return entry?.checked && entry.markers?.length >= 2 ? [{at:entry.at, right:entry.choice === item.answer}] : [];
+    });
     const check = stored.followup;
     const result = stored.checkResult;
-    const checkResult = result && {...result, topics:[...new Set(result.topics.map(topic => skills[retry[topic][0].skill][0]))]};
-    return {entries, last:entries[0], draft:stored.exam?.phase === 'work', observations:scenes.length, checkResult,
+    const solvedTopics = Array.isArray(result?.topics) ? result.topics.filter(topic => retry[topic]?.[0]) : [];
+    const checkResult = result && {...result, solvedTopics,
+      topics:[...new Set(solvedTopics.map(topic => skills[retry[topic][0].skill][0]))]};
+    return {entries, last:entries[0], draft:stored.exam?.phase === 'work', practicePending:Boolean(unfinishedRound(false)),
+      observations:scenes.length, observationTotal:observations.length,
+      observationRight:scenes.filter(scene => scene.right).length, checkResult,
       followupDue:Boolean(check && !check.done && Date.now() >= Date.parse(check.at)),
       observationAt:scenes.map(scene => scene.at).filter(Boolean).sort().at(-1)};
   }

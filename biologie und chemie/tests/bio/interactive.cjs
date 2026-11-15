@@ -39,6 +39,9 @@ module.exports = async function checkInteractive(page, home, {capture = false} =
   const writing = root.locator('[data-bp-review="7"]');
   assert.match(await writing.innerText(), /Die Eckzähne halten fest/);
   await writing.locator('input').first().check();
+  await page.reload();
+  assert.equal(await writing.locator('input').first().isChecked(), true);
+  assert.match(await root.locator('header').innerText(), /Erklärtexte verglichen: 0 von 2/);
   await writing.getByRole('button', {name:'Selbstvergleich speichern'}).click();
   assert.match(await root.locator('header').innerText(), /Erklärtexte verglichen: 1 von 2/);
   await getButton('Fehler gezielt wiederholen').click();

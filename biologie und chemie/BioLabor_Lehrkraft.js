@@ -101,6 +101,7 @@
           field.value = button.dataset.blCopy;
           field.setAttribute('aria-label', 'Direktlink zum Kopieren');
           notice.replaceChildren('Direktlink zum Kopieren', field);
+          field.focus();
           field.select();
         }
       }
