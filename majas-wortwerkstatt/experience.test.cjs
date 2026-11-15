@@ -29,7 +29,7 @@ assert(html.includes('new SpeechSynthesisUtterance'),'computer voice');
 assert(html.includes("speechAPI?.cancel()"),'speech cleanup');
 assert(html.includes('class="prep-question-highlight"'),'red hearing question');
 assert(css.includes('.prep-question-highlight')&&css.includes('#c43c38'),'visible red question');
-assert(html.includes('errorTypes.push')&&html.includes('prep-error-guide'),'error-specific practice advice');
+assert(html.includes('prepFocusFor(q)')&&html.includes('prep-error-guide'),'error-specific practice advice');
 assert(html.includes('Mit Bärli lernen')&&html.includes('Abschlusstest'),'guided course and final tests retained');
 assert(html.includes('maja-parent-snapshot'),'adult summary');
 assert(html.includes('role="img" aria-label="Höchstes Ergebnis'),'parent bars accessible');

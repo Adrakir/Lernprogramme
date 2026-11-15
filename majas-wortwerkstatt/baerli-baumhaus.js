@@ -181,10 +181,24 @@ function statHeader(s){
  const t=stats(s);
  return '<div class="bh-stats"><span>🏆 <b>'+t.passed+' von 10</b> Prüfungen bestanden</span><span>🪙 <b>'+t.balance+'</b> Bärli-Taler verfügbar</span><span>📦 '+Object.keys(s.orders).length+' Bestellungen</span></div>';
 }
+function testsNeeded(s,product){
+ const t=stats(s),need=getCat(product.category).need;
+ return Math.max(need-t.passed,Math.ceil((product.price-t.balance)/PER_EXAM),0);
+}
+function testsMessage(count){return count===1?'Noch ein bestandener Test':'Noch '+count+' bestandene Tests';}
+function nextReward(s){
+ const t=stats(s);
+ const goals=products.filter(product=>!bought(s,product.id)).map(product=>({product,count:testsNeeded(s,product)}));
+ const goal=goals.filter(({count})=>count>0&&count<=10-t.passed).sort((a,b)=>a.count-b.count)[0];
+ if(!goal)return '';
+ const {product,count}=goal;
+ const href=t.passed?'#baumhaus/shop/'+product.category:'#pruefung';
+ return '<aside class="bh-next-reward" aria-label="Nächstes Ziel">'+preview(product)+'<div><strong>'+esc(product.name)+'</strong><p>'+testsMessage(count)+', dann kannst du diesen Artikel bestellen.</p><a href="'+href+'">'+(t.passed?'Abteilung ansehen':'Abschlusstests ansehen')+'</a></div></aside>';
+}
 function closed(){
- const s=stateRead(),t=stats(s);
+ const s=stateRead();
  return htmlHead('Bärlis Baumhaus','Hier wächst mit deinen bestandenen Tests ein eigenes Zimmer.')
-  +statHeader(s)+'<section class="bh-locked"><div class="bh-lock-picture" aria-hidden="true">🌳🏠</div><h2>Das Baumhaus ist noch verschlossen</h2><p>Bestehe deinen ersten Abschlusstest mit mindestens <strong>80 Prozent</strong>. Danach dürfen Bärli und du einziehen.</p><p>Im Zimmer wartet anfangs nur ein <strong>blauer Sitzsack</strong>. Bärli bringt seinen Laptop mit, über den der gelb-blaue Shop geöffnet wird.</p><a class="bh-yellow" href="#pruefung">Jetzt für die Prüfungen üben →</a><p class="bh-subtle">Jeder der zehn verschiedenen Abschlusstests kann einmal 10 Bärli-Taler bringen.</p></section></div>';
+  +statHeader(s)+'<section class="bh-locked"><div class="bh-lock-picture" aria-hidden="true">🌳🏠</div><h2>Das Baumhaus ist noch verschlossen</h2><p>Bestehe deinen ersten Abschlusstest mit mindestens <strong>80 Prozent</strong>. Danach dürfen Bärli und du einziehen.</p><p>Im Zimmer wartet anfangs nur ein <strong>blauer Sitzsack</strong>. Bärli bringt seinen Laptop mit, über den der gelb-blaue Shop geöffnet wird.</p><a class="bh-yellow" href="#pruefung">Jetzt für die Prüfungen üben →</a><p class="bh-subtle">Jeder der zehn verschiedenen Abschlusstests kann einmal 10 Bärli-Taler bringen.</p></section>'+nextReward(s)+'</div>';
 }
 let message='',shopPage=0,selected='start-sitzsack';
 function statusMsg(){return message?'<p class="bh-message" role="status" aria-live="polite">'+esc(message)+'</p>':'';}
@@ -215,6 +229,7 @@ function showRoom(){
  const html=htmlHead('Bärlis Baumhaus','Richte dein Zimmer nach deinen Wünschen ein. Der blaue Sitzsack und der Laptop waren von Anfang an dabei.')
   +statHeader(s)
   +'<nav class="bh-nav"><a href="#baumhaus/shop" class="bh-yellow">🛒 Bärli AG Osnabrück</a><a href="#baerli/schrank" class="bh-secondary">👕 Bärlis Kleidung</a><a href="#pruefung" class="bh-secondary">🏆 Prüfungen</a><a href="#advent" class="bh-secondary">🎄 Adventskalender</a></nav>'
+  +nextReward(s)
   +(bought(s,'zimmer2')?'<div class="bh-rooms"><button type="button" data-bh-room="1" aria-pressed="'+(room===1)+'">🌳 Mein erstes Zimmer</button><button type="button" data-bh-room="2" aria-pressed="'+(room===2)+'">⭐ Zweites Zimmer</button></div>':'')
   +'<div class="bh-room-info"><strong>'+ (room===1?'Mein Baumhauszimmer':'Mein zweites Zimmer') +'</strong><small>Wand: '+esc(wall.name)+'</small></div>'
   +'<div class="bh-room-stage" style="--bh-wall:'+wall.color+';" role="group" aria-label="Einrichtbares Baumhauszimmer">'
@@ -278,8 +293,9 @@ function showShop(category='',page=0){
   html+='<a class="bh-back" href="#baumhaus/shop">← Alle Abteilungen</a><section class="bh-cat-heading"><span class="bh-cat-icon" aria-hidden="true">'+cat.icon+'</span><div><h2>'+esc(cat.label)+'</h2><p>'+esc(cat.desc)+'</p></div></section>';
   if(!unlocked)html+='<p class="bh-shop-lock">🔒 Hier fehlen noch <strong>'+Math.max(0,cat.need-t.passed)+'</strong> bestandene Prüfungen. Du kannst die Sachen schon anschauen.</p>';
   html+='<div class="bh-shop-products">'+list.slice(shopPage*size,(shopPage+1)*size).map(p=>{
-    const owned=bought(s,p.id),available=unlocked&&t.balance>=p.price;
-    return '<article class="bh-product"><div class="bh-product-art">'+preview(p)+'</div><div class="bh-product-copy"><h3>'+esc(p.name)+'</h3><p>'+esc(p.desc)+'</p><strong>🪙 '+p.price+' Bärli-Taler</strong></div><button type="button" data-bh-buy="'+p.id+'" '+(owned||!available?'disabled':'')+'>'+(owned?'✓ Bereits bestellt':!unlocked?'Noch gesperrt':!available?'Taler fehlen':'Jetzt bestellen')+'</button></article>';
+    const owned=bought(s,p.id),count=testsNeeded(s,p),available=count===0;
+    const note=!owned&&!available?(count<=10-t.passed?testsMessage(count):'Dir fehlen '+(p.price-t.balance)+' Bärli-Taler.'):'';
+    return '<article class="bh-product"><div class="bh-product-art">'+preview(p)+'</div><div class="bh-product-copy"><h3>'+esc(p.name)+'</h3><p>'+esc(p.desc)+'</p><strong>🪙 '+p.price+' Bärli-Taler</strong>'+(note?'<p class="bh-product-goal">'+note+'</p>':'')+'</div><button type="button" data-bh-buy="'+p.id+'" '+(owned||!available?'disabled':'')+'>'+(owned?'✓ Bereits bestellt':!unlocked?'Noch gesperrt':!available?'Taler fehlen':'Jetzt bestellen')+'</button></article>';
   }).join('')+'</div>';
   html+='<nav class="bh-shop-pages"><button type="button" data-bh-page="-1" '+(shopPage===0?'disabled':'')+'>← Zurück</button><span>Seite '+(shopPage+1)+' von '+(max+1)+'</span><button type="button" data-bh-page="1" '+(shopPage===max?'disabled':'')+'>Weiter →</button></nav>';
  }

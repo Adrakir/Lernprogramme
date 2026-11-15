@@ -21,8 +21,8 @@ async function completeExam(page,topic,n){
     await expect(page.locator('#prep-reading')).toHaveCount(0);
     await expect(page.locator('.prep-exam-note')).toContainText('Hörtext nicht sichtbar');
     await expect(page.locator('#prep-audio')).toHaveAttribute('src',new RegExp(hearingTracks[n-1]+'.mp3'));
-    await expect(page.locator('#prep-playback-mode')).toBeVisible();
-    await expect(page.locator('#prep-playback-speed')).toBeVisible();
+    await expect(page.locator('#prep-play')).toBeVisible();
+    await expect(page.locator('#prep-slow')).toBeVisible();
   }
   for(const [index,q] of questions.entries()){
     await expect(page.locator('#prep-result')).toBeHidden();
@@ -132,4 +132,24 @@ test('Mobil: Einzelschritte führen direkt zur nächsten Comicseite',async ({pag
   await expect(page.locator('.kino-step-count')).toContainText('Bild 2 von 2');
   await page.locator('[data-kino-next]').click();
   await expect(page).toHaveURL(/#schulgeschichten\/lesezeichen\/2$/);
+});
+
+test('Hörtest führt von einer falschen Antwort zum passenden Hörabschnitt und einer zweiten Übung',async ({page})=>{
+  await page.goto(route('pruefung/hoeren/test/1'),{waitUntil:'domcontentloaded'});
+  const questions=await page.evaluate(()=>prepTasks('hoeren','test',1));
+  for(const [i,q] of questions.entries()){
+    await page.locator('[data-prep-option]').filter({hasText:i===0?'Ben':q.answer}).first().click();
+    await page.locator('#prep-check').click();
+  }
+  await expect(page.locator('.prep-score')).toContainText('4 / 5');
+  await page.getByRole('link',{name:'Personen üben'}).click();
+  await expect(page).toHaveURL(/#fehlertraining\/hoeren\/person$/);
+  await expect(page.locator('.plus-error')).toHaveCount(2);
+  const first=page.locator('.plus-error').first();
+  await expect(first.getByRole('heading')).toHaveText('Wem hilft Anna beim Backen?');
+  await first.getByRole('button',{name:'Passenden Abschnitt anhören'}).click();
+  await expect.poll(()=>first.locator('audio').evaluate(audio=>audio.currentTime)).toBeGreaterThan(0);
+  await first.getByRole('radio',{name:'Oma'}).check();
+  await first.getByRole('button',{name:'Prüfen'}).click();
+  await expect(first.getByRole('status')).toContainText('Richtig!');
 });

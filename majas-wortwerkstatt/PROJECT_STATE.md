@@ -1,8 +1,17 @@
 # Projektstand – Majas Wortwerkstatt
 
-**Zuletzt aktualisiert:** 09.11.2026 · **Branch:** `main` · **Repository:** [Adrakir/Lernprogramme](https://github.com/Adrakir/Lernprogramme) · **App-Ordner:** `majas-wortwerkstatt/`
+**Zuletzt aktualisiert:** 15.11.2026 · **Branch:** `main` · **Repository:** [Adrakir/Lernprogramme](https://github.com/Adrakir/Lernprogramme) · **App-Ordner:** `majas-wortwerkstatt/`
 
 > **Wichtig:** Diese Datei ist die Übergabestelle zwischen ChatGPT, GitHub Copilot und anderen KI-Assistenten. Aussagen über "fertig" beziehen sich auf gespeicherten Code, **nicht automatisch** auf browsergetestete oder öffentlich ausgerollte Funktion. Ein neuer Bearbeiter überprüft immer den aktuellen HEAD.
+
+### Prüfungsvorbereitung, Hörbedienung und Baumhaus (15.11.2026)
+
+- Startseite mit „Hier weitermachen“ für offene Durchgänge, inklusive Aufgabenposition, Entwurf und geöffneten Tipps. Die drei Lern- und vier Bildkacheln sind weiterhin direkt erreichbar. Prüfungstermine stehen zentral in `prepTopics`; nach dem Termin führen dieselben Links zu den Übungen. Der Kombitest verlinkt auf die Abschlusstests.
+- Neu gestartete Nomentests haben fünf Wortbildungs-, fünf Mehrzahl- und fünf Buchstabenaufgaben je Runde mit eigenem Wortschatz. Gespeicherte Durchgänge und ihre Aufgaben-IDs bleiben auf ihrem bisherigen Wortbestand. Alle zehn Abschnitte für Punkte und Baumhaus behalten ihre bestehenden Speicherkennungen.
+- Hörverstehen bietet Anhören/Wiederholen, Langsam und Stopp an der Frage. Stimme und drei Tempi sind im aufklappbaren Menü. Nach Tabwechsel hält der Ton an. Fehlertypen führen zu passenden Nachübungen und, sofern ein Zeitabschnitt zugeordnet ist, direkt zur betreffenden Stelle in der Geschichte.
+- Baumhaus und Shop zeigen mit einer Illustration bzw. unmittelbar beim Artikel, wie viele bestandene Tests für ein bestimmtes Ziel fehlen. Der Hinweis berücksichtigt Freischaltschwellen, Taler und bereits bestellte Artikel.
+- PWA-Cache v15 löscht ausschließlich frühere Caches der Wortwerkstatt. Offline stehen die zur HTML-Version gehörenden Skripte und Hörgeschichten bereit, einschließlich Teilabrufen der MP3-Dateien. Browserregressionen prüfen den Wechsel von v14, vorhandenen Fortschritt, Sterne/Kauf, die Weiterlern-Funktion, Termine und die Fehlerübungen.
+- Ausgangsstand: `289dc5b7a`. Der Commit mit diesem Eintrag enthält die Änderungen und Tests. Die bisherigen statischen Prüfungen sowie Chromium- und Firefox-Szenarien wurden lokal ausgeführt. Echte iPhone-/iPad-Lautsprecher und dort verfügbare Computerstimmen erfordern weiterhin einen Gerätetest (#22); GitHub Pages und CI werden getrennt geprüft.
 
 ### Bärlis Adventskalender – 24 Türchen und Geschenke (09.11.2026)
 - [x] **24 selbstständige, zusammenhängende Kurzgeschichten** mit Bärli, Maja, Fuji und Minka, Wichteln und einem Weihnachtsfinale; pro Türchen ein eigenes Motiv, eine freiwillige dreifache Deutschfrage, eine deutsche Computerstimme mit 3 Lesegeschwindigkeiten und Stopp. Daten und vollständige Geschenkzuordnung in [`ADVENT_KONZEPT.md`](./ADVENT_KONZEPT.md).

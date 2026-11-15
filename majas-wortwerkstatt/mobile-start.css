@@ -157,6 +157,15 @@
 .prep-play-buttons button{min-height:44px}
 .prep-audio-compact .prep-reading-extra{margin-top:9px;font-size:.83rem}
 .prep-audio-compact .prep-reading-extra summary{cursor:pointer;color:#55665f;text-decoration:underline}
+.prep-audio-details summary{cursor:pointer;color:var(--forest);padding-block:9px;min-height:40px}
+.prep-audio-details[open] .prep-listen-toolbar{margin-block:4px 12px}
+.prep-play-buttons #prep-slow[aria-pressed="true"]{background:var(--forest);color:white}
+.prep-audio-compact .inline-status:empty{display:none}
+.maja-resume{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:9px 13px;min-height:48px;background:#e1f3eb;border:1px solid #78a095;border-radius:12px;text-decoration:none}
+.maja-resume strong,.maja-resume small{display:block}
+.maja-resume small{color:var(--ink)}
+.maja-resume svg{width:20px;height:20px;flex:none}
+.plus-cue{display:block;margin-top:6px}
 #prep-question .prep-question-highlight{background:#fff2ee;border:2px solid #c43c38;border-left:7px solid #c43c38;border-radius:13px;padding:12px 14px;margin:9px 0 15px}
 #prep-question .prep-question-highlight span{font-size:.78rem;letter-spacing:.05em;font-weight:900;color:#9b2828;text-transform:uppercase}
 #prep-question .prep-question-highlight h2{font-size:clamp(1.1rem,3vw,1.38rem);line-height:1.35;margin:3px 0 0;color:#842427}
@@ -171,8 +180,8 @@
  #prep-question{padding:13px}
  #prep-question .prep-question-highlight{padding:10px 12px}
  #prep-question .options button{font-size:.96rem;padding:10px 12px}
- .prep-audio-compact .prep-play-buttons{flex-wrap:nowrap}
- .prep-audio-compact .prep-play-buttons button{flex:1;white-space:nowrap;padding-inline:11px}
+ .prep-audio-compact .prep-play-buttons{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:6px}
+ .prep-audio-compact .prep-play-buttons button{padding-inline:5px;font-size:.9rem;line-height:1.2}
 }
 
 /* Kindgerechte Einstiege: höchstens zwei Entscheidungen auf der Startseite,

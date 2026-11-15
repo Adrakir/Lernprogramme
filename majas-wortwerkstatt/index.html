@@ -423,9 +423,9 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-studio.css?v=20261108c">
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
-<link rel="stylesheet" href="./mobile-start.css?v=20261110b">
+<link rel="stylesheet" href="./mobile-start.css?v=20261115a">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109d">
-<link rel="stylesheet" href="./baerli-baumhaus.css?v=20261109a">
+<link rel="stylesheet" href="./baerli-baumhaus.css?v=20261115a">
 <link rel="stylesheet" href="./baerli-advent.css?v=20261109b">
 </head>
 <body>
@@ -3061,12 +3061,12 @@ function showAnnaWriting(part){
   });
 }
 </script>
-<script src="./maja-plus.js?v=20261108"></script>
+<script src="./maja-plus.js?v=20261115a"></script>
 <script src="./comic-kino.js?v=20261109e"></script>
 <script src="./comic-studio.js?v=20261108c"></script>
 <script src="./comic-bubbles.js?v=20261108d"></script>
 <script src="./figurenstimmen.js?v=20261110a"></script>
-<script src="./baerli-baumhaus.js?v=20261109b"></script>
+<script src="./baerli-baumhaus.js?v=20261115a"></script>
 <script>const iconPaths = {
  comic:'<rect x="2.5" y="3.5" width="19" height="17" rx="2"/><path d="M12 3.5v17M3 12h9M15 7h4m-4 4h3m-3 4h4m-13-8h3v2H6l-1 2Z"/>',
  hanger:'<path d="M9 5a3 3 0 1 1 5 2.3c-.8.6-2 1-2 2.1v1.2M12 10.6 3 16a2 2 0 0 0 1.1 3.7h15.8A2 2 0 0 0 21 16l-9-5.4Z"/>',
@@ -3269,16 +3269,19 @@ function showHome(){
   // Ein Blick wie in der vertrauten Kombitest-Übersicht:
   // drei Lernthemen, ein Testfeld, vier bebilderte Freizeitbereiche.
   // Die zusätzlichen Modi bleiben über die Links darunter erreichbar.
+  const resume=prepResume();
+  const hearingDate=prepDate('hoeren');
   app.innerHTML=`<div class="maja-mobile-home maja-classic-home">
     <div class="maja-quick-heading">
       <p class="kicker">${icon('leaf')} Deutsch · Klasse 3</p>
       <h1 tabindex="-1">Fit für den Kombitest</h1>
       <p>Wähle ein Thema. Du darfst selbst entscheiden, womit du beginnst.</p>
     </div>
+    ${resume?`<a class="maja-resume" href="${resume.href}"><span><strong>Hier weitermachen</strong><small>${escapeHtml(resume.label)}</small></span>${icon('arrow')}</a>`:''}
     <nav class="maja-quick-topic-grid" aria-label="Drei Themen zum Üben">
-      <a class="maja-quick-topic" href="#pruefung/hoeren" aria-label="Hörverständnis üben, Klassenarbeit am 16. November">
+      <a class="maja-quick-topic" href="#pruefung/hoeren" aria-label="Hörverständnis üben${hearingDate?', Klassenarbeit am '+hearingDate:''}">
         <span class="maja-topic-symbol maja-topic-hearing" aria-hidden="true">${icon('audio')}<span class="maja-topic-spark">♪</span></span>
-        <strong>Hören</strong><small>16. November</small>
+        <strong>Hören</strong><small>${hearingDate||'Hörgeschichten'}</small>
       </a>
       <a class="maja-quick-topic" href="#endungen" aria-label="Nomen-Endungen mit ung, heit, keit, schaft und nis üben">
         <span class="maja-topic-symbol maja-topic-ending" aria-hidden="true"><span class="maja-ending-tiles"><b>-ung</b><b>-heit</b></span></span>
@@ -3311,7 +3314,6 @@ function showHome(){
       <a href="./bilderbuecher/">Bärlibuch</a>
       <a href="#einstellungen">Einstellungen</a>
       <a href="#baumhaus">🌳 Bärlis Baumhaus</a>
-      <a href="#advent">🎄 Bärlis Adventskalender</a>
     </nav>
   </div>`;
 }
@@ -3515,7 +3517,7 @@ function showCombinationTest(){
     <div class="unit-head sand"><span class="icon-box">${icon('trophy')}</span><div><h1 tabindex="-1">Kombitest üben</h1><p>Wähle einen Teil. Die Aufgaben haben kein Zeitlimit. Nach der Abgabe siehst du die Punkte und zu jeder Aufgabe eine Erklärung.</p></div></div>
     <section class="panel"><h2>Welchen Teil möchtest du üben?</h2>
     <p>In Teil 1 hörst du eine Geschichte und beantwortest fünf Fragen. In Teil 2 löst du zwölf Aufgaben zu <strong>-nis, -ung, -heit, -keit und -schaft</strong> sowie zum Verlängern.</p>
-    <div class="actions">${Object.entries(testParts).map(([id,part])=>`<button class="secondary" type="button" data-test-part="${id}">${part.title}</button>`).join('')}</div></section></div>`;
+    <div class="actions">${Object.entries(testParts).map(([id,part])=>`<button class="secondary" type="button" data-test-part="${id}">${part.title}</button>`).join('')}</div></section><div class="actions"><a class="secondary" href="#pruefung">Zu den Abschlusstests</a></div></div>`;
   app.querySelectorAll('[data-test-part]').forEach(button=>button.onclick=()=>{
     testPart=button.dataset.testPart;
     quiz=[];
@@ -4850,12 +4852,11 @@ function showLearningOverview(adult=false){
  const title=adult?'Für Erwachsene':'Meine Lernübersicht';
  // Parent snapshot reports *only* completed test first-attempt scores; no fake mastery estimates.
  const storedTests=prepRead();
- const testAreas=[['hoeren','Hörverständnis','16. November'],['nomen','Nomen und Verlängern','19. November']];
- const parentRows=testAreas.map(([id,label,date])=>{
+ const parentRows=Object.entries(prepTopics).map(([id,topic])=>{
   const results=[1,2,3,4,5].map(n=>storedTests[id+':test:'+n]).filter(session=>session?.done&&Array.isArray(session.answers));
   const scores=results.map(session=>prepPercent(session.answers));
   const highest=scores.length?Math.max(...scores):null;
-  return {id,label,date,done:results.length,highest,
+  return {id,label:topic.title,date:prepDate(id),done:results.length,highest,
    tip:highest===null?'Erst geführt üben, danach einen Abschlusstest ausprobieren.':
        highest>=80?'Sicherer Stand in wenigstens einem Test. Jetzt mit einem neuen Hörtext oder neuen Wörtern wiederholen.':
        'Geführte Übungen wiederholen und anschließend einen neuen Test bearbeiten.'};
@@ -4867,7 +4868,7 @@ function showLearningOverview(adult=false){
    <div class="maja-parent-progress">
     ${parentRows.map(row=>`<div class="maja-parent-skill">
       <h3>${escapeHtml(row.label)}</h3>
-      <p>${escapeHtml(row.date)} · ${row.done} von 5 Abschlusstests bearbeitet</p>
+      <p>${row.date?escapeHtml(row.date)+' · ':''}${row.done} von 5 Abschlusstests bearbeitet</p>
       ${row.highest!==null?`<div class="maja-parent-bar" role="img" aria-label="Höchstes Ergebnis von ${row.highest} Prozent"><span style="width:${row.highest}%"></span></div><strong>Höchstes Ergebnis: ${row.highest} %</strong>`:`<p class="maja-parent-pending">Noch kein Testergebnis vorhanden</p>`}
       <p>${escapeHtml(row.tip)}</p>
       <a class="secondary" href="#pruefung/${row.id}">Lernweg öffnen</a>
@@ -4942,20 +4943,77 @@ const prepPluralSets=[
  [['Bild','Bilder','Bilt'],['Kalb','Kälber','Kalp'],['Krug','Krüge','Kruk'],['Brot','Brote','Brod'],['Stock','Stöcke','Stok']],
  [['Wald','Wälder','Walt'],['Stab','Stäbe','Stap'],['Zweig','Zweige','Zweik'],['Boot','Boote','Bood'],['Weg','Wege','Wek']]
 ];
-// Keep distractors as single, plausible misspellings.
-prepPluralSets[1][4][2]='Gescheng'.replace(' ','');
+const prepTestNouns=[
+ [['landen','die Landung','ung'],['krank','die Krankheit','heit'],['höflich','die Höflichkeit','keit'],['verwandt','die Verwandtschaft','schaft'],['erlauben','die Erlaubnis','nis']],
+ [['heizen','die Heizung','ung'],['wahr','die Wahrheit','heit'],['ehrlich','die Ehrlichkeit','keit'],['bekannt','die Bekanntschaft','schaft'],['ergeben','das Ergebnis','nis']],
+ [['sammeln','die Sammlung','ung'],['blind','die Blindheit','heit'],['langsam','die Langsamkeit','keit'],['Partner','die Partnerschaft','schaft'],['versäumen','das Versäumnis','nis']],
+ [['packen','die Packung','ung'],['gleich','die Gleichheit','heit'],['tapfer','die Tapferkeit','keit'],['Mitglied','die Mitgliedschaft','schaft'],['verstehen','das Verständnis','nis']],
+ [['liefern','die Lieferung','ung'],['gewohnt','die Gewohnheit','heit'],['aufmerksam','die Aufmerksamkeit','keit'],['Meister','die Meisterschaft','schaft'],['begraben','das Begräbnis','nis']]
+];
+const prepTestPlurals=[
+ [['Bad','Bäder'],['Grab','Gräber'],['Klang','Klänge'],['Schritt','Schritte'],['Block','Blöcke']],
+ [['Fund','Funde'],['Leib','Leiber'],['Ring','Ringe'],['Blatt','Blätter'],['Gelenk','Gelenke']],
+ [['Pferd','Pferde'],['Schub','Schübe'],['Teig','Teige'],['Nest','Nester'],['Fleck','Flecken']],
+ [['Held','Helden'],['Trieb','Triebe'],['Steg','Stege'],['Fahrt','Fahrten'],['Stück','Stücke']],
+ [['Lied','Lieder'],['Betrieb','Betriebe'],['Sieg','Siege'],['Ort','Orte'],['Sack','Säcke']]
+];
+// Each letter pair comes from a different word than the plural-writing tasks.
+const prepTestLetters=[
+ [['Abend','Abende','t'],['Brotkorb','Brotkörbe','p'],['Flug','Flüge','k'],['Wirt','Wirte','d'],['Getränk','Getränke','g']],
+ [['Feld','Felder','t'],['Hieb','Hiebe','p'],['Trog','Tröge','k'],['Wort','Wörter','d'],['Kiosk','Kioske','g']],
+ [['Rind','Rinder','t'],['Küchensieb','Küchensiebe','p'],['Krieg','Kriege','k'],['Schwert','Schwerter','d'],['Trank','Tränke','g']],
+ [['Rand','Ränder','t'],['Weidenkorb','Weidenkörbe','p'],['Hang','Hänge','k'],['Bart','Bärte','d'],['Kleiderschrank','Kleiderschränke','g']],
+ [['Freund','Freunde','t'],['Obstdieb','Obstdiebe','p'],['Sprung','Sprünge','k'],['Salat','Salate','d'],['Fink','Finken','g']]
+];
+const prepHearingSkills=[
+ [['person',0],['sequence',0],['detail',0],['reason',0],['detail',3]],
+ [['place-time',0],['person',1],['place-time',2],['sequence',2],['reason',1]],
+ [['place-time',0],['detail',0],['place-time',1],['reason',2],['sequence',2]],
+ [['detail',0],['sequence',0],['detail',1],['place-time',1],['reason',null]],
+ [['place-time',0],['detail',0],['detail',1],['place-time',1],['reason',2]]
+];
+const prepHearingPracticeSkills=[
+ [['place-time',0],['detail',0],['detail',1],['sequence',1],['reason',null]],
+ [['reason',0],['place-time',0],['sequence',1],['sequence',null],['reason',3]],
+ [['sequence',0],['place-time',0],['detail',1],['sequence',3],['reason',null]],
+ [['place-time',0],['place-time',1],['reason',2],['place-time',2],['reason',3]],
+ [['place-time',0],['detail',0],['reason',null],['detail',2],['place-time',3]]
+];
+const prepFocus={
+ person:['Personen','Achte darauf, wer spricht, hilft oder etwas tut.'],
+ 'place-time':['Ort und Zeit','Achte auf Orts- und Zeitwörter.'],
+ sequence:['Reihenfolge','Höre darauf, was zuerst und was danach passiert.'],
+ detail:['Wichtige Einzelheiten','Achte auf genannte Dinge, Zahlen oder Merkmale.'],
+ reason:['Gründe und Zusammenhänge','Überlege, warum eine Figur etwas tut.'],
+ verlaengern:['Wörter verlängern','Bilde die Mehrzahl und höre auf den fraglichen Laut.'],
+ endungen:['Nomen-Endungen','Prüfe die Nachsilbe, die Großschreibung und den Artikel.']
+};
 function prepChoice(id,prompt,right,a,b,why,skill){return {id,type:'choice',prompt,answer:right,options:[right,a,b],why,skill,hints:['Höre die passende Stelle noch einmal.','Achte auf die genannten Personen, Orte oder die Reihenfolge.',why]};}
-function prepListeningRows(track,rows,prefix){return rows.map(([prompt,right,a,b,why],i)=>({...prepChoice(prefix+'-'+i,prompt,right,a,b,why,'hoeren'),track}));}
-function prepWords(n){
- const nouns=prepNounSets[n-1].map(([base,answer,suffix],i)=>({id:'n'+n+'-s'+i,type:'write',prompt:'Bilde das Nomen mit -'+suffix+' und schreibe den Artikel dazu.',context:base,answer,skill:suffix,why:'Zu „'+base+'“ gehört „'+answer+'“. Die Nachsilbe ist -'+suffix+'. Das Nomen beginnt groß.',hints:['Das Nomen endet auf -'+suffix+'. Schreibe es groß.','Schreibe den Artikel '+answer.split(' ')[0]+' davor.','Die Lösung lautet: '+answer+'.']}));
- const plural=prepPluralSets[n-1].map(([word,long],i)=>({id:'n'+n+'-p'+i,type:'write',prompt:'Verlängere das Nomen: Schreibe seine Mehrzahl.',context:word,answer:long,skill:'verlaengern',why:word+' → '+long+'. In der längeren Form hörst du den fraglichen Laut vor einem Vokal.',hints:['Sage: ein '+word+' – viele …','Lies das Wort langsam und bilde die Mehrzahl.','Die Mehrzahl lautet: '+long+'.']}));
+function prepListeningRows(track,rows,prefix,skills=[]){return rows.map(([prompt,right,a,b,why],i)=>({...prepChoice(prefix+'-'+i,prompt,right,a,b,why,'hoeren'),track,focus:skills[i]?.[0]||'detail',cue:skills[i]?.[1]}));}
+function prepWords(n,version=1){
+ const newTest=version===2;
+ const prefix=(newTest?'test-n':'n')+n;
+ const nouns=(newTest?prepTestNouns:prepNounSets)[n-1].map(([base,answer,suffix],i)=>({id:prefix+'-s'+i,type:'write',prompt:'Bilde das Nomen mit -'+suffix+' und schreibe den Artikel dazu.',context:base,answer,skill:suffix,why:'Zu „'+base+'“ gehört „'+answer+'“. Die Nachsilbe ist -'+suffix+'. Das Nomen beginnt groß.',hints:['Das Nomen endet auf -'+suffix+'. Schreibe es groß.','Schreibe den Artikel '+answer.split(' ')[0]+' davor.','Die Lösung lautet: '+answer+'.']}));
+ const plural=(newTest?prepTestPlurals:prepPluralSets)[n-1].map(([word,long],i)=>({id:prefix+'-p'+i,type:'write',prompt:'Verlängere das Nomen: Schreibe seine Mehrzahl.',context:word,answer:long,skill:'verlaengern',why:word+' → '+long+'. In der längeren Form hörst du den fraglichen Laut deutlicher.',hints:['Bilde die Mehrzahl: viele …','Lies das Wort langsam und bilde die Mehrzahl.','Die Mehrzahl lautet: '+long+'.']}));
+ if(newTest){
+  const letters=prepTestLetters[n-1].map(([word,long,wrong],i)=>{
+   const letter=word.at(-1);
+   return {id:prefix+'-b'+i,type:'choice',prompt:'Welcher Buchstabe fehlt am Ende? Sprich die Mehrzahl laut.',context:word.slice(0,-1)+'_ → '+long,answer:letter,options:[letter,wrong],skill:'verlaengern',why:'In „'+long+'“ hörst du das '+letter+' deutlich. Deshalb schreibst du „'+word+'“ mit '+letter+' am Ende.'};
+  });
+  return [...nouns,...plural,...letters];
+ }
  const spelling=prepPluralSets[n-1].map(([word,long,wrong],i)=>({id:'n'+n+'-b'+i,type:'choice',prompt:'Welche Schreibweise ist richtig? Verlängere zuerst im Kopf.',context:word==='Stock'?'Sto…':word.slice(0,-1)+'_',answer:word,options:[word,wrong],skill:'verlaengern',why:word+' ist richtig: '+word+' → '+long+'.',hints:['Bilde zuerst die Mehrzahl.','Die Mehrzahl ist '+long+'. Höre auf den letzten Laut des kurzen Wortes.','Richtig ist '+word+'.']}));
  return [...nouns,...plural,...spelling];
 }
 function prepNormalize(s){return String(s).trim().normalize('NFC').replace(/\s+/g,' ').replace(/[.!]$/,'').replace(/^(Der|Die|Das) /,v=>v.toLowerCase());}
 function prepCorrect(q,given){return prepNormalize(given)===prepNormalize(q.answer);}
-const prepTopics={hoeren:{title:'Hörverständnis',date:'16.11.2026',intro:'Genau zuhören, wichtige Angaben merken und Gründe verstehen.'},nomen:{title:'Nomen und Verlängern',date:'19.11.2026',intro:'-ung, -heit, -keit, -schaft und -nis; Nomen mit der Mehrzahl verlängern.'}};
-function prepTasks(topic,mode,n){
+const prepTopics={hoeren:{title:'Hörverständnis',date:'2026-11-16',intro:'Genau zuhören, wichtige Angaben merken und Gründe verstehen.'},nomen:{title:'Nomen und Verlängern',date:'2026-11-19',intro:'-ung, -heit, -keit, -schaft und -nis; Nomen mit der Mehrzahl verlängern.'}};
+function prepDate(topic,now=new Date()){
+ const date=new Date(prepTopics[topic].date+'T23:59:59.999');
+ return now<=date?date.toLocaleDateString('de-DE',{day:'numeric',month:'long'}):'';
+}
+function prepFocusFor(q){return q.focus||(q.skill==='hoeren'?'detail':q.skill==='verlaengern'?'verlaengern':'endungen');}
+function prepTasks(topic,mode,n,version=2){
  if(topic==='hoeren'){
   if(mode==='gefuehrt')return prepListeningRows('der-schatten-an-der-wand',[
    ['Was sucht Anna am Anfang?','Ihre Socken','Einen Schlüssel','Ihren Koffer','Im ersten Satz sucht Anna ihre Socken.'],
@@ -4963,10 +5021,10 @@ function prepTasks(topic,mode,n){
    ['Was bewegt die zerknüllte Socke?','Der Vorhang','Eine echte Maus','Ein Hund','Der Vorhang streift die Socke und bewegt dadurch den Schatten.'],
    ['Was formt Anna mit ihrer Hand?','Zwei lange Ohren','Einen Stern','Ein Papierboot','Sie formt mit der Hand zwei lange Ohren. Der Schatten sieht nun wie ein Hase aus.'],
    ['Was ist die vermeintliche Maus?','Der Schatten einer Socke','Ein Stofftier','Ein Loch in der Wand','Lampe, Socke und Vorhang erklären gemeinsam den Schatten.']],'guide');
-  if(mode==='ueben'){const [track,rows]=listeningRounds[(n-1)%5];return prepListeningRows(track,rows,'practice-'+n);}
-  const [track,rows]=prepListen[n-1];return prepListeningRows(track,rows,'test-'+n);
+  if(mode==='ueben'){const [track,rows]=listeningRounds[n-1];return prepListeningRows(track,rows,'practice-'+n,prepHearingPracticeSkills[n-1]);}
+  const [track,rows]=prepListen[n-1];return prepListeningRows(track,rows,'test-'+n,prepHearingSkills[n-1]);
  }
- return prepWords(n).slice(0,mode==='gefuehrt'?10:15);
+ return prepWords(n,mode==='test'?version:1).slice(0,mode==='gefuehrt'?10:15);
 }
 function prepPercent(answers){return answers.length?Math.round(100*answers.filter(x=>x.correct).length/answers.length):0;}
 
@@ -4974,20 +5032,33 @@ const prepKey='majas-wortwerkstatt-klassenarbeiten-nov2026-v1';
 let extraCleanup=null;
 function prepRead(){try{const v=JSON.parse(localStorage.getItem(prepKey)||'{}');if(v&&typeof v==='object'&&!Array.isArray(v))return v;}catch{}return {};}
 function prepWrite(value){try{localStorage.setItem(prepKey,JSON.stringify(value));return true;}catch{return false;}}
+function prepResume(){
+ const pending=Object.entries(prepRead()).filter(([key,session])=>
+  /^(hoeren|nomen):(gefuehrt|ueben|test):[1-5]$/.test(key)&&session&&!session.done&&Array.isArray(session.answers)&&
+  (session.lastOpened||session.answers.length||session.draft));
+ pending.sort(([,a],[,b])=>(b.lastOpened||0)-(a.lastOpened||0));
+ if(!pending.length)return null;
+ const [key,session]=pending[0], [topic,mode,n]=key.split(':');
+ const count=prepTasks(topic,mode,Number(n),session.version||1).length;
+ const step=Math.min(session.answers.length+1,count);
+ const activity=mode==='test'?'Test '+n:mode==='ueben'?'Übung '+n:'Mit Bärli';
+ return {href:'#pruefung/'+key.replaceAll(':','/'),label:prepTopics[topic].title+' · '+activity+' · '+(topic==='hoeren'?'Frage ':'Aufgabe ')+step+' von '+count};
+}
 function prepReward(topic,mode,n,score){
  const id='prep:'+topic+':'+mode+':'+n,amount=mode==='test'?(score>=80?2:1):1,current=starRefresh(),old=current.rewards[id]?.amount||0;
  if(old>=amount)return 'Die Sterne für diesen Durchgang hast du bereits verdient.';
  const next=structuredClone(current);next.rewards[id]={amount,day:starDay()};
  return starCommit(next)?'+'+(amount-old)+' '+((amount-old)===1?'Stern':'Sterne')+' für deinen Lernweg.':'Die Sterne konnten gerade nicht gespeichert werden.';
 }
-function prepHeader(topic,title){return `<div class="route">${homeLink()}<div class="unit-head ${topic==='hoeren'?'sky':'mint'}"><span class="icon-box">${icon(topic==='hoeren'?'audio':'book')}</span><div><p class="kicker">Klassenarbeit · ${prepTopics[topic]?.date||'November'}</p><h1 tabindex="-1">${title}</h1></div></div>`;}
+function prepHeader(topic,title){const date=prepDate(topic);return `<div class="route">${homeLink()}<div class="unit-head ${topic==='hoeren'?'sky':'mint'}"><span class="icon-box">${icon(topic==='hoeren'?'audio':'book')}</span><div><p class="kicker">${date?'Klassenarbeit · '+date:'Deutsch üben'}</p><h1 tabindex="-1">${title}</h1></div></div>`;}
 function showPrep(topic,mode){
  if(!Object.hasOwn(prepTopics,topic)){
-  app.innerHTML=`<div class="route">${homeLink()}<div class="unit-head sky"><span class="icon-box">${icon('book')}</span><div><h1 tabindex="-1">Fit für die Klassenarbeiten</h1><p>Erst gemeinsam lernen, dann selbst üben und zum Schluss einen Abschlusstest lösen.</p></div></div><div class="prep-courses">${Object.entries(prepTopics).map(([id,v])=>`<section class="panel"><p class="kicker">${v.date}</p><h2>${v.title}</h2><p>${v.intro}</p><a class="primary" href="#pruefung/${id}">Lernweg öffnen ${icon('arrow')}</a></section>`).join('')}</div></div>`;return;
+  const upcoming=Object.keys(prepTopics).some(id=>prepDate(id));
+  app.innerHTML=`<div class="route">${homeLink()}<div class="unit-head sky"><span class="icon-box">${icon('book')}</span><div><h1 tabindex="-1">${upcoming?'Fit für die Klassenarbeiten':'Übungen und Abschlusstests'}</h1><p>Erst gemeinsam lernen, dann selbst üben und zum Schluss einen Abschlusstest lösen.</p></div></div><div class="prep-courses">${Object.entries(prepTopics).map(([id,v])=>`<section class="panel"><p class="kicker">${prepDate(id)||'Lernbereich'}</p><h2>${v.title}</h2><p>${v.intro}</p><a class="primary" href="#pruefung/${id}">Lernweg öffnen ${icon('arrow')}</a></section>`).join('')}</div></div>`;return;
  }
  const number=Number(location.hash.split('/')[3]||1),n=Number.isInteger(number)&&number>=1&&number<=5?number:1;
  if(!['gefuehrt','ueben','test'].includes(mode)){
-  const saved=prepRead();app.innerHTML=prepHeader(topic,prepTopics[topic].title)+`<p>${prepTopics[topic].intro}</p><section class="panel"><h2>1. Geführt lernen</h2><p>Bärli zeigt dir den Denkweg. Du bekommst Erklärungen und übst jeden Schritt mit.</p><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Mit Bärli beginnen</a></section><section class="panel"><h2>2. Selbst üben – mit Hilfen</h2><p>Pro Aufgabe kannst du drei Hilfen öffnen. Danach darfst du noch einmal prüfen.</p><div class="actions">${[1,2,3,4,5].map(i=>`<a class="secondary" href="#pruefung/${topic}/ueben/${i}">Übung ${i}</a>`).join('')}</div></section><section class="panel"><h2>3. Fünf verschiedene Abschlusstests</h2><p>Ohne Tipps während der Bearbeitung. Am Ende siehst du alle Fehler, Erklärungen und passende Übungsempfehlungen. Ab 80 % gibt es ein kurzes Feuerwerk.</p><div class="prep-tests">${[1,2,3,4,5].map(i=>{const r=saved[topic+':test:'+i];return `<a class="secondary" href="#pruefung/${topic}/test/${i}">Test ${i}${r?.done?' · '+prepPercent(r.answers||[])+' %':''}</a>`;}).join('')}</div><p class="subtle">Die Hörtexte der Abschlusstests unterscheiden sich von den Hörtexten des geführten Lernwegs und der Übungen.</p></section><a class="secondary" href="#fehlertraining">Meine Fehler gezielt üben</a><a class="plain" href="#pruefung">Beide Klassenarbeiten ansehen</a></div>`;return;
+  const saved=prepRead();app.innerHTML=prepHeader(topic,prepTopics[topic].title)+`<p>${prepTopics[topic].intro}</p><section class="panel"><h2>1. Geführt lernen</h2><p>Bärli zeigt dir den Denkweg. Du bekommst Erklärungen und übst jeden Schritt mit.</p><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Mit Bärli beginnen</a></section><section class="panel"><h2>2. Selbst üben – mit Hilfen</h2><p>Pro Aufgabe kannst du drei Hilfen öffnen. Danach darfst du noch einmal prüfen.</p><div class="actions">${[1,2,3,4,5].map(i=>`<a class="secondary" href="#pruefung/${topic}/ueben/${i}">Übung ${i}</a>`).join('')}</div></section><section class="panel"><h2>3. Fünf verschiedene Abschlusstests</h2><p>Ohne Tipps während der Bearbeitung. Am Ende siehst du alle Fehler, Erklärungen und passende Übungsempfehlungen. Ab 80 % gibt es ein kurzes Feuerwerk.</p><div class="prep-tests">${[1,2,3,4,5].map(i=>{const r=saved[topic+':test:'+i];return `<a class="secondary" href="#pruefung/${topic}/test/${i}">Test ${i}${r?.done?' · '+prepPercent(r.answers||[])+' %':''}</a>`;}).join('')}</div><p class="subtle">${topic==='hoeren'?'Jeder Hörtest enthält eine eigene Geschichte.':'Neu begonnene Nomentests enthalten andere Wörter als die Übungen.'}</p></section><a class="secondary" href="#fehlertraining">Meine Fehler gezielt üben</a><a class="plain" href="#pruefung">Beide Klassenarbeiten ansehen</a></div>`;return;
  }
  runPrep(topic,mode,n);
 }
@@ -5000,15 +5071,28 @@ function prepFireworks(host){
  frame=requestAnimationFrame(draw);return ()=>cancelAnimationFrame(frame);
 }
 function runPrep(topic,mode,n){
- const questions=prepTasks(topic,mode,n),test=mode==='test',guided=mode==='gefuehrt',key=topic+':'+mode+':'+n,data=prepRead();
- let session=data[key];if(!session||!Array.isArray(session.answers)||session.answers.length>questions.length||session.answers.some((a,i)=>!a||a.id!==questions[i].id||typeof a.given!=='string'||typeof a.correct!=='boolean')||(session.done&&session.answers.length!==questions.length))session={answers:[],done:false,assisted:false};
- const audioTrack=questions[0].track,story=annaStories.find(s=>s.id===audioTrack);let hintCount=0,tries=0,firstCorrect=null,given='',checked=false,readingUsed=!!session.assisted;
- function save(){data[key]=session;return prepWrite(data);}
+ const test=mode==='test',guided=mode==='gefuehrt',key=topic+':'+mode+':'+n;
+ let session=prepRead()[key];
+ const version=session?(session.version||1):2;
+ let questions=prepTasks(topic,mode,n,version);
+ if(!session||!Array.isArray(session.answers)||session.answers.length>questions.length||session.answers.some((a,i)=>!a||a.id!==questions[i].id||typeof a.given!=='string'||typeof a.correct!=='boolean')||(session.done&&session.answers.length!==questions.length)){
+  questions=prepTasks(topic,mode,n);session={version:2,answers:[],done:false,assisted:false};
+ }
+ const audioTrack=questions[0].track,story=annaStories.find(s=>s.id===audioTrack);let hintCount=0,firstCorrect=null,given='',checked=false,readingUsed=!!session.assisted;
+ function save(){return prepWrite({...prepRead(),[key]:session});}
+ if(!session.done){session.lastOpened=Date.now();save();}
  const title=(guided?'Mit Bärli lernen':test?'Abschlusstest '+n:'Übung '+n)+' · '+prepTopics[topic].title;
  app.innerHTML=prepHeader(topic,title)+`<a class="crumb" href="#pruefung/${topic}">${icon('back')} Zum Lernweg</a>
  ${guided&&topic!=='hoeren'?'<section class="panel maja-voice-intro"><h2>Bärli begrüßt dich</h2><p>Ein kurzer Mutmacher vor dem Lernen.</p><audio controls preload="none" src="./audio/baerli-intro.mp3" aria-label="Bärli begrüßt Maja"></audio></section>':''}
  ${topic==='hoeren'?`<section class="panel prep-audio prep-audio-compact">
    <h2>🎧 ${escapeHtml(story.title)}</h2>
+   <div class="actions prep-play-buttons">
+     <button class="primary" type="button" id="prep-play">▶ Anhören</button>
+     <button class="secondary" type="button" id="prep-slow" aria-pressed="false">Langsam</button>
+     <button class="secondary" type="button" id="prep-stop">■ Stopp</button>
+   </div>
+   <details class="prep-audio-details">
+   <summary>Stimme und Tempo ändern</summary>
    <div class="prep-listen-toolbar" aria-label="Hörtext und Vorlesestimme">
       <label for="prep-playback-mode">Vorlesen mit
         <select id="prep-playback-mode">
@@ -5027,10 +5111,7 @@ function runPrep(topic,mode,n){
         <select id="prep-voice-list"><option value="">Automatisch auf Deutsch</option></select>
       </label>
    </div>
-   <div class="actions prep-play-buttons">
-     <button class="primary" type="button" id="prep-play">▶ Anhören</button>
-     <button class="secondary" type="button" id="prep-stop">■ Stopp</button>
-   </div>
+   </details>
    <audio id="prep-audio" preload="metadata" src="./anna-audio/${audioTrack}.mp3" aria-label="Aufgenommene Geschichte"></audio>
    <p id="prep-audio-message" class="inline-status" role="status" aria-live="polite"></p>
    ${test?'<p class="prep-exam-note">Im Abschlusstest ist der Hörtext nicht sichtbar. Höre die Geschichte so oft an, wie du möchtest. Die Lösungen erscheinen erst nach Abgabe.</p>':`<details id="prep-reading" class="prep-reading-extra">
@@ -5041,8 +5122,8 @@ function runPrep(topic,mode,n){
   </section>`:''}
   <section class="panel" id="prep-question"></section><section id="prep-result" hidden></section></div>`;
  const root=document.querySelector('#prep-question'),result=document.querySelector('#prep-result'),audio=document.querySelector('#prep-audio');let stopFireworks=()=>{};
- let stopComputer=()=>{},detachVoices=()=>{},drawnStep=-1;
- extraCleanup=()=>{audio?.pause();stopComputer();detachVoices();stopFireworks();};
+ let stopComputer=()=>{},detachVoices=()=>{},stopAudioEvents=()=>{},stopPlayback=()=>{},resetCue=()=>{},drawnStep=-1;
+ extraCleanup=()=>{audio?.pause();stopComputer();detachVoices();stopAudioEvents();stopFireworks();};
  if(audio&&guided&&topic==='hoeren'){
   const cues=annaAudioCues[audioTrack]||[];
   if(cues.length){
@@ -5054,13 +5135,15 @@ function runPrep(topic,mode,n){
    const notes=coach.querySelector('#prep-hearing-notes');notes.value=String(session.hearingNotes||'');
    notes.oninput=()=>{session.hearingNotes=notes.value;save();};
    let cueEnd=null;
+   resetCue=()=>{cueEnd=null;};
    audio.addEventListener('timeupdate',()=>{if(cueEnd!==null&&audio.currentTime>=cueEnd){cueEnd=null;audio.pause();document.querySelector('#prep-audio-message').textContent='Dieser Abschnitt ist zu Ende. Du kannst einen anderen Abschnitt wählen.';}});
    audio.addEventListener('ended',()=>cueEnd=null);
    coach.querySelectorAll('[data-cue-index]').forEach(button=>button.onclick=()=>{
     const cue=cues[Number(button.dataset.cueIndex)];
-    cueEnd=null;audio.pause();
+    resetCue();audio.pause();stopComputer();
     const start=()=>{
-      try{audio.currentTime=cue[0];cueEnd=cue[1];audio.play().catch(()=>document.querySelector('#prep-audio-message').textContent='Der Abschnitt konnte nicht gestartet werden. Bitte auf den Abspielknopf tippen.');}
+      if(!audio.isConnected)return;
+      try{audio.currentTime=cue[0];cueEnd=cue[1];audio.play().catch(()=>{if(audio.isConnected)document.querySelector('#prep-audio-message').textContent='Der Abschnitt konnte nicht gestartet werden. Bitte tippe noch einmal.';});}
       catch{document.querySelector('#prep-audio-message').textContent='Ton noch nicht bereit. Bitte gleich erneut versuchen.';}
     };
     if(audio.readyState===0)audio.addEventListener('loadedmetadata',start,{once:true});else start();
@@ -5079,10 +5162,10 @@ function runPrep(topic,mode,n){
   const speedSelect=document.querySelector('#prep-playback-speed');
   const voiceSelect=document.querySelector('#prep-voice-list');
   const voiceRow=document.querySelector('#prep-voice-row');
-  const playButton=document.querySelector('#prep-play'),stopButton=document.querySelector('#prep-stop');
+  const playButton=document.querySelector('#prep-play'),stopButton=document.querySelector('#prep-stop'),slowButton=document.querySelector('#prep-slow');
   const status=document.querySelector('#prep-audio-message');
   const speechAPI=window.speechSynthesis;
-  let voiceRun=0;
+  let voiceRun=0,recordedRun=0,computerPlaying=false;
   let savedMode='recorded',savedRate='1',savedVoice='';
   try{
    savedMode=localStorage.getItem('majas-wortwerkstatt-hoer-modus-v1')||localStorage.getItem('maja-prep-voice-mode-v1')||'recorded';
@@ -5113,41 +5196,56 @@ function runPrep(topic,mode,n){
   refreshVoiceList();
   speechAPI?.addEventListener?.('voiceschanged',refreshVoiceList);
   detachVoices=()=>speechAPI?.removeEventListener?.('voiceschanged',refreshVoiceList);
-  stopComputer=()=>{voiceRun++;speechAPI?.cancel();};
-  const setMode=()=>{voiceRow.hidden=modeSelect.value!=='computer';audio.pause();stopComputer();status.textContent='';try{localStorage.setItem('majas-wortwerkstatt-hoer-modus-v1',modeSelect.value);}catch{}};
+  stopComputer=()=>{voiceRun++;computerPlaying=false;speechAPI?.cancel();};
+  const quiet=()=>{recordedRun++;resetCue();audio.pause();stopComputer();};
+  stopPlayback=quiet;
+  const setMode=()=>{voiceRow.hidden=modeSelect.value!=='computer';quiet();status.textContent='';try{localStorage.setItem('majas-wortwerkstatt-hoer-modus-v1',modeSelect.value);}catch{}};
   setMode();
-  speedSelect.onchange=()=>{audio.playbackRate=Number(speedSelect.value);stopComputer();try{localStorage.setItem('majas-wortwerkstatt-hoer-tempo-v1',speedSelect.value);}catch{}};
+  const setSpeed=()=>{
+   const restart=computerPlaying;
+   audio.defaultPlaybackRate=audio.playbackRate=Number(speedSelect.value);
+   slowButton.setAttribute('aria-pressed',String(speedSelect.value!=='1'));
+   try{localStorage.setItem('majas-wortwerkstatt-hoer-tempo-v1',speedSelect.value);}catch{}
+   if(restart)playComputer();
+  };
+  speedSelect.onchange=setSpeed;
+  slowButton.onclick=()=>{speedSelect.value=speedSelect.value==='1'?'0.85':'1';setSpeed();};
   voiceSelect.onchange=()=>{stopComputer();try{localStorage.setItem('majas-wortwerkstatt-hoer-stimme-v1',voiceSelect.value);}catch{}};
   modeSelect.onchange=setMode;
   const playComputer=()=>{
-   if(!speechAPI?.speak||!window.SpeechSynthesisUtterance){status.textContent='Auf diesem Gerät ist keine Computerstimme verfügbar. Bitte die Aufnahme auswählen.';return;}
-   audio.pause();stopComputer();refreshVoiceList();
+   if(!speechAPI?.speak||!window.SpeechSynthesisUtterance){status.textContent='Hier ist keine Computerstimme verfügbar. Wähle unter „Stimme und Tempo ändern“ die Aufnahme.';return;}
+   quiet();refreshVoiceList();
    const voice=speechAPI.getVoices().find(v=>v.voiceURI===voiceSelect.value)
     ||speechAPI.getVoices().find(v=>/^de([-_]|$)/i.test(v.lang));
    const sentences=story.paragraphs.flatMap(p=>p.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[p]).map(x=>x.trim()).filter(Boolean);
    let cursor=0;const token=voiceRun;
    const next=()=>{
     if(token!==voiceRun||!document.contains(playButton))return;
-    if(cursor>=sentences.length){status.textContent='Die Geschichte ist zu Ende.';return;}
+    if(cursor>=sentences.length){computerPlaying=false;status.textContent='Die Geschichte ist zu Ende.';return;}
     const utterance=new SpeechSynthesisUtterance(sentences[cursor++]);
     utterance.lang='de-DE';utterance.rate=Number(speedSelect.value);
     if(voice)utterance.voice=voice;
     utterance.onend=next;
-    utterance.onerror=()=>{if(token===voiceRun)status.textContent='Die Computerstimme wurde unterbrochen. Tippe erneut auf Anhören.';};
+    utterance.onerror=()=>{if(token===voiceRun){computerPlaying=false;status.textContent='Die Computerstimme wurde unterbrochen. Tippe auf „Noch mal hören“.';}};
     speechAPI.speak(utterance);
    };
-   status.textContent='Die Computerstimme liest vor.';
+   computerPlaying=true;status.textContent='Die Computerstimme liest vor.';
    next();
   };
   playButton.onclick=()=>{
+   playButton.textContent='▶ Noch mal hören';
    if(modeSelect.value==='computer'){playComputer();return;}
-   stopComputer();
-   // Tippt das Kind während der Wiedergabe erneut auf „Anhören“, beginnt die Aufnahme neu.
-   if(!audio.paused||audio.ended){audio.pause();try{audio.currentTime=0;}catch{}}
-   audio.playbackRate=Number(speedSelect.value);
-   audio.play().then(()=>{status.textContent='Die Aufnahme läuft.';}).catch(()=>{status.textContent='Audio konnte nicht gestartet werden. Bitte Computerstimme auswählen.';});
+   quiet();
+   const token=recordedRun;
+   if(audio.readyState>0){try{audio.currentTime=0;}catch{}}
+   setSpeed();
+   audio.play().then(()=>{if(token===recordedRun&&audio.isConnected)status.textContent='Die Aufnahme läuft.';}).catch(()=>{if(token===recordedRun&&audio.isConnected)status.textContent='Der Ton konnte nicht starten. Tippe noch einmal oder wähle die Computerstimme.';});
   };
-  stopButton.onclick=()=>{audio.pause();stopComputer();status.textContent='Gestoppt.';};
+  setSpeed();
+  stopButton.onclick=()=>{quiet();status.textContent='Gestoppt.';};
+  const pauseOnHide=()=>{if(document.hidden){quiet();status.textContent='Pausiert. Tippe auf „Anhören“, wenn du bereit bist.';}};
+  document.addEventListener('visibilitychange',pauseOnHide);
+  stopAudioEvents=()=>{recordedRun++;document.removeEventListener('visibilitychange',pauseOnHide);};
   audio.onended=()=>{status.textContent='Die Geschichte ist zu Ende.';};
   audio.onerror=()=>{if(modeSelect.value==='recorded')status.textContent='Die Aufnahme konnte nicht geladen werden. Wähle Computerstimme.';};
   const readingPanel=document.querySelector('#prep-reading');
@@ -5155,58 +5253,50 @@ function runPrep(topic,mode,n){
  }
 
  function finish(){
-  session.done=true;session.assisted=readingUsed;save();root.hidden=true;audio?.pause();stopComputer();result.hidden=false;
+  if(!session.done){session.finishedAt=Date.now();session.done=true;session.assisted=readingUsed;save();}
+  root.hidden=true;stopPlayback();result.hidden=false;
   const score=prepPercent(session.answers),good=score>=80,reward=prepReward(topic,mode,n,score);
   // Eine bestandene Prüfung wird sofort dauerhaft für das Baumhaus verbucht.
   if(test&&good)window.MajaTreehouse?.stateRead();
   const mistakes=session.answers.map((answer,i)=>({answer,q:questions[i]})).filter(item=>!item.answer.correct);
-  const errorTypes=[];
-  if(topic==='hoeren'){
-   const hearingAdvice=[
-    ['Personen','Wer|Wem|Wessen|Welche Person|Mit wem','Bei Namen und handelnden Personen kurz mitdenken.'],
-    ['Ort und Zeit','Wo|Wohin|Wann|An welchem Ort','Auf Orte, Zeitangaben und die Reihenfolge achten.'],
-    ['Gründe und Zusammenhänge','Warum|Wieso|Weshalb|Wie hilft','Überlege, warum die Figur etwas tut. Suche den Grund in der Geschichte.']
-   ];
-   for(const [title,pattern,advice] of hearingAdvice){
-    const count=mistakes.filter(({q})=>new RegExp('^(?:'+pattern+')','i').test(q.prompt)).length;
-    if(count)errorTypes.push({title,count,advice});
-   }
-   const rest=mistakes.length-errorTypes.reduce((n,row)=>n+row.count,0);
-   if(rest>0)errorTypes.push({title:'Wichtige Einzelheiten',count:rest,advice:'Achte auf Wörter, Zahlen, Gegenstände und was zuerst geschieht.'});
-  }else{
-   const plural=mistakes.filter(({q})=>q.skill==='verlaengern').length;
-   if(plural)errorTypes.push({title:'Wörter verlängern',count:plural,advice:'Sage ein Wort in der Mehrzahl: Hund → Hunde, Rad → Räder. Höre den schwierigen Laut.'});
-   const ending=mistakes.length-plural;
-   if(ending)errorTypes.push({title:'Nomen-Endungen',count:ending,advice:'Markiere die Nachsilbe, schreibe den Anfang groß und prüfe den richtigen Artikel.'});
-  }
+  const counts={};
+  for(const {q} of mistakes){const id=prepFocusFor(q);counts[id]=(counts[id]||0)+1;}
+  const errorTypes=Object.entries(counts).sort(([,a],[,b])=>b-a).map(([id,count])=>{
+   const [title,advice]=prepFocus[id];return {id,title,advice,count};
+  });
   const guidance=mistakes.length?`<section class="prep-error-guide" aria-label="Nächste Lernschritte">
    <h3>Das solltest du als Nächstes üben</h3>
    <p>${mistakes.length} von ${questions.length} Aufgaben waren beim ersten Versuch noch nicht richtig. Das ist eine Hilfe beim Planen, keine Note.</p>
-   <ul>${errorTypes.map(type=>`<li><strong>${escapeHtml(type.title)} (${type.count}):</strong> ${escapeHtml(type.advice)}</li>`).join('')}</ul>
-   <a class="secondary" href="#${topic==='hoeren'?'pruefung/hoeren/ueben/'+n:'pruefung/nomen/ueben/'+n}">Diese Stellen noch einmal üben</a>
+   <ul>${errorTypes.map(type=>`<li><strong>${escapeHtml(type.title)} (${type.count}):</strong> ${escapeHtml(type.advice)} ${guided?'':`<a href="#fehlertraining/${topic}/${type.id}">${escapeHtml(type.title)} üben</a>`}</li>`).join('')}</ul>
+   <a class="secondary" href="#${guided?'pruefung/'+topic+'/ueben/'+n:'fehlertraining/'+topic+'/'+errorTypes[0].id}">Diese Stellen noch einmal üben</a>
   </section>`:`<p class="prep-success-message">Die ersten Antworten waren alle richtig! Du kannst jetzt weitere Aufgaben ausprobieren.</p>`;
-  result.innerHTML=`<div class="panel"><h2 tabindex="-1">${test?'Dein Testergebnis':'Dein Übungsergebnis'}</h2><p class="prep-score">${session.answers.filter(x=>x.correct).length} / ${questions.length} richtig · ${score} %</p><p>${test?'Gewertet wird deine erste abgegebene Antwort.':'Hier siehst du, was schon beim ersten Prüfen richtig war. Mit Hilfen hast du anschließend weitergeübt.'}${readingUsed?' Dieser Durchgang wurde mit Lesehilfe bearbeitet.':''}</p><p>${reward}</p><div id="prep-celebration"></div>${guidance}<h3>Dein nächster Schritt</h3><p>${good?'Gut gemacht! Wiederhole die wenigen Stellen, bei denen du noch unsicher warst.':'Ein Test zeigt dir, was du als Nächstes üben kannst. Starte mit den Erklärungen und probiere später eine weitere Variante.'}</p><div class="actions"><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Geführt wiederholen</a><a class="secondary" href="#pruefung/${topic}/ueben/${n}">Passende Übung</a><a class="secondary" href="#pruefung/${topic}">Weitere Tests</a><a class="secondary" href="#baumhaus">🌳 Bärlis Baumhaus</a><a class="secondary" href="#fehlertraining/${topic}">Meine Fehler gezielt üben</a><button class="plain" type="button" id="prep-retry">Diesen Durchgang neu starten</button></div><h3>Aufgaben und Erklärungen</h3><ol class="prep-review">${questions.map((q,i)=>{const a=session.answers[i];return `<li class="${a.correct?'prep-right':'prep-wrong'}"><strong>${escapeHtml(q.prompt)} ${escapeHtml(q.context||'')}</strong><p>${a.correct?'✓ Richtig':'Noch üben'} · Deine erste Antwort: ${escapeHtml(a.given||'keine Antwort')}</p><p>Richtig: <strong>${escapeHtml(q.answer)}</strong></p><p>${escapeHtml(q.why)}</p>${!a.correct?`<a href="#${q.skill==='hoeren'?'pruefung/hoeren/ueben/'+n:q.skill==='verlaengern'?'verlaengern':'endungen'}">Diesen Bereich üben</a>`:''}</li>`;}).join('')}</ol></div>`;
+  result.innerHTML=`<div class="panel"><h2 tabindex="-1">${test?'Dein Testergebnis':'Dein Übungsergebnis'}</h2><p class="prep-score">${session.answers.filter(x=>x.correct).length} / ${questions.length} richtig · ${score} %</p><p>${test?'Gewertet wird deine erste abgegebene Antwort.':'Hier siehst du, was schon beim ersten Prüfen richtig war. Mit Hilfen hast du anschließend weitergeübt.'}${readingUsed?' Dieser Durchgang wurde mit Lesehilfe bearbeitet.':''}</p><p>${reward}</p><div id="prep-celebration"></div>${guidance}<h3>Dein nächster Schritt</h3><p>${mistakes.length?'Übe eine der Aufgaben nach und probiere später eine andere Testvariante.':'Alles richtig! Du kannst jetzt eine andere Testvariante ausprobieren.'}</p><div class="actions"><a class="primary" href="#pruefung/${topic}/gefuehrt/1">Geführt wiederholen</a><a class="secondary" href="#pruefung/${topic}/ueben/${n}">Passende Übung</a><a class="secondary" href="#pruefung/${topic}">Weitere Tests</a><a class="secondary" href="#baumhaus">🌳 Bärlis Baumhaus</a><a class="secondary" href="#fehlertraining/${topic}">Meine Fehler gezielt üben</a><button class="plain" type="button" id="prep-retry">Diesen Durchgang neu starten</button></div><h3>Aufgaben und Erklärungen</h3><ol class="prep-review">${questions.map((q,i)=>{const a=session.answers[i];return `<li class="${a.correct?'prep-right':'prep-wrong'}"><strong>${escapeHtml(q.prompt)} ${escapeHtml(q.context||'')}</strong><p>${a.correct?'✓ Richtig':'Noch üben'} · Deine erste Antwort: ${escapeHtml(a.given||'keine Antwort')}</p><p>Richtig: <strong>${escapeHtml(q.answer)}</strong></p><p>${escapeHtml(q.why)}</p>${!a.correct?`<a href="#${guided?'pruefung/'+topic+'/ueben/'+n:'fehlertraining/'+topic+'/'+prepFocusFor(q)}">Diesen Bereich üben</a>`:''}</li>`;}).join('')}</ol></div>`;
   if(test&&good)stopFireworks=prepFireworks(document.querySelector('#prep-celebration'));
-  document.querySelector('#prep-retry').onclick=()=>{extraCleanup?.();delete data[key];prepWrite(data);runPrep(topic,mode,n);};result.querySelector('h2').focus();
+  document.querySelector('#prep-retry').onclick=()=>{extraCleanup?.();const data=prepRead();delete data[key];prepWrite(data);runPrep(topic,mode,n);};result.querySelector('h2').focus();
  }
  function draw(){
   if(session.done||session.answers.length===questions.length){finish();return;}
-  const q=questions[session.answers.length];hintCount=0;tries=0;firstCorrect=typeof session.firstCorrect==='boolean'?session.firstCorrect:null;checked=false;given=typeof session.draft==='string'?session.draft:'';
+  const q=questions[session.answers.length];hintCount=Math.max(0,Math.min(3,Number(session.hintCount)||0));firstCorrect=typeof session.firstCorrect==='boolean'?session.firstCorrect:null;checked=false;given=typeof session.draft==='string'?session.draft:'';
   const options=q.options?gameShuffle(q.options):[];
   const coach=topic==='hoeren'?'Bärlis Hörplan: 1. Wer und wo? 2. Wichtige Einzelheiten. 3. Was geschieht zuerst? 4. Warum? Höre die passende Stelle noch einmal.':q.skill==='verlaengern'?`Bärli macht es vor: Hund → Hunde. Nach dem d hörst du ein e. Deshalb endet Hund auf d. Versuche das jetzt mit „${q.context}“.`:`Bärli erklärt: Nomen schreibt man groß. -ung, -heit, -keit und -schaft haben hier den Artikel die. Bei -nis kann der Artikel das oder die sein. Schau deshalb genau auf das einzelne Wort. Schau auf die Wortart, die Endung -${q.skill} und den passenden Artikel. Denke selbst nach, bevor du prüfst.`;
-  root.innerHTML=`<p class="kicker">Aufgabe ${session.answers.length+1} von ${questions.length}</p><div class="bar"><span style="width:${session.answers.length/questions.length*100}%"></span></div>${guided&&topic!=='hoeren'?`<div class="prep-coach"><strong>Bärli begleitet dich</strong><p>${escapeHtml(coach)}</p></div>`:''}${topic==='hoeren'?`<div class="prep-question-highlight"><span>❓ Die Frage</span><h2 tabindex="-1">${escapeHtml(q.prompt)}</h2></div>`:`<h2>${escapeHtml(q.prompt)}</h2>`}${q.context?`<div class="prep-word">${escapeHtml(q.context)}</div>`:''}<form id="prep-form">${q.type==='choice'?`<div class="options">${options.map(v=>`<button class="choice" type="button" data-prep-option="${escapeHtml(v)}" aria-pressed="false">${escapeHtml(v)}</button>`).join('')}</div>`:'<label class="field" for="prep-answer">Deine Antwort</label><input class="answer" id="prep-answer" autocomplete="off" autocapitalize="off" spellcheck="false">'}<div class="actions"><button class="primary" type="submit" id="prep-check">${test?'Antwort abgeben':'Prüfen'}</button>${test?'':'<button class="secondary" type="button" id="prep-help">🐻 Bärli, hilf mir!</button>'}</div></form><div id="prep-help-text" class="tip" hidden></div><p id="prep-feedback" class="inline-status" role="status"></p><button class="primary" type="button" id="prep-next" hidden>Weiter</button>`;
+  root.innerHTML=`<p class="kicker">Aufgabe ${session.answers.length+1} von ${questions.length}</p><div class="bar"><span style="width:${session.answers.length/questions.length*100}%"></span></div>${guided&&topic!=='hoeren'?`<div class="prep-coach"><strong>Bärli begleitet dich</strong><p>${escapeHtml(coach)}</p></div>`:''}${topic==='hoeren'?`<div class="prep-question-highlight"><span>❓ Die Frage</span><h2 tabindex="-1">${escapeHtml(q.prompt)}</h2></div>`:`<h2>${escapeHtml(q.prompt)}</h2>`}${q.context?`<div class="prep-word">${escapeHtml(q.context)}</div>`:''}<form id="prep-form">${q.type==='choice'?`<div class="options">${options.map(v=>`<button class="choice" type="button" data-prep-option="${escapeHtml(v)}" aria-pressed="${v===given}">${escapeHtml(v)}</button>`).join('')}</div>`:'<label class="field" for="prep-answer">Deine Antwort</label><input class="answer" id="prep-answer" autocomplete="off" autocapitalize="off" spellcheck="false">'}<div class="actions"><button class="primary" type="submit" id="prep-check">${test?'Antwort abgeben':'Prüfen'}</button>${test?'':'<button class="secondary" type="button" id="prep-help">🐻 Bärli, hilf mir!</button>'}</div></form><div id="prep-help-text" class="tip" hidden></div><p id="prep-feedback" class="inline-status" role="status"></p><button class="primary" type="button" id="prep-next" hidden>Weiter</button>`;
   if(q.type==='write'){const input=document.querySelector('#prep-answer');input.value=given;input.oninput=()=>{given=input.value;session.draft=given;save();};}
   else root.querySelectorAll('[data-prep-option]').forEach(b=>b.onclick=()=>{if(checked)return;given=b.dataset.prepOption;session.draft=given;root.querySelectorAll('[data-prep-option]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));save();});
-  if(!test)document.querySelector('#prep-help').onclick=()=>{hintCount=Math.min(3,hintCount+1);document.querySelector('#prep-help-text').hidden=false;document.querySelector('#prep-help-text').textContent=q.hints[hintCount-1];document.querySelector('#prep-help').textContent=hintCount===3?'Alle 3 Bärli-Tipps geöffnet':'🐻 Bärlis Tipp '+(hintCount+1)+' von 3';};
-  function record(correct){session.answers.push({id:q.id,given,correct:firstCorrect??correct,skill:q.skill,help:hintCount>0||guided});delete session.draft;delete session.firstCorrect;save();}
+  if(!test){
+   const help=root.querySelector('#prep-help'),tip=root.querySelector('#prep-help-text');
+   const showHint=()=>{tip.hidden=false;tip.textContent=q.hints[hintCount-1];help.textContent=hintCount===3?'Alle 3 Bärli-Tipps geöffnet':'🐻 Bärlis Tipp '+(hintCount+1)+' von 3';};
+   if(hintCount)showHint();
+   help.onclick=()=>{hintCount=Math.min(3,hintCount+1);session.hintCount=hintCount;save();showHint();};
+  }
+  function record(correct){session.answers.push({id:q.id,given:session.firstGiven??given,correct:firstCorrect??correct,skill:q.skill,help:hintCount>0||guided});delete session.draft;delete session.firstCorrect;delete session.firstGiven;delete session.hintCount;save();}
   document.querySelector('#prep-form').onsubmit=e=>{e.preventDefault();if(checked)return;if(!given.trim()){document.querySelector('#prep-feedback').textContent='Wähle eine Antwort oder schreibe sie in das Feld.';return;}
-   const correct=prepCorrect(q,given);if(firstCorrect===null){firstCorrect=correct;session.firstCorrect=correct;save();}
+   const correct=prepCorrect(q,given);if(firstCorrect===null){firstCorrect=correct;session.firstCorrect=correct;session.firstGiven=given;save();}
    if(test){record(correct);draw();return;}
-   tries++;document.querySelector('#prep-feedback').textContent=correct?'Richtig! '+q.why:'Noch nicht ganz. '+window.MajaPlus.skillHelp(q)+' Nutze bei Bedarf eine Hilfe und probiere es erneut.';
+   document.querySelector('#prep-feedback').textContent=correct?'Richtig! '+q.why:'Noch nicht ganz. '+window.MajaPlus.skillHelp(q)+' Nutze bei Bedarf eine Hilfe und probiere es erneut.';
    if(correct){checked=true;record(correct);document.querySelector('#prep-next').hidden=false;document.querySelector('#prep-check').disabled=true;document.querySelector('#prep-next').focus();}
   };
   document.querySelector('#prep-next').onclick=()=>draw();
-  if(drawnStep>=0 && drawnStep!==session.answers.length){root.scrollIntoView({block:'start',behavior:'instant'});root.querySelector('h2')?.focus({preventScroll:true});}
+  if(drawnStep>=0 && drawnStep!==session.answers.length){(audio?.closest('.prep-audio')||root).scrollIntoView({block:'start',behavior:'instant'});root.querySelector('h2')?.focus({preventScroll:true});}
   drawnStep=session.answers.length;
  }
  draw();
@@ -5341,7 +5431,7 @@ function render(initial=false){
   else if(page==='figurenstimmen')window.MajaRealAudio.show();
   else if(page==='comicstudio')window.MajaComicStudio.render(index);
   else if(page==='tagesplan')window.MajaPlus.showDaily();
-  else if(page==='fehlertraining')window.MajaPlus.showErrors(index);
+  else if(page==='fehlertraining')window.MajaPlus.showErrors(index,part);
   else if(page==='einstellungen')window.MajaPlus.showSettings();
   else if(page==='lernweg')showLearningPlan();
   else if(page==='lesetraining')readingTraining(index);

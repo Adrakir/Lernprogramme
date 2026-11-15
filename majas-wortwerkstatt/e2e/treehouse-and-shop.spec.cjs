@@ -113,3 +113,11 @@ test('Das Bestehen des gleichen Tests bringt auch nach Neustart nicht doppelte T
  const count=await page.evaluate(()=>Object.keys(JSON.parse(localStorage.getItem('majas-wortwerkstatt-baumhaus-v1')).best).length);
  expect(count).toBe(1);
 });
+
+test('Baumhaus zeigt ein erreichbares nächstes Ziel mit Bild',async({page})=>{
+  await page.goto('/majas-wortwerkstatt/#baumhaus');
+  const goal=page.getByRole('complementary',{name:'Nächstes Ziel'});
+  await expect(goal).toContainText('Noch ein bestandener Test');
+  await expect(goal.locator('svg')).toBeVisible();
+  await expect(goal.getByRole('link')).toHaveAttribute('href','#pruefung');
+});

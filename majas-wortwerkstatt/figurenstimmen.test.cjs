@@ -8,7 +8,7 @@ const b=fs.readFileSync(path.join(__dirname,'audio/figuren/baerli-mut.mp3'));
 const m=fs.readFileSync(path.join(__dirname,'audio/figuren/maja-melody.mp3'));
 assert(b.length>10000&&m.length>10000,'Both local audio files exist');
 assert(b.subarray(0,3).toString()==='ID3'&&m.subarray(0,3).toString()==='ID3','Audio files are valid MP3 headers');
-assert(/figurenstimmen\\.js\\?v=20\\d{6}[a-z]/.test(html),'Versioniertes Audio-Modul eingebunden');
+assert(/figurenstimmen\.js\?v=20\d{6}[a-z]/.test(html),'Versioniertes Audio-Modul eingebunden');
 assert(script.includes('player.insertAdjacentElement("afterend",link)'),'Hörtest zeigt die Hörsteuerung vor dem Figurenstimmen-Link');
 assert(html.includes('figurenstimmen.css?v=20261108e'),'Audio styles integrated');
 assert(html.includes("if(page==='figurenstimmen')window.MajaRealAudio.show()"),'Audio route integrated');

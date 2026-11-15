@@ -139,3 +139,8 @@
 @media(max-width:360px){.bh-shop-products{gap:6px}.bh-product{padding:6px}.bh-product h3{font-size:.85rem}.bh-shop-star{display:none}.bh-editor-controls{gap:7px}.bh-arrows{width:100%;justify-content:center}}
 @media(prefers-reduced-motion:reduce){.bh-shell *{scroll-behavior:auto!important;transition:none!important}}
 @media print{.bh-nav,.bh-editor,.bh-owned,.bh-shop-pages{display:none}}
+.bh-next-reward{display:flex;align-items:center;gap:14px;margin:14px 0;padding:12px 15px;border:1px solid #b2c9a7;border-radius:15px;background:#eef6e8;color:#233d31}
+.bh-next-reward svg{width:64px;height:58px;flex:none}
+.bh-next-reward p{margin:3px 0}
+.bh-next-reward a{color:#185b4a}
+.bh-product-copy .bh-product-goal{color:#594721;font-weight:700}

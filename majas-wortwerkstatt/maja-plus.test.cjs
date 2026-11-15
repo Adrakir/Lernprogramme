@@ -7,7 +7,7 @@ const html=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 const js=fs.readFileSync(path.join(__dirname,'maja-plus.js'),'utf8');
 const css=fs.readFileSync(path.join(__dirname,'maja-plus.css'),'utf8');
 
-assert(html.includes('maja-plus.js?v=20261108'),'Lernstudio script linked');
+assert.match(html,/maja-plus\.js\?v=20\d{6}[a-z]?/,'Lernstudio script linked');
 assert(html.includes('maja-plus.css?v=20261108'),'Lernstudio stylesheet linked');
 for(const route of ['tagesplan','fehlertraining','einstellungen']){
   assert(html.includes("page==='"+route+"'"),'Route '+route+' is registered');

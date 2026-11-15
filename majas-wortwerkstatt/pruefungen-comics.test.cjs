@@ -16,8 +16,33 @@ const readBetween=(from,to)=>{
 const resources=vm.runInNewContext(
  readBetween('const annaStories = [','const annaDayFormatter')+
  readBetween('const prepListen=[','function prepChoice')+
- '({stories:annaStories,hearing:prepListen,nouns:prepNounSets,plurals:prepPluralSets})');
+ '({stories:annaStories,hearing:prepListen,nouns:prepNounSets,plurals:prepPluralSets,testNouns:prepTestNouns,testPlurals:prepTestPlurals,letters:prepTestLetters,hearingSkills:prepHearingSkills})');
 assert.equal(resources.hearing.length,5);
+const practiceNouns=new Set(resources.nouns.flat().map(row=>row[1]));
+const practicePlurals=new Set(resources.plurals.flat().map(row=>row[0]));
+const newWords=new Set();
+for(let n=0;n<5;n++){
+  assert.deepEqual(Array.from(resources.testNouns[n],row=>row[2]),['ung','heit','keit','schaft','nis']);
+  assert.equal(resources.testPlurals[n].length,5);
+  assert.equal(resources.letters[n].length,5);
+  assert.equal(resources.hearingSkills[n].length,5);
+  for(const [,answer,suffix] of resources.testNouns[n]){
+    assert(!practiceNouns.has(answer)&&!newWords.has(answer));
+    assert.match(answer,/^(die|das) [A-ZÄÖÜ]/);
+    assert(answer.endsWith(suffix));
+    newWords.add(answer);
+  }
+  for(const [word,plural,wrong] of [...resources.testPlurals[n],...resources.letters[n]]){
+    assert(!practicePlurals.has(word)&&!newWords.has(word));
+    assert.notEqual(word,plural);
+    if(wrong){
+      assert(['bdg','ptk'].some(set=>set.includes(wrong)));
+      assert.notEqual(word.at(-1),wrong);
+      assert(plural.toLowerCase().includes(word.at(-1)));
+    }
+    newWords.add(word);
+  }
+}
 assert.equal(resources.nouns.length,5);
 assert.equal(resources.plurals.length,5);
 const seen=new Set();
@@ -49,7 +74,7 @@ for(let n=0;n<5;n++){
 }
 assert(html.includes('Im Abschlusstest ist der Hörtext nicht sichtbar'),'no script spoiler in listening exams');
 assert(html.includes("if(readingPanel)readingPanel.ontoggle"),'reading helper handled when absent');
-assert(html.includes('if(!audio.paused||audio.ended)'),'press play again restarts recording');
+assert(html.includes('audio.currentTime=0') && html.includes('▶ Noch mal hören'),'press play again restarts recording');
 assert.equal(resources.plurals[3][4][2],'Stok','Stock distractor corrected');
 const comicData=vm.runInNewContext(
  readBetween('const schoolComics=[','const schoolComicAsset')+

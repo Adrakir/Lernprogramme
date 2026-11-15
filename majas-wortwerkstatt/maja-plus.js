@@ -74,16 +74,38 @@
       const m=/^(nomen|hoeren):(test|ueben):([1-5])$/.exec(key);
       if(!m||!session?.done||!Array.isArray(session.answers))continue;
       const [,topic,mode,num]=m;
-      const questions=prepTasks(topic,mode,Number(num));
+      const questions=prepTasks(topic,mode,Number(num),session.version||1);
       for(let i=0;i<questions.length;i++){
         const q=questions[i],a=session.answers[i];
-        if(!a||a.correct)continue;
+        if(!a||a.id!==q.id||a.correct)continue;
         const id=topic+":"+q.id;
-        if(!all.has(id))all.set(id,{id,topic,q,count:0});
-        all.get(id).count++;
+        if(!all.has(id))all.set(id,{id,topic,q,count:0,lastSeen:0});
+        const entry=all.get(id);entry.count++;entry.lastSeen=Math.max(entry.lastSeen,session.finishedAt||0);
       }
     }
     return Array.from(all.values()).sort((a,b)=>b.count-a.count);
+  }
+  const hearingPractice={
+    person:[2,'Wer hat die Pfeile vorbereitet?','Ben','Frau Sommer','Annas Oma','Ben wartet am letzten Pfeil auf Anna und begrüßt sie am Start.'],
+    'place-time':[2,'Wo endet der letzte Pfeil?','Am Blumentopf','An der Bank','Am Fenster','Am Blumentopf entdeckt Anna Ben.'],
+    sequence:[0,'Was tut Anna, bevor der Kiesel herauskullert?','Sie zieht den Schuh aus und schüttelt ihn.','Sie malt einen Pfeil.','Sie geht nach draußen.','Erst schüttelt sie den Schuh. Dann fällt der Kiesel heraus.'],
+    detail:[1,'Welche Farbe hat der Pfeil auf dem Stein?','Weiß','Blau','Rot','Der Pfeil ist weiß, der Kiesel aus dem Schuh ist blau.'],
+    reason:[0,'Warum zieht Anna den Schuh aus?','Etwas drückt darin.','Sie will schneller rennen.','Die Schnürsenkel sind kaputt.','Der Kiesel drückt Anna im Schuh.']
+  };
+  function transferTask(topic,focus){
+    const id='transfer-'+focus;
+    if(topic==='hoeren'){
+      const [cue,prompt,answer,a,b,why]=hearingPractice[focus];
+      return {id,topic,transfer:true,q:{type:'choice',track:'der-kiesel-im-schuh',cue,skill:'hoeren',focus,prompt,answer,options:[answer,a,b],why}};
+    }
+    const q=focus==='verlaengern'
+      ?{skill:'verlaengern',prompt:'Welcher Buchstabe fehlt? Sprich die Mehrzahl laut.',context:'Gel_ → Gelder',answer:'d',options:['d','t'],why:'In Gelder hörst du das d. Deshalb schreibst du Geld mit d.'}
+      :{skill:'ung',prompt:'Bilde das Nomen mit -ung. Wähle die Form mit dem richtigen Artikel.',context:'einladen',answer:'die Einladung',options:['die Einladung','das Einladung','die einladung'],why:'Das Nomen heißt die Einladung und wird großgeschrieben.'};
+    return {id,topic,transfer:true,q:{...q,type:'choice'}};
+  }
+  function reviewAudio(q){
+    const cue=annaAudioCues[q.track]?.[q.cue];
+    return `<audio controls preload="none" src="./anna-audio/${encodeURIComponent(q.track)}.mp3" aria-label="Geschichte erneut anhören"></audio>${cue?`<button type="button" class="secondary plus-cue" data-start="${cue[0]}" data-end="${cue[1]}">Passenden Abschnitt anhören</button>`:''}`;
   }
   function skillText(skill){
     if(skill==="hoeren")return "Hörverständnis";
@@ -124,12 +146,32 @@
       const bar=app.querySelector(".plus-progress");bar.setAttribute("aria-valuenow",count);bar.firstElementChild.style.width=(count*25)+"%";
     });
   }
-  function showErrors(filter){
+  function showErrors(filter,focus){
     const data=read(),errors=mistakes(),topic=["nomen","hoeren"].includes(filter)?filter:null;
-    const items=errors.filter(x=>!topic||x.topic===topic).filter(x=>!data.repaired[x.id]||reviewDue(data,x.id));
+    const focused=topic==='hoeren'?Object.hasOwn(hearingPractice,focus):topic==='nomen'&&['endungen','verlaengern'].includes(focus);
+    const relevant=errors.filter(x=>!topic||x.topic===topic);
+    const active=relevant.filter(x=>!data.repaired[x.id]||reviewDue(data,x.id));
+    const items=focused?relevant.filter(x=>prepFocusFor(x.q)===focus).sort((a,b)=>b.lastSeen-a.lastSeen).slice(0,2):active;
+    if(focused&&items.length<2)items.push(transferTask(topic,focus));
+    const heading=focused?prepFocus[focus][0]+' üben':'Deine Fehlerlupe';
     app.innerHTML=cardTitle("Mein Fehlertrainer","Falsche Antworten aus abgeschlossenen Übungen und Tests werden zu neuen Lernchancen.")+
-      `<section class="panel"><h2>Deine Fehlerlupe</h2><p>Gefundene unterschiedliche Übungsaufgaben: <strong>${items.length}</strong>. Bereits erfolgreich nachgeübt: <strong>${items.filter(x=>data.repaired[x.id]).length}</strong>.</p><div class="actions"><a class="secondary" href="#fehlertraining">Alle</a><a class="secondary" href="#fehlertraining/hoeren">Hörverständnis</a><a class="secondary" href="#fehlertraining/nomen">Nomen und Verlängern</a></div></section>`+
-      (items.length?items.map((entry,i)=>`<section class="panel plus-error" data-error-id="${esc(entry.id)}"><p class="kicker">Übung ${i+1} · ${esc(skillText(entry.q.skill))} ${reviewDue(data,entry.id)?"· 📅 Wiederholung fällig":data.repaired[entry.id]?"· schon einmal nachgeübt":""}</p><h2>${esc(entry.q.prompt)}</h2>${entry.q.context?`<p class="prep-word">${esc(entry.q.context)}</p>`:""}${entry.topic==="hoeren"?`<audio controls preload="none" src="./anna-audio/${encodeURIComponent(entry.q.track)}.mp3" aria-label="Geschichte erneut anhören"></audio>`:""}<form class="plus-try" data-plus-id="${esc(entry.id)}">${entry.q.type==="choice"?`<fieldset class="plus-fieldset"><legend>Wähle die beste Antwort</legend>${entry.q.options.map((option,j)=>`<label><input type="radio" name="antwort-${i}" value="${esc(option)}"> ${esc(option)}</label>`).join("")}</fieldset>`:`<label for="plus-ans-${i}">Deine neue Antwort</label><input type="text" id="plus-ans-${i}" autocomplete="off" spellcheck="false" required>`}<div class="actions"><button class="primary" type="submit">Prüfen</button><button type="button" class="secondary plus-hint">Tipp anzeigen</button></div></form><div class="plus-hint-text" hidden>${esc(skillHelp(entry.q))}</div><p class="plus-feedback" role="status" aria-live="polite"></p></section>`).join(""):`<section class="panel"><h2>Sehr gut!</h2><p>Zu diesem Bereich sind noch keine falschen Antworten aus abgeschlossenen Übungen oder Tests gespeichert. Du kannst trotzdem weitertrainieren.</p><div class="actions"><a class="primary" href="#pruefung/nomen/ueben/1">Nomen trainieren</a><a class="secondary" href="#pruefung/hoeren/ueben/1">Hören trainieren</a></div></section>`)+`<div class="actions"><a class="secondary" href="#tagesplan">Zur Tagesmission</a><a class="secondary" href="#pruefung">Zu den Abschlusstests</a></div></div>`;
+      `<section class="panel"><h2>${esc(heading)}</h2><p>${focused?esc(prepFocus[focus][1]):'Aufgaben zum Nachüben: <strong>'+items.length+'</strong>'}</p><div class="actions"><a class="secondary" href="#fehlertraining">Alle</a><a class="secondary" href="#fehlertraining/hoeren">Hörverständnis</a><a class="secondary" href="#fehlertraining/nomen">Nomen und Verlängern</a></div></section>`+
+      (items.length?items.map((entry,i)=>`<section class="panel plus-error" data-error-id="${esc(entry.id)}"><p class="kicker">Übung ${i+1} · ${esc(focused?prepFocus[focus][0]:skillText(entry.q.skill))} ${reviewDue(data,entry.id)?"· 📅 Wiederholung fällig":data.repaired[entry.id]?"· schon einmal nachgeübt":""}</p><h2>${esc(entry.q.prompt)}</h2>${entry.q.context?`<p class="prep-word">${esc(entry.q.context)}</p>`:""}${entry.topic==='hoeren'?reviewAudio(entry.q):''}<form class="plus-try" data-plus-id="${esc(entry.id)}">${entry.q.type==="choice"?`<fieldset class="plus-fieldset"><legend>Wähle die beste Antwort</legend>${gameShuffle(entry.q.options).map(option=>`<label><input type="radio" name="antwort-${i}" value="${esc(option)}"> ${esc(option)}</label>`).join("")}</fieldset>`:`<label for="plus-ans-${i}">Deine neue Antwort</label><input type="text" id="plus-ans-${i}" autocomplete="off" spellcheck="false" required>`}<div class="actions"><button class="primary" type="submit">Prüfen</button><button type="button" class="secondary plus-hint">Tipp anzeigen</button></div></form><div class="plus-hint-text" hidden>${esc(skillHelp(entry.q))}</div><p class="plus-feedback" role="status" aria-live="polite"></p></section>`).join(""):`<section class="panel"><h2>Sehr gut!</h2><p>Zu diesem Bereich sind noch keine falschen Antworten aus abgeschlossenen Übungen oder Tests gespeichert. Du kannst trotzdem weitertrainieren.</p><div class="actions"><a class="primary" href="#pruefung/nomen/ueben/1">Nomen trainieren</a><a class="secondary" href="#pruefung/hoeren/ueben/1">Hören trainieren</a></div></section>`)+`<div class="actions"><a class="secondary" href="#tagesplan">Zur Tagesmission</a><a class="secondary" href="#pruefung">Zu den Abschlusstests</a></div></div>`;
+    const players=Array.from(app.querySelectorAll('.plus-error audio'));
+    extraCleanup=()=>players.forEach(audio=>audio.pause());
+    for(const audio of players){
+      const button=audio.parentElement.querySelector('.plus-cue');
+      let end=null;
+      audio.onplay=()=>players.filter(other=>other!==audio).forEach(other=>other.pause());
+      audio.onpause=()=>{end=null;};
+      audio.ontimeupdate=()=>{if(end!==null&&audio.currentTime>=end){end=null;audio.pause();}};
+      if(button)button.onclick=()=>{
+        const start=Number(button.dataset.start);
+        const seek=()=>{audio.currentTime=start;end=Number(button.dataset.end);};
+        if(audio.readyState>0)seek();else audio.addEventListener('loadedmetadata',seek,{once:true});
+        audio.play().catch(()=>{audio.parentElement.querySelector('.plus-feedback').textContent='Der Ton konnte nicht starten. Tippe erneut auf den Abschnitt oder nutze den Player.';});
+      };
+    }
     const lookup=new Map(items.map(x=>[x.id,x]));
     for(const form of app.querySelectorAll("form[data-plus-id]")){
       const item=lookup.get(form.dataset.plusId),panel=form.closest(".plus-error");
@@ -140,8 +182,8 @@
         const status=panel.querySelector(".plus-feedback");
         if(!chosen?.trim()){status.textContent="Trage zuerst deine Antwort ein.";return;}
         if(prepCorrect(item.q,chosen)){
-          scheduleReview(item.id);
-          status.textContent="Richtig! "+item.q.why+" Du kannst den nächsten Fehler bearbeiten.";
+          if(!item.transfer)scheduleReview(item.id);
+          status.textContent="Richtig! "+item.q.why;
           form.querySelectorAll("input,button").forEach(x=>x.disabled=true);
         }else{
           status.textContent="Noch nicht richtig. "+skillHelp(item.q);
