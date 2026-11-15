@@ -480,10 +480,11 @@ module.exports = async function checkQuality(page, home) {
   await page.reload();
   assert.deepEqual(await page.locator('.ls-orderitem strong').allTextContents(),order);
   await page.evaluate(() => {
-    const synth = window.speechSynthesis || {getVoices:() => []};
     window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
-    synth.speak = utterance => {window.__spoken = utterance.text;};
-    if (!window.speechSynthesis) window.speechSynthesis = synth;
+    Object.defineProperty(window, 'speechSynthesis', {configurable: true, value: {
+      getVoices: () => [], speaking: false, pending: false, cancel() {},
+      speak(utterance) { window.__spoken = utterance.text; }
+    }});
   });
   await page.locator('[data-ls="read"]').click();
   assert.ok((await page.evaluate(() => window.__spoken)).includes(order.map((step,i) => (i+1)+'. '+step).join(' ')));
