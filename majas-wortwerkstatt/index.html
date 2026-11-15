@@ -424,7 +424,7 @@ legend{font-weight:700;padding:0 7px}
 <link rel="stylesheet" href="./comic-bubbles.css?v=20261108d">
 <link rel="stylesheet" href="./figurenstimmen.css?v=20261108e">
 <link rel="stylesheet" href="./mobile-start.css?v=20261115b">
-<link rel="stylesheet" href="./stern.css?v=20261115a">
+<link rel="stylesheet" href="./stern.css?v=20261115b">
 <link rel="stylesheet" href="./baerli-kleiderschrank.css?v=20261109d">
 <link rel="stylesheet" href="./baerli-baumhaus.css?v=20261115a">
 <link rel="stylesheet" href="./baerli-advent.css?v=20261109b">
@@ -3067,7 +3067,7 @@ function showAnnaWriting(part){
 <script src="./comic-studio.js?v=20261108c"></script>
 <script src="./comic-bubbles.js?v=20261108d"></script>
 <script src="./figurenstimmen.js?v=20261115b"></script>
-<script src="./stern.js?v=20261115a"></script>
+<script src="./stern.js?v=20261115b"></script>
 <script src="./baerli-baumhaus.js?v=20261115a"></script>
 <script>const iconPaths = {
  comic:'<rect x="2.5" y="3.5" width="19" height="17" rx="2"/><path d="M12 3.5v17M3 12h9M15 7h4m-4 4h3m-3 4h4m-13-8h3v2H6l-1 2Z"/>',
@@ -5443,7 +5443,7 @@ function render(initial=false){
   else if(page==='lernweg')showLearningPlan();
   else if(page==='lesetraining')readingTraining(index);
   else if(page==='schreibwerkstatt')writingWorkshop(index);
-  else if(page==='stern')window.MajaStern.show();
+  else if(page==='stern')window.MajaStern.show(index);
   else if(page==='sprechwerkstatt')speakingWorkshop(index);
   else if(page==='lernuebersicht'||page==='erwachsene')showLearningOverview(page==='erwachsene');
   else if(page==='fortschritt')showProgress();

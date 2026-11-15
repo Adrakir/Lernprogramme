@@ -8,6 +8,94 @@
   'Maja erzählte, dass die Tropfen eine Wolke suchten, die ihren Heimweg vergessen hatte. Bärli malte eine Karte. Als Stern den letzten Satz sprach, fand die Wolke nach Hause. Auf der letzten Buchseite stand nun: „Morgen erzählst du mir weiter.“'
  ];
 
+ const adventures=[
+  {
+   id:'regenbrief',title:'Der Brief im Wind',
+   teaser:'Ein geheimnisvoller Brief landet nach dem Regen in der Hecke.',
+   alt:'Maja und Stern halten einen Briefumschlag mit blauem Siegel im Garten fest.',
+   paragraphs:[
+    'Maja und Stern gingen hinaus, kaum dass der Regen aufgehört hatte. Da segelte ein heller Briefumschlag über den Gartenweg. Maja griff danach, doch der Wind war schneller. Erst in der Hecke blieb der Brief hängen. Stern legte eine Pfote auf eine Ecke, bis Maja ihn in der Hand hatte.',
+    'Auf dem Umschlag stand „Für dich, wenn du mich findest“. Maja brach das blaue Siegel. Innen lag ein Zettel. Jemand hatte einen Baum mit einer Bank darunter gemalt. Neben der Bank stand eine einzige Frage: „Was kann man verschenken, ohne es zu verlieren?“',
+    '„Einen Knopf nicht“, sagte Maja. „Den hätte ich danach nicht mehr.“ Stern dachte nach. „Aber eine Geschichte kannst du weitererzählen. Du behältst sie trotzdem.“ Die beiden setzten sich auf die Bank unter dem Apfelbaum. Maja erzählte, wie der Brief über den Garten geflogen war, und Stern erfand, woher der Wind ihn wohl gebracht hatte.',
+    'Am Abend legten sie einen neuen Zettel in den Umschlag. „Jetzt bist du dran“, schrieb Maja. Dann klemmte sie den Brief so zwischen zwei Zweige, dass der nächste Wind ihn mitnehmen konnte.'
+   ]
+  },
+  {
+   id:'mondpfuetze',title:'Die Pfütze mit dem Mond',
+   teaser:'Als Maja nach dem Mond greift, zerfällt er in silberne Stücke.',
+   alt:'Maja und Stern beobachten abends den Mond, der sich in einer Pfütze spiegelt.',
+   paragraphs:[
+    'Als es im Garten schon dämmerte, blieb Stern mitten auf dem Weg stehen. In einer Pfütze lag ein heller, runder Mond. „Der ist heute aber tief gefallen“, flüsterte er. Maja ging in die Hocke und hielt einen Finger dicht über das Wasser.',
+    'Ein Tropfen fiel von einem Blatt. Plitsch! Der Mond in der Pfütze zerbrach in lauter silberne Stücke. Stern hielt den Atem an. Maja nahm seine Pfote. „Schau nach oben.“ Über dem Garten hing der Mond, rund und heil. Als das Wasser wieder still war, erschien auch sein Spiegelbild vollständig.',
+    'Stern legte den Kopf schief. „Was wäre, wenn die Pfütze ein Fenster in den Himmel wäre?“ Maja stellte sich vor, wie sie hinaufkletterten und sich auf eine Wolke setzten. Stern fand, dass sie für die Rückreise auf jeden Fall zwei Butterbrote bräuchten.',
+    'Drinnen malte Maja die Pfütze auf ein Blatt Papier. Stern wollte gerade einen Stern dazumalen, als ihm etwas auffiel. „Hier fehlt noch das Plitsch.“ Maja nahm den Silberstift und zog kleine Kreise um den Mond.'
+   ]
+  },
+  {
+   id:'wunschknopf',title:'Der Knopf, der sich etwas wünschte',
+   teaser:'Im Baumhaus findet Maja einen blauen Knopf. Stern hat eine Idee, was er einmal werden könnte.',
+   alt:'Maja zeigt Stern im Baumhaus einen blauen Knopf aus einer Nähdose.',
+   paragraphs:[
+    'Im Baumhaus klapperte die alte Nähdose, als Maja sie schüttelte. Zwischen bunten Fäden lag ein großer blauer Knopf. Maja hielt ihn auf der flachen Hand. Stern kam so nah heran, dass seine Nasenspitze den Knopf fast berührte.',
+    '„Was wäre, wenn er sich etwas wünschen könnte?“, fragte Stern. „Vielleicht möchte er mal ans Meer“, sagte Maja. Stern schob das kleine Stoffbeutelchen an, das neben der Dose lag. „Der Beutel könnte sein Reisegepäck sein.“',
+    'Maja nahm den Stoff und drehte ihn in der Hand. „Oder der Knopf wird selbst das Meer.“ Sie malte kleine Fische auf den Beutel und nähte den blauen Knopf mitten hinein. Stern steuerte mit einem Bleistiftstrich eine winzige Insel bei.',
+    'Als die beiden fertig waren, packte Maja einen Stein vom Gartenweg in den Beutel. Stern diktierte einen Satz für den ersten Zettel: „Heute hat ein Knopf ein Meer gefunden.“ Den Zettel legten sie zum Stein. Für die nächste Geschichte war noch viel Platz.'
+   ]
+  },
+  {
+   id:'mitternachtsparty',title:'Die Mitternachtsparty mit dem Flüsterdrachen',
+   teaser:'Maja, Bärli und Stern feiern in der Deckenhöhle. Luca kommt als kleiner Drache dazu.',
+   alt:'Maja mit langem rotblondem Haar feiert mit Bärli, Stern und Luca im grünen Drachenkostüm in einer beleuchteten Deckenhöhle.',
+   paragraphs:[
+    'Kurz vor Mitternacht kroch Maja in die Deckenhöhle im Wohnzimmer. Ihre langen rotblonden Haare rutschten ihr über die Schulter, als sie den silbernen Papiermond an der Decke befestigte. Bärli hatte eine Krone gefaltet. Stern legte für jeden ein Apfelstück auf den Teller.',
+    'Da schob sich eine grüne Schnauze durch den Eingang. Darunter grinste Luca. Er trug sein Drachenkostüm mit den gelben Zacken und dem weichen Schwanz. „Raa!“, rief er. Maja legte einen Finger an die Lippen. „Kannst du auch ganz leise brüllen?“ Luca probierte es. Sein „Raa“ klang jetzt so leise, dass Bärli sich dicht zu ihm beugen musste.',
+    'Als die Uhr zwölf zeigte, rutschte der Papiermond vom Deckendach. Bevor er auf den Apfelteller fallen konnte, fing Stern ihn mit beiden Vorderpfoten auf. „Unser Mond braucht einen Drachen, der auf ihn aufpasst“, sagte Maja. Bärli setzte Luca die Papierkrone auf. Luca stellte sich kerzengerade hin und flüsterte sein stolzestes „Raa“.',
+    'Dann teilten die vier die Apfelstücke. Stern erzählte von einem Drachen, der mit einem Flüstern einen ganzen Himmel voller Sterne wecken konnte. Luca wollte wissen, wie die Geschichte ausging. Doch noch bevor Stern den letzten Satz gesagt hatte, war der kleine Drache auf seinem Kissen eingeschlafen.'
+   ]
+  }
+ ];
+
+ const adventureLink=adventure=>'#stern/'+adventure.id;
+ const adventureImage=adventure=>'./stern/'+adventure.id+'.webp';
+ const paragraphsHtml=paragraphs=>paragraphs.map(paragraph=>`<p>${escapeHtml(paragraph)}</p>`).join('');
+
+ function narrationControls(){
+  return `<div class="actions stern-audio">
+   <button class="primary" type="button" id="stern-play">${icon('audio')} Vorlesen</button>
+   <button class="secondary" type="button" id="stern-stop" disabled>Stopp</button>
+   <label for="stern-tempo">Tempo <select id="stern-tempo"><option value="1">Normal</option><option value="0.8">Langsam</option></select></label>
+  </div><p class="inline-status" id="stern-audio-status" role="status"></p>`;
+ }
+
+ function adventureShelf(){
+  return `<section class="stern-panel" aria-labelledby="stern-adventures-title">
+   <h2 id="stern-adventures-title">Geschichten mit Maja und Stern</h2>
+   <ul class="stern-shelf">${adventures.map(adventure=>`<li><a href="${adventureLink(adventure)}">
+    <img src="${adventureImage(adventure)}" alt="" width="960" height="640" loading="lazy">
+    <span><strong>${escapeHtml(adventure.title)}</strong><small>${escapeHtml(adventure.teaser)}</small></span>
+   </a></li>`).join('')}</ul>
+  </section>`;
+ }
+
+ function showAdventure(index){
+  const adventure=adventures[index];
+  const previous=adventures[index-1],next=adventures[index+1];
+  app.innerHTML=`<div class="route stern-route stern-reading">
+   <a class="secondary stern-back" href="#stern">${icon('back')} Zu Sterns Geschichten</a>
+   <article class="panel stern-panel">
+    <h1 tabindex="-1">${escapeHtml(adventure.title)}</h1>
+    <img class="stern-scene" src="${adventureImage(adventure)}" alt="${escapeHtml(adventure.alt)}" width="960" height="640">
+    ${narrationControls()}
+    <div class="stern-story-text">${paragraphsHtml(adventure.paragraphs)}</div>
+   </article>
+   <nav class="actions" aria-label="Weitere Geschichten mit Stern">
+    ${previous?`<a class="secondary" href="${adventureLink(previous)}">Vorherige Geschichte</a>`:''}
+    ${next?`<a class="secondary" href="${adventureLink(next)}">Nächste Geschichte</a>`:''}
+   </nav>
+  </div>`;
+  bindNarration(adventure.paragraphs);
+ }
+
  const ideas=[
   {
    id:'stern-schluessel',title:'Der Schlüssel ohne Tür',who:'Maja und Stern',where:'Im Baumhaus',what:'Ein winziger goldener Schlüssel',
@@ -51,7 +139,9 @@
   };
  }
 
- function show(){
+ function show(id){
+  const adventureIndex=adventures.findIndex(adventure=>adventure.id===id);
+  if(adventureIndex!==-1){showAdventure(adventureIndex);return;}
   const saved=ideas.filter(({id})=>{
    const draft=learning.writing[id];
    return draft&&(draft.plan||draft.draft||draft.revised);
@@ -63,15 +153,11 @@
      <h1 tabindex="-1">Sterns Geschichten<wbr>werkstatt</h1></div>
     <p class="stern-intro">„Hallo, ich bin Stern! Wenn ich etwas Seltsames entdecke, frage ich mich: Was wäre, wenn? So fängt bei mir eine Geschichte an.“</p>
    </header>
+   ${adventureShelf()}
    <section class="panel stern-panel" aria-labelledby="stern-story-title">
     <h2 id="stern-story-title">${escapeHtml(storyTitle)}</h2>
-    <div class="actions stern-audio">
-     <button class="primary" type="button" id="stern-play">${icon('audio')} Vorlesen</button>
-     <button class="secondary" type="button" id="stern-stop" disabled>Stopp</button>
-     <label for="stern-tempo">Tempo <select id="stern-tempo"><option value="1">Normal</option><option value="0.8">Langsam</option></select></label>
-    </div>
-    <p class="inline-status" id="stern-audio-status" role="status"></p>
-    <details><summary>Geschichte lesen</summary>${story.map(paragraph=>`<p>${escapeHtml(paragraph)}</p>`).join('')}</details>
+    ${narrationControls()}
+    <details><summary>Geschichte lesen</summary>${paragraphsHtml(story)}</details>
    </section>
    ${saved.length?`<section class="panel stern-panel"><h2>Meine Geschichten</h2><ul class="stern-drafts">${saved.map(idea=>`<li><a href="${writingLink(idea)}">${escapeHtml(idea.title)} weiterbearbeiten</a></li>`).join('')}</ul></section>`:''}
    <section class="panel stern-panel" aria-labelledby="stern-ideas-title">
@@ -105,7 +191,10 @@
    index=(index+1)%ideas.length;
    updateIdea();
   };
+  bindNarration(story);
+ }
 
+ function bindNarration(paragraphs){
   const player=window.speechSynthesis;
   const play=app.querySelector('#stern-play');
   const stop=app.querySelector('#stern-stop');
@@ -131,7 +220,7 @@
   };
   play.onclick=()=>{
    if(!player?.speak||!window.SpeechSynthesisUtterance){
-    status.textContent='Hier ist keine Vorlesestimme verfügbar. Öffne „Geschichte lesen“.';
+    status.textContent='Hier ist keine Vorlesestimme verfügbar. Du kannst die Geschichte auf dieser Seite lesen.';
     return;
    }
    quiet();
@@ -142,7 +231,7 @@
    play.innerHTML=icon('audio')+' Noch mal vorlesen';
    status.textContent='Die Gerätestimme liest vor.';
    function readParagraph(index){
-    const speech=new window.SpeechSynthesisUtterance(story[index]);
+    const speech=new window.SpeechSynthesisUtterance(paragraphs[index]);
     speech.lang='de-DE';
     speech.rate=rate;
     if(voice)speech.voice=voice;
@@ -154,11 +243,11 @@
     }
     speech.onend=()=>{
      if(utterance!==speech)return;
-     if(index+1<story.length)readParagraph(index+1);
+     if(index+1<paragraphs.length)readParagraph(index+1);
      else finished('Die Geschichte ist zu Ende.');
     };
     speech.onerror=()=>{
-     if(utterance===speech)finished('Die Vorlesestimme ist gerade nicht verfügbar. Öffne „Geschichte lesen“.');
+     if(utterance===speech)finished('Die Vorlesestimme ist gerade nicht verfügbar. Du kannst die Geschichte auf dieser Seite lesen.');
     };
     try{player.speak(speech);}catch{speech.onerror();}
    }

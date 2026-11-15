@@ -4,6 +4,12 @@
 
 > **Wichtig:** Diese Datei ist die Übergabestelle zwischen ChatGPT, GitHub Copilot und anderen KI-Assistenten. Aussagen über "fertig" beziehen sich auf gespeicherten Code, **nicht automatisch** auf browsergetestete oder öffentlich ausgerollte Funktion. Ein neuer Bearbeiter überprüft immer den aktuellen HEAD.
 
+### Vier bebilderte Geschichten mit Maja und Stern (15.11.2026)
+
+- Sterns Geschichtenwerkstatt zeigt vier neue Aquarellbilder mit eigenen Lese- und Vorleseseiten. „Der Brief im Wind“, „Die Pfütze mit dem Mond“, „Der Knopf, der sich etwas wünschte“ und „Die Mitternachtsparty mit dem Flüsterdrachen“ haben eigene Direktlinks unter `#stern/`. Die Bildeinstiege verlinken jeweils auf die passende Erzählung.
+- Der bestehende Vorleseablauf wird verwendet. Er endet beim Seitenwechsel. Die vier Illustrationen sind als WebP im Offline-Cache v18 enthalten. Browserprüfungen decken Bildauflösung, Vor- und Zurücknavigation, Offline-Aufruf und die Nutzung auf schmalen Displays ab.
+- Ausgangsstand: `04b19f7`. Der Commit zu diesem Eintrag enthält Geschichten, Illustrationen und Tests.
+
 ### Sterns Geschichtenwerkstatt (15.11.2026)
 
 - Stern ist Majas und Bärlis Freund. Seine Geschichtenwerkstatt `#stern` ist von Start- und Schreibwerkstatt aus erreichbar. Seine aquarellartige Kinderbuchillustration ist als `stern/stern.webp` hinterlegt. Die Vorlagen waren Fotos des Kuschellamms. Die Seiten des geöffneten Buchs sind Stern zugewandt.

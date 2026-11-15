@@ -76,3 +76,38 @@
  .stern-story-idea dl{grid-template-columns:1fr;gap:5px}
  .stern-story-idea dl div{display:grid;grid-template-columns:3.25rem minmax(0,1fr);gap:5px}
 }
+
+.stern-shelf{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+ margin:0;
+ padding:0;
+ list-style:none;
+}
+.stern-shelf a{
+ display:block;
+ height:100%;
+ overflow:hidden;
+ border:1px solid #bda7c4;
+ border-radius:14px;
+ background:#f5edf6;
+ color:#403049;
+ text-decoration:none;
+}
+.stern-shelf a:hover{background:#ecdef1}
+.stern-shelf img,.stern-scene{display:block;width:100%;height:auto}
+.stern-shelf span{display:block;padding:11px 12px}
+.stern-shelf strong,.stern-shelf small{display:block}
+.stern-shelf small{margin-top:4px;color:#54475b}
+.stern-back{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px}
+.stern-reading h1{margin:0 0 12px;font-size:clamp(1.5rem,5.5vw,2.4rem);overflow-wrap:anywhere}
+.stern-scene{border-radius:13px}
+.stern-story-text{max-width:65ch;margin-top:18px;line-height:1.7}
+.stern-story-text p:last-child{margin-bottom:0}
+@media(max-width:600px){
+ .stern-shelf{grid-template-columns:1fr;gap:8px}
+ .stern-shelf a{display:grid;grid-template-columns:minmax(80px,27%) minmax(0,1fr);align-items:center}
+ .stern-shelf span{padding:8px 10px}
+ .stern-shelf small{font-size:.82rem}
+}

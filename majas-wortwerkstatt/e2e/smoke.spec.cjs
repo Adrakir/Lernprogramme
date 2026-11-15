@@ -143,7 +143,7 @@ test('Offline-Update erhält fremden Cache, Lernstand, Kauf und Prüfungsaufnahm
   });
   await load(page);
   await expect.poll(()=>page.evaluate(()=>Boolean(navigator.serviceWorker.controller))).toBeTruthy();
-  expect(await page.evaluate(()=>caches.keys())).toEqual(expect.arrayContaining(['andere-lernapp','majas-wortwerkstatt-v17']));
+  expect(await page.evaluate(()=>caches.keys())).toEqual(expect.arrayContaining(['andere-lernapp','majas-wortwerkstatt-v18']));
   expect(await page.evaluate(()=>caches.keys())).not.toContain('majas-wortwerkstatt-v14');
   await context.setOffline(true);
   await load(page,'pruefung/hoeren/test/1');
@@ -161,6 +161,9 @@ test('Offline-Update erhält fremden Cache, Lernstand, Kauf und Prüfungsaufnahm
   await expect.poll(()=>page.locator('.stern-hero img').evaluate(image=>image.naturalWidth)).toBe(768);
   await page.getByRole('button',{name:'Nächste Idee'}).click();
   await expect(page.locator('#stern-idea h3')).toHaveText('Der fliegende Regenschirm');
+  await page.getByRole('link',{name:/Die Pfütze mit dem Mond/}).click();
+  await expect(page.locator('h1')).toHaveText('Die Pfütze mit dem Mond');
+  await expect.poll(()=>page.locator('.stern-scene').evaluate(image=>image.naturalWidth)).toBe(960);
 });
 
 test('Sterns Figurenbild, Geschichte und Ideen gehen in die vorhandene Schreibwerkstatt über',async ({page})=>{
@@ -214,4 +217,28 @@ test('Sterns Gerätestimme erhält Deutsch und Tempo und stoppt beim Verlassen',
   await page.getByRole('link',{name:'Zur Schreibwerkstatt'}).click();
   await expect.poll(()=>page.evaluate(()=>window.sternAudio.speech===null)).toBeTruthy();
   expect(await page.evaluate(()=>window.sternAudio.cancels)).toBeGreaterThan(before);
+});
+
+test('Vier Geschichten mit Maja und Stern haben eigene Bilder und lassen sich durchblättern',async({page})=>{
+  await load(page,'stern');
+  const shelf=page.locator('.stern-shelf');
+  await expect(shelf.getByRole('link')).toHaveCount(4);
+  await shelf.getByRole('link',{name:/Der Brief im Wind/}).click();
+  const titles=['Der Brief im Wind','Die Pfütze mit dem Mond','Der Knopf, der sich etwas wünschte','Die Mitternachtsparty mit dem Flüsterdrachen'];
+  const scenes=['regenbrief','mondpfuetze','wunschknopf','mitternachtsparty'];
+  for(const [index,title] of titles.entries()){
+    await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();
+    await expect(page.locator('.stern-story-text p')).toHaveCount(4);
+    await expect(page.locator('.stern-scene')).toHaveAttribute('src','./stern/'+scenes[index]+'.webp');
+    await expect.poll(()=>page.locator('.stern-scene').evaluate(image=>image.naturalWidth)).toBe(960);
+    await expect(page.getByRole('button',{name:'Vorlesen',exact:true})).toBeVisible();
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width+1);
+    if(index<titles.length-1)await page.getByRole('link',{name:'Nächste Geschichte'}).click();
+  }
+  await expect(page.locator('.stern-story-text')).toContainText('Luca');
+  await expect(page.locator('.stern-story-text')).toContainText('Drachenkostüm');
+  await page.getByRole('link',{name:'Vorherige Geschichte'}).click();
+  await expect(page).toHaveURL(/#stern\/wunschknopf$/);
+  await page.getByRole('link',{name:'Zu Sterns Geschichten'}).click();
+  await expect(shelf.getByRole('link')).toHaveCount(4);
 });
