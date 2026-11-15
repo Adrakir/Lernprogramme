@@ -59,21 +59,33 @@
       'Multipliziere die Punkte des Hundes für dieses Merkmal mit dessen Gewicht.'],
   };
 
-  function familyToday({exams, stations}) {
-    const [recommendation] = recommendations(exams).practice;
+  function familyToday({exams, stations}, guided) {
+    const practiced = guided?.practice;
+    const independent = practiced?.total > 0 && practiced.independent === practiced.total;
+    const practicedRoute = guided?.track === 'tiere' ? '#schulstoff/gebiss' : '#klassenarbeit';
+    const nextGuidedRoute = guided?.track === 'tiere' ? '#schulstoff/pfote' : '#schulstoff/bewegung';
+    const revisited = independent && timestamp(practiced.at) >= timestamp(exams.last?.at);
+    const [recommendation] = recommendations(exams).practice.filter(([,href]) =>
+      !revisited || href !== practicedRoute);
     const station = stations.filter(item => item.started && item.done < item.total)
+      .filter(item => !revisited || '#schulstoff/' + item.id !== practicedRoute)
       .sort((a,b) => timestamp(b.at) - timestamp(a.at))[0];
     const stationRoute = station ? '#schulstoff/' + station.id : '';
-    const suggested = recommendation?.[1] || stationRoute;
+    const suggested = recommendation?.[1] || stationRoute ||
+      (revisited ? nextGuidedRoute : guided ? practicedRoute : '');
     const href = Object.hasOwn(familyActivities, suggested) ? suggested : '#klassenarbeit';
     const [title, plan, question, answer] = familyActivities[href];
     const reason = recommendation && href === suggested
       ? 'In der letzten Probearbeit ist zu diesem Thema noch etwas offen.'
       : station && href === stationRoute ? 'Diese Station wurde bereits begonnen.'
-        : 'Ein kurzer Einstieg, den ihr gemeinsam ausprobieren könnt.';
+        : revisited ? 'Hier könnt ihr nach der Beschriftungsrunde weiterüben.'
+          : guided ? 'Diese Übung passt zum ausgewählten Lernweg.'
+            : 'Ein kurzer Einstieg, den ihr gemeinsam ausprobieren könnt.';
     const action = href === stationRoute ? href + '/aufgabe-' + (station.nextTask + 1) : href;
     return `<section class="bl-today" aria-labelledby="bl-today-title">
       <h4 id="bl-today-title">Was üben wir heute?</h4>
+      ${guided ? `<p>Lernweg „${guided.title}“ · ${guided.done} von 3 Schritten erledigt</p>` : ''}
+      ${revisited ? '<p>Die letzte Beschriftungsrunde in diesem Lernweg gelang beim ersten Versuch ohne Tipp.</p>' : ''}
       <p><strong>Ca. 10 Minuten · ${title}</strong></p><p>${reason} ${plan}</p>
       <p><strong>Frage für zu Hause</strong> ${question}</p>
       <details><summary>Antwort zum Vergleichen</summary><p>${answer}</p></details>
@@ -114,7 +126,7 @@
     </section>`;
   }
 
-  function render(view) {
+  function render(view, guided) {
     const data = read();
     const {exams, stations} = data;
     const rows = [
@@ -142,10 +154,10 @@
     return '<section class="bl-progress" aria-label="Lernstand aus Stationen und Probearbeiten"><h3>' +
       (family ? 'Lernübersicht für zu Hause' : 'Stationen, Bildaufgaben und Probearbeiten') +
       '</h3><p>Die Übersicht zeigt Bearbeitungen im aktiven Profil auf diesem Gerät. Freie Erklärungen werden im Selbstvergleich geprüft.</p>' +
-      (family ? familyToday(data) : '') +
+      (family ? familyToday(data, guided) : '') +
       (family ? '<h4>Das klappt schon</h4><p>' + (strong.length ? escape(strong.join(', ')) :
         rows.length ? 'Schaut euch gemeinsam eine bearbeitete Aufgabe an.' : 'Sobald Aufgaben bearbeitet sind, erscheinen sie hier.') +
-        '</p>' + (practice.length ? '<h4>Das üben wir als Nächstes</h4><p>' + escape(practice.map(([topic]) => topic).join(', ')) + '</p>' : '') : '') +
+        '</p>' + (practice.length ? '<h4>Übungshinweise aus der letzten Probearbeit</h4><p>' + escape(practice.map(([topic]) => topic).join(', ')) + '</p>' : '') : '') +
       '<p><a href="' + url + '">' + escape(label) + ' →</a></p>' + filter +
       (rows.length ? '<h4>' + (family?'Zuletzt bearbeitet':'Bearbeitete Inhalte') + '</h4><ul>' + rows.map(r =>
         '<li data-bl-result-topic="' + r.kind + '"><a href="' + r.url + '">' + escape(r.label) + '</a> · ' +

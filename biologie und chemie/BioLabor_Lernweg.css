@@ -126,3 +126,9 @@ body.dark #content .ls-tabs button[aria-pressed="false"] { background:#203a34; c
 .bl-transfer input[type="file"] { max-inline-size:100%; }
 .bl-transfer { border-top:1px solid currentColor; margin-top:16px; padding-top:8px; }
 .bl-transfer label { margin-top:10px; }
+
+.bl-path-total { font-weight:750; }
+.bl-step-state { display:inline-block; border:1px solid var(--line); border-radius:8px; padding:2px 8px; font-weight:750; }
+.bl-step-state[data-state="started"] { background:var(--blue); color:var(--ink); }
+.bl-step-state[data-state="done"] { background:var(--mint); color:var(--deep); }
+.bl-path-context button { min-height:44px; white-space:normal; }
