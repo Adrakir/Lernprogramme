@@ -362,7 +362,7 @@
     });
   }
 
-  function mountExam(outer, section, setRoute, archiveVersion, archiveAttempt) {
+  function mountExam(outer, section, setRoute, archiveVersion, archiveAttempt, getPathTrack) {
     const root = document.createElement('div');
     outer.replaceChildren(root);
     let screen = section || 'start';
@@ -497,11 +497,19 @@
       switch (control.dataset.bpAction) {
         case 'start':
           if (active?.phase === 'work' && !window.confirm('Eine Arbeit ist noch offen. Möchtest du den Entwurf durch eine neue Arbeit ersetzen?')) return;
-          stored.exam = {version: value, index: 0, answers: {}, reviews: {}, phase: 'work'};
+          stored.exam = {version: value, index: 0, answers: {}, reviews: {}, phase: 'work', pathTrack:getPathTrack?.()};
           save();
           open('arbeit');
           break;
-        case 'resume': open(active.phase === 'work' ? 'arbeit' : 'auswertung'); break;
+        case 'resume': {
+          const track = getPathTrack?.();
+          if (active.phase === 'work' && !active.pathTrack && track) {
+            active.pathTrack = track;
+            save();
+          }
+          open(active.phase === 'work' ? 'arbeit' : 'auswertung');
+          break;
+        }
         case 'home':
         case 'pause': open('start'); break;
         case 'jump':
@@ -527,6 +535,7 @@
             stored.previousAttempts ||= {};
             (stored.previousAttempts[active.version] ||= []).push(previous);
           }
+          if (!active.pathTrack) active.pathTrack = getPathTrack?.();
           active.at = new Date().toISOString();
           active.phase = 'results';
           (stored.completed ||= {})[active.version] = active;
@@ -788,5 +797,16 @@
     return {at:entry.at, url, topics, explanations:[...new Set(explanations)]};
   }
 
-  window.BioLaborProbetest = {mountExam, mountObservation, progress, comparisonReport};
+  function pathProgress() {
+    const tracks = ['tiere','bewegung'];
+    const result = {};
+    const draft = stored.exam;
+    if (draft?.phase === 'work' && tracks.includes(draft.pathTrack)) result[draft.pathTrack] = 'started';
+    examHistory().forEach(({entry}) => {
+      if (tracks.includes(entry.pathTrack)) result[entry.pathTrack] = 'done';
+    });
+    return result;
+  }
+
+  window.BioLaborProbetest = {mountExam, mountObservation, progress, comparisonReport, pathProgress};
 })();

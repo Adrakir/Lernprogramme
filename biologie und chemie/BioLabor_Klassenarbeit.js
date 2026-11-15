@@ -250,7 +250,7 @@
     return {questions, answers:draft.answers.map((chosen,i) => ({question:questions[i],chosen,hint:false}))};
   }
 
-  function mount(root, {initialSpecies, initialTopic, getBest, saveBest, getDraft, saveDraft, updateRoute}) {
+  function mount(root, {initialSpecies, initialTopic, getBest, saveBest, getDraft, saveDraft, updateRoute, onPracticeCompleted}) {
     let id = speciesIds.includes(initialSpecies) ? initialSpecies : 'mensch';
     let topic = initialTopic === 'teeth' && anatomy ? 'teeth' : 'bones';
     let mode = 'discover';
@@ -521,8 +521,13 @@
       hintUsed = false;
       firstAnswer = '';
       feedback = '';
-      if (index === round.length && mode === 'test') {
-        saveBest(topic, answers.filter(a => a.chosen === a.question.correct).length);
+      if (index === round.length) {
+        if (mode === 'test') {
+          saveBest(topic, answers.filter(a => a.chosen === a.question.correct).length);
+        } else if (mode === 'practice' && round.length === pointsFor(id, topic).length) {
+          onPracticeCompleted?.(topic, id, round.length,
+            answers.filter(answer => answer.chosen === answer.question.correct && !answer.hint).length);
+        }
       }
       storeTest();
       draw('[data-bk-heading]');

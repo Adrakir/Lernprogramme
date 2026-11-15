@@ -8,6 +8,7 @@ const checkInteractive = require('./interactive.cjs');
 const checkQuality = require('./quality.cjs');
 const checkFollowup = require('./followup.cjs');
 const checkClassroom = require('./classroom.cjs');
+const checkGuidedProgress = require('./guided-progress.cjs');
 
 const browserName = process.env.BIO_BROWSER || 'chromium';
 const folder = resolve(__dirname, '../..');
@@ -164,6 +165,7 @@ async function run() {
     await checkQuality(page, home);
     await checkFollowup(page, home);
     await checkClassroom(browser, home);
+    await checkGuidedProgress(browser, home);
     assert.deepEqual(errors, []);
     console.log('BioLabor (' + browserName + '): Einstieg, Rückmeldung, Profilwechsel, Export/Import, Modelle, Druck, Probearbeiten, Wiederholung, Bildbeobachtung und Stationslinks geprüft.');
   } finally {
