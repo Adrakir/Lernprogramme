@@ -157,7 +157,7 @@
       (family ? familyToday(data, guided) : '') +
       (family ? '<h4>Das klappt schon</h4><p>' + (strong.length ? escape(strong.join(', ')) :
         rows.length ? 'Schaut euch gemeinsam eine bearbeitete Aufgabe an.' : 'Sobald Aufgaben bearbeitet sind, erscheinen sie hier.') +
-        '</p>' + (practice.length ? '<h4>Das üben wir als Nächstes</h4><p>' + escape(practice.map(([topic]) => topic).join(', ')) + '</p>' : '') : '') +
+        '</p>' + (practice.length ? '<h4>Übungshinweise aus der letzten Probearbeit</h4><p>' + escape(practice.map(([topic]) => topic).join(', ')) + '</p>' : '') : '') +
       '<p><a href="' + url + '">' + escape(label) + ' →</a></p>' + filter +
       (rows.length ? '<h4>' + (family?'Zuletzt bearbeitet':'Bearbeitete Inhalte') + '</h4><ul>' + rows.map(r =>
         '<li data-bl-result-topic="' + r.kind + '"><a href="' + r.url + '">' + escape(r.label) + '</a> · ' +

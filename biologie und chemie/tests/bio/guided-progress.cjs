@@ -18,9 +18,14 @@ module.exports = async function checkGuidedProgress(browser, home) {
     assert.equal(await status(0),'Begonnen');
     assert.equal(await status(1),'Noch offen');
     assert.equal(await status(2),'Noch offen');
-    await page.getByRole('link',{name:'Skelett und Bewegung',exact:true}).click();
+    const movement = page.getByRole('link',{name:'Skelett und Bewegung',exact:true});
+    const animals = page.getByRole('link',{name:'Hund und Katze',exact:true});
+    const active = page.locator('a[aria-current="page"]');
+    await movement.click();
+    await movement.and(active).waitFor();
     assert.equal(await status(0),'Noch offen');
-    await page.getByRole('link',{name:'Hund und Katze',exact:true}).click();
+    await animals.click();
+    await animals.and(active).waitFor();
     assert.equal(await status(0),'Begonnen');
 
     await step(0).getByRole('link',{name:'Gebisse verstehen',exact:true}).click();
@@ -80,7 +85,8 @@ module.exports = async function checkGuidedProgress(browser, home) {
     assert.equal(await status(2),'Erledigt');
     await page.reload();
     assert.match(await page.locator('.bl-path-total').innerText(),/3 von 3/);
-    await page.getByRole('link',{name:'Skelett und Bewegung',exact:true}).click();
+    await movement.click();
+    await movement.and(active).waitFor();
     assert.equal(await status(2),'Noch offen');
     assert.deepEqual(errors,[]);
   } finally {
