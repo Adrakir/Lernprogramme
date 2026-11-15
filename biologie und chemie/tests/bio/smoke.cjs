@@ -6,6 +6,7 @@ const {join, resolve, sep, extname} = require('node:path');
 const {chromium, firefox, webkit} = require('playwright');
 const checkInteractive = require('./interactive.cjs');
 const checkQuality = require('./quality.cjs');
+const checkFollowup = require('./followup.cjs');
 
 const browserName = process.env.BIO_BROWSER || 'chromium';
 const folder = resolve(__dirname, '../..');
@@ -160,6 +161,7 @@ async function run() {
     }
     await checkInteractive(page, home, {capture: browserName === 'chromium' && Boolean(process.env.BIO_CAPTURE)});
     await checkQuality(page, home);
+    await checkFollowup(page, home);
     assert.deepEqual(errors, []);
     console.log('BioLabor (' + browserName + '): Einstieg, Rückmeldung, Profilwechsel, Export/Import, Modelle, Druck, Probearbeiten, Wiederholung, Bildbeobachtung und Stationslinks geprüft.');
   } finally {

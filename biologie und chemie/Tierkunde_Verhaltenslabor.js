@@ -90,7 +90,7 @@
     hunt: 'Die Katze schleicht niedrig vorwärts. Der Hund senkt den Kopf, um zu wittern.',
     play: 'Der Hund senkt den Vorderkörper. Die Katze bewegt eine Vorderpfote zum Spielzeug.',
   };
-  const state = {scene: 'greet', answer: null, markers: true, paused: false, large: false};
+  const state = {scene: 'greet', answers: {}, markers: true, paused: false, large: false};
 
   function figure(animal, scene, markers = state.markers, revealScene = true) {
     const cat = animal === 'cat';
@@ -231,6 +231,7 @@
     const root = document.getElementById('behavior-lab');
     if (!root) return;
     const scene = SCENES[state.scene];
+    const answer = state.answers[state.scene];
     const offset = answerOrder.indexOf(state.scene) % scene.choices.length;
     const order = scene.choices.map((_, i) => (i + offset) % scene.choices.length);
     root.classList.toggle('behavior-paused', state.paused);
@@ -253,10 +254,10 @@
     <div class="behavior-story">
       <h4>${scene.question}</h4>
       <div class="behavior-choices" role="group" aria-label="Antwort auswählen">
-        ${order.map(i => `<button type="button" data-behavior-answer="${i}" aria-pressed="${state.answer === i}">${scene.choices[i]}</button>`).join('')}
+        ${order.map(i => `<button type="button" data-behavior-answer="${i}" aria-pressed="${answer === i}">${scene.choices[i]}</button>`).join('')}
       </div>
-      ${state.answer === null ? '' : `<p class="behavior-result ${state.answer === 0 ? 'correct' : 'wrong'}" role="status">
-        <strong>${state.answer === 0 ? 'Richtig.' : 'Schau noch einmal hin.'}</strong> ${scene.explanation}</p>`}
+      ${answer === undefined ? '' : `<p class="behavior-result ${answer === 0 ? 'correct' : 'wrong'}" role="status">
+        <strong>${answer === 0 ? 'Richtig.' : 'Schau noch einmal hin.'}</strong> ${scene.explanation}</p>`}
     </div>
     <p class="behavior-source">Schematische Zeichnungen. Ein einzelnes Zeichen reicht selten aus.
       <a href="https://www.rspca.org.uk/adviceandwelfare/pets/dogs/behaviour/understanding">Quelle Hund</a> ·
@@ -281,10 +282,9 @@
       const {scene, behaviorAnswer, behaviorTool} = button.dataset;
       if (scene && scene !== state.scene) {
         state.scene = scene;
-        state.answer = null;
         render(`[data-scene="${scene}"]`);
       } else if (behaviorAnswer !== undefined) {
-        state.answer = Number(behaviorAnswer);
+        state.answers[state.scene] = Number(behaviorAnswer);
         render(`[data-behavior-answer="${behaviorAnswer}"]`);
       } else if (behaviorTool) {
         if (behaviorTool === 'markers') state.markers = !state.markers;

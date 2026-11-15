@@ -8,7 +8,7 @@ const CASES={
   origin:{title:'Ein Wolf ist noch kein Haushund',story:'Ein junger Wolf wird von Menschen aufgezogen und ist ihnen gegenüber zutraulich.',question:'Ist damit bereits eine neue Haustierart entstanden?',options:['Ja, jedes zahme Tier ist sofort domestiziert.','Ja, wenn der Wolf einen Namen bekommt.','Nein. Domestikation verändert Populationen über viele Generationen.'],correct:2,hint:'Ist „zahm“ dasselbe wie „über Generationen verändert“?',why:'Ein einzelnes Tier kann zahm werden. Domestikation betrifft dagegen Veränderungen in der Abstammungslinie über viele Generationen.',wrong:['Zahmheit eines einzelnen Tieres ist keine Domestikation.','Ein Name verändert keine Abstammungslinie.',''],observe:'Unterscheide Zähmung, Domestikation und spätere Zucht.'},
   teeth:{title:'Festhalten und Zerschneiden',story:'Ein Hund nimmt ein großes Stück tierischer Nahrung auf und trennt es in kleinere Stücke.',question:'Welches Zahn-Team erfüllt diese Aufgaben?',options:['Fangzähne halten fest, Reißzähne schneiden scherenartig.','Schneidezähne atmen, Backenzähne hören.','Alle Zähne erfüllen dieselbe Aufgabe.'],correct:0,hint:'Lange spitze Zähne greifen; scharfe Kanten schneiden.',why:'Fangzähne dienen unter anderem dem Packen und Festhalten. Die Reißzähne (oben P4, unten M1) schneiden mit aneinander vorbeigleitenden Kanten.',wrong:['','Zähne können weder hören noch atmen.','Zahnformen unterscheiden sich und sind an verschiedene Aufgaben angepasst.'],observe:'Schließe im Reißzahnlabor den Unterkiefer langsam und beobachte die orange markierten Kanten.'},
   hunt:{title:'Der Hund findet eine Spur',story:'Ein Hund riecht an einer Stelle, läuft einige Meter, bleibt stehen und prüft die Luft erneut.',question:'Welche Erklärung passt zu dieser Suche?',options:['Er folgt Hinweisen des Geruchssinns und überprüft seine Richtung.','Er kann Beute nur mit den Augen finden.','Alle Hunde jagen immer auf dieselbe Weise.'],correct:0,hint:'Welches Sinnesorgan nutzt der Hund besonders beim Verfolgen von Spuren?',why:'Hunde können mithilfe ihrer Nase sehr gut Geruchsspuren verfolgen. Wahrnehmung, Bewegung und Erfahrung wirken zusammen; Unterschiede zwischen Rassen und Individuen sind groß.',wrong:['','Hunde nutzen mehrere Sinne, nicht ausschließlich die Augen.','Jagd- und Suchverhalten unterscheiden sich zwischen Hunden.'],observe:'Unterscheide Beobachten, Suchen, Verfolgen und Zugreifen.'},
-  motion:{title:'Der diagonal versetzte Trab',story:'Beim Traben bewegt ein Hund oft Vorderbein links und Hinterbein rechts ungefähr gleichzeitig.',question:'Wie bezeichnet man dieses Bewegungsmuster?',options:['Beide Vorderbeine setzen immer gleichzeitig auf.','Diagonal gegenüberliegende Beine bilden ein Paar.','Alle vier Beine bleiben am Boden.'],correct:1,hint:'Vergleiche Vorderbein links mit Hinterbein rechts.',why:'Im Trab bewegen sich die diagonal gegenüberliegenden Beinpaare ungefähr gemeinsam. So kann ein Hund gleichmäßig und energiesparend laufen.',wrong:['Das beschreibt nicht den typischen Trab.','','Beim Trab gibt es bewegte Schwungphasen und je nach Geschwindigkeit kurze Flugphasen.'],observe:'Schalte im Bewegungslabor auf „Traben“ und pausiere die Animation.'},
+  motion:{title:'Der diagonal versetzte Trab',story:'Beim Traben bewegt ein Hund oft Vorderbein links und Hinterbein rechts ungefähr gleichzeitig.',question:'Welche Beschreibung passt zu diesem Bewegungsmuster?',options:['Beide Vorderbeine setzen immer gleichzeitig auf.','Diagonal gegenüberliegende Beine bilden ein Paar.','Alle vier Beine bleiben am Boden.'],correct:1,hint:'Vergleiche Vorderbein links mit Hinterbein rechts.',why:'Im Trab bewegen sich die diagonal gegenüberliegenden Beinpaare ungefähr gemeinsam. So kann ein Hund gleichmäßig und energiesparend laufen.',wrong:['Das beschreibt nicht den typischen Trab.','','Beim Trab gibt es bewegte Schwungphasen und je nach Geschwindigkeit kurze Flugphasen.'],observe:'Schalte im Bewegungslabor auf „Traben“ und pausiere die Animation.'},
   signals:{title:'Ein wedelnder Schwanz genügt nicht',story:'Ein unbekannter Hund wedelt mit dem Schwanz, steht aber steif, schaut starr und knurrt leise.',question:'Was ist die sicherste Deutung und Reaktion?',options:['Wedeln bedeutet immer Freude: sofort streicheln.','Die gesamte Körpersprache beachten und Abstand halten.','Knurren ignorieren und schnell heranlaufen.'],correct:1,hint:'Beachte Körperanspannung, Blick, Lautäußerung und Situation zusammen.',why:'Schwanzbewegungen sind allein kein sicherer Beweis für Freude. Steife Haltung und Knurren sind wichtige Warnsignale. Abstand geben und das Tier nicht bedrängen.',wrong:['Ein einzelnes Schwanzsignal reicht zur Einschätzung nicht aus.','','Knurren ist ein Warnsignal, kein Spielaufruf.'],observe:'Vergleiche in der Körpersprache-Animation „Entspannt“ und „Drohen“. Immer auch auf den Zusammenhang achten.'},
   compare:{title:'Zwei Raubtiere – zwei Gebisse',story:'Ein Hund und eine Katze gehören beide zur Ordnung der Raubtiere. Trotzdem unterscheiden sich ihre Zähne.',question:'Welche Aussage ist wissenschaftlich korrekt?',options:['Beide besitzen immer 42 bleibende Zähne.','Hunde haben normalerweise 42 und Katzen 30 bleibende Zähne.','Katzen haben 42, Hunde 30 bleibende Zähne.'],correct:1,hint:'Vergleiche die Zahnzahlen in der Gegenüberstellung.',why:'Der erwachsene Hund besitzt normalerweise 42 bleibende Zähne, die erwachsene Katze 30. Beide haben Fang- und Reißzähne, aber unterschiedlich viele Backenzähne.',wrong:['Die Zahlen unterscheiden sich bei Hund und Katze.','','Die Zahnzahlen wurden vertauscht.'],observe:'Zähle im Vergleich die bleibenden Zähne und erkläre die jeweilige Ernährungsweise.'}
  },
@@ -24,15 +24,24 @@ const CASES={
 };
 const STORAGE='biolab5-tiertransfer-202611';
 let saved={dog:{},cat:{}};
-try{const raw=localStorage.getItem(STORAGE);if(raw){const data=JSON.parse(raw);if(data&&typeof data.dog==='object'&&typeof data.cat==='object'){saved={dog:data.dog,cat:data.cat}}}}catch(e){}
-const state={animal:'dog',section:'skeleton',selected:null,showHint:false,answerChecked:false,attempts:0};
+try{
+ const data=JSON.parse(localStorage.getItem(STORAGE));
+ if(data?.dog&&data?.cat&&typeof data.dog==='object'&&typeof data.cat==='object')saved=data;
+}catch{}
+const state={animal:null,section:null,selected:null,showHint:false,answerChecked:false};
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 const $=id=>document.getElementById(id);
 function doneCount(animal){return SECTIONS.filter(k=>saved[animal]&&saved[animal][k]===true).length}
 function store(){if(window.BioLaborLernweg.acceptsAnimalWrites()===false)return;try{localStorage.setItem(STORAGE,JSON.stringify(saved))}catch(e){}}
-function illustration(section,animal){
+const draftKey=()=>state.animal+'/'+state.section;
+function saveDraft(){
+ const drafts=saved.drafts ||= {};
+ drafts[draftKey()]={selected:state.selected,showHint:state.showHint,answerChecked:state.answerChecked};
+ store();
+}
+function illustration(section,animal,title){
  const cat=animal==='cat';
- const common='<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vereinfachtes, selbst gezeichnetes Funktionsmodell: '+section+'" class="ft-picture"><defs><linearGradient id="ft-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9f7ee"/><stop offset="1" stop-color="#d8edf3"/></linearGradient></defs><rect x="1" y="1" width="638" height="218" rx="24" fill="url(#ft-bg)" stroke="#cbded5"/>';
+ const common='<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vereinfachtes, selbst gezeichnetes Funktionsmodell: '+esc(title)+'" class="ft-picture"><defs><linearGradient id="ft-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9f7ee"/><stop offset="1" stop-color="#d8edf3"/></linearGradient></defs><rect x="1" y="1" width="638" height="218" rx="24" fill="url(#ft-bg)" stroke="#cbded5"/>';
  const tag=(x,y,t)=>'<text x="'+x+'" y="'+y+'" fill="#235648" font-family="system-ui,sans-serif" font-weight="800" font-size="19" text-anchor="middle">'+t+'</text>';
  const badge=(x,y,t)=>'<rect x="'+(x-80)+'" y="'+(y-26)+'" width="160" height="50" rx="13" fill="#fff" stroke="#bad8cb"/>'+tag(x,y+6,t);
  const arrow='<path d="M0 0L16 0M9 -7L17 0L9 7" stroke="#25846b" stroke-width="4" fill="none" stroke-linecap="round"/>';
@@ -61,23 +70,32 @@ function render(){
  const c=CASES[state.animal][state.section];
  const answered=saved[state.animal][state.section]===true;
  let html='<div class="ft-heading"><div><small>NEU · PRAXIS-CHECK</small><h3>🔎 Forscherfall: '+esc(c.title)+'</h3><p>Übertrage dein Wissen auf eine neue Situation – wie in einer Klassenarbeit.</p></div><span class="ft-progress">'+doneCount(state.animal)+' / 7 geschafft</span></div>';
- html+='<div class="ft-visual">'+illustration(state.section,state.animal)+'</div>';
+ html+='<details class="ft-model"><summary>Lernzeichnung als Hilfe ansehen</summary><div class="ft-visual">'+illustration(state.section,state.animal,c.title)+'</div></details>';
  html+='<div class="ft-story"><span>📖 Beobachtung</span><p>'+esc(c.story)+'</p></div>';
  html+='<div class="ft-question"><strong>'+esc(c.question)+'</strong><div class="ft-options" role="group" aria-label="Wähle eine Lösung">'+c.options.map((opt,i)=>'<button type="button" data-ft="select" data-num="'+i+'" aria-pressed="'+(state.selected===i)+'" '+(state.answerChecked&&state.selected===i?'class="'+(i===c.correct?'ft-correct':'ft-incorrect')+'"':'')+'>'+String.fromCharCode(65+i)+'. '+esc(opt)+'</button>').join('')+'</div></div>';
- html+='<div class="ft-actions"><button type="button" data-ft="hint">💡 Denkhinweis</button><button class="ft-primary" type="button" data-ft="check" '+(state.selected===null?'disabled':'')+'>Antwort prüfen</button><button type="button" data-ft="repeat">↻ Wiederholen</button></div>';
- if(state.showHint)html+='<p class="ft-hint">💡 '+esc(c.hint)+'</p>';
+ html+='<div class="ft-actions"><button type="button" data-ft="hint" aria-controls="ft-hint" aria-expanded="'+state.showHint+'">'+(state.showHint?'Denkhinweis ausblenden':'💡 Denkhinweis')+'</button><button class="ft-primary" type="button" data-ft="check" '+(state.selected===null?'disabled':'')+'>Antwort prüfen</button><button type="button" data-ft="repeat">↻ Wiederholen</button></div>';
+ html+='<p id="ft-hint" class="ft-hint"'+(state.showHint?'':' hidden')+'>💡 '+esc(c.hint)+'</p>';
  if(state.answerChecked){
   const good=state.selected===c.correct;
-  html+='<div class="ft-result '+(good?'good':'bad')+'" role="status" aria-live="polite"><strong>'+(good?'✓ Die ausgewählte Antwort passt.':'Noch nicht richtig – schau genauer hin.')+'</strong><p>'+(good?esc(c.why):esc(c.wrong[state.selected]||c.hint))+'</p>'+(good?'<p><b>Forscherauftrag:</b> '+esc(c.observe)+'</p>':'<p>Wähle eine andere Antwort und prüfe erneut. Du kannst auch den Denkhinweis verwenden.</p>')+'</div>';
+  html+='<div class="ft-result '+(good?'good':'bad')+'" role="status" tabindex="-1"><strong>'+(good?'✓ Die ausgewählte Antwort passt.':'Noch nicht richtig – schau genauer hin.')+'</strong><p>'+(good?esc(c.why):esc(c.wrong[state.selected]||c.hint))+'</p>'+(good?'<p><b>Forscherauftrag:</b> '+esc(c.observe)+'</p>':'<p>Wähle eine andere Antwort und prüfe erneut. Du kannst auch den Denkhinweis verwenden.</p>')+'</div>';
  }
  if(answered)html+='<div class="ft-success"><strong>🏅 Diesen Forscherfall hast du gelöst.</strong><span> '+doneCount(state.animal)+' von 7 Fällen für '+(state.animal==='cat'?'Katze':'Hund')+' abgeschlossen.</span></div>';
- html+='<div class="ft-footer"><span>Die Zeichnung erklärt die Funktion vereinfacht. Für genaue Anatomie nutze den Schulstoff und die verlinkten veterinärmedizinischen Quellen.</span><button type="button" data-ft="next">Nächste Station →</button></div>';
+ html+='<div class="ft-footer"><span>Die Zeichnung erklärt die Funktion vereinfacht. Für genaue Anatomie nutze den Schulstoff und die verlinkten veterinärmedizinischen Quellen.</span><button type="button" data-ft="next">'+(state.section==='compare'?'Zum Wissenstest →':'Nächste Station →')+'</button></div>';
+ const modelOpen=root.querySelector('.ft-model')?.open;
  root.innerHTML=html;
+ if(modelOpen)root.querySelector('.ft-model').open=true;
 }
 function mount(args){
  const main=$('content');
  if(!main||!args||!CASES[args.animal]||!CASES[args.animal][args.section])return;
- if(state.animal!==args.animal||state.section!==args.section){state.animal=args.animal;state.section=args.section;state.selected=null;state.showHint=false;state.answerChecked=false;state.attempts=0}
+ if(state.animal!==args.animal||state.section!==args.section){
+  state.animal=args.animal;state.section=args.section;
+  const draft=saved.drafts?.[draftKey()];
+  const options=CASES[state.animal][state.section].options;
+  state.selected=Number.isInteger(draft?.selected)&&options[draft.selected]!==undefined?draft.selected:null;
+  state.showHint=draft?.showHint===true;
+  state.answerChecked=state.selected!==null&&draft?.answerChecked===true;
+ }
  let root=$('ft-lab');
  if(!root){root=document.createElement('section');root.id='ft-lab';root.className='ft-lab';root.setAttribute('aria-label','Forschercheck: Wissen anwenden');}
  const ref=main.querySelector('.ls-reference');
@@ -90,24 +108,27 @@ document.addEventListener('click',function(event){
  const root=$('ft-lab');
  if(!root||!root.contains(button))return;
  const action=button.dataset.ft;
- if(action==='select'){state.selected=Number(button.dataset.num);state.answerChecked=false}
- if(action==='hint')state.showHint=true;
- if(action==='repeat'){state.selected=null;state.showHint=false;state.answerChecked=false;state.attempts=0}
+ if(action==='select'){
+  const selected=Number(button.dataset.num);
+  if(selected===state.selected)return;
+  state.selected=selected;state.answerChecked=false;
+ }
+ if(action==='hint')state.showHint=!state.showHint;
+ if(action==='repeat'){state.selected=null;state.showHint=false;state.answerChecked=false;root.querySelector('.ft-model').open=false}
  if(action==='check'&&state.selected!==null){
   state.answerChecked=true;
-  state.attempts++;
-  if(state.selected===CASES[state.animal][state.section].correct){
-   saved[state.animal][state.section]=true;store();
-  }
+  if(state.selected===CASES[state.animal][state.section].correct)saved[state.animal][state.section]=true;
  }
  if(action==='next'){
   const index=SECTIONS.indexOf(state.section);
-  const next=SECTIONS[(index+1)%SECTIONS.length];
+  const next=SECTIONS[index+1]||'quiz';
   const nav=document.querySelector('#sections [data-section="'+next+'"]');
   if(nav){nav.click();return;}
  }
+ saveDraft();
  render();
- const selector=action==='select'?'[data-ft="select"][data-num="'+state.selected+'"]':'[data-ft="'+action+'"]';
+ const selector=action==='select'?'[data-ft="select"][data-num="'+state.selected+'"]'
+  :action==='check'?'.ft-result':'[data-ft="'+action+'"]';
  window.BioLaborLernweg.focus(root.querySelector(selector));
 });
 window.BioTransferLab={mount,getProgress:()=>JSON.parse(JSON.stringify(saved)),selfTest:function(){return SECTIONS.length===7&&['dog','cat'].every(a=>SECTIONS.every(s=>CASES[a]&&CASES[a][s]&&CASES[a][s].options.length===3&&Number.isInteger(CASES[a][s].correct)&&CASES[a][s].correct>=0&&CASES[a][s].correct<3))}};

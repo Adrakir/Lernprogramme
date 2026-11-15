@@ -25,15 +25,17 @@ function teeth(upper){
   return tooth(jawX(x),upper?165:278,width*1.15,height,kind,upper,carnassial);
  }).join('');
 }
+function jawTransform(){
+ return 'rotate('+(-(1-state.value/100)*16)+' 635 234)';
+}
 function picture(){
- const rad=-(1-state.value/100)*16;
  const [,x,w]=jawData().upper.find(([code])=>code==='r');
  const marker=jawX(x)+w*.5;
  return bg+'<rect x="0" y="0" width="790" height="370" rx="16" fill="#f6faf7"/><rect width="790" height="370" rx="16" fill="url(#jaw-grid)"/>'+
  '<g><path d="M148 114Q150 100 201 100L572 106Q620 110 655 162L655 206Q628 221 583 198L164 189Q141 185 148 114Z" fill="url(#jaw-bone)" stroke="#9c805b" stroke-width="5"/>'+
  '<path d="M171 116Q352 103 556 116" stroke="#fff5e1" stroke-width="9" stroke-linecap="round" fill="none"/>'+
  teeth(true)+'</g>'+
- '<g id="jaw-movable" transform="rotate('+rad+' 635 234)">'+
+ '<g id="jaw-movable" transform="'+jawTransform()+'">'+
  '<path d="M147 260Q157 246 192 248L574 248Q604 249 635 234L642 264Q622 301 571 317L204 321Q152 316 147 260Z" fill="url(#jaw-bone)" stroke="#9c805b" stroke-width="5"/>'+
  '<path d="M184 305Q375 312 558 300" stroke="#f5e1bd" stroke-width="11" fill="none" stroke-linecap="round"/>'+teeth(false)+'</g>'+
  '<circle cx="635" cy="234" r="11" fill="#e1c292" stroke="#94774c" stroke-width="4"/>'+
@@ -52,13 +54,16 @@ function explanation(){
  if(e)e.innerHTML='<strong>'+groups[state.group].name+'</strong><p>'+groups[state.group].hint+'</p>'+
  (state.group==='carnassial'?'<p>🦴 Das obere Reißzahnblatt ist ein vorderer Backenzahn. Das untere ist ein hinterer Backenzahn. Sie gleiten gegeneinander – sie mahlen nicht flächig wie die Backenzähne eines Pflanzenfressers.</p>':'');
 }
-function redraw(){
- const svg=id('jaw-drawing');
- if(svg)svg.innerHTML=picture();
+function redraw(rebuild=false){
+ if(rebuild)id('jaw-drawing').innerHTML=picture();
+ else id('jaw-movable').setAttribute('transform',jawTransform());
  const position=state.value<20?'Maul weit geöffnet':state.value<100?'Maul teilweise geöffnet':'Maul geschlossen';
  const meter=id('jaw-percent');
- if(meter)meter.textContent=position;
+ if(meter&&meter.textContent!==position)meter.textContent=position;
  const range=id('jaw-range');
+ const percentage=state.value+' % geschlossen';
+ const value=id('jaw-value');
+ if(value&&value.textContent!==percentage)value.textContent=percentage;
  if(range){
   range.value=state.value;
   range.setAttribute('aria-valuetext',position+', '+state.value+' Prozent geschlossen');
@@ -89,19 +94,19 @@ function mount(args){
  const box=d.createElement('section');box.id='jaw-labor';box.className='jaw-labor';
  box.innerHTML='<div class="jaw-head"><div><small>🦷 ZAHNFORSCHER-LABOR</small><h3>Wie schneiden Reißzähne?</h3><p>Öffne und schließe den Unterkiefer. Beobachte die beiden orangefarbenen, scharfkantigen Backenzähne.</p></div><div class="jaw-formula">'+(state.animal==='cat'?'30':'42')+'<small>bleibende Zähne</small></div></div>'+
  '<svg id="jaw-drawing" viewBox="0 0 790 370" role="img" aria-label="Animierte, schematische Kiefer von '+(state.animal==='cat'?'Katze':'Hund')+' mit hervorgehobenen Reißzähnen"></svg>'+
- '<div class="jaw-toolbar"><button id="jaw-play" type="button" aria-pressed="false">▶ Kiefer bewegen</button><button id="jaw-reset" type="button">↻ Neu starten</button><label for="jaw-range">Maul öffnen/schließen</label><input id="jaw-range" type="range" min="0" max="100" value="35" aria-label="Kieferwinkel steuern"/><output id="jaw-percent">Kiefer schließt</output></div>'+
+ '<div class="jaw-toolbar"><button id="jaw-play" type="button" aria-pressed="false">▶ Kiefer bewegen</button><button id="jaw-reset" type="button">↻ Neu starten</button><label for="jaw-range">Maul öffnen/schließen <span id="jaw-value">35 % geschlossen</span></label><input id="jaw-range" type="range" min="0" max="100" value="35" aria-label="Kieferwinkel steuern"/><output id="jaw-percent">Kiefer schließt</output></div>'+
  '<div class="jaw-select" role="group" aria-label="Zahnart untersuchen">'+Object.entries(groups).map(([k,v])=>'<button type="button" data-jaw="'+k+'" aria-pressed="'+(k===state.group)+'">'+v.name+'</button>').join('')+'</div>'+
  '<div class="jaw-explain" id="jaw-explain"></div>'+
- '<p class="jaw-safety">Du siehst eine Seite des Gebisses. Die Zahl oben zählt beide Seiten zusammen. Die Zahnformen und die Bewegung sind vereinfacht. <a href="https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals" target="_blank" rel="noopener noreferrer">Merck Veterinary Manual – Zahnanatomie</a>.</p>';
+ '<p class="jaw-safety">Du siehst eine Seite des Gebisses. Oben sind '+jawData().upper.length+' Zähne, unten '+jawData().lower.length+'. Verdopple die Summe für beide Seiten. Die Zahnformen und die Bewegung sind vereinfacht. <a href="https://www.merckvetmanual.com/digestive-system/dental-development-and-anatomy/dentition-and-dental-nomenclature-of-animals" target="_blank" rel="noopener noreferrer">Merck Veterinary Manual – Zahnanatomie</a>.</p>';
  parent.insertBefore(box,ref||null);
  box.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
  if(b.id==='jaw-play')play(!state.play);
  if(b.id==='jaw-reset'){play(false);state.value=35;redraw()}
- if(b.dataset.jaw){state.group=b.dataset.jaw;box.querySelectorAll('[data-jaw]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.jaw===state.group)));explanation();redraw()}
+ if(b.dataset.jaw){state.group=b.dataset.jaw;box.querySelectorAll('[data-jaw]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.jaw===state.group)));explanation();redraw(true)}
  });
  box.addEventListener('input',e=>{if(e.target.id==='jaw-range'){play(false);state.value=Number(e.target.value);redraw()}});
- redraw();explanation();
+ redraw(true);explanation();
 }
 window.BioDentalLab={mount,stop,render:picture,getState:()=>({animal:state.animal,value:state.value,group:state.group,play:state.play})};
 const init=window.BioLaborLernweg.animalRoute();
