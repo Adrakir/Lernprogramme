@@ -235,3 +235,58 @@ const pruefungen = [
     ["geschichte", einzeln("Stern erklärt seine Auswahl für das Picknick. Welche Begründung passt?", ["Ich nehme Limo, weil sie zur grünen Basis gehört.", "Ich nehme Wasser mit, weil ich nach dem Spielen durstig sein kann.", "Ich lege die Gurke zu den Milchprodukten, weil sie Wasser enthält."], 1, "Wasser ist ein passender Durstlöscher für die Spielpause.")],
   ]},
 ];
+
+const nachfragen = {
+  fit: [
+    einzeln("Maja springt draußen Seil. Was gehört zu einer guten Pause?", ["Weiter springen und nichts trinken", "Sich kurz hinsetzen und Wasser trinken", "Erst zu Hause am Abend etwas trinken"], 1, "Eine kurze Erholungspause und Wasser unterstützen Maja beim Spielen."),
+    einzeln("Was packt Stern für einen bewegten Nachmittag ein?", ["Wasser und einen abwechslungsreichen Snack", "Nur eine leere Trinkflasche", "Zwei Spielsachen und nichts zu trinken"], 0, "Wasser hilft gegen Durst. Ein Snack kann später Energie liefern."),
+  ],
+  labor: [
+    einzeln("Was braucht Bärlis Körper auch im Schlaf?", ["Energie, damit Herz und Atmung weiterarbeiten", "Energie erst wieder beim Frühstück", "Energie nur, wenn er sich im Schlaf umdreht"], 0, "Auch beim Schlafen arbeiten Organe und verbrauchen Energie."),
+    einzeln("Welche Aussage über Kohlenhydrate und Eiweiß stimmt?", ["Beide Stoffe sind dasselbe", "Eiweiß ist ein Baustoff. Kohlenhydrate können Energie liefern.", "Kohlenhydrate sind nur im Wasser. Eiweiß ist nur im Brot."], 1, "Kohlenhydrate können Energie liefern. Eiweiß braucht der Körper unter anderem zum Wachsen."),
+  ],
+  ballast: [
+    einzeln("Was kann Stern essen, wenn er eine ballaststoffreiche Beilage sucht?", ["Eine Portion Kichererbsen", "Einen Löffel Naturjoghurt", "Eine Scheibe Käse"], 0, "Kichererbsen sind Hülsenfrüchte und liefern Ballaststoffe."),
+    einzeln("Bärli tauscht sein helles Brötchen gegen ein Vollkornbrötchen. Was ist meist anders?", ["Das Vollkornbrötchen enthält meist weniger Ballaststoffe.", "Die Mehlart kann bei Ballaststoffen keine Rolle spielen.", "Das Vollkornbrötchen enthält meist mehr Ballaststoffe."], 2, "Vollkorn enthält mehr Bestandteile des ganzen Korns und meist mehr Ballaststoffe."),
+  ],
+  pyramide: [
+    einzeln("Maja räumt Butter und Haselnüsse ein. Wie ordnet sie richtig zu?", ["Beides gehört zu Obst und Gemüse.", "Butter gehört zu Ölen und Fetten, Haselnüsse zu Nüssen und Saaten.", "Butter und Haselnüsse stehen beide unten bei Getränken."], 1, "Butter ist ein Streichfett. Haselnüsse sind Nüsse."),
+    einzeln("Bärli legt einen Apfel und einen Keks aus. Welche Zuordnung stimmt?", ["Apfel: Obst und Gemüse. Keks: Extras.", "Apfel: Extras. Keks: Obst und Gemüse.", "Beide gehören zu den Getränken."], 0, "Der Apfel ist Obst. Kekse gehören in die Spitze der Pyramide zu den Extras."),
+  ],
+  fruehstueck: [
+    einzeln("Welches zweite Frühstück passt zu allen vier Bausteinen?", ["Wasser, Vollkornbrötchen und zwei Äpfel", "Käse, Joghurt, Quark und Milch", "Ungesüßter Tee, Gurke, Haferflocken und Naturjoghurt"], 2, "Tee ist das Getränk, Gurke ist Gemüse, Haferflocken sind Getreide und Naturjoghurt ist ein Milchprodukt."),
+    einzeln("Stern hat Tee, Gurke und Käse. Was fehlt noch für ein Pyramidenfrühstück?", ["Ein Vollkornbrötchen", "Eine Banane", "Noch ein Glas Tee"], 0, "Brot oder Getreide fehlt noch. Ein Vollkornbrötchen passt."),
+  ],
+  zucker: [
+    einzeln("Auf zwei Flaschen steht 3 g und 8 g Zucker, beide je 100 ml. Was kann Maja sagen?", ["Die erste Flasche ist größer.", "Bei gleich viel Getränk enthält das zweite mehr Zucker.", "Beide Getränke enthalten gleich viel Zucker."], 1, "Gleiche Getränkemenge, unterschiedliche Grammzahl: 8 g sind mehr als 3 g."),
+    einzeln("Ein Glas hat 100 ml Apfelschorle mit 5 g Zucker. Wie viel Zucker steckt in 200 ml derselben Schorle?", ["5 g", "15 g", "10 g"], 2, "200 ml sind zweimal 100 ml. Zweimal 5 g ergeben 10 g."),
+  ],
+  geschichte: [
+    einzeln("Stern bringt Wasser, Brot, Quark und Apfel mit. Warum passt das zum Frühstücksmodell?", ["Wasser und Apfel gehören beide zu den Getränken.", "Jedes davon gehört zu einem anderen der vier Frühstücksbausteine.", "Ein Frühstück besteht immer aus genau diesen vier Lebensmitteln."], 1, "Wasser, Brot, Quark und Apfel stehen für vier verschiedene Bausteine. Du kannst auch anders kombinieren."),
+    einzeln("Stern ersetzt im Frühstück die Möhre durch eine Birne. Was bleibt gleich?", ["Die Birne füllt weiterhin den Baustein Obst oder Gemüse.", "Die Birne füllt jetzt den Baustein Getreide.", "Der Baustein Obst oder Gemüse fällt weg."], 0, "Möhre und Birne sind verschiedene Lebensmittel. Im Frühstücksmodell gehören beide zum selben Baustein."),
+  ],
+};
+
+const schriftaufgabe = (text, beispiel, kriterien) => ({ text, beispiel, kriterien });
+const schriftaufgaben = [
+  [
+    schriftaufgabe("Im Energiekreis fehlen drei Sätze. Ergänze die Lücken in der richtigen Reihenfolge: Bewegung → (1) → Essen und Trinken → (2) → neue Energie → (3).", "1. Ich habe Hunger. 2. Ich bin satt. 3. Ich möchte mich bewegen.", ["Deine drei Sätze stehen in der richtigen Reihenfolge.", "Man versteht, wie Hunger, Essen, Sättigung und Bewegung im Modell zusammenhängen."]),
+    schriftaufgabe("Bärli meint: „Wenn ich still lese, braucht mein Körper keine Energie.“ Erkläre ihm in einem Satz, was sein Körper beim Lesen trotzdem tut.", "Dein Körper braucht auch beim Lesen Energie, weil zum Beispiel dein Herz weiter schlägt, du atmest und dein Gehirn arbeitet.", ["Du schreibst, dass der Körper auch beim Lesen Energie braucht.", "Du nennst mindestens ein passendes Beispiel, etwa Herzschlag, Atmung oder Denken."]),
+  ],
+  [
+    schriftaufgabe("Stelle ein Pyramidenfrühstück zusammen. Schreibe neben jedes der vier Lebensmittel, zu welchem Baustein es gehört.", "Wasser – Getränk, Gurke – Obst oder Gemüse, Haferflocken – Brot oder Getreide, Naturjoghurt – Milchprodukt.", ["Alle vier verschiedenen Bausteine sind vertreten.", "Du ordnest jedes Lebensmittel seinem passenden Baustein zu. Andere passende Lebensmittel sind möglich."]),
+    schriftaufgabe("Maja nimmt für ihre Brotdose Vollkornbrot. Erkläre, was daran dem Darm helfen kann.", "Vollkornbrot enthält Ballaststoffe. Sie unterstützen die Verdauung im Darm.", ["Du verwendest das Wort Ballaststoffe.", "Du erklärst, dass sie die Verdauung unterstützen."]),
+  ],
+  [
+    schriftaufgabe("Die Apfelschorle enthält 4 g Zucker je 100 ml. Der Apfelsaft enthält 10 g Zucker je 100 ml. Berechne die Zuckermenge für je 200 ml. Schreibe beide Ergebnisse mit Einheit auf.", "Apfelschorle: 4 g + 4 g = 8 g. Apfelsaft: 10 g + 10 g = 20 g.", ["Du verdoppelst beide Angaben und erhältst 8 g und 20 g.", "Du schreibst die Einheit g zu beiden Ergebnissen."]),
+    schriftaufgabe("Stern will eine kleine Flasche Schorle und einen großen Saftkarton vergleichen. Erkläre, welche Angabe er auf beiden Verpackungen suchen soll und warum.", "Stern sucht bei beiden Getränken „davon Zucker je 100 ml“. So vergleicht er gleich viel Getränk, obwohl die Packungen unterschiedlich groß sind.", ["Du nennst die Zuckermenge je 100 ml auf beiden Packungen.", "Du erklärst, dass damit dieselbe Getränkemenge verglichen wird."]),
+  ],
+  [
+    schriftaufgabe("Beschrifte die Lebensmittel für das Picknick. Nenne die Pyramiden-Gruppe für Leitungswasser, Möhren, Vollkornbrot und Schokolade.", "Leitungswasser – Getränke, Möhren – Obst und Gemüse, Vollkornbrot – Brot, Getreide und Beilagen, Schokolade – Extras.", ["Du ordnest Wasser, Möhren und Vollkornbrot den drei passenden Gruppen zu.", "Du ordnest Schokolade den Extras zu."]),
+    schriftaufgabe("Nach dem Parcours braucht Bärli eine Pause. Was kann er jetzt tun? Nenne zwei Dinge und begründe eins davon.", "Bärli setzt sich auf die Bank und trinkt Wasser. Wasser löscht seinen Durst nach dem Spielen.", ["Du nennst zwei passende Dinge, zum Beispiel ruhen und trinken.", "Du begründest mindestens einen Vorschlag."]),
+  ],
+  [
+    schriftaufgabe("Trage je einen Fachbegriff ein. (1) Dieser Stoff dient als Baustoff für Muskeln. (2) Diese pflanzlichen Bestandteile helfen der Verdauung. (3) Dieser Mineralstoff ist wichtig für Knochen und Zähne.", "1. Eiweiß. 2. Ballaststoffe. 3. Calcium.", ["Deine Antworten passen in die angegebenen Lücken.", "Für Eiweiß sind auch Protein und für Calcium ist auch Kalzium richtig."]),
+    schriftaufgabe("Maja stellt aus Wasser, Äpfeln, Haferflocken und Quark ein Frühstück zusammen. Tausche genau ein Lebensmittel aus und erkläre, warum alle vier Bausteine weiterhin enthalten sind.", "Ich tausche den Apfel gegen eine Möhre. Möhre und Apfel gehören beide zum Baustein Obst oder Gemüse. Wasser, Haferflocken und Quark bleiben dabei.", ["Du tauschst genau ein Lebensmittel aus.", "Dein Ersatz gehört zum gleichen Baustein und du erklärst das."]),
+  ],
+];

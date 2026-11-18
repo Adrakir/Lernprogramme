@@ -6,13 +6,13 @@ const storageKey = "majas-sachunterricht-v1";
 const phasen = ["Entdecken", "Verstehen", "Mitmachen", "Üben", "Überprüfen"];
 const figurNamen = { maja: "Maja", stern: "Stern", baerli: "Bärli" };
 const stationNachId = Object.fromEntries(stationen.map(station => [station.id, station]));
-const bilder = ["regenbrief", "mitternachtsparty", "mondpfuetze", "wunschknopf"];
+const bilder = ["picknick-start", "picknick-pause", "picknick-detektiv", "picknick-wiese"];
 const pyramidBlocks = [1, 2, 1, 2, 1, 4, 5, 6];
 const bildtexte = [
-  "Maja und Stern knien draußen nebeneinander auf einer Wiese.",
-  "Maja, Stern und Bärli mit Luca im Drachenkostüm bei ihrer Mitternachtsparty.",
-  "Maja und Stern schauen sich im Mondlicht eine Pfütze an.",
-  "Maja und Stern öffnen zusammen eine runde Dose.",
+  "Maja baut einen kleinen Parcours unter einem Apfelbaum. Stern und Bärli sehen zu.",
+  "Maja, Stern und Bärli machen an einer Gartenbank eine Trinkpause.",
+  "Stern betrachtet eine Flasche Apfelschorle und einen Karton Apfelsaft auf einem Holztisch.",
+  "Maja, Stern und Bärli sitzen auf einer Picknickdecke. Vor ihnen stehen Wasser, Möhren, Vollkornbrot und Käse.",
 ];
 const pyramidenFragen = [
   ["Linsen", 4], ["Vollkornbrot", 5], ["Leitungswasser", 7], ["Naturjoghurt", 3],
@@ -24,11 +24,11 @@ const schritteFit = [
   ["🌙", "Erholen", "Eine ruhige Pause und Schlaf helfen Maja, sich zu erholen."],
 ];
 
-let state = { done: {}, drafts: {}, results: {}, last: "", theme: "" };
+let state = { done: {}, drafts: {}, results: {}, last: "", theme: "", checkNext: {}, practiceNotes: {} };
 let storageAvailable = true;
 try {
   const saved = JSON.parse(localStorage.getItem(storageKey));
-  if (saved?.done && saved.drafts && saved.results) state = saved;
+  if (saved?.done && saved.drafts && saved.results) state = { ...state, ...saved };
 } catch {
   storageAvailable = false;
 }
@@ -107,12 +107,12 @@ function renderStart() {
         <h1 id="page-title" tabindex="-1">Was braucht<br>mein <em>Körper?</em></h1>
         <p>Entdecke mit Maja, Stern und Bärli, was dir Energie gibt und wie du ein buntes Frühstück zusammenstellst.</p>
         <div class="hero-actions">
-          ${open ? nav(state.drafts[open.id] !== undefined ? "Weiterlernen →" : "Los geht’s →", `station/${open.id}/${resume}`, "primary") : nav("Zur Probeklassenarbeit →", "pruefungen", "primary")}
-          ${nav("Probeklassenarbeiten", "pruefungen", "hero-link")}
+          ${open ? nav(state.drafts[open.id] !== undefined ? `Weiterlernen · ${wrappedTitle(open.title)} →` : "Los geht’s →", `station/${open.id}/${resume}`, "primary") : nav("Zur Probeklassenarbeit →", "pruefungen", "primary")}
+          ${open ? nav("Probeklassenarbeiten", "pruefungen", "hero-link") : nav("Mein Lernstand", "fortschritt", "hero-link")}
         </div>
       </div>
       <div class="hero-art">
-        <img class="hero-book" src="./assets/mitternachtsparty.webp" width="960" height="640" alt="Maja, Bärli, Stern und Luca sitzen bei der Mitternachtsparty zusammen.">
+        <img class="hero-book" src="./assets/picknick-wiese.webp" width="960" height="640" alt="Maja, Bärli und Stern teilen ein Picknick unter einem Apfelbaum.">
         <div class="hero-friends">
           ${["maja", "stern", "baerli"].map(key => `<span>${figur(key, "portrait", "")}<small>${figurNamen[key]}</small></span>`).join("")}
         </div>
@@ -135,7 +135,7 @@ function renderStation() {
   state.last = id;
   save();
   activity = { index: 0, left: 0, right: 1, amount: 100, breakfast: [] };
-  quiz = { index: 0, selected: [], checked: false };
+  quiz = { index: step === 4 ? state.checkNext[id] ?? 0 : 0, selected: [], checked: false };
   const stepNav = phasen.map((phase, i) => `<li><a href="#station/${id}/${i}" ${step === i ? 'aria-current="step"' : ""}><span>${i + 1}</span>${phase}</a></li>`).join("");
   let body;
   if (step === 0) {
@@ -224,8 +224,12 @@ function renderActivity(kind) {
       </label><div class="drink-graph" role="status">${graph(left)}${graph(right)}</div>`;
   }
   const [name, text, prompt] = geschichte[activity.index];
-  return `<div class="story-grid"><figure><button class="story-image" data-do="image" type="button" aria-label="Figurenbild aus der Wortwerkstatt vergrößern">
-      <img src="./assets/${bilder[activity.index]}.webp" alt="${bildtexte[activity.index]}" width="960" height="640"><span aria-hidden="true">⤢</span></button><figcaption>Bild aus der Wortwerkstatt</figcaption></figure>
+  return `<div class="story-grid"><figure><button class="story-image" data-do="image" type="button" aria-label="Geschichtenbild vergrößern">
+      <img src="./assets/${bilder[activity.index]}.webp" alt="${bildtexte[activity.index]}" width="960" height="640"><span aria-hidden="true">⤢</span></button>
+      ${activity.index === 2 ? `<figcaption class="story-labels">
+        <span><strong>Apfelschorle</strong>4 g Zucker je 100 ml</span>
+        <span><strong>Apfelsaft</strong>10 g Zucker je 100 ml</span>
+      </figcaption>` : ""}</figure>
       <div class="story-lead" data-read><p class="eyebrow">Szene ${activity.index + 1} von ${geschichte.length}</p><h3>${name}</h3><p>${text}</p><p class="think">${prompt}</p></div>
     </div>${speechButtons()}${bilddialog()}
     <div class="actions">${activity.index > 0 ? button("← Vorige Szene", "story-prev") : ""}
@@ -338,9 +342,13 @@ function istRichtig(q, selected) {
   return selected.length === q.correct.length && q.correct.every(index => selected.includes(index));
 }
 
+function assessmentTasks(station, check) {
+  return check ? [station.check, ...nachfragen[station.id]] : station.practice;
+}
+
 function renderPractice(station) {
   const check = Number(route[2]) === 4;
-  const tasks = check ? [station.check] : station.practice;
+  const tasks = assessmentTasks(station, check);
   const q = tasks[quiz.index];
   const success = quiz.checked && istRichtig(q, quiz.selected);
   const nextStation = stationen[stationen.indexOf(station) + 1];
@@ -350,7 +358,7 @@ function renderPractice(station) {
   if (!quiz.checked) actions = button("Antwort prüfen", "check", "", "primary");
   else if (check) actions = success
     ? (nextStation ? nav("Nächste Station →", `station/${nextStation.id}/0`, "primary") : nav("Zu den Probeklassenarbeiten →", "pruefungen", "primary"))
-    : button("Noch einmal", "retry", "", "primary");
+    : `${button("Ähnliche Aufgabe →", "retry", "", "primary")}${nav("Erklärung ansehen", `station/${station.id}/1`)}`;
   else actions = quiz.index + 1 < tasks.length
     ? button("Nächste Aufgabe →", "next-question", "", "primary")
     : nav("Wissen überprüfen →", `station/${station.id}/4`, "primary");
@@ -360,9 +368,9 @@ function renderPractice(station) {
 
 function renderExamList() {
   return `<div class="route">${breadcrumb()}<header class="unit-header pfirsich"><div><p class="eyebrow">Alle Themen · Klasse 3</p><h1 id="page-title" tabindex="-1">Probeklassenarbeiten</h1></div>${figur("baerli")}</header>
-    <div class="panel"><p>Jede Arbeit hat acht Aufgaben. Die Lösungen erscheinen nach der Abgabe. Du kannst zurückblättern und deine Antworten ändern.</p>
+    <div class="panel"><p>Jede Arbeit hat acht Aufgaben zum Ankreuzen und zwei zum Schreiben. Nach der Abgabe bekommst du Punkte für die Auswahlaufgaben. Deine Schreibantworten vergleichst du mit den Musterlösungen.</p>
     <div class="test-list">${pruefungen.map((exam, i) => `
-      <article><span class="test-num" aria-hidden="true">${i + 1}</span><div><h2>${exam.title}</h2><p>${state.results[i] ? `Bisher bestes Ergebnis: ${state.results[i].best} von ${exam.tasks.length}` : "8 Aufgaben"}</p></div>
+      <article><span class="test-num" aria-hidden="true">${i + 1}</span><div><h2>${exam.title}</h2><p>${state.results[i] ? `Ankreuzen · Zuletzt ${state.results[i].score} von ${exam.tasks.length}, bisher am besten ${state.results[i].best} von ${exam.tasks.length}` : "10 Aufgaben"}</p></div>
       <div class="test-actions">${state.results[i] ? nav("Lösungen", `ergebnis/${i + 1}`) : ""}${nav(state.drafts[`exam-${i}`] ? "Fortsetzen →" : "Starten →", `pruefung/${i + 1}`, "primary")}</div></article>`).join("")}</div></div></div>`;
 }
 
@@ -373,7 +381,23 @@ function examIndex() {
 function draftExam(i) {
   const key = `exam-${i}`;
   if (!state.drafts[key]) state.drafts[key] = { index: 0, answers: pruefungen[i].tasks.map(() => []) };
-  return state.drafts[key];
+  const draft = state.drafts[key];
+  draft.written ??= schriftaufgaben[i].map(() => ({ text: "", paper: false }));
+  return draft;
+}
+
+function examAnswered(draft) {
+  return [...draft.answers.map(answer => answer.length > 0), ...draft.written.map(answer => answer.paper || answer.text.trim().length > 0)];
+}
+
+function writtenMarkup(task, answer, position, total) {
+  return `<div class="question written-question">
+    <h2 tabindex="-1" data-question-heading><span class="eyebrow question-kicker">Schreibaufgabe · ${position} von ${total}</span><span data-question-text>${task.text}</span></h2>
+    <label for="written-answer">Deine Antwort</label>
+    <textarea id="written-answer" rows="5" maxlength="1200" ${answer.paper ? "disabled" : ""}>
+${html(answer.text)}</textarea>
+    <label class="paper-option"><input type="checkbox" id="written-paper" ${answer.paper ? "checked" : ""}> Ich habe im Heft geantwortet.</label>
+  </div>`;
 }
 
 function renderExam() {
@@ -381,22 +405,37 @@ function renderExam() {
   const exam = pruefungen[i];
   if (!exam) return renderMissing();
   const draft = draftExam(i);
-  const q = exam.tasks[draft.index][1];
-  const count = draft.answers.filter(a => a.length).length;
-  const taskLinks = exam.tasks.map((_, j) => button(`<span aria-hidden="true">${j + 1}</span>`, "exam-go", j, `jump${j === draft.index ? " current" : ""}${draft.answers[j].length ? " filled" : ""}`)
-    .replace(" data-do=", ` aria-label="Aufgabe ${j + 1}, ${draft.answers[j].length ? "beantwortet" : "offen"}" ${j === draft.index ? 'aria-current="step"' : ""} data-do=`)).join("");
+  const answered = examAnswered(draft);
+  const count = answered.filter(Boolean).length;
+  const writtenIndex = draft.index - exam.tasks.length;
+  const taskLinks = answered.map((filled, j) => button(`<span aria-hidden="true">${j + 1}</span>`, "exam-go", j, `jump${j === draft.index ? " current" : ""}${filled ? " filled" : ""}`)
+    .replace(" data-do=", ` aria-label="Aufgabe ${j + 1}, ${filled ? "beantwortet" : "offen"}" ${j === draft.index ? 'aria-current="step"' : ""} data-do=`)).join("");
   return `<div class="route exam-route">${breadcrumb("Alle Probeklassenarbeiten", "pruefungen")}
     <header class="unit-header pfirsich"><div><p class="eyebrow">Probeklassenarbeit ${i + 1}</p><h1 id="page-title" tabindex="-1">${exam.title}</h1></div></header>
-    <section class="panel"><div class="exam-progress"><p role="status">${count} von ${exam.tasks.length} beantwortet</p><div class="jump-list" aria-label="Aufgabe auswählen">${taskLinks}</div></div>
-    ${questionMarkup(q, draft.answers[draft.index], `Aufgabe ${draft.index + 1} von ${exam.tasks.length}`)}
+    <section class="panel"><div class="exam-progress"><p role="status">${count} von ${answered.length} beantwortet</p><div class="jump-list" aria-label="Aufgabe auswählen">${taskLinks}</div></div>
+    ${writtenIndex < 0 ? questionMarkup(exam.tasks[draft.index][1], draft.answers[draft.index], `Aufgabe ${draft.index + 1} von ${answered.length}`)
+      : writtenMarkup(schriftaufgaben[i][writtenIndex], draft.written[writtenIndex], draft.index + 1, answered.length)}
     ${speechButtons()}<div class="actions">
     ${draft.index > 0 ? button("← Zurück", "exam-go", draft.index - 1) : ""}
-    ${draft.index + 1 < exam.tasks.length ? button("Weiter →", "exam-go", draft.index + 1, "primary") : button("Arbeit abgeben", "submit-exam", "", "primary")}
+    ${draft.index + 1 < answered.length ? button("Weiter →", "exam-go", draft.index + 1, "primary") : button("Arbeit abgeben", "submit-exam", "", "primary")}
     </div><p class="message" role="status"></p></section></div>`;
 }
 
 function answerText(question, indexes) {
   return indexes.map(i => question.options[i]).join(" · ");
+}
+
+function renderWrittenSolutions(i, result) {
+  if (!result.written) return '<p class="muted">Zu deiner früheren Abgabe sind die acht Auswahlantworten gespeichert.</p>';
+  const offset = pruefungen[i].tasks.length;
+  return `<section class="written-solutions"><h2>Schreibaufgaben vergleichen</h2>
+    <p>Lies die Musterlösung und prüfe die Punkte darunter. Deine Antwort darf anders klingen.</p>
+    <ol class="review-list" start="${offset + 1}">${schriftaufgaben[i].map((task, j) => `
+      <li class="review-row written-review"><h3>${offset + j + 1}. ${task.text}</h3>
+        <p class="written-response"><strong>Deine Antwort</strong> · ${result.written[j].paper ? "Im Heft geantwortet" : html(result.written[j].text)}</p>
+        <p><strong>Musterlösung</strong> · ${task.beispiel}</p>
+        <ul>${task.kriterien.map(line => `<li>${line}</li>`).join("")}</ul>
+      </li>`).join("")}</ol></section>`;
 }
 
 function renderResult() {
@@ -413,19 +452,60 @@ function renderResult() {
       <p>${q.why}</p>${correct ? "" : nav(`${stationNachId[id].title} üben →`, `station/${id}/3`, "breadcrumb")}</li>`;
   }).join("");
   return `<div class="route">${breadcrumb("Alle Probeklassenarbeiten", "pruefungen")}
-    <header class="unit-header salbei"><div><p class="eyebrow">Dein Ergebnis · ${exam.title}</p><h1 id="page-title" tabindex="-1">${result.score} von ${exam.tasks.length} richtig</h1>
+    <header class="unit-header salbei"><div><p class="eyebrow">Auswahlaufgaben · ${exam.title}</p><h1 id="page-title" tabindex="-1">${result.score} von ${exam.tasks.length} richtig</h1>
     <p>${result.score >= 6 ? "★ Einen Stern für diese Arbeit verdient!" : "Unten findest du die Lösungen und passende Übungen."}</p></div>${figur("stern")}</header>
-    <section class="panel"><h2>Lösungen</h2><ol class="review-list">${review}</ol><div class="actions">${button("Lösungen drucken", "print")}${nav("Weitere Arbeiten →", "pruefungen", "primary")}</div></section></div>`;
+    <section class="panel"><h2>Lösungen zum Ankreuzen</h2><ol class="review-list">${review}</ol>${renderWrittenSolutions(i, result)}<div class="actions">${button("Lösungen drucken", "print")}${nav("Zum Lernstand →", "fortschritt")}${nav("Weitere Arbeiten →", "pruefungen", "primary")}</div></section></div>`;
+}
+
+function learningNotes() {
+  const notes = {};
+  pruefungen.forEach((exam, i) => {
+    const result = state.results[i];
+    if (!result) return;
+    const at = result.at ?? 0;
+    const counts = {};
+    exam.tasks.forEach(([id, q], j) => {
+      const count = counts[id] ??= { correct: 0, total: 0 };
+      count.total++;
+      if (istRichtig(q, result.answers[j])) count.correct++;
+    });
+    for (const [id, count] of Object.entries(counts)) {
+      if (notes[id] && notes[id].at > at) continue;
+      notes[id] = {
+        at, retry: count.correct < count.total,
+        text: `Probearbeit · ${count.correct} von ${count.total} richtig`,
+      };
+    }
+  });
+  for (const [id, note] of Object.entries(state.practiceNotes)) {
+    if (notes[id] && notes[id].at > note.at) continue;
+    const source = note.check ? "Wissenscheck" : "Letzte Übungsaufgabe";
+    notes[id] = { at: note.at, retry: !note.correct, text: `${source} · ${note.correct ? "richtig" : "noch einmal üben"}` };
+  }
+  return notes;
 }
 
 function renderProgress() {
   const doneCount = stationen.filter(s => state.done[s.id]).length;
   const attemptCount = pruefungen.filter((_, i) => state.results[i]).length;
+  const notes = learningNotes();
+  const retry = stationen.filter(s => notes[s.id]?.retry).sort((a, b) => notes[b.id].at - notes[a.id].at)[0];
+  const next = stationen.find(s => s.id === state.last && !state.done[s.id]) || stationen.find(s => !state.done[s.id]);
+  const examDone = attemptCount === pruefungen.length;
+  const suggestion = retry ? nav(`${wrappedTitle(retry.title)} üben →`, `station/${retry.id}/3`, "primary")
+    : next ? nav(`Weiterlernen · ${wrappedTitle(next.title)} →`, `station/${next.id}/${state.drafts[next.id] ?? 0}`, "primary")
+    : nav(examDone ? "Ergebnisse ansehen →" : "Probearbeit wählen →", "pruefungen", "primary");
   return `<div class="route">${breadcrumb()}<header class="unit-header sand"><div><p class="eyebrow">Sterne und Ergebnisse</p><h1 id="page-title" tabindex="-1">Mein Lernstand</h1></div>${figur("baerli")}</header>
     <section class="panel"><h2>${doneCount} von ${stationen.length} Stationen geschafft</h2><progress value="${doneCount}" max="${stationen.length}" aria-label="Abgeschlossene Lernstationen"></progress>
     <p>${attemptCount} von ${pruefungen.length} Probeklassenarbeiten abgegeben</p>
-    <ul class="progress-list">${stationen.map(s => `<li><span>${s.title}</span>${nav(state.done[s.id] ? "★ Wiederholen" : state.drafts[s.id] === undefined ? "Starten" : "Weiterlernen", `station/${s.id}/${state.done[s.id] ? 0 : state.drafts[s.id] || 0}`)}</li>`).join("")}</ul>
-    ${doneCount === stationen.length ? `<div class="actions">${nav("Urkunde ansehen", "urkunde", "primary")}</div>` : ""}
+    <div class="next-step"><h3>Dein nächster Schritt</h3>${retry ? `<p>${wrappedTitle(retry.title)} hat dir zuletzt noch Schwierigkeiten gemacht.</p>` : ""}${suggestion}</div>
+    <ul class="progress-list">${stationen.map(s => {
+      const note = notes[s.id];
+      const nextStep = note?.retry ? 3 : state.done[s.id] ? 0 : state.drafts[s.id] ?? 0;
+      const label = note?.retry ? "Üben" : state.done[s.id] ? "★ Wiederholen" : state.drafts[s.id] === undefined ? "Starten" : "Weiterlernen";
+      return `<li><div><strong>${wrappedTitle(s.title)}</strong><small>${note?.text || (state.done[s.id] ? "Stationsstern verdient" : "Noch keine Auswertung")}</small></div>${nav(label, `station/${s.id}/${nextStep}`)}</li>`;
+    }).join("")}</ul>
+    <div class="actions">${attemptCount ? nav("Ergebnisse und Lösungen", "pruefungen") : ""}${doneCount === stationen.length ? nav("Urkunde ansehen", "urkunde", "primary") : ""}</div>
     <p class="muted">${storageAvailable ? "Dein Lernstand wird in diesem Browser gespeichert." : "Dieser Browser kann den Lernstand gerade nur bis zum Schließen der Seite merken."}</p></section></div>`;
 }
 
@@ -442,8 +522,8 @@ function renderCertificate() {
 
 function renderInfo() {
   return `<div class="route">${breadcrumb()}<header class="unit-header salbei"><div><p class="eyebrow">Sachunterricht · Klasse 3</p><h1 id="page-title" tabindex="-1">Über die Lernwelt</h1></div>${figur("maja")}</header>
-    <section class="panel"><h2>So kannst du lernen</h2><p>Entdecke ein Thema, probiere etwas aus und übe in deinem Tempo. Beim Wissenscheck gibt es einen Stern. In den Probeklassenarbeiten gibt es je einen Stern ab sechs richtigen Aufgaben. Bei Mehrfachauswahl gibt es einen Punkt, wenn alle passenden Antworten ausgewählt sind.</p>
-    <h2>Für Erwachsene</h2><p>Die acht Gruppen und 22 Kästchen orientieren sich an der Ernährungspyramide auf Majas Arbeitsblatt und am Modell des Bundeszentrums für Ernährung. Die App verwendet die Ampelfarben als Orientierung und das Vier-Bausteine-Modell aus dem Unterricht. Die Zuckermengen sind erfundene, gerundete Beispiele. Bei der Geschichte dienen die Originalbilder als Figurenillustrationen.</p>
+    <section class="panel"><h2>So kannst du lernen</h2><p>Entdecke ein Thema, probiere etwas aus und übe in deinem Tempo. Beim Wissenscheck gibt es einen Stern. In den Probeklassenarbeiten gibt es je einen Stern ab sechs richtigen Auswahlaufgaben. Schreibantworten vergleichst du selbst mit der Musterlösung. Bei Mehrfachauswahl gibt es einen Punkt, wenn alle passenden Antworten ausgewählt sind.</p>
+    <h2>Für Erwachsene</h2><p>Die acht Gruppen und 22 Kästchen orientieren sich an der Ernährungspyramide auf Majas Arbeitsblatt und am Modell des Bundeszentrums für Ernährung. Die App verwendet die Ampelfarben als Orientierung und das Vier-Bausteine-Modell aus dem Unterricht. Die Zuckermengen sind erfundene, gerundete Beispiele.</p>
     <ul><li><a href="https://www.bzfe.de/essen-und-gesundheit/ernaehrungspyramide/was-esse-ich">Bundeszentrum für Ernährung · Die acht Lebensmittelgruppen</a></li>
     <li><a href="https://www.dge.de/wissenschaft/referenzwerte/ballaststoffe/">Deutsche Gesellschaft für Ernährung · Ballaststoffe</a></li>
     <li><a href="../majas-wortwerkstatt/">Majas Wortwerkstatt · Originalillustrationen</a></li></ul>
@@ -539,17 +619,18 @@ function submitExam() {
   const i = examIndex();
   const exam = pruefungen[i];
   const draft = draftExam(i);
-  const firstOpen = draft.answers.findIndex(answer => answer.length === 0);
+  const firstOpen = examAnswered(draft).indexOf(false);
   if (firstOpen !== -1) {
     draft.index = firstOpen;
     save();
     render(false);
-    main.querySelector(".message").textContent = "Diese Aufgabe fehlt noch. Wähle eine Antwort aus.";
+    main.querySelector(".message").textContent = firstOpen < exam.tasks.length ? "Diese Aufgabe fehlt noch. Wähle eine Antwort aus."
+      : "Diese Schreibaufgabe fehlt noch. Tippe deine Antwort ein oder kreuze an, dass du im Heft geantwortet hast.";
     main.querySelector("[data-question-heading]").focus();
     return;
   }
   const score = exam.tasks.filter(([, q], j) => istRichtig(q, draft.answers[j])).length;
-  state.results[i] = { score, best: Math.max(state.results[i]?.best || 0, score), answers: draft.answers };
+  state.results[i] = { score, best: Math.max(state.results[i]?.best || 0, score), answers: draft.answers, written: draft.written, at: Date.now() };
   delete state.drafts[`exam-${i}`];
   save();
   location.hash = `ergebnis/${i + 1}`;
@@ -588,17 +669,25 @@ main.addEventListener("click", event => {
     }
     quiz.checked = true;
     const station = stationNachId[route[1]];
-    if (Number(route[2]) === 4 && istRichtig(station.check, quiz.selected)) {
-      state.done[station.id] = true;
-      state.drafts[station.id] = 0;
-      aktualisiereSterne();
-      save();
+    const check = Number(route[2]) === 4;
+    const tasks = assessmentTasks(station, check);
+    const correct = istRichtig(tasks[quiz.index], quiz.selected);
+    state.practiceNotes[station.id] = { at: Date.now(), correct, check };
+    if (check) {
+      state.checkNext[station.id] = correct ? 0 : (quiz.index + 1) % tasks.length;
+      if (correct) {
+        state.done[station.id] = true;
+        state.drafts[station.id] = 0;
+        aktualisiereSterne();
+      }
     }
+    save();
     redoPractice("#feedback");
     return;
   }
   if (action === "retry" || action === "next-question") {
-    quiz = { index: quiz.index + (action === "next-question" ? 1 : 0), selected: [], checked: false };
+    const index = action === "retry" ? state.checkNext[route[1]] : quiz.index + 1;
+    quiz = { index, selected: [], checked: false };
     redoPractice("[data-question-heading]");
     return;
   }
@@ -621,18 +710,43 @@ main.addEventListener("click", event => {
   refreshActivity("", target);
 });
 
+function updateExamProgress(draft) {
+  const answered = examAnswered(draft);
+  const filled = answered[draft.index];
+  const button = main.querySelector(".jump.current");
+  button.classList.toggle("filled", filled);
+  button.setAttribute("aria-label", `Aufgabe ${draft.index + 1}, ${filled ? "beantwortet" : "offen"}`);
+  const status = main.querySelector(".exam-progress p");
+  const summary = `${answered.filter(Boolean).length} von ${answered.length} beantwortet`;
+  if (status.textContent !== summary) status.textContent = summary;
+  main.querySelector(".message").textContent = "";
+  save();
+}
+
+main.addEventListener("input", event => {
+  if (event.target.id !== "written-answer") return;
+  const i = examIndex();
+  const draft = draftExam(i);
+  draft.written[draft.index - pruefungen[i].tasks.length].text = event.target.value;
+  updateExamProgress(draft);
+});
+
 main.addEventListener("change", event => {
   const target = event.target;
+  if (target.id === "written-paper") {
+    const i = examIndex();
+    const draft = draftExam(i);
+    draft.written[draft.index - pruefungen[i].tasks.length].paper = target.checked;
+    main.querySelector("#written-answer").disabled = target.checked;
+    updateExamProgress(draft);
+    return;
+  }
   if (target.name === "answer") {
     const selected = [...main.querySelectorAll('input[name="answer"]:checked')].map(input => Number(input.value));
     if (route[0] === "pruefung") {
       const draft = draftExam(examIndex());
       draft.answers[draft.index] = selected;
-      const button = main.querySelector(".jump.current");
-      button.classList.toggle("filled", selected.length > 0);
-      button.setAttribute("aria-label", `Aufgabe ${draft.index + 1}, ${selected.length ? "beantwortet" : "offen"}`);
-      main.querySelector(".exam-progress p").textContent = `${draft.answers.filter(a => a.length).length} von ${draft.answers.length} beantwortet`;
-      save();
+      updateExamProgress(draft);
     } else {
       quiz.selected = selected;
     }
