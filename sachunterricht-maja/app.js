@@ -144,11 +144,13 @@ function renderStation() {
     body = `<div class="fact-grid" data-read>${s.facts.map(([title, text]) => `<article><h3>${title}</h3><p>${text}</p></article>`).join("")}</div>${speechButtons()}`;
   } else if (step === 2) {
     const cycle = id === "labor" && route[3] === "kreislauf";
+    const matching = id === "labor" && route[3] === "zuordnen";
     const labLinks = id === "labor" ? `<nav class="lab-links" aria-label="Übungen im Nährstofflabor">
-      <a class="secondary" href="#station/labor/2" ${cycle ? "" : 'aria-current="page"'}>Nährstoffkarten</a>
+      <a class="secondary" href="#station/labor/2" ${cycle || matching ? "" : 'aria-current="page"'}>Nährstoffkarten</a>
       <a class="secondary" href="#station/labor/2/kreislauf" ${cycle ? 'aria-current="page"' : ""}>Energiekreislauf</a>
+      <a class="secondary" href="#station/labor/2/zuordnen" ${matching ? 'aria-current="page"' : ""}>Körperaufgaben zuordnen</a>
     </nav>` : "";
-    body = `${labLinks}${cycle ? "" : `<p>${s.task}</p>`}<div id="activity">${renderActivity(s.activity)}</div>`;
+    body = `${labLinks}${cycle || matching ? "" : `<p>${s.task}</p>`}<div id="activity">${renderActivity(s.activity)}</div>`;
   } else {
     body = `<div id="question-area">${renderPractice(s)}</div>`;
   }
@@ -166,6 +168,7 @@ function renderStation() {
 }
 
 function renderActivity(kind) {
+  if (kind === "labor" && route[3] === "zuordnen") return renderBodyMatching();
   if (kind === "labor" && route[3] === "kreislauf") return renderEnergyCycle();
   if (kind === "fit" || kind === "labor") {
     const cards = kind === "fit"
@@ -644,6 +647,15 @@ main.addEventListener("click", event => {
   if (action === "speak") return read(Number(value));
   if (action === "stop") return stopSpeech();
   if (action === "print") return window.print();
+  if (action === "body-check" || action === "body-reset") {
+    if (action === "body-reset") delete activity.bodyMatching;
+    else {
+      activity.bodyMatching.checked = true;
+      activity.bodyMatching.answers = [...main.querySelectorAll("[data-body-match]")].map(select => select.value);
+    }
+    refreshActivity(action === "body-reset" ? "body-match-0" : "body-status");
+    return;
+  }
   if (action.startsWith("cycle-")) return handleEnergyCycle(action, Number(value));
   if (action === "image") {
     const dialog = document.querySelector("#bilddialog");
@@ -733,6 +745,12 @@ main.addEventListener("input", event => {
 
 main.addEventListener("change", event => {
   const target = event.target;
+  if (target.hasAttribute("data-body-match")) {
+    activity.bodyMatching.answers[Number(target.dataset.bodyMatch)] = target.value;
+    activity.bodyMatching.checked = false;
+    refreshActivity(target.id);
+    return;
+  }
   if (target.id === "written-paper") {
     const i = examIndex();
     const draft = draftExam(i);
@@ -768,3 +786,32 @@ window.addEventListener("hashchange", () => render());
 window.addEventListener("pagehide", stopSpeech);
 applyTheme();
 render(false);
+
+function renderBodyMatching() {
+  const exercise = activity.bodyMatching ??= { answers: koerperZuordnung.map(() => ""), checked: false };
+  const choices = ["Eiweiß", "Flüssigkeit", "Kohlenhydrate", "Vitamine", "Ballaststoffe", "Fett", "Mineralstoffe"];
+  const solved = exercise.checked && koerperZuordnung.every((task, i) => exercise.answers[i] === task.stoff);
+  const letters = koerperZuordnung.map((task, i) => exercise.checked && exercise.answers[i] === task.stoff ? task.buchstabe : "·");
+  return `<h3>Was mein Körper braucht</h3>
+    <p>Ordne jeder Körperaufgabe den passenden Stoff zu. Die richtigen Zuordnungen ergeben ein Lösungswort.</p>
+    <ol class="body-matching">${koerperZuordnung.map((task, i) => {
+      const correct = exercise.answers[i] === task.stoff;
+      return `<li class="${exercise.checked ? correct ? "success" : "retry" : ""}">
+        <label for="body-match-${i}"><strong>${i + 1}. ${task.aufgabe}</strong></label>
+        <select id="body-match-${i}" data-body-match="${i}">
+          <option value="">Stoff auswählen …</option>${choices.map(choice => `<option value="${choice}" ${exercise.answers[i] === choice ? "selected" : ""}>${choice}</option>`).join("")}
+        </select>
+        ${exercise.checked ? `<p>${correct ? "✓ Richtig." : "↺ Schau noch einmal."} ${correct ? task.grund : ""}</p>` : ""}
+      </li>`;
+    }).join("")}</ol>
+    <div id="body-status" role="status" tabindex="-1" class="reveal">
+      <strong>Lösungswort</strong>
+      <span class="body-word" aria-label="${solved ? "KALORIE" : "Lösungswort noch unvollständig"}">${letters.join(" ")}</span>
+      ${exercise.checked ? `<p>${solved ? "Alle sieben Zuordnungen stimmen!" : "Ergänze oder verbessere die markierten Zuordnungen."}</p>` : ""}
+    </div>
+    <div class="actions">${button("Zuordnung prüfen", "body-check", "", "primary")}${button("Neu starten", "body-reset")}</div>
+    ${solved ? `<div class="reveal" data-read><h3>Das bedeutet Kalorie</h3>
+      <p>Eine Kalorie ist eine Einheit für Energie. Auf Lebensmittelpackungen steht häufig Kilokalorie, abgekürzt kcal. Eine Kilokalorie sind 1.000 Kalorien.</p>
+      <p>Auf dem Arbeitsblatt gehören Knochen und Zähne zu den Mineralstoffen. Haare bestehen vor allem aus dem Eiweiß Keratin. Vitamine unterstützen die Körperabwehr.</p>
+      </div>${speechButtons()}` : ""}`;
+}

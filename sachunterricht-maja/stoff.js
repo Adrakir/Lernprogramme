@@ -290,3 +290,13 @@ const schriftaufgaben = [
     schriftaufgabe("Maja stellt aus Wasser, Äpfeln, Haferflocken und Quark ein Frühstück zusammen. Tausche genau ein Lebensmittel aus und erkläre, warum alle vier Bausteine weiterhin enthalten sind.", "Ich tausche den Apfel gegen eine Möhre. Möhre und Apfel gehören beide zum Baustein Obst oder Gemüse. Wasser, Haferflocken und Quark bleiben dabei.", ["Du tauschst genau ein Lebensmittel aus.", "Dein Ersatz gehört zum gleichen Baustein und du erklärst das."]),
   ],
 ];
+
+const koerperZuordnung = [
+  { aufgabe: "Du bewegst dich viel: Du fährst Rad, läufst und skatest.", stoff: "Kohlenhydrate", buchstabe: "K", grund: "Kohlenhydrate können deinem Körper Energie für Bewegung liefern." },
+  { aufgabe: "Deine Knochen und Zähne sind stabil.", stoff: "Mineralstoffe", buchstabe: "A", grund: "Der Mineralstoff Calcium ist unter anderem wichtig für Knochen und Zähne." },
+  { aufgabe: "Dein Körper speichert Energie als Reserve.", stoff: "Fett", buchstabe: "L", grund: "Körperfett dient als Energiespeicher. Der Körper kann überschüssige Energie aus verschiedenen Nährstoffen darin speichern." },
+  { aufgabe: "Nährstoffe werden durch deinen Körper transportiert.", stoff: "Flüssigkeit", buchstabe: "O", grund: "Wasser ist Bestandteil des Blutes und hilft beim Transport von Nährstoffen." },
+  { aufgabe: "Dein Körper baut Muskeln auf und wächst.", stoff: "Eiweiß", buchstabe: "R", grund: "Eiweiß ist ein wichtiger Baustoff. Für kräftige Muskeln sind auch Bewegung und Erholung wichtig." },
+  { aufgabe: "Deine Körperabwehr kann gut arbeiten.", stoff: "Vitamine", buchstabe: "I", grund: "Vitamine unterstützen verschiedene Körperfunktionen, zum Beispiel die Körperabwehr. Auch mit genügend Vitaminen kannst du krank werden." },
+  { aufgabe: "Deine Verdauung wird unterstützt.", stoff: "Ballaststoffe", buchstabe: "E", grund: "Ballaststoffe unterstützen die Verdauung im Darm. Regelmäßiges Trinken und Bewegung helfen ebenfalls." },
+];

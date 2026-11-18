@@ -444,3 +444,8 @@ progress { accent-color: var(--accent); width: 100%; height: 16px; margin: 4px 0
 @keyframes cycle-color {
   50% { background: var(--accent); color: var(--accent-text); }
 }
+
+.body-matching { display: grid; gap: 9px; list-style: none; padding: 0; margin: 14px 0; }
+.body-matching li { padding: 11px 13px; border: 1px solid var(--line); border-radius: 12px; }
+.body-matching li p { margin: 7px 0 0; }
+.body-word { display: block; font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 850; letter-spacing: .1em; margin-top: 7px; }
