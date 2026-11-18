@@ -23,6 +23,16 @@ const naehrstoffe = [
   ["Wasser", "💧", "Dein Körper braucht Wasser, um Stoffe zu transportieren und seine Temperatur zu regeln.", "Leitungswasser, ungesüßter Tee, wasserreiches Gemüse"],
 ];
 
+const energieSaetze = ["Ich habe Hunger!", "Ich bin satt!", "Ich möchte mich bewegen!"];
+const energieKreislauf = [
+  { title: "Bewegung", note: "Energie verbrauchen", icon: "👟" },
+  { gap: 0 },
+  { title: "Essen und Trinken", icon: "🍎" },
+  { gap: 1 },
+  { title: "Neue Energie", icon: "⚡" },
+  { gap: 2 },
+];
+
 const fruehstueck = [
   ["Getränk", "💧", ["Wasser", "Ungesüßter Kräutertee"]],
   ["Obst oder Gemüse", "🍎", ["Apfel", "Gurke", "Möhre", "Banane"]],

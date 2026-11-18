@@ -143,7 +143,12 @@ function renderStation() {
   } else if (step === 1) {
     body = `<div class="fact-grid" data-read>${s.facts.map(([title, text]) => `<article><h3>${title}</h3><p>${text}</p></article>`).join("")}</div>${speechButtons()}`;
   } else if (step === 2) {
-    body = `<p>${s.task}</p><div id="activity">${renderActivity(s.activity)}</div>`;
+    const cycle = id === "labor" && route[3] === "kreislauf";
+    const labLinks = id === "labor" ? `<nav class="lab-links" aria-label="Übungen im Nährstofflabor">
+      <a class="secondary" href="#station/labor/2" ${cycle ? "" : 'aria-current="page"'}>Nährstoffkarten</a>
+      <a class="secondary" href="#station/labor/2/kreislauf" ${cycle ? 'aria-current="page"' : ""}>Energiekreislauf</a>
+    </nav>` : "";
+    body = `${labLinks}${cycle ? "" : `<p>${s.task}</p>`}<div id="activity">${renderActivity(s.activity)}</div>`;
   } else {
     body = `<div id="question-area">${renderPractice(s)}</div>`;
   }
@@ -161,6 +166,7 @@ function renderStation() {
 }
 
 function renderActivity(kind) {
+  if (kind === "labor" && route[3] === "kreislauf") return renderEnergyCycle();
   if (kind === "fit" || kind === "labor") {
     const cards = kind === "fit"
       ? schritteFit.map(([icon, title, text]) => [title, icon, text, ""])
@@ -224,6 +230,91 @@ function renderActivity(kind) {
     </div>${speechButtons()}${bilddialog()}
     <div class="actions">${activity.index > 0 ? button("← Vorige Szene", "story-prev") : ""}
       ${activity.index + 1 < geschichte.length ? button("Nächste Szene →", "story-next") : ""}</div>`;
+}
+
+function currentEnergyCycle() {
+  return activity.energyCycle ??= { answers: [null, null, null], active: 0, checked: false, status: "" };
+}
+
+function renderEnergyCycle() {
+  const cycle = currentEnergyCycle();
+  const solved = cycle.checked && cycle.answers.every((answer, index) => answer === index);
+  const slots = energieKreislauf.map((step, index) => {
+    const fixed = step.gap === undefined;
+    let contents;
+    if (fixed) {
+      contents = `<div class="cycle-node"><span aria-hidden="true">${step.icon}</span><strong>${step.title}</strong>${step.note ? `<small>${step.note}</small>` : ""}</div>`;
+    } else {
+      const answer = cycle.answers[step.gap];
+      const status = cycle.checked ? (answer === step.gap ? " success" : " retry") : "";
+      contents = `<button id="cycle-gap-${step.gap}" class="cycle-node cycle-gap${status}" type="button" data-do="cycle-gap" data-value="${step.gap}"
+        aria-pressed="${cycle.active === step.gap}" ${solved ? "disabled" : ""}>
+        <small>Lücke ${step.gap + 1}${cycle.checked ? (answer === step.gap ? " · ✓" : " · ↺") : ""}</small>
+        <strong>${energieSaetze[answer] || "Satz wählen"}</strong>
+      </button>`;
+    }
+    return `<li class="cycle-step cycle-step-${index}" style="--delay:${index * .65}s">${contents}</li>`;
+  }).join("");
+  const options = [2, 0, 1].map(index => `<button id="cycle-answer-${index}" class="secondary" type="button" data-do="cycle-answer" data-value="${index}">${energieSaetze[index]}</button>`).join("");
+  return `<h3>Was mein Körper braucht</h3>
+    <p>Ergänze die drei Lücken wie auf dem Arbeitsblatt. Tippe auf eine Lücke und wähle den passenden Satz.</p>
+    <div id="energy-board" class="cycle-board">
+      <div class="cycle-decoration" aria-hidden="true">
+        <span class="cycle-hub">⚡</span>
+        ${Array.from({ length: 6 }, (_, index) => `<span class="cycle-arrow cycle-arrow-${index}">➜</span>`).join("")}
+      </div>
+      <ol aria-label="Ablauf im Uhrzeigersinn" class="cycle-steps">${slots}</ol>
+    </div>
+    ${solved ? "" : `<fieldset class="cycle-choices"><legend>Satz für Lücke ${cycle.active + 1}</legend>
+      <div>${options}</div></fieldset>`}
+    <p id="cycle-status" class="message${cycle.checked ? " feedback " + (solved ? "success" : "retry") : ""}" tabindex="-1" role="status">${cycle.status}</p>
+    <div class="actions">
+      ${solved ? button("Ablauf abspielen", "cycle-play", "", "primary") : '<button id="cycle-check" type="button" class="primary" data-do="cycle-check">Zuordnung prüfen</button>'}
+      ${button("Neu starten", "cycle-reset")}
+    </div>
+    ${solved ? `<div class="fact-grid cycle-facts" data-read>
+      <article><h3>Woher kommt die Energie?</h3><p>Der Kreis zeigt ein Beispiel. Dein Körper braucht beim Spielen und auch in Ruhe Energie. Er gewinnt sie aus Kohlenhydraten und anderen Nährstoffen. Wasser hilft dem Körper zum Beispiel, seine Temperatur zu regeln.</p></article>
+      <article><h3>Was passiert mit überschüssiger Energie?</h3><p>Wenn dein Körper über längere Zeit mehr Energie aus dem Essen bekommt, als er verbraucht, kann er einen Teil davon als Fett speichern. Das Arbeitsblatt nennt den Energieverbrauch „Verbrennung“.</p></article>
+    </div>${speechButtons()}` : ""}`;
+}
+
+function handleEnergyCycle(action, value) {
+  const cycle = currentEnergyCycle();
+  const answerButton = index => `cycle-answer-${index}`;
+  let focus;
+  if (action === "cycle-play") {
+    const board = document.querySelector("#energy-board");
+    board.classList.remove("playing");
+    void board.offsetWidth;
+    board.classList.add("playing");
+    return;
+  }
+  if (action === "cycle-reset") {
+    delete activity.energyCycle;
+    focus = "cycle-gap-0";
+  } else if (action === "cycle-gap") {
+    cycle.active = value;
+    focus = answerButton(2);
+  } else if (action === "cycle-answer") {
+    const previous = cycle.answers.indexOf(value);
+    if (previous !== -1) cycle.answers[previous] = cycle.answers[cycle.active];
+    cycle.answers[cycle.active] = value;
+    cycle.checked = false;
+    cycle.status = "";
+    const empty = cycle.answers.indexOf(null);
+    if (empty >= 0) cycle.active = empty;
+    focus = empty >= 0 ? answerButton([2, 0, 1].find(index => !cycle.answers.includes(index))) : "cycle-check";
+  } else if (action === "cycle-check") {
+    const empty = cycle.answers.indexOf(null);
+    cycle.checked = empty === -1;
+    if (empty >= 0) cycle.active = empty;
+    cycle.status = empty >= 0 ? "Fülle erst alle drei Lücken aus."
+      : cycle.answers.every((answer, index) => answer === index) ? "Alle drei Sätze sind richtig zugeordnet!"
+      : "Schau dir die Lücken mit dem Pfeil ↺ noch einmal an.";
+    focus = "cycle-status";
+  }
+  refreshActivity(focus);
+  document.getElementById(focus)?.scrollIntoView({ block: "nearest" });
 }
 
 function activityNext(s) {
@@ -472,6 +563,7 @@ main.addEventListener("click", event => {
   if (action === "speak") return read(Number(value));
   if (action === "stop") return stopSpeech();
   if (action === "print") return window.print();
+  if (action.startsWith("cycle-")) return handleEnergyCycle(action, Number(value));
   if (action === "image") {
     const dialog = document.querySelector("#bilddialog");
     const image = target.querySelector("img");
