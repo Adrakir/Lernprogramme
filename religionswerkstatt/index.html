@@ -1,0 +1,252 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Religionswerkstatt · Klasse 5</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f2fb;color:#261a3d;font:1rem/1.5 system-ui,sans-serif}header{background:#32205a;color:white;padding:2.2rem max(1rem,calc((100% - 880px)/2));border-bottom:6px solid #edbf65}h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.1;margin:.25rem 0}header p{margin:.6rem 0 0;color:#ece2fc}main{max-width:912px;margin:auto;padding:1rem}nav,.controls,.options{display:flex;flex-wrap:wrap;gap:.65rem;margin:.75rem 0}button,select,input{font:inherit}button,select{border:1px solid #b6a6cd;border-radius:12px;padding:.65rem .9rem;min-height:44px;background:white;color:inherit}button{cursor:pointer;font-weight:650}button[aria-current=true],.primary{background:#523486;color:white;border-color:#523486}button:focus-visible,select:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid #a66000;outline-offset:3px}button:disabled{cursor:default;opacity:.65}.panel,details{background:white;border:1px solid #e5dbef;border-radius:18px;padding:1rem 1.25rem;margin:.75rem 0}.card{min-height:235px;border-top:6px solid #8060b2}summary{cursor:pointer;font-weight:650}h2{line-height:1.25}.tag{font-weight:700;color:#65478d}.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.options button{text-align:left;color:white;min-height:65px;border:0}.options button:nth-child(4n+1){background:#553194}.options button:nth-child(4n+2){background:#075e86}.options button:nth-child(4n+3){background:#87510a}.options button:nth-child(4n+4){background:#176a52}.options button.correct{outline:4px solid #16814d;opacity:1}.options button.wrong{outline:4px solid #bd4040}.feedback{background:#f0e9fa;padding:.8rem;border-radius:12px}progress{width:100%;accent-color:#65429b}label{display:inline-flex;align-items:center;gap:.45rem;flex-wrap:wrap}@media(max-width:560px){.options{grid-template-columns:1fr}main{padding:.75rem}}
+</style>
+<header><small>RELIGION · KLASSE 5</small><h1>Religionswerkstatt</h1><p>Fragen nachschlagen, Antworten aus dem Kopf sagen und im Quiz Punkte sammeln.</p></header>
+<main><nav aria-label="Lernbereiche"></nav><div class="controls"><label>Thema <select id="topic"></select></label></div><section id="view" aria-label="Lernbereich"></section></main>
+<script>
+const groups = [
+["Goldene Regel und Regeln",[
+["Wie lautet die Goldene Regel?","„Alles, was ihr von anderen erwartet, das tut auch ihnen!“ (Matthäus 7,12)","Hilf anderen nur, wenn sie dir schon geholfen haben.","Jeder entscheidet allein, was für alle gilt.","Behandle alle so, wie die Mehrheit es tut."],
+["Wie kannst du die Goldene Regel in der Schule anwenden?","Wenn ich selbst ausreden möchte, lasse ich auch andere ausreden.","Ich unterbreche andere, um schneller fertig zu werden.","Ich höre nur meinen Freunden zu.","Ich warte darauf, dass alle mir zuerst zuhören."],
+["Warum kann man biblische Regeln mit einem Schutzzaun vergleichen?","Ein Schutzzaun steht für Regeln, die Rechte und Freiheit schützen und Orientierung geben.","Die Regeln sollen festlegen, wer dazugehören darf.","Die Regeln gelten nur innerhalb eines Gebäudes.","Die Regeln sollen jede Entscheidung vorgeben."],
+["Wozu brauchen wir Regeln im Alltag?","Sie machen Absprachen verlässlich, fördern Respekt und schützen davor, dass sich immer die Stärkeren durchsetzen.","Sie ersetzen Absprachen zwischen Menschen.","Sie gelten nur bei Spielen.","Sie sorgen dafür, dass jede Gruppe ihre eigenen Mitglieder bevorzugt."],
+["Was ist ein Regelwerk? Nenne ein Beispiel.","Ein Regelwerk sammelt Regeln für einen Bereich. Beispiele sind die Schulordnung oder die Fußballregeln.","Eine einzelne Anweisung im Unterricht.","Eine Liste aller Mitglieder eines Sportvereins.","Ein Bericht darüber, wer ein Spiel gewonnen hat."]
+]],
+["Die Zehn Gebote",[
+["Wer erhält die Zehn Gebote, und wo stehen sie in der Bibel?","Mose erhält sie von Gott. Sie stehen unter anderem in 2. Mose 20.","Abraham erhält sie in 1. Mose 12.","Der Samariter erhält sie in Lukas 10.","Sara erhält sie in 1. Mose 18."],
+["Warum gab Gott Mose nach der Befreiung aus Ägypten die Zehn Gebote?","Laut der biblischen Geschichte sollen die Gebote die neu gewonnene Freiheit der Israeliten schützen und ihr Zusammenleben ordnen.","Damit die Israeliten nach Ägypten zurückkehren.","Damit der Pharao über sie bestimmen kann.","Damit sie neue Weideplätze finden."],
+["Welche Gebote sind auf dem Arbeitsblatt gelb, welche grün?","Gelb sind 1–3. Sie betreffen die Beziehung zu Gott. Grün sind 4–10. Sie betreffen das Zusammenleben.","Gelb sind 1–5, grün 6–10.","Gelb sind 4–10, grün 1–3.","Gelb sind 1 und 2, grün 3–10."],
+["Wie lautet das erste Gebot?","Ich bin der Herr, dein Gott. Du sollst keine anderen Götter haben. Auf deiner Tafel ist auch das Bilderverbot bei diesem Gebot notiert.","Du sollst den Feiertag heiligen.","Du sollst Vater und Mutter ehren.","Du sollst nicht stehlen."],
+["Was bedeutet das erste Gebot?","Vertraue Gott und setze keinen anderen Gott an seine Stelle.","Gestalte den Feiertag als Ruhetag.","Gebrauche Gottes Namen respektvoll.","Gehe sorgsam mit fremdem Eigentum um."],
+["Wie lautet das zweite Gebot und was bedeutet es?","Du sollst den Namen des Herrn, deines Gottes, nicht missbrauchen. Geh respektvoll mit Gottes Namen um und benutze ihn zum Beispiel nicht zur Rechtfertigung einer Lüge.","Halte den Feiertag frei und nimm dir Zeit für Ruhe.","Ehre deine Eltern und begegne ihnen mit Respekt.","Vertraue allein auf Gott und verehre keine anderen Götter."],
+["Wie lautet das dritte Gebot und was bedeutet es?","Du sollst den Feiertag heiligen. Nimm dir Zeit für Ruhe und für Gott.","Achte fremdes Eigentum und gib Geliehenes zurück.","Gebrauche Gottes Namen respektvoll.","Ehre deine Eltern und begegne ihnen mit Respekt."],
+["Nenne die drei gelben Gebote in der richtigen Reihenfolge.","Keine anderen Götter haben, Gottes Namen nicht missbrauchen, den Feiertag heiligen.","Feiertag heiligen, Gottes Namen achten, keine anderen Götter haben.","Keine anderen Götter haben, Feiertag heiligen, Gottes Namen achten.","Gottes Namen achten, keine anderen Götter haben, Feiertag heiligen."],
+["Wie lautet das vierte Gebot und wie kann man es anwenden?","Du sollst Vater und Mutter ehren. Das heißt, ihnen mit Respekt zu begegnen. Das Arbeitsblatt nennt als Beispiel auch, sich um ältere Menschen zu kümmern.","Den Feiertag heiligen, etwa indem man sich Zeit für Ruhe nimmt.","Keine falsche Aussage machen, etwa wenn man einen Streit beobachtet.","Nicht stehlen, etwa indem man Geliehenes zurückgibt."],
+["Wie lautet das fünfte Gebot und was bedeutet es?","Du sollst nicht töten. Achte und schütze das Leben.","Du sollst nicht stehlen. Achte fremdes Eigentum.","Du sollst die Ehe nicht brechen. Sei treu.","Du sollst keine falsche Aussage machen. Bleibe bei der Wahrheit."],
+["Wie lautet das sechste Gebot und was bedeutet es?","Du sollst die Ehe nicht brechen. Sei in der Ehe treu.","Du sollst Vater und Mutter ehren. Begegne ihnen mit Respekt.","Du sollst nicht töten. Schütze das Leben.","Du sollst nicht stehlen. Respektiere fremden Besitz."],
+["Wie lautet das siebte Gebot und was bedeutet es?","Du sollst nicht stehlen. Respektiere, was anderen gehört.","Du sollst nicht töten. Achte das Leben.","Du sollst nicht falsch aussagen. Bleibe bei der Wahrheit.","Du sollst die Ehe nicht brechen. Sei treu."],
+["Wie lautet das achte Gebot und was bedeutet es?","Du sollst nicht falsch gegen deinen Nächsten aussagen. Erzähle nichts Unwahres über andere und beschuldige niemanden zu Unrecht.","Du sollst nicht stehlen. Lass anderen ihren Besitz.","Du sollst Vater und Mutter ehren. Begegne ihnen mit Respekt.","Du sollst den Feiertag heiligen. Halte Zeit für Ruhe frei."],
+["Wie lautet das neunte Gebot und was bedeutet es?","Du sollst nicht begehren deines Nächsten Haus. Respektiere, dass anderen ihr Zuhause und ihr Besitz gehören.","Achte den Feiertag und nimm dir Zeit für Gott.","Sage nichts Falsches über andere Menschen.","Bleibe deinem Ehepartner treu."],
+["Was meint das zehnte Gebot in der Reihenfolge des Arbeitsblatts?","Begehre nicht, was zum Leben und Haushalt anderer gehört. Die alte Formulierung nennt unter anderem die Frau, Knecht, Magd, Vieh und Besitz des Nächsten. Das Arbeitsblatt erklärt es so: Suche dein eigenes Glück.","Feiertage einhalten und bewusst ruhen.","Eigene Versprechen durch eine falsche Aussage absichern.","Das Leben anderer Menschen vor körperlicher Gewalt schützen."],
+["Was unterscheidet „stehlen“ von „begehren“?","Stehlen ist das Wegnehmen. Begehren meint hier, unbedingt für sich haben zu wollen, was einem anderen gehört.","Beides bedeutet hier, eine falsche Aussage zu machen.","Begehren bedeutet hier, etwas auszuleihen.","Stehlen bezeichnet nur einen Gedanken."],
+["Welches Lösungswort ergibt die Zuordnungsaufgabe zu den Geboten?","WEGZEICHEN. Die Gebote sollen Menschen Orientierung geben.","VATERHAUS","WEIDEPLATZ","GASTFREUND"],
+["Jemand gibt einem unschuldigen Kind die Schuld. Welches Gebot passt dazu?","Das achte Gebot über falsche Aussagen.","Das dritte Gebot über den Feiertag.","Das siebte Gebot über das Stehlen.","Das vierte Gebot über Vater und Mutter."]
+]],
+["Doppelgebot der Liebe",[
+["Wer antwortet auf die Frage nach dem höchsten Gebot und wo steht das?","Jesus antwortet einem Schriftgelehrten. Das steht in Markus 12,29–31.","Mose antwortet dem Pharao in 2. Mose 20.","Jesus antwortet dem Wirt in Lukas 10.","Abraham antwortet Sara in 1. Mose 18."],
+["Welche beiden Gebote verbindet Jesus?","Liebe Gott mit deinem ganzen Herzen und allen Kräften. Liebe deinen Nächsten wie dich selbst.","Ehre Vater und Mutter und heilige den Feiertag.","Zieh in ein anderes Land und teile dein Brot.","Sag die Wahrheit und suche neue Weideplätze."],
+["Welche drei Formen der Liebe stecken im Doppelgebot?","Gottesliebe, Nächstenliebe und Selbstliebe. Die Selbstliebe steckt in den Worten „wie dich selbst“.","Freundschaft, Gastfreundschaft und Mut.","Gottesliebe, Segen und Vertrauen.","Selbstliebe, Treue und Ruhe."],
+["Was bedeutet Selbstliebe in diesem Zusammenhang?","Ich achte auf meine eigenen Bedürfnisse und Grenzen und nehme die Bedürfnisse anderer ernst.","Ich stelle meine Wünsche immer an erste Stelle.","Ich übernehme die Wünsche anderer als meine eigenen.","Ich messe meinen Wert daran, wie oft ich anderen helfe."],
+["Wie würdest du den T-Shirt-Spruch „Wenn jeder an sich denkt, ist an alle gedacht“ beurteilen?","Wer nur an sich denkt, kann die Not anderer übersehen. Das Doppelgebot verbindet die Sorge für sich selbst mit der Sorge für andere.","Der Spruch zeigt, dass Hilfe immer automatisch entsteht.","Der Spruch beschreibt besonders gut die Hilfe des Samariters.","Der Spruch sagt dasselbe wie die Goldene Regel."]
+]],
+["Nächstenliebe im Alltag",[
+["Wie heißen die drei Schritte der Nächstenliebe?","Wahrnehmen → sich berühren lassen → handeln.","Handeln → urteilen → weggehen.","Sich berühren lassen → handeln → wahrnehmen.","Wahrnehmen → warten → vergessen."],
+["Was bedeutet „wahrnehmen“?","Ich bemerke, dass jemand Hilfe brauchen könnte.","Ich tröste die Person oder hole Hilfe.","Ich frage mich, wie sich die Person fühlt.","Ich entscheide, was ich als Nächstes tun werde."],
+["Was bedeutet „sich berühren lassen“?","Die Situation ist mir wichtig. Ich frage mich, wie es der Person geht, und fühle mit.","Ich bemerke, dass ein Kind allein sitzt.","Ich setze mich zu dem Kind.","Ich rufe eine Lehrkraft zu Hilfe."],
+["Was bedeutet „handeln“?","Ich überlege, welche Hilfe passt, und tue etwas Konkretes.","Ich sehe, dass jemand am Boden sitzt.","Ich spüre, dass mich die Situation traurig macht.","Ich nehme mir vor, später darüber nachzudenken."],
+["Ein neues Kind sitzt in der Pause allein. Wie kannst du helfen?","Ich bemerke es, überlege, wie es sich fühlen könnte, und frage, ob es mitspielen oder sich zu uns setzen möchte.","Ich warte darauf, dass es zuerst zu mir kommt.","Ich entscheide ohne Rückfrage, bei wem es sitzen muss.","Ich erzähle herum, dass das Kind in der Pause allein war."],
+["Ein Kind wird im Klassenchat ausgelacht. Was kannst du tun?","Ich unterstütze das Kind, mache beim Auslachen nicht mit und hole bei anhaltenden oder schweren Angriffen eine erwachsene Vertrauensperson dazu.","Ich leite die Nachrichten an mehr Kinder weiter.","Ich schreibe eine Beleidigung zurück.","Ich beteilige mich mit einem Lach-Emoji."],
+["Jemandem fallen Bücher und Brotdose herunter. Was ist eine passende Hilfe?","Ich frage kurz nach und helfe beim Aufheben.","Ich schiebe die Sachen mit dem Fuß weg.","Ich hebe die Brotdose auf und behalte sie.","Ich rufe den anderen Kindern zu, sie sollen wegsehen."],
+["Ein Kind wird ausgeschlossen. Wie kannst du handeln?","Ich kann es einladen, dazuzukommen, und bei wiederholter Ausgrenzung eine Lehrkraft ansprechen.","Ich warte, bis es wieder dazugehört, und sage nichts.","Ich schlage vor, das Kind in einem anderen Spiel ebenfalls auszuschließen.","Ich verspreche Hilfe und gehe sofort weg."],
+["Wann ist es sinnvoll, eine erwachsene Person hinzuzuholen?","Zum Beispiel bei Verletzungen, Bedrohungen oder wiederholter Ausgrenzung, wenn ich Unterstützung brauche.","Sobald jemand eine andere Meinung hat.","Erst nachdem die betroffene Person die Schule gewechselt hat.","Ausschließlich wenn ich selbst direkt betroffen bin."]
+]],
+["Der barmherzige Samariter",[
+["Wo steht das Gleichnis vom barmherzigen Samariter?","In Lukas 10,30–37.","In Markus 12,29–31.","In Matthäus 7,12.","In 1. Mose 12,1–9."],
+["Was geschieht mit dem Mann auf dem Weg von Jerusalem nach Jericho?","Er wird überfallen, ausgeraubt, geschlagen und verletzt liegen gelassen.","Er verirrt sich und wird von Hirten nach Hause gebracht.","Er verliert seine Vorräte und bittet einen Wirt um Arbeit.","Er trifft drei Gäste und bietet ihnen Essen an."],
+["Wer geht am Überfallenen vorbei?","Ein Priester und ein Levit gehen vorbei.","Abraham und Lot gehen vorbei.","Zwei Samariter gehen vorbei.","Der Wirt und Mose gehen vorbei."],
+["Warum ist es schlimm, dass die beiden vorbeigehen?","Der Mann ist verletzt und braucht dringend Hilfe. Er könnte sich verlassen oder traurig gefühlt haben.","Die beiden haben dem Wirt bereits Geld versprochen.","Der Mann hätte ihnen den Weg nach Jericho zeigen sollen.","Die beiden gehen am Ziel ihrer eigenen Reise vorbei."],
+["Wie hilft der Samariter konkret?","Er versorgt die Wunden, bringt den Verletzten in eine Herberge und bezahlt für seine weitere Pflege.","Er zeigt ihm den Weg und zieht weiter.","Er bringt ihn nach Hause und lässt ihn dort allein.","Er wartet in der Herberge auf den Verletzten."],
+["Wer wird dem Verletzten zum Nächsten und warum?","Der Samariter wird ihm zum Nächsten, weil er mitfühlt und konkret hilft.","Der Priester, weil er zuerst vorbeikommt.","Der Levit, weil er den Weg kennt.","Die Räuber, weil sie den Mann getroffen haben."],
+["Wie zeigen sich die drei Schritte im Gleichnis?","Der Samariter sieht den Verletzten, hat Mitleid und versorgt ihn.","Der Samariter sieht die Räuber, warnt sie und folgt ihnen.","Der Samariter bemerkt den Mann und erledigt anschließend nur seine eigenen Einkäufe.","Der Samariter versorgt den Mann zuerst und bemerkt seine Verletzungen erst später."]
+]],
+["Nomadenleben",[
+["Wie lebten die Nomaden auf dem Arbeitsblatt?","Sie lebten in Zelten und zogen mit ihren Schafen und Ziegen zu neuen Weideplätzen und Wasserstellen.","Sie blieben ganzjährig in einem Dorf und bauten Getreide an.","Sie lebten auf Schiffen und transportierten ihre Herden übers Meer.","Sie zogen ohne Tiere von Markt zu Markt."],
+["Woraus bestanden die Zelte im Arbeitsblatt?","Sie waren aus schwarzem Ziegenhaar gewebt.","Sie bestanden aus Lehmziegeln.","Sie waren aus Holzbohlen gebaut.","Sie bestanden aus Palmblättern."],
+["Wo hielten sich die Hirten laut Arbeitsblatt in Regen- und Trockenzeit auf?","In der Regenzeit in der Steppe am Rand des fruchtbaren Landes. In der Trockenzeit suchten sie im Kulturland Futter und Wasser.","In der Regenzeit im Kulturland und in der Trockenzeit in der Steppe.","In beiden Jahreszeiten blieben sie am selben Brunnen.","Im Sommer in Bergdörfern, im Winter in Hafenstädten."],
+["Warum waren Brunnen und Wasserstellen so wichtig?","Menschen und Herden brauchten Wasser zum Überleben. Bei Trockenheit konnte es Streit um Wasser geben.","Dort lagerten sie ihre Zelte dauerhaft ein.","Dort konnten sie Ziegenhaar gegen Getreide tauschen.","Sie dienten hauptsächlich als Wegmarken und wurden kaum genutzt."],
+["Wie wurde das Fladenbrot auf dem Arbeitsblatt zubereitet?","Aus gemahlenen Körnern, Wasser und Salz wurde Teig gemacht und über dem Feuer auf einer heißen Platte gebacken.","Der Teig wurde in kaltem Wasser eingeweicht und roh gegessen.","Ganze Körner wurden ohne Wasser auf dem Feuer geröstet.","Der Teig wurde wie eine Suppe im Topf gekocht."],
+["Welche Gefahren nennt das Arbeitsblatt für die Herden?","Trockenheit und Raubtiere wie Wölfe und Panther.","Hochwasser an der Küste und starke Brandung.","Verkehr in großen Städten und zu enge Ställe.","Schneelawinen und zu viel frisches Gras."]
+]],
+["Abraham und Sara",[
+["Warum verlässt Abraham seine Heimat?","Gott fordert ihn auf, in ein Land zu ziehen, das er ihm zeigen wird. Abraham bricht auf, weil er Gott vertraut.","Der Pharao befiehlt ihm, Ägypten zu verlassen.","Er folgt einem Wirt, der ihm Arbeit verspricht.","Sara sagt ihm, er solle nach Jericho ziehen."],
+["Was soll Abraham in 1. Mose 12,1 verlassen?","Sein Land, seine Verwandtschaft und sein Vaterhaus.","Sein Zelt, seine Herde und seine Vorräte.","Nur seinen Heimatort für einen kurzen Besuch.","Seinen Glauben und alle Menschen seines Haushalts."],
+["Wer zieht mit Abraham los und was nimmt er mit?","Sara, Lot und die Menschen seines Haushalts ziehen mit. Abraham nimmt seinen Besitz mit.","Mose und der Pharao reisen mit, während Abraham seinen Besitz zurücklässt.","Nur Lot zieht mit. Sara bleibt laut Erzählung zu Hause.","Abraham zieht allein und hat lediglich Proviant dabei."],
+["Wohin führt Abrahams Reise?","Beim Aufbruch verspricht Gott, ihm das Land zu zeigen. Abraham kommt nach Kanaan.","Nach Jericho, um eine Herberge zu eröffnen.","Zum Sinai, um die Gebote zu empfangen.","Nach Jerusalem, um den Verletzten zu suchen."],
+["Was verspricht Gott Abraham in 1. Mose 12,2–3?","Gott will Abraham segnen, ihn zu einem großen Volk machen und ihm einen großen Namen geben. Abraham soll ein Segen für andere sein.","Er soll die Israeliten aus Ägypten führen.","Er soll eine Herberge eröffnen und Reisende aufnehmen.","Er soll am Sinai die Zehn Gebote empfangen."],
+["Wem verspricht Gott in 1. Mose 12,7 das Land?","Abrahams Nachkommen.","Mose und seinem Bruder.","Den Gästen unter dem Baum.","Abrahams Neffen Lot allein."],
+["Warum wird Abraham als „Vater des Glaubens“ bezeichnet?","Er vertraut darauf, dass Gott ihn begleitet, auch wenn er den Weg und seine Zukunft noch nicht kennt.","Weil er allen anderen den Weg vorgibt und jeden Ort kennt.","Weil er die Israeliten aus Ägypten geführt hat.","Weil er als Erster die Zehn Gebote aufschreibt."],
+["Was kann bei einem Neubeginn helfen, und was kann schwer sein?","Vertraute Menschen, Unterstützung und Hoffnung können helfen. Abschied, Unsicherheit und Heimweh können schwer sein.","Nur gutes Wetter hilft. Abschied spielt dabei keine Rolle.","Unsicherheit ist die einzige Hilfe. Unterstützung macht den Anfang schwerer.","Vorwissen ist zwingend nötig. Neue Freunde können beim Ankommen kaum helfen."],
+["Wie empfängt Abraham die drei Besucher in 1. Mose 18?","Er bietet ihnen Schatten, Wasser zum Füßewaschen und Essen an.","Er bittet sie, ihm Wasser und Brot zu bringen.","Er schickt sie sofort zur nächsten Wasserstelle.","Er lässt sie warten und bietet ihnen erst am nächsten Morgen etwas an."],
+["Was kündigt einer der Besucher an?","Sara wird innerhalb eines Jahres einen Sohn bekommen.","Lot bekommt die Zehn Gebote.","Die Familie soll am nächsten Tag nach Ägypten ziehen.","Abraham soll eine Herberge bauen."],
+["Warum lacht Sara über die Ankündigung?","Sie hält es wegen ihres hohen Alters für unwahrscheinlich, noch ein Kind zu bekommen.","Sie glaubt, die Besucher machen sich über ihr Zelt lustig.","Sie freut sich darüber, dass Lot schon zurückgekehrt ist.","Sie erkennt einen der Gäste als alten Freund."],
+["Wie heißt der Sohn von Abraham und Sara?","Isaak.","Lot.","Mose.","Jakob."]
+]],
+["Freundschaft",[
+["Was macht eine gute Freundschaft aus?","Vertrauen, Zusammenhalt, Zuhören, gegenseitige Hilfe, gemeinsame Zeit und die Bereitschaft, sich zu entschuldigen.","Gleiche Hobbys und dieselbe Meinung in jeder Frage.","Einseitige Hilfe und möglichst viele Geschenke.","Beliebtheit und Wettbewerb darum, wer mehr Freunde hat."],
+["Wie können Freunde mit einem Streit umgehen?","Sie können zuhören, erklären, was sie verletzt hat, sich bei Bedarf entschuldigen und eine Lösung suchen.","Sie können den Streit in der Gruppe weitererzählen.","Sie können darauf bestehen, dass immer dieselbe Person nachgibt.","Sie können sich gegenseitig Vorwürfe machen und das Gespräch beenden."],
+["Was schadet einer Freundschaft?","Zum Beispiel Auslachen, Beleidigen, absichtliches Hängenlassen oder das Weitererzählen anvertrauter Dinge.","Eine unterschiedliche Meinung respektvoll äußern.","Ein gemeinsames Spiel vorschlagen.","Sich nach einem Fehler ehrlich entschuldigen."],
+["Warum ist der kleine Zauberer in „Abschied von der kleinen Eule“ manchmal traurig?","Er vermisst jemanden, mit dem er etwas teilen kann und der sich mit ihm freut.","Er kann seine Zaubertricks nicht mehr ausführen.","Er findet den Weg zu seiner Hütte nicht wieder.","Er möchte seine Eule gegen einen anderen Vogel tauschen."],
+["Warum ist der Zauberer zunächst von der Eule überrascht?","Er hatte sich einen größeren Freund vorgestellt. Beim Zusammensein merkt er, dass die Größe unwichtig ist.","Er erwartet, dass die Eule sprechen lernt.","Er hatte geglaubt, die Eule würde mit vielen anderen Tieren kommen.","Er hält die Eule zunächst für eine alte Bekannte."],
+["Wie zeigt der Zauberer am Ende, dass ihm die Eule wichtig ist?","Er respektiert ihren Wunsch, in einer Baumhöhle zu leben, und besucht sie weiterhin.","Er verlangt, dass sie bei ihm wohnen bleibt.","Er lässt die Höhle verschließen.","Er besucht sie erst, wenn sie wieder auszieht."]
+]],
+["Erntedank",[
+["Wofür danken Menschen beim Erntedankfest?","Traditionell für die Ernte und Lebensmittel. Im Unterricht ging es auch um Dankbarkeit für Menschen oder Erfahrungen, die uns guttun.","Für den Beginn der Schulferien und die Weihnachtszeit.","Für die Heiligen Drei Könige und ihre Geschenke.","Für den Aufbruch Abrahams und seine Reise."],
+["Wofür stehen die Wurzeln und Früchte im Erntedankbild?","Die Wurzeln stehen für das, was Halt gibt, etwa Familie, Glaube oder Vertrauen. Die Früchte stehen für das, was daraus wächst, etwa Freude oder ein Erfolg.","Die Wurzeln stehen für die Früchte, die Früchte für den Boden.","Die Wurzeln stehen für Gefahren, die Früchte für Regeln.","Die Wurzeln stehen für den Schulweg, die Früchte für das Wetter."]
+]]
+];
+const commandments=["Keine anderen Götter haben","Gottes Namen achten","Den Feiertag heiligen","Vater und Mutter ehren","Das Leben schützen","In der Ehe treu bleiben","Fremdes Eigentum achten","Keine falsche Aussage machen","Das Haus des Nächsten nicht begehren","Nicht nach dem verlangen, was zum Haushalt des Nächsten gehört"];
+const commandmentQuestions=commandments.map((answer,i)=>[
+  "Welche Kurzfassung passt zu Gebot "+(i+1)+" auf dem Arbeitsblatt?",
+  answer,...[1,3,6].map(offset=>commandments[(i+offset)%commandments.length])
+]);
+groups[1][1].push(...commandmentQuestions);
+const cards = groups.flatMap(([topic, rows]) => rows.map(([q,a,...wrong],id)=>({topic,q,a,wrong,id:topic+id})));
+const nav=document.querySelector("nav"), view=document.querySelector("#view"), topic=document.querySelector("#topic");
+const tabs=["Fragenkatalog","Karteikarten","Quiz"];
+let mode=0, index=0, review=false, revealed=false, deck=[], game=null, timer=null;
+let learned=new Set();
+try{learned=new Set(JSON.parse(localStorage.getItem("religion-learned")||"[]"));}catch{}
+function element(tag,value,parent=view){
+  const node=document.createElement(tag);
+  node.textContent=value;
+  parent.append(node);
+  return node;
+}
+function button(label, run, parent=view, cls=""){
+  const node=element("button",label,parent);
+  node.type="button";
+  node.className=cls;
+  node.onclick=run;
+  return node;
+}
+function controls(parent=view){const node=element("div","",parent);node.className="controls";return node;}
+function panel(){const node=element("article","");node.className="panel";return node;}
+function selectOptions(node,values){for(const value of values) element("option",value,node);}
+function resetDeck(){deck=cards.filter(c=>(topic.value==="Alle Themen"||c.topic===topic.value)&&(!review||!learned.has(c.id)));index=0;revealed=false;}
+function shuffle(items){
+  const copy=[...items];
+  for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
+  return copy;
+}
+function clearGame(){clearInterval(timer);timer=null;game=null;}
+function changeMode(tab){clearGame();mode=tab;resetDeck();render();view.querySelector("h2")?.focus();}
+selectOptions(topic,["Alle Themen",...groups.map(g=>g[0])]);
+topic.onchange=()=>{clearGame();resetDeck();render();};
+tabs.forEach((tab,i)=>button(tab,()=>changeMode(i),nav));
+function render(){
+  view.replaceChildren();
+  [...nav.children].forEach((b,i)=>b.setAttribute("aria-current",String(i===mode)));
+  const heading=element("h2",tabs[mode]);heading.tabIndex=-1;
+  const selected=cards.filter(c=>topic.value==="Alle Themen"||c.topic===topic.value);
+  if(mode===0){
+    element("p",selected.length+" mögliche Fragen. Tippe auf eine Frage, um die Antwort zu sehen.");
+    for(const [name] of groups){
+      const list=selected.filter(c=>c.topic===name);
+      if(!list.length)continue;
+      element("h3",name);
+      list.forEach(c=>{const d=element("details","");element("summary",c.q,d);element("p",c.a,d);});
+    }
+  }
+  if(mode===1) renderCards(selected);
+  if(mode===2) renderQuiz(selected);
+}
+function renderCards(selected){
+  const bar=controls();
+  button(review?"Alle Karten anzeigen":"Nur offene Karten",()=>{review=!review;resetDeck();render();},bar);
+  button("Mischen",()=>{deck=shuffle(deck);index=0;revealed=false;render();},bar);
+  element("p",selected.filter(c=>learned.has(c.id)).length+" von "+selected.length+" Karten als gelernt markiert");
+  const c=deck[index];
+  if(!c){element("p","Alle Karten in dieser Auswahl sind gelernt.");return;}
+  const box=panel();box.classList.add("card");
+  element("p",c.topic+" · Karte "+(index+1)+" von "+deck.length,box).className="tag";
+  element("h3",c.q,box);
+  const answer=element("p",revealed?c.a:"Sag die Antwort erst aus dem Kopf.",box);
+  answer.setAttribute("aria-live","polite");
+  const flip=button(revealed?"Antwort verdecken":"Antwort aufdecken",()=>{
+    revealed=!revealed;answer.textContent=revealed?c.a:"Sag die Antwort erst aus dem Kopf.";flip.textContent=revealed?"Antwort verdecken":"Antwort aufdecken";mark.hidden=!revealed;
+  },box,"primary");
+  const mark=button(learned.has(c.id)?"Wiederholen":"Kann ich",()=>{
+    if(learned.has(c.id))learned.delete(c.id);else learned.add(c.id);
+    try{localStorage.setItem("religion-learned",JSON.stringify([...learned]));}catch{}
+    if(review)deck=deck.filter(item=>!learned.has(item.id));
+    index=deck.length?(review?index%deck.length:(index+1)%deck.length):0;
+    revealed=false;render();view.querySelector(".card .primary")?.focus();
+  },box);
+  mark.hidden=!revealed;
+  const move=(delta)=>{index=(index+delta+deck.length)%deck.length;revealed=false;render();view.querySelector(".card .primary")?.focus();};
+  const steps=controls();
+  button("← Zurück",()=>move(-1),steps);
+  button("Weiter →",()=>move(1),steps);
+}
+function renderQuiz(selected){
+  const eligible=selected;
+  if(!game){
+    const box=panel();
+    element("p",eligible.length+" Multiple-Choice-Fragen verfügbar. Jede richtige Antwort gibt 100 Punkte. Im Zeitmodus gibt es bis zu 50 Bonuspunkte.",box);
+    const row=controls(box), label=element("label","Rundenlänge",row), count=element("select","",label);
+    const lengths=[...new Set([Math.min(5,eligible.length),Math.min(10,eligible.length),eligible.length])];
+    for(const length of lengths){
+      const option=element("option",length===eligible.length?"Alle "+length+" Fragen":length+" Fragen",count);
+      option.value=String(length);
+    }
+    count.value=String(Math.min(10,eligible.length));
+    const timing=element("label","Mit 30 Sekunden pro Frage",row);
+    const clock=element("input","",timing);clock.type="checkbox";
+    const start=button("Quiz starten",()=>{
+      game={round:shuffle(eligible).slice(0,Number(count.value)),index:0,points:0,timed:clock.checked,answers:[]};
+      nextQuestion();
+    },box,"primary");
+    start.disabled=!eligible.length;
+    return;
+  }
+  const {round,index,points,answers}=game;
+  const box=panel();
+  if(index===round.length){
+    const mistakes=answers.filter(entry=>entry.choice!==entry.card.a);
+    element("h3","Ergebnis · "+(round.length-mistakes.length)+" von "+round.length+" richtig",box);
+    element("p",points+" Punkte",box);
+    for(const {card,choice} of mistakes){
+      const item=element("details","",box);
+      element("summary",card.q,item);element("p","Deine Antwort: "+(choice??"Zeit abgelaufen"),item);
+      element("p","Richtig: "+card.a,item);
+    }
+    button("Neue Runde",()=>{clearGame();render();},box,"primary");
+    return;
+  }
+  const card=round[index];
+  element("p","Frage "+(index+1)+" / "+round.length+" · "+points+" Punkte",box).className="tag";
+  const progress=element("progress","",box);progress.max=round.length;progress.value=index;progress.setAttribute("aria-label","Quizfortschritt");
+  const timeLabel=element("p",game.timed?"Noch 30 Sekunden":"Ohne Zeitlimit",box);
+  const question=element("h3",card.q,box);question.tabIndex=-1;
+  const options=element("div","",box);options.className="options";
+  const feedback=element("p","",box);feedback.className="feedback";feedback.hidden=true;feedback.setAttribute("role","status");
+  const stop=button("Runde beenden",()=>{clearGame();render();},box);
+  let answered=false;
+  const deadline=performance.now()+30000;
+  function answer(choice){
+    if(answered)return;
+    answered=true;clearInterval(timer);timer=null;
+    const correct=choice===card.a;
+    if(correct)game.points+=100+(game.timed?Math.max(0,Math.round((deadline-performance.now())/600)):0);
+    game.answers.push({card,choice});
+    [...options.children].forEach(b=>{
+      b.disabled=true;
+      if(b.textContent===card.a)b.classList.add("correct");
+      else if(b.textContent===choice)b.classList.add("wrong");
+    });
+    feedback.hidden=false;
+    feedback.textContent=(correct?"Richtig! ":choice===null?"Zeit abgelaufen. ":"Noch nicht richtig. ")+card.a;
+    const next=button(index+1===round.length?"Ergebnis ansehen":"Nächste Frage",()=>{game.index++;nextQuestion();},box,"primary");
+    box.insertBefore(next,stop);next.focus();
+  }
+  shuffle([card.a,...card.wrong]).forEach(choice=>button(choice,()=>answer(game.timed&&performance.now()>=deadline?null:choice),options));
+  if(game.timed)timer=setInterval(()=>{
+    const left=Math.max(0,Math.ceil((deadline-performance.now())/1000));
+    timeLabel.textContent="Noch "+left+" Sekunden";
+    if(left===0)answer(null);
+  },150);
+}
+function nextQuestion(){render();view.querySelector("h3")?.focus();}
+resetDeck();render();
+</script></html>
