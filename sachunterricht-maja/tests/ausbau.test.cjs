@@ -30,6 +30,9 @@ module.exports = async function checkWorkshop(page, context, base) {
     "Vorhersage stimmt",
   );
   await visit("station/labor/2/zuordnen");
+  await page.getByRole("button",{name:"Bärlis Hinweis zu Aufgabe 2",exact:true}).click();
+  await page.getByRole("button",{name:"Bärlis Hinweis zu Aufgabe 2",exact:true}).click();
+  await expect(page.locator(".body-matching li").nth(1).locator(".reveal")).toContainText("Naturjoghurt");
   await page.getByLabel(/Du bewegst dich viel/).selectOption("Fett");
   await page.getByLabel(/Energie als Reserve/).selectOption("Kohlenhydrate");
   await page.getByRole("button", { name: "Zuordnung prüfen" }).focus();
@@ -92,6 +95,8 @@ module.exports = async function checkWorkshop(page, context, base) {
   const archiveCheck = await page.evaluate(() => {
     const historical = JSON.parse(JSON.stringify(state.results[0]));
     const before = normalizeState({ results: { 0: historical } }).results[0];
+    [historical.taskIds[0],historical.taskIds[1]]=[historical.taskIds[1],historical.taskIds[0]];
+    [historical.answers[0],historical.answers[1]]=[historical.answers[1],historical.answers[0]];
     const removed = pruefungen[0].tasks.shift();
     try {
       const after = normalizeState({ results: { 0: historical } }).results[0];

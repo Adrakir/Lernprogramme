@@ -423,7 +423,7 @@ function examIndex() {
 
 function draftExam(i) {
   const key = `exam-${i}`;
-  if (!state.drafts[key]) state.drafts[key] = { edition: ausgabe, index: 0, answers: pruefungen[i].tasks.map(() => []) };
+  if (!state.drafts[key]) state.drafts[key] = { edition: ausgabe, taskIds:[...examEdition(i).ids,...examEdition(i).writingIds], index: 0, answers: examEdition(i).tasks.map(() => []) };
   const draft = state.drafts[key];
   draft.written ??= schriftaufgaben[i].map(() => ({ text: "", paper: false }));
   return draft;
@@ -495,7 +495,7 @@ function renderResult() {
     return `<li class="review-row ${correct ? "success" : "retry"}"><h3>${j + 1}. ${q.text}</h3>
       <p><strong>${correct ? "✓ Richtig" : "Deine Antwort"}</strong> · ${answerText(q, picked)}</p>
       ${correct ? "" : `<p><strong>Lösung</strong> · ${answerText(q, q.correct)}</p>`}
-      <p>${q.why}</p>${correct ? "" : nav("Mit einem anderen Beispiel üben →", `fehlertraining/${i+1}/${j}`, "breadcrumb")}</li>`;
+      <p>${q.why}</p>${nav(correct?"Ähnliches Beispiel ausprobieren":"Mit einem anderen Beispiel üben →", `fehlertraining/${i+1}/${j}`, "breadcrumb")}</li>`;
   }).join("");
   return `<div class="route">${breadcrumb("Alle Probeklassenarbeiten", "pruefungen")}
     <header class="unit-header salbei"><div><p class="eyebrow">Auswahlaufgaben · ${exam.title}</p><h1 id="page-title" tabindex="-1">${result.score} von ${exam.tasks.length} richtig</h1>
@@ -707,12 +707,20 @@ main.addEventListener("click", event => {
   if (action === "speak") return read(Number(value));
   if (action === "stop") return stopSpeech();
   if (action === "print") return window.print();
+  if (action === "body-hint") {
+    const i = Number(value);
+    const hints = activity.bodyMatching.hints ??= {};
+    hints[i] = Math.min(3,(hints[i] || 0)+1);
+    refreshActivity("body-hint-"+i);
+    return;
+  }
   if (action === "body-check" || action === "body-reset") {
     if (action === "body-reset") delete activity.bodyMatching;
     else {
       activity.bodyMatching.checked = true;
       activity.bodyMatching.answers = [...main.querySelectorAll("[data-body-match]")].map(select => select.value);
-      state.bodyEvidence = [...activity.bodyMatching.answers]; save();
+      state.bodyEvidence = [...activity.bodyMatching.answers];
+      state.bodyHints = koerperZuordnung.map((_,i)=>activity.bodyMatching.hints?.[i] || 0); save();
     }
     refreshActivity(action === "body-reset" ? "body-match-0" : "body-status");
     return;
@@ -869,6 +877,7 @@ function renderBodyMatching() {
         <select id="body-match-${i}" data-body-match="${i}">
           <option value="">Stoff auswählen …</option>${choices.map(choice => `<option value="${choice}" ${exercise.answers[i] === choice ? "selected" : ""}>${choice}</option>`).join("")}
         </select>
+        ${solved?"":bodyHint(i,exercise.hints?.[i] || 0)}
         ${exercise.checked ? `<p>${correct ? "✓ Richtig." : "↺ Schau noch einmal."} ${correct ? task.grund : exercise.answers[i] ? "Vergleiche: "+task.grund : "Hier fehlt noch eine Auswahl."}</p>` : ""}
       </li>`;
     }).join("")}</ol>

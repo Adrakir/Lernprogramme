@@ -1,17 +1,17 @@
 "use strict";
-const cacheName = "majas-sachunterricht-2026-11-19-6";
+const cacheName = "majas-sachunterricht-2026-11-19-7";
 const appFiles = [
   "./",
   "./index.html",
-  "./style.css?v=10",
-  "./stoff.js?v=10",
-  "./lernen.js?v=10",
-  "./forschen.js?v=10",
-  "./redaktion.js?v=10",
-  "./ausstattung.js?v=10",
-  "./pruefarchiv.js?v=10",
-  "./werkstatt.js?v=10",
-  "./app.js?v=10",
+  "./style.css?v=11",
+  "./stoff.js?v=11",
+  "./lernen.js?v=11",
+  "./forschen.js?v=11",
+  "./redaktion.js?v=11",
+  "./ausstattung.js?v=11",
+  "./pruefarchiv.js?v=11",
+  "./werkstatt.js?v=11",
+  "./app.js?v=11",
   "./assets/baerli.webp",
   "./assets/essen-apfel.webp",
   "./assets/essen-brot.webp",

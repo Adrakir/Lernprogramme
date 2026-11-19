@@ -580,7 +580,7 @@ function observations() {
             ? html(ans[i]) +
               (ans[i] === t.stoff ? " ✓" : " · passend wäre " + t.stoff)
             : "offengelassen") +
-          "</li>",
+          (state.bodyHints?.[i]?" · Hinweisstufe "+state.bodyHints[i]+" geöffnet":"") + "</li>",
       )
       .join("") +
     "</ul><p>" +
@@ -787,4 +787,19 @@ function persistFieldChanges(replace) {
     }
   }
   readFieldRecords();
+}
+
+const matchingClues = [
+  ["Denke daran, was die Muskeln bei Bewegung brauchen.",3,"Die Stärke im Brot liefert Energie."],
+  ["Gesucht ist eine Stoffgruppe. Calcium gehört dazu.",4,"Naturjoghurt liefert Calcium für Knochen und Zähne."],
+  ["Was kann der Körper für später aufbewahren?",5,"Käse enthält unter anderem Fett. Auch der Körper kann Energie als Fett speichern."],
+  ["Was im Blut hilft, gelöste Stoffe zu befördern?",0,"Wasser ist der größte Bestandteil des Blutplasmas."],
+  ["Beim Wachsen braucht der Körper Baustoffe.",7,"Linsen liefern einen Baustoff für Muskeln."],
+  ["Verschiedene Stoffe aus Obst und Gemüse helfen der Körperabwehr.",2,"Möhren liefern eine Vorstufe von Vitamin A."],
+  ["Denke an die äußeren Schichten eines Getreidekorns.",6,"Vollkornhafer liefert Stoffe, die deinem Darm helfen."]
+];
+function bodyHint(row,stage){
+  const [clue,picture,caption]=matchingClues[row];
+  return '<button type="button" class="subtle-button" id="body-hint-'+row+'" data-do="body-hint" data-value="'+row+'" aria-label="Bärlis Hinweis zu Aufgabe '+(row+1)+'">Bärlis Hinweis · '+Math.min(stage+1,3)+'/3</button>'+
+    (stage?'<div class="reveal" role="status">'+[clue,foodPicture(picture,"lesson-picture")+'<p>'+caption+'</p>',koerperZuordnung[row].grund][stage-1]+'</div>':'');
 }

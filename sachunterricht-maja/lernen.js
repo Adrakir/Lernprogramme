@@ -1,6 +1,6 @@
 "use strict";
 
-const appVersion = "2026-11-19.6";
+const appVersion = "2026-11-19.7";
 const datenVersion = 3;
 const foodCards = [
   { name: "Wasser", group: 7, breakfast: 0, key: "wasser" },
@@ -64,6 +64,15 @@ function cleanSelections(value, task) {
 function cleanWritten(value) {
   return [0, 1].map(i => ({ text: typeof value?.[i]?.text === "string" ? value[i].text.slice(0, 1200) : "", paper: value?.[i]?.paper === true }));
 }
+function archivedAnswers(record, edition) {
+  const ids = record.taskIds;
+  if (!Array.isArray(ids) || !edition.ids) return record;
+  const reorder = (items, expected, offset) => expected.map(id => {
+    const index = ids.indexOf(id);
+    return index < offset ? undefined : items?.[index-offset];
+  });
+  return { ...record, answers:reorder(record.answers,edition.ids,0), written:Array.isArray(record.written)?reorder(record.written,edition.writingIds,edition.ids.length):undefined };
+}
 function normalizeState(raw) {
   if (!isRecord(raw)) throw new Error("Die Datei enthält keinen Lernstand.");
   if (raw.schema > datenVersion) throw new Error("Dieser Lernstand stammt aus einer neueren App-Version. Aktualisiere zuerst die App.");
@@ -82,17 +91,19 @@ function normalizeState(raw) {
     if (isRecord(review)) out.review[s.id] = { due: Number.isFinite(review.due) ? review.due : 0, streak: Math.max(0, Math.min(3, Number.isInteger(review.streak) ? review.streak : 0)), variant: Math.max(0, Number.isInteger(review.variant) ? review.variant % 3 : 0) };
   }
   for (const [i, exam] of pruefungen.entries()) {
-    const draft = raw.drafts?.["exam-" + i];
+    let draft = raw.drafts?.["exam-" + i];
     const archived = record => typeof examEdition==="function"?examEdition(i,record):exam;
+    if(isRecord(draft))draft=archivedAnswers(draft,archived(draft));
     if (isRecord(draft)) out.drafts["exam-" + i] = {
-      edition: draft.edition || "ernaehrung-1",
+      edition: draft.edition || "ernaehrung-1", taskIds:[...(archived(draft).ids || []),...(archived(draft).writingIds || [])],
       index: Number.isInteger(draft.index) ? Math.max(0, Math.min(9, draft.index)) : 0,
       answers: archived(draft).tasks.map(([, task], j) => cleanSelections(draft.answers?.[j], task)),
       written: cleanWritten(draft.written),
     };
-    const result = raw.results?.[i];
+    let result = raw.results?.[i];
     if (isRecord(result) && Array.isArray(result.answers) && result.answers.length === 8) {
       const edition = archived(result);
+      result=archivedAnswers(result,edition);
       const answers = edition.tasks.map(([, task], j) => cleanSelections(result.answers[j], task));
       const score = edition.tasks.filter(([, task], j) => task.correct.length === answers[j].length && task.correct.every(v => answers[j].includes(v))).length;
       out.results[i] = { edition: result.edition || "ernaehrung-1", taskIds: [...(edition.ids||[]),...(edition.writingIds||[])], answers, score, best: Math.max(score, Number.isInteger(result.best) ? Math.min(8, Math.max(0, result.best)) : score), at: Number.isFinite(result.at) ? result.at : 0 };
@@ -108,6 +119,7 @@ function normalizeState(raw) {
     const slot=item.slot==="raum"?id:item.slot;
     if(raw.equipment?.[slot]===id)out.equipment[slot]=id;
   }
+  if(Array.isArray(raw.bodyHints))out.bodyHints=koerperZuordnung.map((_,i)=>[1,2,3].includes(raw.bodyHints[i])?raw.bodyHints[i]:0);
   if(Array.isArray(raw.bodyEvidence))out.bodyEvidence=koerperZuordnung.map((_,i)=>koerperZuordnung.some(t=>t.stoff===raw.bodyEvidence[i])?raw.bodyEvidence[i]:"");
   out.last = stationen.some(s => s.id === raw.last) ? raw.last : "";
   out.theme = ["dark", "light"].includes(raw.theme) ? raw.theme : "";
