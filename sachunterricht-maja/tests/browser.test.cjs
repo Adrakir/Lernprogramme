@@ -129,7 +129,7 @@ async function main() {
     await expect(page.getByRole("button", { name: "Hinweis", exact: true })).toBeFocused();
     await expect(page.locator(".reveal")).toContainText("Calcium");
     await go("forschen");
-    await expect(page.locator("#lab-area a")).toHaveCount(13);
+    await expect(page.locator("#lab-area a")).toHaveCount(16);
     await go("picknick");
     for (const value of [0,1,3,4]) await page.locator('[data-lab="picnic-food"][data-value="'+value+'"]').click();
     await page.getByLabel("Warum passt deine Auswahl zu den Freunden?").fill("Wasser löscht den Durst.");
@@ -181,6 +181,8 @@ async function main() {
     await page.locator("#profile-select").selectOption("standard");
     await go("forscherheft");
     await expect(page.locator(".notebook")).toContainText("Ballaststoffe helfen");
+    await go("diagnose");
+    await require("./ausbau.test.cjs")(page,context,base);
     await go("diagnose");
     const reportPromise=page.waitForEvent("download");
     await page.getByRole("button",{name:"Technischen Bericht herunterladen"}).click();
@@ -272,6 +274,7 @@ async function main() {
     await expect(recoveryPage.locator("html")).toHaveAttribute("data-theme", "dark");
     await recoveryContext.close();
     assert.deepEqual(errors, []);
+    if(engine==="chromium" && !fileMode)await require("./ansichten.cjs")(browser,base);
     console.log("Browserabläufe, Speicherung, Druckansichten, Schriftgröße, Import/Export, Tastatur und " + (fileMode ? "lokale Ressourcen" : "Offline-Nutzung") + " geprüft.");
     await context.close();
   } finally { await browser.close(); }

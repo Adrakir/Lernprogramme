@@ -1,6 +1,6 @@
 "use strict";
 
-const appVersion = "2026-11-19.5";
+const appVersion = "2026-11-19.6";
 const datenVersion = 3;
 const foodCards = [
   { name: "Wasser", group: 7, breakfast: 0, key: "wasser" },
@@ -83,16 +83,19 @@ function normalizeState(raw) {
   }
   for (const [i, exam] of pruefungen.entries()) {
     const draft = raw.drafts?.["exam-" + i];
+    const archived = record => typeof examEdition==="function"?examEdition(i,record):exam;
     if (isRecord(draft)) out.drafts["exam-" + i] = {
+      edition: draft.edition || "ernaehrung-1",
       index: Number.isInteger(draft.index) ? Math.max(0, Math.min(9, draft.index)) : 0,
-      answers: exam.tasks.map(([, task], j) => cleanSelections(draft.answers?.[j], task)),
+      answers: archived(draft).tasks.map(([, task], j) => cleanSelections(draft.answers?.[j], task)),
       written: cleanWritten(draft.written),
     };
     const result = raw.results?.[i];
     if (isRecord(result) && Array.isArray(result.answers) && result.answers.length === 8) {
-      const answers = exam.tasks.map(([, task], j) => cleanSelections(result.answers[j], task));
-      const score = exam.tasks.filter(([, task], j) => task.correct.length === answers[j].length && task.correct.every(v => answers[j].includes(v))).length;
-      out.results[i] = { answers, score, best: Math.max(score, Number.isInteger(result.best) ? Math.min(8, Math.max(0, result.best)) : score), at: Number.isFinite(result.at) ? result.at : 0 };
+      const edition = archived(result);
+      const answers = edition.tasks.map(([, task], j) => cleanSelections(result.answers[j], task));
+      const score = edition.tasks.filter(([, task], j) => task.correct.length === answers[j].length && task.correct.every(v => answers[j].includes(v))).length;
+      out.results[i] = { edition: result.edition || "ernaehrung-1", taskIds: [...(edition.ids||[]),...(edition.writingIds||[])], answers, score, best: Math.max(score, Number.isInteger(result.best) ? Math.min(8, Math.max(0, result.best)) : score), at: Number.isFinite(result.at) ? result.at : 0 };
       if (Array.isArray(result.written)) out.results[i].written = cleanWritten(result.written);
     }
     for (let j = 0; j < 2; j++) for (let k = 0; k < 2; k++) {
@@ -100,6 +103,12 @@ function normalizeState(raw) {
       if (raw.criteria?.[key] === true) out.criteria[key] = true;
     }
   }
+  out.equipment = {};
+  if(typeof ausstattung!=="undefined")for(const [id,item] of Object.entries(ausstattung)){
+    const slot=item.slot==="raum"?id:item.slot;
+    if(raw.equipment?.[slot]===id)out.equipment[slot]=id;
+  }
+  if(Array.isArray(raw.bodyEvidence))out.bodyEvidence=koerperZuordnung.map((_,i)=>koerperZuordnung.some(t=>t.stoff===raw.bodyEvidence[i])?raw.bodyEvidence[i]:"");
   out.last = stationen.some(s => s.id === raw.last) ? raw.last : "";
   out.theme = ["dark", "light"].includes(raw.theme) ? raw.theme : "";
   if (isRecord(raw.preferences)) out.preferences = {
@@ -252,7 +261,7 @@ function levelArea() {
 
 function renderParents() {
   const notes = learningNotes();
-  return extraShell("Gemeinsam lernen", `<div class="learning-tools">${nav("Maja erklärt es mir","erklaeren")}${nav("Lernweg zusammenstellen","lernweg")}${nav("Familienfrühstück","familie")}${nav("Fortschrittsbericht","bericht")}${nav("Kinderprofile","profile")}</div><h2>Was zuletzt geklappt hat</h2>
+  return extraShell("Gemeinsam lernen", `<div class="learning-tools">${nav("Heute fünf Minuten","familienrunde")}${nav("Küchenkarte zum Ausdrucken","kuechenkarte")}${nav("Für den Unterricht","unterricht")}${nav("Maja erklärt es mir","erklaeren")}${nav("Lernweg zusammenstellen","lernweg")}${nav("Familienfrühstück","familie")}${nav("Fortschrittsbericht","bericht")}${nav("Kinderprofile","profile")}</div>${parentPrompts()}<h2>Was zuletzt geklappt hat</h2>
     <p>Diese Übersicht zeigt die letzten Antworten im Browser. Zum gemeinsamen Üben passen die Gesprächsfragen unter jedem Thema.</p>
     <div class="parent-topics">${stationen.map(s => `<article><h3>${s.title}</h3><p>${lernziele[s.id]}</p><p><strong>${notes[s.id]?.text || "Noch keine Auswertung"}</strong></p>
       <p>Aufgabenbeispiel · ${s.practice[0].text}</p>
@@ -329,12 +338,12 @@ function handleExtra(action, value) {
   const n = Number(value);
   if (action === "print") return window.print();
   if (action === "voices") return render(false);
-  if (action === "export") return downloadJSON(JSON.stringify({ app: "majas-sachunterricht", schema: datenVersion, exported: new Date().toISOString(), state }, null, 2), "Majas-Sachunterricht-Lernstand.json");
+  if (action === "export") return downloadJSON(JSON.stringify({ app: "majas-sachunterricht", schema: datenVersion, exported: new Date().toISOString(), profileName: profileList().find(p=>p.id===activeProfile())?.name, state }, null, 2), "Majas-Sachunterricht-Lernstand.json");
   if (action === "recovery") return downloadJSON(recoveryText, "Majas-Sachunterricht-urspruengliche-Daten.json");
   if (action === "import-confirm") {
     if (!extra.imported) return;
     state = extra.imported;
-    save();
+    save(true);
     applyTheme();
     applyPreferences();
     render(false);
@@ -431,7 +440,9 @@ document.addEventListener("change", async event => {
       const data = payload.app === "majas-sachunterricht" ? payload.state : payload;
       if (!isRecord(data) || !isRecord(data.done) || !isRecord(data.drafts) || !isRecord(data.results)) throw new Error("Bitte wähle eine Sicherung aus Majas Sachunterrichtswelt.");
       extra.imported = normalizeState(data);
-      preview.innerHTML = `<p>Die Datei enthält ${Object.keys(extra.imported.done).length} Stationssterne und ${Object.keys(extra.imported.results).length} abgegebene Arbeiten. Beim Übernehmen wird der Lernstand in diesem Browser ersetzt. Sichere ihn vorher, wenn du ihn behalten möchtest.</p>${extraButton("Diesen Lernstand übernehmen", "import-confirm", "", "primary")}`;
+      extra.importName = typeof payload.profileName==="string" ? payload.profileName.slice(0,32) : "Importierter Lernstand";
+      const when = new Date(payload.exported);
+      preview.innerHTML = `<p>Profil: ${html(extra.importName)} · Sicherung: ${Number.isFinite(when.getTime())?when.toLocaleString("de-DE"):"Datum unbekannt"}</p><p>${extra.imported.research.notes.length} Heftnotizen</p><ul>${extra.imported.research.notes.map(n=>"<li>"+html(n.text)+"</li>").join("")}</ul><button class="primary" data-new-import>Als eigenes Profil öffnen</button><p>Die Datei enthält ${Object.keys(extra.imported.done).length} Stationssterne und ${Object.keys(extra.imported.results).length} abgegebene Arbeiten. Beim Übernehmen wird der Lernstand in diesem Browser ersetzt. Sichere ihn vorher, wenn du ihn behalten möchtest.</p>${extraButton("Diesen Lernstand übernehmen", "import-confirm", "", "primary")}`;
       preview.hidden = false;
       status.textContent = "Datei geprüft. Du kannst sie jetzt übernehmen.";
     } catch (error) {
@@ -489,13 +500,21 @@ function initOffline() {
 window.addEventListener("storage", event => {
   if (event.key !== storageKey || !event.newValue) return;
   try {
-    state = normalizeState(JSON.parse(event.newValue));
+    state = normalizeState(JSON.parse(localStorage.getItem(storageKey) || event.newValue));
+    readFieldRecords();
     applyTheme();
     applyPreferences();
+    // Keep an unfinished notebook sentence while another tab updates the learning path.
+    const noteText = document.getElementById("note-text")?.value;
+    const noteFood = document.getElementById("note-food")?.value;
     const focusId = document.activeElement?.id;
     const selection = document.activeElement?.selectionStart;
     synchronizingState = true;
     try { render(false); } finally { synchronizingState = false; }
+    if(noteText && document.getElementById("note-text")){
+      document.getElementById("note-text").value = noteText;
+      if(noteFood !== undefined)document.getElementById("note-food").value = noteFood;
+    }
     const input = focusId && document.getElementById(focusId);
     if (input) {
       input.focus({ preventScroll: true });

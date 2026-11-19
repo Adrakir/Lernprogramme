@@ -539,3 +539,26 @@ input[type="file"] { max-width: 100%; margin: 7px 0; }
 .package-section[aria-pressed="true"] { border-color: var(--accent); background: var(--salbei); }
 .comic-editor textarea { border: 2px solid var(--line); border-radius: 18px; background: var(--paper); }
 @media print { .comic-print-text { border-radius: 18px; background: white; color: #17271d; } }
+
+.reward-scene {display:flex;align-items:end;gap:1rem;padding:clamp(1rem,4vw,3rem);border:4px solid #a47852;border-radius:1.5rem;background:linear-gradient(to bottom,#e7efd9 0 68%,#c69e74 68% 71%,#e5c6a3 71%);color:#263d32}
+.bear-dress {position:relative;width:min(42%,260px);flex:none}
+.bear-dress img,.bear-dress svg {display:block;width:100%}
+.bear-dress svg {position:absolute;inset:0}
+.room-items {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(4.5rem,100%),1fr));flex:1;align-items:end}
+.room-items figure {margin:0;text-align:center;font-size:.84rem}
+.room-items svg,.reward-card svg {width:100%;max-height:7rem}
+.reward-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(10rem,100%),1fr));gap:.8rem}
+.reward-card {display:grid;text-align:center;justify-items:center;align-content:start;gap:.55rem;border:1px solid currentColor;padding:.8rem;border-radius:1rem}
+.grain-layout {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem;align-items:center}
+.grain-layout svg {width:100%;max-height:20rem}
+.grain-layout label,.grain-layout button {display:block;margin:.4rem 0}
+.grain-selected {stroke:#304c70;stroke-width:5px}
+.word-help {margin-block:1rem}
+.word-help details {margin:.5rem 1rem}
+.word-help img,.hint-box img,#sandwich-result img {width:5rem;height:5rem;object-fit:contain;vertical-align:middle}
+.sr-only {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:420px){.grain-layout{grid-template-columns:1fr}.reward-scene{gap:.3rem}.room-items{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media print{.print-controls,.reward-card button{display:none!important}}
+.food-picture.lesson-picture {width:min(12rem,100%);display:block;height:auto}
+.word-link {display:inline;padding:0;color:inherit;background:transparent;border:0;border-radius:0;font:inherit;text-decoration:underline dotted;text-underline-offset:.18em;cursor:help}
+.bear-dress img {border-radius:15%}

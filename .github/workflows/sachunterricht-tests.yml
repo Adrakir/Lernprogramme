@@ -48,4 +48,12 @@ jobs:
         env:
           BROWSER_ENGINE: ${{ matrix.browser }}
           NODE_PATH: ${{ runner.temp }}/sachunterricht-tools/node_modules
+          VIEW_OUTPUT: ${{ runner.temp }}/sachunterricht-ansichten
         run: node sachunterricht-maja/tests/browser.test.cjs
+      - name: Vergleichsbilder aufbewahren
+        if: always() && matrix.browser == 'chromium'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sachunterricht-ansichten
+          path: ${{ runner.temp }}/sachunterricht-ansichten
+          if-no-files-found: ignore

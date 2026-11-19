@@ -87,7 +87,7 @@ function normalizeResearch(raw, out) {
   };
   for (const [i, result] of Object.entries(out.results)) {
     if (raw.results?.[i]?.partial !== undefined) {
-      result.partial = selectionPoints(pruefungen[i], result.answers);
+      result.partial = selectionPoints(typeof examEdition==="function"?examEdition(i,result):pruefungen[i], result.answers);
       result.bestPoints = Math.max(
         result.partial,
         Number.isFinite(raw.results[i].bestPoints)
@@ -143,6 +143,9 @@ function renderResearchHub() {
   return labShell(
     "Unsere Forscherwerkstatt",
     `<p>Wähle, was du heute untersuchen oder gestalten möchtest.</p><div class="offer-grid">${[
+      ["Ein Korn untersuchen", "korn"],
+      ["Sterns belegtes Brot", "brotwerkstatt"],
+      ["Für den Unterricht", "unterricht"],
       ["Unser Picknick planen", "picknick"],
       ["Verpackungen untersuchen", "verpackung"],
       ["Mein Lerncomic", "comic"],
@@ -301,7 +304,7 @@ function dishBody() {
    )
    .join(
      "",
-   )}</div>${labButton("Zutaten prüfen", "dish-check")}<p role="status" class="message"></p>`;
+   )}</div>${labButton("Zutaten prüfen", "dish-check")}<details><summary>Andere Zutaten begründen</summary><p>Auf einer Pizza passen Tomate, Paprika oder Pilze zur Gruppe Obst und Gemüse. Welche Zutaten würdest du als Gemüsebelag wählen? Bei einem Aufstrich kann jede einzelne Zutat zu einer anderen Gruppe gehören.</p><fieldset><legend>Wähle einen oder mehrere passende Gemüsebeläge.</legend>${["Tomate","Paprika","Zucchini","Käse"].map((name,i)=>'<label><input type="checkbox" data-pizza="'+i+'"> '+name+'</label>').join("")}</fieldset><label for="pizza-why">Warum passt deine Wahl?</label><textarea id="pizza-why" rows="2"></textarea><button type="button" class="secondary" data-pizza-check>Beispiel vergleichen</button><p role="status" id="pizza-note"></p></details><p role="status" class="message"></p>`;
 }
 function renderMisconceptions() {
   return labShell(
@@ -406,7 +409,7 @@ function renderReport() {
    .join(
      "",
    )}</tbody></table><h2>Empfohlener nächster Schritt</h2>${nav(nextTopic.title + " üben", "niveau/" + nextTopic.id + "/1")}
- <p>Aufgabenbeispiel · ${stationen.find((s) => notes[s.id]?.retry)?.practice[0].text || stationen[0].practice[0].text}</p>
+ <h2>Letzter Versuch im Nährstoffrätsel</h2>${observations()}${parentPrompts()}<p>Aufgabenbeispiel · ${stationen.find((s) => notes[s.id]?.retry)?.practice[0].text || stationen[0].practice[0].text}</p>
  <div class="print-controls">${labButton("Bericht drucken / als PDF speichern", "print")}</div>`,
   );
 }
@@ -448,6 +451,7 @@ function switchProfile(id) {
     storageKey = profileStorageKey();
     const raw = localStorage.getItem(storageKey);
     state = raw ? normalizeState(JSON.parse(raw)) : standardState();
+    readFieldRecords();
     recoveryText = localStorage.getItem(storageKey + "-rettung") || "";
     applyTheme();
     applyPreferences();

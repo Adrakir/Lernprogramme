@@ -48,6 +48,7 @@ try {
   storageAvailable = false;
 }
 
+try { readFieldRecords(); } catch {}
 let route = [];
 let activity = {};
 let quiz = {};
@@ -58,7 +59,7 @@ const html = value => String(value).replace(/[&<>"']/g, char => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
 })[char]);
 
-function save() {
+function save(replaceFields = false) {
   if (synchronizingState) return;
   if (!storageAvailable) return;
   try {
@@ -71,6 +72,7 @@ function save() {
         localStorage.setItem(storageKey + "-rettung", previous);
       }
     }
+    persistFieldChanges(replaceFields);
     state.schema = datenVersion;
     localStorage.setItem(storageKey, JSON.stringify(state));
   } catch {
@@ -147,7 +149,7 @@ function renderStart() {
         </div>
       </div>
     </section>
-    <nav class="learning-tools" aria-label="Weitere Lernangebote">${nav("Spiele und Bildkarten", "lernspiele", "primary")}${nav("Kurze Lernrunde", "kurzrunde")}${nav("Gemeinsam lernen", "eltern")}</nav>
+    <nav class="learning-tools" aria-label="Weitere Lernangebote">${nav("Bärlis Baumhaus", "baumhaus")}${nav("Spiele und Bildkarten", "lernspiele", "primary")}${nav("Kurze Lernrunde", "kurzrunde")}${nav("Gemeinsam lernen", "eltern")}</nav>
     <section class="stations-section" aria-labelledby="stations-title">
       <div class="section-title"><h2 id="stations-title">Deine Lernstationen</h2><p>${doneCount} von ${stationen.length} geschafft</p></div>
       <div class="station-grid">${stations}
@@ -188,7 +190,7 @@ function renderStation() {
   return `<div class="route">
     ${breadcrumb()}
     <header class="unit-header ${s.color}"><div><p class="eyebrow">Lernstation · ${s.short}</p><h1 id="page-title" tabindex="-1">${s.title}</h1></div>${figur(s.figur)}</header>
-    <p class="learning-goal">${lernziele[id]}</p><div class="station-tools">${nav("Drei Übungsstufen", `niveau/${id}/1`)}${nav("Sterns Auftrag", `entdecken/${id}`)}${nav("Arbeitsblatt", `arbeitsblatt/${id}`)}</div>
+    <p class="learning-goal">${lernziele[id]}</p><div class="station-tools">${id==="ballast"?nav("Ein Korn untersuchen","korn"):""}${nav("Drei Übungsstufen", `niveau/${id}/1`)}${nav("Sterns Auftrag", `entdecken/${id}`)}${nav("Arbeitsblatt", `arbeitsblatt/${id}`)}</div>
     <ol class="step-nav" aria-label="Lernschritte">${stepNav}</ol>
     <section class="panel" aria-labelledby="phase-title">
       <h2 id="phase-title">${phasen[step]}</h2>
@@ -401,10 +403,10 @@ function renderPractice(station) {
     `Ein Beispiel aus der Station: ${station.facts[1][1]}`,
     q.why,
   ];
-  const hint = !quiz.checked ? `<div class="hint-box">${button("Hinweis in kleinen Schritten", "hint")}
-    ${quiz.hint ? `<p class="reveal" role="status">${hintText[Math.min(2, quiz.hint - 1)]}</p>` : ""}</div>` : "";
-  return `${questionMarkup(q, quiz.selected, check ? "Wissenscheck" : `Aufgabe ${quiz.index + 1} von ${tasks.length}`, quiz.checked)}
-    ${speechButtons()}${hint}${description}<div class="actions">${actions}${check && success ? nav("Zur Übersicht", "start") : ""}</div><p class="message" role="status"></p>`;
+  const hint = !quiz.checked ? `<div class="hint-box">${button("Bärlis Hinweis · " + Math.min(3, (quiz.hint || 0) + 1) + " von 3", "hint")}
+    ${quiz.hint ? `<p class="reveal" role="status">${quiz.hint===2?pictureClue(station,q):hintText[Math.min(2, quiz.hint - 1)]}</p>` : ""}</div>` : "";
+  return `${questionMarkup({...q,text:linkedQuestion(q.text)}, quiz.selected, check ? "Wissenscheck" : `Aufgabe ${quiz.index + 1} von ${tasks.length}`, quiz.checked)}
+    ${speechButtons()}${glossary([q.text,...q.options].join(" "))}${hint}${description}<div class="actions">${actions}${check && success ? nav("Bärlis Baumhaus öffnen", "baumhaus")+nav("Zur Übersicht", "start") : ""}</div><p class="message" role="status"></p>`;
 }
 
 function renderExamList() {
@@ -421,7 +423,7 @@ function examIndex() {
 
 function draftExam(i) {
   const key = `exam-${i}`;
-  if (!state.drafts[key]) state.drafts[key] = { index: 0, answers: pruefungen[i].tasks.map(() => []) };
+  if (!state.drafts[key]) state.drafts[key] = { edition: ausgabe, index: 0, answers: pruefungen[i].tasks.map(() => []) };
   const draft = state.drafts[key];
   draft.written ??= schriftaufgaben[i].map(() => ({ text: "", paper: false }));
   return draft;
@@ -443,8 +445,8 @@ ${html(answer.text)}</textarea>
 
 function renderExam() {
   const i = examIndex();
-  const exam = pruefungen[i];
-  if (!exam) return renderMissing();
+  if (!pruefungen[i]) return renderMissing();
+  const exam = examEdition(i,state.drafts["exam-"+i]);
   const draft = draftExam(i);
   const answered = examAnswered(draft);
   const count = answered.filter(Boolean).length;
@@ -455,7 +457,7 @@ function renderExam() {
     <header class="unit-header pfirsich"><div><p class="eyebrow">Probeklassenarbeit ${i + 1}</p><h1 id="page-title" tabindex="-1">${exam.title}</h1></div></header>
     <p id="exam-lock-status" role="status"></p><section class="panel"><div class="exam-progress"><p role="status">${count} von ${answered.length} beantwortet</p><div class="jump-list" aria-label="Aufgabe auswählen">${taskLinks}</div></div>
     ${writtenIndex < 0 ? questionMarkup(exam.tasks[draft.index][1], draft.answers[draft.index], `Aufgabe ${draft.index + 1} von ${answered.length}`)
-      : writtenMarkup(schriftaufgaben[i][writtenIndex], draft.written[writtenIndex], draft.index + 1, answered.length)}
+      : writtenMarkup(exam.written[writtenIndex], draft.written[writtenIndex], draft.index + 1, answered.length)}
     ${speechButtons()}<div class="actions">
     ${draft.index > 0 ? button("← Zurück", "exam-go", draft.index - 1) : ""}
     ${draft.index + 1 < answered.length ? button("Weiter →", "exam-go", draft.index + 1, "primary") : button("Arbeit abgeben", "submit-exam", "", "primary")}
@@ -471,7 +473,7 @@ function renderWrittenSolutions(i, result) {
   const offset = pruefungen[i].tasks.length;
   return `<section class="written-solutions"><h2>Schreibaufgaben vergleichen</h2>
     <p>Lies die Musterlösung und prüfe die Punkte darunter. Deine Antwort darf anders klingen.</p>
-    <ol class="review-list" start="${offset + 1}">${schriftaufgaben[i].map((task, j) => `
+    <ol class="review-list" start="${offset + 1}">${examEdition(i,result).written.map((task, j) => `
       <li class="review-row written-review"><h3>${offset + j + 1}. ${task.text}</h3>
         <p class="written-response"><strong>Deine Antwort</strong> · ${result.written[j].paper ? "Im Heft geantwortet" : html(result.written[j].text)}</p>
         <p><strong>Musterlösung</strong> · ${task.beispiel}</p>
@@ -484,8 +486,8 @@ function renderWrittenSolutions(i, result) {
 
 function renderResult() {
   const i = examIndex();
-  const exam = pruefungen[i];
   const result = state.results[i];
+  const exam = examEdition(i,result);
   if (!exam || !result) return renderMissing();
   const review = exam.tasks.map(([id, q], j) => {
     const picked = result.answers[j];
@@ -493,13 +495,13 @@ function renderResult() {
     return `<li class="review-row ${correct ? "success" : "retry"}"><h3>${j + 1}. ${q.text}</h3>
       <p><strong>${correct ? "✓ Richtig" : "Deine Antwort"}</strong> · ${answerText(q, picked)}</p>
       ${correct ? "" : `<p><strong>Lösung</strong> · ${answerText(q, q.correct)}</p>`}
-      <p>${q.why}</p>${correct ? "" : nav(`${stationNachId[id].title} üben →`, `station/${id}/3`, "breadcrumb")}</li>`;
+      <p>${q.why}</p>${correct ? "" : nav("Mit einem anderen Beispiel üben →", `fehlertraining/${i+1}/${j}`, "breadcrumb")}</li>`;
   }).join("");
   return `<div class="route">${breadcrumb("Alle Probeklassenarbeiten", "pruefungen")}
     <header class="unit-header salbei"><div><p class="eyebrow">Auswahlaufgaben · ${exam.title}</p><h1 id="page-title" tabindex="-1">${result.score} von ${exam.tasks.length} richtig</h1>
     <p>${(result.partial ?? result.score) >= 6 ? "★ Einen Stern für diese Arbeit verdient!" : "Unten findest du die Lösungen und passende Übungen."}</p></div>${figur("stern")}</header>
     <section class="panel">${result.partial !== undefined ? `<div class="reveal"><p><strong>Auswahlaufgaben · ${result.partial.toLocaleString("de-DE")} von 8 Punkten</strong></p><p>Bei mehreren Antworten gibt jede richtige Auswahl einen Anteil am Aufgabenpunkt. Falsche Auswahlen ziehen denselben Anteil ab. Eine Aufgabe ergibt mindestens null Punkte.</p></div>` : ""}
-    <p id="self-points" role="status">Eigene Einschätzung der Schreibaufgaben · ${criteriaPoints(i)} von 4 Prüfpunkten abgehakt</p><h2>Lösungen zum Ankreuzen</h2><ol class="review-list">${review}</ol>${renderWrittenSolutions(i, result)}<div class="actions">${button("Lösungen drucken", "print")}${nav("Zum Lernstand →", "fortschritt")}${nav("Weitere Arbeiten →", "pruefungen", "primary")}</div></section></div>`;
+    ${(result.partial ?? result.score)>=6?nav("Meine Belohnungen ansehen","baumhaus"):""}<p id="self-points" role="status">Eigene Einschätzung der Schreibaufgaben · ${criteriaPoints(i)} von 4 Prüfpunkten abgehakt</p><h2>Lösungen zum Ankreuzen</h2><ol class="review-list">${review}</ol>${renderWrittenSolutions(i, result)}<div class="actions">${button("Lösungen drucken", "print")}${nav("Zum Lernstand →", "fortschritt")}${nav("Weitere Arbeiten →", "pruefungen", "primary")}</div></section></div>`;
 }
 
 function learningNotes() {
@@ -509,7 +511,7 @@ function learningNotes() {
     if (!result) return;
     const at = result.at ?? 0;
     const counts = {};
-    exam.tasks.forEach(([id, q], j) => {
+    examEdition(i,result).tasks.forEach(([id, q], j) => {
       const count = counts[id] ??= { correct: 0, total: 0 };
       count.total++;
       if (istRichtig(q, result.answers[j])) count.correct++;
@@ -567,7 +569,7 @@ function renderCertificate() {
 
 function renderInfo() {
   return `<div class="route">${breadcrumb()}<header class="unit-header salbei"><div><p class="eyebrow">Sachunterricht · Klasse 3</p><h1 id="page-title" tabindex="-1">Über die Lernwelt</h1></div>${figur("maja")}</header>
-    <section class="panel"><h2>So kannst du lernen</h2><p>Entdecke ein Thema, probiere etwas aus und übe in deinem Tempo. Beim Wissenscheck gibt es einen Stern. In den Probeklassenarbeiten gibt es je einen Stern ab sechs richtigen Auswahlaufgaben. Schreibantworten vergleichst du selbst mit der Musterlösung. Bei Mehrfachauswahl gibt es einen Punkt, wenn alle passenden Antworten ausgewählt sind.</p>
+    <section class="panel"><h2>So kannst du lernen</h2><p>Entdecke ein Thema, probiere etwas aus und übe in deinem Tempo. Beim Wissenscheck gibt es einen Stern. In den Probeklassenarbeiten gibt es je einen Stern ab sechs Auswahlpunkten. Schreibantworten vergleichst du selbst mit der Musterlösung. Bei Mehrfachauswahl sind Teilpunkte möglich.</p>
     <div class="actions">${nav("Inhalte und Quellen","redaktion")}</div><h2>Für Erwachsene</h2><p>Die acht Gruppen und 22 Kästchen orientieren sich an der Ernährungspyramide auf Majas Arbeitsblatt und am Modell des Bundeszentrums für Ernährung. Die App verwendet die Ampelfarben als Orientierung und das Vier-Bausteine-Modell aus dem Unterricht. Die Zuckermengen sind erfundene, gerundete Beispiele.</p>
     <ul><li><a href="https://www.bzfe.de/essen-und-gesundheit/ernaehrungspyramide/was-esse-ich">Bundeszentrum für Ernährung · Die acht Lebensmittelgruppen</a></li>
     <li><a href="https://www.dge.de/wissenschaft/referenzwerte/ballaststoffe/">Deutsche Gesellschaft für Ernährung · Ballaststoffe</a></li>
@@ -590,7 +592,7 @@ function render(focus = true) {
   stopSpeech();
   const requested = location.hash.slice(1);
   route = requested && requested !== "inhalt" ? requested.split("/") : ["start"];
-  const screens = { start: renderStart, station: renderStation, pruefungen: renderExamList, pruefung: renderExam, ergebnis: renderResult,
+  const screens = { baumhaus: rewardRoom, korn: grain, brotwerkstatt: sandwich, tafel: classroom, unterricht: teaching, kuechenkarte: kitchen, familienrunde: five, fehlertraining: transfer, start: renderStart, station: renderStation, pruefungen: renderExamList, pruefung: renderExam, ergebnis: renderResult,
     fortschritt: renderProgress, urkunde: renderCertificate, infos: renderInfo,
     lernspiele: renderGames, bildkarten: renderCards, "fruehstueck-frei": renderFreeBreakfast,
     baerli: renderBaerli, kurzrunde: renderShortRound, entdecken: renderDiscover, niveau: renderLevel,
@@ -670,8 +672,8 @@ function read(rate) {
 
 function submitExam() {
   const i = examIndex();
-  const exam = pruefungen[i];
   const draft = draftExam(i);
+  const exam = examEdition(i,draft);
   const firstOpen = examAnswered(draft).indexOf(false);
   if (firstOpen !== -1) {
     draft.index = firstOpen;
@@ -683,7 +685,7 @@ function submitExam() {
     return;
   }
   const score = exam.tasks.filter(([, q], j) => istRichtig(q, draft.answers[j])).length;
-  state.results[i] = { bestPoints: Math.max(state.results[i]?.bestPoints ?? state.results[i]?.best ?? 0, selectionPoints(exam, draft.answers)), partial: selectionPoints(exam, draft.answers), score, best: Math.max(state.results[i]?.best || 0, score), answers: draft.answers, written: draft.written, at: Date.now() };
+  state.results[i] = { edition: draft.edition || ausgabe, taskIds:[...exam.ids,...exam.writingIds], bestPoints: Math.max(state.results[i]?.bestPoints ?? state.results[i]?.best ?? 0, selectionPoints(exam, draft.answers)), partial: selectionPoints(exam, draft.answers), score, best: Math.max(state.results[i]?.best || 0, score), answers: draft.answers, written: draft.written, at: Date.now() };
   delete state.drafts[`exam-${i}`];
   for (let task = 0; task < 2; task++) for (let criterion = 0; criterion < 2; criterion++) {
     delete state.criteria[i + "-" + task + "-" + criterion];
@@ -710,6 +712,7 @@ main.addEventListener("click", event => {
     else {
       activity.bodyMatching.checked = true;
       activity.bodyMatching.answers = [...main.querySelectorAll("[data-body-match]")].map(select => select.value);
+      state.bodyEvidence = [...activity.bodyMatching.answers]; save();
     }
     refreshActivity(action === "body-reset" ? "body-match-0" : "body-status");
     return;
@@ -866,13 +869,13 @@ function renderBodyMatching() {
         <select id="body-match-${i}" data-body-match="${i}">
           <option value="">Stoff auswählen …</option>${choices.map(choice => `<option value="${choice}" ${exercise.answers[i] === choice ? "selected" : ""}>${choice}</option>`).join("")}
         </select>
-        ${exercise.checked ? `<p>${correct ? "✓ Richtig." : "↺ Schau noch einmal."} ${correct ? task.grund : ""}</p>` : ""}
+        ${exercise.checked ? `<p>${correct ? "✓ Richtig." : "↺ Schau noch einmal."} ${correct ? task.grund : exercise.answers[i] ? "Vergleiche: "+task.grund : "Hier fehlt noch eine Auswahl."}</p>` : ""}
       </li>`;
     }).join("")}</ol>
     <div id="body-status" role="status" tabindex="-1" class="reveal">
       <strong>Lösungswort</strong>
       <span class="body-word" aria-label="${solved ? "KALORIE" : "Lösungswort noch unvollständig"}">${letters.join(" ")}</span>
-      ${exercise.checked ? `<p>${solved ? "Alle sieben Zuordnungen stimmen!" : "Ergänze oder verbessere die markierten Zuordnungen."}</p>` : ""}
+      ${exercise.checked ? `<p>${exercise.answers[0]==="Fett" && exercise.answers[2]==="Kohlenhydrate"?"Bewegung und Energiereserve sind vertauscht. Welcher Stoff passt im Blatt zur Reserve für später?":solved ? "Alle sieben Zuordnungen stimmen!" : "Ergänze oder verbessere die markierten Zuordnungen."}</p>` : ""}
     </div>
     <div class="actions">${button("Zuordnung prüfen", "body-check", "", "primary")}${button("Neu starten", "body-reset")}</div>
     ${solved ? `<div class="reveal" data-read><h3>Das bedeutet Kalorie</h3>
