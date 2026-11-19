@@ -1,0 +1,31 @@
+name: Sachunterricht prüfen
+on:
+  push:
+    paths:
+      - "sachunterricht-maja/**"
+      - ".github/workflows/sachunterricht-tests.yml"
+  pull_request:
+    paths:
+      - "sachunterricht-maja/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lernapp:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Inhalte, Dateien und alte Lernstände prüfen
+        run: node --test sachunterricht-maja/tests/inhalt.test.cjs
+      - name: Browserwerkzeuge installieren
+        run: |
+          npm install --prefix "$RUNNER_TEMP/sachunterricht-tools" --no-save playwright@1.62.1
+          "$RUNNER_TEMP/sachunterricht-tools/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Lernen, Prüfungen und Offline-Nutzung durchspielen
+        env:
+          NODE_PATH: ${{ runner.temp }}/sachunterricht-tools/node_modules
+        run: node sachunterricht-maja/tests/browser.test.cjs

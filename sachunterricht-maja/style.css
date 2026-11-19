@@ -449,3 +449,61 @@ progress { accent-color: var(--accent); width: 100%; height: 16px; margin: 4px 0
 .body-matching li { padding: 11px 13px; border: 1px solid var(--line); border-radius: 12px; }
 .body-matching li p { margin: 7px 0 0; }
 .body-word { display: block; font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 850; letter-spacing: .1em; margin-top: 7px; }
+
+[hidden] { display: none !important; }
+.learning-tools, .station-tools { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+.learning-goal { border-left: 4px solid var(--accent); padding: 9px 12px; background: var(--paper); font-weight: 700; border-radius: 0 10px 10px 0; }
+.offer-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.offer-grid .station { display: block; min-height: 124px; padding: 17px; }
+.offer-grid h2 { font-size: 1.3rem; }
+.food-shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin: 15px 0; }
+.food-card { background: var(--paper); border: 2px solid var(--line); border-radius: 14px; padding: 5px; color: var(--ink); display: grid; justify-items: center; align-content: start; min-width: 0; }
+.food-card[aria-pressed="true"], .answer[aria-pressed="true"] { border: 2px solid var(--accent); background: var(--salbei); }
+.food-card strong { padding: 4px; line-height: 1.25; overflow-wrap: anywhere; }
+.food-picture { width: 100%; height: auto; object-fit: contain; border-radius: 9px; }
+.group-buttons { display: flex; flex-wrap: wrap; gap: 7px; }
+.case-lead { display: flex; gap: 16px; align-items: center; font-size: 1.15rem; margin-bottom: 12px; }
+.case-food, .case-portrait { width: 110px; height: 110px; object-fit: contain; flex: 0 0 110px; border-radius: 15px; }
+.parent-topics { display: grid; gap: 15px; }
+.parent-topics > article { border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+details { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 10px 0; }
+summary { cursor: pointer; font-weight: 750; min-height: 28px; }
+details > p { margin-top: 9px; }
+textarea { display: block; width: 100%; padding: 10px 12px; margin: 6px 0 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--page); color: var(--ink); font: inherit; resize: vertical; }
+label[for="journal"], label[for="reason"], label[for="level-answer"] { font-weight: 750; display: block; margin-top: 14px; }
+.hint-box { margin: 10px 0; }
+#voice, #rate, #font-size { margin-bottom: 14px; }
+.file-label { display: block; font-weight: 750; margin-top: 12px; }
+input[type="file"] { max-width: 100%; margin: 7px 0; }
+.notice { background: var(--sand); border: 1px solid var(--line); padding: 9px 12px; border-radius: 10px; margin-top: 10px; }
+.worksheet section { margin: 24px 0; }
+.worksheet h2 { font-size: 1.25rem; }
+.writing-lines { height: 165px; background: repeating-linear-gradient(transparent 0, transparent 31px, var(--line) 31px, var(--line) 32px); }
+@media(max-width: 540px) {
+  .offer-grid { grid-template-columns: 1fr; }
+  .food-shelf { gap: 6px; }
+  .food-card strong { font-size: .82rem; }
+  .case-lead { align-items: flex-start; gap: 10px; font-size: 1rem; }
+  .case-food, .case-portrait { width: 72px; height: 72px; flex-basis: 72px; }
+  .station-tools a { font-size: .84rem; padding-inline: 8px; }
+}
+@media print {
+  .station-tools, .learning-tools, .notice, .print-controls { display: none !important; }
+  .worksheet section { break-inside: avoid; }
+  .worksheet { color: #17271d; }
+  .criteria-list input { appearance: auto; }
+}
+.brand { min-width: 0; }
+.brand > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.header-inner { padding-block: 7px; }
+.primary, .secondary, .hero-link, .subtle-button { max-width: 100%; overflow-wrap: anywhere; }
+@media(max-width: 540px) {
+  .brand { flex: 1 1 0; }
+  .header-actions { flex: 0 0 auto; }
+  .section-title { flex-wrap: wrap; }
+  .hero-actions .primary { font-size: .94rem; }
+}
+.station p { overflow-wrap: anywhere; }
+@media(max-width: 540px) {
+  .tile-arrow { font-size: .8rem; }
+}

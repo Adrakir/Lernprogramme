@@ -24,11 +24,26 @@ const schritteFit = [
   ["🌙", "Erholen", "Eine ruhige Pause und Schlaf helfen Maja, sich zu erholen."],
 ];
 
-let state = { done: {}, drafts: {}, results: {}, last: "", theme: "", checkNext: {}, practiceNotes: {} };
+let state = standardState();
 let storageAvailable = true;
+let recoveryText = "";
 try {
-  const saved = JSON.parse(localStorage.getItem(storageKey));
-  if (saved?.done && saved.drafts && saved.results) state = { ...state, ...saved };
+  const raw = localStorage.getItem(storageKey);
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      state = normalizeState(parsed);
+      if (!isRecord(parsed.done) || !isRecord(parsed.drafts) || !isRecord(parsed.results) || Object.keys(parsed.results || {}).some(key => !state.results[key] || JSON.stringify(parsed.results[key].answers) !== JSON.stringify(state.results[key].answers))) recoveryText = raw;
+    } catch {
+      recoveryText = raw;
+      try {
+        const backup = localStorage.getItem(storageKey + "-vorher");
+        if (backup) state = normalizeState(JSON.parse(backup));
+      } catch {}
+    }
+    if (recoveryText) localStorage.setItem(storageKey + "-rettung", recoveryText);
+  }
+  recoveryText ||= localStorage.getItem(storageKey + "-rettung") || "";
 } catch {
   storageAvailable = false;
 }
@@ -44,8 +59,19 @@ const html = value => String(value).replace(/[&<>"']/g, char => ({
 })[char]);
 
 function save() {
+  if (synchronizingState) return;
   if (!storageAvailable) return;
   try {
+    const previous = localStorage.getItem(storageKey);
+    if (previous) {
+      try {
+        normalizeState(JSON.parse(previous));
+        localStorage.setItem(storageKey + "-vorher", previous);
+      } catch {
+        localStorage.setItem(storageKey + "-rettung", previous);
+      }
+    }
+    state.schema = datenVersion;
     localStorage.setItem(storageKey, JSON.stringify(state));
   } catch {
     storageAvailable = false;
@@ -118,6 +144,7 @@ function renderStart() {
         </div>
       </div>
     </section>
+    <nav class="learning-tools" aria-label="Weitere Lernangebote">${nav("Spiele und Bildkarten", "lernspiele", "primary")}${nav("Kurze Lernrunde", "kurzrunde")}${nav("Gemeinsam lernen", "eltern")}</nav>
     <section class="stations-section" aria-labelledby="stations-title">
       <div class="section-title"><h2 id="stations-title">Deine Lernstationen</h2><p>${doneCount} von ${stationen.length} geschafft</p></div>
       <div class="station-grid">${stations}
@@ -158,6 +185,7 @@ function renderStation() {
   return `<div class="route">
     ${breadcrumb()}
     <header class="unit-header ${s.color}"><div><p class="eyebrow">Lernstation · ${s.short}</p><h1 id="page-title" tabindex="-1">${s.title}</h1></div>${figur(s.figur)}</header>
+    <p class="learning-goal">${lernziele[id]}</p><div class="station-tools">${nav("Drei Übungsstufen", `niveau/${id}/1`)}${nav("Sterns Auftrag", `entdecken/${id}`)}${nav("Arbeitsblatt", `arbeitsblatt/${id}`)}</div>
     <ol class="step-nav" aria-label="Lernschritte">${stepNav}</ol>
     <section class="panel" aria-labelledby="phase-title">
       <h2 id="phase-title">${phasen[step]}</h2>
@@ -365,8 +393,15 @@ function renderPractice(station) {
   else actions = quiz.index + 1 < tasks.length
     ? button("Nächste Aufgabe →", "next-question", "", "primary")
     : nav("Wissen überprüfen →", `station/${station.id}/4`, "primary");
+  const hintText = [
+    `Denk an dein Lernziel: ${lernziele[station.id]}`,
+    `Ein Beispiel aus der Station: ${station.facts[1][1]}`,
+    q.why,
+  ];
+  const hint = !quiz.checked ? `<div class="hint-box">${button("Hinweis in kleinen Schritten", "hint")}
+    ${quiz.hint ? `<p class="reveal" role="status">${hintText[Math.min(2, quiz.hint - 1)]}</p>` : ""}</div>` : "";
   return `${questionMarkup(q, quiz.selected, check ? "Wissenscheck" : `Aufgabe ${quiz.index + 1} von ${tasks.length}`, quiz.checked)}
-    ${speechButtons()}${description}<div class="actions">${actions}${check && success ? nav("Zur Übersicht", "start") : ""}</div><p class="message" role="status"></p>`;
+    ${speechButtons()}${hint}${description}<div class="actions">${actions}${check && success ? nav("Zur Übersicht", "start") : ""}</div><p class="message" role="status"></p>`;
 }
 
 function renderExamList() {
@@ -437,7 +472,10 @@ function renderWrittenSolutions(i, result) {
       <li class="review-row written-review"><h3>${offset + j + 1}. ${task.text}</h3>
         <p class="written-response"><strong>Deine Antwort</strong> · ${result.written[j].paper ? "Im Heft geantwortet" : html(result.written[j].text)}</p>
         <p><strong>Musterlösung</strong> · ${task.beispiel}</p>
-        <ul>${task.kriterien.map(line => `<li>${line}</li>`).join("")}</ul>
+        <div class="criteria-list">${task.kriterien.map((line, k) => {
+          const key = i + "-" + j + "-" + k;
+          return `<label class="paper-option"><input type="checkbox" data-criterion="${key}" ${state.criteria[key] ? "checked" : ""}> ${line}</label>`;
+        }).join("")}</div>
       </li>`).join("")}</ol></section>`;
 }
 
@@ -549,7 +587,10 @@ function render(focus = true) {
   const requested = location.hash.slice(1);
   route = requested && requested !== "inhalt" ? requested.split("/") : ["start"];
   const screens = { start: renderStart, station: renderStation, pruefungen: renderExamList, pruefung: renderExam, ergebnis: renderResult,
-    fortschritt: renderProgress, urkunde: renderCertificate, infos: renderInfo };
+    fortschritt: renderProgress, urkunde: renderCertificate, infos: renderInfo,
+    lernspiele: renderGames, bildkarten: renderCards, "fruehstueck-frei": renderFreeBreakfast,
+    baerli: renderBaerli, kurzrunde: renderShortRound, entdecken: renderDiscover, niveau: renderLevel,
+    eltern: renderParents, einstellungen: renderSettings, arbeitsblatt: renderWorksheet, papierloesung: renderWorksheet };
   const renderScreen = Object.hasOwn(screens, route[0]) ? screens[route[0]] : renderMissing;
   main.innerHTML = renderScreen();
   const activityNode = main.querySelector("#activity");
@@ -600,11 +641,12 @@ function read(rate) {
   const spoken = new SpeechSynthesisUtterance(toRead);
   spoken.lang = "de-DE";
   const voices = speechSynthesis.getVoices();
-  const voice = voices.find(v => v.lang.toLowerCase() === "de-de" && v.localService)
+  const voice = voices.find(v => v.voiceURI === state.preferences.voice)
+    || voices.find(v => v.lang.toLowerCase() === "de-de" && v.localService)
     || voices.find(v => v.lang.toLowerCase().startsWith("de") && v.localService)
     || voices.find(v => v.lang.toLowerCase().startsWith("de"));
   if (voice) spoken.voice = voice;
-  spoken.rate = rate;
+  spoken.rate = rate === 1 ? state.preferences.rate : rate;
   function status(value) {
     if (screenId === currentScreen && utterance === spoken) {
       const node = main.querySelector(".speech-status");
@@ -644,6 +686,11 @@ main.addEventListener("click", event => {
   if (!target) return;
   const action = target.dataset.do;
   const value = target.dataset.value;
+  if (action === "hint") {
+    quiz.hint = Math.min(3, (quiz.hint || 0) + 1);
+    redoPractice(".hint-box button");
+    return;
+  }
   if (action === "speak") return read(Number(value));
   if (action === "stop") return stopSpeech();
   if (action === "print") return window.print();
@@ -685,6 +732,7 @@ main.addEventListener("click", event => {
     const tasks = assessmentTasks(station, check);
     const correct = istRichtig(tasks[quiz.index], quiz.selected);
     state.practiceNotes[station.id] = { at: Date.now(), correct, check };
+    recordReview(station.id, correct);
     if (check) {
       state.checkNext[station.id] = correct ? 0 : (quiz.index + 1) % tasks.length;
       if (correct) {
@@ -759,7 +807,7 @@ main.addEventListener("change", event => {
     updateExamProgress(draft);
     return;
   }
-  if (target.name === "answer") {
+  if (target.name === "answer" && !["kurzrunde", "niveau"].includes(route[0])) {
     const selected = [...main.querySelectorAll('input[name="answer"]:checked')].map(input => Number(input.value));
     if (route[0] === "pruefung") {
       const draft = draftExam(examIndex());
@@ -785,7 +833,13 @@ document.querySelector(".skip").addEventListener("click", event => {
 window.addEventListener("hashchange", () => render());
 window.addEventListener("pagehide", stopSpeech);
 applyTheme();
+applyPreferences();
 render(false);
+if (recoveryText) {
+  const banner = document.getElementById("storage-banner");
+  banner.hidden = false;
+}
+initOffline();
 
 function renderBodyMatching() {
   const exercise = activity.bodyMatching ??= { answers: koerperZuordnung.map(() => ""), checked: false };
