@@ -54,6 +54,7 @@ function starters(id,phrases){
  el.parentElement.after(box);
 }
 function pictureExtras(){
+ foxStudio();
  starters('starReason',['Ich sehe','Der Stern fällt auf, weil']);starters('skyReason',['Mein Himmel wirkt','Ich habe diese Farbe gewählt, weil','Das erkenne ich an']);
  const container=stage.querySelector('article');
  container.insertAdjacentHTML('beforeend','<details class="surface"><summary>Mein eigenes Sternpaar gestalten</summary><p>Halte die Sternfarbe für beide Bilder gleich. Verändere die Hintergründe und suche den stärksten Kontrast.</p><label>Sternfarbe<select id="starColor">'+options(names,Number(read('starColor')??0))+'</select></label><div class="star-pair" id="starStudio"></div><label>Vor welchem Hintergrund fällt der Stern stärker auf? Warum?<textarea id="studioReason"></textarea></label></details><details><summary>Erkläre: Blau neben Orange oder Blau in Orange?</summary><p>Wie lässt Blau das Orange stärker leuchten? Wie trübst du Orange mit Blau?</p><label>Meine Erklärung<textarea id="explainContrast"></textarea></label><details><summary>Musterantwort vergleichen</summary><p>Nebeneinander verstärken Orange und Blau den Kontrast. Rühre ich etwas Blau ins Orange, verliert die Mischung an Buntheit.</p></details></details>');
@@ -85,13 +86,28 @@ function setupExperiments(a,b){
  by('observation').parentElement.insertAdjacentHTML('afterend','<label>Mein nächster Versuch<input id="reflection" maxlength="280"></label>');
  noteField('reflection','reflection'+a+'-'+b);starters('reflection',['Das hatte ich erwartet, weil','Das hat mich überrascht, weil','Als Nächstes ändere ich']);
  if(a===2&&b===8){
+   sortExperiment();
    by('sample').insertAdjacentHTML('afterend','<details id="strip"><summary>Versuchsstreifen: Orange in drei Stufen</summary><p>Stelle 0 %, 10 % und 25 % Blau ein. Lege jede passende Probe hier ab.</p><div class="swatch-grid" id="stripCells"></div><button id="stripSave">Auf Versuchsstreifen ablegen</button><p id="stripHint" role="status"></p></details>');
    if(taskPalette)by('strip').open=true;
    by('stripSave').onclick=()=>{if(![0,10,25].includes(amount))return;stripState[amount]=true;save('comparisonStrip',JSON.stringify(stripState));updateStrip(a,b)};
  }
 }
+function brushRecipe(n,current){
+ if(current[0]+current[1]>0&&Math.round(100*current[1]/(current[0]+current[1]))===n)return current;
+ for(let total=1;total<=8;total++)for(let y=0;y<=Math.min(4,total);y++){
+   const x=total-y;if(x<=4&&Math.round(100*y/total)===n)return [x,y];
+ }
+ return null;
+}
+function syncBrush(n){
+ const x=by('brush0'),y=by('brush1');
+ const recipe=brushRecipe(n,[+x.value,+y.value]);
+ if(recipe){x.value=recipe[0];y.value=recipe[1]}
+ by('brushAnswer').textContent=recipe?'Diese Portionen entsprechen der Prozentanzeige (gegebenenfalls gerundet).':'Diese Prozentzahl lässt sich mit bis zu vier Portionen je Farbe nicht treffen. Die Auswahl ist ein Vorschlag für dein nächstes Rezept.';
+ x.onchange=y.onchange=()=>{by('brushAnswer').textContent='Dein nächstes Rezept. Mit „Portionen mischen“ übernimmst du es.'};
+}
 function updateStrip(a,b){
- if(by('brushAnswer'))by('brushAnswer').textContent='';
+ syncBrush(amount);
  if(!by('stripCells'))return;
  by('stripCells').innerHTML=[0,10,25].map((n,i)=>'<figure><i style="background:'+(stripState[n]?pigmentPreview(hex[a],hex[b],n/100):'var(--tint)')+'"></i><figcaption>'+['Reines Orange','Wenig Blau','Mehr Blau'][i]+' · '+n+' % Blau · '+(stripState[n]?'abgelegt':'frei')+'</figcaption></figure>').join('');
  by('stripSave').disabled=![0,10,25].includes(amount)||!!stripState[amount];by('stripHint').textContent=[0,10,25].every(n=>stripState[n])?'Alle drei Proben sind zum Vergleichen bereit.':'Freie Felder sind beschriftet. Die freie Probenablage bleibt separat verfügbar.';
@@ -145,6 +161,7 @@ function practice(){
  by('pOverview').onclick=()=>{resumePractice=true;practiceHub()};
  by('verify').onclick=()=>{
   const selected=i===1?[]:run.values[i],hit=selected.filter(j=>targets.includes(j)),wrong=selected.filter(j=>!targets.includes(j));
+  if(i!==1&&!selected.length){by('verdict').textContent='Wähle zuerst eine Farbe im Kreis oder in der Liste. Danach kannst du deine Auswahl prüfen.';return}
   const correct=i===1?run.values[i]===v.ratio:hit.length===targets.length&&!wrong.length;
   let message='';
   if(correct)message=i===1?'Genau. Deine vier gleich großen Portionen ergeben '+v.ratio+' % '+names[b]+'.':'Richtig: '+targets.map(j=>names[j]).join(', ')+'.';
@@ -157,6 +174,9 @@ function practice(){
   if(!correct){run.errors[i]++;keepRun();return}
   run.done[i]=true;save('practical'+i,'1');keepRun();
   const next=run.done.indexOf(false);by('practiceNext').innerHTML='<button id="nextPractice">'+(next<0?'Zur Rundenübersicht':'Nächste Aufgabe')+'</button>';
+  const reflection=document.createElement('details');
+  reflection.innerHTML='<summary>Wie hast du die Aufgabe gelöst?</summary><label>Mein Weg (freiwillig)<select>'+['Bitte wählen','Ich habe die Positionen verglichen.','Ich habe die Portionen gezählt.','Ich habe ausprobiert.','Wir haben darüber gesprochen.'].map((s,j)=>'<option value="'+j+'">'+s+'</option>').join('')+'</select></label>';
+  const strategy=reflection.querySelector('select'),key='strategy.'+run.round+'.'+i;strategy.value=read(key)||'0';strategy.onchange=()=>save(key,strategy.value);by('practiceNext').append(reflection);
   by('nextPractice').onclick=()=>{if(next<0){resumePractice=true;practiceHub()}else{run.index=next;keepRun();practice()}};
  };
 }

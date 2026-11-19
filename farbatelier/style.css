@@ -6,3 +6,13 @@
 .zoom-wheel{width:min(94vw,800px);max-height:92vh;color:white;background:#151c45;border:1px solid #787fa7;border-radius:16px;padding:16px}.zoom-wheel button{color:var(--ink)}.zoom-scroll{overflow:auto}.zoom-wheel .wheel{width:100%;min-width:540px;max-width:750px}.zoom-wheel::backdrop{background:#14182dbb}.wheel-feedback{font-weight:650;margin:8px 0}.surface details button,.surface details select{margin:5px}.swatch-grid input{min-width:0}.swatch-grid figure{min-width:0}.surface section figure label{font-size:.87rem}.wheelpanel select{max-width:100%}.zoom-wheel h2{font-size:1.4rem}footer{gap:8px;flex-wrap:wrap}#stripSave:disabled{opacity:.72}
 .skip{position:absolute;left:8px;top:-100px;z-index:10;background:var(--card);padding:8px}.skip:focus{top:8px}.class-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}.class-tools button,.class-tools select{padding:6px 10px;font-size:14px}.large-type{font-size:19px}.large-type :is(label,summary,p,li,dd,button,select,textarea,input,figcaption){font-size:1.09em}.pass dl{display:grid;grid-template-columns:minmax(6rem,1fr) 3fr;gap:10px}.pass dt{font-weight:700}.pass dd{margin:0}.pass label{margin:8px 0}.goal-row{display:flex;gap:16px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0}.goal-row select{display:block;margin-top:6px}.goal-row a{flex-shrink:0}.print-sheet{display:none}@media print{body:has(.print-sheet)>:not(.print-sheet){display:none!important}.print-sheet{display:block;white-space:pre-wrap;font:11pt/1.35 sans-serif;color:#111;background:white}.print-sheet .swatch-grid{break-inside:avoid;print-color-adjust:exact}}
 @media(max-width:500px){.pass dl{display:block}.pass dd{margin:0 0 10px}.goal-row{display:block}.class-tools{gap:5px}.large-type nav a{font-size:16px}}
+
+.guest-info {margin:.5rem 0;max-width:52rem}
+.tone-pair,.sort-picks {display:flex;flex-wrap:wrap;gap:.75rem;margin:.75rem 0}
+.tone-pair span {padding:.5rem 1rem;border-radius:.4rem}
+.record-preview {white-space:pre-wrap;overflow-wrap:anywhere;margin:1rem 0}
+.partner-dialog {width:min(42rem,92vw);max-height:90vh;overflow:auto;color:var(--ink);background:var(--paper,white);padding:1.5rem;border-radius:1rem}
+.partner-dialog::backdrop {background:#20233a}
+.goal-row details {flex-basis:100%}
+#reportSamples figure {overflow-wrap:anywhere}
+.goal-row {flex-wrap:wrap}
