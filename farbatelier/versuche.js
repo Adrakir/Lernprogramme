@@ -9,7 +9,31 @@ function goalDemo(i){
  return '<details><summary>Zeig es mir</summary><p>'+examples[i][0]+'</p><details><summary>Meine Idee vergleichen</summary><p>'+examples[i][1]+'</p></details></details>';
 }
 function sampleSnapshot(list){return list.map(s=>({...s}))}
-function recordSamples(){return stored('pass.samples',[])}
+function bookState(){
+ const state=stored('recordBook',null);
+ if(state&&typeof state.active==='string'&&Array.isArray(state.archive))return state;
+ const old=stored('pass.archive',[]);
+ return {active:'first',archive:Array.isArray(old)?old:[]};
+}
+function hasSample(s){
+ return s&&Number.isInteger(s.a)&&names[s.a]&&Number.isInteger(s.b)&&names[s.b]&&Number.isInteger(s.n)&&s.n>=0&&s.n<=100&&typeof s.color==='string'&&/^rgb\([\d, ]+\)$/.test(s.color);
+}
+function validArchivedRecord(r){
+ return r&&typeof r.title==='string'&&typeof r.date==='string'&&Array.isArray(r.goals)&&r.goals.every(x=>typeof x==='string')&&Array.isArray(r.entries)&&r.entries.every(e=>e&&typeof e.label==='string'&&typeof e.value==='string')&&Array.isArray(r.samples)&&r.samples.every(hasSample);
+}
+function validArchive(){
+ return bookState().archive.filter(validArchivedRecord).map((rec,i)=>{
+  if(rec.id&&rec.samples.every(s=>s.id))return rec;
+  const id=rec.id||'legacy-'+i,list=rec.samples.map((s,j)=>({...s,id:s.id||id+'-probe-'+j}));
+  return {...rec,id,samples:list,referenceId:rec.referenceId||list[rec.reference]?.id||''};
+ });
+}
+function recordSamples(){
+ const data=stored('pass.samples',[]),list=Array.isArray(data)?data.filter(hasSample):[];
+ if(list.some(s=>!s.id)){list.forEach(s=>{s.id=s.id||crypto.randomUUID()});setRecordSamples(list)}
+ if(read('pass.referenceId')===null){const index=Number(read('pass.reference')??-1);save('pass.referenceId',list[index]?.id||'')}
+ return list;
+}
 function setRecordSamples(list){save('pass.samples',JSON.stringify(list))}
 function sampleFigure(sample,caption){
  const f=document.createElement('figure'),paint=document.createElement('i'),cap=document.createElement('figcaption');
@@ -17,15 +41,15 @@ function sampleFigure(sample,caption){
 }
 const allFields=()=>[...reportFields,['partner','Partnergespräch'],['nextGoal','Mein nächstes Ziel']];
 function currentRecord(){
- return {title:read('pass.title')||'',date:read('pass.date')||'',
+ return {id:bookState().active,title:read('pass.title')||'',date:read('pass.date')||'',
   goals:learningGoals.map(([label],i)=>label+' – '+by('goal'+i).selectedOptions[0].textContent),
   entries:allFields().map(([id,label])=>({id,label,value:read('pass.'+id)||'',oral:read('pass.oral.'+id)==='1'})),
-  samples:sampleSnapshot(recordSamples()),reference:Number(read('pass.reference')??-1)};
+  samples:sampleSnapshot(recordSamples()),referenceId:read('pass.referenceId')||''};
 }
 function recordText(rec,withSamples=true){
  const lines=[rec.title||'Mein Farbversuch',rec.date||'', 'Meine Lernziele',...rec.goals];
  rec.entries.forEach(e=>lines.push(e.label+'\n'+([e.value,e.oral?'Mündlich besprochen':''].filter(Boolean).join(' · ')||'________________________________________')));
- if(withSamples)rec.samples.forEach((s,i)=>lines.push((i===rec.reference?'Referenzprobe · ':'Probe '+(i+1)+' · ')+sampleText(s)));
+ if(withSamples)rec.samples.forEach((s,i)=>lines.push((s.id===rec.referenceId?'Referenzprobe · ':'Probe '+(i+1)+' · ')+sampleText(s)));
  return lines.filter(Boolean).join('\n\n');
 }
 function downloadRecord(rec){
@@ -36,7 +60,7 @@ function printRecord(rec){
  document.querySelector('.print-sheet')?.remove();
  const sheet=document.createElement('article');sheet.className='print-sheet';sheet.textContent=recordText(rec,false);
  if(rec.samples.length){
-  const grid=document.createElement('div');grid.className='swatch-grid';rec.samples.forEach((s,i)=>grid.append(sampleFigure(s,(i===rec.reference?'Referenzprobe · ':'')+sampleText(s))));sheet.append(grid);
+  const grid=document.createElement('div');grid.className='swatch-grid';rec.samples.forEach((s,i)=>grid.append(sampleFigure(s,(s.id===rec.referenceId?'Referenzprobe · ':'')+sampleText(s))));sheet.append(grid);
  }
  document.body.append(sheet);window.addEventListener('afterprint',()=>sheet.remove(),{once:true});window.print();
 }
@@ -55,23 +79,30 @@ function setupRecord(){
  grid.insertAdjacentHTML('afterend','<label>Probe aus der Laborablage<select id="importChoice"></select></label><button id="importSample">In diesen Versuch kopieren</button><p id="importStatus" role="status"></p><p><a href="#mischlabor">Weitere Proben im Mischlabor anlegen</a></p>');
  const select=by('importChoice');select.innerHTML=options(samples.map(sampleTextSafe),0);by('importSample').disabled=!samples.length;
  function draw(){
-  grid.replaceChildren();const list=recordSamples(),reference=Number(read('pass.reference')??-1);
+  grid.replaceChildren();const list=recordSamples(),reference=read('pass.referenceId');
   if(!list.length)grid.textContent='Hier kannst du Laborproben mit Rezept und Beobachtung für diesen Versuch sammeln.';
   list.forEach((s,i)=>{
-   const f=sampleFigure(s,sampleText(s)),label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='reference';radio.checked=i===reference;radio.setAttribute('aria-label','Probe '+(i+1)+' als Referenz');radio.onchange=()=>save('pass.reference',i);label.append(radio,' Referenzprobe');
-   const remove=document.createElement('button');remove.textContent='Aus Versuch lösen';remove.onclick=()=>{list.splice(i,1);const ref=Number(read('pass.reference')??-1);save('pass.reference',i===ref?-1:ref>i?ref-1:ref);setRecordSamples(list);draw();by('importStatus').textContent='Probe aus diesem Versuch gelöst.'};f.append(label,remove);grid.append(f);
+   const f=sampleFigure(s,sampleText(s)),label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='reference';radio.checked=s.id===reference;radio.setAttribute('aria-label','Probe '+(i+1)+' als Referenz');radio.onchange=()=>save('pass.referenceId',s.id);label.append(radio,' Referenzprobe');
+   const remove=document.createElement('button');remove.textContent='Aus Versuch lösen';remove.onclick=()=>{list.splice(i,1);if(s.id===read('pass.referenceId'))save('pass.referenceId','');setRecordSamples(list);draw();by('importStatus').textContent='Probe aus diesem Versuch gelöst.'};f.append(label,remove);grid.append(f);
   });
  }
- by('importSample').onclick=()=>{const list=recordSamples();list.push({...samples[Number(select.value)]});setRecordSamples(list);draw();by('importStatus').textContent='Rezept und Beobachtung wurden in den Versuch kopiert.'};draw();
+ by('importSample').onclick=()=>{const list=recordSamples();list.push({...samples[Number(select.value)],id:crypto.randomUUID()});setRecordSamples(list);draw();by('importStatus').textContent='Rezept und Beobachtung wurden in den Versuch kopiert.'};draw();
  by('copyPass').onclick=()=>{downloadRecord(currentRecord());by('passStatus').textContent='Der Textdownload wurde gestartet.'};by('printPass').onclick=()=>printRecord(currentRecord());
  const area=document.createElement('details');area.innerHTML='<summary>Folgeversuch und frühere Versuche</summary><p>Beim Start wird dein aktuelles Protokoll mit seinen Proben ins Archiv gelegt.</p><label><input type="checkbox" id="inherit"> Frage und gleichbleibende Bedingungen übernehmen</label><button id="follow">Folgeversuch beginnen</button><div id="archive"></div>';by('passStatus').after(area);
- const archive=stored('pass.archive',[]);
+ const archive=validArchive();
+ if(archive.length!==bookState().archive.length)by('archive').textContent='Ein beschädigter Archiveintrag konnte nicht angezeigt werden. Die übrigen Versuche sind verfügbar.';
  archive.forEach((rec,i)=>{const item=document.createElement('details'),summary=document.createElement('summary'),pre=document.createElement('div');summary.textContent=[rec.title||'Versuch '+(i+1),rec.date].filter(Boolean).join(' · ');pre.className='record-preview';pre.textContent=recordText(rec);const print=document.createElement('button'),dl=document.createElement('button');print.textContent='Versuch drucken';dl.textContent='Text herunterladen';print.onclick=()=>printRecord(rec);dl.onclick=()=>downloadRecord(rec);item.append(summary,pre,dl,print);by('archive').append(item)});
  by('follow').onclick=()=>{
-  const rec=currentRecord(),inherit=by('inherit').checked;archive.push(rec);save('pass.archive',JSON.stringify(archive));
-  if(unsaved.has(storageKey('pass.archive'))){archive.pop();save('pass.archive',JSON.stringify(archive));by('passStatus').textContent='Der vorige Versuch konnte nicht archiviert werden. Sichere ihn bitte zuerst als Text.';return}
-  rec.entries.forEach(e=>{save('pass.'+e.id,inherit&&['plan','same'].includes(e.id)?e.value:'');save('pass.oral.'+e.id,'0')});
-  save('pass.title','');save('pass.date','');save('pass.reference','-1');setRecordSamples([]);learningPass();attachReaders();by('passTitle').focus();by('passStatus').textContent='Der vorige Versuch liegt im Archiv.';
+  const rec=currentRecord(),inherit=by('inherit').checked,active=crypto.randomUUID(),book=bookState();
+  const draft={samples:'[]',plan:inherit?read('pass.plan')||'':'',same:inherit?read('pass.same')||'':''};
+  // Prepare a new, invisible draft. One atomic write publishes its pointer and the archived snapshot.
+  for(const [field,value] of Object.entries(draft)){
+   const key='draft.'+active+'.'+field;save(key,value);
+   if(unsaved.has(storageKey(key))){by('passStatus').textContent='Der Folgeversuch konnte nicht gespeichert werden. Dein aktuelles Protokoll bleibt geöffnet.';return}
+  }
+  save('recordBook',JSON.stringify({active,archive:[...book.archive,rec]}));
+  if(unsaved.has(storageKey('recordBook'))){unsaved.delete(storageKey('recordBook'));by('passStatus').textContent='Der vorige Versuch konnte nicht archiviert werden. Sichere ihn bitte als Text.';return}
+  learningPass();attachReaders();by('passTitle').focus();by('passStatus').textContent='Der vorige Versuch liegt im Archiv.';
  };
  partnerExercise(area);
 }

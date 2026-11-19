@@ -1,0 +1,16 @@
+.kreistafel .tafel-grid {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1rem,3vw,2.5rem);align-items:center}
+.tafel-graphic {max-width:32rem;width:100%;margin:auto}
+.tafel-kreis {display:block;width:100%;color:var(--ink)}
+.tafel-inhalt [data-segment] {cursor:inherit}
+.tafel-inhalt:has(#tafelStart) [data-segment] {cursor:pointer}
+.tafel-status {min-height:2.8em}
+.tafel-tabs [aria-pressed=true],.tafel-stufen [aria-pressed=true] {background:#343665;color:#fff;border-color:#343665}
+.tafel-liste {list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1rem}
+.tafel-liste i {display:inline-block;width:1rem;height:1rem;margin-right:.35rem;vertical-align:middle;border-radius:50%;border:1px solid #444}
+.tafel-projection {margin:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:.7rem;width:96vw;max-width:none;max-height:96dvh;overflow:auto;padding:1rem}
+.tafel-projection::backdrop {background:#121420ed}
+.tafel-projection .tafel-toolbar {justify-content:center;flex-wrap:wrap;margin:0 0 .5rem}
+.tafel-projection .tafel-toolbar label {display:flex;align-items:center;gap:.4rem}
+.tafel-projection .tafel-kreis {width:100%;height:min(76dvh,75vw)}
+.tafel-name {font-size:11px;font-weight:650;fill:currentColor}
+@media(max-width:640px){.kreistafel .tafel-grid{grid-template-columns:1fr}.tafel-graphic{max-width:22rem}.tafel-projection .tafel-kreis{min-height:52vw;height:auto}}

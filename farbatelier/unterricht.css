@@ -1,0 +1,17 @@
+.unterricht label {display:block; margin:.75rem 0}
+.unterricht label select,.unterricht label textarea {display:block;max-width:100%;margin-top:.25rem}
+.unterricht textarea {width:100%}
+.unterricht details {scroll-margin-top:1rem}
+.unterricht fieldset {border:1px solid var(--line);border-radius:.6rem;padding:.75rem;margin:.8rem 0;min-width:0}
+.uw-timeline li {padding:.45rem 0}.uw-timeline p {margin:.2rem 0}
+.uw-pair {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.uw-pair figure {margin:0}.uw-pair svg,.uw-rescue {display:block;width:100%;height:auto;border-radius:.5rem}
+.uw-color {height:clamp(4rem,14vw,8rem);border-radius:.5rem}
+.uw-rescue {max-width:36rem;margin:.75rem 0}
+.uw-project {width:min(94vw,86rem);max-height:95vh;overflow:auto;background:var(--card);color:var(--ink);border:0;border-radius:1rem;padding:clamp(1rem,3vw,2.5rem)}
+.uw-project::backdrop {background:rgba(15,19,48,.85)}
+.uw-project figcaption {font-size:clamp(1rem,2vw,2rem)}
+.uw-ring {position:relative;aspect-ratio:1;width:min(100%,26rem);margin:.5rem auto}
+.uw-ring button {position:absolute;left:calc(50% + var(--dx)*36%);top:calc(50% + var(--dy)*40%);transform:translate(-50%,-50%);padding:.3rem .45rem;line-height:1.15;color:var(--ink);background:var(--card);border:1px solid var(--line);border-bottom:.45rem solid var(--paint);border-radius:.45rem}
+.uw-ring button[aria-pressed=true] {outline:3px solid var(--ink);outline-offset:2px}
+@media(max-width:580px){.uw-ring{position:static;aspect-ratio:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}.uw-ring button{position:static;transform:none;min-height:2.8rem;overflow-wrap:anywhere}}

@@ -140,7 +140,7 @@ function practiceHub(){
 function practice(){
  if(resumePractice){practiceHub();return}
  const i=run.index,v=practicalSets[run.round%practicalSets.length],a=v.base,b=(a+4)%12;
- const targets=i===0?names.map((_,j)=>j).filter(j=>order(j)===v.family):[(v.opponent+6)%12];
+ const targets=i===0?names.map((_,j)=>j).filter(j=>order(j)===v.family):[opposite(v.opponent)];
  const prompt=['Finde alle drei '+familyNames[v.family]+' im Kreis.',
    'Mische '+(v.ratio===25?'drei Teile '+names[a]+' mit einem Teil '+names[b]:'einen Teil '+names[a]+' mit drei Teilen '+names[b])+'.',
    'Markiere die Gegenfarbe zu '+names[v.opponent]+'.'][i];
@@ -158,6 +158,7 @@ function practice(){
   function mark(){picks.forEach((el,j)=>{const circle=stage.querySelector('[data-pick="'+j+'"] circle');circle.setAttribute('stroke',el.checked?'#151c45':'none');circle.setAttribute('stroke-width',5)});run.values[i]=picks.filter(el=>el.checked).map(el=>+el.value);clear()}
   picks.forEach((el,j)=>{el.checked=run.values[i].includes(j);el.onchange=mark;stage.querySelector('[data-pick="'+j+'"]').onclick=()=>el.click()});mark();
  }
+ practiceHints(i,v,targets);
  by('pOverview').onclick=()=>{resumePractice=true;practiceHub()};
  by('verify').onclick=()=>{
   const selected=i===1?[]:run.values[i],hit=selected.filter(j=>targets.includes(j)),wrong=selected.filter(j=>!targets.includes(j));
