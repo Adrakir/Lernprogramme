@@ -221,7 +221,18 @@ async function main() {
       await updateNavigation;
       await page.waitForLoadState("load");
       await expect(page.locator("h1")).toBeVisible();
-      await context.setOffline(true);
+      // WebKit's offline emulation rejects even service-worker responses:
+      // https://github.com/microsoft/playwright/issues/42775
+      // Stop the actual origin for every engine, and retain network emulation
+      // for Chromium/Firefox. An uncached control must fail at the same URL.
+      const originPort = server.address().port;
+      server.closeAllConnections();
+      await new Promise(resolve => server.close(resolve));
+      const uncachedContext = await browser.newContext({ serviceWorkers: "block" });
+      const uncachedPage = await uncachedContext.newPage();
+      await assert.rejects(() => uncachedPage.goto(base, { timeout: 10000 }));
+      await uncachedContext.close();
+      if (engine !== "webkit") await context.setOffline(true);
       await page.reload();
       await go("bildkarten");
       await page.reload();
@@ -233,7 +244,8 @@ async function main() {
       await offlinePage.goto(base + "#pruefung/3");
       await expect(offlinePage.locator(".question")).toBeVisible();
       await offlinePage.close();
-      await context.setOffline(false);
+      if (engine !== "webkit") await context.setOffline(false);
+      await new Promise(resolve => server.listen(originPort, "127.0.0.1", resolve));
     }
     if (!fileMode) {
       const firstContext = await browser.newContext();
