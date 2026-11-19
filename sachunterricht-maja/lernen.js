@@ -1,6 +1,6 @@
 "use strict";
 
-const appVersion = "2026-11-19.3";
+const appVersion = "2026-11-19.4";
 const datenVersion = 2;
 const foodCards = [
   { name: "Wasser", group: 7, breakfast: 0, key: "wasser" },
@@ -469,7 +469,12 @@ function initOffline() {
     navigator.serviceWorker.ready.then(() => showOfflineStatus("✓ Offline bereit. Lerninhalte und Bilder sind auf diesem Gerät gespeichert."));
   }).catch(() => showOfflineStatus("Offline-Speicherung hat noch nicht geklappt. Öffne die App erneut mit Internet."));
   let reloading = false;
+  let hadController = Boolean(navigator.serviceWorker.controller);
   navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController) {
+      hadController = true;
+      return;
+    }
     if (reloading) return;
     reloading = true;
     if (navigator.serviceWorker.controller) location.reload();

@@ -143,6 +143,15 @@ async function main() {
       await offlinePage.close();
       await context.setOffline(false);
     }
+    if (!fileMode) {
+      const firstContext = await browser.newContext();
+      const firstPage = await firstContext.newPage();
+      await firstPage.goto(base + "#fruehstueck-frei");
+      await firstPage.locator('[data-extra="breakfast-food"][data-value="1"]').click();
+      await firstPage.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
+      await expect(firstPage.locator('[data-extra="breakfast-food"][data-value="1"]')).toHaveAttribute("aria-pressed", "true");
+      await firstContext.close();
+    }
     const recoveryContext = await browser.newContext();
     await recoveryContext.addInitScript(() => {
       if (localStorage.getItem("recovery-seeded")) return;
