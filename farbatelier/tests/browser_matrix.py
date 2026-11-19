@@ -108,11 +108,6 @@ def check(page, base):
     # The current follow-up has no samples. Import one before trying the dialog.
     tab_to(page,page.locator("#importSample"))
     page.keyboard.press("Enter")
-    panel=page.locator("summary").filter(has_text="Partnerrätsel mit einer Farbprobe")
-    tab_to(page,panel)
-    if panel.evaluate("(el)=>el.parentElement.open"):
-        page.keyboard.press("Enter")
-    page.keyboard.press("Enter")
     tab_to(page,start)
     page.keyboard.press("Enter")
     expect(page.get_by_role("dialog")).to_be_visible()

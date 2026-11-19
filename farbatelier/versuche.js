@@ -85,6 +85,7 @@ function setupRecord(){
    const f=sampleFigure(s,sampleText(s)),label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='reference';radio.checked=s.id===reference;radio.setAttribute('aria-label','Probe '+(i+1)+' als Referenz');radio.onchange=()=>save('pass.referenceId',s.id);label.append(radio,' Referenzprobe');
    const remove=document.createElement('button');remove.textContent='Aus Versuch lösen';remove.onclick=()=>{list.splice(i,1);if(s.id===read('pass.referenceId'))save('pass.referenceId','');setRecordSamples(list);draw();by('importStatus').textContent='Probe aus diesem Versuch gelöst.'};f.append(label,remove);grid.append(f);
   });
+  grid.dispatchEvent(new Event('probenwechsel'));
  }
  by('importSample').onclick=()=>{const list=recordSamples();list.push({...samples[Number(select.value)],id:crypto.randomUUID()});setRecordSamples(list);draw();by('importStatus').textContent='Rezept und Beobachtung wurden in den Versuch kopiert.'};draw();
  by('copyPass').onclick=()=>{downloadRecord(currentRecord());by('passStatus').textContent='Der Textdownload wurde gestartet.'};by('printPass').onclick=()=>printRecord(currentRecord());
@@ -110,9 +111,16 @@ function sampleTextSafe(s,i){return 'Probe '+(i+1)+' · '+sampleRecipe(s)}
 function partnerExercise(area){
  const panel=document.createElement('details');panel.innerHTML='<summary>Partnerrätsel mit einer Farbprobe</summary><p>Wähle heimlich eine Probe aus deinem Versuch. Öffne das Rätsel und gib das Gerät weiter. Dein Gegenüber darf raten oder sich die Probe beschreiben lassen.</p><label>Probe für das Rätsel<select></select></label><button>Rezept verdecken und Rätsel starten</button>';area.before(panel);
  const select=panel.querySelector('select'),start=panel.querySelector('button');
- panel.ontoggle=()=>{if(panel.open){const list=recordSamples();select.innerHTML=options(list.map(sampleTextSafe),0);start.disabled=!list.length;if(!list.length)select.add(new Option('Zuerst eine Laborprobe übernehmen',''))}};
+ function refreshChoice(){
+  if(!panel.open)return;
+  const previous=select.value,list=recordSamples();select.replaceChildren();
+  for(const [i,s] of list.entries())select.add(new Option(sampleTextSafe(s,i),s.id));
+  if(list.some(s=>s.id===previous))select.value=previous;
+  start.disabled=!list.length;if(!list.length)select.add(new Option('Zuerst eine Laborprobe übernehmen',''));
+ }
+ panel.ontoggle=refreshChoice;by('reportSamples').addEventListener('probenwechsel',refreshChoice);
  start.onclick=()=>{
-  const s=recordSamples()[Number(select.value)];if(!s)return;
+  const s=recordSamples().find(sample=>sample.id===select.value);if(!s)return;
   const dlg=document.createElement('dialog');dlg.className='partner-dialog';dlg.setAttribute('aria-label','Verdeckte Farbprobe');
   dlg.innerHTML='<h2>Welche Farben stecken darin?</h2><div class="sample" role="img" aria-label="Unbeschriftete Mischprobe"></div><label>Unsere Vermutung (auch mündlich möglich)<input maxlength="180"></label><details><summary>Rezept aufdecken</summary><p></p></details><button>Rätsel schließen</button>';dlg.querySelector('.sample').style.background=s.color;dlg.querySelector('p').textContent=sampleText(s);document.body.append(dlg);dlg.querySelector('button').onclick=()=>dlg.close();dlg.onclose=()=>{dlg.remove();start.focus()};dlg.showModal();
  };
