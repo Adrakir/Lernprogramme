@@ -14,22 +14,29 @@ jobs:
   lernapp:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
       - name: Inhalte, Dateien und alte Lernstände prüfen
-        run: node --test sachunterricht-maja/tests/inhalt.test.cjs
+        run: |
+          node --test sachunterricht-maja/tests/inhalt.test.cjs
+          node sachunterricht-maja/redaktion-bauen.cjs --check
       - name: Browserwerkzeuge installieren
         run: |
           npm install --prefix "$RUNNER_TEMP/sachunterricht-tools" --no-save --no-audit --no-fund --ignore-scripts playwright@1.62.1
-          if command -v google-chrome >/dev/null 2>&1; then
+          if [ "${{ matrix.browser }}" = "chromium" ] && command -v google-chrome >/dev/null 2>&1; then
             echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE=$(command -v google-chrome)" >> "$GITHUB_ENV"
           else
-            "$RUNNER_TEMP/sachunterricht-tools/node_modules/.bin/playwright" install --with-deps chromium
+            "$RUNNER_TEMP/sachunterricht-tools/node_modules/.bin/playwright" install --with-deps ${{ matrix.browser }}
           fi
       - name: Lernen, Prüfungen und Offline-Nutzung durchspielen
         env:
+          BROWSER_ENGINE: ${{ matrix.browser }}
           NODE_PATH: ${{ runner.temp }}/sachunterricht-tools/node_modules
         run: node sachunterricht-maja/tests/browser.test.cjs

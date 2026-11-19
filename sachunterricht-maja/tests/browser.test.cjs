@@ -4,11 +4,12 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const http = require("node:http");
 const { pathToFileURL } = require("node:url");
-const { chromium } = require("playwright");
+const engines = require("playwright");
 const { expect } = require("playwright/test");
 const root = path.resolve(__dirname, "..");
 const fileMode = process.env.APP_FILE_MODE === "1";
 let server;
+let workerRevision = 0;
 
 async function main() {
   let base;
@@ -21,15 +22,20 @@ async function main() {
       try {
         const types = { ".js": "text/javascript", ".html": "text/html", ".css": "text/css", ".webp": "image/webp" };
         res.writeHead(200, { "Content-Type": types[path.extname(target)] || "application/octet-stream" });
-        res.end(await fs.readFile(target));
+        let bytes = await fs.readFile(target);
+        if (target.endsWith(path.sep + "sw.js") && workerRevision) {
+          bytes = Buffer.from(bytes.toString().replace(/(const cacheName = "[^"]+)"/, "$1-update" + workerRevision + '"'));
+        }
+        res.end(bytes);
       } catch { res.writeHead(404); res.end(); }
     });
     await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
     base = "http://127.0.0.1:" + server.address().port + "/";
   }
-  const browser = await chromium.launch({
+  const engine = process.env.BROWSER_ENGINE || "chromium";
+  const browser = await engines[engine].launch({
     executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || undefined,
-    args: ["--no-sandbox"],
+    args: engine === "chromium" ? ["--no-sandbox"] : [],
   });
   try {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, colorScheme: "light" });
@@ -122,6 +128,84 @@ async function main() {
     await page.keyboard.press("Enter");
     await expect(page.getByRole("button", { name: "Hinweis", exact: true })).toBeFocused();
     await expect(page.locator(".reveal")).toContainText("Calcium");
+    await go("forschen");
+    await expect(page.locator("#lab-area a")).toHaveCount(13);
+    await go("picknick");
+    for (const value of [0,1,3,4]) await page.locator('[data-lab="picnic-food"][data-value="'+value+'"]').click();
+    await page.getByLabel("Warum passt deine Auswahl zu den Freunden?").fill("Wasser löscht den Durst.");
+    await page.getByRole("button",{name:"Mit den Freunden prüfen"}).click();
+    await expect(page.locator("#lab-area")).toContainText("Alle vier Bausteine");
+    await go("verpackung");
+    await page.locator('[data-lab="package-mark"][data-value="naehrwerte"]').click();
+    await expect(page.locator(".reveal")).toContainText("gesamten Zucker");
+    await go("comic");
+    await page.locator("#comic-text-0").fill("Wir trinken Wasser.");
+    await page.locator("#comic-scene-0").selectOption("1");
+    await page.reload();
+    await expect(page.locator("#comic-text-0")).toHaveValue("Wir trinken Wasser.");
+    await expect(page.locator("#comic-scene-0")).toHaveValue("1");
+    await go("forscherheft");
+    await page.getByLabel("Mein Merksatz").fill("Ballaststoffe helfen der Verdauung.");
+    await page.getByRole("button",{name:"Merksatz speichern"}).click();
+    await expect(page.locator(".notebook")).toContainText("Ballaststoffe helfen");
+    await go("gerichte");
+    for (const [i,group] of [5,3,6].entries()) await page.locator("#dish-"+i).selectOption(String(group));
+    await page.getByRole("button",{name:"Zutaten prüfen"}).click();
+    await expect(page.locator(".dish-parts")).toContainText("✓ Richtig");
+    await go("team");
+    for(let turn=0;turn<4;turn++){
+      await page.locator('[data-lab="team-pick"]').first().click();
+      await page.getByRole("button",{name:"Antwort prüfen"}).click();
+      await page.getByRole("button",{name:"An das andere Kind weitergeben"}).click();
+    }
+    await expect(page.locator("#lab-area")).toContainText("Gemeinsam geschafft");
+    await go("lernstart");
+    for(let turn=0;turn<3;turn++){
+      await page.locator('[data-lab="start-pick"]').first().click();
+      await page.getByRole("button",{name:"Weiter",exact:true}).click();
+    }
+    await expect(page.locator("#lab-area")).toContainText("So kannst du beginnen");
+    await go("lernweg");
+    await page.locator('[data-lab="plan-add"][data-value="zucker"]').click();
+    await expect(page.locator(".planned-path")).toContainText("Zucker-Detektiv");
+    await go("familie");
+    await page.locator("#family-mode").selectOption("laktosefrei");
+    await expect(page.locator("#lab-area")).toContainText("laktosefreier Naturjoghurt");
+    await go("profile");
+    await page.locator("#profile-name").fill("Testkind");
+    await page.getByRole("button",{name:"Profil anlegen"}).click();
+    await expect(page.locator("#score-number")).toHaveText("0");
+    await go("forscherheft");
+    await expect(page.locator(".notebook article")).toHaveCount(0);
+    await go("profile");
+    await page.locator("#profile-select").selectOption("standard");
+    await go("forscherheft");
+    await expect(page.locator(".notebook")).toContainText("Ballaststoffe helfen");
+    await go("diagnose");
+    const reportPromise=page.waitForEvent("download");
+    await page.getByRole("button",{name:"Technischen Bericht herunterladen"}).click();
+    const report=await fs.readFile(await (await reportPromise).path(),"utf8");
+    assert.ok(!report.includes("Ballaststoffe helfen"));
+    assert.ok(!report.includes("Testkind"));
+    for(const width of [320,820]){
+      await page.setViewportSize({width,height:1000});
+      for(const view of ["forschen","comic","bericht","redaktion","gerichte","verpackung","erklaeren","profile"]){
+        await go(view);
+        assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),width+" "+view);
+      }
+    }
+    if(!fileMode){
+      await go("pruefung/2");
+      await page.locator('input[name="answer"]').first().check();
+      const other=await context.newPage();
+      await other.goto(base+"#pruefung/2");
+      await expect(other.locator('input[name="answer"]').first()).toBeDisabled();
+      await expect(other.locator("#exam-lock-status")).toContainText("anderen Fenster");
+      await go("start");
+      await other.getByRole("button",{name:"Bearbeitung erneut versuchen"}).click();
+      await expect(other.locator('input[name="answer"]').first()).toBeEnabled();
+      await other.close();
+    }
     if (!fileMode) {
       await page.waitForFunction(async () => {
         const registration = await navigator.serviceWorker.ready;
@@ -129,6 +213,14 @@ async function main() {
       });
       await page.reload();
       await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
+      workerRevision++;
+      await page.evaluate(async () => (await navigator.serviceWorker.getRegistration()).update());
+      await expect(page.locator("#update-banner")).toBeVisible();
+      const updateNavigation = page.waitForEvent("framenavigated", frame => frame === page.mainFrame());
+      await page.locator("#apply-update").click();
+      await updateNavigation;
+      await page.waitForLoadState("load");
+      await expect(page.locator("h1")).toBeVisible();
       await context.setOffline(true);
       await page.reload();
       await go("bildkarten");

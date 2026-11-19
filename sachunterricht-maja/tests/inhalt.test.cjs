@@ -12,8 +12,8 @@ const context = vm.createContext({
   console, Date, setTimeout, URL, Blob,
 });
 vm.runInContext(fs.readFileSync(path.join(root, "stoff.js"), "utf8") + "\n" +
-  fs.readFileSync(path.join(root, "lernen.js"), "utf8") +
-  "\nthis.data = {stationen,pruefungen,schriftaufgaben,koerperZuordnung,nachfragen,foodCards,normalizeState,standardState};", context);
+  fs.readFileSync(path.join(root, "lernen.js"), "utf8") + "\n" + fs.readFileSync(path.join(root, "forschen.js"), "utf8") +
+  "\nthis.data = {stationen,pruefungen,schriftaufgaben,koerperZuordnung,nachfragen,foodCards,normalizeState,standardState,selectionPoints};", context);
 const data = context.data;
 
 test("Alle Aufgaben und Zuordnungen haben gültige Lösungen und Erklärungen", () => {
@@ -44,7 +44,7 @@ test("Alle Aufgaben und Zuordnungen haben gültige Lösungen und Erklärungen", 
 });
 
 test("Alle Bilder und Offline-Dateien sind lokal vorhanden", () => {
-  const sources = ["app.js", "lernen.js", "stoff.js", "index.html"].map(file => fs.readFileSync(path.join(root, file), "utf8")).join("\n");
+  const sources = ["app.js", "lernen.js", "forschen.js", "stoff.js", "index.html"].map(file => fs.readFileSync(path.join(root, file), "utf8")).join("\n");
   const assets = [...sources.matchAll(/(?:src|href)="\.\/([^"$]+)"/g)].map(match => match[1].split("?")[0]);
   for (const asset of assets) assert.ok(fs.existsSync(path.join(root, asset)), asset);
   for (const food of data.foodCards) assert.ok(fs.existsSync(path.join(root, "assets/essen-" + food.key + ".webp")));
@@ -68,7 +68,7 @@ test("Alte Entwürfe, Sterne und Antworten werden übernommen", () => {
   assert.equal(saved.drafts["exam-0"].written.length, 2);
   assert.equal(saved.results[0].score, 8);
   assert.equal(saved.theme, "dark");
-  assert.equal(saved.schema, 2);
+  assert.equal(saved.schema, 3);
 });
 
 test("Beschädigte Teilfelder werden bereinigt und fremde Versionen abgewiesen", () => {
@@ -98,4 +98,26 @@ test("Textfarben erreichen auf Lernflächen auch im dunklen Design 4,5:1", () =>
       assert.ok((values[1] + .05) / (values[0] + .05) >= 4.5, fg + " auf " + bg);
     }
   }
+});
+
+test("Teilpunkte honorieren richtige Teilantworten und bestrafen wahlloses Ankreuzen", () => {
+  const exam={tasks:[["fit",{correct:[0,2],options:["a","b","c","d"]}]]};
+  assert.equal(data.selectionPoints(exam,[[0]]),.5);
+  assert.equal(data.selectionPoints(exam,[[0,2]]),1);
+  assert.equal(data.selectionPoints(exam,[[0,1,2,3]]),0);
+  assert.equal(data.selectionPoints(exam,[[1,3]]),0);
+});
+
+test("Forscherheft, Comic und Lernweg überstehen Sicherung und Bereinigung", () => {
+  const state=data.normalizeState({done:{},drafts:{},results:{},research:{
+    notes:[{text:"Mein Merksatz",food:2}],
+    comic:[{scene:2,text:"Wir vergleichen die Angaben."}],
+    plan:["fit","fit","fremd","zucker","labor","ballast"],
+    history:[{id:"zucker",at:123,correct:true,later:true}],
+    family:"laktosefrei",
+  }});
+  assert.equal(state.research.notes[0].text,"Mein Merksatz");
+  assert.equal(state.research.comic[0].scene,2);
+  assert.deepEqual(Array.from(state.research.plan),["fit","zucker","labor"]);
+  assert.equal(state.research.history[0].later,true);
 });

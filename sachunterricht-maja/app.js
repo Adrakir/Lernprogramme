@@ -2,7 +2,7 @@
 
 const main = document.querySelector("main");
 const theme = document.querySelector("#theme");
-const storageKey = "majas-sachunterricht-v1";
+let storageKey = profileStorageKey();
 const phasen = ["Entdecken", "Verstehen", "Mitmachen", "Üben", "Überprüfen"];
 const figurNamen = { maja: "Maja", stern: "Stern", baerli: "Bärli" };
 const stationNachId = Object.fromEntries(stationen.map(station => [station.id, station]));
@@ -79,8 +79,11 @@ function save() {
 }
 
 function aktualisiereSterne() {
+  const profileName = profileList().find(p => p.id === activeProfile())?.name || "Mein Lernstand";
+  const profileLink = document.getElementById("active-profile");
+  if (profileLink) profileLink.textContent = profileName;
   const count = stationen.filter(station => state.done[station.id]).length;
-  const examStars = pruefungen.filter((_, i) => state.results[i]?.best >= 6).length;
+  const examStars = pruefungen.filter((_, i) => (state.results[i]?.bestPoints ?? state.results[i]?.best ?? 0) >= 6).length;
   document.querySelector("#score-number").textContent = count + examStars;
 }
 
@@ -450,7 +453,7 @@ function renderExam() {
     .replace(" data-do=", ` aria-label="Aufgabe ${j + 1}, ${filled ? "beantwortet" : "offen"}" ${j === draft.index ? 'aria-current="step"' : ""} data-do=`)).join("");
   return `<div class="route exam-route">${breadcrumb("Alle Probeklassenarbeiten", "pruefungen")}
     <header class="unit-header pfirsich"><div><p class="eyebrow">Probeklassenarbeit ${i + 1}</p><h1 id="page-title" tabindex="-1">${exam.title}</h1></div></header>
-    <section class="panel"><div class="exam-progress"><p role="status">${count} von ${answered.length} beantwortet</p><div class="jump-list" aria-label="Aufgabe auswählen">${taskLinks}</div></div>
+    <p id="exam-lock-status" role="status"></p><section class="panel"><div class="exam-progress"><p role="status">${count} von ${answered.length} beantwortet</p><div class="jump-list" aria-label="Aufgabe auswählen">${taskLinks}</div></div>
     ${writtenIndex < 0 ? questionMarkup(exam.tasks[draft.index][1], draft.answers[draft.index], `Aufgabe ${draft.index + 1} von ${answered.length}`)
       : writtenMarkup(schriftaufgaben[i][writtenIndex], draft.written[writtenIndex], draft.index + 1, answered.length)}
     ${speechButtons()}<div class="actions">
@@ -494,8 +497,9 @@ function renderResult() {
   }).join("");
   return `<div class="route">${breadcrumb("Alle Probeklassenarbeiten", "pruefungen")}
     <header class="unit-header salbei"><div><p class="eyebrow">Auswahlaufgaben · ${exam.title}</p><h1 id="page-title" tabindex="-1">${result.score} von ${exam.tasks.length} richtig</h1>
-    <p>${result.score >= 6 ? "★ Einen Stern für diese Arbeit verdient!" : "Unten findest du die Lösungen und passende Übungen."}</p></div>${figur("stern")}</header>
-    <section class="panel"><h2>Lösungen zum Ankreuzen</h2><ol class="review-list">${review}</ol>${renderWrittenSolutions(i, result)}<div class="actions">${button("Lösungen drucken", "print")}${nav("Zum Lernstand →", "fortschritt")}${nav("Weitere Arbeiten →", "pruefungen", "primary")}</div></section></div>`;
+    <p>${(result.partial ?? result.score) >= 6 ? "★ Einen Stern für diese Arbeit verdient!" : "Unten findest du die Lösungen und passende Übungen."}</p></div>${figur("stern")}</header>
+    <section class="panel">${result.partial !== undefined ? `<div class="reveal"><p><strong>Auswahlaufgaben · ${result.partial.toLocaleString("de-DE")} von 8 Punkten</strong></p><p>Bei mehreren Antworten gibt jede richtige Auswahl einen Anteil am Aufgabenpunkt. Falsche Auswahlen ziehen denselben Anteil ab. Eine Aufgabe ergibt mindestens null Punkte.</p></div>` : ""}
+    <p id="self-points" role="status">Eigene Einschätzung der Schreibaufgaben · ${criteriaPoints(i)} von 4 Prüfpunkten abgehakt</p><h2>Lösungen zum Ankreuzen</h2><ol class="review-list">${review}</ol>${renderWrittenSolutions(i, result)}<div class="actions">${button("Lösungen drucken", "print")}${nav("Zum Lernstand →", "fortschritt")}${nav("Weitere Arbeiten →", "pruefungen", "primary")}</div></section></div>`;
 }
 
 function learningNotes() {
@@ -564,7 +568,7 @@ function renderCertificate() {
 function renderInfo() {
   return `<div class="route">${breadcrumb()}<header class="unit-header salbei"><div><p class="eyebrow">Sachunterricht · Klasse 3</p><h1 id="page-title" tabindex="-1">Über die Lernwelt</h1></div>${figur("maja")}</header>
     <section class="panel"><h2>So kannst du lernen</h2><p>Entdecke ein Thema, probiere etwas aus und übe in deinem Tempo. Beim Wissenscheck gibt es einen Stern. In den Probeklassenarbeiten gibt es je einen Stern ab sechs richtigen Auswahlaufgaben. Schreibantworten vergleichst du selbst mit der Musterlösung. Bei Mehrfachauswahl gibt es einen Punkt, wenn alle passenden Antworten ausgewählt sind.</p>
-    <h2>Für Erwachsene</h2><p>Die acht Gruppen und 22 Kästchen orientieren sich an der Ernährungspyramide auf Majas Arbeitsblatt und am Modell des Bundeszentrums für Ernährung. Die App verwendet die Ampelfarben als Orientierung und das Vier-Bausteine-Modell aus dem Unterricht. Die Zuckermengen sind erfundene, gerundete Beispiele.</p>
+    <div class="actions">${nav("Inhalte und Quellen","redaktion")}</div><h2>Für Erwachsene</h2><p>Die acht Gruppen und 22 Kästchen orientieren sich an der Ernährungspyramide auf Majas Arbeitsblatt und am Modell des Bundeszentrums für Ernährung. Die App verwendet die Ampelfarben als Orientierung und das Vier-Bausteine-Modell aus dem Unterricht. Die Zuckermengen sind erfundene, gerundete Beispiele.</p>
     <ul><li><a href="https://www.bzfe.de/essen-und-gesundheit/ernaehrungspyramide/was-esse-ich">Bundeszentrum für Ernährung · Die acht Lebensmittelgruppen</a></li>
     <li><a href="https://www.dge.de/wissenschaft/referenzwerte/ballaststoffe/">Deutsche Gesellschaft für Ernährung · Ballaststoffe</a></li>
     <li><a href="../majas-wortwerkstatt/">Majas Wortwerkstatt · Originalillustrationen</a></li></ul>
@@ -590,6 +594,9 @@ function render(focus = true) {
     fortschritt: renderProgress, urkunde: renderCertificate, infos: renderInfo,
     lernspiele: renderGames, bildkarten: renderCards, "fruehstueck-frei": renderFreeBreakfast,
     baerli: renderBaerli, kurzrunde: renderShortRound, entdecken: renderDiscover, niveau: renderLevel,
+    forschen: renderResearchHub, picknick: renderPicnic, verpackung: renderPackaging, comic: renderComic, team: renderTeam, forscherheft: renderNotebook,
+    lernstart: renderStartCheck, gerichte: renderDishes, denkfehler: renderMisconceptions, lernweg: renderLearningPath, erklaeren: renderExplain,
+    familie: renderFamily, bericht: renderReport, profile: renderProfiles, diagnose: renderDiagnostics, redaktion: renderEditorial,
     eltern: renderParents, einstellungen: renderSettings, arbeitsblatt: renderWorksheet, papierloesung: renderWorksheet };
   const renderScreen = Object.hasOwn(screens, route[0]) ? screens[route[0]] : renderMissing;
   main.innerHTML = renderScreen();
@@ -598,6 +605,7 @@ function render(focus = true) {
   const title = main.querySelector("h1");
   document.title = route[0] === "start" ? "Maja, Stern & Bärli – Sachunterrichtswelt" : `${title.textContent} · Majas Sachunterrichtswelt`;
   aktualisiereSterne();
+  protectExam();
   screenId++;
   if (focus) {
     window.scrollTo(0, 0);
@@ -675,7 +683,7 @@ function submitExam() {
     return;
   }
   const score = exam.tasks.filter(([, q], j) => istRichtig(q, draft.answers[j])).length;
-  state.results[i] = { score, best: Math.max(state.results[i]?.best || 0, score), answers: draft.answers, written: draft.written, at: Date.now() };
+  state.results[i] = { bestPoints: Math.max(state.results[i]?.bestPoints ?? state.results[i]?.best ?? 0, selectionPoints(exam, draft.answers)), partial: selectionPoints(exam, draft.answers), score, best: Math.max(state.results[i]?.best || 0, score), answers: draft.answers, written: draft.written, at: Date.now() };
   delete state.drafts[`exam-${i}`];
   for (let task = 0; task < 2; task++) for (let criterion = 0; criterion < 2; criterion++) {
     delete state.criteria[i + "-" + task + "-" + criterion];

@@ -1,7 +1,7 @@
 "use strict";
 
-const appVersion = "2026-11-19.4";
-const datenVersion = 2;
+const appVersion = "2026-11-19.5";
+const datenVersion = 3;
 const foodCards = [
   { name: "Wasser", group: 7, breakfast: 0, key: "wasser" },
   { name: "Apfel", group: 6, breakfast: 1, key: "apfel" },
@@ -107,6 +107,7 @@ function normalizeState(raw) {
     rate: [0.75, 1, 1.15].includes(raw.preferences.rate) ? raw.preferences.rate : 1,
     size: [100, 115, 130].includes(raw.preferences.size) ? raw.preferences.size : 100,
   };
+  if (typeof normalizeResearch === "function") normalizeResearch(raw, out);
   return out;
 }
 
@@ -127,7 +128,8 @@ function renderGames() {
   extra = {};
   return extraShell("Entdecken und ausprobieren", `<div class="offer-grid">
     ${[
-      ["Bärli hat sich vertan", "Finde einen Fehler und erkläre die Verbesserung.", "baerli"],
+      ["Forscherwerkstatt", "Picknick, Comic, Verpackungen und eigenes Forscherheft.", "forschen"],
+    ["Bärli hat sich vertan", "Finde einen Fehler und erkläre die Verbesserung.", "baerli"],
       ["Lebensmittel-Bildkarten", "Erkenne Lebensmittel und ordne die Gruppe zu.", "bildkarten"],
       ["Freie Frühstücksküche", "Wähle selbst aus dem gemeinsamen Vorrat.", "fruehstueck-frei"],
       ["Fünf-Minuten-Lernrunde", "Drei kurze Aufgaben mit einem klaren Abschluss.", "kurzrunde"],
@@ -183,6 +185,7 @@ function baerliArea() {
 }
 
 function recordReview(id, correct) {
+  if (typeof logUnderstanding === "function") logUnderstanding(id, correct);
   const previous = state.review[id] || { streak: 0, variant: 0 };
   const streak = correct ? Math.min(3, previous.streak + 1) : 0;
   state.review[id] = { streak, variant: (previous.variant + 1) % 3, due: Date.now() + (correct ? [1, 3, 7][streak - 1] : 0) * 86400000 };
@@ -249,7 +252,7 @@ function levelArea() {
 
 function renderParents() {
   const notes = learningNotes();
-  return extraShell("Gemeinsam lernen", `<h2>Was zuletzt geklappt hat</h2>
+  return extraShell("Gemeinsam lernen", `<div class="learning-tools">${nav("Maja erklärt es mir","erklaeren")}${nav("Lernweg zusammenstellen","lernweg")}${nav("Familienfrühstück","familie")}${nav("Fortschrittsbericht","bericht")}${nav("Kinderprofile","profile")}</div><h2>Was zuletzt geklappt hat</h2>
     <p>Diese Übersicht zeigt die letzten Antworten im Browser. Zum gemeinsamen Üben passen die Gesprächsfragen unter jedem Thema.</p>
     <div class="parent-topics">${stationen.map(s => `<article><h3>${s.title}</h3><p>${lernziele[s.id]}</p><p><strong>${notes[s.id]?.text || "Noch keine Auswertung"}</strong></p>
       <p>Aufgabenbeispiel · ${s.practice[0].text}</p>
@@ -281,7 +284,7 @@ function renderSettings() {
     <label for="rate">Vorlesetempo</label><select id="rate">${[[0.75, "Langsam"], [1, "Normal"], [1.15, "Etwas schneller"]].map(([value, text]) => `<option value="${value}" ${prefs.rate === value ? "selected" : ""}>${text}</option>`).join("")}</select>
     <p data-read>Maja, Stern und Bärli entdecken gemeinsam, was ihr Körper braucht.</p>
     ${speechButtons()}${extraButton("Stimmenliste neu laden", "voices")}
-    <h2>Lernstand sichern und übertragen</h2><p>Die Sicherung enthält Sterne, Antworten, Entdeckertexte und Einstellungen. Speichere die Datei, um später auf einem anderen Gerät weiterzulernen.</p>
+    <div class="actions">${nav("Kinderprofile", "profile")}${nav("Technische Hilfe", "diagnose")}</div><h2>Lernstand sichern und übertragen</h2><p>Die Sicherung enthält Sterne, Antworten, Entdeckertexte und Einstellungen. Speichere die Datei, um später auf einem anderen Gerät weiterzulernen.</p>
     <div class="actions">${extraButton("Sicherung herunterladen", "export", "", "primary")}</div>
     <label class="file-label" for="import-state">Sicherung auswählen</label><input id="import-state" type="file" accept=".json,application/json">
     <div id="import-preview" class="reveal" hidden></div><p id="settings-status" role="status"></p>
@@ -402,6 +405,8 @@ document.addEventListener("change", async event => {
   if (input.hasAttribute("data-criterion")) {
     state.criteria[input.dataset.criterion] = input.checked;
     save();
+    const summary = document.getElementById("self-points");
+    if (summary) summary.textContent = "Eigene Einschätzung der Schreibaufgaben · " + criteriaPoints(examIndex()) + " von 4 Prüfpunkten abgehakt";
   }
   if (["font-size", "voice", "rate"].includes(input.id)) {
     if (input.id === "font-size") state.preferences.size = Number(input.value);
@@ -482,7 +487,7 @@ function initOffline() {
 }
 
 window.addEventListener("storage", event => {
-  if (event.key !== "majas-sachunterricht-v1" || !event.newValue) return;
+  if (event.key !== storageKey || !event.newValue) return;
   try {
     state = normalizeState(JSON.parse(event.newValue));
     applyTheme();
