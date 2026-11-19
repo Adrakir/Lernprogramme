@@ -1,0 +1,15 @@
+name: Farbatelier im Browser prüfen
+on:
+  pull_request:
+    paths: ['farbatelier/**', '.github/workflows/farbatelier-tests.yml']
+  push:
+    paths: ['farbatelier/**', '.github/workflows/farbatelier-tests.yml']
+permissions:
+  contents: read
+jobs:
+  farbatelier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install selenium==4.34.2
+      - run: python -m unittest discover -s farbatelier/tests -v

@@ -70,15 +70,21 @@ function pigmentPreview(first,second,t){
 let samples=stored('samples',[]);
 if(!Array.isArray(samples))samples=[];
 samples=samples.filter(s=>s&&Number.isInteger(s.a)&&names[s.a]&&Number.isInteger(s.b)&&names[s.b]&&Number.isInteger(s.n)&&s.n>=0&&s.n<=100&&/^rgb\([\d, ]+\)$/.test(s.color)).slice(0,3);
+let removedSample=null;
 function renderSamples(){
   by('tray').innerHTML=samples.map((s,i)=>'<figure><i style="background:'+s.color+'"></i><figcaption>'+(100-s.n)+' % '+names[s.a]+' · '+s.n+' % '+names[s.b]+'</figcaption><label>Meine Beobachtung<input maxlength="180" data-sample-note="'+i+'"></label><button data-remove="'+i+'" aria-label="Probe '+(i+1)+' entfernen">Entfernen</button></figure>').join('');
   by('tray').querySelectorAll('[data-sample-note]').forEach(el=>{
-    const sample=samples[Number(el.dataset.sampleNote)];el.value=sample.note||'';
+    const sample=samples[Number(el.dataset.sampleNote)];el.value=sample.note||'';el.setAttribute('aria-label','Meine Beobachtung zu Probe '+(Number(el.dataset.sampleNote)+1)+', '+sampleRecipe(sample));
     el.oninput=()=>{sample.note=el.value;save('samples',JSON.stringify(samples))};
   });
   by('keep').disabled=samples.length>=3;
   by('trayMsg').textContent=samples.length===3?'Drei Proben abgelegt. Entferne eine, um Platz zu machen.':samples.length+' von 3 Proben abgelegt.';
-  by('tray').querySelectorAll('button').forEach(btn=>btn.onclick=()=>{samples.splice(+btn.dataset.remove,1);save('samples',JSON.stringify(samples));renderSamples();by('keep').focus()});
+  by('tray').querySelectorAll('button').forEach(btn=>btn.onclick=()=>{const index=Number(btn.dataset.remove);removedSample={index,value:samples.splice(index,1)[0]};save('samples',JSON.stringify(samples));renderSamples();by('undoSample').focus()});
+  if(removedSample){
+   const undo=document.createElement('button');undo.id='undoSample';undo.textContent='Entfernen rückgängig machen';undo.disabled=samples.length>=3;
+   undo.onclick=()=>{samples.splice(removedSample.index,0,removedSample.value);removedSample=null;save('samples',JSON.stringify(samples));renderSamples();by('tray').querySelector('button')?.focus()};
+   by('trayMsg').append(' ',undo);
+  }
 }
 function noteField(id,key){
   const el=by(id);el.value=read(key)||'';el.oninput=()=>save(key,el.value);
@@ -97,6 +103,8 @@ function setupLab(a,b){
   if(mode){
     stage.querySelector('article').insertAdjacentHTML('beforeend','<details><summary>Was passiert mit echten Malfarben?</summary><p>Je nach Pigment und Menge kann die Mischung bräunlich, grau oder sehr dunkel werden. Diese digitalen Vergleichsfelder zeigen mögliche Wirkungen.</p><div class="swatch-grid">'+[['#91704f','Bräunlich'],['#807e79','Graustichig'],['#373843','Sehr dunkel']].map(([c,n])=>'<figure><i style="background:'+c+'"></i><figcaption>'+n+'</figcaption></figure>').join('')+'</div><p><a href="https://danielsmith.com/color-stories/watercolors/janes-black-blue-orange-watercolor/" target="_blank" rel="noopener">Echte aufgestrichene Blau-Orange-Mischung ansehen (Herstellerbeispiel)</a> · <a href="https://www.handprint.com/HP/WCL/tech34.html" target="_blank" rel="noopener">Gemalte Grün-Mischreihen vergleichen (englisch)</a></p><label>Eigene Papierproben vergleichen (bis zu 3 Fotos, nur auf diesem Gerät)<input id="photos" type="file" accept="image/*" multiple></label><div class="swatch-grid" id="localPhotos"></div></details><p class="family-next"><a href="#atelier">Zum Malauftrag „Ein Orange in drei Stufen“</a> · <a href="lernheft.pdf#page=14">Malfelder auf Seite 14</a></p>');
     mountPhotos();
+    by('photos').closest('details').insertAdjacentHTML('beforeend','<label>Dein Orange wirkt auf Papier rötlicher als am Bildschirm. Welche Zutat würdest du in einer frischen Probe verändern?<textarea id="realPaint"></textarea></label><details><summary>Versuchsidee vergleichen</summary><p>Beginne mit demselben Gelb und gib weniger Rot dazu. Vergleiche die getrockneten Proben auf demselben Papier. Wie viel Rot brauchst du bei deinen Malfarben?</p></details>');
+    noteField('realPaint','realPaint');
   }
   attachReaders();
 }

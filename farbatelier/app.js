@@ -6,8 +6,21 @@ const group=i=>i%4===0?'Primärfarbe':i%2===0?'Sekundärfarbe':'Tertiärfarbe';
 const by=id=>document.getElementById(id),stage=by('stage');
 const options=(values,i)=>values.map((name,j)=>'<option value="'+j+'" '+(j===i?'selected':'')+'>'+name+'</option>').join('');
 function isGuest(){try{return sessionStorage.getItem('farbatelier.mode')==='gast'}catch{return false}}
-function read(key){try{return isGuest()?sessionStorage.getItem('farbatelier.gast.'+key):localStorage.getItem('farbatelier.'+key)}catch{return null}}
-function save(key,value){try{if(isGuest())sessionStorage.setItem('farbatelier.gast.'+key,value);else localStorage.setItem('farbatelier.'+key,value)}catch{}}
+const unsaved = new Map();
+function storageKey(key){return (isGuest()?'farbatelier.gast.':'farbatelier.')+key}
+function read(key){
+ const id=storageKey(key);
+ if(unsaved.has(id))return unsaved.get(id);
+ try{return (isGuest()?sessionStorage:localStorage).getItem(id)}catch{return null}
+}
+function save(key,value){
+ const id=storageKey(key);
+ try{(isGuest()?sessionStorage:localStorage).setItem(id,value);unsaved.delete(id)}
+ catch{
+  unsaved.set(id,String(value));
+  if(!by('storageNotice'))document.querySelector('main').insertAdjacentHTML('afterbegin','<p id="storageNotice" role="alert" class="note">Der Browser kann Einträge gerade nur für diese geöffnete Seite behalten. Sichere deinen Versuch vor dem Schließen im <a href="#lernpass">Lernpass als Text</a>.</p>');
+ }
+}
 document.body.classList.toggle('dark',read('theme')==='dark');
 function themeState(){by('theme').setAttribute('aria-pressed',String(document.body.classList.contains('dark')))}
 themeState();by('theme').onclick=()=>{document.body.classList.toggle('dark');themeState();save('theme',document.body.classList.contains('dark')?'dark':'light')};
@@ -69,8 +82,8 @@ function mix(){
  stage.querySelectorAll('[data-preset]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.preset)===amount)));
  by('sample').style.background=mode?pigmentPreview(hex[a],hex[b],t):interp(stops[k],stops[k+1],pos-k);
  by('ratioText').textContent=(100-amount)+' % '+names[a]+' + '+amount+' % '+names[b];
- by('result').textContent=mode?(amount===0?names[a]:amount===100?names[b]:amount>=40&&amount<=60?'Stark getrübter Mischton':'Getrübtes '+names[t<.5?a:b]):names[(a+Math.round(t*4))%12];
- by('observe').textContent=mode?'Beobachte, wie der kräftige Farbton auf dem Weg zur Mitte seine Buntheit verliert. An den Enden siehst du die reinen Ausgangsfarben.':'Probiere 25 %, 50 % und 75 % aus. Bei 25 % kommen auf drei Portionen der ersten Farbe eine Portion der zweiten.';
+ by('result').textContent=mode?(amount===0?names[a]:amount===100?names[b]:'Mischung aus '+names[a]+' und '+names[b]):names[(a+Math.round(t*4))%12];
+ by('observe').textContent=mode?'Vergleiche deine Mischung mit beiden Ausgangsfarben darüber. Welche wirkt am leuchtendsten? Beschreibe, wie sich die Buntheit beim Weiterdrehen verändert.':'Probiere 25 %, 50 % und 75 % aus. Bei 25 % kommen auf drei Portionen der ersten Farbe eine Portion der zweiten.';
  updateLab(a,b);
  if(!mode&&amount%25){const near=Math.round(amount/25),other=amount>25*near?near+1:near-1;by('result').textContent='Überwiegend '+names[(a+near)%12]+', mit einem Stich in Richtung '+names[(a+other)%12];}
  updateStrip(a,b);}
