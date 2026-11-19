@@ -1,6 +1,6 @@
 "use strict";
 
-const appVersion = "2026-11-19.1";
+const appVersion = "2026-11-19.2";
 const datenVersion = 2;
 const foodCards = [
   { name: "Wasser", group: 7, breakfast: 0, key: "wasser" },
@@ -454,16 +454,19 @@ function initOffline() {
       document.getElementById("apply-update").onclick = () => registration.waiting?.postMessage("ACTIVATE");
     };
     showUpdate();
-    registration.addEventListener("updatefound", () => {
+    const watchInstallation = () => {
       const worker = registration.installing;
-      worker?.addEventListener("statechange", () => {
+      if (!worker) return;
+      worker.addEventListener("statechange", () => {
         if (worker.state === "installed") {
           if (navigator.serviceWorker.controller) showUpdate();
           else showOfflineStatus("✓ Offline bereit. Lerninhalte und Bilder sind auf diesem Gerät gespeichert.");
         }
       });
-    });
-    if (registration.active) showOfflineStatus("✓ Offline bereit. Lerninhalte und Bilder sind auf diesem Gerät gespeichert.");
+    };
+    watchInstallation();
+    registration.addEventListener("updatefound", watchInstallation);
+    navigator.serviceWorker.ready.then(() => showOfflineStatus("✓ Offline bereit. Lerninhalte und Bilder sind auf diesem Gerät gespeichert."));
   }).catch(() => showOfflineStatus("Offline-Speicherung hat noch nicht geklappt. Öffne die App erneut mit Internet."));
   let reloading = false;
   navigator.serviceWorker.addEventListener("controllerchange", () => {

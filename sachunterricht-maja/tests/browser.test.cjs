@@ -99,7 +99,11 @@ async function main() {
       await page.setViewportSize({ width, height: 1000 });
       for (const route of ["start", "eltern", "bildkarten", "fortschritt", "niveau/zucker/3"]) {
         await go(route);
-        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), width + " " + route);
+        const layout = await page.evaluate(() => ({
+          fits: document.documentElement.scrollWidth <= innerWidth,
+          wide: [...document.querySelectorAll("body *")].filter(node => node.scrollWidth > node.clientWidth + 1).map(node => [node.tagName, node.className, node.textContent.slice(0, 50)]).slice(-12),
+        }));
+        assert.ok(layout.fits, width + " " + route + " " + JSON.stringify(layout.wide));
       }
     }
     // Chromium's accessibility tree reports semantic names and keyboard focus.

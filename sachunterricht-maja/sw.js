@@ -1,12 +1,12 @@
 "use strict";
-const cacheName = "majas-sachunterricht-2026-11-19-1";
+const cacheName = "majas-sachunterricht-2026-11-19-2";
 const appFiles = [
   "./",
   "./index.html",
-  "./style.css?v=5",
-  "./stoff.js?v=5",
-  "./lernen.js?v=5",
-  "./app.js?v=5",
+  "./style.css?v=6",
+  "./stoff.js?v=6",
+  "./lernen.js?v=6",
+  "./app.js?v=6",
   "./assets/baerli.webp",
   "./assets/essen-apfel.webp",
   "./assets/essen-brot.webp",
