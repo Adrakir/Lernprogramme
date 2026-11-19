@@ -27,7 +27,7 @@ function wheelExtras(){
     picker.insertAdjacentHTML('afterend','<div class="wheel-legend"><button id="prevFamily">Vorherige Gruppenfarbe</button><button id="nextFamily">Nächste Gruppenfarbe</button></div>');
     for(const [id,dir] of [['prevFamily',-1],['nextFamily',1]])by(id).onclick=()=>{chooseColor(stepColor(dir));by(id).focus()};
   }
-  stage.querySelector('.wheelpanel').insertAdjacentHTML('afterend','<div class="tools"><button id="zoomWheel">Farbkreis vergrößern</button></div><details class="surface"><summary>Farbnamen, Gruppen und Gegenfarben als Liste</summary><ul>'+names.map((n,i)=>'<li><b>'+n+'</b> · '+group(i)+' · gegenüber: '+names[(i+6)%12]+'</li>').join('')+'</ul></details>');
+  stage.querySelector('.wheelpanel').insertAdjacentHTML('afterend','<div class="tools"><button id="zoomWheel">Farbkreis vergrößern</button></div><details class="surface"><summary>Farbnamen, Gruppen und Gegenfarben als Liste</summary><ul>'+names.map((n,i)=>'<li><b>'+n+'</b> · '+group(i)+' · gegenüber: '+names[opposite(i)]+'</li>').join('')+'</ul></details>');
   by('zoomWheel').onclick=()=>{
     const dlg=document.createElement('dialog');dlg.className='zoom-wheel';
     dlg.innerHTML='<button autofocus>Schließen</button><h2>Farbkreis mit Farbnamen</h2><div class="zoom-scroll"></div>';
@@ -169,7 +169,7 @@ function practice(){
   else if(i===0){
    message=(hit.length?'Schon gefunden: '+hit.map(j=>names[j]).join(', ')+'. ':'')+(wrong.length?'Überprüfe '+names[wrong[0]]+': Das ist eine '+group(wrong[0])+'. ':'');
    if(hit.length<targets.length){const missing=targets.find(j=>!hit.includes(j));message+=v.family===2?'Welche Farbe entsteht aus '+names[(missing+10)%12]+' und '+names[(missing+2)%12]+'?':'Suche auch die Grundfarbe zwischen '+names[(missing+11)%12]+' und '+names[(missing+1)%12]+'.'}
-  }else message=i===1?'Überlege: Wie viel Prozent ist eine von vier Portionen? Nutze die Einzelschritte.':'Zähle von '+names[v.opponent]+' aus sechs Felder weiter.';
+  }else message=i===1?'Überlege: Wie viel Prozent ist eine von vier Portionen? Nutze die Einzelschritte.':'Diese Auswahl passt noch nicht. Suche auf der anderen Kreishälfte oder öffne einen Hinweis.';
   by('verdict').textContent=message;
   if(!correct && i===1 && run.values[i]===100-v.ratio)by('verdict').textContent='Die beiden Mengen sind vertauscht. Der Regler gibt den Anteil '+names[b]+' an.';
   if(!correct){run.errors[i]++;keepRun();return}

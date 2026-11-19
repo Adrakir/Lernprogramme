@@ -83,7 +83,8 @@ def check(page, base):
     for route in ["familie","unterricht","kreisstudio","komplementaerfarben"]:
         page.goto(base+"#"+route)
         expect(page.locator("#stage h2").first).to_be_visible()
-        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth+1"), route
+        overflow = page.evaluate("""() => Array.from(document.querySelectorAll('#stage *')).filter(e=>e.getBoundingClientRect().right>innerWidth+1).map(e=>[e.tagName,e.id,e.className?.baseVal||e.className,Math.round(e.getBoundingClientRect().right)]).slice(0,10)""")
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth+1"), (route,overflow)
     assert not errors, errors
 
 if __name__=="__main__":
