@@ -44,10 +44,19 @@ jobs:
           else
             "$RUNNER_TEMP/sachunterricht-tools/node_modules/.bin/playwright" install --with-deps ${{ matrix.browser }}
           fi
+      - name: Geprüfte Bildreferenz für identische Systemschriften laden
+        if: matrix.browser == 'chromium'
+        uses: actions/checkout@v4
+        with:
+          ref: 2de7dde7d76407576db17a920a8928cf43d06227
+          path: bildreferenz
+          sparse-checkout: sachunterricht-maja
+          persist-credentials: false
       - name: Lernen, Prüfungen und Offline-Nutzung durchspielen
         env:
           BROWSER_ENGINE: ${{ matrix.browser }}
           NODE_PATH: ${{ runner.temp }}/sachunterricht-tools/node_modules
+          VIEW_REFERENCE: ${{ github.workspace }}/bildreferenz/sachunterricht-maja
           VIEW_OUTPUT: ${{ runner.temp }}/sachunterricht-ansichten
         run: node sachunterricht-maja/tests/browser.test.cjs
       - name: Vergleichsbilder aufbewahren

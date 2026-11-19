@@ -16,9 +16,14 @@ async function main() {
   if (fileMode) base = pathToFileURL(path.join(root, "index.html")).href;
   else {
     server = http.createServer(async (req, res) => {
-      const relative = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
-      const target = path.resolve(root, "." + (relative === "/" ? "/index.html" : relative));
-      if (!target.startsWith(root + path.sep)) { res.writeHead(403); res.end(); return; }
+      let relative = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+      let servingRoot = root;
+      if(process.env.VIEW_REFERENCE && relative.startsWith("/visual-reference/")){
+        servingRoot = path.resolve(process.env.VIEW_REFERENCE);
+        relative = relative.slice("/visual-reference".length);
+      }
+      const target = path.resolve(servingRoot, "." + (relative === "/" ? "/index.html" : relative));
+      if (!target.startsWith(servingRoot + path.sep)) { res.writeHead(403); res.end(); return; }
       try {
         const types = { ".js": "text/javascript", ".html": "text/html", ".css": "text/css", ".webp": "image/webp" };
         res.writeHead(200, { "Content-Type": types[path.extname(target)] || "application/octet-stream" });

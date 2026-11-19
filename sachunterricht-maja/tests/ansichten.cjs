@@ -4,8 +4,17 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const baseline = path.join(__dirname, "ansichten.json");
 module.exports = async function views(browser, base) {
+  if(process.env.VIEW_REFERENCE){
+    const expected = await capture(browser, base+"visual-reference/", {}, true);
+    await capture(browser,base,expected,false);
+    return;
+  }
   const update = process.env.UPDATE_VIEW_BASELINES === "1";
   const known = update ? {} : JSON.parse(await fs.readFile(baseline, "utf8"));
+  await capture(browser,base,known,update);
+  if(update)await fs.writeFile(baseline,JSON.stringify(known)+"\n");
+};
+async function capture(browser,base,known,update){
   const output = process.env.VIEW_OUTPUT;
   if (output) await fs.mkdir(output, { recursive: true });
   const context = await browser.newContext({
@@ -99,7 +108,7 @@ module.exports = async function views(browser, base) {
           );
       }
     }
-    if (update) await fs.writeFile(baseline, JSON.stringify(known) + "\n");
+    return known;
   } finally {
     await context.close();
   }
