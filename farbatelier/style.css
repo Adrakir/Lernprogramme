@@ -35,3 +35,4 @@ body:not(.at-home) #resumeCard {display:none}
  .surface details :is(select,button) {max-width:calc(100% - 10px)}
  .swatch-grid {grid-template-columns:minmax(0,1fr)}
 }
+.mix-station button {min-height:44px}

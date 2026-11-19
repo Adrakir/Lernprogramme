@@ -1,5 +1,6 @@
 """Run with python browser_matrix.py chromium|webkit [live]."""
 import sys
+import re
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -21,6 +22,15 @@ def live(page, base):
     for route, selector in [("farbkreis",".wheel"),("kreisstudio",".tafel-kreis"),("familie","#familyRound"),("unterricht","#stage h2")]:
         page.goto(base + "#" + route)
         expect(page.locator(selector).first).to_be_visible()
+
+def tab_to(page, target):
+    """Exercise document tab order, including elements inside newly opened details."""
+    for _ in range(220):
+        if target.evaluate("(el)=>document.activeElement===el"):
+            assert target.evaluate("(el)=>el.matches(':focus-visible')")
+            return
+        page.keyboard.press("Tab")
+    raise AssertionError("Ziel in der Tabreihenfolge nicht erreichbar")
 
 def check(page, base):
     errors = []
@@ -85,6 +95,36 @@ def check(page, base):
         expect(page.locator("#stage h2").first).to_be_visible()
         overflow = page.evaluate("""() => Array.from(document.querySelectorAll('#stage *')).filter(e=>e.getBoundingClientRect().right>innerWidth+1).map(e=>[e.tagName,e.id,e.className?.baseVal||e.className,Math.round(e.getBoundingClientRect().right)]).slice(0,10)""")
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth+1"), (route,overflow)
+    # A fresh keyboard-only walk, following the actual focus order.
+    page.goto(base+"#farbkreis")
+    tab_to(page, page.get_by_role("link",name="Mischlabor",exact=True))
+    page.keyboard.press("Enter")
+    tab_to(page,page.locator("#keep"))
+    page.keyboard.press("Enter")
+    tab_to(page,page.get_by_role("link",name="Lernpass",exact=True))
+    page.keyboard.press("Enter")
+    tab_to(page,page.locator("summary").filter(has_text="Partnerrätsel mit einer Farbprobe"))
+    page.keyboard.press("Enter")
+    # The current follow-up has no samples. Import one before trying the dialog.
+    tab_to(page,page.locator("#importSample"))
+    page.keyboard.press("Enter")
+    panel=page.locator("summary").filter(has_text="Partnerrätsel mit einer Farbprobe")
+    tab_to(page,panel)
+    if panel.evaluate("(el)=>el.parentElement.open"):
+        page.keyboard.press("Enter")
+    page.keyboard.press("Enter")
+    tab_to(page,start)
+    page.keyboard.press("Enter")
+    expect(page.get_by_role("dialog")).to_be_visible()
+    page.keyboard.press("Escape")
+    expect(start).to_be_focused()
+    if sys.argv[1]=="chromium":
+        page.goto(base+"#familie")
+        page.get_by_text("Farbkreis und drei Rezepte auf einem Blatt",exact=True).click()
+        page.evaluate("window.print=()=>{}")
+        page.locator("#familyPrint").click()
+        pdf=page.pdf(format="A4",margin={"top":"12mm","bottom":"12mm"})
+        assert len(re.findall(rb"/Type\s*/Page\b",pdf))==1, "Merkblatt umfasst mehrere Seiten"
     assert not errors, errors
 
 if __name__=="__main__":
