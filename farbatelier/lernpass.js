@@ -6,10 +6,7 @@ const learningGoals=[
  ['Ich kann die Gegenfarbe im Farbkreis finden.','farbkreis']
 ];
 const wordbook=[
- ['Primärfarbe','Eine der drei Grundfarben in Ittens Modell: Gelb, Rot oder Blau.'],
- ['Sekundärfarbe','Eine Mischung aus zwei Grundfarben. Aus Gelb und Blau entsteht zum Beispiel Grün.'],
- ['Tertiärfarbe','Eine Zwischenfarbe im Itten-Kreis, etwa Gelb-Grün zwischen Gelb und Grün.'],
- ['Komplementärfarbe','Die Farbe, die einem Farbton im Kreis genau gegenüberliegt. Gegenfarbe bedeutet dasselbe.'],
+ ...wortlisteFarben,
  ['Farbton','Der Farbton beschreibt, ob eine Farbe zum Beispiel rötlich, bläulich oder grünlich aussieht. Hellrot und Dunkelrot unterscheiden sich in der Helligkeit. Beide haben einen roten Farbton.'],
  ['Buntheit','Wie kräftig oder gedämpft eine Farbe wirkt. Auch Farbsättigung genannt.'],
  ['Helligkeit','Wie hell oder dunkel eine Farbe erscheint. Auch ein dunkles Blau kann kräftig wirken.'],
@@ -19,7 +16,7 @@ const reportFields=[
  ['plan','Meine Frage vor dem Versuch'],['change','Das verändere ich'],['same','Das halte ich gleich'],['finding','Das habe ich beobachtet'],['reason','Meine Erklärung']
 ];
 function learningPass(){
- stage.innerHTML=`<article class="surface pass"><p class="eyebrow">LERNPASS</p><h2>Mein Farbversuch</h2><p>Entscheide, was du üben möchtest. Du kannst schreiben, die Fragen mündlich beantworten oder ein Blatt ausdrucken.</p>
+ stage.innerHTML=`<article class="surface pass"><p class="eyebrow">LERNPASS</p><h2>Mein Farbversuch</h2><p>Entscheide, was du üben möchtest. Du kannst schreiben, die Fragen mündlich beantworten oder ein Blatt ausdrucken.</p><details><summary>Wo wird mein Versuch gespeichert?</summary><p>Dein persönlicher Lernpass bleibt in diesem Browser auf diesem Gerät. Beim Beenden eines Gastdurchgangs werden seine Einträge gelöscht. Lade vor dem Gerätewechsel oder vor dem Schließen des Gast-Tabs deinen Versuch als Text herunter.</p></details>
  <details open><summary>Meine Lernziele</summary><p>Schätze dich selbst ein. Du kannst deine Einschätzung jederzeit ändern.</p><div id="goals"></div></details>
  <details><summary>Farbsprache nachschlagen</summary><dl>${wordbook.map(([k,v])=>'<dt>'+k+'</dt><dd>'+v+(k==='Farbton'?'<div class="tone-pair"><span style="background:#ffacac;color:#251414">Hellrot</span><span style="background:#801717;color:white">Dunkelrot</span></div>':'')+reader(k+'. '+v)+'</dd>').join('')}</dl></details>
  <details><summary>Ein Mischrezept überprüfen</summary><p>Jona möchte Gelb-Orange mischen. Er nimmt drei Portionen Rot und eine Portion Gelb. Sage voraus, welchem Farbton seine Mischung näher kommt. Wie würdest du sein Rezept ändern?</p><details><summary>Meine Erklärung vergleichen</summary><p>Rot überwiegt. Jonas Mischung geht eher in Richtung Rot-Orange. Für Gelb-Orange beginnt er mit mehr Gelb als Rot. Mit echten Malfarben kann er die Menge anpassen.</p></details></details>

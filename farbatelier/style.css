@@ -16,3 +16,23 @@
 .goal-row details {flex-basis:100%}
 #reportSamples figure {overflow-wrap:anywhere}
 .goal-row {flex-wrap:wrap}
+#resumeCard {padding:1rem;border-left:4px solid #6b61c7;background:var(--tint);margin-bottom:1rem}
+body:not(.at-home) #resumeCard {display:none}
+.mix-station {display:grid;gap:.55rem;margin:1rem 0;max-width:46rem}
+.mix-station .sample {margin:0;height:clamp(5rem,16vh,9rem)}
+.mix-station button {justify-self:start}
+.compare-pair {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+.compare-pair figure {margin:0}
+.compare-pair figure i {display:block;height:clamp(5rem,16vh,10rem);border-radius:.5rem}
+.student-tools {display:grid;gap:1rem}
+:focus-visible {outline:3px solid #9575ef;outline-offset:3px}
+/* Keep long colour names and native controls inside the available card width. */
+.surface {overflow-wrap:anywhere;min-width:0}
+.surface :is(label,figure,fieldset,select,input,textarea,button,summary) {min-width:0;max-width:100%}
+.mix-station {grid-template-columns:minmax(0,1fr)}
+@media (max-width:600px){
+ .surface h2 {font-size:clamp(1.5rem,6.6vw,2rem)}
+ .surface details :is(select,button) {max-width:calc(100% - 10px)}
+ .swatch-grid {grid-template-columns:minmax(0,1fr)}
+}
+.mix-station button {min-height:44px}

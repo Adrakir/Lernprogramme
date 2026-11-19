@@ -32,7 +32,7 @@ function enhanceWheel(){
     if(!move&&!['Home','End'].includes(e.key))return;e.preventDefault();const available=names.map((_,i)=>i).filter(i=>!highlighted||order(i)===highlighted);chooseColor(move?stepColor(move):e.key==='Home'?available[0]:available[available.length-1]);stage.querySelector('.wheel').focus();
   };
   if(lineOn){
-    const endpoints=[chosen,(chosen+6)%12].map(i=>point(146,-90+i*30).split(' '));
+    const endpoints=[chosen,opposite(chosen)].map(i=>point(146,-90+i*30).split(' '));
     // Draw beneath the centre label, with a dark backing for legibility.
     by('oppositeLayer').insertAdjacentHTML('beforeend',
       '<g pointer-events="none"><line x1="'+endpoints[0][0]+'" y1="'+endpoints[0][1]+'" x2="'+endpoints[1][0]+'" y2="'+endpoints[1][1]+'" stroke="white" stroke-width="4" stroke-dasharray="6 4"/><rect x="103" y="153" width="154" height="65" rx="18" fill="#151c45"/></g>');
@@ -70,6 +70,7 @@ function pigmentPreview(first,second,t){
 let samples=stored('samples',[]);
 if(!Array.isArray(samples))samples=[];
 samples=samples.filter(s=>s&&Number.isInteger(s.a)&&names[s.a]&&Number.isInteger(s.b)&&names[s.b]&&Number.isInteger(s.n)&&s.n>=0&&s.n<=100&&/^rgb\([\d, ]+\)$/.test(s.color)).slice(0,3);
+if(samples.some(s=>!s.id)){samples=samples.map(s=>({...s,id:s.id||crypto.randomUUID()}));save('samples',JSON.stringify(samples))}
 let removedSample=null;
 function renderSamples(){
   by('tray').innerHTML=samples.map((s,i)=>'<figure><i style="background:'+s.color+'"></i><figcaption>'+(100-s.n)+' % '+names[s.a]+' · '+s.n+' % '+names[s.b]+'</figcaption><label>Meine Beobachtung<input maxlength="180" data-sample-note="'+i+'"></label><button data-remove="'+i+'" aria-label="Probe '+(i+1)+' entfernen">Entfernen</button></figure>').join('');
@@ -77,7 +78,7 @@ function renderSamples(){
     const sample=samples[Number(el.dataset.sampleNote)];el.value=sample.note||'';el.setAttribute('aria-label','Meine Beobachtung zu Probe '+(Number(el.dataset.sampleNote)+1)+', '+sampleRecipe(sample));
     el.oninput=()=>{sample.note=el.value;save('samples',JSON.stringify(samples))};
   });
-  by('keep').disabled=samples.length>=3;
+  by('keep').disabled=samples.length>=3;refreshStudentSamples();
   by('trayMsg').textContent=samples.length===3?'Drei Proben abgelegt. Entferne eine, um Platz zu machen.':samples.length+' von 3 Proben abgelegt.';
   by('tray').querySelectorAll('button').forEach(btn=>btn.onclick=()=>{const index=Number(btn.dataset.remove);removedSample={index,value:samples.splice(index,1)[0]};save('samples',JSON.stringify(samples));renderSamples();by('undoSample').focus()});
   if(removedSample){
@@ -95,7 +96,7 @@ function setupLab(a,b){
   noteField('prediction','prediction'+a+'-'+b);
   by('ratio').insertAdjacentHTML('afterend','<div id="portions"></div>');
   by('sample').insertAdjacentHTML('afterend','<section class="sample-shelf"><button id="keep">Probe ablegen</button><p id="trayMsg" role="status"></p><div id="tray" class="swatch-grid"></div></section>');
-  by('keep').onclick=()=>{if(samples.length>=3)return;samples.push({a,b,n:amount,color:by('sample').style.backgroundColor});save('samples',JSON.stringify(samples));renderSamples()};
+  by('keep').onclick=()=>{if(samples.length>=3)return;samples.push({id:crypto.randomUUID(),a,b,n:amount,color:by('sample').style.backgroundColor});save('samples',JSON.stringify(samples));renderSamples()};
   renderSamples();
   stage.querySelector('article').insertAdjacentHTML('beforeend','<details><summary>Vermutung mit dem Ergebnis vergleichen</summary><p id="myPrediction"></p><label>Ich beobachte …<input id="observation" maxlength="240"></label></details>');
   const predictionText=()=>{by('myPrediction').textContent=by('prediction').value||'Du kannst auch ohne Vermutung eine Beobachtung festhalten.'};predictionText();
