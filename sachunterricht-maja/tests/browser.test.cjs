@@ -73,6 +73,16 @@ async function main() {
     await page.locator("[data-criterion]").first().check();
     await page.reload();
     await expect(page.locator("[data-criterion]").first()).toBeChecked();
+    await go("pruefung/1");
+    for (let i = 0; i < 8; i++) {
+      await page.locator('input[name="answer"]').first().check();
+      await page.getByRole("button", { name: "Weiter →", exact: true }).click();
+    }
+    await page.getByLabel("Ich habe im Heft geantwortet.").check();
+    await page.getByRole("button", { name: "Weiter →", exact: true }).click();
+    await page.getByLabel("Ich habe im Heft geantwortet.").check();
+    await page.getByRole("button", { name: "Arbeit abgeben" }).click();
+    await expect(page.locator("[data-criterion]").first()).not.toBeChecked();
     await go("entdecken/zucker");
     await page.getByLabel("Meine Entdeckung").fill("4 g je 100 ml");
     await page.reload();

@@ -677,6 +677,9 @@ function submitExam() {
   const score = exam.tasks.filter(([, q], j) => istRichtig(q, draft.answers[j])).length;
   state.results[i] = { score, best: Math.max(state.results[i]?.best || 0, score), answers: draft.answers, written: draft.written, at: Date.now() };
   delete state.drafts[`exam-${i}`];
+  for (let task = 0; task < 2; task++) for (let criterion = 0; criterion < 2; criterion++) {
+    delete state.criteria[i + "-" + task + "-" + criterion];
+  }
   save();
   location.hash = `ergebnis/${i + 1}`;
 }

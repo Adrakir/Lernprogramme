@@ -1,6 +1,6 @@
 "use strict";
 
-const appVersion = "2026-11-19.2";
+const appVersion = "2026-11-19.3";
 const datenVersion = 2;
 const foodCards = [
   { name: "Wasser", group: 7, breakfast: 0, key: "wasser" },
