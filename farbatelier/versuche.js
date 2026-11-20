@@ -54,7 +54,7 @@ function recordText(rec,withSamples=true){
 }
 function downloadRecord(rec){
  const a=document.createElement('a'),url=URL.createObjectURL(new Blob([recordText(rec)],{type:'text/plain;charset=utf-8'}));
- a.href=url;a.download=[rec.date,(rec.title||'Mein-Farbversuch').replace(/[^\p{L}\p{N}_-]+/gu,'-')].filter(Boolean).join('_')+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ a.href=url;a.download=[rec.date,(rec.title||'Mein-Farbversuch').replace(/[^\p{L}\p{N}_-]+/gu,'-')].filter(Boolean).join('_')+'.txt';a.hidden=true;document.body.append(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},3000);
 }
 function printRecord(rec){
  document.querySelector('.print-sheet')?.remove();
