@@ -26,7 +26,7 @@ function unterricht(){
     window.addEventListener('afterprint',()=>sheet.remove(),{once:true});window.print();
   }
   function foxPicture(bg){
-    return '<svg viewBox="0 0 200 124" aria-hidden="true"><rect width="200" height="124" rx="8" fill="'+hex[bg]+'"/><path d="m52 20 33 21q15-5 30 0l33-21-9 54-39 34-39-34z" fill="'+hex[2]+'" stroke="#794226" stroke-width="2"/><path d="m61 74 29 9 10 10 10-10 29-9-39 34z" fill="#fff1dc"/><g fill="#41291e"><circle cx="79" cy="68" r="3"/><circle cx="121" cy="68" r="3"/><path d="m93 91 14 0-7 8z"/></g></svg>';
+    return '<svg viewBox="0 0 200 124" role="img" aria-label="Orangefarbener Fuchs auf '+names[bg]+'"><rect width="200" height="124" rx="8" fill="'+hex[bg]+'"/><path d="m52 20 33 21q15-5 30 0l33-21-9 54-39 34-39-34z" fill="'+hex[2]+'" stroke="#794226" stroke-width="2"/><path d="m61 74 29 9 10 10 10-10 29-9-39 34z" fill="#fff1dc"/><g fill="#41291e"><circle cx="79" cy="68" r="3"/><circle cx="121" cy="68" r="3"/><path d="m93 91 14 0-7 8z"/></g></svg>';
   }
   function projectPair(trigger){
     const dlg=document.createElement('dialog');dlg.className='uw-project';
@@ -59,19 +59,38 @@ function unterricht(){
   ])));
 
   const entry=panel('einstieg','Einstieg mit drei kurzen Aufgaben');
-  entry.insertAdjacentHTML('beforeend','<p>Bearbeite alle drei Stationen. Du kannst jederzeit eine Entscheidung ändern und noch einmal prüfen.</p><label>1. Zu welcher Farbgruppe gehört Grün?<select id="uw-group"><option value="">Gruppe wählen</option><option>Primärfarbe</option><option>Sekundärfarbe</option><option>Tertiärfarbe</option></select></label><fieldset><legend>2. Zeige auf die Gegenfarbe zu Gelb.</legend><div id="uw-ring" class="uw-ring"></div></fieldset><fieldset><legend>3. Stelle drei Portionen Gelb und eine Portion Rot ein.</legend><label>Anteil Rot<input id="uw-ratio" type="range" min="0" max="100" value="50"></label><output id="uw-percent" for="uw-ratio"></output><div class="tools"><button type="button" id="uw-ratio-ok">Diese Mischung wählen</button></div></fieldset><button id="uw-diagnose">Meine Entscheidungen prüfen</button><ul id="uw-findings" role="status"></ul>');
-  let pick=null,ratioChosen=false;
+  entry.insertAdjacentHTML('beforeend','<p>Bearbeite alle drei Stationen. Du kannst jederzeit eine Entscheidung ändern und noch einmal prüfen.</p><label>1. Zu welcher Farbgruppe gehört Grün?<select id="uw-group"><option value="">Gruppe wählen</option><option>Primärfarbe</option><option>Sekundärfarbe</option><option>Tertiärfarbe</option></select></label><fieldset><legend>2. Zeige auf die Gegenfarbe zu Gelb.</legend><div id="uw-map" class="uw-map"></div><div id="uw-ring" class="uw-ring"></div></fieldset><fieldset><legend>3. Stelle drei Portionen Gelb und eine Portion Rot ein.</legend><label>Anteil Rot<input id="uw-ratio" type="range" min="0" max="100" value="50"></label><output id="uw-percent" for="uw-ratio"></output><div class="tools"><button type="button" id="uw-ratio-ok">Diese Mischung wählen</button></div></fieldset><button id="uw-diagnose">Meine Entscheidungen prüfen</button><ul id="uw-findings" role="status"></ul>');
+  const draft=stored('unterricht.einstieg',null);
+  let pick=Number.isInteger(draft?.pick)&&names[draft.pick]?draft.pick:null;
+  let ratioChosen=draft?.ratioChosen===true;
+  const groupInput=by('uw-group'),ratioInput=by('uw-ratio');
+  if(Array.from(groupInput.options).some(o=>o.value===draft?.group))groupInput.value=draft.group;
+  if(Number.isInteger(draft?.ratio)&&draft.ratio>=0&&draft.ratio<=100)ratioInput.value=draft.ratio;
+  function keepDiagnosis(){
+    save('unterricht.einstieg',JSON.stringify({group:groupInput.value,pick,ratio:Number(ratioInput.value),ratioChosen}));
+  }
+  const ringSectors=names.map((name,i)=>{
+    const angle=-90+i*30,edges=[angle-15,angle+15],coords=point(129,angle).split(' ');
+    return '<path fill="'+hex[i]+'" stroke="#292b36" stroke-width="2" d="M '+point(160,edges[0])+' A 160 160 0 0 1 '+point(160,edges[1])+' L '+point(92,edges[1])+' A 92 92 0 0 0 '+point(92,edges[0])+' Z"/><circle cx="'+coords[0]+'" cy="'+coords[1]+'" r="13" fill="white"/><text x="'+coords[0]+'" y="'+coords[1]+'" dy=".35em" text-anchor="middle" font-size="18" fill="#181821">'+(i+1)+'</text>';
+  });
+  by('uw-map').innerHTML='<svg viewBox="0 0 360 360" role="img" aria-label="Zwölf Felder im Kreis. Gelb ist oben auf Platz eins, die Nummern steigen im Uhrzeigersinn.">'+ringSectors.join('')+'</svg>';
   names.forEach((name,i)=>{
-    const b=button(name,()=>{pick=i;entry.querySelectorAll('#uw-ring button').forEach((other,j)=>other.setAttribute('aria-pressed',String(i===j)));by('uw-findings').replaceChildren()});
-    b.style.setProperty('--pos',i);b.style.setProperty('--dx',Math.sin(i*Math.PI/6));b.style.setProperty('--dy',-Math.cos(i*Math.PI/6));b.style.setProperty('--paint',hex[i]);b.setAttribute('aria-pressed','false');by('uw-ring').append(b);
+    const b=button(name,()=>{
+      pick=i;
+      entry.querySelectorAll('#uw-ring button').forEach((other,j)=>other.setAttribute('aria-pressed',String(i===j)));
+      by('uw-findings').replaceChildren();keepDiagnosis();
+    });
+    b.dataset.position=i+1;b.setAttribute('aria-label',(i+1)+' · '+name);
+    b.style.setProperty('--dx',Math.sin(i*Math.PI/6));b.style.setProperty('--dy',-Math.cos(i*Math.PI/6));
+    b.style.setProperty('--paint',hex[i]);b.setAttribute('aria-pressed',String(i===pick));by('uw-ring').append(b);
   });
   function showRatio(){
-    const pct=Number(by('uw-ratio').value);
-    by('uw-percent').textContent=(100-pct)+' % Gelb und '+pct+' % Rot'+(ratioChosen?' · gewählt':'');by('uw-findings').replaceChildren();
+    const pct=Number(ratioInput.value),recipe=(100-pct)+' % Gelb und '+pct+' % Rot';
+    by('uw-percent').textContent=recipe+(ratioChosen?' · gewählt':'');ratioInput.setAttribute('aria-valuetext',recipe);by('uw-findings').replaceChildren();
   }
-  by('uw-ratio').oninput=()=>{ratioChosen=true;showRatio()};
-  by('uw-ratio-ok').onclick=()=>{ratioChosen=true;showRatio()};
-  by('uw-group').onchange=()=>by('uw-findings').replaceChildren();showRatio();
+  function chooseRatio(){ratioChosen=true;showRatio();keepDiagnosis()}
+  ratioInput.oninput=chooseRatio;by('uw-ratio-ok').onclick=chooseRatio;
+  groupInput.onchange=()=>{by('uw-findings').replaceChildren();keepDiagnosis()};showRatio();
   by('uw-diagnose').onclick=()=>{
     const checks=[
       [by('uw-group').value!=='',by('uw-group').value===group(10),'Farbgruppe','Grün lässt sich aus Gelb und Blau mischen.','Zwei Grundfarben ergeben eine Sekundärfarbe.','#farbgruppen'],
@@ -96,7 +115,8 @@ function unterricht(){
   by('uw-help').onchange=displayHelp;displayHelp();
 
   const misconception=panel('helligkeit','Kann ein dunkleres Rot bunter wirken?');
-  misconception.insertAdjacentHTML('beforeend','<p>Vergleiche beide Proben. Helligkeit beschreibt den Eindruck zwischen hell und dunkel. Buntheit beschreibt, wie farbkräftig oder gedämpft eine Farbe wirkt.</p><div class="uw-pair"><figure><div class="uw-color" style="background:#d4acac"></div><figcaption>A · gedämpftes Rosa</figcaption></figure><figure><div class="uw-color" style="background:#a61224"></div><figcaption>B · kräftiges Dunkelrot</figcaption></figure></div><label>Welche Probe ist heller?<select id="uw-light"><option value="">Bitte wählen</option><option>A</option><option>B</option></select></label><label>Welche Probe wirkt farbkräftiger?<select id="uw-vivid"><option value="">Bitte wählen</option><option>A</option><option>B</option></select></label><button id="uw-compare">Beobachtungen prüfen</button><p id="uw-observation" role="status"></p>');
+  misconception.insertAdjacentHTML('beforeend','<p>Vergleiche beide Proben. Helligkeit beschreibt den Eindruck zwischen hell und dunkel. Buntheit beschreibt, wie farbkräftig oder gedämpft eine Farbe wirkt.</p><div class="uw-pair"><figure><div class="uw-color" style="background:#d4acac"></div><figcaption>Probe A</figcaption></figure><figure><div class="uw-color" style="background:#a61224"></div><figcaption>Probe B</figcaption></figure></div><details><summary>Bildbeschreibung als Hilfe</summary><p>A ist ein helles, gedämpftes Rosa. B ist ein dunkleres, kräftiges Rot.</p></details><label>Welche Probe ist heller?<select id="uw-light"><option value="">Bitte wählen</option><option>A</option><option>B</option></select></label><label>Welche Probe wirkt farbkräftiger?<select id="uw-vivid"><option value="">Bitte wählen</option><option>A</option><option>B</option></select></label><button id="uw-compare">Beobachtungen prüfen</button><p id="uw-observation" role="status"></p>');
+  for(const id of ['uw-light','uw-vivid'])by(id).onchange=()=>{by('uw-observation').textContent=''};
   by('uw-compare').onclick=()=>{
     const a=by('uw-light').value,b=by('uw-vivid').value;
     by('uw-observation').textContent=!a||!b?'Wähle für beide Eigenschaften eine Probe.':a==='A'&&b==='B'?'Genau. A ist heller. B ist dunkler und wirkt zugleich farbkräftiger.':'Vergleiche erst mit weißem Papier und dann mit einem grauen Feld. A liegt näher am hellen Papier. B zeigt den kräftigeren Rotton. Prüfe deine Auswahl noch einmal.';
@@ -132,8 +152,14 @@ function unterricht(){
   const exit=panel('abschluss','Abschlusskarte mit zwei Orange-Fragen');
   exit.insertAdjacentHTML('beforeend','<p>Erkläre die beiden Wirkungen in eigenen Worten, schriftlich oder mündlich. Vergleiche anschließend mit den Beispielantworten.</p>');
   const exitPrompts=['Wie lässt du Orange neben einer anderen Farbe auffallen?','Wie kannst du dasselbe Orange beim Mischen trüben?'];
-  const exitFields=exitPrompts.map((q,i)=>field(exit,'abschluss.'+i,q));
+  const exitFields=exitPrompts.map((q,i)=>{
+    const answer=field(exit,'abschluss.'+i,q);
+    const label=document.createElement('label'),oral=document.createElement('input'),key='unterricht.abschluss.oral.'+i;
+    oral.type='checkbox';oral.checked=read(key)==='1';oral.onchange=()=>save(key,oral.checked?'1':'0');
+    oral.setAttribute('aria-label','Frage '+(i+1)+' mündlich beantwortet');label.append(oral,' Mündlich beantwortet');exit.append(label);
+    return {answer,oral};
+  });
   exit.insertAdjacentHTML('beforeend','<details><summary>Beispielantworten vergleichen</summary><p>1. Ich male Orange neben seine Gegenfarbe Blau. An der gemeinsamen Kante fällt der Unterschied besonders auf.</p><p>2. Ich mische eine kleine Menge Blau in das Orange und vergleiche mit einer reinen Probe. Meine Mischung wirkt gedämpfter. Der genaue Ton hängt von den Malfarben und den Mengen ab.</p></details>');
-  exit.append(button('Meine Abschlusskarte drucken',()=>printNotes('Abschlusskarte · Orange und Blau',exitPrompts.map((q,i)=>q+'\n'+(exitFields[i].value||'_________________________________')))));
+  exit.append(button('Meine Abschlusskarte drucken',()=>printNotes('Abschlusskarte · Orange und Blau',exitPrompts.map((q,i)=>q+'\n'+([exitFields[i].answer.value,exitFields[i].oral.checked?'Mündlich beantwortet':''].filter(Boolean).join(' · ')||'_________________________________')))));
   if(section){const selected=Array.from(page.querySelectorAll('details[id]')).find(p=>p.id==='uw-'+section);selected?.scrollIntoView({block:'start'})}
 }

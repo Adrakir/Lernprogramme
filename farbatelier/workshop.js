@@ -123,6 +123,15 @@ if(!run||!Number.isInteger(run.index)||!Number.isInteger(run.round)||run.round<0
  run=freshPractice();
  run.done=run.done.map((_,i)=>read('practical'+i)==='1');run.index=Math.max(0,run.done.indexOf(false));
 }
+// Repair each saved answer separately so unaffected answers and completed tasks survive.
+run.done=run.done.map((completed,i)=>typeof completed==='boolean'?completed:read('practical'+i)==='1');
+run.errors=run.errors.map(n=>Number.isSafeInteger(n)&&n>=0?n:0);
+for(const i of [0,2]){
+ const picks=Array.isArray(run.values[i])?run.values[i]:[];
+ run.values[i]=[...new Set(picks.filter(n=>Number.isInteger(n)&&n>=0&&n<names.length))];
+ if(i===2)run.values[i]=run.values[i].slice(0,1);
+}
+if(!Number.isInteger(run.values[1])||run.values[1]<0||run.values[1]>100)run.values[1]=50;
 let resumePractice=run.done.some(Boolean)||run.errors.some(Boolean)||run.values[0].length>0||run.values[1]!==50||run.values[2].length>0;
 function keepRun(){save('practiceV2',JSON.stringify(run))}
 function practiceHub(){
@@ -148,7 +157,8 @@ function practice(){
  stage.innerHTML='<article class="surface"><p class="eyebrow">PRAXISCHECK · '+(i+1)+' VON 3</p><h2>'+prompt+'</h2>'+reader(prompt)+controls+'<div class="tools"><button id="verify" class="primary">Auswahl prüfen</button><span id="readPick"></span></div><p id="verdict" role="status"></p><div id="practiceNext"></div><details><summary>Rundenübersicht und Wiederholen</summary><button id="pOverview">Zur Übersicht</button></details></article>';
  const picks=[...stage.querySelectorAll('[name="pickPractice"]')];
  function readSelection(){const text=i===1?by('exerciseValue').textContent:picks.filter(el=>el.checked).map(el=>names[+el.value]).join(', ')||'keine Farbe';by('readPick').innerHTML=reader('Deine Auswahl: '+text).replace('>Vorlesen<','>Auswahl vorlesen<')}
- function clear(){by('verdict').textContent='';by('practiceNext').replaceChildren();readSelection();keepRun()}
+ let lastError=null;
+ function clear(){lastError=null;by('verdict').textContent='';by('practiceNext').replaceChildren();readSelection();keepRun()}
  if(i===1){
   const slider=by('exerciseRatio');slider.value=run.values[i];
   slider.oninput=()=>{const n=+slider.value;run.values[i]=n;by('exerciseValue').textContent=(100-n)+' % '+names[a]+' + '+n+' % '+names[b];const pos=n/25,k=Math.min(3,Math.floor(pos));by('exerciseSample').style.background=interp(hex[(a+k)%12],hex[(a+k+1)%12],pos-k);clear()};
@@ -172,7 +182,7 @@ function practice(){
   }else message=i===1?'Überlege: Wie viel Prozent ist eine von vier Portionen? Nutze die Einzelschritte.':'Diese Auswahl passt noch nicht. Suche auf der anderen Kreishälfte oder öffne einen Hinweis.';
   by('verdict').textContent=message;
   if(!correct && i===1 && run.values[i]===100-v.ratio)by('verdict').textContent='Die beiden Mengen sind vertauscht. Der Regler gibt den Anteil '+names[b]+' an.';
-  if(!correct){run.errors[i]++;keepRun();return}
+  if(!correct){const answer=JSON.stringify(run.values[i]);if(answer!==lastError){run.errors[i]++;lastError=answer;keepRun()}return}
   run.done[i]=true;save('practical'+i,'1');keepRun();
   const next=run.done.indexOf(false);by('practiceNext').innerHTML='<button id="nextPractice">'+(next<0?'Zur Rundenübersicht':'Nächste Aufgabe')+'</button>';
   const reflection=document.createElement('details');

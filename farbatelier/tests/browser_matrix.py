@@ -32,6 +32,69 @@ def tab_to(page, target):
         page.keyboard.press("Tab")
     raise AssertionError("Ziel in der Tabreihenfolge nicht erreichbar")
 
+def check_learning_regressions(page, base):
+    page.goto(base+"#lernweg")
+    page.locator("#advanceGuide").click()
+    page.reload()
+    expect(page.locator("#stage h2")).to_have_text("Orange mischen")
+    page.evaluate("""()=>localStorage.setItem('farbatelier.practiceV2',JSON.stringify({
+        round:0,index:0,done:[false,true,false],errors:[0,0,0],values:[null,50,{}]
+    }))""")
+    page.reload()
+    page.goto(base+"#praxis")
+    expect(page.locator("#stage")).to_contain_text("1 von 3 Aufgaben gelöst")
+    page.locator("#pResume").click()
+    page.locator('[name="pickPractice"][value="0"]').check()
+    for _ in range(2):
+        page.locator("#verify").click()
+    assert page.evaluate("JSON.parse(localStorage.getItem('farbatelier.practiceV2')).errors[0]") == 1
+    page.goto(base+"#komplementaerfarben")
+    for n in (0,10,25):
+        page.locator(f'[data-preset="{n}"]').click()
+        page.locator("#keep").click()
+    page.locator("#sampleStudio > summary").click()
+    left,right=page.locator(".compare-pair select").all()
+    right.select_option("2")
+    left.select_option("1")
+    left.select_option("2")
+    expect(right).to_have_value("1")
+    page.get_by_role("button",name="Rezepte einblenden").click()
+    page.locator('[data-sample-note="2"]').fill("Gedämpft")
+    expect(page.locator(".compare-pair figcaption").first).to_contain_text("Gedämpft")
+
+    page.goto(base+"#kreisstudio")
+    page.get_by_role("button",name="Gegenfarben verbinden").click()
+    page.reload()
+    expect(page.locator("#tafelStart")).to_be_visible()
+    field=page.locator("[data-segment='0']")
+    field.press("Enter")
+    field.press("Enter")
+    expect(page.locator(".tafel-status")).to_contain_text("Startfarbe")
+    field.press("ArrowRight")
+    expect(page.locator("[data-segment='1']")).to_be_focused()
+    page.goto(base+"#unterricht?teil=einstieg")
+    page.locator("#uw-group").select_option(label="Sekundärfarbe")
+    page.reload()
+    expect(page.locator("#uw-group")).to_have_value("Sekundärfarbe")
+    page.goto(base+"#unterricht?teil=abschluss")
+    page.get_by_role("checkbox",name="Frage 1 mündlich beantwortet").check()
+    page.reload()
+    expect(page.get_by_role("checkbox",name="Frage 1 mündlich beantwortet")).to_be_checked()
+    page.goto(base+"#familie")
+    # Hit the painted centre of field 3 in the rendered SVG coordinate system.
+    family_wheel=page.locator("#familySearchWheel svg")
+    position=family_wheel.evaluate("""svg=>{
+      const c=svg.querySelector('[data-family-field="2"] circle'),p=svg.createSVGPoint();
+      p.x=c.cx.baseVal.value;p.y=c.cy.baseVal.value;
+      const screen=p.matrixTransform(c.getScreenCTM()),box=svg.getBoundingClientRect();
+      return {x:screen.x-box.left,y:screen.y-box.top};
+    }""")
+    family_wheel.click(position=position)
+    expect(page.locator("#familyPick")).to_have_value("2")
+    page.get_by_role("button",name="Zum nächsten Schritt").click()
+    page.get_by_role("button",name="Zum nächsten Schritt").click()
+    expect(page.locator("#familyAction")).to_contain_text("reines Orange")
+
 def check(page, base):
     errors = []
     page.on("pageerror", lambda e: errors.append(str(e)))
@@ -130,6 +193,9 @@ if __name__=="__main__":
         if "live" in sys.argv:
             live(browser.new_page(),"https://adrakir.github.io/Lernprogramme/farbatelier/")
         else:
+            regression_context=browser.new_context()
+            check_learning_regressions(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
+            regression_context.close()
             for width,height in [(390,844),(820,1180),(1366,768)]:
                 context=browser.new_context(viewport={"width":width,"height":height})
                 check(context.new_page(),f"http://127.0.0.1:{server.server_port}/")

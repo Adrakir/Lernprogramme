@@ -76,7 +76,7 @@ function renderSamples(){
   by('tray').innerHTML=samples.map((s,i)=>'<figure><i style="background:'+s.color+'"></i><figcaption>'+(100-s.n)+' % '+names[s.a]+' · '+s.n+' % '+names[s.b]+'</figcaption><label>Meine Beobachtung<input maxlength="180" data-sample-note="'+i+'"></label><button data-remove="'+i+'" aria-label="Probe '+(i+1)+' entfernen">Entfernen</button></figure>').join('');
   by('tray').querySelectorAll('[data-sample-note]').forEach(el=>{
     const sample=samples[Number(el.dataset.sampleNote)];el.value=sample.note||'';el.setAttribute('aria-label','Meine Beobachtung zu Probe '+(Number(el.dataset.sampleNote)+1)+', '+sampleRecipe(sample));
-    el.oninput=()=>{sample.note=el.value;save('samples',JSON.stringify(samples))};
+    el.oninput=()=>{sample.note=el.value;save('samples',JSON.stringify(samples));by('sampleStudio')?.querySelector('.compare-pair')?.dispatchEvent(new Event('sample-note'))};
   });
   by('keep').disabled=samples.length>=3;refreshStudentSamples();
   by('trayMsg').textContent=samples.length===3?'Drei Proben abgelegt. Entferne eine, um Platz zu machen.':samples.length+' von 3 Proben abgelegt.';
@@ -141,9 +141,11 @@ function picture(){
  pictureExtras();noteField('starReason','starReason');noteField('skyReason','skyReason');
  [0,1].forEach(i=>{const el=by('sky'+i);const change=()=>{by('skyFill'+i).setAttribute('fill',hex[+el.value]);save('sky'+i,el.value)};change();el.onchange=change});
 }
-let guideStep=0;
+let guideStep=Number(read('guideStep'));
+if(!Number.isInteger(guideStep)||guideStep<0||guideStep>2)guideStep=0;
 function guided(){
  const steps=[['Grundfarben finden','Wähle im Kreis „Primärfarben“. Wie heißen die drei hervorgehobenen Farben?','farbkreis'],['Orange mischen','Wähle Gelb und Rot und stelle gleich große Anteile ein. Lege deine Probe ab.','mischlabor'],['Orange trüben','Vergleiche 100 : 0 und 90 : 10 bei Orange und Blau. Beschreibe den Unterschied.','komplementaerfarben']];
+ save('guideStep',guideStep);
  const step=steps[guideStep];
  stage.innerHTML='<article class="surface"><p class="eyebrow">DEIN LERNWEG · '+(guideStep+1)+' VON 3</p><h2>'+step[0]+'</h2><p>'+step[1]+'</p><div class="tools"><a class="action-link" id="launchGuide" href="#'+step[2]+'">Schritt ausprobieren</a>'+(guideStep?'<button id="guideBack">Zurück</button>':'')+(guideStep<2?'<button id="advanceGuide">Weiter</button>':'<a href="#praxis">Zum Praxischeck</a>')+'</div></article>';
  if(by('guideBack'))by('guideBack').onclick=()=>{guideStep--;guided();attachReaders()};
@@ -156,7 +158,7 @@ function guideBanner(){
  if(!['0','1','2'].includes(step))return;
  if(location.hash!==['#farbkreis','#mischlabor','#komplementaerfarben'][+step]){sessionStorageSafe('guiding','');return}
  stage.insertAdjacentHTML('afterbegin','<aside class="note"><strong>Lernweg · Schritt '+(+step+1)+'</strong> <a id="continueGuide" href="'+(+step===2?'#praxis':'#lernweg')+'">'+(+step===2?'Zum Praxischeck':'Zum nächsten Schritt')+'</a></aside>');
- by('continueGuide').onclick=()=>{guideStep=Math.min(+step+1,2);sessionStorageSafe('guiding','')};
+ by('continueGuide').onclick=()=>{guideStep=Math.min(+step+1,2);save('guideStep',guideStep);sessionStorageSafe('guiding','')};
 }
 function practicalRing(multiple){
  const segments=names.map((name,i)=>{

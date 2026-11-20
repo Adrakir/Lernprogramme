@@ -14,3 +14,5 @@
 .tafel-projection .tafel-kreis {width:100%;height:min(76dvh,75vw)}
 .tafel-name {font-size:11px;font-weight:650;fill:currentColor}
 @media(max-width:640px){.kreistafel .tafel-grid{grid-template-columns:1fr}.tafel-graphic{max-width:22rem}.tafel-projection .tafel-kreis{min-height:52vw;height:auto}}
+.tafel-kreis [data-segment]:focus-visible path {stroke:#151830;stroke-width:5;paint-order:stroke;filter:drop-shadow(0 0 2px white)}
+.tafel-kreis [data-segment]:focus-visible {outline:0}

@@ -26,3 +26,5 @@
  .family-handout .family-print-wheel {display:flex;flex-wrap:nowrap;align-items:center;gap:9mm}
  .family-handout .family-workboxes div {height:25mm}
 }
+
+.family-wheel [data-family-field] {cursor:pointer}
