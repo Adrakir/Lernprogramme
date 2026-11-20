@@ -81,7 +81,15 @@ def check_learning_regressions(page, base):
     page.reload()
     expect(page.get_by_role("checkbox",name="Frage 1 mündlich beantwortet")).to_be_checked()
     page.goto(base+"#familie")
-    page.locator("[data-family-field='2'] text").click()
+    # Hit the painted centre of field 3 in the rendered SVG coordinate system.
+    family_wheel=page.locator("#familySearchWheel svg")
+    position=family_wheel.evaluate("""svg=>{
+      const c=svg.querySelector('[data-family-field="2"] circle'),p=svg.createSVGPoint();
+      p.x=c.cx.baseVal.value;p.y=c.cy.baseVal.value;
+      const screen=p.matrixTransform(c.getScreenCTM()),box=svg.getBoundingClientRect();
+      return {x:screen.x-box.left,y:screen.y-box.top};
+    }""")
+    family_wheel.click(position=position)
     expect(page.locator("#familyPick")).to_have_value("2")
     page.get_by_role("button",name="Zum nächsten Schritt").click()
     page.get_by_role("button",name="Zum nächsten Schritt").click()
