@@ -38,7 +38,7 @@ function sampleText(s){return sampleRecipe(s)+(s.note?' · '+s.note:'')}
 const big=by('largeType');
 function setType(){const on=read('largeType')==='1';document.body.classList.toggle('large-type',on);big.setAttribute('aria-pressed',String(on))}
 big.onclick=()=>{save('largeType',read('largeType')==='1'?'0':'1');setType()};setType();
-document.querySelector('.skip').onclick=e=>{e.preventDefault();stage.focus();stage.scrollIntoView()};
+document.querySelector('.skip').onclick=e=>{e.preventDefault();const target=stage.hidden?by('startTitle'):stage;target.setAttribute('tabindex','-1');target.focus();target.scrollIntoView()};
 const pace=document.createElement('label');pace.innerHTML='Lesetempo <select aria-label="Lesetempo"><option value="normal">Normal</option><option value="langsam">Langsam</option></select>';
 if('speechSynthesis' in window){document.querySelector('.class-tools').append(pace);const select=pace.querySelector('select');select.value=read('speechPace')||'normal';select.onchange=()=>save('speechPace',select.value)}
 route();

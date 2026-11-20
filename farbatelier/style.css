@@ -36,3 +36,19 @@ body:not(.at-home) #resumeCard {display:none}
  .swatch-grid {grid-template-columns:minmax(0,1fr)}
 }
 .mix-station button {min-height:44px}
+
+#startHub{padding:clamp(24px,5vw,60px) 0 10px}
+#startTitle{font-size:clamp(30px,5vw,56px);margin:0 0 24px}
+.start-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.start-cards a{display:grid;align-content:start;gap:8px;background:var(--card);border:1px solid var(--line);padding:20px;border-radius:16px;text-decoration:none}
+.start-cards strong{font-size:1.24em}.start-cards span{color:var(--sub)}
+.symbol{width:38px;height:38px;display:block;border-radius:50%;margin-bottom:6px}
+.symbol.circle{background:conic-gradient(#ffda35,#ff902b,#e43950,#8046a4,#4068c8,#38975f,#ffda35);mask:radial-gradient(circle,transparent 29%,#000 30%)}
+.symbol.mix{background:linear-gradient(105deg,#ffda35 27%,#6fab61 52%,#4068c8 75%);border-radius:50% 45% 40% 26%}
+.symbol.game{background:#493477;color:white;text-align:center;font:bold 27px/38px system-ui;border-radius:10px}
+.guided-start{margin:18px 0}.guided-start a,.wayfinding>a{font-weight:700}
+.wayfinding{margin:16px 0;display:flex;align-items:baseline;gap:20px;flex-wrap:wrap}
+#areaMenu{flex:1}#areaMenu summary{cursor:pointer;font-weight:650}
+#areaMenu nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:20px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0;padding:16px}
+#areaMenu nav section{display:grid;align-content:start;gap:4px}#areaMenu nav a{border:0;border-radius:6px;padding:5px 8px;font-weight:500}
+@media(max-width:680px){.start-cards{grid-template-columns:1fr;gap:8px}.start-cards a{grid-template-columns:38px 1fr;gap:2px 14px;padding:12px}.start-cards a i{grid-row:span 2;align-self:center;margin:0}.start-cards span{line-height:1.35}}

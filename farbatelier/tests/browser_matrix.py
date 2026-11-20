@@ -96,6 +96,13 @@ def check_learning_regressions(page, base):
     expect(page.locator("#familyAction")).to_contain_text("reines Orange")
 
 def check(page, base):
+    page.goto(base)
+    expect(page.locator("#startHub")).to_be_visible()
+    expect(page.locator(".start-cards a")).to_have_count(3)
+    page.locator(".start-cards a[href='#farbkreis']").click()
+    expect(page.locator("#pick")).to_be_visible()
+    page.locator("#backHome").click()
+    expect(page.locator("#startHub")).to_be_visible()
     errors = []
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.goto(base + "#farbkreis")
@@ -160,9 +167,13 @@ def check(page, base):
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth+1"), (route,overflow)
     # A fresh keyboard-only walk, following the actual focus order.
     page.goto(base+"#farbkreis")
+    tab_to(page,page.locator("#areaMenu > summary"))
+    page.keyboard.press("Enter")
     tab_to(page, page.get_by_role("link",name="Mischlabor",exact=True))
     page.keyboard.press("Enter")
     tab_to(page,page.locator("#keep"))
+    page.keyboard.press("Enter")
+    tab_to(page,page.locator("#areaMenu > summary"))
     page.keyboard.press("Enter")
     tab_to(page,page.get_by_role("link",name="Lernpass",exact=True))
     page.keyboard.press("Enter")
