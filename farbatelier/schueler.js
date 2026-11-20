@@ -42,10 +42,11 @@ function refreshStudentSamples(){
    const col=document.createElement('div'),label=document.createElement('label'),select=document.createElement('select'),swatch=document.createElement('div');
    label.textContent=i?'Rechte Probe':'Linke Probe';select.innerHTML=options(samples.map((_,j)=>'Probe '+(j+1)),i);
    label.append(select);col.append(label,swatch);pair.append(col);pickers.push({select,swatch});
-   select.onchange=()=>{const other=pickers[1-i].select;if(other.value===select.value)other.value=String(samples.findIndex((_,j)=>j!==+select.value));draw()};
+   select.onchange=()=>{const other=pickers[1-i].select;if(other.value===select.value)other.value=select.dataset.previous;draw()};
   });
-  function draw(){pickers.forEach(({select,swatch})=>{const s=samples[+select.value];swatch.replaceChildren(sampleFigure(s,reveal.getAttribute('aria-pressed')==='true'?sampleText(s):'Probe '+(+select.value+1)))})}
+  function draw(){pickers.forEach(({select,swatch})=>{select.dataset.previous=select.value;const s=samples[+select.value];swatch.replaceChildren(sampleFigure(s,reveal.getAttribute('aria-pressed')==='true'?sampleText(s):'Probe '+(+select.value+1)))})}
   reveal.onclick=()=>{const open=reveal.getAttribute('aria-pressed')==='false';reveal.setAttribute('aria-pressed',String(open));reveal.textContent=open?'Rezepte ausblenden':'Rezepte einblenden';draw()};box.append(pair,reveal);draw();
+  pair.addEventListener('sample-note',draw);
  }
  const art=document.createElement('section');art.innerHTML='<h3>Mein Atelierblatt</h3><label>Lieblingsprobe<select></select></label><label>Mein Farbname<input maxlength="60"></label><label>Dafür würde ich diese Farbe verwenden<textarea maxlength="300"></textarea></label><div class="swatch-grid"></div><button>Atelierblatt drucken</button>';
  const select=art.querySelector('select'),name=art.querySelector('input'),idea=art.querySelector('textarea'),grid=art.querySelector('.swatch-grid'),print=art.querySelector('button');
