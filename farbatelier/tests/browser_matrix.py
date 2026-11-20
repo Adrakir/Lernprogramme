@@ -40,8 +40,8 @@ def check_learning_regressions(page, base):
     page.evaluate("""()=>localStorage.setItem('farbatelier.practiceV2',JSON.stringify({
         round:0,index:0,done:[false,true,false],errors:[0,0,0],values:[null,50,{}]
     }))""")
-    page.goto(base+"#praxis")
     page.reload()
+    page.goto(base+"#praxis")
     expect(page.locator("#stage")).to_contain_text("1 von 3 Aufgaben gelöst")
     page.locator("#pResume").click()
     page.locator('[name="pickPractice"][value="0"]').check()
