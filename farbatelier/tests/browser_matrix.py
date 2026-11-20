@@ -81,7 +81,7 @@ def check_learning_regressions(page, base):
     page.reload()
     expect(page.get_by_role("checkbox",name="Frage 1 mündlich beantwortet")).to_be_checked()
     page.goto(base+"#familie")
-    page.locator("[data-family-field='2'] circle").click()
+    page.locator("[data-family-field='2'] text").click()
     expect(page.locator("#familyPick")).to_have_value("2")
     page.get_by_role("button",name="Zum nächsten Schritt").click()
     page.get_by_role("button",name="Zum nächsten Schritt").click()
