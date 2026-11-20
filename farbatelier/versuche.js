@@ -112,13 +112,12 @@ function partnerExercise(area){
  const panel=document.createElement('details');panel.innerHTML='<summary>Partnerrätsel mit einer Farbprobe</summary><p>Wähle heimlich eine Probe aus deinem Versuch. Öffne das Rätsel und gib das Gerät weiter. Dein Gegenüber darf raten oder sich die Probe beschreiben lassen.</p><label>Probe für das Rätsel<select></select></label><button>Rezept verdecken und Rätsel starten</button>';area.before(panel);
  const select=panel.querySelector('select'),start=panel.querySelector('button');
  function refreshChoice(){
-  if(!panel.open)return;
   const previous=select.value,list=recordSamples();select.replaceChildren();
   for(const [i,s] of list.entries())select.add(new Option(sampleTextSafe(s,i),s.id));
   if(list.some(s=>s.id===previous))select.value=previous;
   start.disabled=!list.length;if(!list.length)select.add(new Option('Zuerst eine Laborprobe übernehmen',''));
  }
- panel.ontoggle=refreshChoice;by('reportSamples').addEventListener('probenwechsel',refreshChoice);
+ refreshChoice();by('reportSamples').addEventListener('probenwechsel',refreshChoice);
  start.onclick=()=>{
   const s=recordSamples().find(sample=>sample.id===select.value);if(!s)return;
   const dlg=document.createElement('dialog');dlg.className='partner-dialog';dlg.setAttribute('aria-label','Verdeckte Farbprobe');

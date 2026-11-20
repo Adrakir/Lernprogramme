@@ -1,5 +1,8 @@
 name: Öffentliches Farbatelier prüfen
 on:
+  push:
+    branches: [main]
+    paths: ['farbatelier/**', '.github/workflows/farbatelier-live.yml']
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
@@ -8,10 +11,19 @@ permissions:
   contents: read
 jobs:
   live:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - run: python -m pip install playwright==1.55.0
       - run: python -m playwright install --with-deps chromium
-      - run: python farbatelier/tests/browser_matrix.py chromium live
+      - name: Veröffentlichte Version und Lernbereiche prüfen
+        run: |
+          for attempt in {1..20}; do
+            if curl -fsS "https://adrakir.github.io/Lernprogramme/farbatelier/?build=$GITHUB_SHA" -o /tmp/farbatelier-live.html && cmp -s farbatelier/index.html /tmp/farbatelier-live.html; then
+              python farbatelier/tests/browser_matrix.py chromium live
+              exit $?
+            fi
+            sleep 15
+          done
+          exit 1
