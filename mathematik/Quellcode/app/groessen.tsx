@@ -9,12 +9,14 @@ import {skillById, coreSkills, deepSkills, makeTask, makePractice, makeBereichTe
 import {content, uzVergleich, type Frage} from '@/lib/groessen-content';
 import {TaskVisual, InteractiveModel, WalletPicker, Stairs} from './groessen-visuals';
 import {BuendelModell, UhrModell} from './groessen-modelle';
+import {GroessenTraining,TrainingsStart} from './groessen-training';
+import {werkstattHilfe} from '@/lib/groessen-training-stand';
 import {Speak} from './widgets';
 import './groessen.css';
 
 export const bereiche: Bereich[] = ['laenge', 'masse', 'zeit', 'geld', 'flaeche', 'volumen'];
-export const groessenRoutes = ['groessen', ...bereiche.map(b => 'g-' + b), 'g-test'];
-export const groessenTitles: Record<string, string> = {groessen: 'Größen-Werkstatt', 'g-test': 'Größen · Gesamttest', ...Object.fromEntries(bereiche.map(b => ['g-' + b, 'Größen · ' + bereichInfo[b].short]))};
+export const groessenRoutes = ['groessen', 'g-training','g-training-laenge','g-training-masse','g-training-zeit', ...bereiche.map(b => 'g-' + b), 'g-test'];
+export const groessenTitles: Record<string, string> = {groessen: 'Größen-Werkstatt', ...Object.fromEntries(['g-training','g-training-laenge','g-training-masse','g-training-zeit'].map(x=>[x,'Größentraining'])), 'g-test': 'Größen · Gesamttest', ...Object.fromEntries(bereiche.map(b => ['g-' + b, 'Größen · ' + bereichInfo[b].short]))};
 const icons: Record<Bereich, typeof Ruler> = {laenge: Ruler, masse: Scale, zeit: Clock, geld: Coins, flaeche: Square, volumen: Box};
 const levelNames: Record<Level, string> = {1: 'Grundlagen', 2: 'Standard', 3: 'Knobeln'};
 
@@ -143,6 +145,7 @@ function TaskRunner({task, onDone, nextLabel = 'Nächste Aufgabe'}: {task: Task;
       setState('solved');
       setMsg([tries || hint ? 'Richtig. Gut weitergedacht.' : 'Richtig. Genau so geht es.', ...r.results.map(x => x.message).filter((m): m is string => !!m && task.fields.some(f => f.kind === 'choice'))]);
     } else {
+      werkstattHilfe(task.skill);
       setTries(tries + 1);
       const m = r.results.filter(x => !x.ok).map(x => x.message).filter((x): x is string => !!x);
       setMsg(m.length ? m : ['Das stimmt noch nicht. Prüfe deine Rechnung und die Einheit.']);
@@ -150,6 +153,7 @@ function TaskRunner({task, onDone, nextLabel = 'Nächste Aufgabe'}: {task: Task;
     }
   }
   function help() {
+    werkstattHilfe(task.skill);
     if (hint < 3) setHint(hint + 1);
     else { setState('shown'); setMsg(['Schau dir den Lösungsweg in Ruhe an. Bei der nächsten Aufgabe probierst du es selbst.']); }
   }
@@ -466,6 +470,7 @@ function BereichView({b, store, go}: {b: Bereich; store: StoreApi; go: (r: strin
     <>
       <div className="page-title"><div><span className="eyebrow">GRÖSSEN-WERKSTATT · {info.grade.toUpperCase()}</span><h1>{info.title}</h1><p>{content[b].ziele.join(' · ')}</p></div><span className={'page-module-icon ' + info.color}><Icon size={29} /></span></div>
       <button type="button" className="btn ghost small gw-back" onClick={() => go('groessen')}><ArrowLeft size={16} />Alle Größenbereiche</button>
+      {(b==='laenge'||b==='masse'||b==='zeit')&&<button className="btn ghost" onClick={()=>go('g-training-'+b)}>Gezielt üben · {info.short}</button>}
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="learning-tabs gw-tabs">
           <TabsTrigger value="path"><Compass size={17} />Lernpfad</TabsTrigger>
@@ -488,6 +493,7 @@ function Hub({store, go}: {store: StoreApi; go: (r: string) => void}) {
   return (
     <>
       <div className="page-title"><div><span className="eyebrow">GRÖSSEN-WERKSTATT · KLASSE 5/6</span><h1>Messen, umrechnen, rechnen.</h1><p>Längen, Gewichte, Zeit, Geld, Flächen und Volumen mit Lernpfad, Übungen, Tests und Hilfen.</p></div><span className="page-module-icon teal"><Ruler size={29} /></span></div>
+      <TrainingsStart go={go}/>
       <section className="panel gw-hub-intro">
         <h2>So arbeitest du in der Werkstatt</h2>
         <ol className="gw-how"><li><b>Lernpfad</b><span>Fünf Stationen je Bereich: entdecken, verstehen, gemeinsam lösen, selbst versuchen, begründen.</span></li><li><b>Üben</b><span>Runden mit 6 Aufgaben auf drei Niveaus, mit gestuften Hilfen und Musterlösungen.</span></li><li><b>Vertiefung</b><span>Maßstab, Fahrpläne, Preise vergleichen, Überschlag, Flächen im Alltag, Oberfläche.</span></li><li><b>Test</b><span>Ohne Hilfen, mit Auswertung und Empfehlungen.</span></li></ol>
@@ -516,16 +522,17 @@ function Hub({store, go}: {store: StoreApi; go: (r: string) => void}) {
       </div>
       <section className="panel"><h2>Umrechnungszahlen im Vergleich</h2><p>Bei Längen gilt von m über dm und cm bis mm jeweils mal 10, von km zu m mal 1000, bei Flächen mal 100 (10 · 10) und bei Volumen mal 1000 (10 · 10 · 10).</p><UzTable /></section>
       <section className="panel gw-reset"><h2>Lernstand der Werkstatt</h2><p className="gw-small">{store.s.stations.length} Stationen geschafft · {Object.values(store.s.stats).reduce((s, x) => s + x.tasks, 0)} Übungsaufgaben bearbeitet · {store.s.tests.length} Tests. Der Lernstand wird nur auf diesem Gerät gespeichert.</p>
-        <button type="button" className="btn ghost small" onClick={() => { if (window.confirm('Lernstand der Größen-Werkstatt wirklich löschen? Andere Lernstände bleiben erhalten.')) store.reset(); }}><RotateCcw size={16} />Werkstatt-Lernstand zurücksetzen</button></section>
+        <button type="button" className="btn ghost small" onClick={() => { if (window.confirm('Lernstand der Größen-Werkstatt wirklich löschen? Andere Lernstände bleiben erhalten.')) {store.reset();try{localStorage.removeItem('mathe-kompass-groessen-training-v1');}catch{/* Speicher gesperrt */}} }}><RotateCcw size={16} />Werkstatt-Lernstand zurücksetzen</button></section>
     </>
   );
 }
 
 export function GroessenWerkstatt({route, go}: {route: string; go: (r: string) => void}) {
   const store = useStore();
+  if (route.startsWith('g-training')) {const b=route.slice('g-training-'.length);return <GroessenTraining key={route} bereich={b==='laenge'||b==='masse'||b==='zeit'?b:undefined} go={go}/>;}
   if (route === 'g-test') return (
     <>
-      <div className="page-title"><div><span className="eyebrow">GRÖSSEN-WERKSTATT · GESAMTTEST</span><h1>Alle Größen im Test.</h1><p>Längen · Gewichte · Geld · Flächen · Volumen</p></div><span className="page-module-icon yellow"><ClipboardCheck size={29} /></span></div>
+      <div className="page-title"><div><span className="eyebrow">GRÖSSEN-WERKSTATT · GESAMTTEST</span><h1>Alle Größen im Test.</h1><p>Längen · Gewichte · Zeit · Geld · Flächen · Volumen</p></div><span className="page-module-icon yellow"><ClipboardCheck size={29} /></span></div>
       <button type="button" className="btn ghost small gw-back" onClick={() => go('groessen')}><ArrowLeft size={16} />Alle Größenbereiche</button>
       <TestRunner scope="gesamt" make={makeGesamttest} store={store} onLearn={s => go('g-' + skillById[s].bereich)} />
     </>

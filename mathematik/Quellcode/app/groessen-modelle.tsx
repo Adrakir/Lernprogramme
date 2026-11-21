@@ -52,16 +52,20 @@ export function BuendelModell({thema}: {thema:Thema}) {
     <Buendel key={thema+index} paar={paare[thema][index]}/></div>;
 }
 
-export function UhrModell() {
+export function UhrModell({vorhersage=false}: {vorhersage?:boolean} = {}) {
+  const [dauer,setDauer]=useState(25);
+  const [marke,setMarke]=useState(0);
   const [start,setStart]=useState(8*60+45);
-  const lauf=useAnimation(120,1);
+  const lauf=useAnimation(vorhersage?dauer:120,1);
   const ende=start+lauf.wert;
   return <div className="gw-lab"><label>Startzeit <select value={start} onChange={e=>{lauf.einstellen(0);setStart(Number(e.target.value));}}>{[525,905,1420].map(m=><option value={m} key={m}>{uhr(m)} Uhr</option>)}</select></label>
+    {vorhersage&&<><p>Wo steht der Minutenzeiger nach der gewählten Dauer? Setze zuerst deine orange Zielmarke und starte die Uhr.</p><label>Dauer <select value={dauer} onChange={e=>{lauf.einstellen(0);setDauer(+e.target.value)}}>{[15,25,35,50].map(n=><option key={n} value={n}>{n} Minuten</option>)}</select></label><label>Zielmarke bei Minute <select value={marke} onChange={e=>{lauf.einstellen(0);setMarke(+e.target.value)}}>{Array.from({length:12},(_,i)=><option key={i} value={i*5}>{i*5}</option>)}</select></label></>}
     <svg viewBox="0 0 200 200" className="gw-clock" role="img" aria-label={'Uhr zeigt '+uhr(ende)}><circle cx="100" cy="100" r="94" fill="#f2f7ff" stroke="#26395c" strokeWidth="3"/>
       {Array.from({length:60},(_,i)=><line key={i} x1="100" x2="100" y1="10" y2={i%5===0?20:14} stroke="#385078" strokeWidth={i%5===0?3:1} transform={'rotate('+i*6+' 100 100)'}/>)}
       {[12,3,6,9].map((n,i)=><text key={n} x={100+68*Math.sin(i*Math.PI/2)} y={105-68*Math.cos(i*Math.PI/2)} textAnchor="middle" fill="#15365c" fontWeight="bold">{n}</text>)}
+      {vorhersage&&<circle cx="100" cy="14" r="6" fill="#d7781b" stroke="#763b00" transform={'rotate('+marke*6+' 100 100)'}/>}
       <line x1="100" y1="100" x2="100" y2="54" stroke="#233b64" strokeWidth="7" strokeLinecap="round" transform={'rotate('+ende/2+' 100 100)'}/>
       <line x1="100" y1="100" x2="100" y2="30" stroke="#057c77" strokeWidth="4" strokeLinecap="round" transform={'rotate('+ende*6+' 100 100)'}/><circle cx="100" cy="100" r="5" fill="#233b64"/></svg>
     <p className="gw-lab-result">{uhr(start)} Uhr + {lauf.wert} min = <b>{uhr(ende)} Uhr{ende>=1440?' am nächsten Tag':''}</b></p>
-    <Steuerung lauf={lauf} max={120} label="Vergangene Minuten" einheit="min"/></div>;
+    <Steuerung lauf={lauf} max={vorhersage?dauer:120} label="Vergangene Minuten" einheit="min"/>{vorhersage && lauf.wert===dauer && <p role="status">{ende%60===marke?'Deine Vorhersage stimmt.':'Vergleiche deine Marke mit dem langen Zeiger.'} Zielmarke: Minute {marke}. Ergebnis: Minute {ende%60}.</p>}</div>;
 }

@@ -190,3 +190,27 @@ html[data-contrast=strong] .gw-input-line input{border-color:#111}
 .gw-bundles > div {flex:1; text-align:right}
 .gw-bundle-track {display:block; overflow:hidden; height:1.6rem; border:2px solid #28517b; border-radius:.4rem; background:#edf4fb}
 .gw-bundle-track i {display:block; height:100%; background:repeating-linear-gradient(90deg,#087f80 0 calc(10% - 1px),#5ab3b3 calc(10% - 1px) 10%); background-size:100% 100%}
+
+.gt-buttons,.gt-topics {display:flex;gap:.65rem;flex-wrap:wrap;margin:.85rem 0}
+.gt-topics {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr))}
+.gt-topics .btn {justify-content:flex-start;text-align:left;white-space:normal}
+.gt-form label,.gt-model label {display:grid;gap:.35rem;max-width:36rem;margin:.8rem 0}
+.gt-form input:not([type=range]),.gt-form select {max-width:100%;min-width:0;padding:.55rem .7rem;border:1px solid #8294ad;border-radius:.45rem;color:inherit;background:var(--background,white)}
+.gt-model {padding:1rem;background:#f4f8fc;border:1px solid #c2d1df;border-radius:.75rem;color:#173653}
+.gt-model input[type=range] {width:100%;accent-color:#107e79}
+.gt-wide,.gt-dial {width:100%;display:block;max-width:40rem;margin:auto}
+.gt-dial {max-width:20rem}
+.gt-model svg text {font:15px system-ui;fill:#173653}
+.gt-time-track {height:3px;background:#246c75;position:relative;margin:1.6rem 1rem}
+.gt-time-track span {position:absolute;top:50%;transform:translate(-50%,-50%);background:#185867;color:white;border-radius:1rem;padding:.1rem .3rem;font-size:.8rem}
+.gt-compare {display:block;height:1rem;border-radius:.25rem;background:#dbe7ed;overflow:hidden}
+.gt-compare i {height:100%;background:repeating-linear-gradient(90deg,#137d79 0,#137d79 calc(100% - 2px),#fff calc(100% - 2px));background-size:calc(10% + 1px) 100%;display:block}
+.gt-compare.second i {background:#c16c24}
+.gt-tin {position:relative;width:8rem;margin:1rem auto;text-align:center;padding:1.5rem .3rem .4rem;background:#f3be65;border-radius:.5rem;border:1px solid #6a5536}
+.gt-tin i {position:absolute;inset:0;border:5px solid #7897a5;border-radius:.5rem;transition:transform .4s}
+.gt-tin.open i {transform:translateX(110%)}
+.gt-report {border-top:1px solid #cbd6df;padding:.8rem 0}.gt-report button{margin:.25rem}
+@media(prefers-reduced-motion:reduce){.gt-tin i{transition:none}}
+.gt-interval {stroke-dasharray:1;animation:gt-draw .8s ease-out}
+@keyframes gt-draw {from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){.gt-interval{animation:none}}
