@@ -1,20 +1,21 @@
 'use client';
-// Größen-Werkstatt: Längen, Gewichte, Geld, Flächen und Volumen
+// Größen-Werkstatt: Längen, Gewichte, Zeit, Geld, Flächen und Volumen
 // mit geführtem Lernpfad, Übungen auf drei Niveaus, Vertiefung, Tests und Hilfen.
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {ArrowLeft, ArrowRight, BookOpen, Check, CircleCheck, CircleHelp, ClipboardCheck, Lightbulb, Printer, RotateCcw, Ruler, Scale, Coins, Square, Box, Target, Trophy, Compass, Sparkles} from 'lucide-react';
+import {ArrowLeft, ArrowRight, BookOpen, Check, CircleCheck, CircleHelp, ClipboardCheck, Lightbulb, Printer, RotateCcw, Ruler, Scale, Clock, Coins, Square, Box, Target, Trophy, Compass, Sparkles} from 'lucide-react';
 import {Tabs, TabsList, TabsTrigger, TabsContent} from '@/components/ui/tabs';
 import {type Bereich, type Task, type Field, type Answers, type Level, bereichInfo, unit, checkTask, fieldComplete, answerText, coinLabel, inUnit, fmtNum} from '@/lib/groessen-core';
 import {skillById, coreSkills, deepSkills, makeTask, makePractice, makeBereichTest, makeGesamttest, points, grade} from '@/lib/groessen-tasks';
 import {content, uzVergleich, type Frage} from '@/lib/groessen-content';
 import {TaskVisual, InteractiveModel, WalletPicker, Stairs} from './groessen-visuals';
+import {BuendelModell, UhrModell} from './groessen-modelle';
 import {Speak} from './widgets';
 import './groessen.css';
 
-export const bereiche: Bereich[] = ['laenge', 'masse', 'geld', 'flaeche', 'volumen'];
+export const bereiche: Bereich[] = ['laenge', 'masse', 'zeit', 'geld', 'flaeche', 'volumen'];
 export const groessenRoutes = ['groessen', ...bereiche.map(b => 'g-' + b), 'g-test'];
 export const groessenTitles: Record<string, string> = {groessen: 'Größen-Werkstatt', 'g-test': 'Größen · Gesamttest', ...Object.fromEntries(bereiche.map(b => ['g-' + b, 'Größen · ' + bereichInfo[b].short]))};
-const icons: Record<Bereich, typeof Ruler> = {laenge: Ruler, masse: Scale, geld: Coins, flaeche: Square, volumen: Box};
+const icons: Record<Bereich, typeof Ruler> = {laenge: Ruler, masse: Scale, zeit: Clock, geld: Coins, flaeche: Square, volumen: Box};
 const levelNames: Record<Level, string> = {1: 'Grundlagen', 2: 'Standard', 3: 'Knobeln'};
 
 // ---------------------------------------------------------------------
@@ -345,6 +346,7 @@ function Vertiefung({b, store}: {b: Bereich; store: StoreApi}) {
         <StepReveal {...v.beispiel} />
       </section>
       <Practice b={b} store={store} fixedSkill={v.skill} />
+      {deepSkills(b).filter(s => s.id === "l-wanderweg" || s.id === "m-gepaeck").map(s => <details className="panel" key={s.id}><summary><strong>{s.title}</strong> · Sachaufgaben lösen</summary><p>{s.goal}</p><Practice b={b} store={store} fixedSkill={s.id}/></details>)}
     </>
   );
 }
@@ -376,7 +378,7 @@ function TestRunner({scope, make, store, onLearn}: {scope: Bereich | 'gesamt'; m
     <section className="panel gw-test-start">
       <span className="eyebrow">TEST</span>
       <h2>{scope === 'gesamt' ? 'Gesamttest: alle Größenbereiche' : `Test: ${bereichInfo[scope].title}`}</h2>
-      <p>{scope === 'gesamt' ? '15 Aufgaben aus Längen, Gewichten, Geld, Flächen und Volumen.' : '12 Aufgaben zu allen fünf Stationen.'} Ohne Hilfen, ohne Zeitlimit. Grundlagen-Aufgaben zählen 1 Punkt, Standard 2 Punkte, Knobeln 3 Punkte. Am Ende siehst du alle Musterlösungen und Empfehlungen, was du üben kannst.</p>
+      <p>{scope === 'gesamt' ? '18 Aufgaben aus Längen, Gewichten, Zeit, Geld, Flächen und Volumen.' : '12 Aufgaben zu allen fünf Stationen.'} Ohne Hilfen, ohne Zeitlimit. Grundlagen-Aufgaben zählen 1 Punkt, Standard 2 Punkte, Knobeln 3 Punkte. Am Ende siehst du alle Musterlösungen und Empfehlungen, was du üben kannst.</p>
       <ul className="gw-facts"><li><Check size={16} />jederzeit zurückspringen und Antworten ändern</li><li><Check size={16} />bei jedem Start neue Aufgaben</li><li><Check size={16} />Auswertung mit Orientierungsnote</li></ul>
       <button type="button" className="btn" onClick={start}>Test starten<ArrowRight size={18} /></button>
       {last.length > 0 && <p className="gw-small">Deine letzten Ergebnisse: {last.map(t => `${t.points}/${t.max} Punkte (${new Date(t.date).toLocaleDateString('de-DE')})`).join(' · ')}</p>}
@@ -472,7 +474,7 @@ function BereichView({b, store, go}: {b: Bereich; store: StoreApi; go: (r: strin
           <TabsTrigger value="test"><ClipboardCheck size={17} />Test</TabsTrigger>
           <TabsTrigger value="help"><BookOpen size={17} />Hilfen</TabsTrigger>
         </TabsList>
-        <TabsContent value="path"><Lernpfad key={pathKey} b={b} store={store} onTab={setTab} /></TabsContent>
+        <TabsContent value="path">{(b === 'laenge' || b === 'masse' || b === 'zeit') && <details className="panel"><summary><strong>{b === 'zeit' ? 'Uhrenlabor und Zeitumrechnung' : 'Einheiten bündeln'} · Modell ausprobieren</strong></summary><BuendelModell thema={b}/>{b === 'zeit' && <UhrModell/>}</details>}<Lernpfad key={pathKey} b={b} store={store} onTab={setTab} /></TabsContent>
         <TabsContent value="practice"><Practice b={b} store={store} /></TabsContent>
         <TabsContent value="deep"><Vertiefung b={b} store={store} /></TabsContent>
         <TabsContent value="test"><TestRunner scope={b} make={seed => makeBereichTest(b, seed)} store={store} onLearn={() => { setPathKey(pathKey + 1); setTab('path'); }} /></TabsContent>
@@ -485,10 +487,10 @@ function BereichView({b, store, go}: {b: Bereich; store: StoreApi; go: (r: strin
 function Hub({store, go}: {store: StoreApi; go: (r: string) => void}) {
   return (
     <>
-      <div className="page-title"><div><span className="eyebrow">GRÖSSEN-WERKSTATT · KLASSE 5/6</span><h1>Messen, umrechnen, rechnen.</h1><p>Längen, Gewichte, Geld, Flächen und Volumen mit Lernpfad, Übungen, Tests und Hilfen.</p></div><span className="page-module-icon teal"><Ruler size={29} /></span></div>
+      <div className="page-title"><div><span className="eyebrow">GRÖSSEN-WERKSTATT · KLASSE 5/6</span><h1>Messen, umrechnen, rechnen.</h1><p>Längen, Gewichte, Zeit, Geld, Flächen und Volumen mit Lernpfad, Übungen, Tests und Hilfen.</p></div><span className="page-module-icon teal"><Ruler size={29} /></span></div>
       <section className="panel gw-hub-intro">
         <h2>So arbeitest du in der Werkstatt</h2>
-        <ol className="gw-how"><li><b>Lernpfad</b><span>Fünf Stationen je Bereich: entdecken, verstehen, gemeinsam lösen, selbst versuchen, begründen.</span></li><li><b>Üben</b><span>Runden mit 6 Aufgaben auf drei Niveaus, mit gestuften Hilfen und Musterlösungen.</span></li><li><b>Vertiefung</b><span>Maßstab, Preise vergleichen, Überschlag, Flächen im Alltag, Oberfläche.</span></li><li><b>Test</b><span>Ohne Hilfen, mit Auswertung und Empfehlungen.</span></li></ol>
+        <ol className="gw-how"><li><b>Lernpfad</b><span>Fünf Stationen je Bereich: entdecken, verstehen, gemeinsam lösen, selbst versuchen, begründen.</span></li><li><b>Üben</b><span>Runden mit 6 Aufgaben auf drei Niveaus, mit gestuften Hilfen und Musterlösungen.</span></li><li><b>Vertiefung</b><span>Maßstab, Fahrpläne, Preise vergleichen, Überschlag, Flächen im Alltag, Oberfläche.</span></li><li><b>Test</b><span>Ohne Hilfen, mit Auswertung und Empfehlungen.</span></li></ol>
       </section>
       <div className="gw-hub-grid">
         {bereiche.map(b => {
@@ -508,11 +510,11 @@ function Hub({store, go}: {store: StoreApi; go: (r: string) => void}) {
         <button type="button" className="module-card gw-hub-card yellow" onClick={() => go('g-test')}>
           <span className="module-icon"><ClipboardCheck size={26} /></span>
           <h3>Gesamttest</h3>
-          <p>15 Aufgaben aus allen fünf Bereichen. Ideal vor einer Klassenarbeit.</p>
+          <p>18 Aufgaben aus allen sechs Bereichen. Ideal vor einer Klassenarbeit.</p>
           <div className="card-bottom"><span>{store.s.tests.filter(t => t.scope === 'gesamt').length} Mal bearbeitet</span><ArrowRight size={18} /></div>
         </button>
       </div>
-      <section className="panel"><h2>Umrechnungszahlen im Vergleich</h2><p>Bei Längen geht jede Stufe mal 10, bei Flächen mal 100 (10 · 10) und bei Volumen mal 1000 (10 · 10 · 10).</p><UzTable /></section>
+      <section className="panel"><h2>Umrechnungszahlen im Vergleich</h2><p>Bei Längen gilt von m über dm und cm bis mm jeweils mal 10, von km zu m mal 1000, bei Flächen mal 100 (10 · 10) und bei Volumen mal 1000 (10 · 10 · 10).</p><UzTable /></section>
       <section className="panel gw-reset"><h2>Lernstand der Werkstatt</h2><p className="gw-small">{store.s.stations.length} Stationen geschafft · {Object.values(store.s.stats).reduce((s, x) => s + x.tasks, 0)} Übungsaufgaben bearbeitet · {store.s.tests.length} Tests. Der Lernstand wird nur auf diesem Gerät gespeichert.</p>
         <button type="button" className="btn ghost small" onClick={() => { if (window.confirm('Lernstand der Größen-Werkstatt wirklich löschen? Andere Lernstände bleiben erhalten.')) store.reset(); }}><RotateCcw size={16} />Werkstatt-Lernstand zurücksetzen</button></section>
     </>

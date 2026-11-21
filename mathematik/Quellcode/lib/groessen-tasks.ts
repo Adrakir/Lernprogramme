@@ -6,6 +6,8 @@ import {
   choice, coinLabel, fewestCoins, fmtNum, inUnit, orderField, rng, size, stairs, unit,
 } from './groessen-core.ts';
 
+import {zeitSkills} from './zeit-tasks.ts';
+
 type Draft = Omit<Task, 'id' | 'bereich' | 'skill' | 'level'>;
 export type Skill = {id: string; bereich: Bereich; title: string; goal: string; vertiefung?: boolean; make: (r: Rng, level: Level) => Draft};
 
@@ -85,7 +87,7 @@ function mixedToDecimal(b: Bereich, big: string, small: string, base: number, wr
 const anchors: Record<Bereich, Record<string, string>> = {
   laenge: {mm: '1 mm ist etwa die Dicke einer Bankkarte', cm: '1 cm ist etwa die Breite deines kleinen Fingers', dm: '1 dm ist etwa die Breite deiner Hand ohne Daumen', m: '1 m ist etwa ein großer Schritt', km: '1 km gehst du in etwa einer Viertelstunde'},
   masse: {mg: 'Ein Reiskorn wiegt etwa 20 mg', g: 'Eine Büroklammer wiegt etwa 1 g', kg: '1 Liter Wasser wiegt 1 kg', t: 'Ein kleines Auto wiegt etwa 1 t'},
-  geld: {}, flaeche: {}, volumen: {},
+  zeit: {}, geld: {}, flaeche: {}, volumen: {},
 };
 
 function unitChoice(r: Rng, b: Bereich, sentence: string, value: string, correct: string, options: string[]): Draft {
@@ -1066,7 +1068,26 @@ const volumen: Skill[] = [
   }},
 ];
 
-export const skills: Skill[] = [...laenge, ...masse, ...geld, ...flaeche, ...volumen];
+const transfer: Skill[] = [
+  {id:'l-wanderweg', bereich:'laenge', vertiefung:true, title:'Wanderweg mit Umleitung', goal:'Ich verbinde Wegstrecken in Metern und Kilometern.', make(r,lv) {
+    const km=r.int(1,5), m=r.int(2,15)*50, extra=lv>1?r.int(2,9)*50:0;
+    const hin=km*1000+m+extra, gesamt=lv===3?hin+km*1000+m:hin;
+    return {prompt:`Vom Bahnhof zum See geht ihr zuerst ${km} km und dann ${m} m.${extra?' Eine Umleitung verlängert den Hinweg um '+extra+' m.':''} ${lv===3?'Zurück geht ihr den ursprünglichen Weg ohne Umleitung. Wie viele Kilometer lauft ihr insgesamt?':'Wie lang ist der Hinweg in Metern?'}`,
+      fields:[sf('a','laenge',lv===3?'km':'m',gesamt*1000)],
+      hints:H('Zeichne für jedes Teilstück einen Strich.','1 km = 1.000 m. Rechne zuerst alle Strecken in Meter um.',lv===3?'Addiere den Rückweg ohne die Umleitung und teile am Ende durch 1.000.':'Addiere alle Teilstrecken des Hinwegs.'),
+      solution:[`Ursprüngliche Strecke: ${km} · 1.000 + ${m} = ${km*1000+m} m.`,`Hinweg: ${km*1000+m} + ${extra} = ${hin} m.`,...(lv===3?[`Hin und zurück: ${hin} + ${km*1000+m} = ${gesamt} m = ${fmtNum(gesamt/1000)} km.`]:[])]};
+  }},
+  {id:'m-gepaeck', bereich:'masse', vertiefung:true, title:'Rucksack für den Ausflug', goal:'Ich beachte Leergewicht, Inhalt und Gewichtsgrenze.', make(r,lv) {
+    const leer=r.int(5,10)*100, essen=r.int(2,7)*100, wasser=r.int(1,3)*500, gesamt=leer+essen+wasser;
+    const grenze=Math.ceil(gesamt/1000)+1, reserve=grenze*1000-gesamt;
+    return {prompt:`Dein leerer Rucksack wiegt ${leer} g, der Proviant ${essen} g und die volle Trinkflasche ${fmtNum(wasser/1000)} kg. ${lv===1?'Wie viel wiegt der gepackte Rucksack in Gramm?':lv===2?'Wie viel wiegt er in Kilogramm?':'Der Rucksack darf höchstens '+grenze+' kg wiegen. Wie viele Gramm darfst du noch einpacken?'}`,
+      fields:[sf('a','masse',lv===2?'kg':'g',(lv===3?reserve:gesamt)*1000)],
+      hints:H('Der Rucksack selbst zählt mit.','Wandle die Masse der Flasche in Gramm um.',lv===3?'Ziehe die gepackte Masse von der Grenze in Gramm ab.':'Addiere die drei Massen. Prüfe die verlangte Einheit.'),
+      solution:[`${fmtNum(wasser/1000)} kg = ${wasser} g.`,`Gepackt: ${leer} + ${essen} + ${wasser} = ${gesamt} g = ${fmtNum(gesamt/1000)} kg.`,...(lv===3?[`Noch frei: ${grenze*1000} − ${gesamt} = ${reserve} g.`]:[])]};
+  }}
+];
+
+export const skills: Skill[] = [...transfer, ...laenge, ...masse, ...zeitSkills, ...geld, ...flaeche, ...volumen];
 export const skillById = Object.fromEntries(skills.map(s => [s.id, s])) as Record<string, Skill>;
 export const coreSkills = (b: Bereich) => skills.filter(s => s.bereich === b && !s.vertiefung);
 export const deepSkills = (b: Bereich) => skills.filter(s => s.bereich === b && s.vertiefung);
@@ -1095,9 +1116,9 @@ export function makeBereichTest(b: Bereich, seed: number): Task[] {
   return out;
 }
 
-/** Gesamttest über alle fünf Größenbereiche. */
+/** Gesamttest über alle sechs Größenbereiche. */
 export function makeGesamttest(seed: number): Task[] {
-  const bs: Bereich[] = ['laenge', 'masse', 'geld', 'flaeche', 'volumen'];
+  const bs: Bereich[] = ['laenge', 'masse', 'zeit', 'geld', 'flaeche', 'volumen'];
   const out: Task[] = [];
   bs.forEach((b, i) => {
     const core = coreSkills(b);

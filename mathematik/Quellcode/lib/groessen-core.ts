@@ -2,10 +2,11 @@
 // Alle Werte werden intern als ganze Zahlen in der kleinsten Einheit gespeichert
 // (mm, mg, ct, mm², mm³). So entstehen keine Rundungsfehler bei Kommazahlen.
 
-export type Bereich = 'laenge' | 'masse' | 'geld' | 'flaeche' | 'volumen';
+export type Bereich = 'zeit' | 'laenge' | 'masse' | 'geld' | 'flaeche' | 'volumen';
 export type Unit = {id: string; label: string; factor: number; name: string};
 
 export const units: Record<Bereich, Unit[]> = {
+  zeit: [{id:'s',label:'s',factor:1,name:'Sekunde'},{id:'min',label:'min',factor:60,name:'Minute'},{id:'h',label:'h',factor:3600,name:'Stunde'},{id:'tag',label:'Tag',factor:86400,name:'Tag'}],
   laenge: [
     {id: 'mm', label: 'mm', factor: 1, name: 'Millimeter'},
     {id: 'cm', label: 'cm', factor: 10, name: 'Zentimeter'},
@@ -44,6 +45,7 @@ export const units: Record<Bereich, Unit[]> = {
 
 /** Die Stufen der Einheitentreppe (ohne Doppelnamen wie ml/cm³). */
 export const stairs: Record<Bereich, string[]> = {
+  zeit: ['tag','h','min','s'],
   laenge: ['km', 'm', 'dm', 'cm', 'mm'],
   masse: ['t', 'kg', 'g', 'mg'],
   geld: ['eur', 'ct'],
@@ -52,6 +54,7 @@ export const stairs: Record<Bereich, string[]> = {
 };
 
 export const bereichInfo: Record<Bereich, {title: string; short: string; uz: string; grade: string; color: string}> = {
+  zeit: {title:'Zeit und Zeitspannen',short:'Zeit',uz:'60 zwischen s, min und h; 24 zwischen h und Tag',grade:'Klasse 5',color:'purple'},
   laenge: {title: 'Längen', short: 'Längen', uz: 'Meistens 10, zwischen m und km 1000', grade: 'Klasse 5', color: 'blue'},
   masse: {title: 'Gewichte (Masse)', short: 'Gewichte', uz: '1000', grade: 'Klasse 5', color: 'teal'},
   geld: {title: 'Rechnen mit Geld', short: 'Geld', uz: '100', grade: 'Klasse 5', color: 'yellow'},
@@ -73,6 +76,7 @@ export function fmtNum(n: number, maxDecimals = 6): string {
 /** Wert (in kleinster Einheit) in einer Zieleinheit als deutsche Zahl, exakt. */
 export function inUnit(base: number, b: Bereich, id: string): string {
   const f = unit(b, id).factor;
+  if (b === 'zeit') return fmtNum(base / f);
   const neg = base < 0;
   const abs = BigInt(Math.abs(base));
   const fb = BigInt(f);
@@ -233,6 +237,7 @@ export function diagnose(given: number, correct: number, b: Bereich): string | u
   const small = powers.find(p => Math.abs(r - 1 / p) < 1e-9);
   const uz: Record<Bereich, string> = {
     laenge: 'Bei Längen ist die Umrechnungszahl 10 (zwischen m und km 1000).',
+    zeit: '1 h = 60 min, 1 min = 60 s, 1 Tag = 24 h.',
     masse: 'Bei Gewichten ist die Umrechnungszahl 1000.',
     geld: '1 € sind 100 ct.',
     flaeche: 'Bei Flächen ist die Umrechnungszahl 100, weil ein Quadrat in beide Richtungen zehnmal so lang ist.',

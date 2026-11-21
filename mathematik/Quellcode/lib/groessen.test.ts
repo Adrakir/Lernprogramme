@@ -64,15 +64,15 @@ test('typische Fehler bekommen eine passende Rückmeldung', () => {
 });
 
 test('Tests und Übungsrunden sind vollständig und gemischt', () => {
-  for (const b of ['laenge', 'masse', 'geld', 'flaeche', 'volumen'] as const) for (let s = 1; s < 30; s++) {
+  for (const b of ['laenge', 'masse', 'zeit', 'geld', 'flaeche', 'volumen'] as const) for (let s = 1; s < 30; s++) {
     const t = makeBereichTest(b, s);
     assert.equal(t.length, 12);
     assert.equal(new Set(t.map(x => x.skill)).size, 5);
     assert.equal(makePractice(b, 'mix', 2, s).length, 6);
   }
   const g = makeGesamttest(3);
-  assert.equal(g.length, 15);
-  assert.equal(new Set(g.map(x => x.bereich)).size, 5);
+  assert.equal(g.length, 18);
+  assert.equal(new Set(g.map(x => x.bereich)).size, 6);
   assert.equal(grade(90).note, '1');
   assert.equal(grade(49).note, '5');
 });

@@ -184,3 +184,9 @@ html[data-contrast=strong] .gw-input-line input{border-color:#111}
 }
 @media print{.gw-actions,.gw-back,.gw-tabs,.gw-test-nav{display:none!important}.gw-review{display:block}.gw-review-card{break-inside:avoid;margin-bottom:12px}}
 @media (max-width:640px){.gw-stairs{min-width:0;width:100%;max-width:none}.gw-stairs text{font-size:115%}}
+
+.gw-clock {display:block; width:min(100%,12rem); margin:1rem auto}
+.gw-bundles {display:flex; gap:.6rem; margin:1rem 0}
+.gw-bundles > div {flex:1; text-align:right}
+.gw-bundle-track {display:block; overflow:hidden; height:1.6rem; border:2px solid #28517b; border-radius:.4rem; background:#edf4fb}
+.gw-bundle-track i {display:block; height:100%; background:repeating-linear-gradient(90deg,#087f80 0 calc(10% - 1px),#5ab3b3 calc(10% - 1px) 10%); background-size:100% 100%}

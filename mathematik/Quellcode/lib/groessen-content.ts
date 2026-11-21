@@ -1,7 +1,9 @@
 // Größen-Werkstatt: Inhalte der geführten Lernpfade, Vertiefungen und Hilfen.
 import type {Bereich, Visual} from './groessen-core';
 
-export type Interactive = 'stairs' | 'ruler' | 'balance' | 'wallet' | 'rect' | 'cuboid' | 'jug' | 'grid';
+import {zeitContent} from './zeit-content.ts';
+
+export type Interactive = 'clock' | 'timeunits' | 'stairs' | 'ruler' | 'balance' | 'wallet' | 'rect' | 'cuboid' | 'jug' | 'grid';
 
 export type Frage = {question: string; options: string[]; answer: number; explain: string[]};
 
@@ -35,6 +37,7 @@ const pruefen = ['Lies die Aufgabe genau. Was ist gegeben, was ist gesucht?', 'B
 
 export const content: Record<Bereich, BereichContent> = {
   // ===================================================================
+  zeit: zeitContent,
   laenge: {
     intro: 'Längen begegnen dir überall: beim Messen mit dem Lineal, beim Weg zur Schule oder beim Basteln. In diesem Lernpfad lernst du, Längen zu schätzen, genau zu messen, umzurechnen und mit ihnen zu rechnen.',
     ziele: ['Längen mit Stützpunkten schätzen', 'Mit dem Lineal genau messen', 'Zwischen mm, cm, dm, m und km umrechnen', 'Längen mit Komma schreiben', 'Mit Längen rechnen und Sachaufgaben lösen'],
@@ -449,6 +452,7 @@ export const content: Record<Bereich, BereichContent> = {
 /** Vergleich der Umrechnungszahlen über alle Bereiche (für die Hilfen). */
 export const uzVergleich: [string, string, string][] = [
   ['Länge', '10 (m → km: 1000)', '1 m = 10 dm'],
+  ['Zeit', '60 oder 24', '1 h = 60 min, 1 Tag = 24 h'],
   ['Gewicht', '1000', '1 kg = 1.000 g'],
   ['Geld', '100', '1 € = 100 ct'],
   ['Fläche', '100', '1 m² = 100 dm²'],

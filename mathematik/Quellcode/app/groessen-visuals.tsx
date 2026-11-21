@@ -4,6 +4,8 @@ import {useMemo, useState} from 'react';
 import {type Bereich, type Visual, stairs, unit, units, inUnit, size, toBase, fmtNum, coinLabel, euroItems, fewestCoins} from '@/lib/groessen-core';
 import {content, type Interactive} from '@/lib/groessen-content';
 
+import {BuendelModell, UhrModell} from './groessen-modelle';
+
 const INK = '#1b2b4a';
 const BLUE = '#355fe4';
 const TEAL = '#15a29b';
@@ -434,6 +436,8 @@ function JugExplorer() {
 
 export function InteractiveModel({kind, bereich}: {kind: Interactive; bereich: Bereich}) {
   switch (kind) {
+    case 'clock': return <UhrModell />;
+    case 'timeunits': return <BuendelModell thema="zeit" />;
     case 'stairs': return <StairsExplorer bereich={bereich} />;
     case 'ruler': return <RulerExplorer />;
     case 'balance': return <BalanceExplorer />;

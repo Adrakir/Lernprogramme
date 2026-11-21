@@ -44,8 +44,8 @@ auf einem anderen Gerät wieder laden.
 
 Größen-Werkstatt
 ----------------
-In der Seitenleiste unter "GRÖSSEN-WERKSTATT" gibt es fünf Größenbereiche:
-Längen, Gewichte, Rechnen mit Geld, Flächen und Volumen.
+In der Seitenleiste unter "GRÖSSEN-WERKSTATT" gibt es sechs Größenbereiche:
+Längen, Gewichte, Zeit, Rechnen mit Geld, Flächen und Volumen.
 
 Jeder Bereich hat fünf Reiter:
 1. Lernpfad: fünf Stationen. Jede Station führt in fünf Schritten durch das
@@ -62,7 +62,7 @@ Jeder Bereich hat fünf Reiter:
 5. Hilfen: Stützpunkte, Merksätze, typische Fehler, Umrechnungstabellen und
    Lösungsstrategien. Die Seite lässt sich drucken.
 
-Zusätzlich gibt es einen Gesamttest über alle fünf Größenbereiche.
+Zusätzlich gibt es einen Gesamttest über alle sechs Größenbereiche.
 
 Für Lehrkräfte
 --------------

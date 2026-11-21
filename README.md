@@ -46,7 +46,7 @@ Beim Löschen der Browserdaten können sie verloren gehen. Die älteren Deutsch-
 MatheKompass bietet geführte Lernwege mit Martha Mathe, zusätzliche interaktive
 Modelle, eine Unterrichtsansicht und druckbare Arbeitsblätter mit optionalem
 separatem Lösungsblatt. Die Lernstandserhebung umfasst 30 Aufgaben aus 15
-Bereichen. Neu ist die Größen-Werkstatt für Längen, Gewichte, Geld, Flächen
+Bereichen. Neu ist die Größen-Werkstatt für Längen, Gewichte, Zeit, Geld, Flächen
 und Volumen: je fünf Stationen mit geführtem Lernpfad, Übungen in drei Niveaus,
 Vertiefung, Test mit Auswertung, gestuften Hilfen und Merkwissen. Alte Sicherungen und begonnene 14-Aufgaben-Diagnosen bleiben lesbar.
 Ein bearbeitetes Beispiel ist kein Kompetenznachweis; Inhalte mit Kennzeichnung
