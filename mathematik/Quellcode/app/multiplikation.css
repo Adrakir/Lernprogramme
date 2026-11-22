@@ -1,0 +1,2 @@
+.mul-step{min-width:0;padding:0;border:0;margin:.65rem 0}.mul-step legend{font-weight:700}.mul-table td{min-width:1.9rem;height:1.9rem;font-variant-numeric:tabular-nums}.mul-table caption{text-align:left}.mul-table tbody tr:last-child{border-top:2px solid}.ad-lab .mul-array{max-height:14rem;width:auto;max-width:100%;min-width:9rem}.mul-dot{transform-box:fill-box;transform-origin:center}
+@media(prefers-reduced-motion:no-preference){.mul-dot{animation:mul-in .32s ease-out}@keyframes mul-in{from{transform:scale(.25);opacity:.15}}}
