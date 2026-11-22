@@ -1,0 +1,2 @@
+.sub-places{display:flex;gap:.4rem;margin:.65rem 0;flex-wrap:wrap}.sub-places>div{flex:1;min-width:4.7rem;background:white;padding:.5rem;border-radius:.4rem}.sub-places i{margin:.1rem}.sub-places b{font-size:.85rem;display:block}
+@media(prefers-reduced-motion:no-preference){.sub-places i{animation:sub-place .36s ease-out}.sub-jump{stroke-dasharray:500;animation:sub-draw .65s ease-out}@keyframes sub-place{from{transform:translateY(-.5rem);opacity:.1}}@keyframes sub-draw{from{stroke-dashoffset:500}to{stroke-dashoffset:0}}}
