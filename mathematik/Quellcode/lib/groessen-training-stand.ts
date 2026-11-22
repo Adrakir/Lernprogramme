@@ -1,6 +1,6 @@
 import {themen, type Thema} from './groessen-training';
 export type Modus='check'|'arbeit'|'uebung'|'reise'|'detektiv'|'wiederholen';
-export type Stand={modus:Modus; ids:Thema[]; seed:number; i:number; antworten:string[][]; hilfe:boolean[]; umkehr:boolean[]; fertig:boolean};
+export type Stand={version?:2; sicherheit?:string[]; reflexion?:string[]; modus:Modus; ids:Thema[]; seed:number; i:number; antworten:string[][]; hilfe:boolean[]; umkehr:boolean[]; fertig:boolean};
 type Eintrag={id:Thema; umkehr:boolean};
 type Daten={runde?:Stand; liste:Eintrag[]};
 const key='mathe-kompass-groessen-training-v1';
@@ -21,7 +21,7 @@ export function verbuchen(r:Stand,ok:boolean[]){
   const d=lesen();let liste=[...d.liste];
   r.ids.forEach((id,i)=>{
     const alt=liste.find(e=>e.id===id);
-    if(!ok[i]||r.hilfe[i]){if(!alt)liste.push({id,umkehr:false});return;}
+    if(!ok[i]||r.hilfe[i]||r.sicherheit?.[i]==='geraten'){if(!alt)liste.push({id,umkehr:false});return;}
     if(r.modus!=='wiederholen'||!alt)return;
     const gegenrichtung=['regelL','regelM','regelZ','stellen'].includes(id);
     if(gegenrichtung&&!r.umkehr[i])liste=liste.map(e=>e.id===id?{id,umkehr:true}:e);

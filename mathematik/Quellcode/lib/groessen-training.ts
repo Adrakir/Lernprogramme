@@ -1,9 +1,12 @@
 import {fmtNum as f, plainNumber, rng} from './groessen-core.ts';
 import {uhr} from './zeit-tasks.ts';
 
+import {aufbau,aufbauThemen,istAufbau} from './groessen-aufbau.ts';
+
 export const fach = {laenge:'Längen', masse:'Gewichte', zeit:'Zeit'} as const;
 export type Fach = keyof typeof fach;
 export const themen = {
+  ...aufbauThemen,
   lineal:['laenge','Am versetzten Lineal messen'], strecke:['laenge','Meter und Kilometer'], stellen:['laenge','Meter und Zentimeter zusammensetzen'],
   skala:['masse','Die Skala der Küchenwaage'], dose:['masse','Verpackung und Inhalt'], ordnen:['masse','Gleiche Massen finden'], rezept:['masse','Ein Rezept abwiegen'],
   zeitlinie:['zeit','Zeitspannen mit Zwischenstopps'], dezimal:['zeit','Uhrzeit oder Dauer?'], zurueck:['zeit','Vom Bus rückwärts planen'], fahrplan:['zeit','Den Anschluss wählen'],
@@ -14,13 +17,14 @@ export const themen = {
 export type Thema = keyof typeof themen;
 export type Feld = {label:string; wert:string|number; optionen?:string[]};
 export type Bild = {typ:'lineal'|'strecke'|'stellen'|'skala'|'dose'|'ordnen'|'rezept'|'zeitlinie'; daten:number[]};
-export type Aufgabe = {frage:string; felder:Feld[]; tipp:string; weg:string; tabelle?:string[][]; bild?:Bild};
+export type Aufgabe = {frage:string; felder:Feld[]; tipp:string; weg:string; tabelle?:string[][]; modell?:{art:'band'|'familie'|'waage'|'nullpunkt'|'uhr'|'kalender';werte:number[]}; bild?:Bild};
 const zahl=(label:string,wert:number):Feld=>({label,wert});
 const wahl=(label:string,wert:string,optionen:string[]):Feld=>({label,wert,optionen});
 export function richtig(feld:Feld, antwort:string) {
   return typeof feld.wert==='number' ? Math.abs((plainNumber(antwort)??NaN)-feld.wert)<1e-8 : antwort===feld.wert;
 }
-export function aufgabe(id:Thema,seed:number,umkehr=false):Aufgabe {
+export function aufgabe(id:Thema,seed:number,umkehr=false,variante=0):Aufgabe {
+  if(istAufbau(id))return aufbau(id,seed,variante);
   const r=rng(seed), n=r.int(2,8), rest=r.int(1,9), kg=n+rest/100, g=n*1000+rest*10;
   const make=(frage:string,felder:Feld[],tipp:string,weg:string,bild?:Bild)=>({frage,felder,tipp,weg,bild});
   const pick=(label:string,wert:string,others:string[])=>wahl(label,wert,r.shuffle([wert,...others]));

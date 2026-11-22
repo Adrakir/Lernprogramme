@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {fmtNum} from '@/lib/groessen-core';
+import {Feinschritt} from './groessen-aufbaulabor';
 import {uhr} from '@/lib/zeit-tasks';
 
 const paare = {
@@ -26,6 +27,7 @@ function useAnimation(max: number, increment: number) {
 
 function Steuerung({lauf, max, label, einheit}: {lauf: ReturnType<typeof useAnimation>; max:number; label:string; einheit:string}) {
   return <div className="gw-lab-controls"><label>{label} <input type="range" min={0} max={max} value={lauf.wert} aria-valuetext={lauf.wert+' '+einheit} onChange={e=>lauf.einstellen(Number(e.target.value))}/></label>
+    <Feinschritt name={label} wert={lauf.wert} min={0} max={max} set={lauf.einstellen}/>
     <button type="button" className="btn ghost small" onClick={lauf.starten}>{lauf.laeuft?'Pause':'Animation starten'}</button>
     <button type="button" className="btn ghost small" onClick={()=>lauf.einstellen(0)}>Auf null</button></div>;
 }
