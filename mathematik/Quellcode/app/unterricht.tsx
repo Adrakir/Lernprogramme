@@ -5,7 +5,7 @@ import {plainNumber} from '@/lib/groessen-core';
 export function Unterricht(){
  const [wahl,setWahl]=useState<Fach[]>(['addition','zeit','daten','sach']),[pflicht,setPflicht]=useState<Fach[]>([]),[umfang,anzahl]=useState(6),[seed,neu]=useState(731);
  const [material,setMaterial]=useState<Fach>('daten'),[nr,wechsel]=useState(0),[art,setArt]=useState(''),[antwort,setAntwort]=useState(''),[grund,setGrund]=useState(''),[geprueft,pruefen]=useState(false);
- const a=blattaufgabe('sach',seed+7919*nr,nr),ok=a.art===art&&plainNumber(antwort)===a.antwort;
+ const a=blattaufgabe('sach',731+7919*nr,nr),ok=a.art===art&&plainNumber(antwort)===a.antwort;
  const gueltig=wahl.length>0&&pflicht.length<=umfang&&wahl.length<=umfang;
  return <div className="ad-school"><h1>Unterricht und gemischte Aufgaben</h1><section className="panel"><h2>Klassenarbeit zusammenstellen</h2><p>Wähle Lernziele und Umfang. Pflichtaufgaben stehen am Anfang. Beide Fassungen prüfen dieselben Lernziele mit derselben Punkteverteilung.</p>
  <table className="ad-grid"><thead><tr><th>Lernziel</th><th>Aufnehmen</th><th>Pflichtaufgabe</th></tr></thead><tbody>{faecher.map(f=><tr key={f}><th>{themen[f]}</th><td><input type="checkbox" aria-label={themen[f]+' aufnehmen'} checked={wahl.includes(f)} onChange={e=>{setWahl(e.target.checked?[...wahl,f]:wahl.filter(v=>v!==f));setPflicht(pflicht.filter(v=>v!==f));}}/></td><td><input type="checkbox" aria-label={themen[f]+' als Pflichtaufgabe'} disabled={!wahl.includes(f)} checked={pflicht.includes(f)} onChange={e=>setPflicht(e.target.checked?[...pflicht,f]:pflicht.filter(v=>v!==f))}/></td></tr>)}</tbody></table>

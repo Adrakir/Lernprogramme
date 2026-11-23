@@ -19,8 +19,17 @@ export function blattaufgabe(fach:Fach,seed:number,position:number):Blattaufgabe
  case 'daten':{const v=[a,b+3,c+1];return baue(`Schulwege: Rad ${v[0]}, Bus ${v[1]}, zu Fuß ${v[2]} Kinder. Zeichne ein Säulendiagramm. Wie viele Kinder nahmen teil?`,v.reduce((s,n)=>s+n),'Kinder',`Addiere die drei Häufigkeiten: ${v.join(' + ')} = ${v.reduce((s,n)=>s+n)}.`,['Achsen und Kategorien beschriftet','Gleichmäßiger Maßstab und passende Säulenhöhen','Gesamtzahl richtig'],v);}
  case 'geometrie':return baue(`Zeichne ein Rechteck mit Seitenlängen ${a} cm und ${b} cm. Beschrifte die Seiten und bestimme den Umfang.`,2*(a+b),'cm',`U = 2 · (${a} + ${b}) = ${2*(a+b)} cm.`,['Rechte Winkel und Seitenlängen','Maßstab und Beschriftung','Umfang mit Einheit'],[a,b]);
  case 'sach':{const art=['Addition','Subtraktion','Multiplikation','Division'][position%4],n=a*b;
- const fragen=[`Im Bus sitzen ${n} Kinder. ${b} steigen ein. Wie viele fahren weiter?`,`Ein Regal enthält ${n} Bücher. ${b} werden ausgeliehen. Wie viele bleiben?`,`In ${a} Kisten liegen jeweils ${b} Bälle. Wie viele sind es zusammen?`,`${n} Kinder bilden Gruppen zu je ${b} Kindern. Wie viele Gruppen entstehen?`];
- return baue(fragen[position%4],[n+b,n-b,n,a][position%4],['Kinder','Bücher','Bälle','Gruppen'][position%4],['Die beiden Gruppen kommen zusammen.','Die ausgeliehenen Bücher werden abgezogen.','Gleich große Gruppen werden zusammengefasst.','Die Gruppengröße ist vorgegeben.'][position%4],['Passende Rechenart gewählt','Wahl aus der Geschichte begründet','Ergebnis mit Einheit'],[],art);}
+ const variante=r.int(0,1);
+ const geschichten=[
+  [`Im Bus sitzen ${n} Kinder. ${b} steigen ein. Wie viele fahren weiter?`, `Die Klasse sammelt ${n} Bücher. Eine Familie bringt ${b} weitere Bücher. Wie viele sind es jetzt?`],
+  [`Ein Regal enthält ${n} Bücher. ${b} werden ausgeliehen. Wie viele bleiben?`, `Am Start stehen ${n} Kinder. ${b} laufen schon los. Wie viele warten noch?`],
+  [`In ${a} Kisten liegen jeweils ${b} Bälle. Wie viele sind es zusammen?`, `Jeder von ${a} Tischen braucht ${b} Becher. Wie viele Becher brauchst du?`],
+  [`${n} Kinder bilden Gruppen zu je ${b} Kindern. Wie viele Gruppen entstehen?`, `${n} Stifte werden gerecht auf ${b} Kinder verteilt. Wie viele bekommt jedes Kind?`]
+ ];
+ const i=position%4;
+ const einheiten=[['Kinder','Bücher'],['Bücher','Kinder'],['Bälle','Becher'],['Gruppen','Stifte']];
+ const wege=[`Zur Anfangsmenge kommt eine zweite Menge hinzu: ${n} + ${b}.`,`Von der Anfangsmenge geht ein Teil weg: ${n} − ${b}.`,`Es gibt ${a} gleich große Mengen mit je ${b} Stück: ${a} · ${b}.`,variante?`Die Gesamtmenge wird gleich verteilt: ${n} : ${b}.`:`Gesucht ist die Anzahl der Gruppen: ${n} : ${b}.`];
+ return baue(geschichten[i][variante],[n+b,n-b,n,a][i],einheiten[i][variante],wege[i],['Passende Rechenart gewählt','Wahl aus der Geschichte begründet','Ergebnis mit Einheit'],[],art);}
  }
 }
 export function zusammenstellen(ziele:Fach[],pflicht:Fach[],umfang:number,seed:number,variante:number){
@@ -50,7 +59,7 @@ function lesen(key:string){try{return JSON.parse(localStorage.getItem(key)??'nul
 export function lernbelege(){
  const list=belege();
  const main=lesen('mathe-kompass-v1')?.records,lernen=lesen(learningKey)?.records;
- if(Array.isArray(main))for(const r of main){if(typeof r?.prompt==='string'&&typeof r.date==='string')list.push({ersterVersuch:r.attempts===1,hinweise:r.hints>0,tag:r.date,ziel:r.title,aufgabe:r.prompt,status:r.first?'selbst':r.solved?'hilfe':'offen',wiederholung:false});}
+ if(Array.isArray(main))for(const r of main){if(typeof r?.prompt==='string'&&typeof r.date==='string')list.push({ersterVersuch:r.attempts===1,hinweise:r.hints>0,tag:r.date,ziel:r.title,aufgabe:r.prompt,status:r.first&&!r.hints?'selbst':r.solved?'hilfe':'offen',wiederholung:false});}
  if(Array.isArray(lernen))for(const r of lernen){if(r?.mode!=='previous'&&Object.hasOwn(skills,r?.skill)&&typeof r.day==='string')list.push({ersterVersuch:r.firstCorrect,hinweise:r.hints>0||r.viewed,tag:r.day+'T12:00:00Z',ziel:skills[r.skill as Skill].name,aufgabe:'Tagestraining · '+skills[r.skill as Skill].name,status:r.solved&&!r.viewed&&r.firstCorrect&&!r.hints?'selbst':r.solved?'hilfe':'offen',wiederholung:false});}
  return list.filter(b=>Number.isFinite(Date.parse(b.tag))).sort((a,b)=>b.tag.localeCompare(a.tag));
 }

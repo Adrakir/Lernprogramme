@@ -1,3 +1,4 @@
+import {Kurzrunde} from './kurzrunde';
 import {type Arbeit} from '@/lib/werkstattstand';
 import {notieren} from '@/lib/lernatelier';
 import {AufgabenNavigation,ArbeitAktionen,Aufgabenhilfe,Kriterien,useWerkstattstand,offenerVersuch} from './werkstatt-basis';
@@ -56,6 +57,7 @@ export function Multiplikationsschule({go}:{go:(route:string)=>void}){
     inhalt=<><section className="panel"><h2>Schriftlich multiplizieren</h2><p>Zerlege den zweiten Faktor in Stellenwerte. Berechne die Teilprodukte und setze sie zum Gesamtprodukt zusammen.</p>
       <div className="ad-actions"><button className="btn" onClick={()=>{ueben('raster');setMuster(true)}}>Geführt starten · 24 · 13</button><button className="btn ghost" onClick={()=>ueben('raster')}>Rastertraining · sechs Stufen</button></div></section>
       {abschnitte.map(g=><details key={g.titel} className="panel ad-fold"><summary>{g.titel}</summary><div className="ad-links">{g.themen.map(t=><button className="btn ghost" key={t} onClick={()=>ueben(t)}>{namen[t]}</button>)}</div></details>)}
+      <Kurzrunde fach="multiplikation"/>
       <section className="panel"><h2>Für die Klassenarbeit</h2><p>Acht Aufgaben mit Kopfrechnen, schriftlicher Multiplikation, Überschlag, Fehleranalyse und Sachrechnen. Du kannst zwischen den Aufgaben wechseln und Antworten bis zur Abgabe ändern.</p>
       <div className="ad-actions">{stand.arbeit?<><button className="btn" onClick={()=>{neu();setSeite('arbeit')}}>{stand.arbeit.fertig?'Letzte Auswertung ansehen':'Probeklassenarbeit fortsetzen'}</button>{stand.arbeit.fertig&&<button className="btn ghost" onClick={startTest}>Neue Probeklassenarbeit</button>}</>:<button className="btn" onClick={startTest}>Probeklassenarbeit starten</button>}
       <button className="btn ghost" onClick={()=>pdf(stand.ziele)}>Drei Nachübungen als PDF</button></div></section><button className="btn ghost" onClick={()=>go('arithmetic')}>Zum Modul Schriftlich rechnen</button></>;

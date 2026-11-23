@@ -46,6 +46,32 @@ with sync_playwright() as pw:
         assert download.value.path().read_bytes().startswith(b'%PDF')
         page.goto(url+'#familie')
         expect(page.get_by_role('heading',name='Die letzten sieben Tage')).to_be_visible()
+        # Die Datei auf einem zweiten Gerät mit leerem Browserspeicher übernehmen.
+        with page.expect_download() as backup:
+            button('Gesamten Lernstand sichern').click()
+        second = browser.new_page(viewport={'width':width,'height':height})
+        second.goto(url+'#familie')
+        second.locator('input[type=file]').set_input_files({
+            'name':'Lernstand.json', 'mimeType':'application/json',
+            'buffer':backup.value.path().read_bytes(),
+        })
+        expect(second.get_by_role('alert')).to_contain_text('Aufgabe 2 von 8')
+        with second.expect_navigation():
+            second.get_by_role('button',name='Ja, Sicherung laden').click()
+        second.goto(url+'#division')
+        second.get_by_role('button',name='Probeklassenarbeit fortsetzen').click()
+        expect(second.locator('.ad-fields fieldset input').first).to_have_value('12')
+        second.close()
+        for fach in ['addition','subtraktion','multiplikation','division']:
+            page.goto(url+'#'+fach)
+            button('Kurzrunde starten').click()
+            panel=page.locator('section').filter(has=page.get_by_role('heading',name='Kurzrunde mit drei Aufgaben'))
+            for i in range(3):
+                expect(panel.get_by_role('heading',name=f'Aufgabe {i+1} von 3')).to_be_visible()
+                panel.get_by_role('textbox').fill('-999')
+                panel.get_by_role('button',name='Ergebnis prüfen').click()
+                panel.get_by_role('button',name='Runde auswerten' if i==2 else 'Nächste Kurzaufgabe').click()
+            expect(panel.get_by_role('status')).to_contain_text('Noch üben: 3')
         page.close()
     browser.close()
 print('Handy-, Tablet- und Desktop-Bedienwege bestanden.')

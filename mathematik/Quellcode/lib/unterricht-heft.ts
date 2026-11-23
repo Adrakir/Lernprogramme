@@ -23,7 +23,7 @@ export function unterrichtsheft(tasks:Blattaufgabe[],name:string,heft=false){
   tasks.forEach((a,i)=>{if(i%2===0){if(i||loesung)doc.addPage();absatz(name+(loesung?' · Erwartungshorizont':''),18,17,true);absatz(loesung?'Je erfülltem Kriterium ein Punkt.':'Name ________________________     Datum ______________',29);}
    let y=43+i%2*121;y=absatz((i+1)+'. '+(heft?['Am Modell arbeiten','Mit weniger Hilfe zeichnen','Im freien Feld zeichnen'][i]:'Aufgabe'),y,12,true);
    y=absatz(a.text,y);
-   if(loesung){y=absatz(a.weg+' Ergebnis: '+a.antwort+' '+a.einheit+'.',y);y=absatz(a.kriterien.join(' / ')+' ('+a.kriterien.length+' Punkte)',y,9);}
+   if(loesung){y=absatz((a.art?a.art+'. ':'')+a.weg+' Ergebnis: '+a.antwort+' '+a.einheit+'.',y);y=absatz(a.kriterien.join(' / ')+' ('+a.kriterien.length+' Punkte)',y,9);}
    if(a.fach==='geometrie'||a.fach==='daten'){zeichnung(a,y+3,heft?i:2,loesung);}
    else if(!loesung){if(a.art)y=absatz('Meine Rechenart und Begründung:',y,10);for(let k=0;k<4;k++)doc.line(16,y+10+k*10,191,y+10+k*10);}
   });
