@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {plainNumber} from '@/lib/groessen-core';
 import {rechenweg,punkte,type Aufgabe,type Antworten} from '@/lib/division';
 
-type Props={a:Aufgabe;w:Antworten;set:(k:string,v:string)=>void;test:boolean;nachAbschluss?:React.ReactNode;beiFehler?:()=>void};
+type Props={a:Aufgabe;w:Antworten;set:(k:string,v:string)=>void;test:boolean;geschafft?:()=>void;nachAbschluss?:React.ReactNode;beiFehler?:()=>void};
 function Verteilmodell({a}:{a:Aufgabe}){
  const [runde,setRunde]=useState(0),[n,d]=a.zahlen,max=Math.floor(n/d),rest=n-runde*d;
  const verteilen=a.ziel==='verteilen',sprung=a.ziel==='sprung';
@@ -25,10 +25,10 @@ function Herunterholen({rest,ziffer}:{rest:number;ziffer:number}){
  return <div className="ad-lab"><button className="btn ghost" onClick={()=>zeige(!unten)}>{unten?'Modell zurücksetzen':'Herunterholen im Modell zeigen'}</button>
  <p aria-live="polite">{unten?<><b>{rest} · 10 + <span className="div-ziffer">{ziffer}</span> = {rest*10+ziffer}</b> ist die neue Teilzahl.</>:<>Voriger Rest: {rest}. Nächste Ziffer: {ziffer}.</>}</p></div>;
 }
-export function Aufgabenfelder({a,w,set,test,nachAbschluss,beiFehler}:Props){
+export function Aufgabenfelder({a,w,set,test,nachAbschluss,geschafft,beiFehler}:Props){
  const [phase,weiter]=useState(0),[meldung,melde]=useState('');
  const schrift=a.ziel==='raster'||a.ziel==='nullstelle',s=a.schritte[phase],fertig=!s,rows=schrift?rechenweg(a.zahlen[0],a.zahlen[1]):[];
- function pruefen(){const falsch=s.felder.find(f=>plainNumber(w[f.key]??'')!==f.wert);if(falsch){beiFehler?.();melde(falsch.label+': '+falsch.hinweis);return;}weiter(phase+1);melde('');}
+ function pruefen(){const falsch=s.felder.find(f=>plainNumber(w[f.key]??'')!==f.wert);if(falsch){beiFehler?.();melde(falsch.label+': '+falsch.hinweis);return;}if(phase+1===a.schritte.length)geschafft?.();weiter(phase+1);melde('');}
  function edit(k:string,v:string){melde('');set(k,v);}
  const karten=w.karten?w.karten.split(',').map(Number):[];
  return <div className="ad-fields"><p className="ad-prompt">{a.frage}</p>

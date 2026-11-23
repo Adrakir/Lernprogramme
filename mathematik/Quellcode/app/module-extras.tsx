@@ -1,3 +1,4 @@
+import {importVorschau} from '@/lib/werkstattstand';
 'use client';
 // Vertiefung, Modultest und Hilfen für die zwölf Lernmodule.
 import {useEffect, useMemo, useState, type ReactNode} from 'react';
@@ -204,23 +205,24 @@ export function LernstandSicherung() {
   }
   function laden(f: File | undefined) {
     if (!f) return;
+    setGeladen(null);
     if (f.size > 5_000_000) { setMeldung('Die Datei ist zu groß für eine Lernstand-Sicherung.'); return; }
     f.text().then(t => {
       let s: Sicherung | null = null;
       try { s = pruefeSicherung(JSON.parse(t)); } catch { s = null; }
       if (!s) { setMeldung('Diese Datei ist keine gültige MatheKompass-Sicherung.'); setGeladen(null); return; }
       setGeladen(s); setMeldung('');
-    });
+    }).catch(()=>setMeldung('Die Datei konnte nicht gelesen werden.'));
   }
   function uebernehmen() {
     if (!geladen) return;
-    try { for (const [k, v] of Object.entries(geladen.daten)) localStorage.setItem(k, v); } catch { setMeldung('Der Browser konnte die Sicherung nicht speichern.'); return; }
+    const alt=new Map<string,string|null>();try { for (const [k, v] of Object.entries(geladen.daten)){alt.set(k,localStorage.getItem(k));localStorage.setItem(k, v);} } catch {for(const [k,v] of alt){if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);} setMeldung('Der Browser konnte die Sicherung nicht speichern.'); return; }
     location.reload();
   }
   return <section className="panel"><h2>Gesamten Lernstand sichern</h2>
     <p className="muted">Der Lernstand liegt nur in diesem Browser. Mit einer Sicherungsdatei kannst du ihn auf ein anderes Gerät mitnehmen oder nach dem Löschen des Browserspeichers wiederherstellen. Gesichert werden alle Bereiche: Module, Tests, Größen-Werkstatt, Lernpfade und Einstellungen.</p>
     <div className="exercise-actions"><button className="btn" onClick={sichern}>Gesamten Lernstand sichern</button><label className="btn ghost">Sicherung laden<input type="file" accept="application/json,.json" className="sr-only" onChange={e => { laden(e.target.files?.[0]); e.target.value = ''; }}/></label></div>
-    {geladen && <div role="alert" className="hint">Sicherung vom {geladen.datum ? new Date(geladen.datum).toLocaleString('de-DE') : 'unbekannten Datum'} mit {Object.keys(geladen.daten).length} Speicherbereichen. Beim Laden werden die vorhandenen Daten dieser Bereiche ersetzt.<div className="exercise-actions"><button className="btn" onClick={uebernehmen}>Ja, Sicherung laden</button><button className="btn ghost" onClick={() => setGeladen(null)}>Abbrechen</button></div></div>}
+    {geladen && <div role="alert" className="hint">Sicherung vom {geladen.datum ? new Date(geladen.datum).toLocaleString('de-DE') : 'unbekannten Datum'} mit {Object.keys(geladen.daten).length} Speicherbereichen. Beim Laden werden die vorhandenen Daten dieser Bereiche ersetzt.<ul>{importVorschau(geladen.daten).map(v=><li key={v}>{v}</li>)}</ul><div className="exercise-actions"><button className="btn" onClick={uebernehmen}>Ja, Sicherung laden</button><button className="btn ghost" onClick={() => setGeladen(null)}>Abbrechen</button></div></div>}
     {meldung && <p role="status" className="muted">{meldung}</p>}
   </section>;
 }

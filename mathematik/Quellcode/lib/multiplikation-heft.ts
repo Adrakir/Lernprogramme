@@ -1,3 +1,4 @@
+import {uebungsgrund} from './werkstattstand.ts';
 import {jsPDF} from 'jspdf';
 import {aufgabe,raster,zeilen,namen,type Ziel} from './multiplikation.ts';
 import {kurz} from './addition.ts';
@@ -9,7 +10,7 @@ export function malheft(ziele:Ziel[],seed:number){
  for(const loesung of [false,true]){
   if(loesung)doc.addPage();text(loesung?'Lösungen und Rechenwege':'Multiplikation im Heft',20,20,true);
   text(loesung?'Prüfe zunächst die Teilprodukte, dann das Ergebnis.':'Name __________________________    Datum _______________',31);
-  tasks.forEach((a,i)=>{let y=44+80*i;y=text((i+1)+'. '+namen[a.ziel],y,13,true);y=text(a.frage,y);
+  tasks.forEach((a,i)=>{let y=44+80*i;y=text((i+1)+'. '+namen[a.ziel],y,13,true);if(!loesung)y=text(uebungsgrund(a.ziel,!!ziele.length,namen[a.ziel]),y,9);y=text(a.frage,y);
    if(loesung)y=text(a.weg,y);
    if(a.ziel==='raster'||a.ziel==='nullstelle'){
     if(!loesung&&i===2){text('Zeichne das Raster selbst. Beschrifte die Teilprodukte und addiere.',y);return;}

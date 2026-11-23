@@ -1,3 +1,4 @@
+import {uebungsgrund} from './werkstattstand.ts';
 import {jsPDF} from 'jspdf';
 import {aufgabe,raster,rechenweg,namen,type Ziel} from './division.ts';
 export function divisionsheft(ziele:Ziel[],seed:number){
@@ -7,7 +8,7 @@ export function divisionsheft(ziele:Ziel[],seed:number){
  for(const loesung of [false,true]){
   if(loesung)doc.addPage();text(loesung?'Lösungen und Rechenwege':'Division im Heft',20,20,true);
   text(loesung?'Kontrolliere mit Quotient mal Divisor plus Rest.':'Name ________________________    Datum _______________',31);
-  tasks.forEach((a,i)=>{let y=44+81*i;y=text((i+1)+'. '+namen[a.ziel],y,13,true);y=text(a.frage,y);
+  tasks.forEach((a,i)=>{let y=44+81*i;y=text((i+1)+'. '+namen[a.ziel],y,13,true);if(!loesung)y=text(uebungsgrund(a.ziel,!!ziele.length,namen[a.ziel]),y,9);y=text(a.frage,y);
    if(loesung)y=text(a.weg,y);
    if(a.ziel==='raster'||a.ziel==='nullstelle'){
     if(!loesung&&i===2){text('Lege die Rechnung im Heft an und ergänze die Probe.',y);return;}

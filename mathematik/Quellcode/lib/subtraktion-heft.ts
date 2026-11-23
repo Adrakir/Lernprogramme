@@ -1,3 +1,4 @@
+import {uebungsgrund} from './werkstattstand.ts';
 import {jsPDF} from 'jspdf';
 import {aufgabe,kurz,namen,raster,rechenweg,type Ziel} from './subtraktion.ts';
 
@@ -25,6 +26,7 @@ export function subtraktionsheft(ziele:Ziel[],seed:number){
     line(loesung?'Vergleiche auch deine Zwischenschritte.':'Name ______________________     Datum ______________',31);
     tasks.forEach(({titel,z,task},i)=>{
       let y=43+80*i;y=line((i+1)+'. '+titel,y,true,13);
+      if(!loesung)y=line(uebungsgrund(pool[i%pool.length],!!ziele.length,titel),y,false,9);
       if(z){const [a,b]=z;y=line(a+' − '+b+' = '+(loesung?String(a-b):'________'),y);
         if(loesung||i<2){y=line(loesung?'Verfügbar zeigt die obere Menge beim Bearbeiten jeder Spalte.':i===0?'Ordne die Zahlen ein und entbündle von rechts nach links.':'Beschrifte das Raster selbst und rechne.',y);grid(z,y+3,loesung||i===0,loesung);}
         else line('Zeichne dein eigenes Raster im Heft. Prüfe mit Addition.',y);

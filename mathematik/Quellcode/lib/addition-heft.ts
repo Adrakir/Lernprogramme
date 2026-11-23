@@ -1,3 +1,4 @@
+import {uebungsgrund} from './werkstattstand.ts';
 import {jsPDF} from 'jspdf';
 import {aufgabe,kurz,namen,rasterAufgabe,spalten,type Thema} from './addition.ts';
 import {fmtNum as f} from './groessen-core.ts';
@@ -38,7 +39,7 @@ export function additionsheft(ziele:Ziel[],seed:number){
   let y=39;
   tasks.forEach(({ziel,zahlen,a},i)=>{
     text((i+1)+'. '+(a?namen[a.thema]:ziel==='raster3'?'Drei Summanden':'Stellenrichtig addieren'),18,y,13,true);y+=6;
-    if(a)y=block(a.frage,y);
+    y=block(uebungsgrund(ziel,!!ziele.length,a?namen[a.thema]:'Stellenrichtig rechnen'),y);if(a)y=block(a.frage,y);
     y=block((a?.thema==='luecke'?'Ergänze zuerst die Lücke. Überprüfe anschließend schriftlich.':zahlen.map(n=>f(n)).join(' + ')+' = __________')+' '+['Trage die Zahlen in das beschriftete Raster ein.','Ordne die Stellen im leeren Raster selbst zu.','Lege die Rechnung selbst im Heft an.'][i],y);
     if(i<2)y=raster(zahlen,y+4,i===0,false);else{doc.line(18,y+5,187,y+5);y+=12;}y+=4;
   });

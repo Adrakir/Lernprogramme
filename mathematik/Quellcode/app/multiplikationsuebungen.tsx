@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {kurz} from '@/lib/addition';
 import {plainNumber} from '@/lib/groessen-core';
 import {punkte,zeilen,type Aufgabe,type Antworten,type Feld} from '@/lib/multiplikation';
-type Props={a:Aufgabe;w:Antworten;set:(k:string,v:string)=>void;test:boolean;nachAbschluss?:React.ReactNode;beiFehler?:()=>void};
+type Props={a:Aufgabe;w:Antworten;set:(k:string,v:string)=>void;test:boolean;geschafft?:()=>void;nachAbschluss?:React.ReactNode;beiFehler?:()=>void};
 
 function Eingabe({f,w,set}:{f:Feld}&Pick<Props,'w'|'set'>){
  return <label>{f.label}<input inputMode="numeric" value={w[f.key]??''} onChange={e=>set(f.key,e.target.value)}/></label>;
@@ -29,10 +29,10 @@ function Flaechenmodell({a}:{a:Aufgabe}){
  <svg viewBox="0 0 300 90" role="img" aria-label={'Rechteck mit '+sichtbar+' eingeblendeten Teilflächen'}><rect x="2" y="5" width="294" height="76" fill="white" stroke="currentColor"/>{teile.map((r,i)=>{const left=links,width=294*r.faktor/b;links+=width;return i< sichtbar?<rect className="mul-dot" key={i} x={2+left} y="5" width={width} height="76" stroke="white" fill={['#14736c','#ab501d','#385e92'][i]}/>:null;})}</svg>
  <p aria-live="polite">{teile.slice(0,sichtbar).map(r=>x+' · '+r.faktor+' = '+r.wert).join(' | ')}</p><button className="btn ghost" disabled={sichtbar===teile.length} onClick={()=>zeige(sichtbar+1)}>Nächste Teilfläche zeigen</button> <button className="btn ghost" disabled={!sichtbar} onClick={()=>zeige(0)}>Von vorn</button></details>;
 }
-export function Aufgabenfelder({a,w,set,test,nachAbschluss,beiFehler}:Props){
+export function Aufgabenfelder({a,w,set,test,nachAbschluss,geschafft,beiFehler}:Props){
  const [phase,weiter]=useState(0),[meldung,melde]=useState('');
  const schrift=a.ziel==='raster'||a.ziel==='nullstelle',s=a.schritte[phase],fertig=phase>=a.schritte.length;
- function pruefen(){const f=s.felder.find(f=>plainNumber(w[f.key]??'')!==f.wert);if(f){beiFehler?.();melde(f.hinweis);return;}weiter(phase+1);melde('');}
+ function pruefen(){const f=s.felder.find(f=>plainNumber(w[f.key]??'')!==f.wert);if(f){beiFehler?.();melde(f.hinweis);return;}if(phase+1===a.schritte.length)geschafft?.();weiter(phase+1);melde('');}
  const karten=w.karten?w.karten.split(',').map(Number):[];
  const edit=(k:string,v:string)=>{melde('');set(k,v);};
  return <div className="ad-fields"><p className="ad-prompt">{a.frage}</p>

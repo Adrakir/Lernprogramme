@@ -1,3 +1,4 @@
+import {notieren} from '@/lib/lernatelier';
 'use client';
 // Größen-Werkstatt: Längen, Gewichte, Zeit, Geld, Flächen und Volumen
 // mit geführtem Lernpfad, Übungen auf drei Niveaus, Vertiefung, Tests und Hilfen.
@@ -142,10 +143,10 @@ function TaskRunner({task, onDone, nextLabel = 'Nächste Aufgabe'}: {task: Task;
     const r = checkTask(task, a);
     setRes(r.results);
     if (r.ok) {
-      setState('solved');
+      notieren(skillById[task.skill].title,task.prompt,tries||hint?'hilfe':'selbst');setState('solved');
       setMsg([tries || hint ? 'Richtig. Gut weitergedacht.' : 'Richtig. Genau so geht es.', ...r.results.map(x => x.message).filter((m): m is string => !!m && task.fields.some(f => f.kind === 'choice'))]);
     } else {
-      werkstattHilfe(task.skill);
+      notieren(skillById[task.skill].title,task.prompt,'offen');werkstattHilfe(task.skill);
       setTries(tries + 1);
       const m = r.results.filter(x => !x.ok).map(x => x.message).filter((x): x is string => !!x);
       setMsg(m.length ? m : ['Das stimmt noch nicht. Prüfe deine Rechnung und die Einheit.']);

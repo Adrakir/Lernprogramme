@@ -1,3 +1,4 @@
+import {NaechstesFeld} from './werkstatt-basis';
 import {useState} from 'react';
 import {ausrichtung,kurz,spalten,stellen,uebertragRichtig,type Werte} from '@/lib/addition';
 import {fmtNum} from '@/lib/groessen-core';
@@ -17,7 +18,7 @@ export function Additionsraster({zahlen,werte:w,schreiben,pruefung=false,nachAbs
   const [phase,setPhase]=useState(-1),[meldung,setMeldung]=useState(''),[modell,setModell]=useState(false);
   const fertig=phase===breite,c=cols[phase];
   function feld(key:string,label:string,aktiv:boolean){
-    return <input aria-label={label} inputMode="numeric" autoComplete="off" maxLength={1} value={w[key]??''} disabled={!pruefung&&!aktiv} onChange={e=>{if(/^\d?$/.test(e.target.value)){schreiben(key,e.target.value);setMeldung('')}}}/>;
+    return <input onKeyDown={NaechstesFeld} enterKeyHint="next" aria-label={label} inputMode="numeric" autoComplete="off" maxLength={1} value={w[key]??''} disabled={!pruefung&&!aktiv} onChange={e=>{if(/^\d?$/.test(e.target.value)){schreiben(key,e.target.value);setMeldung('')}}}/>;
   }
   function check(){
     if(phase<0){
