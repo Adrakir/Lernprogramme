@@ -1,3 +1,4 @@
+import {folgepunkt,type Kriterium} from './lernzielbericht.ts';
 import {rng,plainNumber} from './groessen-core.ts';
 import {stellen} from './addition.ts';
 export type Antworten=Record<string,string>;
@@ -72,7 +73,11 @@ export function aufgabe(ziel:Ziel,seed:number):Aufgabe{
  }
 }
 export function punkte(a:Aufgabe,w:Antworten){
- const p=a.schritte.flatMap(s=>s.felder.map(f=>({name:s.titel+' · '+f.label,ok:plainNumber(w[f.key]??'')===f.wert})));
+ const summanden=a.schritte.flatMap(s=>s.felder).filter(f=>/^p\d+$/.test(f.key)).map(f=>plainNumber(w[f.key]??''));
+ const p:Kriterium[]=a.schritte.flatMap(s=>s.felder.map(f=>{
+  const v=plainNumber(w[f.key]??''),folge=f.key==='produkt'&&summanden.length>=2&&summanden.every(n=>n!==null&&Number.isSafeInteger(n)&&n>=0)&&v===summanden.reduce<number>((sum,n)=>sum+(n??0),0);
+  return folgepunkt(s.titel+' · '+f.label,v===f.wert,folge);
+ }));
  if(a.ziel==='probe'){const [x,y,z]=a.zahlen;p.push({name:'Divisionsprobe',ok:[`${z},${x},${y}`,`${z},${y},${x}`].includes(w.karten)});}
  return p;
 }

@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {rechenweg,rasterpunkte,stellen,kurz,type Werte} from '@/lib/subtraktion';
 
-export function Subtraktionsraster({zahlen,werte:w,schreiben,pruefung=false,beiFehler}:{zahlen:number[];werte:Werte;schreiben:(k:string,v:string)=>void;pruefung?:boolean;beiFehler?:()=>void}){
+export function Subtraktionsraster({zahlen,werte:w,schreiben,pruefung=false,nachAbschluss,beiFehler}:{zahlen:number[];werte:Werte;schreiben:(k:string,v:string)=>void;pruefung?:boolean;nachAbschluss?:React.ReactNode;beiFehler?:()=>void}){
   const [a,b]=zahlen,cols=rechenweg(a,b),folge=cols.map((_,i)=>cols.length-1-i);
   const [phase,setPhase]=useState(-1),[tausch,setTausch]=useState(0),[modell,setModell]=useState(false),[meldung,setMeldung]=useState('');
   const c=cols[phase],bestand=c&&(tausch?c.tausch[tausch-1]:c.vorher);
@@ -22,5 +22,5 @@ export function Subtraktionsraster({zahlen,werte:w,schreiben,pruefung=false,beiF
     {modell&&c&&<div className="ad-bundle"><p>So ist die obere Zahl für diese Spalte aufgeteilt. Bei jedem Tausch bleibt ihr Wert gleich.</p><div className="sub-places">{folge.map(i=><div key={i}><b>{bestand[i]} {stellen[i]}</b><div key={tausch}>{Array.from({length:bestand[i]},(_,j)=><i className="ad-one" key={j}/>)}</div></div>)}</div>
     {tausch<c.tausch.length?<button className="btn ghost" onClick={()=>setTausch(tausch+1)}>Eine Einheit in zehn kleinere tauschen</button>:<p>{c.tausch.length?'Jetzt reicht die Menge in dieser Spalte.':'Hier reicht die Menge bereits.'}</p>}
     {tausch>0&&<button className="btn ghost small" onClick={()=>setTausch(tausch-1)}>Tausch zurück</button>}</div>}
-    {meldung&&<p className="ad-feedback" role="status">{meldung}</p>}{!pruefung&&phase===cols.length&&<strong>{a} − {b} = {a-b}</strong>}</div>;
+    {meldung&&<p className="ad-feedback" role="status">{meldung}</p>}{!pruefung&&phase===cols.length&&<strong>{a} − {b} = {a-b}</strong>}{!pruefung&&phase===cols.length&&nachAbschluss}</div>;
 }

@@ -1,3 +1,4 @@
+import {folgepunkt,type Kriterium} from './lernzielbericht.ts';
 import {fmtNum as fmt,plainNumber,rng} from './groessen-core.ts';
 
 export const stellen=['Einer','Zehner','Hunderter','Tausender','Zehntausender','Hunderttausender'] as const;
@@ -29,7 +30,7 @@ export function rasterAufgabe(stufe:number,seed:number):number[]{
   }
 }
 export type Werte=Record<string,string>;
-export type Kriterium={name:string;ok:boolean};
+export type {Kriterium} from './lernzielbericht.ts';
 export function ausrichtung(zahlen:number[],w:Werte,reihe:number){
   const text=String(zahlen[reihe]);
   return spalten(zahlen).every((_,i)=>(w[`s${reihe}-${i}`]??'')===(text[text.length-1-i]??''));
@@ -38,7 +39,7 @@ export function uebertragRichtig(w:Werte,i:number,c:Spalte){return (w['u'+i]??''
 export function rasterPunkte(zahlen:number[],w:Werte):Kriterium[]{
   return [...zahlen.map((_,j)=>({name:'Ausrichtung · Zahl '+(j+1),ok:ausrichtung(zahlen,w,j)})),...spalten(zahlen).flatMap((c,i)=>[
     ...(i?[{name:'Übertrag in die '+stellen[i]+'spalte',ok:uebertragRichtig(w,i,c)&&Boolean(w['u'+i]||w['e'+i])}]:[]),
-    {name:'Ergebnis · '+stellen[i],ok:w['e'+i]===String(c.ziffer)}
+    folgepunkt('Ergebnis · '+stellen[i],w['e'+i]===String(c.ziffer),i>0&&/^[012]$/.test(w['u'+i]??'')&&w['e'+i]===String((c.summe-c.eingang+Number(w['u'+i]))%10))
   ])];
 }
 

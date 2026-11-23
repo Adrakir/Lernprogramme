@@ -61,3 +61,5 @@ html[data-contrast=strong] [data-slot=sidebar-menu-button][data-active=true]{col
 .chart text,.chart-label-small{fill:#263b5c}.chart svg>line{stroke:#526079}
 html[data-contrast=strong] .chart text{fill:#111}
 html[data-contrast=strong] .chart svg>line{stroke:#111;stroke-width:2px}
+
+.startwege{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:1rem;margin:1.25rem 0}.startwege button{display:grid;gap:.6rem;text-align:left;align-content:start;color:inherit}.startwege svg{color:#19736d}.startwege strong{font-size:1.15rem}.startwege [aria-expanded=true]{outline:2px solid #19736d}.startwege small{line-height:1.45}

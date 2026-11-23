@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {ausrichtung,kurz,spalten,stellen,uebertragRichtig,type Werte} from '@/lib/addition';
 import {fmtNum} from '@/lib/groessen-core';
 
-type Props={zahlen:number[];werte:Werte;schreiben:(key:string,wert:string)=>void;pruefung?:boolean;beiFehler?:()=>void;geschafft?:()=>void};
+type Props={zahlen:number[];werte:Werte;schreiben:(key:string,wert:string)=>void;pruefung?:boolean;nachAbschluss?:React.ReactNode;beiFehler?:()=>void;geschafft?:()=>void};
 function Buendeln({summe,stelle}:{summe:number;stelle:number}){
   const [gruppen,setGruppen]=useState(0);
   const rest=summe-gruppen*10;
@@ -12,7 +12,7 @@ function Buendeln({summe,stelle}:{summe:number;stelle:number}){
     <button type="button" className="btn ghost small" disabled={rest<10} onClick={()=>setGruppen(gruppen+1)}>Zehn bündeln</button>
     <p role="status">{gruppen} {stellen[stelle+1]} und {rest} {stellen[stelle]}.</p></div>;
 }
-export function Additionsraster({zahlen,werte:w,schreiben,pruefung=false,beiFehler,geschafft}:Props){
+export function Additionsraster({zahlen,werte:w,schreiben,pruefung=false,nachAbschluss,beiFehler,geschafft}:Props){
   const cols=spalten(zahlen),breite=cols.length,folge=cols.map((_,j)=>breite-1-j);
   const [phase,setPhase]=useState(-1),[meldung,setMeldung]=useState(''),[modell,setModell]=useState(false);
   const fertig=phase===breite,c=cols[phase];
@@ -41,5 +41,5 @@ export function Additionsraster({zahlen,werte:w,schreiben,pruefung=false,beiFehl
     {!pruefung&&!fertig&&<div className="ad-actions"><button type="button" className="btn" onClick={check}>{phase<0?'Ausrichtung prüfen':'Spalte prüfen'}</button>{c&&phase<breite-1&&<button className="btn ghost" onClick={()=>setModell(!modell)}>{modell?'Modell schließen':'Mit Plättchen bündeln'}</button>}</div>}
     {!pruefung&&modell&&c&&<Buendeln key={phase} summe={c.summe} stelle={phase}/>}
     {meldung&&<p className="ad-feedback" role="status">{meldung}</p>}
-    {!pruefung&&fertig&&<p><b>{zahlen.map(n=>fmtNum(n)).join(' + ')} = {fmtNum(zahlen.reduce((s,n)=>s+n,0))}</b></p>}</div>;
+    {!pruefung&&fertig&&<p><b>{zahlen.map(n=>fmtNum(n)).join(' + ')} = {fmtNum(zahlen.reduce((s,n)=>s+n,0))}</b></p>}{!pruefung&&fertig&&nachAbschluss}</div>;
 }

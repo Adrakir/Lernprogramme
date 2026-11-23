@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {kurz} from '@/lib/addition';
 import {plainNumber} from '@/lib/groessen-core';
 import {punkte,zeilen,type Aufgabe,type Antworten,type Feld} from '@/lib/multiplikation';
-type Props={a:Aufgabe;w:Antworten;set:(k:string,v:string)=>void;test:boolean;beiFehler?:()=>void};
+type Props={a:Aufgabe;w:Antworten;set:(k:string,v:string)=>void;test:boolean;nachAbschluss?:React.ReactNode;beiFehler?:()=>void};
 
 function Eingabe({f,w,set}:{f:Feld}&Pick<Props,'w'|'set'>){
  return <label>{f.label}<input inputMode="numeric" value={w[f.key]??''} onChange={e=>set(f.key,e.target.value)}/></label>;
@@ -29,7 +29,7 @@ function Flaechenmodell({a}:{a:Aufgabe}){
  <svg viewBox="0 0 300 90" role="img" aria-label={'Rechteck mit '+sichtbar+' eingeblendeten Teilflächen'}><rect x="2" y="5" width="294" height="76" fill="white" stroke="currentColor"/>{teile.map((r,i)=>{const left=links,width=294*r.faktor/b;links+=width;return i< sichtbar?<rect className="mul-dot" key={i} x={2+left} y="5" width={width} height="76" stroke="white" fill={['#14736c','#ab501d','#385e92'][i]}/>:null;})}</svg>
  <p aria-live="polite">{teile.slice(0,sichtbar).map(r=>x+' · '+r.faktor+' = '+r.wert).join(' | ')}</p><button className="btn ghost" disabled={sichtbar===teile.length} onClick={()=>zeige(sichtbar+1)}>Nächste Teilfläche zeigen</button> <button className="btn ghost" disabled={!sichtbar} onClick={()=>zeige(0)}>Von vorn</button></details>;
 }
-export function Aufgabenfelder({a,w,set,test,beiFehler}:Props){
+export function Aufgabenfelder({a,w,set,test,nachAbschluss,beiFehler}:Props){
  const [phase,weiter]=useState(0),[meldung,melde]=useState('');
  const schrift=a.ziel==='raster'||a.ziel==='nullstelle',s=a.schritte[phase],fertig=phase>=a.schritte.length;
  function pruefen(){const f=s.felder.find(f=>plainNumber(w[f.key]??'')!==f.wert);if(f){beiFehler?.();melde(f.hinweis);return;}weiter(phase+1);melde('');}
@@ -41,6 +41,7 @@ export function Aufgabenfelder({a,w,set,test,beiFehler}:Props){
  {a.ziel==='probe'&&<div className="ad-lab"><div className="ad-actions">{a.zahlen.map(n=><button key={n} className="btn ghost" disabled={karten.includes(n)} onClick={()=>edit('karten',[...karten,n].join(','))}>{n}</button>)}</div><p>{karten[0]??'□'} : {karten[1]??'□'} = {karten[2]??'□'}</p><button className="btn ghost" disabled={!karten.length} onClick={()=>edit('karten',karten.slice(0,-1).join(','))}>Letzte Karte zurück</button></div>}
  {(schrift&&!test?(fertig?[]:[s]):a.schritte).map(step=><fieldset className="mul-step" key={step.titel}>{schrift&&<legend>{step.titel}</legend>}{step.rechnung&&!test&&<p>Rechne {step.rechnung}.</p>}{step.felder.map(f=><Eingabe key={f.key} f={f} w={w} set={edit}/>)}</fieldset>)}
  {schrift&&!test&&(fertig?<p className="ad-feedback" role="status">Alle Rechenschritte stimmen. {a.weg}</p>:<><button className="btn" onClick={pruefen}>Schritt prüfen</button>{meldung&&<p role="status" className="ad-feedback">{meldung}</p>}</>)}
+ {schrift&&!test&&fertig&&nachAbschluss}
  {['vergleich','geschichte'].includes(a.ziel)&&<label>{a.ziel==='geschichte'?'Dein Antwortsatz':'Welchen Weg wählst du und warum?'}<textarea value={w.text??''} onChange={e=>edit('text',e.target.value)}/></label>}</div>;
 }
 export function Rueckmeldung({a,w}:{a:Aufgabe;w:Antworten}){const falsch=punkte(a,w).find(p=>!p.ok);return <p className="ad-feedback" role="status">{falsch?'Prüfe '+falsch.name+'. '+a.tipp:'Die prüfbaren Antworten stimmen. '+a.weg}</p>;}

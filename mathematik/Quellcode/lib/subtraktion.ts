@@ -1,3 +1,4 @@
+import {folgepunkt} from './lernzielbericht.ts';
 import {plainNumber,rng} from './groessen-core.ts';
 import {stellen,type Werte} from './addition.ts';
 export {stellen,kurz,type Werte} from './addition.ts';
@@ -32,7 +33,7 @@ export function rechenweg(a:number,b:number){
 export function rasterpunkte(a:number,b:number,w:Werte){
   const cols=rechenweg(a,b);
   const reihen=[a,b].map((n,j)=>({name:'Ausrichtung · Zahl '+(j+1),ok:cols.every((_,i)=>(w['s'+j+'-'+i]??'')===(String(n).at(-i-1)??''))}));
-  return [...reihen,...cols.flatMap((c,i)=>[{name:'Verfügbar · '+stellen[i],ok:plainNumber(w['v'+i]??'')===c.verfuegbar},{name:'Differenz · '+stellen[i],ok:plainNumber(w['e'+i]??'')===c.rest}])];
+  return [...reihen,...cols.flatMap((c,i)=>[{name:'Verfügbar · '+stellen[i],ok:plainNumber(w['v'+i]??'')===c.verfuegbar},folgepunkt('Differenz · '+stellen[i],plainNumber(w['e'+i]??'')===c.rest,/^(?:[0-9]|1[0-9])$/.test(w['v'+i]??'')&&/^[0-9]$/.test(w['e'+i]??'')&&Number(w['e'+i])===Number(w['v'+i])-c.abzug)])];
 }
 export const namen={sprung:'Rückwärts am Zahlenstrahl',ergaenzen:'Vorwärts den Abstand finden',ausgleich:'Mit einer runden Hilfszahl rechnen',vergleich:'Zwei Rechenwege vergleichen',strategie:'Einen passenden Weg wählen',fehler:'Die erste falsche Spalte finden',schaetzen:'Mit Überschlag prüfen',probe:'Die Umkehrprobe legen',luecke:'Die fehlende Zahl finden',geschichte:'Wegnehmen und Vergleichen',groessen:'Längen, Gewichte und Zeitspannen',kette:'Zweimal nacheinander abziehen'} as const;
 export type Thema=keyof typeof namen;

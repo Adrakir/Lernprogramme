@@ -1,3 +1,4 @@
+import {folgepunkt,type Kriterium} from './lernzielbericht.ts';
 import {rng,plainNumber} from './groessen-core.ts';
 import type {Antworten,Feld,Schritt} from './multiplikation.ts';
 export type {Antworten,Feld} from './multiplikation.ts';
@@ -63,7 +64,12 @@ export function aufgabe(ziel:Ziel,seed:number):Aufgabe{
  }
 }
 export function punkte(a:Aufgabe,w:Antworten){
- const p=a.schritte.flatMap(s=>s.felder.map(f=>({name:s.titel+' · '+f.label,ok:plainNumber(w[f.key]??'')===f.wert})));
+ const p:Kriterium[]=a.schritte.flatMap((s,j)=>s.felder.map(f=>{
+  const v=plainNumber(w[f.key]??''),q=plainNumber(w['q'+j]??''),t=plainNumber(w['t'+j]??''),produkt=plainNumber(w['p'+j]??'');
+  const folge=(f.key==='p'+j&&q!==null&&Number.isInteger(q)&&q>=0&&q<=9&&v===q*a.zahlen[1])||
+   (f.key==='r'+j&&t!==null&&produkt!==null&&[t,produkt].every(n=>Number.isSafeInteger(n)&&n>=0)&&v!==null&&v>=0&&v<a.zahlen[1]&&v===t-produkt);
+  return folgepunkt(s.titel+' · '+f.label,v===f.wert,folge);
+ }));
  if(a.ziel==='luecke')p.push({name:'Division durch null',ok:w.nullregel==='Die Rechnung hat kein Ergebnis.'});
  if(a.ziel==='probe'){const [q,d,r]=a.zahlen;p.push({name:'Probe mit Rest',ok:[`${q},${d},${r}`,`${d},${q},${r}`].includes(w.karten)});}
  return p;
