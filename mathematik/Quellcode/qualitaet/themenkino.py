@@ -48,6 +48,9 @@ with sync_playwright() as pw:
             page.locator('.lesson-phases button').nth(1).click()
             expect(page.locator('.lesson .tk-studio')).to_have_count(1)
             images=page.locator('.lesson .tk-studio svg')
+            if images.count()==0:
+                print('Grafikdiagnose Modul',fach,'Titel',page.locator('.lesson .tk-studio').inner_text()[:850],
+                      'JS-Fehler',errors,flush=True)
             expect(images).not_to_have_count(0)
         assert not errors, errors
         page.close()
