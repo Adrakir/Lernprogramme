@@ -14,15 +14,26 @@ function Zahlenwahl({label,wert,min,max,set}:{label:string;wert:number;min:numbe
 type Modell = keyof typeof modelle;
 
 export function Tafelmodelle() {
+  const startknopf=useRef<HTMLButtonElement|null>(null);
+  const aktuell=useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const [modell, waehlen] = useState<Modell>('uebertrag');
   const [loesung, zeigen] = useState(false);
   const [runde, zurueck] = useState(0);
   function neu() { zeigen(false); zurueck(n => n + 1); }
-  function oeffnen(id: Modell) { waehlen(id); neu(); dialog.current?.showModal(); }
+  function oeffnen(id: Modell) { waehlen(id); setVergleich(null);neu(); dialog.current?.showModal(); }
   const [links,setLinks]=useState(8),[rechts,setRechts]=useState(5);
   const [reihen,setReihen]=useState(punkte.zahlen[0]),[spalten,setSpalten]=useState(punkte.zahlen[1]);
   const [start,setStart]=useState(59);
+  const [vergleich,setVergleich]=useState<{bild:HTMLElement;frage:string}|null>(null);
+  function festhalten(){
+    if(vergleich){setVergleich(null);return;}
+    if(!aktuell.current)return;
+    const bild=aktuell.current.cloneNode(true) as HTMLElement;
+    bild.querySelectorAll('button,label,input,select,.gt-fine,.gw-lab-controls').forEach(e=>e.remove());
+    bild.querySelectorAll('[aria-live],[role="status"]').forEach(e=>{e.removeAttribute('aria-live');e.removeAttribute('role');});
+    setVergleich({bild,frage});
+  }
   const summe=links+rechts, ende=start+1;
   const titel=modelle[modell];
   const frage=modell==='uebertrag' ? `Brauchen ${links} + ${rechts} Einer einen Übertrag? Wie viele Einer bleiben?` :
@@ -36,18 +47,21 @@ export function Tafelmodelle() {
   }
   return <section className="panel"><h2>Modelle für die Tafel</h2>
     <div className="ad-actions">{(Object.keys(modelle) as Modell[]).map(id =>
-      <button className="btn ghost" key={id} onClick={() => oeffnen(id)}>{modelle[id]}</button>)}</div>
-    <dialog className="tafel-dialog" ref={dialog} aria-labelledby="tafel-titel" onClose={neu}>
+      <button className="btn ghost" key={id} onClick={e => {startknopf.current=e.currentTarget;oeffnen(id);}}>{modelle[id]}</button>)}</div>
+    <dialog className="tafel-dialog" ref={dialog} aria-labelledby="tafel-titel" onClose={()=>{neu();startknopf.current?.focus();}}>
       <div className="tafel-kopf"><h2 id="tafel-titel">{titel}</h2><button className="btn ghost" onClick={() => dialog.current?.close()}>Schließen</button></div>
       <div className="ad-actions">{modell==='uebertrag'?<>{auswahl('Erster Summand',links,0,9,setLinks)}{auswahl('Zweiter Summand',rechts,0,9,setRechts)}</> :
         modell==='punkte'?<>{auswahl('Reihen',reihen,2,9,setReihen)}{auswahl('Spalten',spalten,11,19,setSpalten)}</> :
         auswahl('Start in Minuten',start,0,119,setStart)}</div>
       <p className="tafel-frage">{frage}</p>
-      {dialog.current?.open && <div key={runde} className="tafel-modell">
+      <button className="btn ghost" onClick={festhalten}>{vergleich?'Vergleich schließen':'Beispiel zum Vergleich festhalten'}</button>
+      <div className={vergleich?'tafel-vergleich':''}>{vergleich&&<section className="panel"><h3>Erstes Beispiel</h3>
+       <p>{vergleich.frage}</p><div ref={node=>{node?.replaceChildren(vergleich.bild);}}/></section>}
+      {dialog.current?.open && <div ref={aktuell} key={runde} className="tafel-modell">
         {modell === 'uebertrag' && <Buendeln summe={summe} stelle={0}/>}
         {modell === 'punkte' && <Punktefeld a={{...punkte,zahlen:[reihen,spalten]}}/>}
         {modell === 'minuten' && <Buendel paar={['min','h',60]} startwert={start} tafel/>}
-      </div>}
+      </div>}</div>
       <div className="ad-actions"><button className="btn" aria-expanded={loesung} onClick={() => zeigen(!loesung)}>{loesung ? 'Ergebnis ausblenden' : 'Ergebnis einblenden'}</button><button className="btn ghost" onClick={neu}>Modell zurücksetzen</button></div>
       {loesung && <p className="tafel-frage" role="status">{erklaerung}</p>}
     </dialog>

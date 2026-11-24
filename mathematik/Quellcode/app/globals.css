@@ -72,3 +72,10 @@ html[data-contrast=strong] .chart svg>line{stroke:#111;stroke-width:2px}
 .tafel-modell { font-size:clamp(1.1rem,1.6vw,1.5rem); margin-block:1.2em; }
 .tafel-modell .mul-array { width:min(100%,42rem); max-height:36vh; }
 .tafel-modell .ad-one { width:1.3em; height:1.3em; }
+.zeitstrecken,.tafel-vergleich{display:flex;gap:.3rem;align-items:stretch}
+.zeitstrecken span{background:#176c69;color:white;text-align:center;min-width:1.5rem}
+.zeitstrecken span+span{background:#87501a}
+.tafel-vergleich>*{flex:1;min-width:0}
+.rastertasten button{min-height:44px}
+.ad-grid input:focus-visible{outline:3px solid #166c79;outline-offset:1px}
+@media(max-width:680px){.tafel-vergleich{flex-direction:column}}

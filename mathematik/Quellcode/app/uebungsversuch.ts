@@ -1,8 +1,9 @@
 import {useRef} from 'react';
 import {notieren} from '@/lib/lernatelier';
 
-export function useUebungsversuch() {
-  const stand = useRef({aufgabenId: '', versuche: 0, hilfe: false, abgeschlossen: false});
+export type Versuch = {aufgabenId:string;versuche:number;hilfe:boolean;abgeschlossen:boolean};
+export function useUebungsversuch(alt?:Versuch) {
+  const stand = useRef(alt ?? {aufgabenId: '', versuche: 0, hilfe: false, abgeschlossen: false});
   function hinweis() { stand.current.hilfe = true; }
   function zuruecksetzen() {
     stand.current = {aufgabenId: '', versuche: 0, hilfe: false, abgeschlossen: false};
@@ -17,5 +18,5 @@ export function useUebungsversuch() {
     s.abgeschlossen = richtig;
     return status;
   }
-  return {hinweis, zuruecksetzen, pruefen};
+  return {stand,hinweis, zuruecksetzen, pruefen};
 }

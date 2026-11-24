@@ -1,3 +1,4 @@
+import {Unterrichtsgespraech} from './unterrichtsgespraech';
 import {Tafelmodelle} from './tafelmodelle';
 import {useState} from 'react';
 import {faecher,themen,blattaufgabe,zusammenstellen,notieren,type Fach} from '@/lib/lernatelier';
@@ -8,7 +9,7 @@ export function Unterricht(){
  const [material,setMaterial]=useState<Fach>('daten'),[nr,wechsel]=useState(0),[art,setArt]=useState(''),[antwort,setAntwort]=useState(''),[grund,setGrund]=useState(''),[geprueft,pruefen]=useState(false);
  const a=blattaufgabe('sach',731+7919*nr,nr),ok=a.art===art&&plainNumber(antwort)===a.antwort;
  const gueltig=wahl.length>0&&pflicht.length<=umfang&&wahl.length<=umfang;
- return <div className="ad-school"><h1>Unterricht und gemischte Aufgaben</h1><Tafelmodelle/><section className="panel"><h2>Klassenarbeit zusammenstellen</h2><p>Wähle Lernziele und Umfang. Pflichtaufgaben stehen am Anfang. Beide Fassungen prüfen dieselben Lernziele mit derselben Punkteverteilung.</p>
+ return <div className="ad-school"><h1>Unterricht und gemischte Aufgaben</h1><Tafelmodelle/><Unterrichtsgespraech/><a className="btn ghost" href="#denklabor">Zum Mathe-Denklabor</a><section className="panel"><h2>Klassenarbeit zusammenstellen</h2><p>Wähle Lernziele und Umfang. Pflichtaufgaben stehen am Anfang. Beide Fassungen prüfen dieselben Lernziele mit derselben Punkteverteilung.</p>
  <table className="ad-grid"><thead><tr><th>Lernziel</th><th>Aufnehmen</th><th>Pflichtaufgabe</th></tr></thead><tbody>{faecher.map(f=><tr key={f}><th>{themen[f]}</th><td><input type="checkbox" aria-label={themen[f]+' aufnehmen'} checked={wahl.includes(f)} onChange={e=>{setWahl(e.target.checked?[...wahl,f]:wahl.filter(v=>v!==f));setPflicht(pflicht.filter(v=>v!==f));}}/></td><td><input type="checkbox" aria-label={themen[f]+' als Pflichtaufgabe'} disabled={!wahl.includes(f)} checked={pflicht.includes(f)} onChange={e=>setPflicht(e.target.checked?[...pflicht,f]:pflicht.filter(v=>v!==f))}/></td></tr>)}</tbody></table>
  <label>Anzahl Aufgaben<select value={umfang} onChange={e=>anzahl(+e.target.value)}>{[3,4,5,6,8,10,12].map(n=><option key={n}>{n}</option>)}</select></label>{!gueltig&&<p>Wähle mindestens ein Lernziel und mindestens so viele Aufgaben wie Lernziele.</p>}
  <div className="ad-actions">{['A','B'].map((v,i)=><button className="btn" disabled={!gueltig} key={v} onClick={()=>unterrichtsheft(zusammenstellen(wahl,pflicht,umfang,seed,i),'Klassenarbeit '+v).save('MatheKompass_Arbeit_'+v+'.pdf')}>Fassung {v} mit Lösungen als PDF</button>)}<button className="btn ghost" onClick={()=>neu(seed+419)}>Neue Zahlen für beide Fassungen</button></div></section>

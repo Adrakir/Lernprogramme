@@ -122,6 +122,21 @@ export function toBase(raw: string, b: Bereich, id: string): number | null {
   return Number(num / den);
 }
 
+export function groessenangabe(text:string,bereich:Bereich){
+  const eingabe=text.trim().toLowerCase();
+  const teile=[...eingabe.matchAll(/(\d+(?:[.,]\d+)*)\s*([a-z€²³]+)/g)];
+  if(!teile.length || teile.map(t=>t[0]).join('').replace(/\s/g,'')!==eingabe.replace(/\s/g,''))return null;
+  const einheiten:string[]=[];
+  let basis=0;
+  for(const [,zahl,label] of teile){
+    const u=units[bereich].find(u=>u.label.toLowerCase()===label||u.id===label);
+    if(!u)return null;
+    const wert=toBase(zahl,bereich,u.id);
+    if(wert===null||!Number.isSafeInteger(wert))return null;
+    basis+=wert;einheiten.push(u.id);
+  }
+  return {basis,einheiten};
+}
 export function plainNumber(raw: string): number | null {
   const p = parseInput(raw);
   if (!p) return null;
@@ -219,7 +234,11 @@ export function checkField(f: Field, a: Answers): FieldResult {
     const trap = f.traps?.find(t => Math.abs(t.value - n) < 1e-9);
     return {ok: false, message: trap?.message};
   }
-  const base = toBase(raw, f.bereich, f.unit);
+  const teile=groessenangabe(raw,f.bereich);
+  if(teile && teile.basis===f.answer){
+    return teile.einheiten.every(u=>u===f.unit)?{ok:true}:{ok:false,message:'Die Menge stimmt. Schreibe sie jetzt in '+unit(f.bereich,f.unit).label+'.'};
+  }
+  const base = teile?.basis ?? toBase(raw, f.bereich, f.unit);
   if (base === null) return {ok: false, message: 'Gib nur die Zahl ein, zum Beispiel 3,5. Die Einheit steht schon daneben.'};
   if (Number.isNaN(base)) return {ok: false, message: 'Deine Zahl hat zu viele Stellen nach dem Komma. Prüfe die Umrechnung noch einmal.'};
   if (base === f.answer) return {ok: true};

@@ -1,3 +1,4 @@
+import {Rastertasten} from './rastertasten';
 import {NaechstesFeld} from './werkstatt-basis';
 import {useState} from 'react';
 import {rechenweg,rasterpunkte,stellen,kurz,type Werte} from '@/lib/subtraktion';
@@ -14,11 +15,11 @@ export function Subtraktionsraster({zahlen,werte:w,schreiben,pruefung=false,nach
     if(fehler){beiFehler?.();setMeldung(fehler);return;}
     if(phase+1===cols.length)geschafft?.();setPhase(phase+1);setTausch(0);setModell(false);setMeldung(phase+1===cols.length?'Alle Spalten stimmen.':phase<0?'Beide Zahlen stehen richtig. Beginne rechts.':'Diese Spalte stimmt. Gehe eine Stelle nach links.');
   }
-  function feld(k:string,label:string,aktiv:boolean,len=1){return <input onKeyDown={NaechstesFeld} enterKeyHint="next" aria-label={label} inputMode="numeric" maxLength={len} value={w[k]??''} disabled={!pruefung&&!aktiv} onChange={e=>{if(/^\d*$/.test(e.target.value)){schreiben(k,e.target.value);setMeldung('');}}}/>;}
+  function feld(k:string,label:string,aktiv:boolean,len=1){return <input data-feld={k} onKeyDown={NaechstesFeld} enterKeyHint="next" aria-label={label} inputMode="numeric" maxLength={len} value={w[k]??''} disabled={!pruefung&&!aktiv} onChange={e=>{if(/^\d*$/.test(e.target.value)){schreiben(k,e.target.value);setMeldung('');}}}/>;}
   return <div><h3>{a} − {b}</h3><p>{pruefung?'Richte beide Zahlen aus. Trage je Spalte die oben verfügbaren Einheiten nach dem Entbündeln und die Ergebnisziffer ein.':phase<0?'Trage die Zahlen stellenrichtig ein. Die Zahl, von der du abziehst, steht oben.':c?`Bearbeite die ${stellen[phase]}spalte. Wie viele Einheiten hast du oben nach dem Tauschen? Wie viele bleiben nach dem Abziehen?`:'Lies die Differenz von links nach rechts.'}</p>
-    <div className="ad-scroll"><table className="ad-grid"><thead><tr><th>Stelle</th>{folge.map(i=><th key={i} className={phase===i?'current':''}>{kurz[i]}</th>)}</tr></thead><tbody>
+    <Rastertasten loeschen={schreiben}><div className="ad-scroll"><table className="ad-grid"><thead><tr><th>Stelle</th>{folge.map(i=><th key={i} className={phase===i?'current':''}>{kurz[i]}</th>)}</tr></thead><tbody>
     {zahlen.map((_,j)=><tr key={j}><th scope="row">{j?'− Zahl 2':'Zahl 1'}</th>{folge.map(i=><td key={i}>{feld('s'+j+'-'+i,'Zahl '+(j+1)+' · '+stellen[i],phase<0)}</td>)}</tr>)}
-    {[['v','Verfügbar'],['e','Differenz']].map(([key,label])=><tr className={key==='e'?'ad-result':'ad-carry'} key={key}><th scope="row">{label}</th>{folge.map(i=><td key={i}>{feld(key+i,label+' · '+stellen[i],phase===i,key==='v'?2:1)}</td>)}</tr>)}</tbody></table></div>
+    {[['v','Verfügbar'],['e','Differenz']].map(([key,label])=><tr className={key==='e'?'ad-result':'ad-carry'} key={key}><th scope="row">{label}</th>{folge.map(i=><td key={i}>{feld(key+i,label+' · '+stellen[i],phase===i,key==='v'?2:1)}</td>)}</tr>)}</tbody></table></div></Rastertasten>
     {!pruefung&&phase<cols.length&&<div className="ad-actions"><button className="btn" onClick={check}>{phase<0?'Ausrichtung prüfen':'Spalte prüfen'}</button>{c&&<button className="btn ghost" onClick={()=>setModell(!modell)}>{modell?'Modell schließen':'Tauschmodell öffnen'}</button>}</div>}
     {modell&&c&&<div className="ad-bundle"><p>So ist die obere Zahl für diese Spalte aufgeteilt. Bei jedem Tausch bleibt ihr Wert gleich.</p><div className="sub-places">{folge.map(i=><div key={i}><b>{bestand[i]} {stellen[i]}</b><div key={tausch}>{Array.from({length:bestand[i]},(_,j)=><i className="ad-one" key={j}/>)}</div></div>)}</div>
     {tausch<c.tausch.length?<button className="btn ghost" onClick={()=>setTausch(tausch+1)}>Eine Einheit in zehn kleinere tauschen</button>:<p>{c.tausch.length?'Jetzt reicht die Menge in dieser Spalte.':'Hier reicht die Menge bereits.'}</p>}

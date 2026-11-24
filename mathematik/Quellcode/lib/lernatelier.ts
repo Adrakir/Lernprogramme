@@ -13,7 +13,7 @@ export function blattaufgabe(fach:Fach,seed:number,position:number):Blattaufgabe
  case 'subtraktion':return rechne(100*(a+3)+2,100*a+40+b,'−',262-b);
  case 'multiplikation':return rechne(10*a+7,10*c+3,'·',(10*a+7)*(10*c+3));
  case 'division':{const q=100*a+b;return rechne(q*c,c,':',q);}
- case 'zeit':return baue(`Der Bus fährt um ${a+7}:45 Uhr los und kommt um ${a+8}:${10+b} Uhr an. Wie lange fährt er?`,25+b,'min',`15 min bis zur vollen Stunde, danach ${10+b} min. Zusammen ${25+b} min.`,['Volle Stunde als Zwischenstopp','Dauer mit Einheit']);
+ case 'zeit':return baue(`Der Bus fährt um ${a+7}:45 Uhr los und kommt um ${a+8}:${10+b} Uhr an. Wie lange fährt er?`,25+b,'min',`15 min bis zur vollen Stunde, danach ${10+b} min. Zusammen ${25+b} min.`,['Volle Stunde als Zwischenstopp','Dauer mit Einheit'],[a+7,10+b]);
  case 'laenge':return baue(`Von ${a} m 15 cm Band schneidest du ${40+b} cm ab. Wie lang ist der Rest?`,100*a+15-40-b,'cm',`${100*a+15} cm − ${40+b} cm = ${100*a-25-b} cm.`,['Einheiten vereinheitlicht','Restlänge mit Einheit']);
  case 'masse':return baue(`Ein Paket wiegt ${a} kg 200 g, davon sind ${100+10*b} g Verpackung. Wie viel wiegt der Inhalt?`,1000*a+100-10*b,'g',`${1000*a+200} g − ${100+10*b} g = ${1000*a+100-10*b} g.`,['In Gramm umgerechnet','Inhalt mit Einheit']);
  case 'daten':{const v=[a,b+3,c+1];return baue(`Schulwege: Rad ${v[0]}, Bus ${v[1]}, zu Fuß ${v[2]} Kinder. Zeichne ein Säulendiagramm. Wie viele Kinder nahmen teil?`,v.reduce((s,n)=>s+n),'Kinder',`Addiere die drei Häufigkeiten: ${v.join(' + ')} = ${v.reduce((s,n)=>s+n)}.`,['Achsen und Kategorien beschriftet','Gleichmäßiger Maßstab und passende Säulenhöhen','Gesamtzahl richtig'],v);}

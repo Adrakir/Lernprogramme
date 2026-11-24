@@ -33,6 +33,7 @@ export function Aufgabenfelder({a,w,set,test,nachAbschluss,geschafft,beiFehler}:
  const karten=w.karten?w.karten.split(',').map(Number):[];
  return <div className="ad-fields"><p className="ad-prompt">{a.frage}</p>
  {schrift&&<><Rechentafel a={a} w={w}/>{!test&&s&&<p>{phase===0?'Beginne ganz links. Ist die erste Ziffer kleiner als der Divisor, nimm die nächste dazu.':phase<rows.length?`Hole die ${rows[phase].ziffer} herunter und stelle sie rechts neben den Rest ${rows[phase-1].rest}.`:'Alle Ziffern sind verarbeitet. Lies das Ergebnis ab.'}</p>}</>}
+ {schrift&&!test&&phase>0&&<div className="ad-actions">{rows.slice(0,phase).map((_,i)=><button key={i} className="btn ghost small" onClick={()=>{weiter(i);melde('Ändere diese Zeile und prüfe sie erneut. Deine weiteren Einträge bleiben erhalten.');}}>Zeile {i+1} bearbeiten</button>)}</div>}
  {schrift&&!test&&phase>0&&phase<rows.length&&<Herunterholen key={phase} rest={rows[phase-1].rest} ziffer={rows[phase].ziffer}/>}
  {a.ziel==='luecke'&&<label>Was gilt für sieben geteilt durch null?<select value={w.nullregel??''} onChange={e=>edit('nullregel',e.target.value)}><option value="">Bitte wählen</option><option>Das Ergebnis ist null.</option><option>Die Rechnung hat kein Ergebnis.</option><option>Das Ergebnis ist sieben.</option></select></label>}
  {['verteilen','packen','sprung'].includes(a.ziel)&&<Verteilmodell a={a}/>}
