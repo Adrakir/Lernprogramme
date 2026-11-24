@@ -32,9 +32,9 @@ function Steuerung({lauf, max, label, einheit}: {lauf: ReturnType<typeof useAnim
     <button type="button" className="btn ghost small" onClick={()=>lauf.einstellen(0)}>Auf null</button></div>;
 }
 
-export function Buendel({paar, tafel=false}: {paar: readonly [string,string,number]; tafel?:boolean}) {
+export function Buendel({paar, tafel=false, startwert}: {paar: readonly [string,string,number]; tafel?:boolean; startwert?:number}) {
   const [klein,gross,faktor]=paar;
-  const lauf=useAnimation(2*faktor,Math.max(1,Math.floor(faktor/30)), tafel ? faktor-1 : 0);
+  const lauf=useAnimation(2*faktor,Math.max(1,Math.floor(faktor/30)), startwert ?? (tafel ? faktor-1 : 0));
   const [ziel, setZiel]=useState(1);
   const [pruefung,setPruefung]=useState<{wert:number; text:string} | null>(null);
   const anteile=[1.5,0.5,1,2];

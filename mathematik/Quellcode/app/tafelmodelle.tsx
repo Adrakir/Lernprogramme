@@ -5,12 +5,12 @@ import {Buendel} from './groessen-modelle';
 import {aufgabe} from '@/lib/multiplikation';
 
 const punkte = aufgabe('zerlegen', 0);
-const [reihen, spalten] = punkte.zahlen;
-const modelle = {
-  uebertrag: ['Übertrag zeigen', 'Was wird aus 8 + 5 Einern, wenn du zehn davon bündelst?', '8 + 5 = 13. In der Einerspalte bleibt die 3. Der gebündelte Zehner kommt als Übertrag in die Zehnerspalte.'],
-  punkte: ['Punktefeld zerlegen', 'Wie kannst du die Punkte nach der zehnten Spalte teilen und die beiden Felder zum Rechnen nutzen?', reihen+' · '+spalten+' = '+reihen+' · 10 + '+reihen+' · '+(spalten-10)+' = '+reihen*10+' + '+reihen*(spalten-10)+' = '+reihen*spalten+'.'],
-  minuten: ['Minuten bündeln', 'Der Regler steht zu Beginn bei 59 Minuten. Was ändert sich, wenn eine Minute hinzukommt?', '59 Minuten + 1 Minute = 60 Minuten. Der erste Balken ist voll: Das ist genau eine Stunde.']
-} as const;
+const modelle = {uebertrag:'Übertrag zeigen',punkte:'Punktefeld zerlegen',minuten:'Minuten bündeln'} as const;
+function Zahlenwahl({label,wert,min,max,set}:{label:string;wert:number;min:number;max:number;set:(v:number)=>void}) {
+  return <label>{label}<select aria-label={label} value={wert} onChange={e=>set(Number(e.target.value))}>
+    {Array.from({length:max-min+1},(_,i)=>min+i).map(n=><option key={n}>{n}</option>)}
+  </select></label>;
+}
 type Modell = keyof typeof modelle;
 
 export function Tafelmodelle() {
@@ -20,17 +20,33 @@ export function Tafelmodelle() {
   const [runde, zurueck] = useState(0);
   function neu() { zeigen(false); zurueck(n => n + 1); }
   function oeffnen(id: Modell) { waehlen(id); neu(); dialog.current?.showModal(); }
-  const [titel, frage, erklaerung] = modelle[modell];
+  const [links,setLinks]=useState(8),[rechts,setRechts]=useState(5);
+  const [reihen,setReihen]=useState(punkte.zahlen[0]),[spalten,setSpalten]=useState(punkte.zahlen[1]);
+  const [start,setStart]=useState(59);
+  const summe=links+rechts, ende=start+1;
+  const titel=modelle[modell];
+  const frage=modell==='uebertrag' ? `Brauchen ${links} + ${rechts} Einer einen Übertrag? Wie viele Einer bleiben?` :
+    modell==='punkte' ? `Wie kannst du ${reihen} Reihen mit je ${spalten} Punkten in zwei Teilfelder zerlegen?` :
+    `Du startest bei ${start} Minuten. Was ändert sich, wenn eine Minute hinzukommt?`;
+  const erklaerung=modell==='uebertrag' ? `${links} + ${rechts} = ${summe}. ${summe>=10?'Du bündelst einen Zehner. In der Einerspalte bleibt die '+(summe%10)+'.':'Alle Einer bleiben in der Einerspalte. Es gibt keinen Übertrag.'}` :
+    modell==='punkte' ? `${reihen} · ${spalten} = ${reihen} · 10 + ${reihen} · ${spalten-10} = ${reihen*10} + ${reihen*(spalten-10)} = ${reihen*spalten}.` :
+    `${start} min + 1 min = ${ende} min. ${Math.floor(ende/60)} h und ${ende%60} min.`;
+  function auswahl(label:string,wert:number,min:number,max:number,set:(v:number)=>void) {
+    return <Zahlenwahl {...{label,wert,min,max}} set={n=>{set(n);neu();}}/>;
+  }
   return <section className="panel"><h2>Modelle für die Tafel</h2>
     <div className="ad-actions">{(Object.keys(modelle) as Modell[]).map(id =>
-      <button className="btn ghost" key={id} onClick={() => oeffnen(id)}>{modelle[id][0]}</button>)}</div>
+      <button className="btn ghost" key={id} onClick={() => oeffnen(id)}>{modelle[id]}</button>)}</div>
     <dialog className="tafel-dialog" ref={dialog} aria-labelledby="tafel-titel" onClose={neu}>
       <div className="tafel-kopf"><h2 id="tafel-titel">{titel}</h2><button className="btn ghost" onClick={() => dialog.current?.close()}>Schließen</button></div>
+      <div className="ad-actions">{modell==='uebertrag'?<>{auswahl('Erster Summand',links,0,9,setLinks)}{auswahl('Zweiter Summand',rechts,0,9,setRechts)}</> :
+        modell==='punkte'?<>{auswahl('Reihen',reihen,2,9,setReihen)}{auswahl('Spalten',spalten,11,19,setSpalten)}</> :
+        auswahl('Start in Minuten',start,0,119,setStart)}</div>
       <p className="tafel-frage">{frage}</p>
       {dialog.current?.open && <div key={runde} className="tafel-modell">
-        {modell === 'uebertrag' && <Buendeln summe={13} stelle={0}/>}
-        {modell === 'punkte' && <Punktefeld a={punkte}/>}
-        {modell === 'minuten' && <Buendel paar={['min','h',60]} tafel/>}
+        {modell === 'uebertrag' && <Buendeln summe={summe} stelle={0}/>}
+        {modell === 'punkte' && <Punktefeld a={{...punkte,zahlen:[reihen,spalten]}}/>}
+        {modell === 'minuten' && <Buendel paar={['min','h',60]} startwert={start} tafel/>}
       </div>}
       <div className="ad-actions"><button className="btn" aria-expanded={loesung} onClick={() => zeigen(!loesung)}>{loesung ? 'Ergebnis ausblenden' : 'Ergebnis einblenden'}</button><button className="btn ghost" onClick={neu}>Modell zurücksetzen</button></div>
       {loesung && <p className="tafel-frage" role="status">{erklaerung}</p>}

@@ -37,10 +37,17 @@ export function zusammenstellen(ziele:Fach[],pflicht:Fach[],umfang:number,seed:n
  const reihe=[...pflicht,...ziele.filter(f=>!pflicht.includes(f))];
  return Array.from({length:umfang},(_,i)=>blattaufgabe(reihe[i%reihe.length],seed+7919*i+variante*1249,i+seed%4));
 }
-export type Beleg={tag:string;ziel:string;aufgabe:string;status:'selbst'|'hilfe'|'offen';wiederholung:boolean;ersterVersuch?:boolean;hinweise?:boolean};
+export type Beleg={tag:string;ziel:string;aufgabe:string;status:'selbst'|'hilfe'|'offen';wiederholung:boolean;ersterVersuch?:boolean;hinweise?:boolean;aufgabenId?:string;versuche?:number};
 export const belegKey='mathe-kompass-lernbelege-v1';
 export function belege():Beleg[]{try{const a=JSON.parse(localStorage.getItem(belegKey)??'[]');return Array.isArray(a)?a.filter(b=>b&&typeof b.tag==='string'&&typeof b.aufgabe==='string'&&typeof b.ziel==='string'&&['selbst','hilfe','offen'].includes(b.status)):[];}catch{return [];}}
-export function notieren(ziel:string,aufgabe:string,status:Beleg['status'],wiederholung=false,ersterVersuch?:boolean,hinweise?:boolean){try{localStorage.setItem(belegKey,JSON.stringify([...belege(),{tag:new Date().toISOString(),ziel,aufgabe,status,wiederholung,ersterVersuch,hinweise}].slice(-1500)));}catch{}}
+export function notieren(ziel:string,aufgabe:string,status:Beleg['status'],wiederholung=false,ersterVersuch?:boolean,hinweise?:boolean,versuch?:{aufgabenId:string;versuche:number}){
+ try {
+  const bisher=belege();
+  const eintrag:Beleg={tag:new Date().toISOString(),ziel,aufgabe,status,wiederholung,ersterVersuch,hinweise,...versuch};
+  const behalten=versuch ? bisher.filter(b=>b.aufgabenId!==versuch.aufgabenId) : bisher;
+  localStorage.setItem(belegKey,JSON.stringify([...behalten,eintrag].slice(-1500)));
+ }catch{}
+}
 export const familienhilfe:Record<Fach,[string,string,string]>={
  zeit:['Wie viele Minuten stecken schon in den ganzen Stunden?','Wie lange ist es von 16:45 bis 17:10 Uhr?','15 + 10 = 25 Minuten.'],
  laenge:['Welche gemeinsame Einheit kannst du verwenden?','Lege ein 20 cm langes und ein 15 cm langes Band hintereinander.','Zusammen sind es 35 cm.'],
