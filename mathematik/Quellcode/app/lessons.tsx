@@ -6,6 +6,7 @@ import { Topic } from '@/lib/math';
 import { Speak, Tally, Chart, PlaceTable, DataLab, ChartLab, BundleLab, NumberPuzzle, RoundLab, OrderLab } from './widgets';
 import {MarthaGuide} from './curriculum-visuals';
 import {GuidedLesson,TeachingTools} from './guided-learning';
+import {ModulKino} from './modulkino';
 import {learningGoals} from '@/lib/guidance';
 import {geoLessons} from './geo5-lessons';
 import {additionalLessons,dataAdditions,numberAddition,roundingAddition,type Lesson} from './extra-lessons';
@@ -49,7 +50,7 @@ export function LessonView({topic,onComplete,onPractice}:{topic:Topic;onComplete
  return <div className="lesson-layout"><article className="panel lesson"><div className="between"><span className="eyebrow">LERNWEG · SCHRITT {step+1} VON {lessons[topic].length}</span><Speak key={step} text={lesson.title+'. '+lesson.text+' Merke dir: '+lesson.rule}/></div><h2>{lesson.title}</h2>
  <p className="lesson-level">{lesson.extension||topic==='stats'?'VERTIEFUNG / AUSBLICK KLASSE 6 · nach Absprache im Unterricht':'GRUNDLAGE KLASSE 5 · Reihenfolge nach Unterricht anpassen'}</p><p className="lesson-goal"><strong>Dein Ziel:</strong> {learningGoals[topic].goal}</p>{notice&&<p role="status" className="hint">{notice}</p>}
  <nav className="lesson-phases" aria-label="Phasen des Lernschritts">{phases.map((name,i)=><button className="btn ghost" key={name} aria-current={phase===i?'step':undefined} onClick={()=>setPhase(i)}>{i+1}. {name}</button>)}</nav>
- {phase===1&&<><p className="lesson-intro">{lesson.text}</p>{lesson.visual}<MarthaGuide message={lesson.coach??lesson.rule}/>{lesson.example&&<p className="example"><strong>Beispiel:</strong> {lesson.example}</p>}</>}
+ {phase===1&&<><p className="lesson-intro">{lesson.text}</p><ModulKino topic={topic}/>{lesson.visual}<MarthaGuide message={lesson.coach??lesson.rule}/>{lesson.example&&<p className="example"><strong>Beispiel:</strong> {lesson.example}</p>}</>}
  <GuidedLesson key={`${topic}-${step}-${phase}`} topic={topic} step={step} phase={phase}/>
  <div className="guided-actions"><button className="btn ghost" disabled={phase===0} onClick={()=>setPhase(phase-1)}>Phase zurück</button>{phase<4?<button className="btn" onClick={()=>setPhase(phase+1)}>Weiter: {phases[phase+1]}<ArrowRight size={18}/></button>:<p>Besprochene Beispiele sind noch kein Könnensnachweis. Im Training prüfst du dich mit neuen Aufgaben.</p>}</div>
  <TeachingTools topic={topic} step={step}/>
