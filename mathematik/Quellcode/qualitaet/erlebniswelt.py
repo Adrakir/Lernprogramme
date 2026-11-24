@@ -1,5 +1,6 @@
 """Regressionstest für die visuell-interaktiven Lernmodelle und den Dunkelmodus."""
 import os
+import re
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 
@@ -44,7 +45,12 @@ with sync_playwright() as pw:
         toggle.click()
         expect(page.locator('html')).to_have_attribute('data-theme', 'light')
         page.get_by_role('link', name='Brüche üben').click()
-        expect(page).to_have_url(lambda u: u.endswith('#fractions'))
+        expect(page).to_have_url(re.compile(r'#fractions
+        assert not errors, errors
+        page.close()
+    browser.close()
+print(engine, 'Visuelle Mini-Labore, Smartphone-Ansicht, Links und Dunkelmodus geprüft.')
+))
         assert not errors, errors
         page.close()
     browser.close()
