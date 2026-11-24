@@ -55,7 +55,7 @@ function CubeModel({v}:{v:number}){let side=26*v;const x=238,y=113;return <svg v
  <text x="238" y="240" textAnchor="middle" fontSize="17" fill="#294f76">Jede Kante: {v} cm</text>
  </svg>}
 export function GroessenKino({bereich,station}:Props){
- const [value,setValue]=useState(5),[height,setHeight]=useState(4),[help,setHelp]=useState(false);
+ const [value,setValue]=useState(bereich==='masse'?500:5),[height,setHeight]=useState(4),[help,setHelp]=useState(false);
  const data=infos[bereich];
  const configs:Record<Bereich,{min:number;max:number;step:number;defaultLabel:string}> = {
   laenge:{min:0,max:30,step:1,defaultLabel:'Strecke in Zentimetern'},
