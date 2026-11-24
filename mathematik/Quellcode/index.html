@@ -1,1 +1,102 @@
-<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MatheKompass · Klasse 5</title><meta name="description" content="Verstehen, üben und anwenden: Mathematik Klasse 5 mit geführten Lernwegen, Übungen, Tests und Hilfen."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23355fe4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='white' stroke-width='2.5'/%3E%3Cpath d='M19.5 12.5l-2 5-5 2 2-5z' fill='white'/%3E%3C/svg%3E"></head><body><div id="root"></div><script type="module" src="./offline-build/main.tsx"></script></body></html>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MatheKompass · Klasse 5</title><meta name="description" content="Verstehen, üben und anwenden: Mathematik Klasse 5 mit geführten Lernwegen, Übungen, Tests und Hilfen."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23355fe4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='white' stroke-width='2.5'/%3E%3Cpath d='M19.5 12.5l-2 5-5 2 2-5z' fill='white'/%3E%3C/svg%3E">
+<style id="mk-theme-patch-20261124">
+/* mk-theme-patch-20261124: Echter Hell-/Dunkelmodus; Diagrammpapier bleibt hell. */
+html[data-theme=dark] {
+ color-scheme:dark;
+ --background:#101827;--foreground:#f3f7ff;--card:#1b2940;--card-foreground:#f3f7ff;
+ --popover:#1b2940;--popover-foreground:#f3f7ff;
+ --primary:#a9c4ff;--primary-foreground:#0c172a;
+ --secondary:#283b5a;--secondary-foreground:#f3f7ff;
+ --muted:#263650;--muted-foreground:#c6d5e9;
+ --accent:#2b436b;--accent-foreground:#f3f7ff;
+ --border:#61728e;--input:#abc0dc;--ring:#a9c4ff;
+ --sidebar:#18253b;--sidebar-foreground:#f3f7ff;
+ --sidebar-primary:#a9c4ff;--sidebar-primary-foreground:#0c172a;
+ --sidebar-accent:#2b4266;--sidebar-accent-foreground:#fff;
+ --sidebar-border:#61728e;--sidebar-ring:#a9c4ff;
+}
+html[data-theme=dark] body {background:var(--background);color:var(--foreground)}
+html[data-theme=dark] :is(.topbar,.panel,.module-card,.glossary-card,.review-card,.stat,.class-badge,.sidebar-note,.gw-lab,.gw-path button,.gw-choice label,.gw-levels label,.gw-order-items button,.gw-test-nav button,.gw-phases button,.gw-setup,.gw-form,.it-field,.test-navigation button,.answer-options label,.btn.ghost) {
+ background:var(--card)!important;color:var(--foreground)!important;border-color:var(--border)!important;
+}
+html[data-theme=dark] :is(.card-bottom,.glossary-example,.review-topic,.math-expression,.rule,.solution,.gw-solution,.gw-steps li,.gw-merksatz,.gw-hints,.gt-model,.setup-aside,.result-summary>div,.local-avatar,.gw-input-line,.learning-card,.gw-fig-receipt) {
+ background:#293c5b!important;color:var(--foreground)!important;border-color:var(--border)!important;
+}
+html[data-theme=dark] :is(.breadcrumb,.breadcrumb b,.brand,.brand small,.page-title p,.module-card p,.module-skills,.card-bottom,.card-bottom svg,.eyebrow,.nav-section,.local-note,.local-note small,.sidebar-note p,.app-footer,.section-heading>span,.module-number,.icon-text,.lesson-intro,.topic-label,.muted,.answer-input-wrap>label,.answer-input-wrap small,.glossary-card p,.stat strong,.stat>span,.review-card>p,.review-row p,.teacher-notes p,.solution strong,.gw-small,.gw-path small,.gw-levels small,.gw-stats span,.setup-aside p,.setup-aside b,.gw-skill,.gw-level,.class-badge) {
+ color:var(--foreground)!important;
+}
+html[data-theme=dark] :is(.panel h1,.panel h2,.panel h3,.panel p,.panel small,.panel strong,.module-card h3,.glossary-card h2,.stat strong,.review-card h3,.lesson .between,.gw-lab h3,.gw-lab p) {
+ color:var(--foreground);
+}
+html[data-theme=dark] :is(input:not([type=radio]):not([type=checkbox]):not([type=range]),textarea,select,[data-slot=select-trigger]) {
+ background:#101d32!important;color:#f3f7ff!important;border:2px solid #a7bad4!important;
+}
+html[data-theme=dark] :is(input::placeholder,textarea::placeholder) {color:#c6d5e9!important;opacity:1}
+html[data-theme=dark] :is(.btn:not(.ghost):not(.light),.test-navigation button.active,.gw-test-nav button.active,.gw-phases button.active) {
+ background:#3e63cd!important;color:#fff!important;border-color:#8ca9ff!important;
+}
+html[data-theme=dark] :is(.btn.ghost:hover,.nav-item:hover,.gw-path button:hover,.answer-options label:hover,.gw-choice label.selected,.gw-levels label.selected) {
+ background:#314a73!important;color:#fff!important;
+}
+html[data-theme=dark] :is(.module-card:hover,.btn.ghost:focus-visible,.theme-toggle:focus-visible) {outline-color:#bed3ff}
+html[data-theme=dark] .home-feature {background:#1c3264;color:#fff}
+html[data-theme=dark] .home-feature :is(h2,p,.chip) {color:#fff}
+html[data-theme=dark] :is(.feature-diagram,.chart-pair .chart,.gw-figure,.gw-receipt,.math-shape,.graph-note) {
+ background:#fff!important;color:#1b2b4a!important;
+}
+html[data-theme=dark] .feature-diagram :is(p,span,small) {color:#1b2b4a!important}
+html[data-theme=dark] .gw-figure :is(p,span,strong,small,label) {color:#1b2b4a!important}
+html[data-theme=dark] .sidebar-note strong {color:var(--foreground)}
+html[data-theme=dark] .main-content a:not(.btn) {color:#bbd1ff}
+html[data-theme=dark] .topbar {background:#17243a}
+html[data-theme=dark] .btn.light {color:#253749}
+html[data-theme=dark] [data-slot=sidebar-menu-button][data-active=true] {background:#304a75!important;color:#fff!important}
+html[data-theme=dark][data-contrast=strong] {
+ --background:#070b12;--foreground:#fff;--card:#111d2f;
+ --border:#d4e2f5;--input:#fff;--muted-foreground:#fff;
+}
+html[data-theme=dark][data-contrast=strong] :is(.panel,.module-card,.btn.ghost,input,textarea) {border-color:#e3ebff!important}
+.theme-toggle {font-size:.875rem;min-height:44px;white-space:nowrap;flex-shrink:0}
+html[data-theme=dark] .theme-toggle {background:#273a59!important;color:#fff!important;border:1px solid #849cc2!important}
+@media print {
+ .theme-toggle {display:none!important}
+ html[data-theme=dark] {color-scheme:light;--background:#fff;--foreground:#111;--card:#fff;--card-foreground:#111;--border:#999;--muted-foreground:#333}
+ html[data-theme=dark] :is(.panel,.module-card,.glossary-card,.review-card,.stat) {background:#fff!important;color:#111!important}
+}
+</style>
+</head><body><div id="root"></div><script type="module" src="./offline-build/main.tsx"></script>
+<script id="mk-theme-patch-20261124">
+/* mk-theme-patch-20261124: unabhängig vom Kontrastmodus, ohne Änderungen am Übungszustand */
+(()=>{
+ const storageKey='mathe-kompass-theme';
+ let mode='light';
+ try {mode=localStorage.getItem(storageKey)==='dark'?'dark':'light'} catch {}
+ function apply(){document.documentElement.dataset.theme=mode;document.documentElement.style.colorScheme=mode}
+ function update(button){
+  const dark=mode==='dark';
+  const label=dark?'☀ Hellmodus':'☾ Dunkelmodus';
+  if(button.textContent!==label) button.textContent=label;
+  button.setAttribute('aria-label',dark?'Zum Hellmodus wechseln':'Zum Dunkelmodus wechseln');
+  button.setAttribute('aria-pressed',String(dark));
+  button.title=dark?'Helle Darstellung einschalten':'Dunkle Darstellung einschalten';
+ }
+ function ensure(){
+  const bar=document.querySelector('.topbar');
+  if(!bar || document.getElementById('mk-theme-toggle'))return;
+  const button=document.createElement('button');
+  button.id='mk-theme-toggle';button.type='button';button.className='btn ghost theme-toggle no-print';
+  button.addEventListener('click',()=>{
+   mode=mode==='dark'?'light':'dark';apply();update(button);
+   try{localStorage.setItem(storageKey,mode)}catch{}
+  });
+  update(button);
+  const contrast=bar.querySelector('.contrast-toggle');
+  if(contrast)bar.insertBefore(button,contrast);else bar.appendChild(button);
+ }
+ apply();
+ const mount=document.getElementById('root');
+ if(mount){new MutationObserver(()=>{if(!document.getElementById('mk-theme-toggle'))ensure()}).observe(mount,{childList:true,subtree:true})}
+ ensure();
+})();
+</script>
+</body></html>
