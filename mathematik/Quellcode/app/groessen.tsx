@@ -1,4 +1,5 @@
 import {notieren} from '@/lib/lernatelier';
+import {GroessenKino} from './groessenkino';
 'use client';
 // Größen-Werkstatt: Längen, Gewichte, Zeit, Geld, Flächen und Volumen
 // mit geführtem Lernpfad, Übungen auf drei Niveaus, Vertiefung, Tests und Hilfen.
@@ -239,7 +240,7 @@ function Station({b, idx, store, onNext, onClose}: {b: Bereich; idx: number; sto
       </nav>
       <div className="gw-phase">
         {phase === 0 && <><h3>Entdecken</h3><p className="gw-small">Überlege zuerst selbst. Hier gibt es keine Punkte.</p><Question key={st.skill} q={st.entdecken} onAnswered={() => mark(0)} /></>}
-        {phase === 1 && <><h3>Verstehen</h3>{st.verstehen.text.map((t, i) => <p key={i}>{t}</p>)}<div className="gw-merksatz"><b>Merksatz</b><p>{st.verstehen.merksatz}</p></div><div className="gw-model"><b>Ausprobieren</b><p className="gw-small">{st.verstehen.interactiveHint}</p><InteractiveModel kind={st.verstehen.interactive} bereich={b} /></div></>}
+        {phase === 1 && <><h3>Verstehen</h3><GroessenKino bereich={b} station={st.title}/>{st.verstehen.text.map((t, i) => <p key={i}>{t}</p>)}<div className="gw-merksatz"><b>Merksatz</b><p>{st.verstehen.merksatz}</p></div><div className="gw-model"><b>Ausprobieren</b><p className="gw-small">{st.verstehen.interactiveHint}</p><InteractiveModel kind={st.verstehen.interactive} bereich={b} /></div></>}
         {phase === 2 && <><h3>Gemeinsam lösen</h3><StepReveal {...st.beispiel} /></>}
         {phase === 3 && <><h3>Selbst versuchen</h3><p className="gw-small">Drei Aufgaben: Grundlagen, Standard und Knobeln. Hilfen kannst du jederzeit nutzen.</p>
           <div className="gw-mini-progress" aria-label={`Aufgabe ${Math.min(taskIdx + 1, 3)} von 3`}>{tasks.map((_, i) => <span key={i} className={i < taskIdx ? 'done' : i === taskIdx ? 'active' : ''} />)}</div>
@@ -267,6 +268,7 @@ function Lernpfad({b, store, onTab}: {b: Bereich; store: StoreApi; onTab: (t: st
     <div>
       <section className="panel gw-intro">
         <p>{c.intro}</p>
+        <GroessenKino bereich={b}/>
         <div className="gw-progressbar" role="progressbar" aria-valuemin={0} aria-valuemax={5} aria-valuenow={doneCount} aria-label="Stationen geschafft"><span style={{width: doneCount / 5 * 100 + '%'}} /></div>
         <p className="gw-small">{doneCount} von 5 Stationen geschafft. Jede Station hat fünf Phasen: Entdecken, Verstehen, Gemeinsam lösen, Selbst versuchen und Begründen.</p>
         {nextIdx >= 0 ? <button type="button" className="btn" onClick={() => setOpen(nextIdx)}>{doneCount ? 'Weiterlernen' : 'Lernpfad starten'}: {c.stationen[nextIdx].title}<ArrowRight size={18} /></button>
