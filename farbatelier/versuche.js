@@ -53,7 +53,7 @@ function recordText(rec,withSamples=true){
  return lines.filter(Boolean).join('\n\n');
 }
 function prepareTextDownload(link,rec){
- link.href='data:text/plain;charset=utf-8,'+encodeURIComponent(recordText(rec));
+ link.href='data:text/plain;charset=utf-8,%EF%BB%BF'+encodeURIComponent(recordText(rec));
  link.download=[rec.date,(rec.title||'Mein-Farbversuch').replace(/[^\p{L}\p{N}_-]+/gu,'-')].filter(Boolean).join('_')+'.txt';
 }
 function printRecord(rec){
