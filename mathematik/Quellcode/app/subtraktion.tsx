@@ -1,4 +1,5 @@
 import {useUebungsversuch} from './uebungsversuch';
+import {RechenKino} from './rechenkino';
 import {Kurzrunde} from './kurzrunde';
 import {type Arbeit} from '@/lib/werkstattstand';
 import {notieren} from '@/lib/lernatelier';
@@ -70,6 +71,7 @@ export function Subtraktionsschule({go}:{go:(route:string)=>void}){
     inhalt=<><section className="panel"><h2>Schriftlich subtrahieren</h2><p>Richte die Zahlen selbst aus. Tausche einen Hunderter in zehn Zehner und bearbeite danach jede Spalte in deinem Tempo.</p>
       <div className="ad-actions"><button className="btn" onClick={()=>{ueben('raster');setMuster(true)}}>Geführt starten · 704 − 286</button><button className="btn ghost" onClick={()=>ueben('raster')}>Rastertraining · sechs Stufen</button></div></section>
       {abschnitte.map(g=><details key={g.titel} className="panel ad-fold"><summary>{g.titel}</summary><div className="ad-links">{g.themen.map(t=><button className="btn ghost" key={t} onClick={()=>ueben(t)}>{namen[t]}</button>)}</div></details>)}
+      <RechenKino fach="subtraktion"/>
       <Kurzrunde fach="subtraktion"/>
       <section className="panel"><h2>Für die Klassenarbeit</h2><p>Acht Aufgaben mit Kopfrechnen, schriftlicher Subtraktion, Überschlag, Fehleranalyse und Sachrechnen. Du kannst zwischen den Aufgaben wechseln und Antworten bis zur Abgabe ändern.</p>
       <div className="ad-actions">{stand.arbeit?<><button className="btn" onClick={()=>{neu();setSeite('arbeit')}}>{stand.arbeit.fertig?'Letzte Auswertung ansehen':'Probeklassenarbeit fortsetzen'}</button>{stand.arbeit.fertig&&<button className="btn ghost" onClick={startTest}>Neue Probeklassenarbeit</button>}</>:<button className="btn" onClick={startTest}>Probeklassenarbeit starten</button>}
@@ -77,11 +79,11 @@ export function Subtraktionsschule({go}:{go:(route:string)=>void}){
   }else if(seite==='raster'){
     const zahlen=muster?[704,286]:rasterAufgabe(stufe,seed);
     inhalt=<>{nav}<section className="panel"><label>Übungsstufe <select value={muster?'m':String(stufe)} onChange={e=>{neu();setMuster(e.target.value==='m');setStufe(e.target.value==='m'?0:Number(e.target.value));setSeed(0)}}><option value="m">Geführtes Beispiel</option>{stufen.map((s,i)=><option key={s} value={i}>{i+1}. {s}</option>)}</select></label>
-      <Aufgabenhilfe fach="Subtraktion" frage={zahlen.join(' − ')} zahlen={zahlen} tipp="Arbeite von rechts nach links."/><Subtraktionsraster key={stufe+'-'+seed+'-'+muster} zahlen={zahlen} werte={w} schreiben={eingabe} beiFehler={()=>merken(stufe===4?'nullkette':'raster')} geschafft={()=>notieren('Subtraktion · '+stufen[muster?3:stufe],zahlen.join(' − '),'hilfe')} nachAbschluss={einzelprobe(stufe===4?'nullkette':'raster',muster?3:stufe,seed)}/>
+      <RechenKino fach="subtraktion"/><Aufgabenhilfe fach="Subtraktion" frage={zahlen.join(' − ')} zahlen={zahlen} tipp="Arbeite von rechts nach links."/><Subtraktionsraster key={stufe+'-'+seed+'-'+muster} zahlen={zahlen} werte={w} schreiben={eingabe} beiFehler={()=>merken(stufe===4?'nullkette':'raster')} geschafft={()=>notieren('Subtraktion · '+stufen[muster?3:stufe],zahlen.join(' − '),'hilfe')} nachAbschluss={einzelprobe(stufe===4?'nullkette':'raster',muster?3:stufe,seed)}/>
       <div className="ad-actions"><button className="btn ghost" onClick={()=>{neu();setMuster(false);setSeed(neuerSeed())}}>Neue Zahlen</button>{stufe<5&&<button className="btn ghost" onClick={()=>{neu();setMuster(false);setStufe(muster?0:stufe+1);setSeed(0)}}>Nächste Stufe</button>}</div></section></>;
   }else if(seite==='thema'){
     const a=aufgabe(thema,seed);
-    inhalt=<>{nav}<section className="panel"><h2>{namen[thema]}</h2><Aufgabenhilfe beiHilfe={()=>{versuch.hinweis()}} fach="Subtraktion" frage={a.frage} tipp={a.tipp}/><Aufgabenfelder key={thema+seed} a={a} w={w} set={eingabe} test={false}/>
+    inhalt=<>{nav}<section className="panel"><h2>{namen[thema]}</h2><RechenKino fach="subtraktion"/><Aufgabenhilfe beiHilfe={()=>{versuch.hinweis()}} fach="Subtraktion" frage={a.frage} tipp={a.tipp}/><Aufgabenfelder key={thema+seed} a={a} w={w} set={eingabe} test={false}/>
       <div className="ad-actions"><button className="btn" onClick={()=>{if(!bereit(a,w)){setHinweis('Bearbeite zuerst alle Teile der Aufgabe.');return;}setHinweis('');setGeprueft(true);const ok=pruefeAufgabe(a,w).every(k=>k.ok);versuch.pruefen('Subtraktion · '+namen[thema],a.frage,ok);if(!ok)merken(thema);}}>Antwort prüfen</button><button className="btn ghost" onClick={()=>{merken(thema);setHinweis(a.tipp)}}>Tipp</button><button className="btn ghost" onClick={()=>{merken(thema);setLoesung(true)}}>Lösungsweg zeigen</button><button className="btn ghost" onClick={()=>{neu();setSeed(neuerSeed())}}>Neue Aufgabe</button></div>{hinweis&&<p role="status">{hinweis}</p>}{geprueft&&['geschichte','strategie','vergleich'].includes(thema)&&<Kriterien ziel={thema}/>}{geprueft&&<Rueckmeldung a={a} w={w}/>}{loesung&&<p>{a.weg}</p>}{geprueft&&pruefeAufgabe(a,w).every(p=>p.ok)&&einzelprobe(thema,0,seed)}{thema==='groessen'&&<button className="btn ghost small" onClick={()=>go('g-training')}>In der Größen-Werkstatt weiterüben</button>}</section></>;
   }else if(stand.arbeit){
     const a=stand.arbeit,i=a.index,item=teil(a,i);
