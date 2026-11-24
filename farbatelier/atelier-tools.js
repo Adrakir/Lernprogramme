@@ -1,7 +1,4 @@
 'use strict';
-function stored(key, fallback) {
-  try { return JSON.parse(read(key)) ?? fallback; } catch { return fallback; }
-}
 function reader(text) {
   if (!('speechSynthesis' in window)) return '';
   return '<span class="read-tools"><button type="button" data-speak="'+encodeURIComponent(text)+'">Vorlesen</button> <button type="button" data-stop aria-label="Vorlesen stoppen">Stopp</button></span>';

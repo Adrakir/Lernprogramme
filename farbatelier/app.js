@@ -1,27 +1,6 @@
 'use strict';
 const by=id=>document.getElementById(id),stage=by('stage');
 const options=(values,i)=>values.map((name,j)=>'<option value="'+j+'" '+(j===i?'selected':'')+'>'+name+'</option>').join('');
-function isGuest(){try{return sessionStorage.getItem('farbatelier.mode')==='gast'}catch{return false}}
-const unsaved = new Map();
-function storageKey(key){
- if(key.startsWith('pass.')&&key!=='pass.archive'){
-  const state=stored('recordBook',null);
-  if(state?.active&&state.active!=='first')key='draft.'+state.active+'.'+key.slice(5);
- }
- return (isGuest()?'farbatelier.gast.':'farbatelier.')+key}
-function read(key){
- const id=storageKey(key);
- if(unsaved.has(id))return unsaved.get(id);
- try{return (isGuest()?sessionStorage:localStorage).getItem(id)}catch{return null}
-}
-function save(key,value){
- const id=storageKey(key);
- try{(isGuest()?sessionStorage:localStorage).setItem(id,value);unsaved.delete(id)}
- catch{
-  unsaved.set(id,String(value));
-  if(!by('storageNotice'))document.querySelector('main').insertAdjacentHTML('afterbegin','<p id="storageNotice" role="alert" class="note">Der Browser kann Einträge gerade nur für diese geöffnete Seite behalten. Sichere deinen Versuch vor dem Schließen im <a href="#lernpass">Lernpass als Text</a>.</p>');
- }
-}
 document.body.classList.toggle('dark',read('theme')==='dark');
 function themeState(){by('theme').setAttribute('aria-pressed',String(document.body.classList.contains('dark')))}
 themeState();by('theme').onclick=()=>{document.body.classList.toggle('dark');themeState();save('theme',document.body.classList.contains('dark')?'dark':'light')};
@@ -60,7 +39,7 @@ function wheel(){
  });
 }
 let mode=0,pair=0,amount=50;
-function interp(a,b,t){return 'rgb('+[1,3,5].map(i=>Math.round(parseInt(a.slice(i,i+2),16)*(1-t)+parseInt(b.slice(i,i+2),16)*t)).join(',')+')'}
+
 const palettes = [{pair:0, amount:50}, {pair:0, amount:0}];
 let taskPalette=false;
 function showPalette(nextMode){
@@ -80,9 +59,10 @@ function mix(){
  setupLab(a,b);
  setupExperiments(a,b);
  setupStudentLab(a,b);
- function update(){const t=amount/100,stops=mode?[hex[a],hex[b]]:[0,1,2,3,4].map(offset=>hex[(a+offset)%12]);const pos=t*(stops.length-1),k=Math.min(Math.floor(pos),stops.length-2);
+ if(!mode)stage.insertAdjacentHTML('beforeend','<p><a href="#gruenversuch">Mit dem Farbkasten: Mein Grün in zwei Versuchen</a></p>');
+ function update(){const t=amount/100;
  stage.querySelectorAll('[data-preset]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.preset)===amount)));
- by('sample').style.background=mode?pigmentPreview(hex[a],hex[b],t):interp(stops[k],stops[k+1],pos-k);
+ by('sample').style.background=mode?pigmentPreview(hex[a],hex[b],t):grundMischton(a,amount);
  by('ratioText').textContent=(100-amount)+' % '+names[a]+' + '+amount+' % '+names[b];
  by('result').textContent=mode?(amount===0?names[a]:amount===100?names[b]:'Mischung aus '+names[a]+' und '+names[b]):names[(a+Math.round(t*4))%12];
  by('observe').textContent=mode?'Vergleiche deine Mischung mit beiden Ausgangsfarben darüber. Welche wirkt am leuchtendsten? Beschreibe, wie sich die Buntheit beim Weiterdrehen verändert.':'Probiere 25 %, 50 % und 75 % aus. Bei 25 % kommen auf drei Portionen der ersten Farbe eine Portion der zweiten.';
@@ -139,7 +119,7 @@ function familyLessons() {
     + '<p class="family-next"><a href="#mischlabor">Mischrezepte im Mischlabor ausprobieren</a></p>';
 }
 
-const views={unterricht:()=>unterricht(),familie:()=>familie(),kreisstudio:()=>kreisStudio(),lernpass:()=>learningPass(),farbkreis:wheel,farbgruppen:()=>{stage.innerHTML=familyLessons()},mischlabor:()=>showPalette(0),komplementaerfarben:()=>showPalette(1),atelier:()=>{atelier();extendTasks()},quiz:()=>quiz(),lernweg:()=>guided(),praxis:()=>practice(),bildaufgabe:()=>picture()};
+const views={gruenversuch:()=>gruenversuch(),beobachten:()=>beobachtungsbogen(),unterricht:()=>{unterricht();stage.insertAdjacentHTML('beforeend','<article class="surface"><h2>Malaufträge beurteilen</h2><a href="#beobachten">Beobachtungsbogen öffnen</a></article>')},familie:()=>familie(),kreisstudio:()=>kreisStudio(),lernpass:()=>learningPass(),farbkreis:wheel,farbgruppen:()=>{stage.innerHTML=familyLessons()},mischlabor:()=>showPalette(0),komplementaerfarben:()=>showPalette(1),atelier:()=>{atelier();extendTasks()},quiz:()=>quiz(),lernweg:()=>guided(),praxis:()=>practice(),bildaufgabe:()=>picture()};
 function route(){const key=location.hash.slice(1).split("?")[0],selected=Object.hasOwn(views,key)?key:key==='start'||!key?'start':'farbkreis';
  const home=selected==='start';by('startHub').hidden=!home;by('backHome').hidden=home;by('areaMenu').open=false;stage.hidden=home;
 document.querySelectorAll('nav a').forEach(a=>{if(a.hash==='#'+selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});document.body.classList.toggle('at-home',home||selected==='farbkreis');refreshResume();window.speechSynthesis?.cancel();if(home){stage.replaceChildren()}else{views[selected]();attachReaders();guideBanner()}}

@@ -28,8 +28,8 @@ export function zahlen(stufe:number,seed:number):[number,number]{
  const q=stufe===4?100*r.int(1,7)+r.int(1,9):stufe===1?10*r.int(1,8)+9:r.int(23,98);
  return [d*q+(stufe===2||stufe===5?r.int(1,d-1):0),d];
 }
-export function raster(stufe:number,seed:number):Aufgabe{
- const [n,d]=zahlen(stufe,seed),rows=rechenweg(n,d),frage=`${n} : ${d}`;
+export function raster(stufe:number,seed:number,paar=zahlen(stufe,seed)):Aufgabe{
+ const [n,d]=paar,rows=rechenweg(n,d),frage=`${n} : ${d}`;
  const schritte:Schritt[]=rows.map((r,j)=>({titel:'Schritt '+(j+1),felder:[
   feld('t'+j,'Teilzahl',r.teil,j?`Hänge die nächste Ziffer ${r.ziffer} rechts an den vorigen Rest an.`:`Lies von links bis zur ersten Zahl, die mindestens ${d} ist. Ist der ganze Dividend kleiner, beginne mit ihm.`),
   feld('q'+j,'Quotientenziffer',r.q,`Wie oft passt ${d} ganz in ${r.teil}? Passt es keinmal, schreibe an dieser Stelle eine 0.`),

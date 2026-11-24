@@ -32,6 +32,31 @@ def tab_to(page, target):
         page.keyboard.press("Tab")
     raise AssertionError("Ziel in der Tabreihenfolge nicht erreichbar")
 
+def check_green(page,base):
+    page.goto(base+"#gruenversuch")
+    expect(page.locator("#gruenLabor")).not_to_be_visible()
+    page.locator("#gruenPlan").fill("Ein helles Grün für junge Blätter.")
+    page.locator("#gruenStart").click()
+    expect(page.locator("#gruenProbe")).to_have_css("background-color","rgb(56, 151, 95)")
+    for field,value in {"gelbA":"1","blauA":"1","probeA":"Zu dunkel","aenderung":"Mehr Gelb","gelbB":"3","blauB":"1","wirkung":"B wirkt sonniger"}.items():
+        page.locator("#"+field).fill(value)
+    page.locator("#gruenVergleich").click()
+    expect(page.locator("#gruenBilanz")).to_contain_text("B wirkt sonniger")
+    page.goto(base+"#beobachten")
+    expect(page.locator("#bogenEntdeckung")).to_contain_text("Mehr Gelb")
+    page.locator("#bogenKriterien select").first.select_option(label="Selbstständig gezeigt")
+    page.locator("#bogenNotiz").fill("Begründet den Gelbanteil am zweiten Blatt.")
+    page.locator("#guestToggle").click()
+    expect(page.locator("#bogenNotiz")).to_have_value("")
+    page.goto(base+"#gruenversuch")
+    expect(page.locator("#gruenPlan")).to_have_value("")
+    page.locator("#gruenPlan").fill("Gastprobe")
+    page.once("dialog",lambda dialog:dialog.accept())
+    page.locator("#guestToggle").click()
+    expect(page.locator("#gruenBilanz")).to_contain_text("B wirkt sonniger")
+    page.goto(base+"#beobachten")
+    expect(page.locator("#bogenNotiz")).to_have_value("Begründet den Gelbanteil am zweiten Blatt.")
+
 def check_learning_regressions(page, base):
     page.goto(base+"#lernweg")
     page.locator("#advanceGuide").click()
@@ -208,6 +233,7 @@ if __name__=="__main__":
         else:
             regression_context=browser.new_context()
             check_learning_regressions(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
+            check_green(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
             regression_context.close()
             for width,height in [(390,844),(820,1180),(1366,768)]:
                 context=browser.new_context(viewport={"width":width,"height":height})

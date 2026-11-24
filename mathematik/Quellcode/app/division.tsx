@@ -55,7 +55,7 @@ export function Divisionsschule({go}:{go:(route:string)=>void}){
   const pdf=(ziele:Ziel[])=>divisionsheft(ziele,neuerSeed()).save('MatheKompass_Division_im_Heft.pdf');
   let inhalt;
   if(seite==='start'){
-    inhalt=<><section className="panel"><h2>Schriftlich dividieren</h2><p>Teile von links nach rechts. Berechne den Rest und hole die nächste Ziffer herunter. In der Rechentafel wächst daraus dein Quotient.</p>
+    inhalt=<><section className="panel"><h2>Schriftlich dividieren</h2><a href="#divisionshilfe">Wo hakt es? Hilfe mit einer kurzen Aufgabe</a><p>Teile von links nach rechts. Berechne den Rest und hole die nächste Ziffer herunter. In der Rechentafel wächst daraus dein Quotient.</p>
       <div className="ad-actions"><button className="btn" onClick={()=>{ueben('raster');setMuster(true)}}>Geführt starten · 1248 : 6</button><button className="btn ghost" onClick={()=>ueben('raster')}>Rastertraining · sechs Stufen</button></div></section>
       {abschnitte.map(g=><details key={g.titel} className="panel ad-fold"><summary>{g.titel}</summary><div className="ad-links">{g.themen.map(t=><button className="btn ghost" key={t} onClick={()=>ueben(t)}>{namen[t]}</button>)}</div></details>)}
       <Kurzrunde fach="division"/>

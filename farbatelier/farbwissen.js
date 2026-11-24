@@ -20,3 +20,9 @@ const wortlisteFarben=[
  ['Tertiärfarbe','Eine Zwischenfarbe im Itten-Kreis, etwa '+names[11]+' zwischen '+names[0]+' und '+names[10]+'.'],
  ['Komplementärfarbe','Die Farbe, die einem Farbton im Kreis genau gegenüberliegt. Zum Beispiel liegt '+names[opposite(2)]+' gegenüber von '+names[2]+'. Gegenfarbe bedeutet dasselbe.']
 ];
+
+function interp(a,b,t){return 'rgb('+[1,3,5].map(i=>Math.round(parseInt(a.slice(i,i+2),16)*(1-t)+parseInt(b.slice(i,i+2),16)*t)).join(',')+')'}
+function grundMischton(start,menge){
+ const position=menge/25,schritt=Math.min(3,Math.floor(position));
+ return interp(hex[(start+schritt)%12],hex[(start+schritt+1)%12],position-schritt);
+}
