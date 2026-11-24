@@ -40,6 +40,12 @@ with sync_playwright() as pw:
             expect(studio.locator('.tk-live')).not_to_be_empty()
             expect(studio.locator('svg, .tk-money').first).to_be_visible()
             page.locator('.gw-intro button').first.click()
+            if page.locator('.gw-phases button').count() == 0:
+                print('Diagnose Größen-Station',bereich,'URL',page.url,
+                      'Stationen',page.locator('.gw-station').count(),
+                      'Intro',page.locator('.gw-intro').count(),
+                      'Navigation',page.locator('.gw-phases').count(),
+                      'Inhalt',page.locator('main').inner_text()[:950],flush=True)
             page.locator('.gw-phases button').nth(1).click()
             expect(page.locator('.gw-phase .tk-studio.tk-size')).to_have_count(1)
         for fach in MODULES:
