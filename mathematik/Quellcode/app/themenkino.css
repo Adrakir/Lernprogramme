@@ -1,0 +1,88 @@
+/* MatheKompass: didaktische Bildschritt-Schulungen in den Themenbereichen */
+.tk-studio{--tk-ink:#263b5d;--tk-muted:#495d76;--tk-border:#c4d3e7;--tk-paper:#f4f8ff;--tk-dark:#244b86;--tk-highlight:#eaf3ff;color:var(--tk-ink);background:#fff;border:2px solid var(--tk-border);border-radius:20px;margin:1.3rem 0 1.8rem;overflow:hidden;box-shadow:0 12px 26px #193f7311;isolation:isolate}
+.tk-studio *{box-sizing:border-box}
+.tk-studio-head{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1.35rem 1.55rem;background:linear-gradient(120deg,#1f437d,#3f71b6);color:#fff}
+.tk-eyebrow{display:block;font-size:.7rem;letter-spacing:.11em;font-weight:850;color:#cae3ff;margin:0 0 .5rem}
+.tk-studio-head h3{color:white;font-size:clamp(1.2rem,2.3vw,1.75rem);font-weight:850;letter-spacing:-.02em;margin:0 0 .5rem}
+.tk-studio-head p{color:#f0f5ff;margin:0;font-size:.94rem;line-height:1.6;max-width:62ch}
+.tk-studio-head .tk-station-context{margin-top:.4rem;font-size:.8rem;color:#d4edff}
+.tk-head-icon{display:grid;place-items:center;min-width:70px;height:70px;border:2px solid #ffffff99;border-radius:20px;background:#ffffff24;color:#fff;font-weight:850;font-size:2.65rem}
+.tk-stage,.tk-size-layout{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,1fr);gap:1.25rem;padding:1.15rem}
+.tk-image{display:grid;place-items:center;min-width:0;min-height:230px;padding:.7rem;border:1px solid #cddded;border-radius:14px;background:linear-gradient(135deg,#f5faff,#e5f0ff);overflow-x:auto}
+.tk-image svg{width:100%;height:auto;max-height:300px;min-width:0}
+.tk-image svg text{font-family:Inter,'Segoe UI',sans-serif}
+.tk-animated{animation:tk-pop .45s ease-out both;transform-origin:center}
+@keyframes tk-pop{from{opacity:.25;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.tk-explain{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-width:0;padding:.55rem .25rem}
+.tk-step-indicator{font-size:.72rem;letter-spacing:.08em;font-weight:850;color:#2463ae}
+.tk-explain h4{font-size:1.2rem;color:var(--tk-ink);margin:.65rem 0 .5rem;font-weight:850}
+.tk-explain p{color:var(--tk-ink);line-height:1.65;margin:0 0 1rem;font-size:.95rem}
+.tk-equation{font-size:clamp(1rem,1.6vw,1.15rem);font-weight:800;padding:.8rem 1rem;border-left:5px solid #497fce;border-radius:8px;background:#e7f1ff;color:#163f7a;width:100%;overflow-wrap:anywhere}
+.tk-controls{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.15rem}
+.tk-button{min-height:45px;display:inline-flex;align-items:center;justify-content:center;text-align:center;gap:.5rem;border-radius:10px;padding:.65rem .85rem;font-weight:800;font-size:.88rem;background:#315eb7;color:#fff;border:2px solid #315eb7;cursor:pointer;transition:background .15s,transform .15s}
+.tk-button:hover:not(:disabled){background:#234c9c;transform:translateY(-1px)}
+.tk-button:disabled{opacity:.5;cursor:not-allowed}
+.tk-button.tk-secondary{background:#fff;color:#23476d;border-color:#839ec5}
+.tk-button.tk-secondary:hover:not(:disabled){background:#e2eefa}
+.tk-button:focus-visible,.tk-tip-button:focus-visible,.tk-dots button:focus-visible,.tk-hint summary:focus-visible,.tk-studio input:focus-visible{outline:3px solid #f4a85d;outline-offset:3px}
+.tk-dots{display:flex;justify-content:center;gap:.6rem;margin:.3rem 0 1rem}
+.tk-dots button{border:1px solid #a7badd;background:#edf3fc;color:#213c68;width:39px;height:39px;border-radius:50%;font-weight:800;cursor:pointer}
+.tk-dots button[aria-current=step]{background:#305db4;border-color:#305db4;color:#fff}
+.tk-result{font-size:.82rem;line-height:1.5;color:#3f5b76;margin:.2rem 1.1rem 1.25rem!important}
+.tk-hint{margin:.5rem 1.1rem;padding:.75rem .95rem;border-radius:10px;background:#fff5d9;border:1px solid #e5c986;color:#4a3e1d}
+.tk-hint summary{font-size:.91rem;font-weight:750;cursor:pointer;min-height:25px}
+.tk-hint p{font-size:.88rem;line-height:1.6;margin:.55rem 0}
+.tk-place{width:100%}
+.tk-place-legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding-left:24%;font-size:.7rem;font-weight:800;color:#415675;text-align:center;gap:3px}
+.tk-place-legend span{border-bottom:3px solid #9bb1d0;padding-bottom:.4rem}
+.tk-place-grid{display:grid;grid-template-columns:24% repeat(3,1fr);gap:5px;text-align:center;align-items:stretch}
+.tk-rowname{font-size:clamp(.59rem,1vw,.76rem);font-weight:720;color:#425b80;align-self:center;line-height:1.3;text-align:left;overflow-wrap:break-word}
+.tk-place-value{font-size:clamp(1.1rem,2.2vw,1.8rem);border-radius:7px;padding:.4rem 0;min-width:0;background:#dceafb;color:#264d86;font-variant-numeric:tabular-nums}
+.tk-place-value:nth-child(4n+3){background:#d8f1ea;color:#19594d}
+.tk-place-value:nth-child(4n+4){background:#ffebdb;color:#8a4828}
+.tk-place-value.tk-small-value{font-size:.74rem;display:grid;place-items:center;min-height:43px;color:#244966;background:#f1f3f7}
+.tk-place-value.tk-visible{border:2px solid #399077;color:#19564a;background:#d5f5e9}
+.tk-place-value.tk-waiting{opacity:.42}
+.tk-place-value.tk-lit{box-shadow:inset 0 0 0 3px #ffb14a}
+.tk-blocks{display:flex;gap:4px;justify-content:center;margin:.85rem 0 .35rem}
+.tk-blocks span{height:18px;flex:1;max-width:24px;background:#d9e5f3;border:1px solid #8eafcf;border-radius:4px}
+.tk-blocks span.tk-filled{background:#e7a75f;border-color:#aa6c27}
+.tk-visual-caption{font-size:.7rem!important;color:#586b87!important;text-align:center;margin:.35rem 0 0!important}
+.tk-svg-label{font-size:15px;font-weight:750;fill:#304a73}
+.tk-area-text{font-size:15px;font-weight:850;fill:#193e61}
+.tk-group-num{font-size:24px;font-weight:850;fill:#224a78}
+.tk-size-graphic{min-height:270px}
+.tk-size-graphic svg{max-height:255px}
+.tk-range-label{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;font-size:.87rem;font-weight:780;color:var(--tk-ink);margin:.6rem 0}
+.tk-range-label strong{font-size:1.05rem;font-variant-numeric:tabular-nums;color:#2863ac}
+.tk-size input[type=range]{width:100%;min-height:42px;accent-color:#315eb7;cursor:pointer}
+.tk-live{padding:.8rem 1rem;border-radius:9px;border-left:5px solid #329a8e;background:#e5f6f2;font-weight:700;color:#174f47!important;margin:1rem 0!important}
+.tk-tip-button{background:#fff;border:1px solid #bc9d60;border-radius:8px;padding:.5rem .75rem;font-weight:780;color:#5a4420;min-height:44px;cursor:pointer}
+.tk-money{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;min-height:210px;text-align:center}
+.tk-money-illustration{display:flex;align-items:center;gap:1rem}
+.tk-money-illustration>span{display:grid;place-items:center;width:70px;height:70px;border-radius:50%;background:#edbd57;border:5px solid #ca9031;font-weight:900;font-size:2.5rem;color:#664319}
+.tk-money-illustration strong{font-size:2rem;color:#214d83}
+.tk-coin-row{display:flex;justify-content:center;flex-wrap:wrap;gap:.4rem}
+.tk-coin{display:flex;flex-direction:column;align-items:center;font-size:.8rem;color:#344869}
+.tk-coin-circle{display:grid;place-items:center;border:2px solid #bb8e40;border-radius:50%;background:#f9d879;color:#593a13;width:45px;height:45px;font-size:.7rem;font-weight:800}
+.tk-money p{font-size:.73rem!important;margin:0!important;color:#476080!important}
+html[data-theme=dark] .tk-studio{--tk-ink:#f4f7ff;--tk-muted:#c0d2ec;--tk-border:#7d91b0;--tk-paper:#253956;--tk-highlight:#253956;background:#19283e;border-color:#7d91b0;color:#f4f7ff}
+html[data-theme=dark] .tk-studio-head{background:linear-gradient(120deg,#1c3766,#2f548f)}
+html[data-theme=dark] .tk-studio-head :is(h3,p){color:#fff!important}
+html[data-theme=dark] .tk-studio .tk-explain :is(p,h4){color:#f4f7ff!important}
+html[data-theme=dark] .tk-image{background:#eff6ff;border-color:#96b5da;color:#1c385c}
+html[data-theme=dark] .tk-place :is(.tk-rowname,.tk-place-legend span),html[data-theme=dark] .tk-place .tk-visual-caption{color:#324e70!important}
+html[data-theme=dark] .tk-live{background:#214841;color:#ddfff1!important}
+html[data-theme=dark] .tk-equation{background:#294467;color:#f3f9ff}
+html[data-theme=dark] .tk-hint{background:#483c29;color:#fff0d1;border-color:#b79b61}
+html[data-theme=dark] .tk-hint p,html[data-theme=dark] .tk-result{color:#fff1d3!important}
+html[data-theme=dark] .tk-studio .tk-step-indicator{color:#b9d9ff}
+html[data-theme=dark] .tk-range-label,html[data-theme=dark] .tk-range-label strong{color:#f5f9ff}
+html[data-theme=dark] .tk-button.tk-secondary{background:#2b3f5e;color:#fff;border-color:#9bb6dc}
+html[data-theme=dark] .tk-button.tk-secondary:hover:not(:disabled){background:#39527a}
+html[data-theme=dark] .tk-tip-button{background:#2c3e58;color:#fff0d1;border-color:#c9b479}
+html[data-theme=dark] .tk-coin-circle{color:#593a13}
+@media(max-width:900px){.tk-stage,.tk-size-layout{grid-template-columns:1fr;gap:.6rem}.tk-image{min-height:190px}.tk-size-graphic{min-height:220px}.tk-explain{padding:.35rem .25rem}}
+@media(max-width:540px){.tk-studio{border-radius:13px;margin:1rem 0}.tk-studio-head{padding:1rem}.tk-head-icon{min-width:45px;height:45px;border-radius:11px;font-size:1.7rem}.tk-studio-head h3{font-size:1.15rem}.tk-studio-head p{font-size:.82rem}.tk-stage,.tk-size-layout{padding:.75rem}.tk-image{padding:.45rem;min-height:170px}.tk-controls{flex-direction:column;width:100%}.tk-controls button{width:100%}.tk-place-value{padding:.4rem 0}.tk-rowname{font-size:.59rem}.tk-place-legend{font-size:.62rem}.tk-size-graphic{min-height:185px}.tk-equation{padding:.7rem}.tk-hint{margin:.5rem .75rem}.tk-result{margin:.3rem .75rem 1rem!important}}
+@media(prefers-reduced-motion:reduce){.tk-animated{animation:none!important}.tk-studio *{scroll-behavior:auto!important;transition:none!important}}
+@media print{.tk-studio{break-inside:avoid;box-shadow:none;border:1px solid #444;background:white!important;color:#111!important}.tk-studio-head{background:white!important;color:#111!important;border-bottom:1px solid #777}.tk-studio-head :is(h3,p,.tk-eyebrow){color:#111!important}.tk-controls,.tk-dots,.tk-studio input[type=range],.tk-tip-button{display:none!important}.tk-image{min-height:0}.tk-explain{color:#111!important}.tk-explain :is(h4,p){color:#111!important}.tk-hint,.tk-equation,.tk-live{background:white!important;color:#111!important}}
