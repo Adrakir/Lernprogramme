@@ -70,7 +70,7 @@ function Diagram({topic,v}:{topic:TopicModel;v:number}){
   </svg>;
  }
  if(topic==='angles'){
-  let a=(180-v)*Math.PI/180, x=205+127*Math.cos(a),y=160-127*Math.sin(a);return <svg viewBox="0 0 410 230" role="img" aria-label={`Winkel mit ${v} Grad`}>
+  let a=v*Math.PI/180, x=205+127*Math.cos(a),y=160-127*Math.sin(a);return <svg viewBox="0 0 410 230" role="img" aria-label={`Winkel mit ${v} Grad`}>
    <line x1="205" y1="160" x2="364" y2="160" stroke="#416a96" strokeWidth="8" strokeLinecap="round"/>
    <line x1="205" y1="160" x2={x} y2={y} stroke="#ed9079" strokeWidth="8" strokeLinecap="round" className="tk-line-motion"/>
    <circle cx="205" cy="160" r="9" fill="#314e77"/>
