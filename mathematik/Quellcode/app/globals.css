@@ -79,3 +79,11 @@ html[data-contrast=strong] .chart svg>line{stroke:#111;stroke-width:2px}
 .rastertasten button{min-height:44px}
 .ad-grid input:focus-visible{outline:3px solid #166c79;outline-offset:1px}
 @media(max-width:680px){.tafel-vergleich{flex-direction:column}}
+.atelier svg{display:block;width:min(100%,38rem);margin:1rem auto}
+.atelier [aria-pressed=true]{outline:3px solid #16746f;outline-offset:-3px;font-weight:700}
+.atelier fieldset{margin-block:1rem;padding:1rem;border:1px solid var(--border);border-radius:.6rem}
+.atelier-waage{border:2px solid #36847d;border-radius:1rem;display:grid;padding:1.2rem;text-align:center;max-width:19rem}
+.atelier-waage output{font-size:2.2rem;font-variant-numeric:tabular-nums}
+.atelier-band{display:flex;height:1.2rem;border:1px solid currentColor;margin:.35rem 0}.atelier-band span{background:#23756e}.atelier-band i{background:#bc7135}
+.atelier-zeit{padding:1rem;text-align:center;border-bottom:3px solid #23756e}.atelier-dots{color:#177168;letter-spacing:.12em}
+.atelier-bandpaar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}

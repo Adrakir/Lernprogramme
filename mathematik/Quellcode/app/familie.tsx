@@ -1,3 +1,4 @@
+import {Rueckschau} from './atelier-begleitung';
 import {useState} from 'react';
 import {berlinDay} from '@/lib/learning';
 import {lernbelege,notieren,familienhilfe,fachZu,faecher,themen,blattaufgabe,type Beleg,type Fach} from '@/lib/lernatelier';
@@ -24,5 +25,5 @@ export function Familie(){
  const [frage,uebung,loesung]=familienhilfe[f];
  function beispiel(b:Beleg|undefined){return b?<><b>{b.ziel}</b> · {b.aufgabe}{b.wiederholung?' (Wiederholung)':''}{b.versuche ? ' · '+(b.status==='offen'?b.versuche+' Versuch'+(b.versuche===1?'':'e'):'im '+b.versuche+'. Versuch gelöst') : b.ersterVersuch&&b.status==='selbst'?' · im ersten Versuch':''}{b.hinweise?' · mit Hinweis':''}</>:'Hier liegt für die letzten sieben Tage noch kein passender Aufgabenbeleg vor.';}
  return <div className="ad-school"><h1>Gemeinsam zu Hause lernen</h1><section className="panel"><h2>Die letzten sieben Tage</h2><h3>Das klappt selbstständig</h3><p>{beispiel(list.find(b=>b.status==='selbst'))}</p><h3>Hier half ein Hinweis oder ein weiterer Versuch</h3><p>{beispiel(list.find(b=>b.status==='hilfe'))}</p><h3>Das üben wir als Nächstes</h3><p>{bedarf?beispiel(bedarf):list.length?'Wählt eine neue Aufgabe zum zuletzt geübten Thema.':'Nach einer Übungsrunde erscheint hier eine Empfehlung.'}</p></section>
- <section className="panel"><h2>Fünf Minuten gemeinsam üben</h2><label>Thema<select value={f} onChange={e=>setF(e.target.value as Fach)}>{faecher.map(id=><option key={id} value={id}>{themen[id]}</option>)}</select></label><h3>Eine Frage zum Weiterdenken</h3><p>{frage}</p><h3>Im Alltag ausprobieren</h3><p>{uebung}</p><details key={f}><summary>Kontrolllösung</summary><p>{loesung}</p></details></section><Tagesplan aktualisieren={()=>neuLaden(n=>n+1)}/><LernstandSicherung/></div>;
+ <section className="panel"><h2>Fünf Minuten gemeinsam üben</h2><label>Thema<select value={f} onChange={e=>setF(e.target.value as Fach)}>{faecher.map(id=><option key={id} value={id}>{themen[id]}</option>)}</select></label><h3>Eine Frage zum Weiterdenken</h3><p>{frage}</p><h3>Im Alltag ausprobieren</h3><p>{uebung}</p><details key={f}><summary>Kontrolllösung</summary><p>{loesung}</p></details></section><Rueckschau/><Tagesplan aktualisieren={()=>neuLaden(n=>n+1)}/><LernstandSicherung/></div>;
 }

@@ -47,6 +47,7 @@ jobs:
           node --import tsx qualitaet/druckproben.ts "$RUNNER_TEMP/mathe-druck"
           python qualitaet/drucktest.py "$RUNNER_TEMP/mathe-druck"
           python qualitaet/browser.py
+          python qualitaet/atelier.py
   webkit:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -58,3 +59,4 @@ jobs:
         run: |
           python -m pip install playwright==1.55.0
           MATHE_BROWSER=webkit python qualitaet/tafeltest.py
+          MATHE_BROWSER=webkit python qualitaet/atelier.py

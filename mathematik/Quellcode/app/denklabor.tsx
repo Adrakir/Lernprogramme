@@ -50,5 +50,5 @@ function Erfinden(){
 }
 export function Denklabor(){
   const teile=[['Zwei Rechenwege vergleichen',<Rechenwege/>],['Zeit über Mitternacht',<Mitternacht/>],['Gewicht schätzen und umrechnen',<Masse/>],['Was bedeutet der Rest?',<Geschichten rest/>],['Welche Größe wird gesucht?',<Geschichten rest={false}/>],['Eine Addition erfinden',<Erfinden/>]] as const;
-  return <div className="ad-school"><h1>Mathe-Denklabor</h1>{teile.map(([name,inhalt])=><details className="panel" key={name}><summary>{name}</summary>{inhalt}</details>)}</div>;
+  return <div className="ad-school"><h1>Mathe-Denklabor</h1><a className="btn ghost" href="#atelier">Weitere Aufgaben im Mathe-Atelier</a>{teile.map(([name,inhalt])=><details className="panel" key={name}><summary>{name}</summary>{inhalt}</details>)}</div>;
 }
