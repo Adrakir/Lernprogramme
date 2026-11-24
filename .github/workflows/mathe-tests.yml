@@ -14,6 +14,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: mathekompass-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   testen:
     runs-on: ubuntu-24.04
@@ -49,6 +53,7 @@ jobs:
           python qualitaet/browser.py
           python qualitaet/atelier.py
           python qualitaet/erlebniswelt.py
+          python qualitaet/themenkino.py
       - name: Geprüften Offline-Build veröffentlichen
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
@@ -71,3 +76,4 @@ jobs:
           python -m pip install playwright==1.55.0
           MATHE_BROWSER=webkit python qualitaet/tafeltest.py
           MATHE_BROWSER=webkit python qualitaet/atelier.py
+          MATHE_BROWSER=webkit python qualitaet/themenkino.py
