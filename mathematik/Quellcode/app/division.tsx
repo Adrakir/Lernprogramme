@@ -1,9 +1,10 @@
+import {useUebungsversuch} from './uebungsversuch';
 import {Kurzrunde} from './kurzrunde';
 import {type Arbeit} from '@/lib/werkstattstand';
 import {notieren} from '@/lib/lernatelier';
 import {AufgabenNavigation,ArbeitAktionen,Aufgabenhilfe,Kriterien,useWerkstattstand,offenerVersuch} from './werkstatt-basis';
 import {Einzelprobe,Lernzielbericht} from './lernzielbericht';
-import {useEffect,useState,useRef} from 'react';
+import {useEffect,useState} from 'react';
 import {ArrowLeft,Divide} from 'lucide-react';
 import {aufgabe,namen,punkte as pruefeAufgabe,pruefplan,raster,stufen,bereit,type Antworten as Werte,type Ziel} from '@/lib/division';
 import {divisionsheft} from '@/lib/division-heft';
@@ -33,9 +34,9 @@ export function Divisionsschule({go}:{go:(route:string)=>void}){
   const [muster,setMuster]=useState(false);
   useEffect(()=>{try{if(sessionStorage.getItem('mathe-kompass-fortsetzen')==='division'){sessionStorage.removeItem('mathe-kompass-fortsetzen');if(stand.arbeit&&!stand.arbeit.fertig)setSeite('arbeit');}}catch{}},[]);
 
-  function merken(z:Ziel){hilfe.current=true;if(!stand.ziele.includes(z))sichern({...stand,ziele:[z,...stand.ziele].slice(0,12)});}
-  const versuche=useRef(0),hilfe=useRef(false),verbucht=useRef(false);
-  function neu(){versuche.current=0;hilfe.current=false;verbucht.current=false;setW({});setGeprueft(false);setHinweis('');setLoesung(false);}
+  function merken(z:Ziel){versuch.hinweis();if(!stand.ziele.includes(z))sichern({...stand,ziele:[z,...stand.ziele].slice(0,12)});}
+  const versuch=useUebungsversuch();
+  function neu(){versuch.zuruecksetzen();setW({});setGeprueft(false);setHinweis('');setLoesung(false);}
   function ueben(t:Ziel){neu();setSeed(0);setMuster(false);if(t==='raster'||t==='nullstelle'){setStufe(t==='nullstelle'?4:0);setSeite('raster');}else{setThema(t);setSeite('thema');}}
   function einzelprobe(t:Ziel,level:number,altSeed:number){
     return <Einzelprobe ziel={'Division · '+(t in namen?namen[t as keyof typeof namen]:'Schriftlich rechnen')} key={t+'-'+level+'-'+altSeed} aufbauen={()=>{
@@ -68,8 +69,8 @@ export function Divisionsschule({go}:{go:(route:string)=>void}){
       <div className="ad-actions"><button className="btn ghost" onClick={()=>{neu();setMuster(false);setSeed(neuerSeed())}}>Neue Zahlen</button>{stufe<5&&<button className="btn ghost" onClick={()=>{neu();setMuster(false);setStufe(muster?0:stufe+1);setSeed(0)}}>Nächste Stufe</button>}</div></section></>;
   }else if(seite==='thema'){
     const a=aufgabe(thema,seed);
-    inhalt=<>{nav}<section className="panel"><h2>{namen[thema]}</h2><Aufgabenhilfe beiHilfe={()=>{hilfe.current=true}} fach="Division" frage={a.frage} tipp={a.tipp}/><Aufgabenfelder key={thema+seed} a={a} w={w} set={eingabe} test={false}/>
-      <div className="ad-actions"><button className="btn" onClick={()=>{if(!bereit(a,w)){setHinweis('Bearbeite zuerst alle Teile der Aufgabe.');return;}setHinweis('');setGeprueft(true);versuche.current++;const ok=pruefeAufgabe(a,w).every(k=>k.ok);if(!verbucht.current)notieren('Division · '+namen[thema],a.frage,ok?(hilfe.current?'hilfe':'selbst'):'offen',false,versuche.current===1,hilfe.current);verbucht.current=ok;if(!ok)merken(thema);}}>Antwort prüfen</button><button className="btn ghost" onClick={()=>{merken(thema);setHinweis(a.tipp)}}>Tipp</button><button className="btn ghost" onClick={()=>{merken(thema);setLoesung(true)}}>Lösungsweg zeigen</button><button className="btn ghost" onClick={()=>{neu();setSeed(neuerSeed())}}>Neue Aufgabe</button></div>{hinweis&&<p role="status">{hinweis}</p>}{geprueft&&['geschichte','strategie','vergleich'].includes(thema)&&<Kriterien ziel={thema}/>}{geprueft&&<Rueckmeldung a={a} w={w}/>}{loesung&&<p>{a.weg}</p>}{geprueft&&pruefeAufgabe(a,w).every(p=>p.ok)&&einzelprobe(thema,0,seed)}{thema==='groessen'&&<button className="btn ghost small" onClick={()=>go('g-training')}>In der Größen-Werkstatt weiterüben</button>}</section></>;
+    inhalt=<>{nav}<section className="panel"><h2>{namen[thema]}</h2><Aufgabenhilfe beiHilfe={()=>{versuch.hinweis()}} fach="Division" frage={a.frage} tipp={a.tipp}/><Aufgabenfelder key={thema+seed} a={a} w={w} set={eingabe} test={false}/>
+      <div className="ad-actions"><button className="btn" onClick={()=>{if(!bereit(a,w)){setHinweis('Bearbeite zuerst alle Teile der Aufgabe.');return;}setHinweis('');setGeprueft(true);const ok=pruefeAufgabe(a,w).every(k=>k.ok);versuch.pruefen('Division · '+namen[thema],a.frage,ok);if(!ok)merken(thema);}}>Antwort prüfen</button><button className="btn ghost" onClick={()=>{merken(thema);setHinweis(a.tipp)}}>Tipp</button><button className="btn ghost" onClick={()=>{merken(thema);setLoesung(true)}}>Lösungsweg zeigen</button><button className="btn ghost" onClick={()=>{neu();setSeed(neuerSeed())}}>Neue Aufgabe</button></div>{hinweis&&<p role="status">{hinweis}</p>}{geprueft&&['geschichte','strategie','vergleich'].includes(thema)&&<Kriterien ziel={thema}/>}{geprueft&&<Rueckmeldung a={a} w={w}/>}{loesung&&<p>{a.weg}</p>}{geprueft&&pruefeAufgabe(a,w).every(p=>p.ok)&&einzelprobe(thema,0,seed)}{thema==='groessen'&&<button className="btn ghost small" onClick={()=>go('g-training')}>In der Größen-Werkstatt weiterüben</button>}</section></>;
   }else if(stand.arbeit){
     const a=stand.arbeit,i=a.index,item=teil(a,i);
     const sichernArbeit=(neu:Arbeit)=>sichern({...stand,arbeit:neu});

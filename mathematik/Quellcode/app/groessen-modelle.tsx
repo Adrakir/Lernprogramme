@@ -11,8 +11,8 @@ const paare = {
 type Thema = keyof typeof paare;
 
 // Eine Wiedergabe endet genau am Ziel und wird beim Verlassen des Modells beendet.
-function useAnimation(max: number, increment: number) {
-  const [wert, setWert] = useState(0);
+function useAnimation(max: number, increment: number, startwert = 0) {
+  const [wert, setWert] = useState(startwert);
   const [laeuft, setLaeuft] = useState(false);
   useEffect(() => {
     if (!laeuft) return;
@@ -32,21 +32,21 @@ function Steuerung({lauf, max, label, einheit}: {lauf: ReturnType<typeof useAnim
     <button type="button" className="btn ghost small" onClick={()=>lauf.einstellen(0)}>Auf null</button></div>;
 }
 
-function Buendel({paar}: {paar: readonly [string,string,number]}) {
+export function Buendel({paar, tafel=false}: {paar: readonly [string,string,number]; tafel?:boolean}) {
   const [klein,gross,faktor]=paar;
-  const lauf=useAnimation(2*faktor,Math.max(1,Math.floor(faktor/30)));
+  const lauf=useAnimation(2*faktor,Math.max(1,Math.floor(faktor/30)), tafel ? faktor-1 : 0);
   const [ziel, setZiel]=useState(1);
   const [pruefung,setPruefung]=useState<{wert:number; text:string} | null>(null);
   const anteile=[1.5,0.5,1,2];
   const zielwert=anteile[ziel]*faktor;
   return <><p>Ein voller Balken entspricht <b>1 {gross}</b>. Fülle beide Balken und beobachte die Einheitengrenze.</p>
     <div className="gw-bundles">{[0,1].map(i=><div key={i}><span className="gw-bundle-track"><i style={{width:Math.min(100, Math.max(0,(lauf.wert/faktor-i)*100))+'%'}}/></span><small>{i+1} {gross==='Tag' && i===1?'Tage':gross}</small></div>)}</div>
-    <p className="gw-lab-result"><b>{fmtNum(lauf.wert)} {klein}</b> = {Math.floor(lauf.wert/faktor)} {gross==='Tag'&&lauf.wert>=2*faktor?'Tage':gross} + {lauf.wert%faktor} {klein}</p>
+    {tafel ? <p>{lauf.wert} {klein}</p> : <p className="gw-lab-result"><b>{fmtNum(lauf.wert)} {klein}</b> = {Math.floor(lauf.wert/faktor)} {gross==='Tag'&&lauf.wert>=2*faktor?'Tage':gross} + {lauf.wert%faktor} {klein}</p>}
     <Steuerung lauf={lauf} max={2*faktor} label={'Menge in '+klein} einheit={klein}/>
-    <p><b>Dein Auftrag</b> · Stelle {fmtNum(anteile[ziel])} {gross==='Tag' && anteile[ziel]!==1?'Tage':gross} mit dem Regler ein.</p>
+    {!tafel && <><p><b>Dein Auftrag</b> · Stelle {fmtNum(anteile[ziel])} {gross==='Tag' && anteile[ziel]!==1?'Tage':gross} mit dem Regler ein.</p>
     <div className="gw-row"><button className="btn small" onClick={()=>{lauf.einstellen(lauf.wert);setPruefung({wert:lauf.wert,text:lauf.wert===zielwert?'Richtig! '+zielwert+' '+klein+' entsprechen genau der gesuchten Menge.':lauf.wert<zielwert?'Deine Menge ist noch zu klein.':'Deine Menge ist zu groß.'});}}>Einstellung prüfen</button>
     <button className="btn ghost small" onClick={()=>{lauf.einstellen(0);setPruefung(null);setZiel((ziel+1)%anteile.length);}}>Neuer Auftrag</button></div>
-    <p role="status">{pruefung?.wert === lauf.wert && !lauf.laeuft ? pruefung.text : ''}</p></>;
+    <p role="status">{pruefung?.wert === lauf.wert && !lauf.laeuft ? pruefung.text : ''}</p></>}</>;
 }
 export function BuendelModell({thema}: {thema:Thema}) {
   const [index,setIndex]=useState(0);

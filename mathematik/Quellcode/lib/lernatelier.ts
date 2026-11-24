@@ -7,7 +7,7 @@ export type Blattaufgabe={fach:Fach;text:string;antwort:number;einheit:string;we
 export function blattaufgabe(fach:Fach,seed:number,position:number):Blattaufgabe{
  const r=rng(seed),a=r.int(3,8),b=r.int(3,8),c=r.int(2,5);
  function baue(text:string,antwort:number,einheit:string,weg:string,kriterien:string[],werte:number[]=[],art?:string){return {fach,text,antwort,einheit,weg,kriterien,werte,art};}
- const rechne=(x:number,y:number,op:string,n:number)=>baue(`Rechne schriftlich: ${x} ${op} ${y}. Zeige deine Zwischenschritte.`,n,'',`${x} ${op} ${y} = ${n}.`,['Stellenwert und Zwischenschritte stimmen','Ergebnis stimmt']);
+ const rechne=(x:number,y:number,op:string,n:number)=>baue(`Rechne schriftlich: ${x} ${op} ${y}. Zeige deine Zwischenschritte.`,n,'',`${x} ${op} ${y} = ${n}.`,['Stellenwert und Zwischenschritte stimmen','Ergebnis stimmt'],[x,y]);
  switch(fach){
  case 'addition':return rechne(100*a+78,100*b+57,'+',100*(a+b)+135);
  case 'subtraktion':return rechne(100*(a+3)+2,100*a+40+b,'−',262-b);

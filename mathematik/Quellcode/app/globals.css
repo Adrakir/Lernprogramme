@@ -64,3 +64,11 @@ html[data-contrast=strong] .chart svg>line{stroke:#111;stroke-width:2px}
 
 .startwege{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:1rem;margin:1.25rem 0}.startwege button{display:grid;gap:.6rem;text-align:left;align-content:start;color:inherit}.startwege svg{color:#19736d}.startwege strong{font-size:1.15rem}.startwege [aria-expanded=true]{outline:2px solid #19736d}.startwege small{line-height:1.45}
 @media(max-width:700px){.ad-scroll:focus-within{scroll-padding-inline:3rem}.ad-grid input:focus{outline:3px solid #146e68;outline-offset:-3px}.ad-grid th[scope=row]{position:sticky;left:0;background:var(--background,#fff);z-index:1}.ad-grid th.current{font-weight:800}.ad-grid td:focus-within{outline:2px solid #146e68}.ad-fields input[type=checkbox]{width:1.2rem;height:1.2rem}.ad-school .ad-grid input[type=checkbox]{width:1.3rem;height:1.3rem}}
+
+.tafel-dialog { box-sizing:border-box; margin:auto; width:min(68rem,96vw); max-height:94dvh; overflow:auto; padding:clamp(1rem,3vw,3rem); border:1px solid currentColor; border-radius:1rem; color:inherit; background:var(--background,white); }
+.tafel-dialog::backdrop { background:rgb(15 23 42 / .72); }
+.tafel-kopf { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+.tafel-frage { font-size:clamp(1.2rem,2.2vw,2rem); margin:1em 0; }
+.tafel-modell { font-size:clamp(1.1rem,1.6vw,1.5rem); margin-block:1.2em; }
+.tafel-modell .mul-array { width:min(100%,42rem); max-height:36vh; }
+.tafel-modell .ad-one { width:1.3em; height:1.3em; }

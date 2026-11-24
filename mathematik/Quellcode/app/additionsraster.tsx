@@ -4,7 +4,7 @@ import {ausrichtung,kurz,spalten,stellen,uebertragRichtig,type Werte} from '@/li
 import {fmtNum} from '@/lib/groessen-core';
 
 type Props={zahlen:number[];werte:Werte;schreiben:(key:string,wert:string)=>void;pruefung?:boolean;nachAbschluss?:React.ReactNode;beiFehler?:()=>void;geschafft?:()=>void};
-function Buendeln({summe,stelle}:{summe:number;stelle:number}){
+export function Buendeln({summe,stelle}:{summe:number;stelle:number}){
   const [gruppen,setGruppen]=useState(0);
   const rest=summe-gruppen*10;
   return <div className="ad-bundle"><p><b>{summe} {stellen[stelle]}</b> liegen in dieser Spalte. Tausche jeweils zehn gegen eine Einheit der nächsten Stelle.</p>

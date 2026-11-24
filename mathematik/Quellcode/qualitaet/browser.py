@@ -68,8 +68,12 @@ with sync_playwright() as pw:
             panel=page.locator('section').filter(has=page.get_by_role('heading',name='Kurzrunde mit drei Aufgaben'))
             for i in range(3):
                 expect(panel.get_by_role('heading',name=f'Aufgabe {i+1} von 3')).to_be_visible()
-                panel.get_by_role('textbox').fill('-999')
+                panel.get_by_role('textbox').fill('999998')
                 panel.get_by_role('button',name='Ergebnis prüfen').click()
+                expect(panel.get_by_role('status')).to_contain_text('Versuche es noch einmal')
+                expect(panel.get_by_role('button',name='Korrektur prüfen')).to_be_disabled()
+                panel.get_by_role('textbox').fill('999999')
+                panel.get_by_role('button',name='Korrektur prüfen').click()
                 panel.get_by_role('button',name='Runde auswerten' if i==2 else 'Nächste Kurzaufgabe').click()
             expect(panel.get_by_role('status')).to_contain_text('Noch üben: 3')
         page.close()

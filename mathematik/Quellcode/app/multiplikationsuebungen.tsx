@@ -7,7 +7,7 @@ type Props={a:Aufgabe;w:Antworten;set:(k:string,v:string)=>void;test:boolean;ges
 function Eingabe({f,w,set}:{f:Feld}&Pick<Props,'w'|'set'>){
  return <label>{f.label}<input inputMode="numeric" value={w[f.key]??''} onChange={e=>set(f.key,e.target.value)}/></label>;
 }
-function Punktefeld({a}:{a:Aufgabe}){
+export function Punktefeld({a}:{a:Aufgabe}){
  const [aktion,stellen]=useState(0),[h,b]=a.zahlen,gruppe=a.ziel==='gruppen',drehen=a.ziel==='tausch',geteilt=!gruppe&&!drehen&&aktion>0;
  const hoehe=gruppe?aktion:drehen&&aktion?b:h,breite=drehen&&aktion?h:b;
  const seite=Math.max(h,b),beschreibung=`${hoehe} ${hoehe===1?'Reihe':'Reihen'} mit je ${breite} Punkten`;

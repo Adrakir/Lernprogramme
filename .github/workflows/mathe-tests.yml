@@ -43,7 +43,8 @@ jobs:
       - name: Druckvorlagen und Bedienwege auf drei Bildschirmgrößen prüfen
         run: |
           python -m pip install playwright==1.55.0 PyMuPDF==1.26.4
-          python -m playwright install --with-deps chromium
+          python -m playwright install --with-deps chromium webkit
           node --import tsx qualitaet/druckproben.ts "$RUNNER_TEMP/mathe-druck"
           python qualitaet/drucktest.py "$RUNNER_TEMP/mathe-druck"
           python qualitaet/browser.py
+          MATHE_BROWSER=webkit python qualitaet/tafeltest.py
