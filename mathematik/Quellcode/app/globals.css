@@ -46,21 +46,21 @@ select:focus-visible,textarea:focus-visible,[role=slider]:focus-visible,[data-sl
 .it-svg-scroll text{font-size:14px}.it-svg-scroll svg rect{stroke:#263b5c;stroke-width:1.5px}
 @media(max-width:640px){.topbar{padding:12px 16px;gap:8px}.contrast-toggle{min-height:44px}.app-footer{flex-wrap:wrap;gap:8px}.page-title,.between{flex-wrap:wrap}.it-field>div{flex-wrap:wrap;max-width:100%}.it-field input{max-width:100%}}
 /* Strong contrast preserves chart colours and white graph paper. */
-html[data-contrast=strong]{--background:#fff;--foreground:#111;--card-foreground:#111;--muted-foreground:#222;--border:#526079;--input:#222;--primary:#173caa;--sidebar-foreground:#111;--sidebar-border:#526079}
-html[data-contrast=strong] :is(p,small,label,legend,h1,h2,h3,h4,.eyebrow,.module-skills,.card-bottom,.breadcrumb,.local-note,.app-footer,.nav-section,.module-number,.lesson-aside button,.icon-text){color:#111}
-html[data-contrast=strong] :is(.panel,.module-card,.glossary-card,.review-card,.lab,.multi-field,.btn.ghost,.it-nav button,.it-number-chips button,.answer-options label){border-color:#333}
-html[data-contrast=strong] :is(input,textarea,[data-slot=select-trigger]){border:2px solid #222;color:#111;background:#fff}
-html[data-contrast=strong] :is(input::placeholder,textarea::placeholder){color:#333}
-html[data-contrast=strong] .home-feature :is(h2,p,.chip,.feature-caption){color:#fff}
-html[data-contrast=strong] .feature-diagram :is(span,p){color:#111}
-html[data-contrast=strong] :is(.it-nav button.active,.it-number-chips button.active,.btn:not(.ghost):not(.light)){background:#173caa;color:#fff}
-html[data-contrast=strong] :is(button,a,input,textarea,select,[role=slider],summary):focus-visible{outline:3px solid #111;outline-offset:4px;box-shadow:0 0 0 6px #fff}
-html[data-contrast=strong] [data-slot=sidebar-menu-button][data-active=true]{color:#111;border:2px solid #173caa}
+html[data-theme=light][data-contrast=strong]{--background:#fff;--foreground:#111;--card-foreground:#111;--muted-foreground:#222;--border:#526079;--input:#222;--primary:#173caa;--sidebar-foreground:#111;--sidebar-border:#526079}
+html[data-theme=light][data-contrast=strong] :is(p,small,label,legend,h1,h2,h3,h4,.eyebrow,.module-skills,.card-bottom,.breadcrumb,.local-note,.app-footer,.nav-section,.module-number,.lesson-aside button,.icon-text){color:#111}
+html[data-theme=light][data-contrast=strong] :is(.panel,.module-card,.glossary-card,.review-card,.lab,.multi-field,.btn.ghost,.it-nav button,.it-number-chips button,.answer-options label){border-color:#333}
+html[data-theme=light][data-contrast=strong] :is(input,textarea,[data-slot=select-trigger]){border:2px solid #222;color:#111;background:#fff}
+html[data-theme=light][data-contrast=strong] :is(input::placeholder,textarea::placeholder){color:#333}
+html[data-theme=light][data-contrast=strong] .home-feature :is(h2,p,.chip,.feature-caption){color:#fff}
+html[data-theme=light][data-contrast=strong] .feature-diagram :is(span,p){color:#111}
+html[data-theme=light][data-contrast=strong] :is(.it-nav button.active,.it-number-chips button.active,.btn:not(.ghost):not(.light)){background:#173caa;color:#fff}
+html[data-theme=light][data-contrast=strong] :is(button,a,input,textarea,select,[role=slider],summary):focus-visible{outline:3px solid #111;outline-offset:4px;box-shadow:0 0 0 6px #fff}
+html[data-theme=light][data-contrast=strong] [data-slot=sidebar-menu-button][data-active=true]{color:#111;border:2px solid #173caa}
 @media(forced-colors:active){input,textarea,button,[data-slot=select-trigger]{border:1px solid ButtonText}.chart svg,.it-svg-scroll svg,.numberline-figure svg{forced-color-adjust:none}.btn:focus-visible,[role=slider]:focus-visible{outline:3px solid Highlight}}
 @media print{.contrast-toggle{display:none!important}}
 .chart text,.chart-label-small{fill:#263b5c}.chart svg>line{stroke:#526079}
-html[data-contrast=strong] .chart text{fill:#111}
-html[data-contrast=strong] .chart svg>line{stroke:#111;stroke-width:2px}
+html[data-theme=light][data-contrast=strong] .chart text{fill:#111}
+html[data-theme=light][data-contrast=strong] .chart svg>line{stroke:#111;stroke-width:2px}
 
 .startwege{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:1rem;margin:1.25rem 0}.startwege button{display:grid;gap:.6rem;text-align:left;align-content:start;color:inherit}.startwege svg{color:#19736d}.startwege strong{font-size:1.15rem}.startwege [aria-expanded=true]{outline:2px solid #19736d}.startwege small{line-height:1.45}
 @media(max-width:700px){.ad-scroll:focus-within{scroll-padding-inline:3rem}.ad-grid input:focus{outline:3px solid #146e68;outline-offset:-3px}.ad-grid th[scope=row]{position:sticky;left:0;background:var(--background,#fff);z-index:1}.ad-grid th.current{font-weight:800}.ad-grid td:focus-within{outline:2px solid #146e68}.ad-fields input[type=checkbox]{width:1.2rem;height:1.2rem}.ad-school .ad-grid input[type=checkbox]{width:1.3rem;height:1.3rem}}
