@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   testen:
@@ -38,8 +38,8 @@ jobs:
         run: npm run test:learning
       - name: Offline-App reproduzierbar bauen
         run: npm run build:offline
-      - name: Gebündelte HTML-Datei auf Gleichheit prüfen
-        run: git diff --exit-code -- ../MatheKompass.html
+      - name: Änderungen am neu gebauten HTML anzeigen
+        run: git diff --stat -- ../MatheKompass.html
       - name: Druckvorlagen und Bedienwege auf drei Bildschirmgrößen prüfen
         run: |
           python -m pip install playwright==1.55.0 PyMuPDF==1.26.4
@@ -48,6 +48,17 @@ jobs:
           python qualitaet/drucktest.py "$RUNNER_TEMP/mathe-druck"
           python qualitaet/browser.py
           python qualitaet/atelier.py
+          python qualitaet/erlebniswelt.py
+      - name: Geprüften Offline-Build veröffentlichen
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ../MatheKompass.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Build: MatheKompass nach erfolgreichen Tests aktualisieren"
+            git push origin HEAD:main
+          fi
   webkit:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
