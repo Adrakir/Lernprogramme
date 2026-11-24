@@ -77,6 +77,41 @@ def check_green(page,base):
     page.locator("#aufdecken").press("Enter")
     expect(page.locator("#tafelErgebnis")).to_contain_text("Rezept B: 4 Stimmen")
 
+def check_werkstatt(page,base):
+    page.goto(base+"#start")
+    page.get_by_role("link",name="Farbwerkstatt entdecken").click()
+    station=page.get_by_label("Station wählen")
+    page.get_by_role("button",name="Bildstelle 1: Himmel").click()
+    page.get_by_role("button",name="Bildstelle 4: Blätter").click()
+    page.get_by_label("Mein Blick fällt zuerst").fill("Die Blätter leuchten vor dem dunklen Wald.")
+    station.select_option("1")
+    page.get_by_role("slider").press("End")
+    expect(page.locator("#vergleichInfo")).to_contain_text("dasselbe Orange")
+    station.select_option("2")
+    for k in [0,4,8,2,6,10,1,3,5,7,9,11]:
+        page.get_by_label("Farbstein").select_option(str(k))
+        page.get_by_role("button",name=str(k or 12)+" Uhr",exact=True).click()
+    expect(page.locator("#legeMeldung")).to_contain_text("Alle zwölf")
+    station.select_option("3")
+    page.locator("textarea").first.fill("Mit Weiß wird mein Orange heller.")
+    station.select_option("4")
+    page.locator("figure select").first.select_option("4")
+    expect(page.locator("figure svg rect").first).to_have_attribute("fill","#547896")
+    station.select_option("5")
+    for name in ["Gelb","Rot","Blau","Orange"]: page.get_by_role("button",name=name,exact=True).click()
+    expect(page.get_by_role("button",name="Orange",exact=True)).to_have_attribute("aria-pressed","false")
+    station.select_option("6")
+    page.locator("textarea").first.fill("Der Strich ist gut sichtbar.")
+    station.select_option("7")
+    page.get_by_label("3. Nachfragen").fill("Wolltest du den Blick auf den Weg lenken?")
+    station.select_option("8")
+    expect(page.get_by_role("link",name="Mischblatt als PDF öffnen")).to_have_attribute("href","mischblatt.pdf")
+    station.select_option("0")
+    expect(page.get_by_label("Mein Blick fällt zuerst")).to_have_value("Die Blätter leuchten vor dem dunklen Wald.")
+    for i in range(9):
+        station.select_option(str(i))
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth+1"), i
+
 def check_tablet_export(browser, base):
     from tempfile import TemporaryDirectory
     context=browser.new_context(viewport={"width":820,"height":1180},has_touch=True,is_mobile=True)
@@ -275,6 +310,7 @@ if __name__=="__main__":
             check_learning_regressions(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
             check_green(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
             regression_context.close()
+            check_werkstatt(browser.new_page(viewport={"width":390,"height":844}),f"http://127.0.0.1:{server.server_port}/")
             check_tablet_export(browser,f"http://127.0.0.1:{server.server_port}/")
             for width,height in [(390,844),(820,1180),(1366,768)]:
                 context=browser.new_context(viewport={"width":width,"height":height})
