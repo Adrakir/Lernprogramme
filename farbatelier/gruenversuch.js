@@ -36,12 +36,12 @@ function gruenversuch(){
 }
 function beobachtungsbogen(){
  const titel=['Mein Grün in zwei Versuchen',...tasks.map(t=>t[0])];
- stage.innerHTML='<article class="surface"><h2>Beobachtungsbogen für Malaufträge</h2><label>Malauftrag <select id="bogenAufgabe"></select></label><p id="bogenEntdeckung"></p><p>Entscheidend ist, wie das Kind seine Entscheidung untersucht und erklärt. Auch ein unerwarteter Farbton kann alle Kriterien erfüllen.</p><div id="bogenKriterien"></div><label>Beleg aus dem Bild oder aus dem Gespräch<textarea id="bogenNotiz"></textarea></label><p>Der Bogen bleibt in diesem Browser. Ein Gastdurchgang eignet sich für eine weitere Arbeit am selben Gerät.</p><button id="bogenDruck">Bogen drucken</button></article>';
+ stage.innerHTML='<article class="surface"><h2>Beobachtungsbogen für Malaufträge</h2><label>Malauftrag <select id="bogenAufgabe"></select></label><label>Arbeit <select id="bogenWerk"><option value="">Bild 1</option><option value=".2">Bild 2</option></select></label><p id="bogenEntdeckung"></p><p>Entscheidend ist, wie das Kind seine Entscheidung untersucht und erklärt. Auch ein unerwarteter Farbton kann alle Kriterien erfüllen.</p><div id="bogenKriterien"></div><label>Beleg aus dem Bild oder aus dem Gespräch<textarea id="bogenNotiz"></textarea></label><p>Der Bogen bleibt in diesem Browser. Für jeden Malauftrag kannst du zwei Bilder getrennt beurteilen.</p><button id="bogenDruck">Bogen drucken</button></article>';
  const auswahl=by('bogenAufgabe');titel.forEach((t,i)=>auswahl.add(new Option(t,String(i))));
  function laden(){
-  const key='malbogen.'+auswahl.value,daten=stored(key,{})||{},box=by('bogenKriterien');
+  const key='malbogen.'+auswahl.value+by('bogenWerk').value,daten=stored(key,{})||{},box=by('bogenKriterien');
   const bilanz=stored('gruenversuch',{})?.bilanz;
-  by('bogenEntdeckung').textContent=auswahl.value==='0'&&bilanz?bilanz:'';
+  by('bogenEntdeckung').textContent=auswahl.value==='0'&&!by('bogenWerk').value&&bilanz?bilanz:'';
   box.replaceChildren();
   ['Farbwahl begründen','Mischung gezielt verändern','Bildwirkung beschreiben'].forEach((k,i)=>{
     const label=document.createElement('label'),select=document.createElement('select');
@@ -50,5 +50,14 @@ function beobachtungsbogen(){
   });
   by('bogenNotiz').value=daten.notiz||'';by('bogenNotiz').oninput=e=>{daten.notiz=e.target.value;save(key,JSON.stringify(daten));};
  }
- auswahl.onchange=laden;laden();by('bogenDruck').onclick=()=>window.print();
+ auswahl.onchange=laden;by('bogenWerk').onchange=laden;laden();
+ by('bogenDruck').onclick=()=>{
+  document.querySelector('.print-sheet')?.remove();
+  const sheet=document.createElement('article');sheet.className='print-sheet';
+  const zeilen=['Beobachtungsbogen',titel[Number(auswahl.value)]+' · '+by('bogenWerk').selectedOptions[0].textContent,by('bogenEntdeckung').textContent];
+  for(const feld of by('bogenKriterien').querySelectorAll('select'))zeilen.push(feld.parentElement.firstChild.textContent.trim()+': '+feld.value);
+  zeilen.push('Beleg aus dem Bild oder aus dem Gespräch',by('bogenNotiz').value);
+  sheet.textContent=zeilen.filter(Boolean).join('\n\n');document.body.append(sheet);
+  window.addEventListener('afterprint',()=>sheet.remove(),{once:true});window.print();
+ };
 }
