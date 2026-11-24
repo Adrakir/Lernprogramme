@@ -40,11 +40,14 @@ def check_green(page,base):
     expect(page.locator("#gruenProbe")).to_have_css("background-color","rgb(56, 151, 95)")
     for field,value in {"gelbA":"1","blauA":"1","probeA":"Zu dunkel","aenderung":"Mehr Gelb","gelbB":"3","blauB":"1","wirkung":"B wirkt sonniger"}.items():
         page.locator("#"+field).fill(value)
+    page.locator("#wahlProbe").select_option("B")
+    expect(page.locator("#rezeptB")).to_have_text("3 Portionen Gelb + 1 Portion Blau")
     page.locator("#gruenVergleich").click()
     expect(page.locator("#gruenBilanz")).to_contain_text("B wirkt sonniger")
     page.goto(base+"#beobachten")
     expect(page.locator("#bogenEntdeckung")).to_contain_text("Mehr Gelb")
     page.locator("#bogenKriterien select").first.select_option(label="Selbstständig gezeigt")
+    expect(page.locator("#bogenAuftrag")).to_contain_text("Verändere nur die Menge")
     page.locator("#bogenNotiz").fill("Begründet den Gelbanteil am zweiten Blatt.")
     page.locator("#bogenWerk").select_option(".2")
     expect(page.locator("#bogenNotiz")).to_have_value("")
@@ -66,6 +69,33 @@ def check_green(page,base):
     expect(page.locator("#gruenBilanz")).to_contain_text("B wirkt sonniger")
     page.goto(base+"#beobachten")
     expect(page.locator("#bogenNotiz")).to_have_value("Begründet den Gelbanteil am zweiten Blatt.")
+
+    page.goto(base+"#unterricht")
+    page.get_by_role("link",name="Zwei Grünrezepte an der Tafel").click()
+    page.get_by_label("Stimmen für A").fill("12")
+    page.get_by_label("Stimmen für B").fill("4")
+    page.locator("#aufdecken").press("Enter")
+    expect(page.locator("#tafelErgebnis")).to_contain_text("Rezept B: 4 Stimmen")
+
+def check_tablet_export(browser, base):
+    from tempfile import TemporaryDirectory
+    context=browser.new_context(viewport={"width":820,"height":1180},has_touch=True,is_mobile=True)
+    try:
+        page=context.new_page()
+        page.goto(base+"#lernpass")
+        page.locator("#passTitle").fill("Blätter im Licht")
+        page.locator("#passDate").fill("2026-11-24")
+        with page.expect_download() as export:
+            page.locator("#copyPass").tap()
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/export.value.suggested_filename
+            export.value.save_as(path)
+            assert path.name=="2026-11-24_Blätter-im-Licht.txt"
+            page.goto(path.resolve().as_uri())
+            expect(page.locator("body")).to_contain_text("Blätter im Licht")
+            expect(page.locator("body")).to_contain_text("2026-11-24")
+    finally:
+        context.close()
 
 def check_learning_regressions(page, base):
     page.goto(base+"#lernweg")
@@ -245,6 +275,7 @@ if __name__=="__main__":
             check_learning_regressions(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
             check_green(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
             regression_context.close()
+            check_tablet_export(browser,f"http://127.0.0.1:{server.server_port}/")
             for width,height in [(390,844),(820,1180),(1366,768)]:
                 context=browser.new_context(viewport={"width":width,"height":height})
                 check(context.new_page(),f"http://127.0.0.1:{server.server_port}/")

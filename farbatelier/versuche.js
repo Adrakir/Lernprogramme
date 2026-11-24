@@ -52,9 +52,9 @@ function recordText(rec,withSamples=true){
  if(withSamples)rec.samples.forEach((s,i)=>lines.push((s.id===rec.referenceId?'Referenzprobe · ':'Probe '+(i+1)+' · ')+sampleText(s)));
  return lines.filter(Boolean).join('\n\n');
 }
-function downloadRecord(rec){
- const a=document.createElement('a'),url=URL.createObjectURL(new Blob([recordText(rec)],{type:'text/plain;charset=utf-8'}));
- a.href=url;a.download=[rec.date,(rec.title||'Mein-Farbversuch').replace(/[^\p{L}\p{N}_-]+/gu,'-')].filter(Boolean).join('_')+'.txt';a.hidden=true;document.body.append(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(url)},3000);
+function prepareTextDownload(link,rec){
+ link.href='data:text/plain;charset=utf-8,'+encodeURIComponent(recordText(rec));
+ link.download=[rec.date,(rec.title||'Mein-Farbversuch').replace(/[^\p{L}\p{N}_-]+/gu,'-')].filter(Boolean).join('_')+'.txt';
 }
 function printRecord(rec){
  document.querySelector('.print-sheet')?.remove();
@@ -88,11 +88,11 @@ function setupRecord(){
   grid.dispatchEvent(new Event('probenwechsel'));
  }
  by('importSample').onclick=()=>{const list=recordSamples();list.push({...samples[Number(select.value)],id:crypto.randomUUID()});setRecordSamples(list);draw();by('importStatus').textContent='Rezept und Beobachtung wurden in den Versuch kopiert.'};draw();
- by('copyPass').onclick=()=>{downloadRecord(currentRecord());by('passStatus').textContent='Der Textdownload wurde gestartet.'};by('printPass').onclick=()=>printRecord(currentRecord());
+ by('copyPass').onclick=()=>{prepareTextDownload(by('copyPass'),currentRecord());by('passStatus').textContent='Der Textdownload wurde gestartet.'};by('printPass').onclick=()=>printRecord(currentRecord());
  const area=document.createElement('details');area.innerHTML='<summary>Folgeversuch und frühere Versuche</summary><p>Beim Start wird dein aktuelles Protokoll mit seinen Proben ins Archiv gelegt.</p><label><input type="checkbox" id="inherit"> Frage und gleichbleibende Bedingungen übernehmen</label><button id="follow">Folgeversuch beginnen</button><div id="archive"></div>';by('passStatus').after(area);
  const archive=validArchive();
  if(archive.length!==bookState().archive.length)by('archive').textContent='Ein beschädigter Archiveintrag konnte nicht angezeigt werden. Die übrigen Versuche sind verfügbar.';
- archive.forEach((rec,i)=>{const item=document.createElement('details'),summary=document.createElement('summary'),pre=document.createElement('div');summary.textContent=[rec.title||'Versuch '+(i+1),rec.date].filter(Boolean).join(' · ');pre.className='record-preview';pre.textContent=recordText(rec);const print=document.createElement('button'),dl=document.createElement('button');print.textContent='Versuch drucken';dl.textContent='Text herunterladen';print.onclick=()=>printRecord(rec);dl.onclick=()=>downloadRecord(rec);item.append(summary,pre,dl,print);by('archive').append(item)});
+ archive.forEach((rec,i)=>{const item=document.createElement('details'),summary=document.createElement('summary'),pre=document.createElement('div');summary.textContent=[rec.title||'Versuch '+(i+1),rec.date].filter(Boolean).join(' · ');pre.className='record-preview';pre.textContent=recordText(rec);const print=document.createElement('button'),dl=document.createElement('a');print.textContent='Versuch drucken';dl.textContent='Text herunterladen';print.onclick=()=>printRecord(rec);prepareTextDownload(dl,rec);item.append(summary,pre,dl,print);by('archive').append(item)});
  by('follow').onclick=()=>{
   const rec=currentRecord(),inherit=by('inherit').checked,active=crypto.randomUUID(),book=bookState();
   const draft={samples:'[]',plan:inherit?read('pass.plan')||'':'',same:inherit?read('pass.same')||'':''};

@@ -52,3 +52,5 @@ body:not(.at-home) #resumeCard {display:none}
 #areaMenu nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:20px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0;padding:16px}
 #areaMenu nav section{display:grid;align-content:start;gap:4px}#areaMenu nav a{border:0;border-radius:6px;padding:5px 8px;font-weight:500}
 @media(max-width:680px){.start-cards{grid-template-columns:1fr;gap:8px}.start-cards a{grid-template-columns:38px 1fr;gap:2px 14px;padding:12px}.start-cards a i{grid-row:span 2;align-self:center;margin:0}.start-cards span{line-height:1.35}}
+
+.gruen-paar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-block:1rem}.gruen-paar>div{border:1px solid currentColor;border-radius:.6rem;padding:.75rem;font-size:clamp(1rem,2vw,1.5rem)}.gruen-paar input{max-width:100%;box-sizing:border-box}
