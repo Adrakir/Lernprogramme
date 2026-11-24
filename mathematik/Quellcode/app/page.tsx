@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Erlebniswelt } from './erlebniswelt';
 import { Compass, ClipboardCheck, LayoutGrid, ChartNoAxesColumnIncreasing, Hash, LocateFixed, Zap, Flag, BookOpen, ChartColumnIncreasing, ArrowUpRight, ArrowRight, ArrowLeft, Check, Lightbulb, RotateCcw, Download, Printer, GraduationCap, Trophy, Target, X, ChevronRight, CircleCheck, CircleHelp, Sparkles, Ruler, Scale, Clock, Coins, Square, Box, TriangleRight, Shapes, Cuboid } from 'lucide-react';
 import { Sidebar, SidebarProvider, SidebarHeader, SidebarContent, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -52,6 +53,7 @@ function HomeView({go,saved}:{go:(r:string)=>void;saved:Saved}){
  const name=modules.find(m=>m.id===zuletzt)?.title??rechenwege.find(([r])=>r===zuletzt)?.[1]??groessenTitles[zuletzt]??({learning:'Lernstand & Tagestraining',preparation:'Vorbereitungskurs',interactive:'Interaktive Tests',exams:'Klassenarbeiten',test:'Freizeitpark-Mission','year-tests':'Thementests',progress:'Mein Lernstand',glossary:'Wissenskarten'}[zuletzt])??'Lernbereich';
  function links(items:readonly (readonly [string,string])[]){return <div className="guided-actions">{items.map(([r,label])=><button className="btn ghost" key={r} onClick={()=>go(r)}>{label}</button>)}</div>;}
  return <><div className="page-title"><div><span className="eyebrow">MATHEMATIK · KLASSE 5</span><h1>Deine Lernreise</h1></div><span className="class-badge"><GraduationCap size={18}/>Gymnasium Niedersachsen</span></div>
+ <Erlebniswelt/>
  <div className="startwege">
  <button className="panel" onClick={()=>{try{sessionStorage.setItem('mathe-kompass-fortsetzen',zuletzt);}catch{}go(zuletzt);}}><Compass/><strong>Hier weitermachen</strong><small>{name}</small></button>
  <button className="panel" aria-expanded={wahl==='thema'} onClick={()=>waehlen(wahl==='thema'?null:'thema')}><BookOpen/><strong>Ein Thema üben</strong><small>Rechnen, Größen, Daten und Geometrie</small></button>
