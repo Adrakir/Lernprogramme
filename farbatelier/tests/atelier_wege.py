@@ -4,6 +4,13 @@ import re
 from playwright.sync_api import expect
 
 
+def setze_regler(regler, wert):
+    regler.press("Home")
+    minimum = int(regler.get_attribute("min") or 0)
+    for _ in range(wert-minimum):
+        regler.press("ArrowRight")
+
+
 def pruefe_lernwege(page, base):
     fehler = []
     page.on("pageerror", lambda error: fehler.append(str(error)))
@@ -17,7 +24,7 @@ def pruefe_lernwege(page, base):
 
     page.locator("#backHome").click()
     karten.get_by_role("link", name="Farben mischen").click()
-    page.locator("#ratio").fill("25")
+    setze_regler(page.locator("#ratio"),25)
     page.locator("#keep").click()
     page.reload()
     expect(page.locator("#ratio")).to_have_value("25")
@@ -114,16 +121,16 @@ def pruefe_stationen(page, base):
     expect(page.get_by_label("Mein Kommentar zu Weg")).to_have_value("Der Weg fällt mir zuerst auf.")
     for n in [9,10]:
         station(n)
-        page.get_by_label("Gelbe Portionen").fill("4")
-        page.get_by_label("Rote Portionen").fill("2")
+        setze_regler(page.get_by_label("Gelbe Portionen"),4)
+        setze_regler(page.get_by_label("Rote Portionen"),2)
         page.get_by_role("button",name="Mischung prüfen").click()
         expect(page.locator("#werkInhalt")).to_contain_text("gelben Seite" if n == 9 else "Mengen sind verdoppelt")
     station(11)
-    page.get_by_role("slider").fill("3")
+    setze_regler(page.get_by_role("slider"),3)
     expect(page.locator("#werkInhalt")).to_contain_text("3 Portionen getrübte Mischung")
     station(12)
-    page.get_by_role("slider").fill("80")
-    expect(page.locator(".flaechenplakat circle")).to_have_attribute("r","80")
+    page.get_by_role("slider").press("End")
+    expect(page.locator(".flaechenplakat circle")).to_have_attribute("r","102")
     station(13)
     page.get_by_label("Hinterster Hügel").select_option("1")
     expect(page.locator(".ferne").last).to_have_attribute("fill","#b4c6d1")

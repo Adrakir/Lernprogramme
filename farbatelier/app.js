@@ -44,15 +44,17 @@ let mode=0,pair=0,amount=50;
 
 const palettes = [{pair:0, amount:50}, {pair:0, amount:0}];
 let taskPalette=false;
+let initialMixRoute=true;
 function showPalette(nextMode){
  if(!taskPalette)palettes[mode] = {pair, amount};
  mode = nextMode;
  taskPalette=location.hash.includes('?auftrag=')||sessionStorageSafe('guiding')===String(nextMode+1);
  ({pair, amount} = taskPalette?{pair:0,amount:0}:palettes[mode]);
- if(location.hash.includes('?fortsetzen')){
+ if(location.hash.includes('?fortsetzen') || (initialMixRoute && !taskPalette)){
   const last=stored('lastMix',null);
   if(last&&last.mode===mode&&Number.isInteger(last.pair)&&(mode?comps:bases)[last.pair]&&Number.isInteger(last.amount)&&last.amount>=0&&last.amount<=100)({pair,amount}=last);
  }
+ initialMixRoute=false;
  mix();
 }
 function mix(){
