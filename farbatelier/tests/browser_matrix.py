@@ -24,6 +24,14 @@ def live(page, base):
         page.goto(base + "#" + route)
         expect(page.locator(selector).first).to_be_visible()
 
+    page.goto(base + "#farbwerkstatt?thema=13")
+    expect(page.get_by_label("Hinterster Hügel")).to_be_visible()
+    page.goto(base + "farbduell.html")
+    expect(page.get_by_label("Thema")).to_be_visible()
+    page.locator("#start").click()
+    expect(page.locator("[data-i]")).to_have_count(4)
+
+
 def tab_to(page, target):
     """Exercise document tab order, including elements inside newly opened details."""
     for _ in range(220):

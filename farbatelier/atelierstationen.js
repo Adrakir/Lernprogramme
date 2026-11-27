@@ -35,7 +35,7 @@ function stationTeilen(parent,nr) {
 
 function freieFelder(parent,daten,merken) {
  const panel=atelierElement(parent,'details');
- atelierElement(panel,'summary','Frei legen und zwei Felder tauschen');
+ const titel=atelierElement(panel,'summary','Frei legen und zwei Felder tauschen');
  atelierElement(panel,'p','Lege einen Stein auf ein freies Feld. Für einen Tausch tippe zwei belegte Felder an. Prüfe deinen Kreis, wenn du so weit bist.');
  const start=Array(12).fill(null);
  for(const id of daten.gelegt||[])if(Number.isInteger(id)&&id>=0&&id<12)start[id]=id;
@@ -44,15 +44,17 @@ function freieFelder(parent,daten,merken) {
  const kreis=atelierElement(panel,'div',undefined,'legekreis freier-kreis');kreis.setAttribute('role','group');kreis.setAttribute('aria-label','Frei belegbare Felder');
  const status=atelierElement(panel,'p');status.setAttribute('role','status');
  let von=null,initialisiert=Array.isArray(daten.freieFelder);
- panel.addEventListener('toggle',()=>{
-  if(panel.open&&!initialisiert){
+ titel.addEventListener('click',()=>{
+  if(!panel.open&&!initialisiert){
+   belegt.fill(null);
    for(const id of daten.gelegt||[])belegt[id]=id;
    zeichne();initialisiert=true;
   }
  });
  function zeichne(){
   const rest=names.map((n,i)=>i).filter(i=>!belegt.includes(i));
-  wahl.replaceChildren(...rest.map(i=>new Option(names[i],i)));wahl.disabled=!rest.length;
+  const bisher=wahl.value;wahl.replaceChildren(...rest.map(i=>new Option(names[i],i)));wahl.disabled=!rest.length;
+  if(bisher!==''&&rest.includes(Number(bisher)))wahl.value=bisher;
   kreis.replaceChildren();
   belegt.forEach((id,i)=>{
    const b=atelierKnopf(kreis,String(i||12),()=>{
@@ -125,17 +127,24 @@ function waldAtelier(box,daten,merken){
   function farbe(i,v){
    if(bearbeite==='variante'){entwurf=[...entwurf];entwurf[i]=v;merken(variantKey,entwurf)}
    else merken('wald'+j+i,v);
-   malen();desktop[i].value=v;
+   malen();desktop[i].value=v;markiere();
   }
   const mobil=atelierElement(edit,'div',undefined,'wald-mobil');
   atelierWahl(mobil,'Bildteil',bildstellen.map((n,i)=>[i,n]),teil,v=>{
-   teil=+v;desktop.forEach((s,i)=>s.parentElement.classList.toggle('aktiver-teil',teil===i));
+   teil=+v;desktop.forEach((s,i)=>s.parentElement.classList.toggle('aktiver-teil',teil===i));markiere();
   });
   const breit=atelierElement(edit,'div',undefined,'wald-breit');
   const desktop=bildstellen.map((n,i)=>atelierWahl(breit,n,palette,werte()[i],v=>farbe(i,+v)));
   desktop[0].parentElement.classList.add('aktiver-teil');
+  const chips=atelierElement(edit,'div',undefined,'wald-chips');
+  chips.setAttribute('role','group');chips.setAttribute('aria-label','Farbfelder für den gewählten Bildteil');
+  const farbfelder=waldFarbnamen.map((name,i)=>{
+   const b=atelierKnopf(chips,name,()=>farbe(teil,i));b.style.setProperty('--farbprobe',waldPalette[i]);return b;
+  });
+  function markiere(){farbfelder.forEach((b,i)=>b.setAttribute('aria-pressed',String(i===werte()[teil])))}
+  markiere();
   const werkzeuge=atelierElement(edit,'div');
-  function umschalten(v){bearbeite=v;desktop.forEach((s,i)=>s.value=werte()[i]);malen()}
+  function umschalten(v){bearbeite=v;desktop.forEach((s,i)=>s.value=werte()[i]);markiere();malen()}
   function werkzeug(){
    werkzeuge.replaceChildren();
    if(entwurf){atelierWahl(werkzeuge,'Entwurf bearbeiten',[['original','Original'],['variante','Variante']],bearbeite,umschalten)}
@@ -177,6 +186,10 @@ function neueWerkstation(nr,box,daten,merken,notiz){
  }
  if(nr===9||nr===10){
   const irrtum=nr===9;
+  if(irrtum){
+   const figur=atelierElement(box,'div',undefined,'misch-ida');
+   figur.innerHTML='<svg viewBox="0 0 120 102" aria-hidden="true"><path fill="#467a77" d="M11 102Q15 65 52 64Q87 63 97 102Z"/><path fill="#e8b086" d="M45 58h19v17Q53 82 45 73Z"/><ellipse fill="#bb674a" cx="54" cy="39" rx="29" ry="31"/><ellipse fill="#f0bd96" cx="55" cy="44" rx="23" ry="25"/><path fill="#935535" d="M27 42Q19 4 52 7Q84 4 82 40Q61 36 52 22Q42 37 27 42Z"/><g fill="#343744"><circle cx="46" cy="44" r="2"/><circle cx="64" cy="44" r="2"/></g><path d="M49 55q7 6 13 -1" fill="none" stroke="#8c493f" stroke-width="2"/><path d="M88 85l13-41" stroke="#935535" stroke-width="4"/><path d="M99 47q-2-11 10-19 1 14-7 20" fill="#f29634"/></svg>';
+  }
   frage(irrtum?'Ida behauptet: „Für Gelb-Orange brauche ich mehr Rot als Gelb.“ Prüfe ihre Behauptung. Verändere die Portionen im zweiten Napf.':'Ein Rezept enthält zwei Portionen Gelb und eine Portion Rot. Mische sechs gleich große Portionen im selben Farbton.');
   const reihe=atelierElement(box,'div',undefined,'probenpaar');
   const vorlage=probe(reihe,irrtum?'Idas Mischung · 1 Gelb + 3 Rot':'Original · 2 Gelb + 1 Rot'),eigene=probe(reihe,'Deine Mischung');
@@ -229,7 +242,7 @@ function neueWerkstation(nr,box,daten,merken,notiz){
 function plakatTest(box,daten,merken){
  const teile=['Titel','Termin','Ort'],texte=['Schulfest','Freitag · 15 Uhr','Auf dem Schulhof'];
  const farben=[['Tintenblau','#233766'],['Zinnoberrot','#a12624'],['Dunkelgrün','#215944'],['Violett','#643484'],['Braun','#76421e']];
- atelierElement(box,'p','Gestalte das Plakat so, dass der Titel zuerst und der Termin danach auffällt. Gib es dann einem zweiten Kind für den Blicktest.');
+ const auftrag=atelierElement(box,'p','Gestalte das Plakat so, dass der Titel zuerst und der Termin danach auffällt. Gib es dann einem zweiten Kind für den Blicktest.');
  const plakat=atelierElement(box,'div',undefined,'schulfest'),editor=atelierElement(box,'div');
  const start=atelierKnopf(box,'Blicktest starten',()=>beginne());
  const status=atelierElement(box,'p');status.setAttribute('role','status');
@@ -256,12 +269,12 @@ function plakatTest(box,daten,merken){
   zeilen.forEach(b=>b.disabled=true);
  }
  function bearbeiten(){
-  aktiv=false;editor.hidden=false;start.hidden=false;nochmal.hidden=true;zeilen.forEach(b=>b.disabled=true);
+  aktiv=false;auftrag.hidden=false;editor.hidden=false;start.hidden=false;nochmal.hidden=true;zeilen.forEach(b=>b.disabled=true);
   if(daten.blickfolge?.length===2)ergebnis(daten.blickfolge);else status.textContent='';
  }
  function beginne(){
-  folge=[];aktiv=true;editor.hidden=true;start.hidden=true;nochmal.hidden=false;
-  zeilen.forEach(b=>b.disabled=false);status.textContent='Zweites Kind: Was hast du zuerst gesehen? Tippe auf diese Stelle im Plakat.';zeilen[0].focus({preventScroll:true});
+  folge=[];aktiv=true;auftrag.hidden=true;editor.hidden=true;start.hidden=true;nochmal.hidden=false;
+  zeilen.forEach(b=>b.disabled=false);status.textContent='Zweites Kind: Was hast du zuerst gesehen? Tippe auf diese Stelle im Plakat.';status.tabIndex=-1;status.focus({preventScroll:true});plakat.scrollIntoView({block:'center'});
  }
  bearbeiten();
 }

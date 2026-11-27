@@ -53,7 +53,7 @@ function transfer(){
  const result=[];
  for(const skill of new Set(missed.map(q=>q.skill))){
   const pool=shuffled(fragen.filter(q=>q.skill===skill));
-  const candidate=pool.find(q=>!deck.includes(q))||pool.find(q=>!missed.includes(q))||pool.find(q=>q!==missed.find(m=>m.skill===skill));
+  const candidate=pool.find(q=>!deck.includes(q))||transferfragen.find(q=>q.skill===skill);
   if(candidate)result.push(candidate);
  }
  return result;

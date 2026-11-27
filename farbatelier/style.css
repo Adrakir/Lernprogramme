@@ -75,3 +75,6 @@ body:not(.at-home) #resumeCard {display:none}
 @media(max-width:550px){.spurreihe{gap:.25rem}.spurreihe strong,.spurreihe figcaption{font-size:.83rem}.werkstatt .waldpaar{grid-template-columns:1fr}}
 .wald-mobil{display:none}
 @media(max-width:550px){.wald-mobil{display:block}.wald-breit label:not(.aktiver-teil){display:none}}
+
+.wald-chips{display:none}.misch-ida{width:6.5rem;float:left;margin:0 1rem .5rem 0}.misch-ida~.probenpaar{clear:both}
+@media(max-width:550px){.wald-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem}.wald-chips button{display:flex;align-items:center;gap:.45rem;text-align:left;padding:.35rem .45rem;min-height:2.55rem}.wald-chips button::before{content:'';flex:none;width:1.2rem;height:1.2rem;border-radius:50%;border:1px solid currentColor;background:var(--farbprobe)}.wald-chips button[aria-pressed=true]{font-weight:750}}

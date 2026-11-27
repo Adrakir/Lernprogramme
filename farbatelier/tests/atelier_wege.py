@@ -93,6 +93,8 @@ def pruefe_stationen(page, base):
     frei.get_by_role("button", name="1 Uhr · frei", exact=True).click()
     page.get_by_label("Freier Farbstein").select_option("1")
     frei.get_by_role("button", name="3 Uhr · frei", exact=True).click()
+    steine = frei.get_by_role("button").evaluate_all("(buttons)=>buttons.map(b=>b.getAttribute('aria-label'))")
+    assert steine[1] == "1 Uhr · Rot-Orange" and steine[3] == "3 Uhr · Gelb-Orange", steine
     for pos, ton in [(1,"Rot-Orange"),(3,"Gelb-Orange")]:
         frei.get_by_role("button", name=f"{pos} Uhr · {ton}", exact=True).click()
     page.get_by_role("button",name="Meinen Kreis prüfen").click()

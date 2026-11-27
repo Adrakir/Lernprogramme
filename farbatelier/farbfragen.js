@@ -663,3 +663,16 @@ const fragen = [
     "motif": "flower"
   }
 ];
+
+// Reserve one unseen transfer task per concept for rounds which used the entire pool.
+const transferfragen = [
+ {skill:'Grundfarben',q:'Du hast zwölf Farbsteine. Welche drei legst du zuerst, um Ittens Kreis aufzubauen?',a:['Grün, Orange, Violett','Gelb, Rot, Blau','Weiß, Grau, Schwarz','Rot, Grün, Blau'],k:1,why:'Die drei Grundfarben stehen im gleichen Abstand. Zwischen je zwei von ihnen kommt später eine Sekundärfarbe.'},
+ {skill:'Grundmischung',q:'Deine gemalte Pflaume soll violett werden. Mit welchem Paar beginnst du?',a:['Gelb und Blau','Gelb und Rot','Rot und Blau','Orange und Grün'],k:2,why:'Violett liegt im Itten-Kreis zwischen Rot und Blau.'},
+ {skill:'Nachbarn',q:'Ein Schal soll von Blau über eine Zwischenfarbe zu Grün übergehen. Welcher Streifen gehört in die Mitte?',a:['Blau-Grün','Gelb-Grün','Violett','Gelb-Orange'],k:0,why:'Blau-Grün grenzt im Farbkreis direkt an Blau und Grün.'},
+ {skill:'Gegenfarben',q:'Dein Farbkreis hängt schräg an der Tafel. Wie findest du trotzdem die Gegenfarbe von Orange?',a:['Das oberste Feld nehmen','Das Feld rechts daneben wählen','Zwei Felder weitergehen','Von Orange gerade durch die Mitte gehen'],k:3,axis:2,why:'Die Lage der Tafel ändert die Farbpaare nicht. Gegenüber von Orange liegt Blau.'},
+ {skill:'Trüben',q:'Eine violette Wolke soll weniger kräftig wirken. Welche Farbe probierst du in winziger Menge aus?',a:['Blau','Gelb','Weiß','Rot'],k:1,axis:6,why:'Gelb ist die Gegenfarbe von Violett. Etwas Gelb in der violetten Mischung kann die Leuchtkraft dämpfen.'},
+ {skill:'Kontrast',q:'Welche zwei Papierstreifen kannst du als Gegenfarben direkt aneinanderlegen?',a:['Rot und Gelb','Blau und Grün','Gelb-Grün und Rot-Violett','Orange und Rot'],k:2,axis:11,why:'Gelb-Grün und Rot-Violett liegen einander im zwölfteiligen Farbkreis gegenüber.'},
+ {skill:'Helligkeit',q:'Ein Kind malt nachts ein kräftiges Dunkelblau. Welche Beschreibung passt?',a:['Dunkel und farbkräftig zugleich','Hell und getrübt','Immer mit Weiß gemischt','Ohne erkennbaren Farbton'],k:0,why:'Dunkel beschreibt die Helligkeit. Auch ein dunkler Farbton kann kräftig leuchten.'},
+ {skill:'Verhältnis',q:'Für eine Kulisse brauchst du dreimal so viel Mischung aus einem Teil Rot und zwei Teilen Gelb. Was füllst du ein?',a:['2 Rot, 3 Gelb','3 Rot, 2 Gelb','1 Rot, 6 Gelb','3 Rot, 6 Gelb'],k:3,why:'Verdreifache beide Zutaten. Drei rote und sechs gelbe Teile ergeben wieder das Verhältnis eins zu zwei.'},
+ {skill:'Versuch',q:'Welche Reihe zeigt am besten die Wirkung von Weiß auf dasselbe Blau?',a:['Anderes Blau in jedem Feld','Gleiche Blaumenge, schrittweise mehr Weiß','Immer zugleich mehr Blau und Gelb','Drei verschiedene Papiere ohne Vergleichsprobe'],k:1,why:'Halte das Blau und die Bedingungen gleich. Dann kannst du Änderungen gezielt der Weißzugabe zuordnen.'}
+];
