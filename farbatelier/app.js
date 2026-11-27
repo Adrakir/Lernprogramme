@@ -25,6 +25,7 @@ function wheel(){
  stage.innerHTML='<div class="wheelpanel"><div><div class="eyebrow">INTERAKTIVER FARBKREIS</div><h2>Der Farbkreis<br>nach Itten</h2><p>Tippe auf einen Farbton oder hebe eine ganze Farbgruppe hervor.</p><div class="wheel-legend" role="group" aria-label="Farbgruppen hervorheben">'+legend+'</div><p class="family-hint">'+familyHints[highlighted]+'</p><select aria-label="Farbe im Farbkreis wählen" id="pick">'+options(names,chosen)+'</select></div><svg class="wheel" viewBox="0 0 360 360" role="img" aria-label="Zwölfteiliger Farbkreis, ausgewählt: '+names[chosen]+'">'+segments+'<g id="oppositeLayer" pointer-events="none"></g><text x="180" y="183" fill="white" text-anchor="middle" font-size="23" font-weight="750">'+names[chosen]+'</text><text x="180" y="206" fill="#cbcde6" text-anchor="middle" font-size="14">'+group(chosen)+'</text></svg></div><figure style="margin:1.2rem 0"><h3>Kreis im Kreis</h3><a href="kreis-im-kreis.svg"><img src="kreis-im-kreis.svg" alt="Drei konzentrische Farbringe. Innen drei Grundfarben, in der Mitte sechs und außen zwölf beschriftete Farbtöne. Bild vergrößern." style="display:block;width:100%;max-width:640px;height:auto;margin:auto"></a><figcaption>Lies von innen nach außen: Orange liegt an der Grenze zwischen Gelb und Rot. Im äußeren Ring findest du auf der gelben Seite Gelb-Orange und auf der roten Seite Rot-Orange.</figcaption></figure><details class="surface"><summary>Die drei Farbkreise nebeneinander vergleichen</summary><figure style="margin:1.2rem 0"><a href="drei-farbkreise.svg" aria-label="Schaubild mit allen drei Farbkreisen vergrößern"><img src="drei-farbkreise.svg" alt="Ittens Farbkreis im Aufbau: drei Primärfarben, ergänzt auf sechs und schließlich zwölf Farbtöne." style="width:100%;height:auto;display:block"></a><figcaption>Gelb bleibt oben. Im zweiten Kreis liegt Orange zwischen Gelb und Rot. Im dritten kommt zwischen Gelb und Orange noch Gelb-Orange hinzu. Tippe zum Vergrößern auf das Bild.</figcaption></figure></details><div class="cards"><article class="tile"><div class="eyebrow">MISCHREZEPT</div><h3>'+names[chosen]+'</h3><p>'+(order(chosen)===3?'<b>Nur mit Grundfarben:</b> ':'')+recipes[chosen]+'</p>'+selectedGraphic(chosen)+'</article><article class="tile"><div class="eyebrow">GEGENFARBE</div><h3><b class="sw" style="background:'+hex[opp]+'"></b>'+names[opp]+'</h3><p>Genau sechs Felder entfernt. Nebeneinander können die beiden Farben besonders kräftig wirken.</p></article><article class="tile"><div class="eyebrow">NACHBARFARBEN</div><h3>'+names[(chosen+11)%12]+' und '+names[(chosen+1)%12]+'</h3><p>Sie liegen direkt neben '+names[chosen]+' und bilden sanfte Übergänge.</p></article></div>';
  stage.insertAdjacentHTML('beforeend','<details class="surface"><summary>Farbgruppen und Mischrezepte nachlesen</summary>'+familyLessons()+'</details>');
  stage.insertAdjacentHTML('beforeend','<details class="surface"><summary>Farbhilfe: Namen und Positionen</summary><ol>'+names.map((n,i)=>'<li>'+n+' · '+(i||12)+' Uhr</li>').join('')+'</ol></details>');
+ farbspur(stage.querySelector('a[href="drei-farbkreise.svg"]').closest('figure').parentNode);
  enhanceWheel();
  wheelExtras();stage.querySelector('.wheelpanel').insertAdjacentHTML('afterend','<p class="family-next"><a href="#kreisstudio">Den Farbkreis aufbauen und Gegenfarben verbinden</a></p>');
  stage.querySelectorAll('details > summary').forEach(el=>{if(openPanels.has(el.textContent))el.parentElement.open=true});
@@ -43,20 +44,25 @@ let mode=0,pair=0,amount=50;
 
 const palettes = [{pair:0, amount:50}, {pair:0, amount:0}];
 let taskPalette=false;
+let initialMixRoute=true;
 function showPalette(nextMode){
  if(!taskPalette)palettes[mode] = {pair, amount};
  mode = nextMode;
  taskPalette=location.hash.includes('?auftrag=')||sessionStorageSafe('guiding')===String(nextMode+1);
  ({pair, amount} = taskPalette?{pair:0,amount:0}:palettes[mode]);
- if(location.hash.includes('?fortsetzen')){
+ if(location.hash.includes('?fortsetzen') || (initialMixRoute && !taskPalette)){
   const last=stored('lastMix',null);
   if(last&&last.mode===mode&&Number.isInteger(last.pair)&&(mode?comps:bases)[last.pair]&&Number.isInteger(last.amount)&&last.amount>=0&&last.amount<=100)({pair,amount}=last);
  }
+ initialMixRoute=false;
  mix();
 }
 function mix(){
  const pairs=mode?comps:bases,[a,b]=pairs[pair];
  stage.innerHTML='<article class="surface"><div class="eyebrow">MISCHLABOR</div><h2>'+(mode?'Komplementärfarben mischen':'Grundfarben mischen')+'</h2><p>'+(mode?'Wähle zwei Gegenfarben. Schiebe den Regler und beobachte, wie sich ihr Mischton verändert.':'Mische zwei Grundfarben oder <a href="#komplementaerfarben">probiere Komplementärfarben aus</a>.')+'</p><div class="tools"><label>Farbpaar<select id="pair">'+options(pairs.map(([x,y])=>names[x]+' und '+names[y]),pair)+'</select></label></div><p>Die beiden Farben nebeneinander</p><div class="split labelled"><span style="background:'+hex[a]+'"><b>'+names[a]+'</b></span><span style="background:'+hex[b]+'"><b>'+names[b]+'</b></span></div><label for="ratio"><strong id="ratioText"></strong></label><input class="range" type="range" min="0" max="100" step="1" id="ratio" value="'+amount+'"><div class="sample" id="sample"><strong id="result"></strong></div>'+(mode?'<div class="tools presets" aria-label="Mischverhältnis auswählen">'+[0,10,25,50,75,90,100].map(n=>'<button data-preset="'+n+'">'+(100-n)+' : '+n+'</button>').join('')+'</div>':'')+'<p class="note" id="observe"></p><p>Das Modell zeigt ungefähre Farbtöne. Echte Malfarben haben je nach Pigment eine andere Färbekraft.</p></article>';
+ const aufgaben=document.createElement('details');aufgaben.className='surface';
+ aufgaben.innerHTML='<summary>Mischaufträge ausprobieren</summary><ul>'+[9,10,11].map(i=>'<li><a href="#farbwerkstatt?thema='+i+'">'+werkThemen[i]+'</a></li>').join('')+'</ul>';
+ stage.firstElementChild.append(aufgaben);
  setupLab(a,b);
  setupExperiments(a,b);
  setupStudentLab(a,b);

@@ -1,5 +1,5 @@
 'use strict';
-const werkThemen=['Farbdetektiv im Bild','Gleiche Farbe auf zwei Hintergründen','Farbkreis aus dem Gedächtnis','Aufhellen und Trüben','Ein Wald in zwei Stimmungen','Drei Farben für einen Herbstweg','Wasser und Deckweiß','Partnerkritik am Werk','Mischblatt zum Ausdrucken'];
+const werkThemen=['Farbdetektiv im Bild','Gleiche Farbe auf zwei Hintergründen','Farbkreis aus dem Gedächtnis','Aufhellen und Trüben','Ein Wald in zwei Stimmungen','Drei Farben für einen Herbstweg','Wasser und Deckweiß','Partnerkritik am Werk','Mischblatt zum Ausdrucken','Idas Orange überprüfen','Ein Rezept verdoppeln','Ein stumpfes Orange retten','Wie groß soll der Farbfleck sein?','Drei Hügel in der Ferne','Schulfestplakat mit Blicktest'];
 const bildstellen=['Himmel','Baumkronen','Weg','Blätter'];
 const morgen=['#f6ce87','#45765b','#d1a275','#d85c35'];
 function waldbild(farben){
@@ -49,7 +49,7 @@ function farbwerkstatt(){
   absatz('Auf Papier: Schneide zwei Stücke aus demselben orangefarbenen Bogen und lege sie auf zwei verschiedene Hintergründe.');
  }else if(nr===2){
   absatz('Gelb gehört nach oben. Wähle einen Farbstein und tippe seine Position an. Lege zuerst die Grundfarben, dann die Mischfarben und zuletzt die Zwischenfarben.');
-  box.insertAdjacentHTML('beforeend','<label>Farbstein<select id="farbstein"></select></label><div class="legekreis" role="group" aria-label="Zwölf Positionen wie auf einer Uhr"></div><p id="legeMeldung" role="status"></p>');
+  box.insertAdjacentHTML('beforeend','<label>Farbstein<select id="farbstein" aria-label="Farbstein"></select></label><div class="legekreis" role="group" aria-label="Zwölf Positionen wie auf einer Uhr"></div><p id="legeMeldung" role="status"></p>');
   const kreis=box.querySelector('.legekreis'),pick=by('farbstein');let gelegt=Array.isArray(daten.gelegt)?daten.gelegt:[];
   function zeichnen(){
    const rest=names.map((_,i)=>i).filter(i=>!gelegt.includes(i)).sort((a,b)=>order(a)-order(b)||a-b);
@@ -60,6 +60,7 @@ function farbwerkstatt(){
      gelegt=[...gelegt,i];merken('gelegt',gelegt);zeichnen();by('legeMeldung').textContent=gelegt.length===12?'Alle zwölf Farben liegen richtig.':name+' liegt richtig. Wähle den nächsten Farbstein.';if(!pick.disabled)pick.focus();};kreis.append(b);});
   }zeichnen();hilfe('Drehe im Uhrzeigersinn: Gelb liegt bei 12 Uhr, Rot bei 4, Blau bei 8. Orange liegt zwischen Gelb und Rot. Zwischenfarben stehen zwischen den Farben ihres Namens.');
   const reset=document.createElement('button');reset.textContent='Neu legen';reset.onclick=()=>{gelegt=[];merken('gelegt',[]);zeichnen();by('legeMeldung').textContent='Der Kreis ist wieder leer.';};box.append(reset);
+  freieFelder(box,daten,merken);
  }else if(nr===3||nr===6){
   const deck=nr===6;
   absatz(deck?'Ziehe auf festem Papier einen dunklen, wasserfesten Strich und lass ihn trocknen. Teile dein Blatt in zwei Felder. Male mit derselben Farbe jeweils quer über den Strich.':'Lege zwei Reihen mit je drei Malfeldern an. Beginne beide mit gleich viel Orange. Halte Papier, Pinsel und Wassermenge gleich.');
@@ -69,13 +70,7 @@ function farbwerkstatt(){
   absatz('Für das Malen am Tisch:');box.insertAdjacentHTML('beforeend','<a href="mischblatt.pdf">A4-Mischblatt öffnen</a>');
  }else if(nr===4){
   absatz('Gestalte denselben Wald zweimal. Wähle für jede Bildstelle einen Farbton und vergleiche die Wirkung.');
-  const palette=['#efc78c','#eddfb4','#376f59','#88a751','#547896','#30364e','#725476','#a34f3f','#c58e63','#ef7940'];
-  const farbnamen=['Apricot','Hellgelb','Waldgrün','Blattgrün','Graublau','Nachtblau','Grauviolett','Ziegelrot','Ocker','Orange'];
-  const paar=document.createElement('div');paar.className='waldpaar';box.append(paar);
-  ['Ruhig am Morgen','Unheimlich am Abend'].forEach((t,j)=>{const f=document.createElement('figure'),cap=document.createElement('figcaption');cap.textContent=t;const v=document.createElement('div');f.append(cap,v);paar.append(f);
-   const basis=j?[5,6,4,7]:[0,2,8,9];function malen(){v.innerHTML=waldbild(basis.map((n,i)=>palette[daten['wald'+j+i]??n]));}malen();
-   bildstellen.forEach((teil,i)=>{const l=document.createElement('label'),s=document.createElement('select'),key='wald'+j+i;l.append(teil,s);f.append(l);farbnamen.forEach((x,k)=>s.add(new Option(x,String(k))));s.value=String(daten[key]??basis[i]);s.onchange=()=>{merken(key,+s.value);malen();};});
-  });notiz('stimmung','An dieser Stelle verändert meine Farbe die Stimmung, weil …');
+  waldAtelier(box,daten,merken);notiz('stimmung','An dieser Stelle verändert meine Farbe die Stimmung, weil …');
  }else if(nr===5){
   absatz('Gestalte einen Herbstweg auf Papier. Wähle bis zu drei verschiedene Ausgangsfarben für deine Palette.');
   const gruppe=document.createElement('div');box.append(gruppe);const status=absatz('');status.setAttribute('role','status');let w=Array.isArray(daten.palette)?daten.palette:[];
@@ -84,8 +79,12 @@ function farbwerkstatt(){
   notiz('mischung','Welche weitere Farbe hast du aus deiner Palette gemischt? Wofür hast du sie im Bild verwendet?');
  }else if(nr===7){
   absatz('Legt das Bild zwischen euch. Ein Kind beschreibt es, das andere hört zu und antwortet. Tauscht dann die Rollen.');
+  bildkommentar(box,daten,merken);
   notiz('stelle','1. Beschreiben: An welcher Bildstelle siehst du welche Farben?');notiz('wirkung','2. Wirkung: Wohin wandert dein Blick? Was löst das aus?');notiz('frage','3. Nachfragen: Was möchtest du das Kind zu seiner Farbentscheidung fragen?');notiz('antwort','Antwort des Kindes, das gemalt hat');
- }else{
+ }else if(nr===8){
   absatz('Zwei große Felder zum Malen, Platz für die Rezepte und eine Vergleichsfrage. Drucke das Blatt in Schwarz-Weiß auf A4.');box.insertAdjacentHTML('beforeend','<a href="mischblatt.pdf">Mischblatt als PDF öffnen</a>');
+ }else{
+  neueWerkstation(nr,box,daten,merken,notiz);
  }
+ stationTeilen(box,nr);
 }
