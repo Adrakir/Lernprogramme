@@ -7,6 +7,7 @@ from pathlib import Path
 from threading import Thread
 
 from playwright.sync_api import sync_playwright, expect
+from atelier_wege import pruefe_lernwege, pruefe_stationen
 
 root = Path(__file__).resolve().parents[1]
 folder = root / "dist" if (root / "dist").is_dir() else root
@@ -89,13 +90,13 @@ def check_werkstatt(page,base):
     expect(page.locator("#vergleichInfo")).to_contain_text("dasselbe Orange")
     station.select_option("2")
     for k in [0,4,8,2,6,10,1,3,5,7,9,11]:
-        page.get_by_label("Farbstein").select_option(str(k))
+        page.get_by_label("Farbstein", exact=True).select_option(str(k))
         page.get_by_role("button",name=str(k or 12)+" Uhr",exact=True).click()
     expect(page.locator("#legeMeldung")).to_contain_text("Alle zwölf")
     station.select_option("3")
     page.locator("textarea").first.fill("Mit Weiß wird mein Orange heller.")
     station.select_option("4")
-    page.locator("figure select").first.select_option("4")
+    page.get_by_label("Himmel",exact=True).first.select_option("4")
     expect(page.locator("figure svg rect").first).to_have_attribute("fill","#547896")
     station.select_option("5")
     for name in ["Gelb","Rot","Blau","Orange"]: page.get_by_role("button",name=name,exact=True).click()
@@ -306,6 +307,11 @@ if __name__=="__main__":
         if "live" in sys.argv:
             live(browser.new_page(),"https://adrakir.github.io/Lernprogramme/farbatelier/")
         else:
+            with browser.new_context() as wege:
+                pruefe_lernwege(wege.new_page(),f"http://127.0.0.1:{server.server_port}/")
+            for width in (390,1366):
+                with browser.new_context(viewport={"width":width,"height":844}) as stationen:
+                    pruefe_stationen(stationen.new_page(),f"http://127.0.0.1:{server.server_port}/")
             regression_context=browser.new_context()
             check_learning_regressions(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")
             check_green(regression_context.new_page(),f"http://127.0.0.1:{server.server_port}/")

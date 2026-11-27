@@ -56,3 +56,22 @@ body:not(.at-home) #resumeCard {display:none}
 .gruen-paar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-block:1rem}.gruen-paar>div{border:1px solid currentColor;border-radius:.6rem;padding:.75rem;font-size:clamp(1rem,2vw,1.5rem)}.gruen-paar input{max-width:100%;box-sizing:border-box}
 
 .werkstatt label{display:grid;gap:.35rem;margin-block:.75rem;max-width:46rem}.werkstatt svg{display:block;width:100%;height:auto}.detektiv-bild{position:relative;max-width:46rem}.detektiv-bild button,.legekreis button{position:absolute;transform:translate(-50%,-50%);padding:.35em;min-width:2.5em;min-height:2.5em;border-radius:50%}.werkstatt button[aria-pressed=true]{outline:3px double currentColor}.kontrastfeld{height:9rem;position:relative;background:linear-gradient(90deg,#3258ae 50%,#f6d743 50%)}.kontrastfeld i{position:absolute;top:25%;height:50%;width:18%;background:#f09939}.kontrastfeld i:first-child{left:var(--mitte)}.kontrastfeld i:last-child{right:var(--mitte)}.legekreis{position:relative;width:min(100%,25rem);aspect-ratio:1;background:radial-gradient(circle,transparent 53%,currentColor 54%,transparent 55%)}.waldpaar{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:1rem}.waldpaar figure{margin:0}.waldpaar figcaption{font-weight:bold}
+
+.stations-qr{display:block;width:13rem;max-width:100%;image-rendering:pixelated;margin-block:1rem}
+.spurreihe,.probenpaar,.waldvergleich{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.spurreihe{grid-template-columns:repeat(3,minmax(0,1fr))}
+.spurreihe figure,.probenpaar figure{margin:0;min-width:0}
+.spurreihe figure{text-align:center}
+.spurreihe svg{display:block;width:100%;max-width:14rem;margin:auto;background:#faf8f3;border-radius:.65rem}
+.spurreihe [data-ton]{cursor:pointer}.probenpaar .mischprobe{min-height:5rem;border:1px solid var(--sub);border-radius:0 0 1.5rem 1.5rem;display:grid;place-content:center}
+.probenpaar figcaption,.waldvergleich strong{display:block;font-weight:650;margin:.4rem 0}
+.lupe .waldgrafik{filter:grayscale(1)}
+.waldvergleich{margin-top:.65rem}
+.flaechenplakat,.schulfest{max-width:38rem}
+.schulfest{display:grid;gap:1rem;align-content:center;min-height:13rem;background:#fff3d2;border:.6rem double #36485b;border-radius:.4rem;padding:1rem}
+.schulfest button,.schulfest button:disabled{display:block;text-align:center;line-height:1.2;overflow-wrap:anywhere;background:transparent;border:0;opacity:1;font-weight:700}
+.werkstatt fieldset{border:1px solid var(--sub);margin:1rem 0;min-width:0;border-radius:.5rem}
+@media(prefers-reduced-motion:no-preference){.flaechenplakat circle,.probenpaar .ferne,.waldgrafik svg path,.waldgrafik svg rect{transition:r .13s ease-out,fill .18s ease-out}.farbspur circle{animation:spurpunkt .22s ease-out}@keyframes spurpunkt{from{opacity:.25}to{opacity:1}}}
+@media(max-width:550px){.spurreihe{gap:.25rem}.spurreihe strong,.spurreihe figcaption{font-size:.83rem}.werkstatt .waldpaar{grid-template-columns:1fr}}
+.wald-mobil{display:none}
+@media(max-width:550px){.wald-mobil{display:block}.wald-breit label:not(.aktiver-teil){display:none}}
