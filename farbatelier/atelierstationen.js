@@ -14,7 +14,7 @@ function atelierKnopf(parent,text,action) {
 }
 function atelierWahl(parent,label,werte,wert,change) {
  const feld=atelierElement(parent,'label',label);
- const s=atelierElement(feld,'select');
+ const s=atelierElement(feld,'select');s.setAttribute('aria-label',label);
  werte.forEach(([key,name])=>s.add(new Option(name,key)));
  s.value=String(wert);s.onchange=()=>change(s.value);
  return s;

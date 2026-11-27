@@ -49,7 +49,7 @@ function farbwerkstatt(){
   absatz('Auf Papier: Schneide zwei Stücke aus demselben orangefarbenen Bogen und lege sie auf zwei verschiedene Hintergründe.');
  }else if(nr===2){
   absatz('Gelb gehört nach oben. Wähle einen Farbstein und tippe seine Position an. Lege zuerst die Grundfarben, dann die Mischfarben und zuletzt die Zwischenfarben.');
-  box.insertAdjacentHTML('beforeend','<label>Farbstein<select id="farbstein"></select></label><div class="legekreis" role="group" aria-label="Zwölf Positionen wie auf einer Uhr"></div><p id="legeMeldung" role="status"></p>');
+  box.insertAdjacentHTML('beforeend','<label>Farbstein<select id="farbstein" aria-label="Farbstein"></select></label><div class="legekreis" role="group" aria-label="Zwölf Positionen wie auf einer Uhr"></div><p id="legeMeldung" role="status"></p>');
   const kreis=box.querySelector('.legekreis'),pick=by('farbstein');let gelegt=Array.isArray(daten.gelegt)?daten.gelegt:[];
   function zeichnen(){
    const rest=names.map((_,i)=>i).filter(i=>!gelegt.includes(i)).sort((a,b)=>order(a)-order(b)||a-b);

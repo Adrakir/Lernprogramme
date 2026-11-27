@@ -13,7 +13,10 @@ def setze_regler(regler, wert):
 
 def pruefe_lernwege(page, base):
     fehler = []
-    page.on("pageerror", lambda error: fehler.append(str(error)))
+    def page_error(error):
+        fehler.append(str(error))
+        print("Browserfehler:", error, flush=True)
+    page.on("pageerror", page_error)
     page.goto(base)
     karten = page.locator(".start-cards")
     karten.get_by_role("link", name="Farbkreis entdecken").click()
@@ -74,7 +77,10 @@ def pruefe_lernwege(page, base):
 
 def pruefe_stationen(page, base):
     fehler = []
-    page.on("pageerror", lambda error: fehler.append(str(error)))
+    def page_error(error):
+        fehler.append(str(error))
+        print("Browserfehler:", error, flush=True)
+    page.on("pageerror", page_error)
     def station(n):
         page.goto(base + "#farbwerkstatt?thema=" + str(n))
         expect(page.get_by_label("Station wählen")).to_have_value(str(n))
@@ -100,7 +106,9 @@ def pruefe_stationen(page, base):
     page.get_by_role("button",name="Meinen Kreis prüfen").click()
     expect(page.get_by_text("Alle gelegten Steine passen.", exact=False)).to_be_visible()
     station(4)
+    assert not fehler, fehler
     wald = page.locator(".waldpaar > figure").first
+    expect(wald.locator(".wald-breit select")).to_have_count(4)
     wald.get_by_label("Himmel",exact=True).select_option("4")
     wald.get_by_role("button",name="Variante ausprobieren").click()
     wald.get_by_label("Himmel",exact=True).select_option("5")
