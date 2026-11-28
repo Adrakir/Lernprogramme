@@ -1,0 +1,10 @@
+#maerchen .mf-steps{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0}
+#maerchen .mf-steps [aria-pressed=true]{outline:3px solid currentColor;outline-offset:1px}
+#maerchen .mf-lesetext p{max-width:69ch;line-height:1.7}
+#maerchen fieldset{min-width:0;margin:1rem 0;padding:1rem;border:1px solid currentColor;border-radius:.65rem}
+#maerchen legend{font-weight:700;padding:0 .3rem}
+#maerchen label{display:block;margin:.65rem 0}
+#maerchen input:is([type=radio],[type=checkbox]){width:auto}
+#maerchen input:not([type]),#maerchen textarea{display:block;width:100%;box-sizing:border-box;font:inherit;margin:.35rem 0;padding:.6rem}
+#maerchen details{margin:1rem 0}
+#maerchen .mf-plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:0 1rem}
