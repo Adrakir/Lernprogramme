@@ -38,7 +38,7 @@ test('Deutschapp: echte Browser- und Bildkontrolle auf Safari/WebKit und Chromiu
       // Safari-/iMac-Kompatibilität: WebP absichtlich unzugänglich machen.
       if(width===1366)await page.route('**/*.webp',route=>route.abort());
       await page.goto(URL,{waitUntil:'load'});
-      assert.equal(await page.locator('nav.navigation [data-page]').count(),9,'Neun integrierte Deutsch-Bereiche');
+      assert.equal(await page.locator('nav.navigation [data-page]').count(),10,'Zehn integrierte Deutsch-Bereiche');
       if(width===1366){
        // Regression: Dasselbe IMG-Element wird mehrfach auf ein neues WebP umgeschaltet.
        // Alte Safari-Versionen müssen bei JEDEM Wechsel auf JPEG zurückfallen.
@@ -72,11 +72,23 @@ test('Deutschapp: echte Browser- und Bildkontrolle auf Safari/WebKit und Chromiu
       if(width===320)await page.screenshot({path:path.join(artifactDir,'deutsch-'+engine+'-handy-start.png')});
 
       // Alle Navigationseinträge wirklich besuchen: nicht nur existierende Links.
-      for(const id of ['entdecken','spannung','ueben','schreiben','lesen','sprache','lehrgang','hauptteil']){
+      for(const id of ['entdecken','spannung','ueben','schreiben','lesen','sprache','lehrgang','hauptteil','maerchen']){
        await page.locator('[data-page="'+id+'"]').click();
        assert.equal(await page.locator('section#'+id).isVisible(),true,'Bereich erreichbar: '+id);
        await layout(page,id+' '+engine+' '+width);
       }
+      await page.locator('.mf-steps [data-mf-step="spuren"]').click();
+      const firstQuestion=page.locator('#mf-fragen fieldset').first();
+      await firstQuestion.getByRole('radio').nth(0).check();
+      assert.match(await firstQuestion.getByRole('status').textContent(),/Anfangsformel/);
+      await firstQuestion.getByRole('radio').nth(1).check();
+      assert.match(await firstQuestion.getByRole('status').textContent(),/Richtig/);
+      await page.locator('.mf-steps [data-mf-step="schreiben"]').click();
+      await page.locator('[data-mf-save="text"]').fill('Es war einmal eine verwunschene Quelle.');
+      await page.goto(URL.split('#')[0]+'#maerchen');
+      await page.reload();
+      await page.locator('.mf-steps [data-mf-step="schreiben"]').click();
+      assert.equal(await page.locator('[data-mf-save="text"]').inputValue(),'Es war einmal eine verwunschene Quelle.');
       await page.locator('[data-page="entdecken"]').click();
       await artwork(page.locator('#comic-image'),'Comicmotiv '+engine+' '+width);
       await artwork(page.locator('.guide-pair'),'Fuji/Minka-Figuren '+engine+' '+width);
